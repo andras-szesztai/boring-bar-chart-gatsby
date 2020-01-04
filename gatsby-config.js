@@ -1,8 +1,8 @@
 module.exports = {
   siteMetadata: {
     title: `Boring Bar Chart`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    description: `A Data Visualisation Site`,
+    author: `@AndSzesztai`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
