@@ -22,15 +22,16 @@ export default function IndexPage() {
       }
     }
   `)
-  
+
   return (
     <>
       <Helmet title="Boring Bar Chart" />
       <FlexContainer
-        fontSize={2}
-        fontWeight="bold"
+        fontSize={10}
+        fontWeight={0}
+        fullScreen
       >
-        Coming soon...
+        Coming soon
       </FlexContainer>
     </>
   )

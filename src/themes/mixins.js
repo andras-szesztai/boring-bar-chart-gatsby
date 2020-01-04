@@ -8,14 +8,6 @@ function createThemify(path){
   }
 }
 
-export function themifyFontWeight(weight){
-  const path = theme.fontWeight
-  const fontWeight = typeof weight === "string"
-    ? path[weight]
-    : path[Object.keys(path)[weight]]
-  return fontWeight
-}
-
 export function themifyColor(color){
   if (color.indexOf('#') > -1) {
     return color
@@ -26,6 +18,7 @@ export function themifyColor(color){
 }
 
 export const themifyFontSize= createThemify(theme.fontSize) // Pass in index
+export const themifyFontWeight= createThemify(theme.fontWeight) // Pass in index
 export const themifyCurve= createThemify(theme.curves) // Pass in curve name
 export const themifySpace = createThemify(theme.space) // Pass in inde
 export const themifyZIndex= createThemify(theme.z) // Pass in z-index name

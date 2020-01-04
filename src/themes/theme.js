@@ -25,18 +25,10 @@ export const fontSize = [
   "9rem",
   "10rem",
   "11rem",
-  "12rem"
+  "12rem",
 ]
 
-export const fontWeight = {
-  ultralight: 200,
-  ligh: 300,
-  book: 400,
-  medium: 500,
-  semibold: 600,
-  bold: 700,
-  heavy: 800
-}
+export const fontWeight = [200, 300, 400, 500, 600, 700, 800]
 
 export const curves = {}
 
