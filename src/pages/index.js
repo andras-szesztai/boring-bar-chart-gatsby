@@ -34,7 +34,7 @@ export default function IndexPage() {
   }
   `)
 
-  console.log(edges, 'big data');
+  console.log(edges);
   
   return (
     <>
