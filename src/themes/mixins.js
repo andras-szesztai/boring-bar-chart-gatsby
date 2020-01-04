@@ -1,5 +1,4 @@
 
-import { tint as polishedTint, shade as polishedShade } from 'polished';
 import { css } from 'styled-components';
 import theme from './theme'
 
@@ -10,7 +9,7 @@ function createThemify(path){
 }
 
 export function themifyFontWeight(weight){
-  const path = theme.type.fontWeight
+  const path = theme.fontWeight
   const fontWeight = typeof weight === "string"
     ? path[weight]
     : path[Object.keys(path)[weight]]
@@ -26,7 +25,7 @@ export function themifyColor(color){
   }
 }
 
-export const themifyFontSize= createThemify(theme.type.fontSize) // Pass in index
+export const themifyFontSize= createThemify(theme.fontSize) // Pass in index
 export const themifyCurve= createThemify(theme.curves) // Pass in curve name
 export const themifySpace = createThemify(theme.space) // Pass in inde
 export const themifyZIndex= createThemify(theme.z) // Pass in z-index name
@@ -40,34 +39,6 @@ export function isValidColor(color) {
       .join('')
       .toLowerCase(),
   );
-}
-
-export function themifyShade(amount, color) {
-  if (!color || !isValidColor(color)) return;
-  if (typeof amount === 'string' && isValidColor(amount)) {
-    if (isValidColor(amount)) {
-      return polishedShade(1 - color, amount);
-    }
-    return amount;
-  }
-  if (isValidColor(color)) {
-    return polishedShade(1 - amount, color);
-  }
-  return color;
-}
-
-export function themifyTint(amount, color) {
-  if (!color || !isValidColor(color)) return;
-  if (typeof amount === 'string') {
-    if (isValidColor(amount) && isValidColor(amount)) {
-      return polishedTint(1 - color, amount);
-    }
-    return amount;
-  }
-  if (isValidColor(color)) {
-    return polishedTint(1 - amount, color);
-  }
-  return color;
 }
 
 export function themifyPadding(side, amount) {
@@ -156,9 +127,7 @@ export function themifyMargin(side, amount) {
 
 const mixins = {
   themifyMargin,
-  themifyPadding,
-  themifyShade,
-  themifyTint
+  themifyPadding
 };
 
 export default mixins;

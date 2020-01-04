@@ -22,13 +22,15 @@ export default function IndexPage() {
       }
     }
   `)
-
-  console.log(edges)
+  
   return (
     <>
       <Helmet title="Boring Bar Chart" />
-      <FlexContainer>
-        
+      <FlexContainer
+        fontSize={2}
+        fontWeight="bold"
+      >
+        Coming soon...
       </FlexContainer>
     </>
   )
