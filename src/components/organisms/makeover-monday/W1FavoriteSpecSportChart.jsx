@@ -1,5 +1,6 @@
-import React from 'react';
-import styled from 'styled-components'
+import React from "react"
+import styled from "styled-components"
+import { VerticalDropChartRow } from "../../molecules/chartElements"
 
 const ChartContainer = styled.div`
   width: 80vw;
@@ -10,23 +11,17 @@ const ChartContainer = styled.div`
   max-height: 600px;
   min-height: 500px;
 
-  border: 1px solid black;
-
   display: grid;
   grid-template-rows: repeat(10, 1fr);
   grid-row-gap: 1rem;
-  
 `
 
-export default function({
-  data,
-  valueArray
-}){
-
-
+export default function({ data, valueArray }) {
   return (
     <ChartContainer>
-      Chart
+      {valueArray.map(val => (
+        <VerticalDropChartRow axisLabel={val} />
+      ))}
     </ChartContainer>
   )
 }
