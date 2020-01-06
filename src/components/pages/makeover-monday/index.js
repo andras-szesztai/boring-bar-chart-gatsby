@@ -1,0 +1,1 @@
+export { default as FavoriteSpecSport } from './W1FavoriteSpecSport'

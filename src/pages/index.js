@@ -4,10 +4,6 @@ import { Helmet } from "react-helmet"
 import { FlexContainer } from "../components/atoms"
 
 export default function IndexPage() {
-  const {
-    allStrapiDatasets: { edges },
-  } = useStaticQuery(graphql`
-  `)
   
   return (
     <>
