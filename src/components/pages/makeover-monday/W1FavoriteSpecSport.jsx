@@ -4,7 +4,7 @@ import _ from "lodash"
 
 import { useRawData } from "../../../hooks"
 import { FavoriteSpecSportChart } from "../../organisms"
-import FlexContainer from "../../atoms/FlexContainer"
+import {FlexContainer} from "../../atoms"
 
 export default function Dashboard() {
   const {

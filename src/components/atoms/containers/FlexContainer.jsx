@@ -1,6 +1,6 @@
 import React from "react"
 import styled, { css } from "styled-components"
-import { themifyFontSize, themifyFontWeight, themifyColor } from "../../themes/mixins"
+import { themifyFontSize, themifyFontWeight, themifyColor } from "../../../themes/mixins"
 
 const Container = styled.div`
   font-size: ${({ fontSize }) => themifyFontSize(fontSize)};
