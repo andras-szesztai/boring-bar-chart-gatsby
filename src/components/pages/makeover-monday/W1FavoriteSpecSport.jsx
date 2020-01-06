@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useStaticQuery, graphql } from "gatsby"
-import { useRawData } from "../../../hooks"
 import _ from "lodash"
+
+import { useRawData } from "../../../hooks"
 import { FavoriteSpecSportChart } from "../../organisms"
+import FlexContainer from "../../atoms/FlexContainer"
 
 export default function Dashboard() {
   const {
@@ -28,13 +30,20 @@ export default function Dashboard() {
   useEffect(() => {
     if (!dataObject && rawData) {
       setDataObject({
-        array:  _.uniq(rawData.map(d => d.Sport)),
-        grouppedData: _.groupBy(rawData, 'Sport')
+        array: _.uniq(rawData.sort((a,b) => b.perc - a.perc).map(d => d.Sport)),
+        grouppedData: _.groupBy(rawData, "Sport"),
       })
     }
   }, [dataObject, rawData])
 
-  console.log(dataObject)
-
-  return <FavoriteSpecSportChart/>
+  return (
+    <FlexContainer fullScreen>
+      {dataObject && (
+        <FavoriteSpecSportChart
+          data={dataObject.grouppedData}
+          valueArray={dataObject.array}
+        />
+      )}
+    </FlexContainer>
+  )
 }
