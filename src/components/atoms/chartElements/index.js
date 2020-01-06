@@ -1,1 +1,1 @@
-export { default as DropChart } from './DropChart'
+export { default as VerticalDropChart } from './VerticalDropChart'

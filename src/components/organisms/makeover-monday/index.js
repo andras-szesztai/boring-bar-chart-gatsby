@@ -1,0 +1,1 @@
+export { default as FavoriteSpecSportChart } from './W1FavoriteSpecSportChart'
