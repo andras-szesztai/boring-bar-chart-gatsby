@@ -20,7 +20,7 @@ export default function({ data, valueArray }) {
   return (
     <ChartContainer>
       {valueArray.map(val => (
-        <VerticalDropChartRow axisLabel={val} />
+        <VerticalDropChartRow axisLabel={val} key={val} data={data[val]} />
       ))}
     </ChartContainer>
   )

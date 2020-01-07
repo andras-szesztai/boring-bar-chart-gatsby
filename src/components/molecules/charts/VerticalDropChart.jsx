@@ -1,8 +1,11 @@
 import React, { useRef } from "react"
 import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
 import { useDimensions } from "../../../hooks";
+import useInitUpdate from "../../../hooks/useInitUpdate";
 
-export default function VerticalDropChart() {
+export default function VerticalDropChart({
+  data
+}) {
   
   const wrapperRef = useRef()
   const svgRef = useRef()
@@ -11,9 +14,17 @@ export default function VerticalDropChart() {
     wrapperRef
   );
 
-  console.log(
-    chartHeight, chartWidth
-  )
+  
+  function initVis(){
+    createUpdateCircles()
+  }
+  
+  function createUpdateCircles(){
+    console.log(data)
+  }
+  
+  const { init, runUpdate } = useInitUpdate({ data,  chartHeight, chartWidth, initVis})
+  
 
   return (
     <ChartWrapper ref={wrapperRef}>
