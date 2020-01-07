@@ -10,8 +10,6 @@ const RowContainer = styled.div`
   grid-template-columns: 100px 1fr;
   grid-column-gap: 1rem;
   align-items: center;
-
-  border: 1px solid black;
 `
 
 export default function({ axisLabel, data, xAxis, domain }) {
