@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 
-export const ChartWrapper = styled.svg`
+export const ChartWrapper = styled.div`
   position: relative;
 
   display: flex;

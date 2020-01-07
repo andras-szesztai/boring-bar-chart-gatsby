@@ -1,5 +1,5 @@
-import { VerticalDropChartRow } from './chartElements'
+import { VerticalDropChart } from './charts'
 
 export {
-  VerticalDropChartRow
+  VerticalDropChart
 }

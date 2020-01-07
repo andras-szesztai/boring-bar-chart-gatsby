@@ -3,7 +3,7 @@ import { useStaticQuery, graphql } from "gatsby"
 import _ from "lodash"
 
 import { useRawData } from "../../../hooks"
-import { FavoriteSpecSportChart } from "../../organisms"
+import { FavoriteSpecSportChart } from "../../templates"
 import {FlexContainer} from "../../atoms"
 
 export default function Dashboard() {

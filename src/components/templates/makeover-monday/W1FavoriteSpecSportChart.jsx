@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import { VerticalDropChartRow } from "../../molecules/chartElements"
+import { VerticalDropChartRow } from "../../organisms"
 
 const ChartContainer = styled.div`
   width: 80vw;

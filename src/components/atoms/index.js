@@ -1,5 +1,4 @@
 import {
-  VerticalDropChart,
   ChartArea,
   ChartWrapper,
   ChartSvg,
@@ -7,7 +6,6 @@ import {
 import { FlexContainer, VerticalAxisLabelContainer } from "./containers"
 
 export {
-  VerticalDropChart,
   FlexContainer,
   VerticalAxisLabelContainer,
   ChartArea,

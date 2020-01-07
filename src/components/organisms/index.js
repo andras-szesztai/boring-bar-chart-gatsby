@@ -1,7 +1,5 @@
-import {
-  FavoriteSpecSportChart
-} from './makeover-monday'
+import { VerticalDropChartRow } from './chartElements'
 
 export {
-  FavoriteSpecSportChart
+  VerticalDropChartRow
 }

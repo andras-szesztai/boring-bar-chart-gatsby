@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
-import { VerticalAxisLabelContainer, VerticalDropChart } from "../../atoms"
+import { VerticalAxisLabelContainer } from "../../atoms"
+import { VerticalDropChart } from '../../molecules'
 
 const RowContainer = styled.div`
   display: grid;
