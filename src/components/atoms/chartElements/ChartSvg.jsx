@@ -1,4 +1,3 @@
-import React from "react"
 import styled from "styled-components"
 
 export const ChartSvg = styled.svg`
@@ -6,6 +5,4 @@ export const ChartSvg = styled.svg`
   height: ${props => props.height || 0}px;
 `
 
-export default function(props) {
-  return <ChartSvg {...props}>{props.children}</ChartSvg>
-}
+export default ChartSvg

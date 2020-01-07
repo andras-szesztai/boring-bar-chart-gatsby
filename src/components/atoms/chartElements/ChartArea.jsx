@@ -1,19 +1,10 @@
-import React from 'react';
 import styled from 'styled-components'
 
 export const ChartArea = styled.g`
   transform: translate(
-    ${props => props.marginLeft}px,
-    ${props => props.marginTop}px
+    ${props => props.marginLeft || 0}px,
+    ${props => props.marginTop || 0}px
   );
 `;
 
-export default function(props){
-
-  return (
-    <ChartArea {...props}>
-      {props.children}
-    </ChartArea>
-  )
-}
-
+export default ChartArea

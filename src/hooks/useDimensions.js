@@ -1,12 +1,20 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react"
 
-export default function useDimensions(ref, margins) {
+export default function useDimensions(
+  ref,
+  margins = {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  }
+) {
   const [dims, setDims] = useState({
     width: undefined,
     height: undefined,
     chartWidth: undefined,
-    chartHeight: undefined
-  });
+    chartHeight: undefined,
+  })
 
   const getDimensions = useCallback(() => {
     if (
@@ -19,15 +27,15 @@ export default function useDimensions(ref, margins) {
         width: ref.current.offsetWidth,
         height: ref.current.offsetHeight,
         chartWidth: ref.current.offsetWidth - (margins.left + margins.right),
-        chartHeight: ref.current.offsetHeight - (margins.top + margins.bottom)
-      }); 
+        chartHeight: ref.current.offsetHeight - (margins.top + margins.bottom),
+      })
     }
   }, [margins.bottom, margins.left, margins.right, margins.top, ref])
 
   useEffect(() => {
-    window.addEventListener("resize", getDimensions);
+    window.addEventListener("resize", getDimensions)
     setTimeout(() => getDimensions(), 1000)
-  }, [getDimensions, ref]);
+  }, [getDimensions, ref])
 
-  return dims;
+  return dims
 }

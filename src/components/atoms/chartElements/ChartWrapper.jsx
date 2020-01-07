@@ -1,7 +1,6 @@
-import React from 'react';
 import styled from 'styled-components'
 
-export const ChartWrapper = styled.div`
+const ChartWrapper = styled.div`
   position: relative;
 
   display: flex;
@@ -12,11 +11,4 @@ export const ChartWrapper = styled.div`
   width: 100%;
 `;
 
-export default function(props){
-
-  return (
-    <ChartWrapper {...props}>
-      {props.children}
-    </ChartWrapper>
-  )
-}
+export default ChartWrapper
