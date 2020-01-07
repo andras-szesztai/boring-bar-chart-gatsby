@@ -1,39 +1,51 @@
 import React, { useRef } from "react"
+import { scaleLinear } from "d3-scale"
+import { select } from "d3-selection"
 
-import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
-import { useDimensions } from "../../../hooks";
-import useInitUpdate from "../../../hooks/useInitUpdate";
+import { ChartWrapper, ChartSvg } from "../../atoms"
+import { useDimensions } from "../../../hooks"
+import useInitUpdate from "../../../hooks/useInitUpdate"
 
-export default function VerticalDropChart({
-  data, domain
-}) {
-  
+export default function VerticalDropChart({ data, domain }) {
   const wrapperRef = useRef()
   const svgRef = useRef()
-  const areaRef = useRef()
-  const { width, height, chartHeight, chartWidth } = useDimensions(
-    wrapperRef
-  );
+  const valueStore = useRef()
+  const { width, height } = useDimensions(wrapperRef)
+  const lgRadius = height * 0.2
+  const smRadius = height * 0.05
 
-  
-  function initVis(){
-    // const x = xAxis.range(0, chartWidth)
-    console.log(domain)
+  function initVis() {
+    const xScale = scaleLinear()
+      .domain(domain)
+      .range([width, 0])
+    valueStore.current = {
+      xScale,
+    }
     createUpdateCircles()
   }
-  
-  function createUpdateCircles(){
-    // console.log(data)
+
+  function createUpdateCircles() {
+    const { xScale } = valueStore.current
+
+    select(svgRef.current)
+      .selectAll("circle")
+      .data(data.sort((a, b) => b.perc - a.perc), d => d.year)
+      .join(enter =>
+        enter
+          .append("circle")
+          .attr("fill", "#333")
+          .attr("cy", height / 2)
+          .attr("cx", d => xScale(+d.perc))
+          .attr("r", d => (d.year === 2017 ? lgRadius : smRadius))
+          .call(enter => enter)
+      )
   }
-  
-  const { init, runUpdate } = useInitUpdate({ data,  chartHeight, chartWidth, initVis})
-  
+
+  useInitUpdate({ data, chartHeight: height, chartWidth: width, initVis })
 
   return (
     <ChartWrapper ref={wrapperRef}>
-      <ChartSvg ref={svgRef} width={width} height={height}>
-        <ChartArea ref={areaRef} />
-      </ChartSvg>
+      <ChartSvg ref={svgRef} width={width} height={height} />
     </ChartWrapper>
   )
 }

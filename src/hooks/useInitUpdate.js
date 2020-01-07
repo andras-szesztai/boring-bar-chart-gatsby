@@ -1,28 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 
-import usePrevious from "./usePrevious";
-
+import usePrevious from "./usePrevious"
 
 export default function useInitUpdate({
   data,
-  chartHeight, chartWidth,
+  chartHeight,
+  chartWidth,
   initVis,
-  updateVis
+  updateVis,
 }) {
   const [state, setState] = useState({
     init: false,
-    runUpdate: false
-  });
+    runUpdate: false,
+  })
 
   const { init, runUpdate } = state
 
   useEffect(() => {
-    if(!init && chartHeight && chartWidth && data){
-      setState(prev => ({...prev, init: true}))
+    if (!init && chartHeight && chartWidth && data) {
+      setState(prev => ({ ...prev, init: true }))
       initVis()
     }
-
   }, [chartHeight, chartWidth, data, init, initVis])
 
-  return state;
+  return state
 }

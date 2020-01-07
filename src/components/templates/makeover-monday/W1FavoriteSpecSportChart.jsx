@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
 import { max, min } from "d3-array"
+import { FlexContainer } from "../../atoms"
 
 const ChartContainer = styled.div`
   width: 80vw;
@@ -32,15 +33,18 @@ export default function({ rawData, data, valueArray }) {
   }, [domain, rawData])
 
   return (
-    <ChartContainer>
-      {valueArray.map(val => (
-        <VerticalDropChartRow
-          axisLabel={val}
-          key={val}
-          data={data[val]}
-          domain={domain}
-        />
-      ))}
-    </ChartContainer>
+    <FlexContainer fullScreen>
+      <ChartContainer>
+        {valueArray &&
+          valueArray.map(val => (
+            <VerticalDropChartRow
+              axisLabel={val}
+              key={val}
+              data={data[val]}
+              domain={domain}
+            />
+          ))}
+      </ChartContainer>
+    </FlexContainer>
   )
 }
