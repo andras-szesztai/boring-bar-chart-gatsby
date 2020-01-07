@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
+
 import { VerticalDropChartRow } from "../../organisms"
-import { scaleLinear } from "d3-scale"
-import { max, min } from "d3-array"
 import { getAxisPadding } from "../../../utils"
+import { max, min } from "d3-array"
 
 const ChartContainer = styled.div`
   width: 80vw;
@@ -20,23 +20,26 @@ const ChartContainer = styled.div`
 `
 
 export default function({ rawData, data, valueArray }) {
-
-  const [ xAxis, setXAxis ] = useState(undefined)
+  const [domain, setDomain] = useState(undefined)
   useEffect(() => {
-    if(rawData && !xAxis){
-      const params = [rawData, 'perc', .025]
-      setXAxis(scaleLinear().domain())
-      .domain([
+    if (rawData && !domain) {
+      const params = [rawData, "perc", 0.025]
+      setDomain([
         max(rawData, d => d.perc) + getAxisPadding(...params),
-        min(rawData, d => d.perc) - getAxisPadding(...params)
-      ]);
+        min(rawData, d => d.perc) - getAxisPadding(...params),
+      ])
     }
-  }, [rawData, xAxis])
+  }, [domain, rawData])
 
   return (
     <ChartContainer>
-      {xAxis && valueArray.map(val => (
-        <VerticalDropChartRow axisLabel={val} key={val} data={data[val]} xAxis={xAxis}/>
+      {valueArray.map(val => (
+        <VerticalDropChartRow
+          axisLabel={val}
+          key={val}
+          data={data[val]}
+          domain={domain}
+        />
       ))}
     </ChartContainer>
   )

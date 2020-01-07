@@ -14,12 +14,12 @@ const RowContainer = styled.div`
   border: 1px solid black;
 `
 
-export default function({ axisLabel, data }) {
+export default function({ axisLabel, data, xAxis }) {
 
   return (
     <RowContainer>
       <VerticalAxisLabelContainer label={axisLabel}/>
-      <VerticalDropChart data={data}/>
+      <VerticalDropChart data={data} xAxis={xAxis}/>
     </RowContainer>
   )
 }
