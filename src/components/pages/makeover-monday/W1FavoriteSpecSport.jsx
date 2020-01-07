@@ -40,6 +40,7 @@ export default function Dashboard() {
     <FlexContainer fullScreen>
       {dataObject && (
         <FavoriteSpecSportChart
+          rawData={rawData}
           data={dataObject.grouppedData}
           valueArray={dataObject.array}
         />

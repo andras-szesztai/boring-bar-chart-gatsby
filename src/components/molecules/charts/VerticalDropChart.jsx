@@ -20,7 +20,7 @@ export default function VerticalDropChart({
   }
   
   function createUpdateCircles(){
-    console.log(data)
+    // console.log(data)
   }
   
   const { init, runUpdate } = useInitUpdate({ data,  chartHeight, chartWidth, initVis})

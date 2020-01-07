@@ -1,7 +1,9 @@
 import React from "react"
 import styled from "styled-components"
+
 import { VerticalAxisLabelContainer } from "../../atoms"
 import { VerticalDropChart } from '../../molecules'
+
 
 const RowContainer = styled.div`
   display: grid;
@@ -13,6 +15,7 @@ const RowContainer = styled.div`
 `
 
 export default function({ axisLabel, data }) {
+
   return (
     <RowContainer>
       <VerticalAxisLabelContainer label={axisLabel}/>

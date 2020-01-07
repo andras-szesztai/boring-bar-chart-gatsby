@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
-import _ from "lodash";
 
 import usePrevious from "./usePrevious";
 
-function checkIfUpdated(sortedRaw, sortedPrevRaw) {
-  return sortedRaw
-    .map((el, i) => _.isEqual(el, sortedPrevRaw[i]))
-    .includes(false);
-}
 
 export default function useInitUpdate({
   data,
