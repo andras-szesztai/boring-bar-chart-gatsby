@@ -5,6 +5,7 @@ import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
 import { max, min } from "d3-array"
 import { FlexContainer } from "../../atoms"
+import { themifyFontSize } from "../../../themes/mixins"
 
 const ChartContainer = styled.div`
   width: 80vw;
@@ -18,16 +19,19 @@ const ChartContainer = styled.div`
   display: grid;
   grid-template-rows: repeat(10, 1fr);
   grid-row-gap: 1rem;
+
+  text {
+    font-size: ${themifyFontSize(1)};
+  }
 `
 
 
 // Inspired: https://www.behance.net/gallery/90323631/Life-expectancy-BBC-Science-Focus
 const chartColors = {
-  bg: "#04091d",
-  text: "#fff",
+  text: "#191919",
+  bg: "#E5E5E5",
+  neu: "#999999",
   lgGrowth: "#195a98",
-  smGrowth: "#a1d5cb",
-  smDecline: "#ffd7d8",
   lgDecline: "#d65e57",
   
 }

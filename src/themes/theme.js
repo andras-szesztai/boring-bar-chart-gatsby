@@ -1,15 +1,17 @@
 export const space = [0, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96]
 
 export const colors = {
-  white: "#fff",
-  grayLightest: "#F0F0F0",
-  grayLighter: "#b2b2b2",
+  white: "#ffffff",
+  whiteDark: "#E5E5E5",
+  grayLightest: "#cccccc",
+  grayLighter: "#B2B2B2",
   grayLight: "#999999",
-  gray: "#7f7f7f",
-  grayDark: "#4c4c4c",
-  grayDarker: "#323232",
-  grayDarkest: "#232323",
-  black: "#000",
+  gray: "#7F7F7F",
+  grayDark: "#666666",
+  grayDarker: "#4C4C4C",
+  grayDarkest: "#333333",
+  blackLight: "#191919",
+  black: "#000000"
 }
 
 export const fontSize = [
