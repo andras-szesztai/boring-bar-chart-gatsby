@@ -31,14 +31,6 @@ const ChartContainer = styled.div`
   }
 `
 
-const TitleContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-
-  display: grid;
-`
-
 const axisSvgHeight = 12
 
 // Inspired: https://www.behance.net/gallery/90323631/Life-expectancy-BBC-Science-Focus
@@ -147,7 +139,7 @@ export default function({ rawData, data, valueArray }) {
         </FlexContainer>
         <FlexContainer
           fixSize
-          height={100}
+          height={55}
           width={200}
           justify="space-around"
           absPos

@@ -10,7 +10,7 @@ export default function Dashboard() {
     allStrapiDatasets: { nodes },
   } = useStaticQuery(graphql`
     {
-      allStrapiDatasets(filter: { name: {} }) {
+      allStrapiDatasets(filter: {id: {eq: "Datasets_6"}}) {
         nodes {
           data {
             Sport
@@ -25,15 +25,20 @@ export default function Dashboard() {
 
   const rawData = useRawData(nodes)
 
-  const [dataObject, setDataObject] = useState({array: undefined, grouppedData: undefined})
+  const [dataObject, setDataObject] = useState({
+    array: undefined,
+    grouppedData: undefined,
+  })
   useEffect(() => {
     if (!dataObject.array && rawData) {
       const valueArray = _.uniq(
         rawData.sort((a, b) => b.perc - a.perc).map(d => d.Sport)
       )
-      const grouppedDataArray =  _.groupBy(rawData, "Sport")
+      const grouppedDataArray = _.groupBy(rawData, "Sport")
       const diffs = valueArray.map(el => {
-        const percentages = grouppedDataArray[el].sort((a,b) => b.year - a.year).map(d => d.perc)
+        const percentages = grouppedDataArray[el]
+          .sort((a, b) => b.year - a.year)
+          .map(d => d.perc)
         const difference = percentages[0] - percentages[1]
         return difference
       })
@@ -43,11 +48,12 @@ export default function Dashboard() {
       })
       setDataObject({
         array: valueArray,
-        grouppedData: grouppedDataArray
+        grouppedData: grouppedDataArray,
       })
     }
   }, [dataObject, rawData])
 
+  console.log(nodes)
   return (
     <FavoriteSpecSportChart
       rawData={rawData}
