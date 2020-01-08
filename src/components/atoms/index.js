@@ -4,6 +4,8 @@ import {
   ChartSvg,
 } from "./chartElements"
 import { FlexContainer, VerticalAxisLabelContainer } from "./containers"
+import { Title } from "./textElements"
+
 
 export {
   FlexContainer,
@@ -11,4 +13,5 @@ export {
   ChartArea,
   ChartWrapper,
   ChartSvg,
+  Title
 }

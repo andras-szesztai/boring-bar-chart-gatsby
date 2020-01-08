@@ -7,7 +7,7 @@ import { max, min } from "d3-array"
 
 import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
-import { FlexContainer, ChartSvg } from "../../atoms"
+import { FlexContainer, ChartSvg, Title } from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
 import { useDimensions } from "../../../hooks"
 
@@ -123,20 +123,16 @@ export default function({ rawData, data, valueArray }) {
         <FlexContainer
           fixSize
           height={100}
-          fontSize={5}
+          justify="flex-end"
           align="flex-end"
           direction="column"
-          paddingBottom={2}
+          paddingBottom={1}
           absPos
           bottom={height / 2 + axisSvgHeight / 2}
           right={0}
         >
-          <span>
-            Top Spectator Sports in the United States
-          </span>
-          <span>
-            Changes between 2008 and 2017
-          </span>
+          <Title fontSize={2} fontColor="grayLight">Changes between 2008 and 2017</Title>
+          <Title fontSize={5}>Top Spectator Sports in the United States</Title>
         </FlexContainer>
       </ChartContainer>
     </FlexContainer>
