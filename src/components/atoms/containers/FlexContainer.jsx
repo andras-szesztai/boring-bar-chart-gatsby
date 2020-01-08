@@ -6,6 +6,7 @@ const Container = styled.div`
   font-size: ${({ fontSize }) => themifyFontSize(fontSize)};
   font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight)};
   color: ${({ fontColor }) => themifyColor(fontColor)};
+  background: ${({bgColor}) => bgColor || "#fff"};
 
   ${({ fullScreen }) => fullScreen && css`
     height: 100vh;

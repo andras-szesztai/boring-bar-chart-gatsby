@@ -12,12 +12,12 @@ const RowContainer = styled.div`
   align-items: center;
 `
 
-export default function({ axisLabel, data, xAxis, domain }) {
+export default function({ axisLabel, data, xAxis, domain, colors }) {
 
   return (
     <RowContainer>
-      <VerticalAxisLabelContainer label={axisLabel}/>
-      {domain && <VerticalDropChart data={data} xAxis={xAxis} domain={domain}/>}
+      <VerticalAxisLabelContainer label={axisLabel} color={colors.text}/>
+      {domain && <VerticalDropChart data={data} xAxis={xAxis} domain={domain} colors={colors}/>}
     </RowContainer>
   )
 }

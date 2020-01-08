@@ -20,6 +20,16 @@ const ChartContainer = styled.div`
   grid-row-gap: 1rem;
 `
 
+const chartColors = {
+  bg: "#04091d",
+  text: "#fff",
+  lgGrowth: "#195a98",
+  smGrowth: "#a1d5cb",
+  smDecline: "#ffd7d8",
+  lgDecline: "#d65e57",
+  
+}
+
 export default function({ rawData, data, valueArray }) {
   const [domain, setDomain] = useState(undefined)
   useEffect(() => {
@@ -33,11 +43,12 @@ export default function({ rawData, data, valueArray }) {
   }, [domain, rawData])
 
   return (
-    <FlexContainer fullScreen>
+    <FlexContainer fullScreen bgColor={chartColors.bg} fontColor="grayDarkest">
       <ChartContainer>
         {valueArray &&
           valueArray.map(val => (
             <VerticalDropChartRow
+              colors={chartColors}
               axisLabel={val}
               key={val}
               data={data[val]}

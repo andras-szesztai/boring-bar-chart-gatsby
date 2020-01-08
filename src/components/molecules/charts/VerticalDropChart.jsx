@@ -1,28 +1,28 @@
 import React, { useRef } from "react"
 import { scaleLinear } from "d3-scale"
 import { select } from "d3-selection"
-import { area, arc } from "d3-shape"
+import { area } from "d3-shape"
 
 import { ChartWrapper, ChartSvg } from "../../atoms"
 import { useDimensions } from "../../../hooks"
 import useInitUpdate from "../../../hooks/useInitUpdate"
 
-export default function VerticalDropChart({ data, domain }) {
+export default function VerticalDropChart({ data, domain, colors }) {
   const wrapperRef = useRef()
   const svgRef = useRef()
   const valueStore = useRef()
   const { width, height } = useDimensions(wrapperRef)
-  const lgRadius = height * 0.2
-  const smRadius = height * 0.05
+  const lgRadius = height * 0.15
+  const smRadius = height * 0.01
 
   function initVis() {
     const xScale = scaleLinear()
       .domain(domain)
-      .range([width, 0])
+      .range([width, 0])   
     valueStore.current = {
       xScale,
     }
-   // createUpdateAreas()
+    createUpdateAreas()
     createUpdateCircles()
   }
 
@@ -34,7 +34,7 @@ export default function VerticalDropChart({ data, domain }) {
     select(svgRef.current)
       .append("path")
       .datum(data)
-      .attr("fill", "#333")
+      .attr("fill", "#4c4c4c")
       .attr(
         "d",
         area()
@@ -46,22 +46,17 @@ export default function VerticalDropChart({ data, domain }) {
 
   function createUpdateCircles() {
     const { xScale } = valueStore.current
-
+    
     select(svgRef.current)
-      .selectAll(".circle")
+      .selectAll("circle")
       .data(data.sort((a, b) => b.perc - a.perc), d => d.year)
       .join(enter =>
         enter
           .append("circle")
-          .attr('class', 'circle')
-          .attr("fill", "#333")
-          .attr('transform', 'translate('+[x,y]+')')
-          .attr('d', arc({
-              innerRadius: 0,
-              outerRadius: rad,
-              startAngle: -Math.PI*0.5,
-              endAngle: Math.PI*0.5
-          }))
+          .attr("fill", "#4c4c4c")
+          .attr("cy", height / 2)
+          .attr("cx", d => xScale(+d.perc))
+          .attr("r", d => (isRecent(d) ? lgRadius : smRadius))
           .call(enter => enter)
       )
   }
