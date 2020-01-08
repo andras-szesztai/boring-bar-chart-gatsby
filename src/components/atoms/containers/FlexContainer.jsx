@@ -38,6 +38,7 @@ const Container = styled.div`
     css`
       height: ${height}px;
       width: ${width}px;
+      white-space: nowrap;
     `}
 
   display: flex;

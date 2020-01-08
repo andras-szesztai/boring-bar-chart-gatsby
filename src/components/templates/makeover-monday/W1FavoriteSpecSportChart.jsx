@@ -96,6 +96,13 @@ export default function({ rawData, data, valueArray }) {
     }
   })
 
+  const [buttons, setButtons] = useState({
+    "2008": { text: 2008, checked: false },
+    "2018": { text: 2018, checked: false },
+  })
+
+  console.log(buttons)
+
   return (
     <FlexContainer fullScreen bgColor={chartColors.bg} fontColor="grayDarkest">
       <ChartContainer ref={wrapperRef}>
@@ -131,8 +138,12 @@ export default function({ rawData, data, valueArray }) {
           bottom={height / 2 + axisSvgHeight / 2}
           right={0}
         >
-          <Title fontSize={2} fontColor="grayLight">Changes between 2008 and 2017</Title>
-          <Title fontSize={5} fontColor="grayDarkest">Top Spectator Sports in the United States</Title>
+          <Title fontSize={2} fontColor="grayLight">
+            Changes between 2008 and 2017
+          </Title>
+          <Title fontSize={5} fontWeight={0} fontColor="grayDarkest">
+            Top Spectator Sports in the United States
+          </Title>
         </FlexContainer>
         <FlexContainer
           fixSize
@@ -143,8 +154,22 @@ export default function({ rawData, data, valueArray }) {
           top={height / 2 + axisSvgHeight / 2}
           right={0}
         >
-          <NeumorphButton height={30} width={60} text="2008"/>
-          <NeumorphButton height={30} width={60} text="2017"/>
+          {Object.values(buttons).map(b => (
+            <NeumorphButton
+              height={30}
+              width={60}
+              {...b}
+              handleClick={() =>
+                setButtons(prev => ({
+                  ...prev,
+                  [b.text]: {
+                    ...prev[b.text],
+                    checked: !prev[b.text].checked,
+                  },
+                }))
+              }
+            />
+          ))}
         </FlexContainer>
       </ChartContainer>
     </FlexContainer>

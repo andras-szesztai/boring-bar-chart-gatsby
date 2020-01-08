@@ -12,9 +12,19 @@ const Button = styled.div`
     font-weight: ${themifyFontWeight(fontWeight)};
   `}
 
-  /* box-shadow: 9px 9px 16px rgb(163,177,198,0.6), -9px -9px 16px  rgba(255,255,255, 0.6); */
+  transition: box-shadow .3s;
 
-  box-shadow: inset 1px 1px 4px rgb(163,177,198,0.6), inset -1px -1px 4px  rgba(255,255,255, 0.6);
+  ${({ checked }) =>
+    !checked
+      ? css`
+          box-shadow: 9px 9px 16px rgb(163, 177, 198, 0.6),
+            -9px -9px 16px rgba(255, 255, 255, 0.6);
+        `
+      : css`
+          box-shadow: inset 1px 1px 4px rgb(163, 177, 198, 0.6),
+            inset -1px -1px 4px rgba(255, 255, 255, 0.6);
+        `}
+
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 15px;
 
@@ -25,30 +35,45 @@ const Button = styled.div`
   align-items: center;
 `
 
-const Underline = styled.div`
+const Indicator = styled.div`
   ${({ width, height, fontSize, fontWeight }) => css`
-    width: ${width * .7}px;
-    height: ${height * .6}px;
+    width: ${width * 0.7}px;
+    height: ${height * 0.6}px;
     font-size: ${themifyFontSize(fontSize)};
     font-weight: ${themifyFontWeight(fontWeight)};
   `}
 
-  background: #333;
-  color: #E5E5E5;
+  transition: color .3s;
 
+  ${({ checked }) =>
+    !checked
+      ? css`
+          color: #999999;
+        `
+      : css`
+          color: #191919;
+        `}
+
+  ${Button}:hover & {
+    color: #191919;
+  }
+  &:hover {
+    color: #191919;
+  }
   display: flex;
   justify-content: center;
   align-items: center;
 
   border-radius: 15px;
-  border: 1px solid black;
 `
 
 export default function(props) {
   return (
-    <Button {...props}>
-      <Underline {...props}>{props.text}</Underline>
-    </Button>
+    <div onClick={props.handleClick}>
+      <Button {...props}>
+        <Indicator {...props}>{props.text}</Indicator>
+      </Button>
+    </div>
   )
 }
 
