@@ -20,6 +20,8 @@ const ChartContainer = styled.div`
   grid-row-gap: 1rem;
 `
 
+
+// Inspired: https://www.behance.net/gallery/90323631/Life-expectancy-BBC-Science-Focus
 const chartColors = {
   bg: "#04091d",
   text: "#fff",

@@ -34,7 +34,7 @@ export default function VerticalDropChart({ data, domain, colors }) {
     select(svgRef.current)
       .append("path")
       .datum(data)
-      .attr("fill", "#4c4c4c")
+      .attr("fill", colors.smDecline)
       .attr(
         "d",
         area()
@@ -53,7 +53,7 @@ export default function VerticalDropChart({ data, domain, colors }) {
       .join(enter =>
         enter
           .append("circle")
-          .attr("fill", "#4c4c4c")
+          .attr("fill", colors.smDecline)
           .attr("cy", height / 2)
           .attr("cx", d => xScale(+d.perc))
           .attr("r", d => (isRecent(d) ? lgRadius : smRadius))
