@@ -2,6 +2,7 @@ import React, { useRef } from "react"
 import { scaleLinear } from "d3-scale"
 import { select } from "d3-selection"
 import { area } from "d3-shape"
+import _ from 'lodash'
 
 import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
 import { useDimensions } from "../../../hooks"
@@ -58,11 +59,10 @@ export default function VerticalDropChart({ data, domain, colors, margin }) {
       .join(enter =>
         enter
           .append("text")
-          .attr("text-anchor", "end")
-          .attr("x", d => xScale(d.perc))
-          .attr("dx", isRecentGreater ? -lgRadius - 3 : -smRadius - 3)
+          .attr("text-anchor", "middle")
+          .attr("x", xScale(_.mean(percentages)))
           .attr("y", height / 2)
-          .attr("dy", 3)
+          .attr("dy", -lgRadius * 1.5)
           .attr("fill", d => getColor(d.difference))
           .text(d => d.Sport)
       )

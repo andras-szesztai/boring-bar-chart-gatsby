@@ -31,6 +31,14 @@ const ChartContainer = styled.div`
   }
 `
 
+const TitleContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  display: grid;
+`
+
 const axisSvgHeight = 12
 
 // Inspired: https://www.behance.net/gallery/90323631/Life-expectancy-BBC-Science-Focus
@@ -46,7 +54,7 @@ const margin = {
   top: 0,
   right: 0,
   bottom: 0,
-  left: 20,
+  left: 10,
 }
 
 export default function({ rawData, data, valueArray }) {
@@ -112,6 +120,24 @@ export default function({ rawData, data, valueArray }) {
           fontSize={1}
           fontColor="grayLight"
         />
+        <FlexContainer
+          fixSize
+          height={100}
+          fontSize={5}
+          align="flex-end"
+          direction="column"
+          paddingBottom={2}
+          absPos
+          bottom={height / 2 + axisSvgHeight / 2}
+          right={0}
+        >
+          <span>
+            Top Spectator Sports in the United States
+          </span>
+          <span>
+            Changes between 2008 and 2017
+          </span>
+        </FlexContainer>
       </ChartContainer>
     </FlexContainer>
   )

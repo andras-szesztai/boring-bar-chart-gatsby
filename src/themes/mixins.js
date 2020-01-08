@@ -20,7 +20,7 @@ export function themifyColor(color){
 export const themifyFontSize= createThemify(theme.fontSize) // Pass in index
 export const themifyFontWeight= createThemify(theme.fontWeight) // Pass in index
 export const themifyCurve= createThemify(theme.curves) // Pass in curve name
-export const themifySpace = createThemify(theme.space) // Pass in inde
+export const themifySpace = createThemify(theme.space) // Pass in index
 export const themifyZIndex= createThemify(theme.z) // Pass in z-index name
 
 export function isValidColor(color) {
