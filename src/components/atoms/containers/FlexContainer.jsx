@@ -12,10 +12,11 @@ const Container = styled.div`
   color: ${({ fontColor }) => themifyColor(fontColor)};
   background: ${({ bgColor }) => bgColor};
 
-  ${({ absPos, bottom, right }) => absPos && css`
+  ${({ absPos, bottom, right, top }) => absPos && css`
     position: absolute;
     bottom: ${bottom}px;
     right: ${right}px;
+    top: ${top}px;
   `}
 
   ${({ fullScreen }) =>

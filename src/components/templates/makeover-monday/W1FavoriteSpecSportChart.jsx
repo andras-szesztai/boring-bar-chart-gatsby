@@ -7,7 +7,7 @@ import { max, min } from "d3-array"
 
 import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
-import { FlexContainer, ChartSvg, Title } from "../../atoms"
+import { FlexContainer, ChartSvg, Title, NeumorphButton } from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
 import { useDimensions } from "../../../hooks"
 
@@ -132,7 +132,19 @@ export default function({ rawData, data, valueArray }) {
           right={0}
         >
           <Title fontSize={2} fontColor="grayLight">Changes between 2008 and 2017</Title>
-          <Title fontSize={5}>Top Spectator Sports in the United States</Title>
+          <Title fontSize={5} fontColor="grayDarkest">Top Spectator Sports in the United States</Title>
+        </FlexContainer>
+        <FlexContainer
+          fixSize
+          height={100}
+          width={200}
+          justify="space-around"
+          absPos
+          top={height / 2 + axisSvgHeight / 2}
+          right={0}
+        >
+          <NeumorphButton height={30} width={60} text="2008"/>
+          <NeumorphButton height={30} width={60} text="2017"/>
         </FlexContainer>
       </ChartContainer>
     </FlexContainer>

@@ -5,6 +5,7 @@ import {
 } from "./chartElements"
 import { FlexContainer, VerticalAxisLabelContainer } from "./containers"
 import { Title } from "./textElements"
+import { NeumorphButton } from "./buttons"
 
 
 export {
@@ -13,5 +14,6 @@ export {
   ChartArea,
   ChartWrapper,
   ChartSvg,
-  Title
+  Title,
+  NeumorphButton
 }
