@@ -19,7 +19,7 @@ export default function VerticalDropChart({ data, domain, colors, margin }) {
   function initVis() {
     const xScale = scaleLinear()
       .domain(domain)
-      .range([chartWidth, 0])
+      .range([0, chartWidth])
     valueStore.current = {
       xScale,
     }

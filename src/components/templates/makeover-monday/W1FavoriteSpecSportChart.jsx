@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import styled from "styled-components"
+import { scaleLinear } from "d3-scale"
+import { axisBottom } from "d3-axis"
+import { select } from "d3-selection"
+import { max, min } from "d3-array"
 
 import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
-import { max, min } from "d3-array"
-import { FlexContainer } from "../../atoms"
+import { FlexContainer, ChartSvg } from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
+import { useDimensions } from "../../../hooks"
 
 const ChartContainer = styled.div`
+  position: relative;
+
   width: 80vw;
   min-width: 600px;
   max-width: 1100px;
@@ -25,6 +31,7 @@ const ChartContainer = styled.div`
   }
 `
 
+const axisSvgHeight = 12
 
 // Inspired: https://www.behance.net/gallery/90323631/Life-expectancy-BBC-Science-Focus
 const chartColors = {
@@ -33,7 +40,13 @@ const chartColors = {
   neu: "#999999",
   lgGrowth: "#195a98",
   lgDecline: "#d65e57",
-  
+}
+
+const margin = {
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 20,
 }
 
 export default function({ rawData, data, valueArray }) {
@@ -42,15 +55,42 @@ export default function({ rawData, data, valueArray }) {
     if (rawData && !domain) {
       const params = [rawData, "perc", 0.025]
       setDomain([
-        max(rawData, d => d.perc) + getAxisPadding(...params),
         min(rawData, d => d.perc) - getAxisPadding(...params),
+        max(rawData, d => d.perc) + getAxisPadding(...params),
       ])
     }
   }, [domain, rawData])
 
+  const svgRef = useRef()
+  const wrapperRef = useRef()
+  const { width, height } = useDimensions(wrapperRef)
+  const [axisInit, setAxisInit] = useState(false)
+  function addAxis() {
+    const axis = axisBottom(
+      scaleLinear()
+        .domain(domain)
+        .range([0, svgRef.current.clientWidth - margin.left])
+    )
+      .tickSize(0)
+      .tickFormat(d => d + "%")
+    select(svgRef.current)
+      .append("g")
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(axis)
+    select(svgRef.current)
+      .select(".domain")
+      .remove()
+    setAxisInit(true)
+  }
+  useEffect(() => {
+    if (svgRef && svgRef.current && width && !axisInit) {
+      addAxis()
+    }
+  })
+
   return (
     <FlexContainer fullScreen bgColor={chartColors.bg} fontColor="grayDarkest">
-      <ChartContainer>
+      <ChartContainer ref={wrapperRef}>
         {valueArray &&
           valueArray.map(val => (
             <VerticalDropChartRow
@@ -59,8 +99,19 @@ export default function({ rawData, data, valueArray }) {
               key={val}
               data={data[val]}
               domain={domain}
+              margin={margin}
             />
           ))}
+        <ChartSvg
+          absPos
+          top={height / 2 - axisSvgHeight / 2}
+          left={margin.left}
+          ref={svgRef}
+          width={width}
+          height={axisSvgHeight}
+          fontSize={1}
+          fontColor="grayLight"
+        />
       </ChartContainer>
     </FlexContainer>
   )

@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 import { VerticalDropChart } from "../../molecules"
 
-export default function({ data, xAxis, domain, colors }) {
+export default function({ data, xAxis, domain, colors, margin }) {
   return (
     <div>
       {domain && (
@@ -12,12 +12,7 @@ export default function({ data, xAxis, domain, colors }) {
           xAxis={xAxis}
           domain={domain}
           colors={colors}
-          margin={{
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 20
-          }}
+          margin={margin}
         />
       )}
     </div>

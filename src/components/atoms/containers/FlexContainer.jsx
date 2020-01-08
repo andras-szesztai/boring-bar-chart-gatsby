@@ -1,4 +1,3 @@
-import React from "react"
 import styled, { css } from "styled-components"
 import { themifyFontSize, themifyFontWeight, themifyColor } from "../../../themes/mixins"
 
@@ -25,11 +24,9 @@ const Container = styled.div`
   user-select: none;
 `
 
-export default function FlexContainer(props) {
-  return <Container {...props}>{props.children}</Container>
-}
+export default Container
 
-FlexContainer.defaultProps = {
+Container.defaultProps = {
   fontColor: "grayDarker",
   justify: "center",
   align: "center"
