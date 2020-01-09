@@ -109,8 +109,9 @@ export default function VerticalDropChart({
     select(areaRef.current)
       .selectAll(".perc-text")
       .transition("highlight")
-      .attr("opacity", d => displayedYears.filter(y => y.text === d.year).checked ? 1 : 0)
-      .each(d => displayedYears.filter(y => y.text === d.year).checked)
+      .attr("opacity", d =>
+        displayedYears.filter(y => y.text === d.year)[0].checked ? 1 : 0
+      )
   }
 
   function createUpdateText() {
