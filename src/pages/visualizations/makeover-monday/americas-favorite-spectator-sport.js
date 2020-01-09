@@ -4,13 +4,14 @@ import _ from "lodash"
 
 import { useRawData } from "../../../hooks"
 import { FavoriteSpecSportChart } from "../../../components/templates"
+import { Helmet } from "react-helmet"
 
 export default function Dashboard() {
   const {
     allStrapiDatasets: { nodes },
   } = useStaticQuery(graphql`
     {
-      allStrapiDatasets(filter: {id: {eq: "Datasets_6"}}) {
+      allStrapiDatasets(filter: { id: { eq: "Datasets_6" } }) {
         nodes {
           data {
             Sport
@@ -54,10 +55,13 @@ export default function Dashboard() {
   }, [dataObject, rawData])
 
   return (
-    <FavoriteSpecSportChart
-      rawData={rawData}
-      data={dataObject.grouppedData}
-      valueArray={dataObject.array}
-    />
+    <>
+      <Helmet title="Top Spectator Sports in the United States" />
+      <FavoriteSpecSportChart
+        rawData={rawData}
+        data={dataObject.grouppedData}
+        valueArray={dataObject.array}
+      />
+    </>
   )
 }

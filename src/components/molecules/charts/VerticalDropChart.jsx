@@ -98,7 +98,7 @@ export default function VerticalDropChart({
           .attr("x", d => xScale(d.perc))
           .attr("dx", d => getVals(d).dx)
           .attr("y", height / 2)
-          .attr("dy", 3)
+          .attr("dy", 4)
           .attr("opacity", 0)
           .attr("fill", d => getColor(d.difference))
           .text(d => d.perc + "%")
