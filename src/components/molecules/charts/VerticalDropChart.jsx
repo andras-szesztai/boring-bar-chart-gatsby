@@ -1,14 +1,21 @@
-import React, { useRef } from "react"
+import React, { useRef, useEffect } from "react"
 import { scaleLinear } from "d3-scale"
 import { select } from "d3-selection"
 import { area } from "d3-shape"
 import _ from "lodash"
+import "d3-transition"
 
 import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
-import { useDimensions } from "../../../hooks"
+import { useDimensions, usePrevious } from "../../../hooks"
 import useInitUpdate from "../../../hooks/useInitUpdate"
 
-export default function VerticalDropChart({ data, domain, colors, margin }) {
+export default function VerticalDropChart({
+  data,
+  domain,
+  colors,
+  margin,
+  displayedYears,
+}) {
   const wrapperRef = useRef()
   const svgRef = useRef()
   const areaRef = useRef()
@@ -16,6 +23,16 @@ export default function VerticalDropChart({ data, domain, colors, margin }) {
   const { width, height, chartWidth } = useDimensions(wrapperRef)
   const lgRadius = height * 0.15
   const smRadius = height * 0.025
+
+  const prevDisplayedYears = usePrevious(displayedYears)
+  useEffect(() => {
+    const newDisplayed = displayedYears.map(el => el.checked)
+    const prevDisplayed =
+      prevDisplayedYears && prevDisplayedYears.map(el => el.checked)
+    if (prevDisplayed && !_.isEqual(newDisplayed, prevDisplayed)) {
+      displayHidePercText()
+    }
+  })
 
   function initVis() {
     const xScale = scaleLinear()
@@ -51,16 +68,19 @@ export default function VerticalDropChart({ data, domain, colors, margin }) {
     let vals
     switch (true) {
       case (year === 2017 && diff < 0) || (year === 2008 && diff === 0):
-        vals = { dx: -lgRadius, anchor: "end"}
+        vals = { dx: -lgRadius - 2, anchor: "end" }
         break
-      case (year === 2008 && diff > 0):
-        vals = { dx: -smRadius, anchor: "end"}
+      case year === 2008 && diff > 0:
+        vals = { dx: -smRadius - 2, anchor: "end" }
         break
-      case (year === 2017 && diff > 0) || (year === 2008 && diff < 0) || (year === 2017 && diff === 0):
-        vals = { dx: 10, anchor: "start"}
+      case (year === 2017 && diff > 0) || (year === 2017 && diff === 0):
+        vals = { dx: lgRadius + 2, anchor: "start" }
+        break
+      case year === 2008 && diff < 0:
+        vals = { dx: smRadius + 2, anchor: "start" }
         break
       default:
-        vals = { dx: 0, anchor: "middle"}
+        vals = { dx: 0, anchor: "middle" }
     }
     return vals
   }
@@ -78,9 +98,19 @@ export default function VerticalDropChart({ data, domain, colors, margin }) {
           .attr("x", d => xScale(d.perc))
           .attr("dx", d => getVals(d).dx)
           .attr("y", height / 2)
+          .attr("dy", 3)
+          .attr("opacity", 0)
           .attr("fill", d => getColor(d.difference))
           .text(d => d.perc + "%")
       )
+  }
+
+  function displayHidePercText() {
+    select(areaRef.current)
+      .selectAll(".perc-text")
+      .transition("highlight")
+      .attr("opacity", d => displayedYears.filter(y => y.text === d.year).checked ? 1 : 0)
+      .each(d => displayedYears.filter(y => y.text === d.year).checked)
   }
 
   function createUpdateText() {

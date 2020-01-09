@@ -100,6 +100,7 @@ export default function({ rawData, data, valueArray }) {
           valueArray.map(val => (
             <VerticalDropChartRow
               colors={chartColors}
+              displayedYears={Object.values(buttons)}
               axisLabel={val}
               key={val}
               data={data[val]}
@@ -146,6 +147,7 @@ export default function({ rawData, data, valueArray }) {
         >
           {Object.values(buttons).map(b => (
             <NeumorphButton
+              key={b}
               height={30}
               width={60}
               {...b}

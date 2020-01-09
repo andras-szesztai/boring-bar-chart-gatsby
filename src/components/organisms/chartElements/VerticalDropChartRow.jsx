@@ -2,16 +2,12 @@ import React from "react"
 
 import { VerticalDropChart } from "../../molecules"
 
-export default function({ data, xAxis, domain, colors, margin }) {
+export default function(props) {
   return (
     <div>
-      {domain && (
+      {props && (
         <VerticalDropChart
-          data={data}
-          xAxis={xAxis}
-          domain={domain}
-          colors={colors}
-          margin={margin}
+          {...props}
         />
       )}
     </div>
