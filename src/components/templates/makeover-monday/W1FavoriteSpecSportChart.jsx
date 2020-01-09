@@ -90,10 +90,8 @@ export default function({ rawData, data, valueArray }) {
 
   const [buttons, setButtons] = useState({
     "2008": { text: 2008, checked: false },
-    "2018": { text: 2018, checked: false },
+    "2017": { text: 2017, checked: false },
   })
-
-  console.log(buttons)
 
   return (
     <FlexContainer fullScreen bgColor={chartColors.bg} fontColor="grayDarkest">

@@ -2,7 +2,7 @@ import React, { useRef } from "react"
 import { scaleLinear } from "d3-scale"
 import { select } from "d3-selection"
 import { area } from "d3-shape"
-import _ from 'lodash'
+import _ from "lodash"
 
 import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
 import { useDimensions } from "../../../hooks"
@@ -27,6 +27,7 @@ export default function VerticalDropChart({ data, domain, colors, margin }) {
     createUpdateAreas()
     createUpdateCircles()
     createUpdateText()
+    createUpdatePercText()
   }
 
   const isRecent = d => d.year === 2017
@@ -44,6 +45,42 @@ export default function VerticalDropChart({ data, domain, colors, margin }) {
         color = colors.neu
     }
     return color
+  }
+
+  function getVals({ year, difference: diff }) {
+    let vals
+    switch (true) {
+      case (year === 2017 && diff < 0) || (year === 2008 && diff === 0):
+        vals = { dx: -lgRadius, anchor: "end"}
+        break
+      case (year === 2008 && diff > 0):
+        vals = { dx: -smRadius, anchor: "end"}
+        break
+      case (year === 2017 && diff > 0) || (year === 2008 && diff < 0) || (year === 2017 && diff === 0):
+        vals = { dx: 10, anchor: "start"}
+        break
+      default:
+        vals = { dx: 0, anchor: "middle"}
+    }
+    return vals
+  }
+
+  function createUpdatePercText() {
+    const { xScale } = valueStore.current
+    select(areaRef.current)
+      .selectAll(".perc-text")
+      .data(data)
+      .join(enter =>
+        enter
+          .append("text")
+          .attr("class", "perc-text")
+          .attr("text-anchor", d => getVals(d).anchor)
+          .attr("x", d => xScale(d.perc))
+          .attr("dx", d => getVals(d).dx)
+          .attr("y", height / 2)
+          .attr("fill", d => getColor(d.difference))
+          .text(d => d.perc + "%")
+      )
   }
 
   function createUpdateText() {
@@ -106,7 +143,7 @@ export default function VerticalDropChart({ data, domain, colors, margin }) {
   return (
     <ChartWrapper ref={wrapperRef}>
       <ChartSvg ref={svgRef} width={width} height={height}>
-        <ChartArea ref={areaRef} marginLeft={margin.left}/>
+        <ChartArea ref={areaRef} marginLeft={margin.left} />
       </ChartSvg>
     </ChartWrapper>
   )

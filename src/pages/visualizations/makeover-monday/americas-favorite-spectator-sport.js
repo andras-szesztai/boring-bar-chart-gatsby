@@ -53,7 +53,6 @@ export default function Dashboard() {
     }
   }, [dataObject, rawData])
 
-  console.log(nodes)
   return (
     <FavoriteSpecSportChart
       rawData={rawData}
