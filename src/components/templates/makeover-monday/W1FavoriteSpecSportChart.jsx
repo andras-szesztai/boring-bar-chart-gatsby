@@ -4,6 +4,7 @@ import { scaleLinear } from "d3-scale"
 import { axisBottom } from "d3-axis"
 import { select } from "d3-selection"
 import { max, min } from "d3-array"
+import { PropagateLoader } from "react-spinners"
 
 import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
@@ -88,82 +89,110 @@ export default function({ rawData, data, valueArray }) {
     }
   })
 
+  const [ loading, setLoading ] = useState(true)
+  useEffect(() => {
+    if(loading){
+      setTimeout(() => setLoading(false), 2000)
+    }
+  })
+
   const [buttons, setButtons] = useState({
     "2008": { text: 2008, checked: false },
     "2017": { text: 2017, checked: false },
   })
 
   return (
-    <FlexContainer fullScreen bgColor={chartColors.bg} fontColor="grayDarkest">
-      <ChartContainer ref={wrapperRef}>
-        {valueArray &&
-          valueArray.map(val => (
-            <VerticalDropChartRow
-              colors={chartColors}
-              displayedYears={Object.values(buttons)}
-              axisLabel={val}
-              key={val}
-              data={data[val]}
-              domain={domain}
-              margin={margin}
-            />
-          ))}
-        <ChartSvg
-          absPos
-          top={height / 2 - axisSvgHeight / 2}
-          left={margin.left}
-          ref={svgRef}
-          width={width}
-          height={axisSvgHeight}
-          fontSize={1}
-          fontColor="grayLight"
-        />
+    <>
+      {loading && (
         <FlexContainer
-          fixSize
-          height={100}
-          justify="flex-end"
-          align="flex-end"
-          direction="column"
-          paddingBottom={1}
+          fullScreen
           absPos
-          bottom={height / 2 + axisSvgHeight / 2}
-          right={0}
+          bgColor={chartColors.bg}
+          fontColor="grayDarkest"
+          zIndex="loader"
         >
-          <Title fontSize={2} fontColor="grayLight">
-            Changes between 2008 and 2017
-          </Title>
-          <Title fontSize={5} fontWeight={0} fontColor="grayDarkest">
-            Top Spectator Sports in the United States
-          </Title>
+          <PropagateLoader
+            size={10}
+            color={chartColors.text}
+            loading={loading}
+          />
         </FlexContainer>
-        <FlexContainer
-          fixSize
-          height={55}
-          width={200}
-          justify="space-around"
-          absPos
-          top={height / 2 + axisSvgHeight / 2}
-          right={0}
-        >
-          {Object.values(buttons).map(b => (
-            <NeumorphButton
-              key={b}
-              height={30}
-              width={60}
-              {...b}
-              handleClick={() =>
-                setButtons(prev => ({
-                  ...prev,
-                  [b.text]: {
-                    ...prev[b.text],
-                    checked: !prev[b.text].checked,
-                  },
-                }))
-              }
-            />
-          ))}
-        </FlexContainer>
-      </ChartContainer>
-    </FlexContainer>
+      )}
+      <FlexContainer
+        fullScreen
+        bgColor={chartColors.bg}
+        fontColor="grayDarkest"
+      >
+        <ChartContainer ref={wrapperRef}>
+          {valueArray &&
+            valueArray.map(val => (
+              <VerticalDropChartRow
+                colors={chartColors}
+                displayedYears={Object.values(buttons)}
+                axisLabel={val}
+                key={val}
+                data={data[val]}
+                domain={domain}
+                margin={margin}
+              />
+            ))}
+          <ChartSvg
+            absPos
+            top={height / 2 - axisSvgHeight / 2}
+            left={margin.left}
+            ref={svgRef}
+            width={width}
+            height={axisSvgHeight}
+            fontSize={1}
+            fontColor="grayLight"
+          />
+          <FlexContainer
+            fixSize
+            height={100}
+            justify="flex-end"
+            align="flex-end"
+            direction="column"
+            paddingBottom={1}
+            absPos
+            bottom={height / 2 + axisSvgHeight / 2}
+            right={0}
+          >
+            <Title fontSize={2} fontColor="grayLight">
+              Changes between 2008 and 2017
+            </Title>
+            <Title fontSize={5} fontWeight={0} fontColor="grayDarkest">
+              Top Spectator Sports in the United States
+            </Title>
+          </FlexContainer>
+          <FlexContainer
+            fixSize
+            height={55}
+            width={200}
+            justify="space-around"
+            absPos
+            top={height / 2 + axisSvgHeight / 2}
+            right={0}
+          >
+            {Object.values(buttons).map(b => (
+              <NeumorphButton
+                key={b}
+                height={30}
+                width={60}
+                {...b}
+                handleClick={() =>
+                  setButtons(prev => ({
+                    ...prev,
+                    [b.text]: {
+                      ...prev[b.text],
+                      checked: !prev[b.text].checked,
+                    },
+                  }))
+                }
+              />
+            ))}
+          </FlexContainer>
+        </ChartContainer>
+      </FlexContainer>
+    </>
   )
 }

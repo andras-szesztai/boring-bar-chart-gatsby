@@ -4,6 +4,7 @@ import {
   themifyFontWeight,
   themifyColor,
   themifySpace,
+  themifyZIndex,
 } from "../../../themes/mixins"
 
 const Container = styled.div`
@@ -11,6 +12,7 @@ const Container = styled.div`
   font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight)};
   color: ${({ fontColor }) => themifyColor(fontColor)};
   background: ${({ bgColor }) => bgColor};
+  z-index: ${({ zIndex }) => themifyZIndex(zIndex)};
 
   ${({ absPos, bottom, right, top }) => absPos && css`
     position: absolute;

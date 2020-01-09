@@ -34,7 +34,9 @@ export const fontWeight = [200, 300, 400, 500, 600, 700, 800]
 
 export const curves = {}
 
-export const z = {}
+export const z = {
+  loader: 100
+}
 
 const theme = {
   space,
