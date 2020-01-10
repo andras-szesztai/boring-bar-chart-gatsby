@@ -46,47 +46,21 @@ const flexEndObject = { justify: "flex-end" }
 const creditElements = [
   {
     ...flexEndObject,
-    component: (
-      <Title>
-        Designed and built by:{" "}
-        <a
-          href="https://twitter.com/AndSzesztai"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Andras Szesztai
-        </a>
-      </Title>
-    ),
+    text: "Designed and built by",
+    link: "https://twitter.com/AndSzesztai",
+    anchorText: "András Szesztai",
   },
   {
     ...flexEndObject,
-    component: (
-      <Title>
-        <a
-          href="https://www.makeovermonday.co.uk/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          #MakeoverMonday
-        </a>
-      </Title>
-    ),
+    text: "Project",
+    link: "https://www.makeovermonday.co.uk/",
+    anchorText: "#MakeoverMonday",
   },
   {
     ...flexEndObject,
-    component: (
-      <Title>
-        Data source:
-        <a
-          href="https://news.gallup.com/poll/4735/sports.aspx#1"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Gallup
-        </a>
-      </Title>
-    ),
+    text: "Data source",
+    link: "https://news.gallup.com/poll/4735/sports.aspx#1",
+    anchorText: "Gallup",
   },
 ]
 
@@ -101,7 +75,7 @@ const chartColors = {
 
 const margin = {
   top: 0,
-  right: 0,
+  right: 10,
   bottom: 0,
   left: 10,
 }
@@ -142,7 +116,7 @@ export default function({ rawData, data, valueArray }) {
     const axis = axisBottom(
       scaleLinear()
         .domain(domain)
-        .range([0, svgRef.current.clientWidth - margin.left])
+        .range([0, svgRef.current.clientWidth - margin.left - margin.right])
     )
       .tickSize(0)
       .tickFormat(d => d + "%")

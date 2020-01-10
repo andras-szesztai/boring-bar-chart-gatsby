@@ -20,7 +20,7 @@ export default function VerticalDropChart({
   const svgRef = useRef()
   const areaRef = useRef()
   const valueStore = useRef()
-  const { width, height, chartWidth } = useDimensions(wrapperRef)
+  const { width, height, chartWidth } = useDimensions(wrapperRef, margin)
   const lgRadius = height * 0.15
   const smRadius = height * 0.025
 
