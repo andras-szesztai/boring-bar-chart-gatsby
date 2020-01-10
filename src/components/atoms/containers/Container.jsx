@@ -47,6 +47,10 @@ const Container = styled.div`
       width: ${width}px;
       white-space: nowrap;
     `}
+
+  ${({gridArea}) => css`
+    grid-area: ${gridArea};
+  `}
   
 `
 
