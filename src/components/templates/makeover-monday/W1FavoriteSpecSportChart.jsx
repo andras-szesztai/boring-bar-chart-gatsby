@@ -34,6 +34,11 @@ const ChartContainer = styled.div`
   }
 `
 
+const ImageContainer = styled.div`
+  position: relative;
+  width: 220px;
+`
+
 const axisSvgHeight = 12
 
 // Inspired: https://www.behance.net/gallery/90323631/Life-expectancy-BBC-Science-Focus
@@ -53,8 +58,22 @@ const margin = {
 }
 
 export default function({ rawData, data, valueArray }) {
+  const query = useStaticQuery(graphql`
+    {
+      allStrapiDatasets {
+        nodes {
+          image {
+            childImageSharp {
+              fluid {
+                ...GatsbyImageSharpFluid_tracedSVG
+              }
+            }
+          }
+        }
+      }
+    }
+  `)
 
-  
   const [domain, setDomain] = useState(undefined)
   useEffect(() => {
     if (rawData && !domain) {
@@ -93,9 +112,9 @@ export default function({ rawData, data, valueArray }) {
     }
   })
 
-  const [ loading, setLoading ] = useState(true)
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
-    if(loading){
+    if (loading) {
       setTimeout(() => setLoading(false), 2000)
     }
   })
@@ -194,6 +213,15 @@ export default function({ rawData, data, valueArray }) {
                 }
               />
             ))}
+          </FlexContainer>
+          <FlexContainer absPos top={height / 2 + 75} right={0}>
+            <ImageContainer>
+              <Image
+                fluid={
+                  query.allStrapiDatasets.nodes[0].image.childImageSharp.fluid
+                }
+              />
+            </ImageContainer>
           </FlexContainer>
         </ChartContainer>
       </FlexContainer>
