@@ -10,6 +10,12 @@ const Title = styled.span`
   font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight)};
   color: ${({ fontColor }) => themifyColor(fontColor)};
   line-height: ${({ lineHeight }) => lineHeight};
+
+  a {
+    text-decoration: none;
+    color: ${({ fontColor }) => themifyColor(fontColor)};
+    font-weight: ${({ anchorFontWeight }) => themifyFontWeight(anchorFontWeight)};
+  }
 `
 
 export default Title
@@ -17,4 +23,5 @@ export default Title
 Title.defaultProps = {
   fontColor: "grayDarker",
   lineHeight: 1.2,
+  anchorFontWeight:5
 }

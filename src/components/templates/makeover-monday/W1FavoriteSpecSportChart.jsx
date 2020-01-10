@@ -13,6 +13,7 @@ import { FlexContainer, ChartSvg, Title, NeumorphButton } from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
 import { useDimensions } from "../../../hooks"
 import { useStaticQuery, graphql } from "gatsby"
+import Credits from "../../molecules/Credits"
 
 const ChartContainer = styled.div`
   position: relative;
@@ -40,6 +41,54 @@ const ImageContainer = styled.div`
 `
 
 const axisSvgHeight = 12
+
+const flexEndObject = { justify: "flex-end" }
+const creditElements = [
+  {
+    ...flexEndObject,
+    component: (
+      <Title>
+        Designed and built by:{" "}
+        <a
+          href="https://twitter.com/AndSzesztai"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Andras Szesztai
+        </a>
+      </Title>
+    ),
+  },
+  {
+    ...flexEndObject,
+    component: (
+      <Title>
+        <a
+          href="https://www.makeovermonday.co.uk/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          #MakeoverMonday
+        </a>
+      </Title>
+    ),
+  },
+  {
+    ...flexEndObject,
+    component: (
+      <Title>
+        Data source:
+        <a
+          href="https://news.gallup.com/poll/4735/sports.aspx#1"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Gallup
+        </a>
+      </Title>
+    ),
+  },
+]
 
 // Inspired: https://www.behance.net/gallery/90323631/Life-expectancy-BBC-Science-Focus
 const chartColors = {
@@ -223,6 +272,14 @@ export default function({ rawData, data, valueArray }) {
               />
             </ImageContainer>
           </FlexContainer>
+          <Credits
+            direction="column"
+            position={{
+              bottom: 0,
+              right: 0,
+            }}
+            elements={creditElements}
+          />
         </ChartContainer>
       </FlexContainer>
     </>
