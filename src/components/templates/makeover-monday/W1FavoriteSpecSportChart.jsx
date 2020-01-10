@@ -5,12 +5,14 @@ import { axisBottom } from "d3-axis"
 import { select } from "d3-selection"
 import { max, min } from "d3-array"
 import { PropagateLoader } from "react-spinners"
+import Image from "gatsby-image"
 
 import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
 import { FlexContainer, ChartSvg, Title, NeumorphButton } from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
 import { useDimensions } from "../../../hooks"
+import { useStaticQuery, graphql } from "gatsby"
 
 const ChartContainer = styled.div`
   position: relative;
@@ -51,6 +53,8 @@ const margin = {
 }
 
 export default function({ rawData, data, valueArray }) {
+
+  
   const [domain, setDomain] = useState(undefined)
   useEffect(() => {
     if (rawData && !domain) {
@@ -113,7 +117,7 @@ export default function({ rawData, data, valueArray }) {
         >
           <PropagateLoader
             size={10}
-            color={chartColors.text}
+            color={chartColors.neu}
             loading={loading}
           />
         </FlexContainer>
@@ -175,7 +179,7 @@ export default function({ rawData, data, valueArray }) {
           >
             {Object.values(buttons).map(b => (
               <NeumorphButton
-                key={b}
+                key={b.text}
                 height={30}
                 width={60}
                 {...b}
