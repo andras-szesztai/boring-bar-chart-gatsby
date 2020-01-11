@@ -18,7 +18,6 @@ export default function Dashboard() {
             perc
             year
           }
-          Description
         }
       }
     }
