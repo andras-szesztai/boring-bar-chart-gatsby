@@ -9,6 +9,12 @@ export const ChartSvg = styled.svg`
   width: ${props => props.width || 0}px;
   height: ${props => props.height || 0}px;
 
+  transition: opacity .25s;
+  ${({ visible }) => css`
+    opacity: ${visible ? 1 : 0};
+  `}
+
+
   font-size: ${({ fontSize }) => themifyFontSize(fontSize)};
   font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight)};
 
@@ -25,5 +31,8 @@ export const ChartSvg = styled.svg`
     `}
 `
 
-export default ChartSvg
+ChartSvg.defaultProps = {
+  visible: true,
+}
 
+export default ChartSvg

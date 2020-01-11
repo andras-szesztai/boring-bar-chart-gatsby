@@ -81,5 +81,5 @@ Button.defaultProps = {
   width: 50,
   height: 50,
   fontSize: 1,
-  fontWeight: 4,
+  fontWeight: 5,
 }

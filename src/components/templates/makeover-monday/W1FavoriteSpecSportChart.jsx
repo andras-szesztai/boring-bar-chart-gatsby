@@ -15,6 +15,7 @@ import {
   Title,
   NeumorphButton,
   ChartArea as AxisArea,
+  ColoredSpan,
 } from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
 import { useDimensions, useDimsUpdate } from "../../../hooks"
@@ -83,7 +84,7 @@ const margin = {
   top: 0,
   right: 15,
   bottom: 0,
-  left: 15
+  left: 15,
 }
 
 export default function({ rawData, data, valueArray }) {
@@ -126,6 +127,7 @@ export default function({ rawData, data, valueArray }) {
         .range([0, svgRef.current.clientWidth - margin.left - margin.right])
     )
       .tickSize(0)
+      .ticks(3)
       .tickFormat(d => d + "%")
     select(axisRef.current).call(axis)
     select(axisRef.current)
@@ -201,9 +203,33 @@ export default function({ rawData, data, valueArray }) {
             height={axisSvgHeight}
             fontSize={1}
             fontColor="grayLight"
+            visible={Object.values(buttons)
+              .map(val => val.checked)
+              .includes(false)}
           >
             <AxisArea ref={axisRef} marginLeft={margin.left} />
           </ChartSvg>
+          <FlexContainer
+            absPos
+            top={height / 2 - height * 0.31}
+            right={0}
+            width={420}
+            textAlign="right"
+          >
+            <div>
+              Compared to 2008, a growing number of Americans chose
+              <ColoredSpan color={chartColors.lgGrowth} fontWeight={5}>
+                {" "}
+                Soccer{" "}
+              </ColoredSpan>
+              as their favorite sport to watch in 2017, while the popularity of
+              <ColoredSpan color={chartColors.lgDecline} fontWeight={5}>
+                {" "}
+                Football{" "}
+              </ColoredSpan>
+              seems to be on the decline.
+            </div>
+          </FlexContainer>
           <FlexContainer
             fixSize
             height={100}
@@ -216,7 +242,7 @@ export default function({ rawData, data, valueArray }) {
             bottom={height / 2 + axisSvgHeight / 1.5}
             right={0}
           >
-            <Title fontSize={2} color="grayLight">
+            <Title fontSize={1} color="grayLight">
               Changes between 2008 and 2017
             </Title>
             <Title fontSize={5} fontWeight={0} color="grayDarkest">
@@ -226,7 +252,7 @@ export default function({ rawData, data, valueArray }) {
           <FlexContainer
             fixSize
             height={55}
-            width={200}
+            width={210}
             justify="space-around"
             absPos
             top={height / 2 + axisSvgHeight / 2}
@@ -250,8 +276,12 @@ export default function({ rawData, data, valueArray }) {
               />
             ))}
           </FlexContainer>
-          <FlexContainer absPos top={height / 2 +( height * .11)} right={0}>
-            <GridContainer columns="1fr min-content 1fr" width={210} columnGap={.5}>
+          <FlexContainer absPos top={height / 2 + height * 0.21} right={0}>
+            <GridContainer
+              columns="1fr min-content 1fr"
+              width={200}
+              columnGap={0.5}
+            >
               <FlexContainer>2008</FlexContainer>
               <ImageContainer>
                 <Image
