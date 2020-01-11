@@ -132,11 +132,12 @@ export default function VerticalDropChart({
       isRecentGreater ? d.year === 2017 : d.year === 2008
     )
     select(areaRef.current)
-      .selectAll("text")
+      .selectAll(".label")
       .data(textData)
       .join(enter =>
         enter
           .append("text")
+          .attr("class", "label")
           .attr("text-anchor", "middle")
           .attr("x", xScale(_.mean(percentages)))
           .attr("y", height / 2)
@@ -144,11 +145,15 @@ export default function VerticalDropChart({
           .attr("fill", d => getColor(d.difference))
           .text(d => d.Sport)
       )
+    valueStore.current = {
+      ...valueStore.current,
+      perc: percentages,
+    }
   }
 
+  const getOffset = d => (isRecent(d) ? lgRadius : smRadius)
   function createUpdateAreas() {
     const { xScale } = valueStore.current
-    const getOffset = d => (isRecent(d) ? lgRadius : smRadius)
     select(areaRef.current)
       .append("path")
       .datum(data)
@@ -187,7 +192,23 @@ export default function VerticalDropChart({
   })
 
   function updateDims() {
-    console.log("running dims")
+    const { xScale, perc } = valueStore.current
+    xScale.range([0, chartWidth])
+    const chartArea = select(areaRef.current)
+    chartArea.selectAll("path").attr(
+      "d",
+      area()
+        .x(d => xScale(d.perc))
+        .y1(d => height / 2 - getOffset(d))
+        .y0(d => height / 2 + getOffset(d))
+    )
+    chartArea.selectAll("circle").attr("cx", d => xScale(+d.perc))
+    chartArea.selectAll(".label").attr("x", xScale(_.mean(perc)))
+    chartArea.selectAll(".perc-text").attr("x", d => xScale(d.perc))
+    valueStore.current = {
+      ...valueStore.current,
+      xScale,
+    }
   }
   useDimsUpdate({ updateDims, init, width, height })
 

@@ -9,9 +9,15 @@ import Image from "gatsby-image"
 
 import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
-import { FlexContainer, ChartSvg, Title, NeumorphButton } from "../../atoms"
+import {
+  FlexContainer,
+  ChartSvg,
+  Title,
+  NeumorphButton,
+  ChartArea as AxisArea,
+} from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
-import { useDimensions } from "../../../hooks"
+import { useDimensions, useDimsUpdate } from "../../../hooks"
 import { useStaticQuery, graphql } from "gatsby"
 import Credits from "../../molecules/Credits"
 import { GridContainer, Container } from "../../atoms/containers"
@@ -20,8 +26,7 @@ const ChartContainer = styled.div`
   position: relative;
 
   width: 80vw;
-  max-width: 80% !important;
-  min-width: 600px;
+  min-width: 800px;
   max-width: 1100px;
 
   height: 80vh;
@@ -66,7 +71,6 @@ const creditElements = [
   },
 ]
 
-// Inspired: https://www.behance.net/gallery/90323631/Life-expectancy-BBC-Science-Focus
 const chartColors = {
   text: "#191919",
   bg: "#E5E5E5",
@@ -111,10 +115,11 @@ export default function({ rawData, data, valueArray }) {
   }, [domain, rawData])
 
   const svgRef = useRef()
+  const axisRef = useRef()
   const wrapperRef = useRef()
   const { width, height } = useDimensions({ ref: wrapperRef })
   const [axisInit, setAxisInit] = useState(false)
-  function addAxis() {
+  function createUpdateAxis() {
     const axis = axisBottom(
       scaleLinear()
         .domain(domain)
@@ -122,20 +127,22 @@ export default function({ rawData, data, valueArray }) {
     )
       .tickSize(0)
       .tickFormat(d => d + "%")
-    select(svgRef.current)
-      .append("g")
-      .attr("transform", `translate(${margin.left},0)`)
-      .call(axis)
-    select(svgRef.current)
+    select(axisRef.current).call(axis)
+    select(axisRef.current)
       .select(".domain")
       .remove()
     setAxisInit(true)
   }
   useEffect(() => {
     if (svgRef && svgRef.current && width && !axisInit) {
-      addAxis()
+      createUpdateAxis()
     }
   })
+
+  function updateDims() {
+    createUpdateAxis()
+  }
+  useDimsUpdate({ updateDims, init: true, width, height })
 
   const [loading, setLoading] = useState(true)
   useEffect(() => {
@@ -194,7 +201,9 @@ export default function({ rawData, data, valueArray }) {
             height={axisSvgHeight}
             fontSize={1}
             fontColor="grayLight"
-          />
+          >
+            <AxisArea ref={axisRef} marginLeft={margin.left} />
+          </ChartSvg>
           <FlexContainer
             fixSize
             height={100}
@@ -241,15 +250,8 @@ export default function({ rawData, data, valueArray }) {
             ))}
           </FlexContainer>
           <FlexContainer absPos top={height / 2 + height / 4.8} right={0}>
-            <GridContainer
-              columns="1fr min-content 1fr"
-              width={200}
-            >
-              <FlexContainer
- 
-              >
-                2008
-              </FlexContainer>
+            <GridContainer columns="1fr min-content 1fr" width={200}>
+              <FlexContainer>2008</FlexContainer>
               <ImageContainer>
                 <Image
                   fluid={
@@ -257,10 +259,7 @@ export default function({ rawData, data, valueArray }) {
                   }
                 />
               </ImageContainer>
-              <FlexContainer 
-              >
-                  2017
-              </FlexContainer>
+              <FlexContainer>2017</FlexContainer>
             </GridContainer>
           </FlexContainer>
           <Credits
