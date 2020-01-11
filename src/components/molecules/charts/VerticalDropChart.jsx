@@ -6,9 +6,12 @@ import _ from "lodash"
 import "d3-transition"
 
 import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
-import { useDimensions, usePrevious } from "../../../hooks"
-import useInitUpdate from "../../../hooks/useInitUpdate"
-import useDimsUpdate from "../../../hooks/useUpdateDims"
+import {
+  useDimensions,
+  usePrevious,
+  useInitUpdate,
+  useDimsUpdate,
+} from "../../../hooks"
 
 export default function VerticalDropChart({
   data,
@@ -183,10 +186,10 @@ export default function VerticalDropChart({
     initVis,
   })
 
-  // function updateDims() {
-  //   // console.log("running dims")
-  // }
-  // useDimsUpdate({ updateDims, init, width, height })
+  function updateDims() {
+    console.log("running dims")
+  }
+  useDimsUpdate({ updateDims, init, width, height })
 
   return (
     <>
