@@ -39,7 +39,7 @@ const ChartContainer = styled.div`
 
 const ImageContainer = styled(Container)`
   position: relative;
-  width: 140px;
+  width: 135px;
 `
 
 const axisSvgHeight = 12
@@ -71,8 +71,8 @@ const chartColors = {
   text: "#191919",
   bg: "#E5E5E5",
   neu: "#999999",
-  lgGrowth: "#195a98",
-  lgDecline: "#d65e57",
+  lgGrowth: "#2A638C",
+  lgDecline: "#CC603D",
 }
 
 const margin = {
@@ -206,10 +206,10 @@ export default function({ rawData, data, valueArray }) {
             bottom={height / 2 + axisSvgHeight / 2}
             right={0}
           >
-            <Title fontSize={2} fontColor="grayLight">
+            <Title fontSize={2} color="grayLight">
               Changes between 2008 and 2017
             </Title>
-            <Title fontSize={5} fontWeight={0} fontColor="grayDarkest">
+            <Title fontSize={5} fontWeight={0} color="grayDarkest">
               Top Spectator Sports in the United States
             </Title>
           </FlexContainer>
@@ -240,7 +240,7 @@ export default function({ rawData, data, valueArray }) {
               />
             ))}
           </FlexContainer>
-          <FlexContainer absPos top={height / 2 + 75} right={0}>
+          <FlexContainer absPos top={height / 2 + height / 4.8} right={0}>
             <GridContainer
               columns="1fr min-content 1fr"
               width={200}
