@@ -11,14 +11,13 @@ export default function Dashboard() {
     allStrapiDatasets: { nodes },
   } = useStaticQuery(graphql`
     {
-      allStrapiDatasets(filter: { id: { eq: "Datasets_6" } }) {
+      allStrapiDatasets(filter: { id: { eq: "Datasets_7" } }) {
         nodes {
           data {
             Sport
             perc
             year
           }
-          Description
         }
       }
     }

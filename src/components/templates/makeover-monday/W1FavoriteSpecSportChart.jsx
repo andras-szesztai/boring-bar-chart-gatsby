@@ -9,16 +9,25 @@ import Image from "gatsby-image"
 
 import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
-import { FlexContainer, ChartSvg, Title, NeumorphButton } from "../../atoms"
+import {
+  FlexContainer,
+  ChartSvg,
+  Title,
+  NeumorphButton,
+  ChartArea as AxisArea,
+  ColoredSpan,
+} from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
-import { useDimensions } from "../../../hooks"
+import { useDimensions, useDimsUpdate } from "../../../hooks"
 import { useStaticQuery, graphql } from "gatsby"
+import Credits from "../../molecules/Credits"
+import { GridContainer, Container } from "../../atoms/containers"
 
 const ChartContainer = styled.div`
   position: relative;
 
   width: 80vw;
-  min-width: 600px;
+  min-width: 800px;
   max-width: 1100px;
 
   height: 80vh;
@@ -34,27 +43,67 @@ const ChartContainer = styled.div`
   }
 `
 
+const ImageContainer = styled(Container)`
+  position: relative;
+  width: 135px;
+`
+
 const axisSvgHeight = 12
 
-// Inspired: https://www.behance.net/gallery/90323631/Life-expectancy-BBC-Science-Focus
+const flexEndObject = { justify: "flex-end" }
+const creditElements = [
+  {
+    ...flexEndObject,
+    text: "Designed and built by",
+    link: "https://twitter.com/AndSzesztai",
+    anchorText: "András Szesztai",
+  },
+  {
+    ...flexEndObject,
+    text: "Project",
+    link: "https://www.makeovermonday.co.uk/",
+    anchorText: "#MakeoverMonday",
+  },
+  {
+    ...flexEndObject,
+    text: "Data source",
+    link: "https://news.gallup.com/poll/4735/sports.aspx#1",
+    anchorText: "Gallup",
+  },
+]
+
 const chartColors = {
   text: "#191919",
   bg: "#E5E5E5",
   neu: "#999999",
-  lgGrowth: "#195a98",
-  lgDecline: "#d65e57",
+  lgGrowth: "#2A638C",
+  lgDecline: "#CC603D",
 }
 
 const margin = {
   top: 0,
-  right: 0,
+  right: 15,
   bottom: 0,
-  left: 10,
+  left: 15,
 }
 
 export default function({ rawData, data, valueArray }) {
+  const query = useStaticQuery(graphql`
+    {
+      allStrapiDatasets {
+        nodes {
+          image {
+            childImageSharp {
+              fluid {
+                ...GatsbyImageSharpFluid_tracedSVG
+              }
+            }
+          }
+        }
+      }
+    }
+  `)
 
-  
   const [domain, setDomain] = useState(undefined)
   useEffect(() => {
     if (rawData && !domain) {
@@ -67,35 +116,39 @@ export default function({ rawData, data, valueArray }) {
   }, [domain, rawData])
 
   const svgRef = useRef()
+  const axisRef = useRef()
   const wrapperRef = useRef()
-  const { width, height } = useDimensions(wrapperRef)
+  const { width, height } = useDimensions({ ref: wrapperRef })
   const [axisInit, setAxisInit] = useState(false)
-  function addAxis() {
+  function createUpdateAxis() {
     const axis = axisBottom(
       scaleLinear()
         .domain(domain)
-        .range([0, svgRef.current.clientWidth - margin.left])
+        .range([0, svgRef.current.clientWidth - margin.left - margin.right])
     )
       .tickSize(0)
+      .ticks(3)
       .tickFormat(d => d + "%")
-    select(svgRef.current)
-      .append("g")
-      .attr("transform", `translate(${margin.left},0)`)
-      .call(axis)
-    select(svgRef.current)
+    select(axisRef.current).call(axis)
+    select(axisRef.current)
       .select(".domain")
       .remove()
     setAxisInit(true)
   }
   useEffect(() => {
     if (svgRef && svgRef.current && width && !axisInit) {
-      addAxis()
+      createUpdateAxis()
     }
   })
 
-  const [ loading, setLoading ] = useState(true)
+  function updateDims() {
+    createUpdateAxis()
+  }
+  useDimsUpdate({ updateDims, init: true, width, height })
+
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
-    if(loading){
+    if (loading) {
       setTimeout(() => setLoading(false), 2000)
     }
   })
@@ -138,6 +191,7 @@ export default function({ rawData, data, valueArray }) {
                 data={data[val]}
                 domain={domain}
                 margin={margin}
+                parentRef={wrapperRef}
               />
             ))}
           <ChartSvg
@@ -149,29 +203,56 @@ export default function({ rawData, data, valueArray }) {
             height={axisSvgHeight}
             fontSize={1}
             fontColor="grayLight"
-          />
+            visible={Object.values(buttons)
+              .map(val => val.checked)
+              .includes(false)}
+          >
+            <AxisArea ref={axisRef} marginLeft={margin.left} />
+          </ChartSvg>
+          <FlexContainer
+            absPos
+            top={height / 2 - height * 0.31}
+            right={0}
+            width={420}
+            textAlign="right"
+          >
+            <div>
+              Compared to 2008, a growing number of Americans chose
+              <ColoredSpan color={chartColors.lgGrowth} fontWeight={5}>
+                {" "}
+                Soccer{" "}
+              </ColoredSpan>
+              as their favorite sport to watch in 2017, while the popularity of
+              <ColoredSpan color={chartColors.lgDecline} fontWeight={5}>
+                {" "}
+                Football{" "}
+              </ColoredSpan>
+              seems to be on the decline.
+            </div>
+          </FlexContainer>
           <FlexContainer
             fixSize
             height={100}
             justify="flex-end"
             align="flex-end"
             direction="column"
+            whiteSpace="no-wrap"
             paddingBottom={1}
             absPos
-            bottom={height / 2 + axisSvgHeight / 2}
+            bottom={height / 2 + axisSvgHeight / 1.5}
             right={0}
           >
-            <Title fontSize={2} fontColor="grayLight">
+            <Title fontSize={1} color="grayLight">
               Changes between 2008 and 2017
             </Title>
-            <Title fontSize={5} fontWeight={0} fontColor="grayDarkest">
+            <Title fontSize={5} fontWeight={0} color="grayDarkest">
               Top Spectator Sports in the United States
             </Title>
           </FlexContainer>
           <FlexContainer
             fixSize
             height={55}
-            width={200}
+            width={210}
             justify="space-around"
             absPos
             top={height / 2 + axisSvgHeight / 2}
@@ -195,6 +276,31 @@ export default function({ rawData, data, valueArray }) {
               />
             ))}
           </FlexContainer>
+          <FlexContainer absPos top={height / 2 + height * 0.21} right={0}>
+            <GridContainer
+              columns="1fr min-content 1fr"
+              width={200}
+              columnGap={0.5}
+            >
+              <FlexContainer>2008</FlexContainer>
+              <ImageContainer>
+                <Image
+                  fluid={
+                    query.allStrapiDatasets.nodes[0].image.childImageSharp.fluid
+                  }
+                />
+              </ImageContainer>
+              <FlexContainer>2017</FlexContainer>
+            </GridContainer>
+          </FlexContainer>
+          <Credits
+            direction="column"
+            position={{
+              bottom: 0,
+              right: 0,
+            }}
+            elements={creditElements}
+          />
         </ChartContainer>
       </FlexContainer>
     </>

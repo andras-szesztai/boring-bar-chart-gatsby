@@ -4,7 +4,7 @@ import {
   ChartSvg,
 } from "./chartElements"
 import { FlexContainer, VerticalAxisLabelContainer } from "./containers"
-import { Title } from "./textElements"
+import { Title, ColoredSpan } from "./textElements"
 import { NeumorphButton } from "./buttons"
 
 
@@ -15,5 +15,6 @@ export {
   ChartWrapper,
   ChartSvg,
   Title,
-  NeumorphButton
+  NeumorphButton,
+  ColoredSpan
 }

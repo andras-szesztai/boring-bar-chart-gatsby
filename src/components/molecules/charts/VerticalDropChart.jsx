@@ -6,8 +6,12 @@ import _ from "lodash"
 import "d3-transition"
 
 import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
-import { useDimensions, usePrevious } from "../../../hooks"
-import useInitUpdate from "../../../hooks/useInitUpdate"
+import {
+  useDimensions,
+  usePrevious,
+  useInitUpdate,
+  useDimsUpdate,
+} from "../../../hooks"
 
 export default function VerticalDropChart({
   data,
@@ -15,12 +19,18 @@ export default function VerticalDropChart({
   colors,
   margin,
   displayedYears,
+  parentRef,
 }) {
   const wrapperRef = useRef()
   const svgRef = useRef()
   const areaRef = useRef()
   const valueStore = useRef()
-  const { width, height, chartWidth } = useDimensions(wrapperRef)
+  const { width, height, chartWidth } = useDimensions({
+    ref: wrapperRef,
+    margin,
+    parentRef,
+    parentWidth: true,
+  })
   const lgRadius = height * 0.15
   const smRadius = height * 0.025
 
@@ -68,16 +78,16 @@ export default function VerticalDropChart({
     let vals
     switch (true) {
       case (year === 2017 && diff < 0) || (year === 2008 && diff === 0):
-        vals = { dx: -lgRadius - 2, anchor: "end" }
+        vals = { dx: -lgRadius - 10, anchor: "end" }
         break
       case year === 2008 && diff > 0:
-        vals = { dx: -smRadius - 2, anchor: "end" }
+        vals = { dx: -smRadius - 10, anchor: "end" }
         break
       case (year === 2017 && diff > 0) || (year === 2017 && diff === 0):
-        vals = { dx: lgRadius + 2, anchor: "start" }
+        vals = { dx: lgRadius + 10, anchor: "start" }
         break
       case year === 2008 && diff < 0:
-        vals = { dx: smRadius + 2, anchor: "start" }
+        vals = { dx: smRadius + 10, anchor: "start" }
         break
       default:
         vals = { dx: 0, anchor: "middle" }
@@ -122,11 +132,12 @@ export default function VerticalDropChart({
       isRecentGreater ? d.year === 2017 : d.year === 2008
     )
     select(areaRef.current)
-      .selectAll("text")
+      .selectAll(".label")
       .data(textData)
       .join(enter =>
         enter
           .append("text")
+          .attr("class", "label")
           .attr("text-anchor", "middle")
           .attr("x", xScale(_.mean(percentages)))
           .attr("y", height / 2)
@@ -134,11 +145,15 @@ export default function VerticalDropChart({
           .attr("fill", d => getColor(d.difference))
           .text(d => d.Sport)
       )
+    valueStore.current = {
+      ...valueStore.current,
+      perc: percentages,
+    }
   }
 
+  const getOffset = d => (isRecent(d) ? lgRadius : smRadius)
   function createUpdateAreas() {
     const { xScale } = valueStore.current
-    const getOffset = d => (isRecent(d) ? lgRadius : smRadius)
     select(areaRef.current)
       .append("path")
       .datum(data)
@@ -169,13 +184,41 @@ export default function VerticalDropChart({
       )
   }
 
-  useInitUpdate({ data, chartHeight: height, chartWidth, initVis })
+  const { init } = useInitUpdate({
+    data,
+    chartHeight: height,
+    chartWidth,
+    initVis,
+  })
+
+  function updateDims() {
+    const { xScale, perc } = valueStore.current
+    xScale.range([0, chartWidth])
+    const chartArea = select(areaRef.current)
+    chartArea.selectAll("path").attr(
+      "d",
+      area()
+        .x(d => xScale(d.perc))
+        .y1(d => height / 2 - getOffset(d))
+        .y0(d => height / 2 + getOffset(d))
+    )
+    chartArea.selectAll("circle").attr("cx", d => xScale(+d.perc))
+    chartArea.selectAll(".label").attr("x", xScale(_.mean(perc)))
+    chartArea.selectAll(".perc-text").attr("x", d => xScale(d.perc))
+    valueStore.current = {
+      ...valueStore.current,
+      xScale,
+    }
+  }
+  useDimsUpdate({ updateDims, init, width, height })
 
   return (
-    <ChartWrapper ref={wrapperRef}>
-      <ChartSvg ref={svgRef} width={width} height={height}>
-        <ChartArea ref={areaRef} marginLeft={margin.left} />
-      </ChartSvg>
-    </ChartWrapper>
+    <>
+      <ChartWrapper ref={wrapperRef}>
+        <ChartSvg ref={svgRef} width={width} height={height}>
+          <ChartArea ref={areaRef} marginLeft={margin.left} />
+        </ChartSvg>
+      </ChartWrapper>
+    </>
   )
 }
