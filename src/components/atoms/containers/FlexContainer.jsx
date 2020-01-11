@@ -11,4 +11,9 @@ const FlexContainer = styled(Container)`
   
 `
 
+FlexContainer.defaultProps = {
+  justify: "center",
+  align: "center",
+}
+
 export default FlexContainer

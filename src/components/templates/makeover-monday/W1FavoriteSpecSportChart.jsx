@@ -14,6 +14,7 @@ import { themifyFontSize } from "../../../themes/mixins"
 import { useDimensions } from "../../../hooks"
 import { useStaticQuery, graphql } from "gatsby"
 import Credits from "../../molecules/Credits"
+import { GridContainer, Container } from "../../atoms/containers"
 
 const ChartContainer = styled.div`
   position: relative;
@@ -36,9 +37,9 @@ const ChartContainer = styled.div`
   }
 `
 
-const ImageContainer = styled.div`
+const ImageContainer = styled(Container)`
   position: relative;
-  width: 220px;
+  width: 140px;
 `
 
 const axisSvgHeight = 12
@@ -240,13 +241,27 @@ export default function({ rawData, data, valueArray }) {
             ))}
           </FlexContainer>
           <FlexContainer absPos top={height / 2 + 75} right={0}>
-            <ImageContainer>
-              <Image
-                fluid={
-                  query.allStrapiDatasets.nodes[0].image.childImageSharp.fluid
-                }
-              />
-            </ImageContainer>
+            <GridContainer
+              columns="1fr min-content 1fr"
+              width={200}
+            >
+              <FlexContainer
+ 
+              >
+                2008
+              </FlexContainer>
+              <ImageContainer>
+                <Image
+                  fluid={
+                    query.allStrapiDatasets.nodes[0].image.childImageSharp.fluid
+                  }
+                />
+              </ImageContainer>
+              <FlexContainer 
+              >
+                  2017
+              </FlexContainer>
+            </GridContainer>
           </FlexContainer>
           <Credits
             direction="column"

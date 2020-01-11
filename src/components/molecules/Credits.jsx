@@ -11,7 +11,7 @@ export default function({ direction, elements = [], position }) {
       {...position}
     >
       {elements.map(({ justify, text, link, anchorText }) => (
-        <FlexContainer justify={justify} key={text}>
+        <FlexContainer justify={justify} key={text} fontSize={0}>
           <Title>
             {text}:{" "}
             <a href={`${link}`} target="_blank" rel="noopener noreferrer">

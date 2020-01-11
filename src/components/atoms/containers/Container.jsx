@@ -40,8 +40,7 @@ const Container = styled.div`
       width: 100%;
     `}
 
-  ${({ fixSize, height, width }) =>
-    fixSize &&
+  ${({ height, width }) =>
     css`
       height: ${height}px;
       width: ${width}px;
@@ -58,6 +57,5 @@ export default Container
 
 Container.defaultProps = {
   fontColor: "grayDarker",
-  justify: "center",
-  align: "center",
+  fontSize: 1
 }
