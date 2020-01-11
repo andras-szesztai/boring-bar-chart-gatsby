@@ -81,9 +81,9 @@ const chartColors = {
 
 const margin = {
   top: 0,
-  right: 10,
+  right: 15,
   bottom: 0,
-  left: 10,
+  left: 15
 }
 
 export default function({ rawData, data, valueArray }) {
@@ -210,9 +210,10 @@ export default function({ rawData, data, valueArray }) {
             justify="flex-end"
             align="flex-end"
             direction="column"
+            whiteSpace="no-wrap"
             paddingBottom={1}
             absPos
-            bottom={height / 2 + axisSvgHeight / 2}
+            bottom={height / 2 + axisSvgHeight / 1.5}
             right={0}
           >
             <Title fontSize={2} color="grayLight">
@@ -249,8 +250,8 @@ export default function({ rawData, data, valueArray }) {
               />
             ))}
           </FlexContainer>
-          <FlexContainer absPos top={height / 2 + height / 4.8} right={0}>
-            <GridContainer columns="1fr min-content 1fr" width={200}>
+          <FlexContainer absPos top={height / 2 +( height * .11)} right={0}>
+            <GridContainer columns="1fr min-content 1fr" width={210} columnGap={.5}>
               <FlexContainer>2008</FlexContainer>
               <ImageContainer>
                 <Image

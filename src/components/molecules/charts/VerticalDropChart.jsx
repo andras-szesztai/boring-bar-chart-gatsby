@@ -78,16 +78,16 @@ export default function VerticalDropChart({
     let vals
     switch (true) {
       case (year === 2017 && diff < 0) || (year === 2008 && diff === 0):
-        vals = { dx: -lgRadius - 2, anchor: "end" }
+        vals = { dx: -lgRadius - 10, anchor: "end" }
         break
       case year === 2008 && diff > 0:
-        vals = { dx: -smRadius - 2, anchor: "end" }
+        vals = { dx: -smRadius - 10, anchor: "end" }
         break
       case (year === 2017 && diff > 0) || (year === 2017 && diff === 0):
-        vals = { dx: lgRadius + 2, anchor: "start" }
+        vals = { dx: lgRadius + 10, anchor: "start" }
         break
       case year === 2008 && diff < 0:
-        vals = { dx: smRadius + 2, anchor: "start" }
+        vals = { dx: smRadius + 10, anchor: "start" }
         break
       default:
         vals = { dx: 0, anchor: "middle" }

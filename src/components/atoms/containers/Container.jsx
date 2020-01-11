@@ -15,16 +15,18 @@ const Container = styled.div`
   color: ${({ fontColor }) => themifyColor(fontColor)};
   background: ${({ bgColor }) => bgColor};
   z-index: ${({ zIndex }) => themifyZIndex(zIndex)};
-  padding-bottom: ${({paddingBottom}) => themifySpace(paddingBottom)}px;
+  padding-bottom: ${({ paddingBottom }) => themifySpace(paddingBottom)}px;
 
 
-  ${({ absPos, bottom, right, top, left }) => absPos && css`
-    position: absolute;
-    bottom: ${bottom}px;
-    right: ${right}px;
-    left: ${left}px;
-    top: ${top}px;
-  `}
+  ${({ absPos, bottom, right, top, left }) =>
+    absPos &&
+    css`
+      position: absolute;
+      bottom: ${bottom}px;
+      right: ${right}px;
+      left: ${left}px;
+      top: ${top}px;
+    `}
 
   ${({ fullScreen }) =>
     fullScreen &&
@@ -40,15 +42,16 @@ const Container = styled.div`
       width: 100%;
     `}
 
-  ${({ height, width }) =>
+  ${({ height, width, whiteSpace }) =>
     css`
       height: ${height}px;
       width: ${width}px;
-      white-space: nowrap;
+      white-space: ${whiteSpace};
     `}
 
-  ${({gridArea}) => css`
+  ${({ gridArea, textAlign }) => css`
     grid-area: ${gridArea};
+    text-align: ${textAlign};
   `}
   
 `
@@ -57,5 +60,5 @@ export default Container
 
 Container.defaultProps = {
   fontColor: "grayDarker",
-  fontSize: 1
+  fontSize: 1,
 }
