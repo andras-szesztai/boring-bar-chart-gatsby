@@ -4,6 +4,7 @@ import { usePrevious } from ".";
 export default function useDimsUpdate({
   updateDims, init, width, height
 }){
+  console.log(init, width, height)
   const prevWidth = usePrevious(width)
   const prevHeight = usePrevious(height)
   useEffect(() => {

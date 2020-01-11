@@ -19,6 +19,7 @@ const ChartContainer = styled.div`
   position: relative;
 
   width: 80vw;
+  max-width: 80% !important;
   min-width: 600px;
   max-width: 1100px;
 
@@ -110,7 +111,7 @@ export default function({ rawData, data, valueArray }) {
 
   const svgRef = useRef()
   const wrapperRef = useRef()
-  const { width, height } = useDimensions(wrapperRef)
+  const { width, height } = useDimensions({ ref: wrapperRef })
   const [axisInit, setAxisInit] = useState(false)
   function addAxis() {
     const axis = axisBottom(
@@ -180,6 +181,7 @@ export default function({ rawData, data, valueArray }) {
                 data={data[val]}
                 domain={domain}
                 margin={margin}
+                parentRef={wrapperRef}
               />
             ))}
           <ChartSvg

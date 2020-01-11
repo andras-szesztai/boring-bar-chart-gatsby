@@ -8,6 +8,7 @@ import "d3-transition"
 import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
 import { useDimensions, usePrevious } from "../../../hooks"
 import useInitUpdate from "../../../hooks/useInitUpdate"
+import useDimsUpdate from "../../../hooks/useUpdateDims"
 
 export default function VerticalDropChart({
   data,
@@ -15,12 +16,18 @@ export default function VerticalDropChart({
   colors,
   margin,
   displayedYears,
+  parentRef,
 }) {
   const wrapperRef = useRef()
   const svgRef = useRef()
   const areaRef = useRef()
   const valueStore = useRef()
-  const { width, height, chartWidth } = useDimensions(wrapperRef, margin)
+  const { width, height, chartWidth } = useDimensions({
+    ref: wrapperRef,
+    margin,
+    parentRef,
+    parentWidth: true,
+  })
   const lgRadius = height * 0.15
   const smRadius = height * 0.025
 
@@ -169,13 +176,25 @@ export default function VerticalDropChart({
       )
   }
 
-  useInitUpdate({ data, chartHeight: height, chartWidth, initVis })
+  const { init } = useInitUpdate({
+    data,
+    chartHeight: height,
+    chartWidth,
+    initVis,
+  })
+
+  // function updateDims() {
+  //   // console.log("running dims")
+  // }
+  // useDimsUpdate({ updateDims, init, width, height })
 
   return (
-    <ChartWrapper ref={wrapperRef}>
-      <ChartSvg ref={svgRef} width={width} height={height}>
-        <ChartArea ref={areaRef} marginLeft={margin.left} />
-      </ChartSvg>
-    </ChartWrapper>
+    <>
+      <ChartWrapper ref={wrapperRef}>
+        <ChartSvg ref={svgRef} width={width} height={height}>
+          <ChartArea ref={areaRef} marginLeft={margin.left} />
+        </ChartSvg>
+      </ChartWrapper>
+    </>
   )
 }
