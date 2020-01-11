@@ -31,7 +31,7 @@ module.exports = {
       options: {
         apiURL: `https://strapi-boring-barchart.herokuapp.com`,
         queryLimit: 1000, // Default to 100
-        contentTypes: [`datasets`, `courses`]
+        contentTypes: [`datasets`]
       },
     }
   ],
