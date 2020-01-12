@@ -6,9 +6,11 @@ import { useRawData, useFetchData } from "../../../hooks"
 import { FavoriteSpecSportChart } from "../../../components/templates"
 import { Helmet } from "react-helmet"
 
+const url = "https://boring-barchart-gatsby.firebaseio.com/mm2020w1.json"
+
 export default function Dashboard() {
 
-  const rawData = useFetchData("https://boring-barchart-gatsby.firebaseio.com/mm2020w1.json")
+  const rawData = useFetchData(url)
 
   const [dataObject, setDataObject] = useState({
     array: undefined,
