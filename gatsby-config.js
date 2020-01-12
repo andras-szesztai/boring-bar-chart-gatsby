@@ -27,12 +27,12 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-source-strapi`,
+      resolve: `gatsby-source-contentful`,
       options: {
-        apiURL: `https://strapi-boring-barchart.herokuapp.com`,
-        queryLimit: 1000, // Default to 100
-        contentTypes: [`datasets`]
+        spaceId: `w36cqgpg2pdu`,
+        accessToken: 'ih7LJB9xSp9alB5BlKkaxBKmCdtDhG2Rknw_xe5PDdY',
       },
-    }
+    },
   ],
 }
+  

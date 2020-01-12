@@ -2,28 +2,13 @@ import React, { useEffect, useState } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import _ from "lodash"
 
-import { useRawData } from "../../../hooks"
+import { useRawData, useFetchData } from "../../../hooks"
 import { FavoriteSpecSportChart } from "../../../components/templates"
 import { Helmet } from "react-helmet"
 
 export default function Dashboard() {
-  const {
-    allStrapiDatasets: { nodes },
-  } = useStaticQuery(graphql`
-    {
-      allStrapiDatasets(filter: { id: { eq: "Datasets_7" } }) {
-        nodes {
-          data {
-            Sport
-            perc
-            year
-          }
-        }
-      }
-    }
-  `)
 
-  const rawData = useRawData(nodes)
+  const rawData = useFetchData("https://boring-barchart-gatsby.firebaseio.com/mm2020w1.json")
 
   const [dataObject, setDataObject] = useState({
     array: undefined,

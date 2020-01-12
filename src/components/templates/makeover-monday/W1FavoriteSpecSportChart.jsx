@@ -6,6 +6,7 @@ import { select } from "d3-selection"
 import { max, min } from "d3-array"
 import { PropagateLoader } from "react-spinners"
 import Image from "gatsby-image"
+import { useStaticQuery, graphql } from "gatsby"
 
 import { VerticalDropChartRow } from "../../organisms"
 import { getAxisPadding } from "../../../utils"
@@ -18,8 +19,7 @@ import {
   ColoredSpan,
 } from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
-import { useDimensions, useDimsUpdate } from "../../../hooks"
-import { useStaticQuery, graphql } from "gatsby"
+import { useDimensions, useDimsUpdate, useFetchData } from "../../../hooks"
 import Credits from "../../molecules/Credits"
 import { GridContainer, Container } from "../../atoms/containers"
 
@@ -89,19 +89,17 @@ const margin = {
 
 export default function({ rawData, data, valueArray }) {
   const query = useStaticQuery(graphql`
-    {
-      allStrapiDatasets {
-        nodes {
-          image {
-            childImageSharp {
+      {
+        allContentfulImages(filter: {contentful_id: {eq: "1aC8EITLwvaOOpttIMNamr"}}) {
+          nodes {
+            images {
               fluid {
-                ...GatsbyImageSharpFluid_tracedSVG
+                ...GatsbyContentfulFluid_tracedSVG
               }
             }
           }
         }
       }
-    }
   `)
 
   const [domain, setDomain] = useState(undefined)
@@ -284,9 +282,10 @@ export default function({ rawData, data, valueArray }) {
             >
               <FlexContainer>2008</FlexContainer>
               <ImageContainer>
+              {console.log(query)}
                 <Image
                   fluid={
-                    query.allStrapiDatasets.nodes[0].image.childImageSharp.fluid
+                    query.allContentfulImages.nodes[0].images[0].fluid
                   }
                 />
               </ImageContainer>
