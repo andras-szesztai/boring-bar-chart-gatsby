@@ -1,5 +1,7 @@
 import React from 'react';
 import { FlexContainer, GridContainer} from '../atoms'
+import { Container } from '../atoms/containers';
+import { SortableComponent } from '../molecules';
 
 export default function(){
 
@@ -14,9 +16,20 @@ export default function(){
         height="95%"
         maxHeight="720"
         minHeight="600"  
-        borderColor="red"
+        columns="200px 1fr"
       >
-
+        <Container
+         borderColor="gray"
+        >
+          Controls
+        </Container>
+        <Container
+          borderColor="red"
+        >
+          <SortableComponent
+            items={["a", "b", "c"]}
+          />
+        </Container>
       </GridContainer>
     </FlexContainer>
   )

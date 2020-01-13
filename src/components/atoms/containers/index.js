@@ -2,3 +2,4 @@ export { default as VerticalAxisLabelContainer } from './VerticalAxisLabelContai
 export { default as FlexContainer } from './FlexContainer'
 export { default as Container } from './Container'
 export { default as GridContainer } from './GridContainer'
+export { default as SortableItem } from './SortableItem'

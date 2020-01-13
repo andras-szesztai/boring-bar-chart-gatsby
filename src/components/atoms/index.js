@@ -1,12 +1,12 @@
+import { ChartArea, ChartWrapper, ChartSvg } from "./chartElements"
 import {
-  ChartArea,
-  ChartWrapper,
-  ChartSvg,
-} from "./chartElements"
-import { FlexContainer, VerticalAxisLabelContainer, GridContainer } from "./containers"
+  FlexContainer,
+  VerticalAxisLabelContainer,
+  GridContainer,
+  SortableItem,
+} from "./containers"
 import { Title, ColoredSpan } from "./textElements"
 import { NeumorphButton } from "./buttons"
-
 
 export {
   FlexContainer,
@@ -17,5 +17,6 @@ export {
   Title,
   NeumorphButton,
   ColoredSpan,
-  GridContainer
+  GridContainer,
+  SortableItem,
 }
