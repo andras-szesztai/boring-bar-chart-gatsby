@@ -211,7 +211,7 @@ export default function({ rawData, data, valueArray }) {
             absPos
             top={height / 2 - height * 0.31}
             right={0}
-            width={420}
+            width="420px"
             textAlign="right"
           >
             <div>
@@ -230,7 +230,7 @@ export default function({ rawData, data, valueArray }) {
           </FlexContainer>
           <FlexContainer
             fixSize
-            height={100}
+            height="100px"
             justify="flex-end"
             align="flex-end"
             direction="column"
@@ -249,8 +249,8 @@ export default function({ rawData, data, valueArray }) {
           </FlexContainer>
           <FlexContainer
             fixSize
-            height={55}
-            width={210}
+            height="55px"
+            width="210px"
             justify="space-around"
             absPos
             top={height / 2 + axisSvgHeight / 2}
@@ -277,7 +277,7 @@ export default function({ rawData, data, valueArray }) {
           <FlexContainer absPos top={height / 2 + height * 0.21} right={0}>
             <GridContainer
               columns="1fr min-content 1fr"
-              width={200}
+              width="200px"
               columnGap={0.5}
             >
               <FlexContainer>2008</FlexContainer>

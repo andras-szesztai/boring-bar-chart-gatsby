@@ -42,16 +42,26 @@ const Container = styled.div`
       width: 100%;
     `}
 
-  ${({ height, width, whiteSpace }) =>
+  ${({ height, width, whiteSpace, maxHeight, minHeight, maxWidth, minWidth }) =>
     css`
-      height: ${height}px;
-      width: ${width}px;
+      height: ${height};
+      max-height: ${maxHeight}px;
+      min-height: ${minHeight}px;
+
+      width: ${width};
+      max-width: ${maxWidth}px;
+      min-width: ${minWidth}px;
+
       white-space: ${whiteSpace};
     `}
 
   ${({ gridArea, textAlign }) => css`
     grid-area: ${gridArea};
     text-align: ${textAlign};
+  `}
+
+  ${({ borderColor }) => borderColor && css`
+    border: 1px solid ${borderColor};
   `}
   
 `
