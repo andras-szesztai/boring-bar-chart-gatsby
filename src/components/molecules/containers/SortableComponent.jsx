@@ -1,24 +1,28 @@
 import React, {useState} from 'react';
 import {SortableContainer} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
-import { SortableItem } from '../../atoms';
+import { SortableItem, GridContainer } from '../../atoms';
 
-const SortableList = SortableContainer(({items}) => {
+const SortableList = SortableContainer((props) => {
+  const { items } = props
   return (
-    <div>
+    <GridContainer
+      {...props}
+    >
       {items.map((value, index) => (
         <SortableItem key={`item-${value}`} index={index} value={value} />
       ))}
-    </div>
+    </GridContainer>
   );
 });
 
-export default function({items: defaultItems}){
+export default function(props){
+  const { items: defaultItems } = props
   const [ items, setItems ] = useState(defaultItems)
   function onSortEnd({oldIndex, newIndex}){
     setItems(prev => arrayMove(prev, oldIndex, newIndex))
   }
   return (
-    <SortableList items={items} onSortEnd={onSortEnd} />
+    <SortableList items={items} onSortEnd={onSortEnd} {...props}/>
   );
 }
