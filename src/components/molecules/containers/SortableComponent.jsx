@@ -4,13 +4,13 @@ import arrayMove from 'array-move';
 import { SortableItem, GridContainer } from '../../atoms';
 
 const SortableList = SortableContainer((props) => {
-  const { items } = props
+  const { sortedItems } = props
   return (
     <GridContainer
       {...props}
     >
-      {items.map((value, index) => (
-        <SortableItem key={`item-${value}`} index={index} value={value} />
+      {sortedItems.map((comp, index) => (
+        <SortableItem key={`item-${comp}`} index={index} value={comp} />
       ))}
     </GridContainer>
   );
@@ -23,6 +23,6 @@ export default function(props){
     setItems(prev => arrayMove(prev, oldIndex, newIndex))
   }
   return (
-    <SortableList items={items} onSortEnd={onSortEnd} {...props}/>
+    <SortableList sortedItems={items} onSortEnd={onSortEnd} {...props}/>
   );
 }

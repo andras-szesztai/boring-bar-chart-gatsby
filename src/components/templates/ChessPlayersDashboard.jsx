@@ -19,14 +19,16 @@ export default function() {
         <Container borderColor="gray">
           <SortableComponent
             axis="x"
+            columnGap={.5}
+            fullSize
             columns="repeat(8, 1fr)"
             items={[
-              <Container borderColor="red">Yellow</Container>,
-              <Container borderColor="black">Black</Container>,
-              <Container borderColor="green">Green</Container>,
-              <Container borderColor="red">Yellow</Container>,
-              <Container borderColor="black">Black</Container>,
-              <Container borderColor="green">Green</Container>,
+              <Container fullSize borderColor="red">Yellow</Container>,
+              <Container fullSize borderColor="black">Black</Container>,
+              <Container fullSize borderColor="green">Green</Container>,
+              <Container fullSize borderColor="red">Yellow</Container>,
+              <Container fullSize borderColor="black">Black</Container>,
+              <Container fullSize borderColor="green">Green</Container>,
             ]}
           />
         </Container>
