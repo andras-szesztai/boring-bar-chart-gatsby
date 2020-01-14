@@ -1,11 +1,13 @@
-import React from 'react';
-import {ChessPlayersDashboard} from '../../components/templates';
+import React from "react"
+import Helmet from 'react-helmet'
 
+import { ChessPlayersDashboard } from "../../components/templates"
 
-export default function(){
-  
-
-
-
-  return <ChessPlayersDashboard/>
+export default function() {
+  return (
+    <>
+      <Helmet title="Chess Players ..." />
+      <ChessPlayersDashboard />
+    </>
+  )
 }

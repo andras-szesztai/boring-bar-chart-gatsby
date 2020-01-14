@@ -1,7 +1,7 @@
 import React from "react"
 import {SortableHandle} from 'react-sortable-hoc';
 
-import { FlexContainer, GridContainer } from "../atoms"
+import { FlexContainer, GridContainer, CheckBox } from "../atoms"
 import { Container } from "../atoms/containers"
 import { SortableComponent } from "../molecules"
 
@@ -30,7 +30,10 @@ export default function() {
             columns="repeat(8, 1fr)"
             items={[
               <FlexContainer fullSize borderColor="red">
-                <Test/>
+                <CheckBox
+                  checked={true}
+                  
+                />
               </FlexContainer>,
               <Container fullSize borderColor="black">Black</Container>,
               <Container fullSize borderColor="green">Green</Container>,
