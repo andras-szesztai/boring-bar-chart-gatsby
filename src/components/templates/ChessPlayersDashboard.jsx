@@ -31,8 +31,7 @@ export default function() {
             items={[
               <FlexContainer fullSize borderColor="red">
                 <CheckBox
-                  checked={true}
-                  
+                  value="andras_szesztai"
                 />
               </FlexContainer>,
               <Container fullSize borderColor="black">Black</Container>,
