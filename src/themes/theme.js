@@ -19,6 +19,7 @@ export const ease = {
 };
 
 export const transition = {
+  xs: "0.15s",
   sm: "0.3s"
 }
 
@@ -41,8 +42,6 @@ export const fontSize = [
 
 export const fontWeight = [200, 300, 400, 500, 600, 700, 800]
 
-export const curves = {}
-
 export const z = {
   loader: 100
 }
@@ -52,8 +51,9 @@ const theme = {
   fontSize,
   fontWeight,
   colors,
-  curves,
-  z,
+  ease,
+  transition,
+  z
 }
 
 export default theme

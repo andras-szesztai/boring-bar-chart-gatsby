@@ -19,7 +19,8 @@ export function themifyColor(color){
 
 export const themifyFontSize= createThemify(theme.fontSize) // Pass in index
 export const themifyFontWeight= createThemify(theme.fontWeight) // Pass in index
-export const themifyCurve= createThemify(theme.curves) // Pass in curve name
+export const themifyEase = createThemify(theme.ease) // Pass in ease name
+export const themifyTransition = createThemify(theme.transition) // Pass in ease name
 export const themifySpace = createThemify(theme.space) // Pass in index
 export const themifyZIndex= createThemify(theme.z) // Pass in z-index name
 
