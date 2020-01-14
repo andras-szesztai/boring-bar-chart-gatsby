@@ -14,6 +14,15 @@ export const colors = {
   black: "#000000"
 }
 
+export const ease = {
+  easeInOutCubic: "cubic-bezier(0.645, 0.045, 0.355, 1)"
+};
+
+export const transition = {
+  sm: "0.3s"
+}
+
+
 export const fontSize = [
   "1rem",
   "1.5rem",
