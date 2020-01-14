@@ -1,4 +1,6 @@
 import React from "react"
+import {SortableHandle} from 'react-sortable-hoc';
+
 import { FlexContainer, GridContainer } from "../atoms"
 import { Container } from "../atoms/containers"
 import { SortableComponent } from "../molecules"
@@ -17,13 +19,19 @@ export default function() {
       >
         <Container borderColor="gray">Controls</Container>
         <Container borderColor="gray">
+        {// TODO: Move this part into an Organism with proper grid
+        }
           <SortableComponent
             axis="x"
+            lockAxis="x"
+            useDragHandle
             columnGap={.5}
             fullSize
             columns="repeat(8, 1fr)"
             items={[
-              <Container fullSize borderColor="red">Yellow</Container>,
+              <FlexContainer fullSize borderColor="red">
+                <Test/>
+              </FlexContainer>,
               <Container fullSize borderColor="black">Black</Container>,
               <Container fullSize borderColor="green">Green</Container>,
               <Container fullSize borderColor="red">Yellow</Container>,
@@ -36,3 +44,6 @@ export default function() {
     </FlexContainer>
   )
 }
+
+// TODO: Add SortableHandle Component
+const Test = SortableHandle(({value}) => <Container>Test</Container>);
