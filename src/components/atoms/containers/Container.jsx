@@ -55,9 +55,10 @@ const Container = styled.div`
       white-space: ${whiteSpace};
     `}
 
-  ${({ gridArea, textAlign }) => css`
+  ${({ gridArea, textAlign, cursor}) => css`
     grid-area: ${gridArea};
     text-align: ${textAlign};
+    cursor: ${cursor};
   `}
 
   ${({ borderColor }) => borderColor && css`
@@ -69,6 +70,6 @@ const Container = styled.div`
 export default Container
 
 Container.defaultProps = {
-  fontColor: "grayDarker",
+  fontColor: "grayDarkest",
   fontSize: 1,
 }

@@ -5,6 +5,7 @@ import {
   GridContainer,
   CheckBox,
   SortableHandle,
+  SelectAllText,
 } from "../atoms"
 import { Container } from "../atoms/containers"
 import { SortableComponent } from "../molecules"
@@ -26,10 +27,8 @@ function getInitCheckedArray() {
   return initCheckedArray
 }
 
-const initCheckedArray = getInitCheckedArray()
-
 export default function() {
-  const [checkedObject, setCheckedObject] = useState(initCheckedArray)
+  const [checkedObject, setCheckedObject] = useState(getInitCheckedArray())
 
   return (
     <FlexContainer fullScreen>
@@ -43,7 +42,13 @@ export default function() {
         columns="200px 1fr"
       >
         <Container borderColor="gray">
-          <FlexContainer fullSize>Controls</FlexContainer>
+          <FlexContainer fullSize>
+            {/* TODO: finish setup */}
+            <SelectAllText
+              // onClick={isMissing => {  }}
+              array={Object.values(checkedObject)}
+            />
+          </FlexContainer>
         </Container>
         <Container borderColor="gray">
           <SortableComponent
