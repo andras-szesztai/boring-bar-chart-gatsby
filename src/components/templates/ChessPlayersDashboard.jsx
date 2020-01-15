@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 
 import {
   FlexContainer,
@@ -20,7 +20,17 @@ const data = [
   "polgar",
 ]
 
+function getInitCheckedArray() {
+  let initCheckedArray = {}
+  data.forEach(el => (initCheckedArray = { ...initCheckedArray, [el]: true }))
+  return initCheckedArray
+}
+
+const initCheckedArray = getInitCheckedArray()
+
 export default function() {
+  const [checkedObject, setCheckedObject] = useState(initCheckedArray)
+
   return (
     <FlexContainer fullScreen>
       <GridContainer
@@ -33,14 +43,9 @@ export default function() {
         columns="200px 1fr"
       >
         <Container borderColor="gray">
-          <FlexContainer fullSize>
-            Controls
-          </FlexContainer>
+          <FlexContainer fullSize>Controls</FlexContainer>
         </Container>
         <Container borderColor="gray">
-          {
-            // TODO: Move this part into an Organism with proper grid
-          }
           <SortableComponent
             axis="x"
             lockAxis="x"
@@ -49,9 +54,17 @@ export default function() {
             fullSize
             columns="repeat(8, 1fr)"
             items={data.map(d => (
-              <FlexContainer fullSize direction="column">
+              <FlexContainer key={d} fullSize direction="column">
                 {d}
-                <CheckBox value={d} initialCheck={true}/>
+                <CheckBox
+                  parentChecked
+                  checked={checkedObject[d]}
+                  test={checkedObject}
+                  value={d}
+                  onClick={() =>
+                    setCheckedObject(prev => ({ ...prev, [d]: !prev[d] }))
+                  }
+                />
               </FlexContainer>
             ))}
           />
