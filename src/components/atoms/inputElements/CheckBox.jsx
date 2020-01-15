@@ -28,8 +28,8 @@ const CheckBox = styled.div`
 `
 
 export default function(props) {
-  const { value, handleClick } = props
-  const [check, setCheck] = useState(false)
+  const { value, handleClick, initialCheck } = props
+  const [check, setCheck] = useState(initialCheck)
   return (
     <CheckBox
       checked={check}
