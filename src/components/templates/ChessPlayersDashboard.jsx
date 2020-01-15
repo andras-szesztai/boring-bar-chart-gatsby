@@ -1,7 +1,6 @@
 import React from "react"
-import {SortableHandle} from 'react-sortable-hoc';
 
-import { FlexContainer, GridContainer, CheckBox } from "../atoms"
+import { FlexContainer, GridContainer, CheckBox, SortableHandle } from "../atoms"
 import { Container } from "../atoms/containers"
 import { SortableComponent } from "../molecules"
 
@@ -34,7 +33,12 @@ export default function() {
                   value="andras_szesztai"
                 />
               </FlexContainer>,
-              <Container fullSize borderColor="black">Black</Container>,
+              <Container fullSize borderColor="black">
+                <SortableHandle
+                  size="30px"
+                  color="#333333"
+                />
+              </Container>,
               <Container fullSize borderColor="green">Green</Container>,
               <Container fullSize borderColor="red">Yellow</Container>,
               <Container fullSize borderColor="black">Black</Container>,
@@ -46,6 +50,3 @@ export default function() {
     </FlexContainer>
   )
 }
-
-// TODO: Add SortableHandle Component
-const Test = SortableHandle(({value}) => <Container>Test</Container>);

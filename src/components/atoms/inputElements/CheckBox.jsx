@@ -45,14 +45,3 @@ export default function(props) {
 CheckBox.defaultProps = {
   width: 15
 }
-
-// .fancy.square label {
-//   input[type=checkbox]:after {
-//     content: '\f0c8'; // square
-//   }
-//   input[type=checkbox]:checked::after {
-//     content: '\f14a'; // check-square
-//   }
-// }
-
-//https://codepen.io/andras-newzoo/pen/BayPRRp

@@ -8,6 +8,7 @@ import {
 import { Title, ColoredSpan } from "./textElements"
 import { NeumorphButton } from "./buttons"
 import { CheckBox } from './inputElements'
+import { SortableHandle } from './controlElements'
 
 export {
   FlexContainer,
@@ -20,5 +21,6 @@ export {
   ColoredSpan,
   GridContainer,
   SortableItem,
-  CheckBox
+  CheckBox,
+  SortableHandle
 }
