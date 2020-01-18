@@ -17,7 +17,7 @@ export default function({data: {allContentfulChessPlayersData: {nodes}} }) {
 
 export const query = graphql`
 {
-  allContentfulChessPlayersData {
+  allContentfulChessPlayersData(sort: {fields: dob, order: ASC}) {
     nodes {
       id
       nameId

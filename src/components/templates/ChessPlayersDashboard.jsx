@@ -25,9 +25,6 @@ export default function({ data }) {
       setCheckedObject(checkUncheckAll(true, dataKeys))
     }
   }, [dataKeys, data, checkedObject])
-  console.log(data);
-  
-
 
   return (
     <FlexContainer fullScreen>
@@ -77,14 +74,13 @@ export default function({ data }) {
             <SortableComponent
               axis="x"
               lockAxis="x"
-              // useDragHandle
               columnGap={0.5}
               fullSize
               columns="repeat(8, 1fr)"
               items={dataKeys.map(d => (
                 <GridContainer rows="150px 1fr 100px" key={d} fullSize>
                   <FlexContainer borderColor="gray">Bio</FlexContainer>
-                  <ParallelBoxPlotColumn/>
+                  <ParallelBoxPlotColumn data={data.find(({ nameId }) => nameId === d)} isFiltered={checkedObject[d]}/>
                   <FlexContainer
                     borderColor="gray"
                     direction="column"

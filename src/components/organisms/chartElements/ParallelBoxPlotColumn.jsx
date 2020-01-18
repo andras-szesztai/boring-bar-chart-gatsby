@@ -4,6 +4,8 @@ import { GridContainer, FlexContainer } from '../../atoms';
 export default function ParellelBoxPlotColumn({
  data, isFiltered, result, period
 }){
+  console.log(data);
+  console.log(isFiltered);
 
   return (
     <GridContainer
