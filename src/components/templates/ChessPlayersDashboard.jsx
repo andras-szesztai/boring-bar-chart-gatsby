@@ -1,16 +1,10 @@
 import React, { useState } from "react"
 
-import {
-  FlexContainer,
-  GridContainer,
-  CheckBox,
-  SortableHandle,
-  SelectAllText,
-} from "../atoms"
+import { FlexContainer, GridContainer, CheckBox, SelectAllText } from "../atoms"
 import { Container } from "../atoms/containers"
 import { SortableComponent } from "../molecules"
 
-const data = [
+const dataKeys = [
   "anand",
   "botvinnik",
   "carlsen",
@@ -21,14 +15,14 @@ const data = [
   "polgar",
 ]
 
-function getInitCheckedArray() {
-  let initCheckedArray = {}
-  data.forEach(el => (initCheckedArray = { ...initCheckedArray, [el]: true }))
-  return initCheckedArray
+function checkUncheckAll(bool) {
+  let checkArray = {}
+  dataKeys.forEach(key => (checkArray = { ...checkArray, [key]: bool }))
+  return checkArray
 }
 
 export default function() {
-  const [checkedObject, setCheckedObject] = useState(getInitCheckedArray())
+  const [checkedObject, setCheckedObject] = useState(checkUncheckAll(true))
 
   return (
     <FlexContainer fullScreen>
@@ -41,26 +35,38 @@ export default function() {
         minHeight="600"
         columns="200px 1fr"
       >
-        <Container borderColor="gray">
-          <FlexContainer fullSize>
-            {/* TODO: finish setup */}
-            <SelectAllText
-              // onClick={isMissing => {  }}
-              array={Object.values(checkedObject)}
-            />
-          </FlexContainer>
-        </Container>
-        <Container borderColor="gray">
+        <GridContainer rows="150px 1fr">
+          <FlexContainer borderColor="gray">Title</FlexContainer>
+          <GridContainer rows="1fr 50px">
+            <GridContainer rows="1fr 100px">
+              <FlexContainer borderColor="gray">Chart Control</FlexContainer>
+              <FlexContainer borderColor="gray" direction="column" justify="space-evenly">
+                <FlexContainer borderColor="gray">
+                  LDW Select
+                </FlexContainer>
+                <SelectAllText
+                  handleClick={isMissing => {
+                    setCheckedObject(
+                      isMissing ? checkUncheckAll(true) : checkUncheckAll(false)
+                    )
+                  }}
+                  array={Object.values(checkedObject)}
+                />
+              </FlexContainer>
+            </GridContainer>
+            <FlexContainer borderColor="gray">Brush Control</FlexContainer>
+          </GridContainer>
+        </GridContainer>
+        <GridContainer rows="1fr 50px">
           <SortableComponent
             axis="x"
             lockAxis="x"
-            useDragHandle
+            // useDragHandle
             columnGap={0.5}
             fullSize
             columns="repeat(8, 1fr)"
-            items={data.map(d => (
+            items={dataKeys.map(d => (
               <FlexContainer key={d} fullSize direction="column">
-                {d}
                 <CheckBox
                   parentChecked
                   checked={checkedObject[d]}
@@ -73,7 +79,8 @@ export default function() {
               </FlexContainer>
             ))}
           />
-        </Container>
+          <FlexContainer borderColor="gray">Filters</FlexContainer>
+        </GridContainer>
       </GridContainer>
     </FlexContainer>
   )

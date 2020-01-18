@@ -1,20 +1,23 @@
 import React from "react"
-import { Container } from "../containers"
+import { Container, FlexContainer } from "../containers"
+import { ColoredSpan } from "../textElements"
 
 export default function({
   array, handleClick
 }){
 
-
   const isMissing = array.includes(false)
   return (
-    <Container
+    <FlexContainer
       fontWeight={3}
+      fontSize={1}
       cursor="pointer"
       onClick={() => handleClick(isMissing)}
     >
-      {isMissing ? "Select all" : "Unselect all"}
-    </Container>
+      <ColoredSpan isHoverable paddingBottom={2}>
+        {isMissing ? "Select all" : "Unselect all"}
+      </ColoredSpan>
+    </FlexContainer>
   )
 }
 
