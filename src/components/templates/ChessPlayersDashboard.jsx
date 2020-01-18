@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 
 import { FlexContainer, GridContainer, CheckBox, SelectAllText } from "../atoms"
-import { Container } from "../atoms/containers"
 import { SortableComponent } from "../molecules"
 
 const dataKeys = [
@@ -21,7 +20,10 @@ function checkUncheckAll(bool) {
   return checkArray
 }
 
-export default function() {
+export default function({
+  data
+}) {
+  console.log(data);
   const [checkedObject, setCheckedObject] = useState(checkUncheckAll(true))
 
   return (

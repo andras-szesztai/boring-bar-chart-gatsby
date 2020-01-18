@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react"
-import { useStaticQuery, graphql } from "gatsby"
 import _ from "lodash"
 
-import { useRawData, useFetchData } from "../../../hooks"
+import { useFetchData } from "../../../hooks"
 import { FavoriteSpecSportChart } from "../../../components/templates"
 import { Helmet } from "react-helmet"
 
