@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react"
 import { FlexContainer, GridContainer, CheckBox, SelectAllText } from "../atoms"
 import { SortableComponent } from "../molecules"
 import { ParallelBoxPlotColumn } from "../organisms"
+import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
 
 function checkUncheckAll(bool, keys) {
   let checkArray = {}
@@ -44,25 +45,33 @@ export default function({ data }) {
                 <FlexContainer borderColor="gray" />
                 <FlexContainer borderColor="gray" />
               </GridContainer>
-              <FlexContainer
+              <GridContainer
                 borderColor="gray"
-                direction="column"
-                justify="space-evenly"
+                rows="repeat(2, 50%)"
+                rowGap={0}
               >
-                <FlexContainer>LDW Select</FlexContainer>
-                {checkedObject && (
-                  <SelectAllText
-                    handleClick={isMissing => {
-                      setCheckedObject(
-                        isMissing
-                          ? checkUncheckAll(true, dataKeys)
-                          : checkUncheckAll(false, dataKeys)
-                      )
-                    }}
-                    array={Object.values(checkedObject)}
+                <FlexContainer borderColor="gray">
+                  <VerticalMultiSelect
+                    values={["Lose", "Draw", "Win"]}
+                    colorRange={["#fc5050", "#ffd00c", "#415f77"]}
+                    checkedObject={{Lose: true, Draw: false, Win: true}}
                   />
-                )}
-              </FlexContainer>
+                </FlexContainer>
+                <FlexContainer borderColor="gray">
+                  {checkedObject && (
+                    <SelectAllText
+                      handleClick={isMissing => {
+                        setCheckedObject(
+                          isMissing
+                            ? checkUncheckAll(true, dataKeys)
+                            : checkUncheckAll(false, dataKeys)
+                        )
+                      }}
+                      array={Object.values(checkedObject)}
+                    />
+                  )}
+                </FlexContainer>
+              </GridContainer>
             </GridContainer>
             <FlexContainer borderColor="gray">Brush Control</FlexContainer>
           </GridContainer>
@@ -92,7 +101,6 @@ export default function({ data }) {
                     <CheckBox
                       parentChecked
                       checked={checkedObject[d]}
-                      test={checkedObject}
                       value={d}
                       onClick={() =>
                         setCheckedObject(prev => ({ ...prev, [d]: !prev[d] }))

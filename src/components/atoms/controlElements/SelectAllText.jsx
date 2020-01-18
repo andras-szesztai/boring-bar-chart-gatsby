@@ -9,7 +9,7 @@ export default function({
   const isMissing = array.includes(false)
   return (
     <FlexContainer
-      fontWeight={3}
+      // fontWeight={3}
       fontSize={1}
       cursor="pointer"
       onClick={() => handleClick(isMissing)}
