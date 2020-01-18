@@ -1,5 +1,4 @@
-import React, { useState } from "react"
-import styled, { css } from "styled-components"
+import React from "react"
 import { CheckBox, GridContainer, FlexContainer } from "../../atoms"
 
 export default function({ values, colorRange, checkedObject, handleClick }) {

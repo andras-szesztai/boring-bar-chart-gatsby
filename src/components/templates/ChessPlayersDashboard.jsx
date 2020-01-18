@@ -26,6 +26,12 @@ export default function({ data }) {
     }
   }, [dataKeys, data, checkedObject])
 
+  const [resultCheckedObject, setResultCheckedObject] = useState({
+    Lose: true,
+    Draw: true,
+    Win: true,
+  })
+
   return (
     <FlexContainer fullScreen>
       <GridContainer
@@ -50,14 +56,20 @@ export default function({ data }) {
                 rows="repeat(2, 50%)"
                 rowGap={0}
               >
-                <FlexContainer borderColor="gray">
+                <FlexContainer>
                   <VerticalMultiSelect
                     values={["Lose", "Draw", "Win"]}
                     colorRange={["#fc5050", "#ffd00c", "#415f77"]}
-                    checkedObject={{Lose: true, Draw: false, Win: true}}
+                    checkedObject={resultCheckedObject}
+                    handleClick={val =>
+                      setResultCheckedObject(prev => ({
+                        ...prev,
+                        [val]: !prev[val],
+                      }))
+                    }
                   />
                 </FlexContainer>
-                <FlexContainer borderColor="gray">
+                <FlexContainer>
                   {checkedObject && (
                     <SelectAllText
                       handleClick={isMissing => {
@@ -90,7 +102,7 @@ export default function({ data }) {
                   <ParallelBoxPlotColumn
                     data={data.find(({ nameId }) => nameId === d)}
                     isFiltered={checkedObject[d]}
-                    results={["Lose", "Draw", "Win"]}
+                    results={Object.keys(resultCheckedObject).filter(key => resultCheckedObject[key])}
                   />
                   <FlexContainer
                     borderColor="gray"
