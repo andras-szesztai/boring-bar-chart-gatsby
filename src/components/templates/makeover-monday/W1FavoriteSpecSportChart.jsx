@@ -19,7 +19,7 @@ import {
   ColoredSpan,
 } from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
-import { useDimensions, useDimsUpdate, useFetchData } from "../../../hooks"
+import { useDimensions, useDimsUpdate } from "../../../hooks"
 import Credits from "../../molecules/Credits"
 import { GridContainer, Container } from "../../atoms/containers"
 
