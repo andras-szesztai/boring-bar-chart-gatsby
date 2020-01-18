@@ -1,5 +1,5 @@
 import React from "react"
-import { Container, FlexContainer } from "../containers"
+import { FlexContainer } from "../containers"
 import { ColoredSpan } from "../textElements"
 
 export default function({

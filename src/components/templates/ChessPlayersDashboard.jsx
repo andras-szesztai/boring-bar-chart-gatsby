@@ -40,10 +40,12 @@ export default function() {
           <GridContainer rows="1fr 50px">
             <GridContainer rows="1fr 100px">
               <FlexContainer borderColor="gray">Chart Control</FlexContainer>
-              <FlexContainer borderColor="gray" direction="column" justify="space-evenly">
-                <FlexContainer borderColor="gray">
-                  LDW Select
-                </FlexContainer>
+              <FlexContainer
+                borderColor="gray"
+                direction="column"
+                justify="space-evenly"
+              >
+                <FlexContainer>LDW Select</FlexContainer>
                 <SelectAllText
                   handleClick={isMissing => {
                     setCheckedObject(
@@ -66,17 +68,30 @@ export default function() {
             fullSize
             columns="repeat(8, 1fr)"
             items={dataKeys.map(d => (
-              <FlexContainer key={d} fullSize direction="column">
-                <CheckBox
-                  parentChecked
-                  checked={checkedObject[d]}
-                  test={checkedObject}
-                  value={d}
-                  onClick={() =>
-                    setCheckedObject(prev => ({ ...prev, [d]: !prev[d] }))
-                  }
-                />
-              </FlexContainer>
+              <GridContainer
+                rows="150px 1fr 100px"
+                key={d}
+                fullSize
+              >
+                <FlexContainer borderColor="gray">Bio</FlexContainer>
+                <FlexContainer borderColor="gray">{d}</FlexContainer>
+                <FlexContainer
+                  borderColor="gray"
+                  direction="column"
+                  justify="space-evenly"
+                >
+                  <FlexContainer>LDW</FlexContainer>
+                  <CheckBox
+                    parentChecked
+                    checked={checkedObject[d]}
+                    test={checkedObject}
+                    value={d}
+                    onClick={() =>
+                      setCheckedObject(prev => ({ ...prev, [d]: !prev[d] }))
+                    }
+                  />
+                </FlexContainer>
+              </GridContainer>
             ))}
           />
           <FlexContainer borderColor="gray">Filters</FlexContainer>
