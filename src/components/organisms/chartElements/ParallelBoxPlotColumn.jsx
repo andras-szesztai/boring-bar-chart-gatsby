@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { GridContainer, FlexContainer } from "../../atoms"
 import { quantile } from "d3-array"
+import { usePrevious } from "../../../hooks"
 
 const initialDataSets = {
   q1: undefined,
@@ -46,6 +47,8 @@ export default function ParellelBoxPlotColumn({
   results,
   period,
 }) {
+  const prevIsFiltered = usePrevious(isFiltered)
+  const prevResults = usePrevious(results)
   const [state, setState] = useState({
     isInitialized: false,
     boxPlotData: {
@@ -56,9 +59,6 @@ export default function ParellelBoxPlotColumn({
     },
   })
   const { isInitialized, boxPlotData } = state
-
-  console.log(boxPlotData);
-  
 
   useEffect(() => {
     if (!isInitialized && data) {
@@ -86,7 +86,22 @@ export default function ParellelBoxPlotColumn({
         },
       })
     }
-  }, [data, isFiltered, isInitialized, period, results])
+
+    if(isInitialized){
+      // To reset when becomes unfiltered
+      if(prevIsFiltered || isFiltered){
+        setState(prev => ({
+          ...prev,
+          boxPlotData: {
+            ...prev.boxPlotData,
+            filteredOppElo: prev.boxPlotData.unfilteredOppElo,
+            filteredMoves: prev.boxPlotData.unfilteredMoves,
+          }
+        }) 
+        )
+      }
+    }
+  }, [data, isFiltered, isInitialized, period, prevIsFiltered, results])
 
   return (
     <GridContainer
