@@ -11,7 +11,6 @@ function checkUncheckAll(bool, keys) {
 }
 
 export default function({ data }) {
-  
   const [dataKeys, setDataKeys] = useState(undefined)
   useEffect(() => {
     if (!dataKeys) {
@@ -41,18 +40,17 @@ export default function({ data }) {
           <FlexContainer borderColor="gray">Title</FlexContainer>
           <GridContainer rows="1fr 50px">
             <GridContainer rows="1fr 100px">
-                <GridContainer rows="repeat(2, 1fr)" rowGap={.5}>
-                  <FlexContainer borderColor="gray"/>
-                  <FlexContainer borderColor="gray"/>
-                </GridContainer>
+              <GridContainer rows="repeat(2, 1fr)" rowGap={0.5}>
+                <FlexContainer borderColor="gray" />
+                <FlexContainer borderColor="gray" />
+              </GridContainer>
               <FlexContainer
                 borderColor="gray"
                 direction="column"
                 justify="space-evenly"
               >
                 <FlexContainer>LDW Select</FlexContainer>
-                {
-                  checkedObject &&
+                {checkedObject && (
                   <SelectAllText
                     handleClick={isMissing => {
                       setCheckedObject(
@@ -63,7 +61,7 @@ export default function({ data }) {
                     }}
                     array={Object.values(checkedObject)}
                   />
-                }
+                )}
               </FlexContainer>
             </GridContainer>
             <FlexContainer borderColor="gray">Brush Control</FlexContainer>
@@ -80,7 +78,11 @@ export default function({ data }) {
               items={dataKeys.map(d => (
                 <GridContainer rows="150px 1fr 100px" key={d} fullSize>
                   <FlexContainer borderColor="gray">Bio</FlexContainer>
-                  <ParallelBoxPlotColumn data={data.find(({ nameId }) => nameId === d)} isFiltered={checkedObject[d]}/>
+                  <ParallelBoxPlotColumn
+                    data={data.find(({ nameId }) => nameId === d)}
+                    isFiltered={checkedObject[d]}
+                    results={["Lose", "Draw", "Win"]}
+                  />
                   <FlexContainer
                     borderColor="gray"
                     direction="column"
