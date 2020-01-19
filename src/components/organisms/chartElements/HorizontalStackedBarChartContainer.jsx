@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import _ from 'lodash'
+import React, { useState, useEffect } from "react"
+import _ from "lodash"
 
-import { FlexContainer } from '../../atoms';
-import { usePrevious, useInitValues } from '../../../hooks';
+import { FlexContainer } from "../../atoms"
+import { usePrevious, useInitValues } from "../../../hooks"
+import { HorizontalStackedBarChart } from "../../molecules"
 
 // TODO: add period filtering too
 const getPeriodFilteredData = (data, period) => data.filter(d => true)
 function getResultsData({ data, isFiltered, period }) {
   let dataSet = data
   // if (isFiltered) {
-    //dataSet = getPeriodFilteredData(data, period)
+  //dataSet = getPeriodFilteredData(data, period)
   // }
   const orderedList = ["Lose", "Draw", "Win"]
   const totalLength = dataSet.length
@@ -25,12 +26,10 @@ function getResultsData({ data, isFiltered, period }) {
   return percentagesObject
 }
 
-export default function ({
-  data, period, isFiltered
-}) {
+export default function({ data, period, isFiltered }) {
   const prevIsFiltered = usePrevious(isFiltered)
   const prevPeriod = usePrevious(period)
-  const initValues = useInitValues({period})
+  const initValues = useInitValues({ period })
   const [state, setState] = useState({
     isInitialized: false,
     resultData: {
@@ -38,7 +37,7 @@ export default function ({
       filteredResults: undefined,
     },
   })
-  
+
   const { isInitialized, resultData } = state
 
   useEffect(() => {
@@ -62,16 +61,14 @@ export default function ({
         setState(prev => ({
           ...prev,
           resultData: {
-            ...prev.resultData, 
-            filteredResults: prev.resultData.unfilteredResults
-          }
+            ...prev.resultData,
+            filteredResults: prev.resultData.unfilteredResults,
+          },
         }))
       }
 
       if (
-        (!prevIsFiltered &&
-          isFiltered &&
-          !_.isEqual(initPeriod, period)) ||
+        (!prevIsFiltered && isFiltered && !_.isEqual(initPeriod, period)) ||
         !_.isEqual(period, prevPeriod)
       ) {
         setState(prev => ({
@@ -81,17 +78,28 @@ export default function ({
             filteredResults: getResultsData({
               data,
               period,
-            })
-          }
+            }),
+          },
         }))
       }
     }
-  }, [data, initValues, isFiltered, isInitialized, period, prevIsFiltered, prevPeriod])
+  }, [
+    data,
+    initValues,
+    isFiltered,
+    isInitialized,
+    period,
+    prevIsFiltered,
+    prevPeriod,
+  ])
 
-  
   return (
-    <FlexContainer>
-
-    </FlexContainer>
+    <>
+      {Object.keys(resultData).map(obj => (
+        <FlexContainer height="50%" width="100%" withBorder>
+          <HorizontalStackedBarChart data={resultData[obj]} />
+        </FlexContainer>
+      ))}
+    </>
   )
 }

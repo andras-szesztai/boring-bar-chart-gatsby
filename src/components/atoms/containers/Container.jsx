@@ -64,6 +64,11 @@ const Container = styled.div`
   ${({ borderColor }) => borderColor && css`
     border: 1px solid ${borderColor};
   `}
+
+  ${({ withBorder }) => withBorder && css`
+    border: 1px solid gray;
+  `}
+  
   
 `
 

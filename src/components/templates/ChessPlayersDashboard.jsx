@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react"
 
 import { FlexContainer, GridContainer, CheckBox, SelectAllText } from "../atoms"
 import { SortableComponent } from "../molecules"
-import { ParallelBoxPlotColumn, VerticalStackedBarChartContainer } from "../organisms"
+import {
+  ParallelBoxPlotColumn,
+  HorizontalStackedBarChartContainer,
+} from "../organisms"
 import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
 
 function checkUncheckAll(bool, keys) {
@@ -105,30 +108,34 @@ export default function({ data }) {
                     <ParallelBoxPlotColumn
                       data={dataSet}
                       isFiltered={isChecked}
-                      results={Object.keys(resultCheckedObject).filter(key => resultCheckedObject[key])}
+                      results={Object.keys(resultCheckedObject).filter(
+                        key => resultCheckedObject[key]
+                      )}
                     />
-                    <FlexContainer
+                    <GridContainer
                       borderColor="gray"
-                      direction="column"
-                      justify="space-evenly"
+                      rows="repeat(2, 50%)"
+                      rowGap={0}
                     >
-                      <FlexContainer>
-                        <VerticalStackedBarChartContainer
+                      <FlexContainer  direction="column" >
+                        <HorizontalStackedBarChartContainer
                           isFiltered={isChecked}
                           data={dataSet}
                           //TODO:
                           period={[1, 100]}
                         />
                       </FlexContainer>
-                      <CheckBox
-                        parentChecked
-                        checked={isChecked}
-                        value={d}
-                        onClick={() =>
-                          setCheckedObject(prev => ({ ...prev, [d]: !prev[d] }))
-                        }
-                      />
-                    </FlexContainer>
+                      <FlexContainer>
+                        <CheckBox
+                          parentChecked
+                          checked={isChecked}
+                          value={d}
+                          onClick={() =>
+                            setCheckedObject(prev => ({ ...prev, [d]: !prev[d] }))
+                          }
+                        />
+                      </FlexContainer>
+                    </GridContainer>
                   </GridContainer>
                 )
               })}

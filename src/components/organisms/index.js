@@ -1,11 +1,11 @@
 import {
   VerticalDropChartRow,
   ParallelBoxPlotColumn,
-  VerticalStackedBarChartContainer,
+  HorizontalStackedBarChartContainer,
 } from "./chartElements"
 
 export {
   VerticalDropChartRow,
   ParallelBoxPlotColumn,
-  VerticalStackedBarChartContainer,
+  HorizontalStackedBarChartContainer,
 }
