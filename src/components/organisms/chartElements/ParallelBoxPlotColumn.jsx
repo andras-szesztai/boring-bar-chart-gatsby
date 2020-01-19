@@ -4,6 +4,7 @@ import _ from "lodash"
 
 import { GridContainer, FlexContainer } from "../../atoms"
 import { usePrevious, useInitValues } from "../../../hooks"
+import { getPeriodFilteredData } from "../../../utils"
 
 const initialDataSets = {
   q1: undefined,
@@ -13,15 +14,14 @@ const initialDataSets = {
   max: undefined,
 }
 
-// TODO: add period filtering too
-const getFilteredData = (data, results, period) =>
+const getFilteredData = (data, results) =>
   data.filter(d => results.includes(d.result))
 const getSortedValueArray = (data, key) =>
   data.map(d => d[key]).sort((a, b) => a - b)
 function getBoxPlotData({ data, key, isFiltered, results, period }) {
   let dataSet = data
   if (isFiltered) {
-    dataSet = getFilteredData(data, results, period)
+    dataSet = getPeriodFilteredData(getFilteredData(data, results), period)
   }
 
   const sortedValues = getSortedValueArray(dataSet, key)
@@ -45,7 +45,7 @@ function getBoxPlotData({ data, key, isFiltered, results, period }) {
 }
 
 export default function ParellelBoxPlotColumn({
-  data: { dataSet: data },
+  data,
   isFiltered,
   results,
   period,
@@ -65,7 +65,7 @@ export default function ParellelBoxPlotColumn({
     }
   })
   const { isInitialized, boxPlotData } = state
-
+  
   useEffect(() => {
     if (!isInitialized && data) {
       const eloData = getBoxPlotData({
@@ -135,7 +135,7 @@ export default function ParellelBoxPlotColumn({
       }
     }
   }, [data, initValues, isFiltered, isInitialized, period, prevIsFiltered, prevPeriod, prevResults, results])
-
+  
   return (
     <GridContainer
       rows="repeat(2, 1fr)"

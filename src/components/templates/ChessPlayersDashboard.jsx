@@ -117,6 +117,7 @@ export default function({ data }) {
                     <ParallelBoxPlotColumn
                       data={dataSet}
                       isFiltered={isChecked}
+                      period={period}
                       results={Object.keys(resultCheckedObject).filter(
                         key => resultCheckedObject[key]
                       )}
