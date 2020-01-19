@@ -10,14 +10,15 @@ export default function HorizontalStackedBarChart({
   const { width, height } = useDimensions({ref: wrapperRef})
   console.log(width, height);
   
-  function initVis(){
+
+  function initializeVis(){
     
   }
-  function updateVis(){
+  function updateVisData(){
 
   }
-  function updateDims(){
-
+  function updateVisDims(){
+    
   }
 
   return (

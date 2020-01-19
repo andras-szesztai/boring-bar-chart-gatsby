@@ -10,7 +10,7 @@ export default function useDimensions({
   },
   parentRef,
   parentWidth,
-  parentHeight
+  parentHeight,
 }) {
   const [dims, setDims] = useState({
     width: undefined,
@@ -18,21 +18,19 @@ export default function useDimensions({
     chartWidth: undefined,
     chartHeight: undefined,
   })
-  
+
   useEffect(() => {
     function getDimensions() {
-
-      if (
-        ref &&
-        ref.current
-      ) {
+      if ((ref || parentRef) && (ref.current || parentRef.current)) {
         const width = parentWidth
           ? parentRef.current.offsetWidth
           : ref.current.offsetWidth
         const height = parentHeight
           ? parentRef.current.offsetHeight
           : ref.current.offsetHeight
-        if(width !== dims.width || height !== dims.height){
+        
+        
+        if (dims.width !== width || height !== dims.height) {
           setDims({
             width,
             height,
@@ -42,12 +40,12 @@ export default function useDimensions({
         }
       }
     }
-    window.addEventListener("resize", getDimensions)
-    if(!dims.height && ref.current){
+    if (!dims.height && (ref.current || parentRef.current)) {
+      window.addEventListener("resize", getDimensions)
       getDimensions()
     }
-    // return window.removeEventListener("resize", getDimensions)
-    // setTimeout(() => getDimensions(), 1000)
+    // TODO: figure out how to use it 
+    // return  window.removeEventListener("resize", getDimensions)
   }, [dims, margin, parentHeight, parentRef, parentWidth, ref])
 
   return dims

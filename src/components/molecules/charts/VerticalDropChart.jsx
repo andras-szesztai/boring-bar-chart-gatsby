@@ -31,6 +31,7 @@ export default function VerticalDropChart({
     parentRef,
     parentWidth: true,
   })
+  
   const lgRadius = height * 0.15
   const smRadius = height * 0.025
 

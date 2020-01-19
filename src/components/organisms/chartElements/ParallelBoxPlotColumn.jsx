@@ -49,6 +49,7 @@ export default function ParellelBoxPlotColumn({
   isFiltered,
   results,
   period,
+  columnRef
 }) {
   const prevIsFiltered = usePrevious(isFiltered)
   const prevResults = usePrevious(results)

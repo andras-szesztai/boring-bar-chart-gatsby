@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
 import { FlexContainer, GridContainer, CheckBox, SelectAllText } from "../atoms"
 import { SortableComponent } from "../molecules"
@@ -7,6 +7,7 @@ import {
   HorizontalStackedBarChartContainer,
 } from "../organisms"
 import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
+import { useDimensions } from "../../hooks"
 
 function checkUncheckAll(bool, keys) {
   let checkArray = {}
@@ -34,7 +35,7 @@ export default function({ data }) {
     Draw: true,
     Win: true,
   })
-
+  
   return (
     <FlexContainer fullScreen>
       <GridContainer
@@ -117,7 +118,7 @@ export default function({ data }) {
                       rows="repeat(2, 50%)"
                       rowGap={0}
                     >
-                      <FlexContainer  direction="column" >
+                      <FlexContainer direction="column">
                         <HorizontalStackedBarChartContainer
                           isFiltered={isChecked}
                           data={dataSet}
@@ -131,7 +132,10 @@ export default function({ data }) {
                           checked={isChecked}
                           value={d}
                           onClick={() =>
-                            setCheckedObject(prev => ({ ...prev, [d]: !prev[d] }))
+                            setCheckedObject(prev => ({
+                              ...prev,
+                              [d]: !prev[d],
+                            }))
                           }
                         />
                       </FlexContainer>
