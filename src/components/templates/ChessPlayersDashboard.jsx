@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import { FlexContainer, GridContainer, CheckBox, SelectAllText } from "../atoms"
 import { SortableComponent } from "../molecules"
-import { ParallelBoxPlotColumn } from "../organisms"
+import { ParallelBoxPlotColumn, VerticalStackedBarChartContainer } from "../organisms"
 import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
 
 function checkUncheckAll(bool, keys) {
@@ -96,31 +96,42 @@ export default function({ data }) {
               columnGap={0.5}
               fullSize
               columns="repeat(8, 1fr)"
-              items={dataKeys.map(d => (
-                <GridContainer rows="150px 1fr 100px" key={d} fullSize>
-                  <FlexContainer borderColor="gray">Bio</FlexContainer>
-                  <ParallelBoxPlotColumn
-                    data={data.find(({ nameId }) => nameId === d)}
-                    isFiltered={checkedObject[d]}
-                    results={Object.keys(resultCheckedObject).filter(key => resultCheckedObject[key])}
-                  />
-                  <FlexContainer
-                    borderColor="gray"
-                    direction="column"
-                    justify="space-evenly"
-                  >
-                    <FlexContainer>LDW</FlexContainer>
-                    <CheckBox
-                      parentChecked
-                      checked={checkedObject[d]}
-                      value={d}
-                      onClick={() =>
-                        setCheckedObject(prev => ({ ...prev, [d]: !prev[d] }))
-                      }
+              items={dataKeys.map(d => {
+                const dataSet = data.find(({ nameId }) => nameId === d).dataSet
+                const isChecked = checkedObject[d]
+                return (
+                  <GridContainer rows="150px 1fr 100px" key={d} fullSize>
+                    <FlexContainer borderColor="gray">Bio</FlexContainer>
+                    <ParallelBoxPlotColumn
+                      data={dataSet}
+                      isFiltered={isChecked}
+                      results={Object.keys(resultCheckedObject).filter(key => resultCheckedObject[key])}
                     />
-                  </FlexContainer>
-                </GridContainer>
-              ))}
+                    <FlexContainer
+                      borderColor="gray"
+                      direction="column"
+                      justify="space-evenly"
+                    >
+                      <FlexContainer>
+                        <VerticalStackedBarChartContainer
+                          isFiltered={isChecked}
+                          data={dataSet}
+                          //TODO:
+                          period={[1, 100]}
+                        />
+                      </FlexContainer>
+                      <CheckBox
+                        parentChecked
+                        checked={isChecked}
+                        value={d}
+                        onClick={() =>
+                          setCheckedObject(prev => ({ ...prev, [d]: !prev[d] }))
+                        }
+                      />
+                    </FlexContainer>
+                  </GridContainer>
+                )
+              })}
             />
           )}
           <FlexContainer borderColor="gray">Filters</FlexContainer>

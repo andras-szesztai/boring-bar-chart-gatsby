@@ -13,16 +13,18 @@ const initialDataSets = {
   max: undefined,
 }
 
-// TODO: add period filtering too
-const getFilteredData = (data, results, period) =>
+const getResultsFilteredData = (data, results) =>
   data.filter(d => results.includes(d.result))
+// TODO: add period filtering too
+const getPeriodFilteredData = (data, period) => data.filter(d => true)
 const getSortedValueArray = (data, key) =>
   data.map(d => d[key]).sort((a, b) => a - b)
 function getBoxPlotData({ data, key, isFiltered, results, period }) {
   let dataSet = data
   if (isFiltered) {
-    dataSet = getFilteredData(data, results, period)
+    dataSet = getResultsFilteredData(data, results)
   }
+
   const sortedValues = getSortedValueArray(dataSet, key)
   const min = sortedValues[0]
   const max = sortedValues[sortedValues.length - 1]
@@ -41,6 +43,25 @@ function getBoxPlotData({ data, key, isFiltered, results, period }) {
     r0,
     r1,
   }
+}
+
+function getResultsData({ data, isFiltered, period }) {
+  let dataSet = data
+  if (isFiltered) {
+    dataSet = getPeriodFilteredData(data, period)
+  }
+  const orderedList = ["Lose", "Draw", "Win"]
+  const totalLength = dataSet.length
+  const groupped = _.groupBy(dataSet, "result")
+  let percentagesObject = {}
+  orderedList.forEach(
+    el =>
+      (percentagesObject = {
+        ...percentagesObject,
+        [el]: groupped[el].length / totalLength,
+      })
+  )
+  return percentagesObject
 }
 
 export default function ParellelBoxPlotColumn({
@@ -72,6 +93,10 @@ export default function ParellelBoxPlotColumn({
       filteredOppElo: initialDataSets,
       filteredMoves: initialDataSets,
     },
+    resultData: {
+      unfilteredResults: undefined,
+      filteredResults: undefined,
+    },
   })
   const { isInitialized, boxPlotData } = state
 
@@ -89,6 +114,10 @@ export default function ParellelBoxPlotColumn({
         period,
         key: "moves",
       })
+      const resultData = getResultsData({
+        data,
+        period,
+      })
       setState({
         isInitialized: true,
         boxPlotData: {
@@ -96,6 +125,10 @@ export default function ParellelBoxPlotColumn({
           unfilteredMoves: movesData,
           filteredOppElo: eloData,
           filteredMoves: movesData,
+        },
+        resultData: {
+          unfilteredResults: resultData,
+          filteredResults: resultData,
         },
       })
     }
@@ -111,9 +144,14 @@ export default function ParellelBoxPlotColumn({
             filteredOppElo: prev.boxPlotData.unfilteredOppElo,
             filteredMoves: prev.boxPlotData.unfilteredMoves,
           },
+          resultData: {
+            ...prev.resultData, 
+            filteredResults: prev.resultData.unfilteredResults
+          }
         }))
       }
 
+      // TODO: setup for period data too
       if (
         (!prevIsFiltered &&
           isFiltered &&

@@ -1,6 +1,11 @@
-import { VerticalDropChartRow, ParallelBoxPlotColumn } from './chartElements'
+import {
+  VerticalDropChartRow,
+  ParallelBoxPlotColumn,
+  VerticalStackedBarChartContainer,
+} from "./chartElements"
 
 export {
   VerticalDropChartRow,
-  ParallelBoxPlotColumn
+  ParallelBoxPlotColumn,
+  VerticalStackedBarChartContainer,
 }
