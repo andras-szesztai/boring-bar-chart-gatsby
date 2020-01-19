@@ -26,7 +26,7 @@ function getResultsData({ data, isFiltered, period }) {
   return percentagesObject
 }
 
-export default function({ data, period, isFiltered }) {
+export default function({ data, period, isFiltered, colorRange}) {
   const prevIsFiltered = usePrevious(isFiltered)
   const prevPeriod = usePrevious(period)
   const initValues = useInitValues({ period })
@@ -100,6 +100,7 @@ export default function({ data, period, isFiltered }) {
           <HorizontalStackedBar
             data={resultData[obj]}
             margin={{ top: 5, left: 10, bottom: 5, right: 10 }}
+            colorRange={colorRange}
           />
         </FlexContainer>
       ))}

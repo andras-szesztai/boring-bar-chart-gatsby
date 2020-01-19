@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 
 import { FlexContainer, GridContainer, CheckBox, SelectAllText } from "../atoms"
 import { SortableComponent } from "../molecules"
@@ -7,7 +7,8 @@ import {
   HorizontalStackedBarChartContainer,
 } from "../organisms"
 import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
-import { useDimensions } from "../../hooks"
+
+const COLOR_RANGE = ["#fc5050", "#ffd00c", "#415f77"]
 
 function checkUncheckAll(bool, keys) {
   let checkArray = {}
@@ -63,7 +64,7 @@ export default function({ data }) {
                 <FlexContainer>
                   <VerticalMultiSelect
                     values={["Lose", "Draw", "Win"]}
-                    colorRange={["#fc5050", "#ffd00c", "#415f77"]}
+                    colorRange={COLOR_RANGE}
                     checkedObject={resultCheckedObject}
                     handleClick={val =>
                       setResultCheckedObject(prev => ({
@@ -121,6 +122,7 @@ export default function({ data }) {
                       <FlexContainer direction="column">
                         <HorizontalStackedBarChartContainer
                           isFiltered={isChecked}
+                          colorRange={COLOR_RANGE}
                           data={dataSet}
                           //TODO:
                           period={[1, 100]}

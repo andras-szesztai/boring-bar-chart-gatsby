@@ -14,7 +14,6 @@ export const ChartSvg = styled.svg`
     opacity: ${visible ? 1 : 0};
   `}
 
-
   font-size: ${({ fontSize }) => themifyFontSize(fontSize)};
   font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight)};
 
@@ -26,7 +25,7 @@ export const ChartSvg = styled.svg`
     absPos &&
     css`
       position: absolute;
-      top: ${top}px;
+      top: ${top || 0}px;
       left: ${left || 0}px;
     `}
 `
