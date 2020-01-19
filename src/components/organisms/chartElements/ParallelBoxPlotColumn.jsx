@@ -3,7 +3,7 @@ import { quantile } from "d3-array"
 import _ from "lodash"
 
 import { GridContainer, FlexContainer } from "../../atoms"
-import { usePrevious } from "../../../hooks"
+import { usePrevious, useInitValues } from "../../../hooks"
 
 const initialDataSets = {
   q1: undefined,
@@ -13,16 +13,15 @@ const initialDataSets = {
   max: undefined,
 }
 
-const getResultsFilteredData = (data, results) =>
-  data.filter(d => results.includes(d.result))
 // TODO: add period filtering too
-const getPeriodFilteredData = (data, period) => data.filter(d => true)
+const getFilteredData = (data, results, period) =>
+  data.filter(d => results.includes(d.result))
 const getSortedValueArray = (data, key) =>
   data.map(d => d[key]).sort((a, b) => a - b)
 function getBoxPlotData({ data, key, isFiltered, results, period }) {
   let dataSet = data
   if (isFiltered) {
-    dataSet = getResultsFilteredData(data, results)
+    dataSet = getFilteredData(data, results, period)
   }
 
   const sortedValues = getSortedValueArray(dataSet, key)
@@ -45,46 +44,16 @@ function getBoxPlotData({ data, key, isFiltered, results, period }) {
   }
 }
 
-function getResultsData({ data, isFiltered, period }) {
-  let dataSet = data
-  if (isFiltered) {
-    dataSet = getPeriodFilteredData(data, period)
-  }
-  const orderedList = ["Lose", "Draw", "Win"]
-  const totalLength = dataSet.length
-  const groupped = _.groupBy(dataSet, "result")
-  let percentagesObject = {}
-  orderedList.forEach(
-    el =>
-      (percentagesObject = {
-        ...percentagesObject,
-        [el]: groupped[el].length / totalLength,
-      })
-  )
-  return percentagesObject
-}
-
 export default function ParellelBoxPlotColumn({
   data: { dataSet: data },
   isFiltered,
   results,
   period,
 }) {
-  const [initFilters, setInitFilters] = useState({
-    results: undefined,
-    period: undefined,
-  })
-  useEffect(() => {
-    if (!initFilters.results) {
-      setInitFilters({
-        results,
-        period,
-      })
-    }
-  }, [initFilters.results, period, results])
   const prevIsFiltered = usePrevious(isFiltered)
   const prevResults = usePrevious(results)
   const prevPeriod = usePrevious(period)
+  const initValues = useInitValues({period, results})
   const [state, setState] = useState({
     isInitialized: false,
     boxPlotData: {
@@ -92,11 +61,7 @@ export default function ParellelBoxPlotColumn({
       unfilteredMoves: initialDataSets,
       filteredOppElo: initialDataSets,
       filteredMoves: initialDataSets,
-    },
-    resultData: {
-      unfilteredResults: undefined,
-      filteredResults: undefined,
-    },
+    }
   })
   const { isInitialized, boxPlotData } = state
 
@@ -114,10 +79,6 @@ export default function ParellelBoxPlotColumn({
         period,
         key: "moves",
       })
-      const resultData = getResultsData({
-        data,
-        period,
-      })
       setState({
         isInitialized: true,
         boxPlotData: {
@@ -125,17 +86,13 @@ export default function ParellelBoxPlotColumn({
           unfilteredMoves: movesData,
           filteredOppElo: eloData,
           filteredMoves: movesData,
-        },
-        resultData: {
-          unfilteredResults: resultData,
-          filteredResults: resultData,
-        },
+        }
       })
     }
 
     if (isInitialized) {
       // To reset when becomes unfiltered
-      const { period: initPeriod, result: initResults } = initFilters
+      const { period: initPeriod, result: initResults } = initValues
       if (prevIsFiltered && !isFiltered) {
         setState(prev => ({
           ...prev,
@@ -143,15 +100,10 @@ export default function ParellelBoxPlotColumn({
             ...prev.boxPlotData,
             filteredOppElo: prev.boxPlotData.unfilteredOppElo,
             filteredMoves: prev.boxPlotData.unfilteredMoves,
-          },
-          resultData: {
-            ...prev.resultData, 
-            filteredResults: prev.resultData.unfilteredResults
           }
         }))
       }
 
-      // TODO: setup for period data too
       if (
         (!prevIsFiltered &&
           isFiltered &&
@@ -181,17 +133,7 @@ export default function ParellelBoxPlotColumn({
         }))
       }
     }
-  }, [
-    data,
-    initFilters,
-    isFiltered,
-    isInitialized,
-    period,
-    prevIsFiltered,
-    prevPeriod,
-    prevResults,
-    results,
-  ])
+  }, [data, initValues, isFiltered, isInitialized, period, prevIsFiltered, prevPeriod, prevResults, results])
 
   return (
     <GridContainer
