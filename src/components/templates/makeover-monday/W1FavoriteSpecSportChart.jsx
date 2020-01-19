@@ -119,6 +119,7 @@ export default function({ rawData, data, valueArray }) {
   const { width, height } = useDimensions({ ref: wrapperRef })
   const [axisInit, setAxisInit] = useState(false)
   function createUpdateAxis() {
+    
     const axis = axisBottom(
       scaleLinear()
         .domain(domain)
@@ -134,7 +135,7 @@ export default function({ rawData, data, valueArray }) {
     setAxisInit(true)
   }
   useEffect(() => {
-    if (svgRef && svgRef.current && width && !axisInit) {
+    if (svgRef && svgRef.current && width && !axisInit && rawData) {
       createUpdateAxis()
     }
   })
@@ -282,7 +283,6 @@ export default function({ rawData, data, valueArray }) {
             >
               <FlexContainer>2008</FlexContainer>
               <ImageContainer>
-              {console.log(query)}
                 <Image
                   fluid={
                     query.allContentfulImages.nodes[0].images[0].fluid

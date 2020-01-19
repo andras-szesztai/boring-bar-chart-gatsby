@@ -10,11 +10,12 @@ const url = "https://boring-barchart-gatsby.firebaseio.com/mm2020w1.json"
 export default function Dashboard() {
 
   const rawData = useFetchData(url)
-
+  
   const [dataObject, setDataObject] = useState({
     array: undefined,
     grouppedData: undefined,
   })
+
   useEffect(() => {
     if (!dataObject.array && rawData) {
       const valueArray = _.uniq(
@@ -42,11 +43,14 @@ export default function Dashboard() {
   return (
     <>
       <Helmet title="Top Spectator Sports in the United States" />
-      <FavoriteSpecSportChart
-        rawData={rawData}
-        data={dataObject.grouppedData}
-        valueArray={dataObject.array}
-      />
+      {
+        rawData &&
+        <FavoriteSpecSportChart
+          rawData={rawData}
+          data={dataObject.grouppedData}
+          valueArray={dataObject.array}
+        />
+      }
     </>
   )
 }

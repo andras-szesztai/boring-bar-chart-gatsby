@@ -10,5 +10,6 @@ export default function useDataFetch(url) {
       })
     }
   }, [response, url])
+  
   return response
 }

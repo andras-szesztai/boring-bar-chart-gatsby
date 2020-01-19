@@ -18,14 +18,13 @@ export default function useDimensions({
     chartWidth: undefined,
     chartHeight: undefined,
   })
-
+  
   useEffect(() => {
     function getDimensions() {
+
       if (
         ref &&
-        ref.current &&
-        ref.current.offsetWidth &&
-        ref.current.offsetHeight
+        ref.current
       ) {
         const width = parentWidth
           ? parentRef.current.offsetWidth
@@ -33,17 +32,23 @@ export default function useDimensions({
         const height = parentHeight
           ? parentRef.current.offsetHeight
           : ref.current.offsetHeight
-        setDims({
-          width,
-          height,
-          chartWidth: width - (margin.left + margin.right),
-          chartHeight: height - (margin.top + margin.bottom),
-        })
+        if(width !== dims.width || height !== dims.height){
+          setDims({
+            width,
+            height,
+            chartWidth: width - (margin.left + margin.right),
+            chartHeight: height - (margin.top + margin.bottom),
+          })
+        }
       }
     }
     window.addEventListener("resize", getDimensions)
-    setTimeout(() => getDimensions(), 1000)
-  }, [margin.bottom, margin.left, margin.right, margin.top, parentHeight, parentRef, parentWidth, ref])
+    if(!dims.height && ref.current){
+      getDimensions()
+    }
+    // return window.removeEventListener("resize", getDimensions)
+    // setTimeout(() => getDimensions(), 1000)
+  }, [dims, margin, parentHeight, parentRef, parentWidth, ref])
 
   return dims
 }
