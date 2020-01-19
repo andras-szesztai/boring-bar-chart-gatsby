@@ -3,7 +3,7 @@ import _ from "lodash"
 
 import { FlexContainer } from "../../atoms"
 import { usePrevious, useInitValues } from "../../../hooks"
-import { HorizontalStackedBarChart } from "../../molecules"
+import { HorizontalStackedBar } from "../../molecules"
 
 // TODO: add period filtering too
 const getPeriodFilteredData = (data, period) => data.filter(d => true)
@@ -97,7 +97,10 @@ export default function({ data, period, isFiltered }) {
     <>
       {Object.keys(resultData).map(obj => (
         <FlexContainer height="50%" width="100%" withBorder>
-          <HorizontalStackedBarChart data={resultData[obj]} />
+          <HorizontalStackedBar
+            data={resultData[obj]}
+            margin={{ top: 5, left: 10, bottom: 5, right: 10 }}
+          />
         </FlexContainer>
       ))}
     </>
