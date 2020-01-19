@@ -55,11 +55,12 @@ const Container = styled.div`
       white-space: ${whiteSpace};
     `}
 
-  ${({ gridArea, textAlign, cursor, pos}) => css`
+  ${({ gridArea, textAlign, cursor, pos, padding}) => css`
     grid-area: ${gridArea};
     text-align: ${textAlign};
     cursor: ${cursor};
     position: ${pos};
+    padding: ${padding};
   `}
 
   ${({ borderColor }) => borderColor && css`

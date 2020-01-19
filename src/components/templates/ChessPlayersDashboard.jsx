@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react"
+import Range from "rc-slider/lib/Range"
+import "rc-slider/assets/index.css"
 
 import { FlexContainer, GridContainer, CheckBox, SelectAllText } from "../atoms"
 import { SortableComponent } from "../molecules"
@@ -7,6 +9,9 @@ import {
   HorizontalStackedBarChartContainer,
 } from "../organisms"
 import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
+import { colors } from "../../themes/theme"
+
+const { grayLightest, grayDarkest, grayDark } = colors
 
 const COLOR_RANGE = ["#fc5050", "#ffd00c", "#415f77"]
 
@@ -36,6 +41,8 @@ export default function({ data }) {
     Draw: true,
     Win: true,
   })
+
+  const [period, setPeriod] = useState([0, 100])
   
   return (
     <FlexContainer fullScreen>
@@ -147,7 +154,20 @@ export default function({ data }) {
               })}
             />
           )}
-          <FlexContainer borderColor="gray">Filters</FlexContainer>
+          <FlexContainer withBorder pos="relative">
+            <Range
+              min={0}
+              max={100}
+              defaultValue={period}
+              onChange={newPeriod => setPeriod(newPeriod)}
+              trackStyle={[{ backgroundColor: grayDarkest }]}
+              handleStyle={[
+                { backgroundColor: grayDark },
+                { backgroundColor: grayDark },
+              ]}
+              railStyle={{ backgroundColor: grayLightest }}
+            />
+          </FlexContainer>
         </GridContainer>
       </GridContainer>
     </FlexContainer>
