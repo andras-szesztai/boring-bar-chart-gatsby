@@ -29,13 +29,16 @@ export default function useDimensions({
           ? parentRef.current.offsetHeight
           : ref.current.offsetHeight
         
+          console.log(margin);
+          
+        console.log(width, width - margin.left - margin.right);
         
         if (dims.width !== width || height !== dims.height) {
           setDims({
             width,
             height,
-            chartWidth: width - (margin.left + margin.right),
-            chartHeight: height - (margin.top + margin.bottom),
+            chartWidth: width - margin.left - margin.right,
+            chartHeight: height - margin.top - margin.bottom,
           })
         }
       }

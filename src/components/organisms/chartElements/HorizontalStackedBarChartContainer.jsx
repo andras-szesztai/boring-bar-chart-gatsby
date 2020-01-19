@@ -95,15 +95,17 @@ export default function({ data, period, isFiltered, colorRange}) {
 
   return (
     <>
-      {Object.keys(resultData).map(obj => (
-        <FlexContainer height="50%" width="100%" withBorder>
+      {Object.keys(resultData).map((obj, i) => {
+      const isFirst = i === 1
+      return (
+        <FlexContainer height="50%" width="100%">
           <HorizontalStackedBar
             data={resultData[obj]}
-            margin={{ top: 5, left: 10, bottom: 5, right: 10 }}
+            margin={{ top: isFirst ? 0 : 10, left: 10, bottom: isFirst ? 10 : 0, right: 10 }}
             colorRange={colorRange}
           />
         </FlexContainer>
-      ))}
+      )})}
     </>
   )
 }
