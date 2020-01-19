@@ -42,7 +42,7 @@ export default function({ data }) {
     Win: true,
   })
 
-  const [period, setPeriod] = useState([0, 100])
+  const [period, setPeriod] = useState([0, 4])
   
   return (
     <FlexContainer fullScreen>
@@ -131,8 +131,7 @@ export default function({ data }) {
                           isFiltered={isChecked}
                           colorRange={COLOR_RANGE}
                           data={dataSet}
-                          //TODO:
-                          period={[1, 100]}
+                          period={period}
                         />
                       </FlexContainer>
                       <FlexContainer>
@@ -154,10 +153,17 @@ export default function({ data }) {
               })}
             />
           )}
-          <FlexContainer withBorder pos="relative">
+          <FlexContainer pos="relative">
             <Range
               min={0}
-              max={100}
+              max={4}
+              step={1}
+              allowCross={false}
+              marks={{
+                1: <p>&#8249; Early games</p>,
+                2: "Mid games",
+                3: "Later games"
+              }}
               defaultValue={period}
               onChange={newPeriod => setPeriod(newPeriod)}
               trackStyle={[{ backgroundColor: grayDarkest }]}

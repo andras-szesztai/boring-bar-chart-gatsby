@@ -4,14 +4,14 @@ import _ from "lodash"
 import { FlexContainer } from "../../atoms"
 import { usePrevious, useInitValues } from "../../../hooks"
 import { HorizontalStackedBar } from "../../molecules"
+import { getPeriodFilteredData } from "../../../utils"
 
-// TODO: add period filtering too
-const getPeriodFilteredData = (data, period) => data.filter(d => true)
+
 function getResultsData({ data, isFiltered, period }) {
   let dataSet = data
-  // if (isFiltered) {
-  //dataSet = getPeriodFilteredData(data, period)
-  // }
+  if (isFiltered) {
+    dataSet = getPeriodFilteredData(data, period)
+  }
   const orderedList = ["Lose", "Draw", "Win"]
   const totalLength = dataSet.length
   const groupped = _.groupBy(dataSet, "result")
@@ -78,6 +78,7 @@ export default function({ data, period, isFiltered, colorRange}) {
             filteredResults: getResultsData({
               data,
               period,
+              isFiltered
             }),
           },
         }))
@@ -92,7 +93,7 @@ export default function({ data, period, isFiltered, colorRange}) {
     prevIsFiltered,
     prevPeriod,
   ])
-
+  
   return (
     <>
       {Object.keys(resultData).map((obj, i) => {
