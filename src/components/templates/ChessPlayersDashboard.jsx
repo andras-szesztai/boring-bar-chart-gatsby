@@ -134,9 +134,18 @@ export default function({ data }) {
                           <SortableHandle horizontal align="flex-start"/>
                         </FlexContainer>
                       </GridContainer>
-                      <GridContainer noGap rows="repeat(3, 1fr)"  >
-                        <FlexContainer justify="flex-start" style={{ marginRight: 20 }}>
+                      <GridContainer noGap rows="repeat(4, 1fr)"  paddingLeft={1}>
+                        <FlexContainer justify="flex-start">
                           Name
+                        </FlexContainer>
+                        <FlexContainer justify="flex-start">
+                          No. of games:
+                        </FlexContainer>
+                        <FlexContainer justify="flex-start">
+                          Avg. ELO:
+                        </FlexContainer>
+                        <FlexContainer justify="flex-start">
+                          Max. ELO:
                         </FlexContainer>
                       </GridContainer>
                     </GridContainer>

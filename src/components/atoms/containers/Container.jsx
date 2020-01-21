@@ -9,15 +9,36 @@ import {
 
 const Container = styled.div`
   user-select: none;
-  
-  font-size: ${({ fontSize }) => themifyFontSize(fontSize || 1)};
-  font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight)};
-  color: ${({ fontColor }) => themifyColor(fontColor)};
-  background: ${({ bgColor }) => bgColor};
-  z-index: ${({ zIndex }) => themifyZIndex(zIndex)};
-  padding-bottom: ${({ paddingBottom }) => themifySpace(paddingBottom)}px;
-  padding-right: ${({ paddingRight }) => themifySpace(paddingRight)}px;
 
+  ${({
+    gridArea,
+    textAlign,
+    cursor,
+    pos,
+    padding,
+    fontSize,
+    fontWeight,
+    fontColor,
+    bgColor,
+    zIndex,
+    paddingBottom,
+    paddingRight,
+    paddingLeft
+  }) => css`
+    grid-area: ${gridArea};
+    text-align: ${textAlign};
+    cursor: ${cursor};
+    position: ${pos};
+    padding: ${padding};
+    font-size: ${themifyFontSize(fontSize || 1)};
+    font-weight: ${themifyFontWeight(fontWeight)};
+    color: ${themifyColor(fontColor)};
+    background: ${bgColor};
+    z-index: ${themifyZIndex(zIndex)};
+    padding-bottom: ${themifySpace(paddingBottom)}px;
+    padding-right: ${themifySpace(paddingRight)}px;
+    padding-left: ${themifySpace(paddingLeft)}px;
+  `}
 
   ${({ absPos, bottom, right, top, left }) =>
     absPos &&
@@ -56,21 +77,17 @@ const Container = styled.div`
       white-space: ${whiteSpace};
     `}
 
-  ${({ gridArea, textAlign, cursor, pos, padding}) => css`
-    grid-area: ${gridArea};
-    text-align: ${textAlign};
-    cursor: ${cursor};
-    position: ${pos};
-    padding: ${padding};
-  `}
+  ${({ borderColor }) =>
+    borderColor &&
+    css`
+      border: 1px solid ${borderColor};
+    `}
 
-  ${({ borderColor }) => borderColor && css`
-    border: 1px solid ${borderColor};
-  `}
-
-  ${({ withBorder }) => withBorder && css`
-    border: 1px solid gray;
-  `}
+  ${({ withBorder }) =>
+    withBorder &&
+    css`
+      border: 1px solid gray;
+    `}
   
   
 `
@@ -78,5 +95,5 @@ const Container = styled.div`
 export default Container
 
 Container.defaultProps = {
-  fontColor: "grayDarkest"
+  fontColor: "grayDarkest",
 }
