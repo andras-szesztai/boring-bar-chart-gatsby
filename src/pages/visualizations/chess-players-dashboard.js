@@ -34,6 +34,10 @@ export const query = graphql`
         fluid {
           ...GatsbyContentfulFluid_tracedSVG
         }
+      },
+      fullName,
+      bio {
+        bio
       }
     }
   }

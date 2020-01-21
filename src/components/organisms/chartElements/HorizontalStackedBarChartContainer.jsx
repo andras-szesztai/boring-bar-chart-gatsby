@@ -39,7 +39,7 @@ export default function({ data, period, isFiltered, colorRange}) {
   })
 
   const { isInitialized, resultData } = state
-
+  
   useEffect(() => {
     if (!isInitialized && data) {
       const resultData = getResultsData({

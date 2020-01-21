@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import Image from "gatsby-image"
 import Range from "rc-slider/lib/Range"
 import "rc-slider/assets/index.css"
 
@@ -16,6 +17,7 @@ import {
 } from "../organisms"
 import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
 import { colors } from "../../themes/theme"
+import { Container } from "../atoms/containers"
 
 const { grayLightest, grayDarkest, grayDark } = colors
 
@@ -50,18 +52,20 @@ export default function({ data }) {
 
   const [period, setPeriod] = useState([0, 4])
 
+  console.log(data)
+
   return (
     <FlexContainer fullScreen>
       <GridContainer
         width="95%"
-        maxWidth="1440"
-        minWidth="1100"
+        maxWidth="1440px"
+        minWidth="1100px"
         height="95%"
-        maxHeight="720"
-        minHeight="600"
+        maxHeight="720px"
+        minHeight="600px"
         columns="200px 1fr"
       >
-        <GridContainer rows="150px 1fr">
+        <GridContainer rows="180px 1fr">
           <FlexContainer borderColor="gray">Title</FlexContainer>
           <GridContainer rows="1fr 50px">
             <GridContainer rows="1fr 100px">
@@ -116,41 +120,47 @@ export default function({ data }) {
               useDragHandle
               columns="repeat(8, 1fr)"
               items={dataKeys.map(d => {
-                const dataSet = data.find(({ nameId }) => nameId === d).dataSet
+                const dataSet = data.find(({ nameId }) => nameId === d)
                 const isChecked = checkedObject[d]
                 return (
-                  <GridContainer rows="150px 1fr 100px" key={d} fullSize>
-                    <GridContainer
-                      noGap
-                      fullSize
-                      rows="repeat(2, 1fr)"
-                      withBorder
-                    >
-                      <GridContainer noGap columns="70% 30%" withBorder>
-                        <FlexContainer fullSize withBorder>
-                          Photo
-                        </FlexContainer>
-                        <FlexContainer>
-                          <SortableHandle horizontal align="flex-start"/>
-                        </FlexContainer>
+                  <GridContainer rows="180px 1fr 100px" key={d} fullSize>
+                      <GridContainer
+                        noGap
+                        fullSize
+                        rows="repeat(2, 1fr)"
+                        withBorder
+                      >
+                        <GridContainer noGap columns="70% 30%" withBorder>
+                          <Container pos="relative" >
+                            <Image 
+                            style={{ maxHeight: 90}}
+                            fluid={dataSet.image.fluid} />
+                          </Container>
+                          <FlexContainer>
+                            <SortableHandle horizontal align="flex-start" />
+                          </FlexContainer>
+                        </GridContainer>
+                        <GridContainer
+                          noGap
+                          rows="repeat(4, 1fr)"
+                          paddingLeft={1}
+                        >
+                          <FlexContainer justify="flex-start">
+                            {dataSet.fullName}
+                          </FlexContainer>
+                          <FlexContainer justify="flex-start">
+                            No. of games:
+                          </FlexContainer>
+                          <FlexContainer justify="flex-start">
+                            Avg. ELO:
+                          </FlexContainer>
+                          <FlexContainer justify="flex-start">
+                            Max. ELO:
+                          </FlexContainer>
+                        </GridContainer>
                       </GridContainer>
-                      <GridContainer noGap rows="repeat(4, 1fr)"  paddingLeft={1}>
-                        <FlexContainer justify="flex-start">
-                          Name
-                        </FlexContainer>
-                        <FlexContainer justify="flex-start">
-                          No. of games:
-                        </FlexContainer>
-                        <FlexContainer justify="flex-start">
-                          Avg. ELO:
-                        </FlexContainer>
-                        <FlexContainer justify="flex-start">
-                          Max. ELO:
-                        </FlexContainer>
-                      </GridContainer>
-                    </GridContainer>
                     <ParallelBoxPlotColumn
-                      data={dataSet}
+                      data={dataSet.dataSet}
                       isFiltered={isChecked}
                       period={period}
                       results={Object.keys(resultCheckedObject).filter(
@@ -166,7 +176,7 @@ export default function({ data }) {
                         <HorizontalStackedBarChartContainer
                           isFiltered={isChecked}
                           colorRange={COLOR_RANGE}
-                          data={dataSet}
+                          data={dataSet.dataSet}
                           period={period}
                         />
                       </FlexContainer>

@@ -67,12 +67,12 @@ const Container = styled.div`
   ${({ height, width, whiteSpace, maxHeight, minHeight, maxWidth, minWidth }) =>
     css`
       height: ${height};
-      max-height: ${maxHeight}px;
-      min-height: ${minHeight}px;
+      max-height: ${maxHeight};
+      min-height: ${minHeight};
 
       width: ${width};
-      max-width: ${maxWidth}px;
-      min-width: ${minWidth}px;
+      max-width: ${maxWidth};
+      min-width: ${minWidth};
 
       white-space: ${whiteSpace};
     `}
