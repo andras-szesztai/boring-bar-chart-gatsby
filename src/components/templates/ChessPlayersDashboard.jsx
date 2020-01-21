@@ -52,8 +52,6 @@ export default function({ data }) {
 
   const [period, setPeriod] = useState([0, 4])
 
-  console.log(data)
-
   return (
     <FlexContainer fullScreen>
       <GridContainer

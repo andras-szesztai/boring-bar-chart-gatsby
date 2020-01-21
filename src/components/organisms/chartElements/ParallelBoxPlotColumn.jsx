@@ -14,14 +14,14 @@ const initialDataSets = {
   max: undefined,
 }
 
-const getFilteredData = (data, results) =>
+const getResultFilteredData = (data, results) =>
   data.filter(d => results.includes(d.result))
 const getSortedValueArray = (data, key) =>
   data.map(d => d[key]).sort((a, b) => a - b)
 function getBoxPlotData({ data, key, isFiltered, results, period }) {
   let dataSet = data
   if (isFiltered) {
-    dataSet = getPeriodFilteredData(getFilteredData(data, results), period)
+    dataSet = getPeriodFilteredData(getResultFilteredData(data, results), period)
   }
   const sortedValues = getSortedValueArray(dataSet, key)
   const min = sortedValues[0]
