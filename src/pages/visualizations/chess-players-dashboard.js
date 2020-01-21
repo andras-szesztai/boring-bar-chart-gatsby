@@ -30,6 +30,11 @@ export const query = graphql`
         moves
         game_id
       }
+      image {
+        fluid {
+          ...GatsbyContentfulFluid_tracedSVG
+        }
+      }
     }
   }
 }

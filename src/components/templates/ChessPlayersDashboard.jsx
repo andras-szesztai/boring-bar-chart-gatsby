@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react"
 import Range from "rc-slider/lib/Range"
 import "rc-slider/assets/index.css"
 
-import { FlexContainer, GridContainer, CheckBox, SelectAllText } from "../atoms"
+import {
+  FlexContainer,
+  GridContainer,
+  CheckBox,
+  SelectAllText,
+  SortableHandle,
+} from "../atoms"
 import { SortableComponent } from "../molecules"
 import {
   ParallelBoxPlotColumn,
@@ -43,7 +49,7 @@ export default function({ data }) {
   })
 
   const [period, setPeriod] = useState([0, 4])
-  
+
   return (
     <FlexContainer fullScreen>
       <GridContainer
@@ -107,13 +113,33 @@ export default function({ data }) {
               lockAxis="x"
               columnGap={0.5}
               fullSize
+              useDragHandle
               columns="repeat(8, 1fr)"
               items={dataKeys.map(d => {
                 const dataSet = data.find(({ nameId }) => nameId === d).dataSet
                 const isChecked = checkedObject[d]
                 return (
                   <GridContainer rows="150px 1fr 100px" key={d} fullSize>
-                    <FlexContainer borderColor="gray">Bio</FlexContainer>
+                    <GridContainer
+                      noGap
+                      fullSize
+                      rows="repeat(2, 1fr)"
+                      withBorder
+                    >
+                      <GridContainer noGap columns="70% 30%" withBorder>
+                        <FlexContainer fullSize withBorder>
+                          Photo
+                        </FlexContainer>
+                        <FlexContainer>
+                          <SortableHandle horizontal align="flex-start"/>
+                        </FlexContainer>
+                      </GridContainer>
+                      <GridContainer noGap rows="repeat(3, 1fr)"  >
+                        <FlexContainer justify="flex-start" style={{ marginRight: 20 }}>
+                          Name
+                        </FlexContainer>
+                      </GridContainer>
+                    </GridContainer>
                     <ParallelBoxPlotColumn
                       data={dataSet}
                       isFiltered={isChecked}
@@ -163,7 +189,7 @@ export default function({ data }) {
               marks={{
                 1: <p>&#8249; Early games</p>,
                 2: "Mid games",
-                3: "Later games"
+                3: "Later games",
               }}
               defaultValue={period}
               onChange={newPeriod => setPeriod(newPeriod)}

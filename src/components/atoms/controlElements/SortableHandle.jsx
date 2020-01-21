@@ -1,23 +1,31 @@
 import React from "react"
 import { SortableHandle } from "react-sortable-hoc"
-import { IoIosMove } from "react-icons/io"
-import styled from 'styled-components'
+import { IoIosMove, IoIosResize } from "react-icons/io"
+import styled, { css } from "styled-components"
 
 import { FlexContainer } from "../containers"
+import { colors } from "../../../themes/theme"
+
+const { grayDark } = colors
 
 const Container = styled(FlexContainer)`
-  svg {
-    cursor: pointer;
-  }
+  pointer-events: auto !important;
+  cursor: col-resize;
+
+  ${({ horizontal }) =>
+    horizontal &&
+    css`
+      svg {
+        transform: rotate(45deg);
+      }
+    `}
 `
 
-export default SortableHandle(({
-  size, color
-}) => (
-  <Container>
-    <IoIosMove
-      size={size}
-      color={color}
-    />
-  </Container>
-))
+export default SortableHandle(
+  ({ size = 20, fill = grayDark, horizontal, allDims, align }) => (
+    <Container fill={fill} horizontal={horizontal} fullSize align={align}>
+      {!!allDims && <IoIosMove size={size} />}
+      {!!horizontal && <IoIosResize size={size} />}
+    </Container>
+  )
+)

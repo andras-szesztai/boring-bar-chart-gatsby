@@ -10,6 +10,11 @@ const GridContainer = styled(Container)`
     grid-row-gap: ${rowGap}rem;
     grid-column-gap: ${columnGap}rem;
   `}
+
+  ${({ noGap }) => noGap && css`
+    grid-row-gap: 0rem;
+    grid-column-gap: 0rem;
+  `}
 `
 
 GridContainer.defaultProps = {

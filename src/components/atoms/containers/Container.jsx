@@ -10,12 +10,13 @@ import {
 const Container = styled.div`
   user-select: none;
   
-  font-size: ${({ fontSize }) => themifyFontSize(fontSize)};
+  font-size: ${({ fontSize }) => themifyFontSize(fontSize || 1)};
   font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight)};
   color: ${({ fontColor }) => themifyColor(fontColor)};
   background: ${({ bgColor }) => bgColor};
   z-index: ${({ zIndex }) => themifyZIndex(zIndex)};
   padding-bottom: ${({ paddingBottom }) => themifySpace(paddingBottom)}px;
+  padding-right: ${({ paddingRight }) => themifySpace(paddingRight)}px;
 
 
   ${({ absPos, bottom, right, top, left }) =>
@@ -77,6 +78,5 @@ const Container = styled.div`
 export default Container
 
 Container.defaultProps = {
-  fontColor: "grayDarkest",
-  fontSize: 1,
+  fontColor: "grayDarkest"
 }

@@ -23,7 +23,6 @@ function getBoxPlotData({ data, key, isFiltered, results, period }) {
   if (isFiltered) {
     dataSet = getPeriodFilteredData(getFilteredData(data, results), period)
   }
-
   const sortedValues = getSortedValueArray(dataSet, key)
   const min = sortedValues[0]
   const max = sortedValues[sortedValues.length - 1]
@@ -49,12 +48,11 @@ export default function ParellelBoxPlotColumn({
   isFiltered,
   results,
   period,
-  columnRef
 }) {
   const prevIsFiltered = usePrevious(isFiltered)
   const prevResults = usePrevious(results)
   const prevPeriod = usePrevious(period)
-  const initValues = useInitValues({period, results})
+  const initValues = useInitValues({ period, results })
   const [state, setState] = useState({
     isInitialized: false,
     boxPlotData: {
@@ -62,10 +60,10 @@ export default function ParellelBoxPlotColumn({
       unfilteredMoves: initialDataSets,
       filteredOppElo: initialDataSets,
       filteredMoves: initialDataSets,
-    }
+    },
   })
   const { isInitialized, boxPlotData } = state
-  
+
   useEffect(() => {
     if (!isInitialized && data) {
       const eloData = getBoxPlotData({
@@ -87,7 +85,7 @@ export default function ParellelBoxPlotColumn({
           unfilteredMoves: movesData,
           filteredOppElo: eloData,
           filteredMoves: movesData,
-        }
+        },
       })
     }
 
@@ -101,7 +99,7 @@ export default function ParellelBoxPlotColumn({
             ...prev.boxPlotData,
             filteredOppElo: prev.boxPlotData.unfilteredOppElo,
             filteredMoves: prev.boxPlotData.unfilteredMoves,
-          }
+          },
         }))
       }
 
@@ -134,8 +132,18 @@ export default function ParellelBoxPlotColumn({
         }))
       }
     }
-  }, [data, initValues, isFiltered, isInitialized, period, prevIsFiltered, prevPeriod, prevResults, results])
-  
+  }, [
+    data,
+    initValues,
+    isFiltered,
+    isInitialized,
+    period,
+    prevIsFiltered,
+    prevPeriod,
+    prevResults,
+    results,
+  ])
+
   return (
     <GridContainer
       rows="repeat(2, 1fr)"
