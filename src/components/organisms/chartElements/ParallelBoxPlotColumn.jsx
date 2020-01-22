@@ -4,7 +4,15 @@ import _ from "lodash"
 
 import { GridContainer, FlexContainer } from "../../atoms"
 import { usePrevious, useInitValues } from "../../../hooks"
-import { getPeriodFilteredData } from "../../../utils"
+
+export function getPeriodFilteredData(data, period){
+  const q = data.length/4
+  const startIndex = period[0] * q
+  const endIndex = period[1] * q
+  
+  const periodFilteredData = _.slice(data, startIndex, endIndex)
+  return periodFilteredData
+}
 
 const initialDataSets = {
   q1: undefined,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react"
 import Image from "gatsby-image"
 import Range from "rc-slider/lib/Range"
+import { quantile } from "d3-array"
 import "rc-slider/assets/index.css"
 
 import {
@@ -23,6 +24,64 @@ import { chessReducer } from "../../reducers"
 const { grayLightest, grayDarkest, grayDark } = colors
 
 const COLOR_RANGE = ["#fc5050", "#ffd00c", "#415f77"]
+
+// TODO: setup functions to filter datasets on dasboard level for all columns
+
+export function getPeriodFilteredData(data, period){
+  const q = data.length/4
+  const startIndex = period[0] * q
+  const endIndex = period[1] * q
+  
+  const periodFilteredData = _.slice(data, startIndex, endIndex)
+  return periodFilteredData
+}
+
+const getResultFilteredData = (data, results) =>
+  data.filter(d => results.includes(d.result))
+
+function getResultsData({ data, isFiltered, period }) {
+  let dataSet = data
+  if (isFiltered) {
+    dataSet = getPeriodFilteredData(data, period)
+  }
+  const orderedList = ["Lose", "Draw", "Win"]
+  const totalLength = dataSet.length
+  const groupped = _.groupBy(dataSet, "result")
+  let percentagesObject = {}
+  orderedList.forEach(
+    el =>
+      (percentagesObject = {
+        ...percentagesObject,
+        [el]: groupped[el].length / totalLength,
+      })
+  )
+  return percentagesObject
+}
+  
+function getBoxPlotData({ data, key, isFiltered, results, period }) {
+  let dataSet = data
+  if (isFiltered) {
+    dataSet = getPeriodFilteredData(getResultFilteredData(data, results), period)
+  }
+  const sortedValues = dataSet.map(d => d[key]).sort((a, b) => a - b)
+  const min = sortedValues[0]
+  const max = sortedValues[sortedValues.length - 1]
+  const q1 = quantile(sortedValues, 0.25)
+  const median = quantile(sortedValues, 0.5)
+  const q3 = quantile(sortedValues, 0.75)
+  const iqr = q3 - q1
+  const r0 = Math.max(min, q1 - iqr * 1.5)
+  const r1 = Math.min(max, q3 + iqr * 1.5)
+  return {
+    q1,
+    median,
+    q3,
+    min,
+    max,
+    r0,
+    r1,
+  }
+}
 
 function checkUncheckAll(bool, keys) {
   let checkArray = {}
