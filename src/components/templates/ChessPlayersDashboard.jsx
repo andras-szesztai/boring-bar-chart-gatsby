@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useReducer } from "react"
 import Image from "gatsby-image"
 import Range from "rc-slider/lib/Range"
 import "rc-slider/assets/index.css"
@@ -18,6 +18,7 @@ import {
 import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
+import { chessReducer } from "../../reducers"
 
 const { grayLightest, grayDarkest, grayDark } = colors
 
@@ -29,7 +30,21 @@ function checkUncheckAll(bool, keys) {
   return checkArray
 }
 
-export default function({ data }) {
+function createInitialState(keysArray) {
+  let initialState = {}
+  keysArray.forEach(el => {
+    initialState = { ...initialState, [el]: { checked: true } }
+  })
+  return initialState
+}
+
+export default function({ data, keyArray }) {
+  const [state, dispatch] = useReducer(
+    chessReducer,
+    createInitialState(keyArray)
+  )
+  console.log(state)
+
   const [dataKeys, setDataKeys] = useState(undefined)
   useEffect(() => {
     if (!dataKeys) {
@@ -120,43 +135,45 @@ export default function({ data }) {
               items={dataKeys.map(d => {
                 const dataSet = data.find(({ nameId }) => nameId === d)
                 const isChecked = checkedObject[d]
+                console.log(d)
                 return (
                   <GridContainer rows="180px 1fr 100px" key={d} fullSize>
+                    <GridContainer
+                      noGap
+                      fullSize
+                      rows="repeat(2, 1fr)"
+                      withBorder
+                    >
+                      <GridContainer noGap columns="70% 30%" withBorder>
+                        <Container pos="relative">
+                          <Image
+                            style={{ maxHeight: 90 }}
+                            fluid={dataSet.image.fluid}
+                          />
+                        </Container>
+                        <FlexContainer>
+                          <SortableHandle horizontal align="flex-start" />
+                        </FlexContainer>
+                      </GridContainer>
                       <GridContainer
                         noGap
-                        fullSize
-                        rows="repeat(2, 1fr)"
-                        withBorder
+                        rows="repeat(4, 1fr)"
+                        paddingLeft={1}
                       >
-                        <GridContainer noGap columns="70% 30%" withBorder>
-                          <Container pos="relative" >
-                            <Image 
-                            style={{ maxHeight: 90}}
-                            fluid={dataSet.image.fluid} />
-                          </Container>
-                          <FlexContainer>
-                            <SortableHandle horizontal align="flex-start" />
-                          </FlexContainer>
-                        </GridContainer>
-                        <GridContainer
-                          noGap
-                          rows="repeat(4, 1fr)"
-                          paddingLeft={1}
-                        >
-                          <FlexContainer justify="flex-start">
-                            {dataSet.fullName}
-                          </FlexContainer>
-                          <FlexContainer justify="flex-start">
-                            No. of games:
-                          </FlexContainer>
-                          <FlexContainer justify="flex-start">
-                            Avg. ELO:
-                          </FlexContainer>
-                          <FlexContainer justify="flex-start">
-                            Max. ELO:
-                          </FlexContainer>
-                        </GridContainer>
+                        <FlexContainer justify="flex-start">
+                          {dataSet.fullName}
+                        </FlexContainer>
+                        <FlexContainer justify="flex-start">
+                          No. of games:
+                        </FlexContainer>
+                        <FlexContainer justify="flex-start">
+                          Avg. ELO:
+                        </FlexContainer>
+                        <FlexContainer justify="flex-start">
+                          Max. ELO:
+                        </FlexContainer>
                       </GridContainer>
+                    </GridContainer>
                     <ParallelBoxPlotColumn
                       data={dataSet.dataSet}
                       isFiltered={isChecked}
@@ -183,12 +200,13 @@ export default function({ data }) {
                           parentChecked
                           checked={isChecked}
                           value={d}
-                          onClick={() =>
+                          onClick={() =>{
                             setCheckedObject(prev => ({
                               ...prev,
                               [d]: !prev[d],
                             }))
-                          }
+                            dispatch({ type: "check", payload: d })
+                          }}
                         />
                       </FlexContainer>
                     </GridContainer>

@@ -38,6 +38,8 @@ export default function({ data, period, isFiltered, colorRange}) {
     },
   })
 
+  
+
   const { isInitialized, resultData } = state
   
   useEffect(() => {

@@ -9,7 +9,7 @@ export default function({data: {allContentfulChessPlayersData: {nodes}} }) {
   return (
     <>
       <Helmet title="Chess Players ..." />
-      <ChessPlayersDashboard data={nodes} />
+      <ChessPlayersDashboard data={nodes} keyArray={nodes.map(({ nameId }) => nameId)} />
     </>
   )
 }
