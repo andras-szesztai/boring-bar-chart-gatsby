@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer } from "react"
 import Image from "gatsby-image"
 import Range from "rc-slider/lib/Range"
 import { quantile } from "d3-array"
+import _ from "lodash"
 import "rc-slider/assets/index.css"
 
 import {
@@ -20,6 +21,7 @@ import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelec
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
 import { chessReducer } from "../../reducers"
+import { usePrevious } from "../../hooks"
 
 const { grayLightest, grayDarkest, grayDark } = colors
 
@@ -27,11 +29,11 @@ const COLOR_RANGE = ["#fc5050", "#ffd00c", "#415f77"]
 
 // TODO: setup functions to filter datasets on dasboard level for all columns
 
-export function getPeriodFilteredData(data, period){
-  const q = data.length/4
+function getPeriodFilteredData(data, period) {
+  const q = data.length / 4
   const startIndex = period[0] * q
   const endIndex = period[1] * q
-  
+
   const periodFilteredData = _.slice(data, startIndex, endIndex)
   return periodFilteredData
 }
@@ -57,11 +59,14 @@ function getResultsData({ data, isFiltered, period }) {
   )
   return percentagesObject
 }
-  
+
 function getBoxPlotData({ data, key, isFiltered, results, period }) {
   let dataSet = data
   if (isFiltered) {
-    dataSet = getPeriodFilteredData(getResultFilteredData(data, results), period)
+    dataSet = getPeriodFilteredData(
+      getResultFilteredData(data, results),
+      period
+    )
   }
   const sortedValues = dataSet.map(d => d[key]).sort((a, b) => a - b)
   const min = sortedValues[0]
@@ -89,21 +94,15 @@ function checkUncheckAll(bool, keys) {
   return checkArray
 }
 
-function createInitialState(keysArray) {
-  let initialState = {}
-  keysArray.forEach(el => {
-    initialState = { ...initialState, [el]: { checked: true } }
-  })
-  return initialState
+const initialDataSets = {
+  q1: undefined,
+  median: undefined,
+  q3: undefined,
+  min: undefined,
+  max: undefined,
 }
 
 export default function({ data, keyArray }) {
-  const [state, dispatch] = useReducer(
-    chessReducer,
-    createInitialState(keyArray)
-  )
-  console.log(state)
-
   const [dataKeys, setDataKeys] = useState(undefined)
   useEffect(() => {
     if (!dataKeys) {
@@ -123,8 +122,24 @@ export default function({ data, keyArray }) {
     Draw: true,
     Win: true,
   })
-
   const [period, setPeriod] = useState([0, 4])
+
+  const [dataSets, setDataSets] = useState(undefined)
+  useEffect(() => {
+    if (!dataSets && dataKeys) {
+      let object = {}
+      dataKeys.forEach(key => {
+        const set = data.find(d => d.nameId === key).dataSet
+        object = { ...object, [key]: { filtered: set, unFiltered: set } }
+      })
+      setDataSets(object)
+    }
+  }, [data, dataKeys, dataSets])
+
+  useEffect(() => {
+    
+  }, [period])
+
 
   return (
     <FlexContainer fullScreen>
@@ -155,12 +170,12 @@ export default function({ data, keyArray }) {
                     values={["Lose", "Draw", "Win"]}
                     colorRange={COLOR_RANGE}
                     checkedObject={resultCheckedObject}
-                    handleClick={val =>
+                    handleClick={val => {
                       setResultCheckedObject(prev => ({
                         ...prev,
                         [val]: !prev[val],
                       }))
-                    }
+                    }}
                   />
                 </FlexContainer>
                 <FlexContainer>
@@ -194,7 +209,6 @@ export default function({ data, keyArray }) {
               items={dataKeys.map(d => {
                 const dataSet = data.find(({ nameId }) => nameId === d)
                 const isChecked = checkedObject[d]
-                console.log(d)
                 return (
                   <GridContainer rows="180px 1fr 100px" key={d} fullSize>
                     <GridContainer
@@ -259,12 +273,11 @@ export default function({ data, keyArray }) {
                           parentChecked
                           checked={isChecked}
                           value={d}
-                          onClick={() =>{
+                          onClick={() => {
                             setCheckedObject(prev => ({
                               ...prev,
                               [d]: !prev[d],
                             }))
-                            dispatch({ type: "check", payload: d })
                           }}
                         />
                       </FlexContainer>
