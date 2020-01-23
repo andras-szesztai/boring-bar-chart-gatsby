@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useReducer } from "react"
+import React, { useState, useEffect } from "react"
 import Image from "gatsby-image"
 import Range from "rc-slider/lib/Range"
-import { quantile } from "d3-array"
 import _ from "lodash"
 import "rc-slider/assets/index.css"
 
@@ -20,7 +19,6 @@ import {
 import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
-import { chessReducer } from "../../reducers"
 import { usePrevious } from "../../hooks"
 
 const { grayLightest, grayDarkest, grayDark } = colors
@@ -41,68 +39,13 @@ function getPeriodFilteredData(data, period) {
 const getResultFilteredData = (data, results) =>
   data.filter(d => results.includes(d.result))
 
-function getResultsData({ data, isFiltered, period }) {
-  let dataSet = data
-  if (isFiltered) {
-    dataSet = getPeriodFilteredData(data, period)
-  }
-  const orderedList = ["Lose", "Draw", "Win"]
-  const totalLength = dataSet.length
-  const groupped = _.groupBy(dataSet, "result")
-  let percentagesObject = {}
-  orderedList.forEach(
-    el =>
-      (percentagesObject = {
-        ...percentagesObject,
-        [el]: groupped[el].length / totalLength,
-      })
-  )
-  return percentagesObject
-}
-
-function getBoxPlotData({ data, key, isFiltered, results, period }) {
-  let dataSet = data
-  if (isFiltered) {
-    dataSet = getPeriodFilteredData(
-      getResultFilteredData(data, results),
-      period
-    )
-  }
-  const sortedValues = dataSet.map(d => d[key]).sort((a, b) => a - b)
-  const min = sortedValues[0]
-  const max = sortedValues[sortedValues.length - 1]
-  const q1 = quantile(sortedValues, 0.25)
-  const median = quantile(sortedValues, 0.5)
-  const q3 = quantile(sortedValues, 0.75)
-  const iqr = q3 - q1
-  const r0 = Math.max(min, q1 - iqr * 1.5)
-  const r1 = Math.min(max, q3 + iqr * 1.5)
-  return {
-    q1,
-    median,
-    q3,
-    min,
-    max,
-    r0,
-    r1,
-  }
-}
-
 function checkUncheckAll(bool, keys) {
   let checkArray = {}
   keys.forEach(key => (checkArray = { ...checkArray, [key]: bool }))
   return checkArray
 }
 
-const initialDataSets = {
-  q1: undefined,
-  median: undefined,
-  q3: undefined,
-  min: undefined,
-  max: undefined,
-}
-
-export default function({ data, keyArray }) {
+export default function({ data }) {
   const [dataKeys, setDataKeys] = useState(undefined)
   useEffect(() => {
     if (!dataKeys) {
@@ -111,6 +54,7 @@ export default function({ data, keyArray }) {
   }, [dataKeys, data])
 
   const [checkedObject, setCheckedObject] = useState(undefined)
+  const prevCheckedObject = usePrevious(checkedObject)
   useEffect(() => {
     if (dataKeys && !checkedObject) {
       setCheckedObject(checkUncheckAll(true, dataKeys))
@@ -122,7 +66,9 @@ export default function({ data, keyArray }) {
     Draw: true,
     Win: true,
   })
+  const prevResultCheckedObject = usePrevious(resultCheckedObject)
   const [period, setPeriod] = useState([0, 4])
+  const prevPeriod = usePrevious(period)
 
   const [dataSets, setDataSets] = useState(undefined)
   useEffect(() => {
@@ -130,16 +76,124 @@ export default function({ data, keyArray }) {
       let object = {}
       dataKeys.forEach(key => {
         const set = data.find(d => d.nameId === key).dataSet
-        object = { ...object, [key]: { filtered: set, unFiltered: set } }
+        object = {
+          ...object,
+          [key]: {
+            unfiltered: set,
+            periodFiltered: set,
+            periodResultFiltered: set,
+          },
+        }
       })
       setDataSets(object)
     }
   }, [data, dataKeys, dataSets])
 
+  // Filtering on change
   useEffect(() => {
-    
-  }, [period])
+    if (dataSets && prevPeriod && !_.isEqual(period, prevPeriod)) {
+      let newDataSets = {}
+      dataKeys.forEach(key => {
+        const isChecked = checkedObject[key]
+        const sets = dataSets[key]
+        const unfiltered = sets.unfiltered
+        newDataSets = {
+          ...newDataSets,
+          [key]: {
+            ...sets,
+            periodFiltered: isChecked
+              ? getPeriodFilteredData(unfiltered, period)
+              : unfiltered,
+            periodResultFiltered: isChecked
+              ? getPeriodFilteredData(
+                  getResultFilteredData(
+                    unfiltered,
+                    Object.keys(resultCheckedObject).filter(
+                      k => resultCheckedObject[k]
+                    )
+                  ),
+                  period
+                )
+              : unfiltered,
+          },
+        }
+      })
+      setDataSets(newDataSets)
+    }
+    if (
+      dataSets &&
+      prevResultCheckedObject &&
+      !_.isEqual(resultCheckedObject, prevResultCheckedObject)
+    ) {
+      let newDataSets = {}
+      dataKeys.forEach(key => {
+        const isChecked = checkedObject[key]
+        const sets = dataSets[key]
+        const unfiltered = sets.unfiltered
+        newDataSets = {
+          ...newDataSets,
+          [key]: {
+            ...sets,
+            periodResultFiltered: isChecked
+              ? getPeriodFilteredData(
+                  getResultFilteredData(
+                    unfiltered,
+                    Object.keys(resultCheckedObject).filter(
+                      k => resultCheckedObject[k]
+                    )
+                  ),
+                  period
+                )
+              : unfiltered,
+          },
+        }
+      })
+      setDataSets(newDataSets)
+    }
+    if (
+      dataSets &&
+      prevCheckedObject &&
+      !_.isEqual(checkedObject, prevCheckedObject)
+    ) {
+      const changedValue = dataKeys.filter(
+        key => checkedObject[key] !== prevCheckedObject[key]
+      )
+      const isChecked = checkedObject[changedValue]
+      setDataSets(prev => ({
+        ...prev,
+        [changedValue]: {
+          ...prev[changedValue],
+          periodFiltered: isChecked
+            ? getPeriodFilteredData(prev[changedValue].unfiltered, period)
+            : prev[changedValue].unfiltered,
+          periodResultFiltered: isChecked
+            ? getPeriodFilteredData(
+                getResultFilteredData(
+                  prev[changedValue].unfiltered,
+                  Object.keys(resultCheckedObject).filter(
+                    k => resultCheckedObject[k]
+                  )
+                ),
+                period
+              )
+            : prev[changedValue].unfiltered,
+        },
+      }))
+    }
+  }, [
+    checkedObject,
+    dataKeys,
+    dataSets,
+    period,
+    prevCheckedObject,
+    prevPeriod,
+    prevResultCheckedObject,
+    resultCheckedObject,
+  ])
 
+
+  // TODO: pass in data to columns
+  console.log(dataSets)
 
   return (
     <FlexContainer fullScreen>
