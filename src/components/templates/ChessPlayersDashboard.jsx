@@ -300,10 +300,6 @@ export default function({ data }) {
                     <ParallelBoxPlotColumn
                       data={dataSets[d]}
                       isFiltered={isChecked}
-                      period={period}
-                      results={Object.keys(resultCheckedObject).filter(
-                        key => resultCheckedObject[key]
-                      )}
                     />
                     <GridContainer
                       borderColor="gray"
@@ -315,7 +311,6 @@ export default function({ data }) {
                           isFiltered={isChecked}
                           colorRange={COLOR_RANGE}
                           data={dataSets[d]}
-                          period={period}
                         />
                       </FlexContainer>
                       <FlexContainer>

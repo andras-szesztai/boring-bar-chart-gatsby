@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react"
 import _ from "lodash"
 
 import { FlexContainer } from "../../atoms"
-import { usePrevious, useInitValues } from "../../../hooks"
+import { usePrevious } from "../../../hooks"
 import { HorizontalStackedBar } from "../../molecules"
-
 
 function getResultsData(data) {
   const orderedList = ["Lose", "Draw", "Win"]
@@ -21,10 +20,9 @@ function getResultsData(data) {
   return percentagesObject
 }
 
-export default function({ data, period, isFiltered, colorRange}) {
+export default function({ data: { unfiltered, periodFiltered }, isFiltered, colorRange }) {
   const prevIsFiltered = usePrevious(isFiltered)
-  const prevPeriod = usePrevious(period)
-  const initValues = useInitValues({ period })
+  const prevPeriodFiltered = usePrevious(periodFiltered)
   const [state, setState] = useState({
     isInitialized: false,
     resultData: {
@@ -34,10 +32,10 @@ export default function({ data, period, isFiltered, colorRange}) {
   })
 
   const { isInitialized, resultData } = state
-  
+
   useEffect(() => {
-    if (!isInitialized && data) {
-      const resultData = getResultsData(data.periodFiltered)
+    if (!isInitialized && unfiltered) {
+      const resultData = getResultsData(unfiltered)
       setState({
         isInitialized: true,
         resultData: {
@@ -48,7 +46,6 @@ export default function({ data, period, isFiltered, colorRange}) {
     }
 
     if (isInitialized) {
-      const { period: initPeriod } = initValues.current
       if (prevIsFiltered && !isFiltered) {
         setState(prev => ({
           ...prev,
@@ -60,41 +57,39 @@ export default function({ data, period, isFiltered, colorRange}) {
       }
 
       if (
-        (!prevIsFiltered && isFiltered && !_.isEqual(initPeriod, period)) ||
-        !_.isEqual(period, prevPeriod)
+        periodFiltered.length !== prevPeriodFiltered.length
       ) {
         setState(prev => ({
           ...prev,
           resultData: {
             ...prev.resultData,
-            filteredResults: getResultsData(data.periodFiltered),
+            filteredResults: getResultsData(periodFiltered),
           },
         }))
       }
     }
-  }, [
-    data,
-    initValues,
-    isFiltered,
-    isInitialized,
-    period,
-    prevIsFiltered,
-    prevPeriod,
-  ])
-  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFiltered, isInitialized, periodFiltered, prevIsFiltered, unfiltered])
+
   return (
     <>
       {Object.keys(resultData).map((obj, i) => {
-      const isFirst = i === 1
-      return (
-        <FlexContainer key={obj} height="50%" width="100%">
-          <HorizontalStackedBar
-            data={resultData[obj]}
-            margin={{ top: isFirst ? 0 : 10, left: 10, bottom: isFirst ? 10 : 0, right: 10 }}
-            colorRange={colorRange}
-          />
-        </FlexContainer>
-      )})}
+        const isFirst = i === 1
+        return (
+          <FlexContainer key={obj} height="50%" width="100%">
+            <HorizontalStackedBar
+              data={resultData[obj]}
+              margin={{
+                top: isFirst ? 0 : 10,
+                left: 10,
+                bottom: isFirst ? 10 : 0,
+                right: 10,
+              }}
+              colorRange={colorRange}
+            />
+          </FlexContainer>
+        )
+      })}
     </>
   )
 }

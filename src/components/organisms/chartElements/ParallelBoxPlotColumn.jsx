@@ -46,13 +46,9 @@ function getBoxPlotData({ data, key }) {
 export default function ParellelBoxPlotColumn({
   data: { unfiltered, periodResultFiltered },
   isFiltered,
-  results,
-  period,
 }) {
   const prevIsFiltered = usePrevious(isFiltered)
-  const prevResults = usePrevious(results)
-  const prevPeriod = usePrevious(period)
-  const initValues = useInitValues({ period, results })
+  const prevPeriodResultFiltered = usePrevious(periodResultFiltered)
   const [state, setState] = useState({
     isInitialized: false,
     boxPlotData: {
@@ -86,8 +82,6 @@ export default function ParellelBoxPlotColumn({
     }
 
     if (isInitialized) {
-      // To reset when becomes unfiltered
-      const { period: initPeriod, result: initResults } = initValues
       if (prevIsFiltered && !isFiltered) {
         setState(prev => ({
           ...prev,
@@ -99,13 +93,7 @@ export default function ParellelBoxPlotColumn({
         }))
       }
 
-      if (
-        (!prevIsFiltered &&
-          isFiltered &&
-          (!_.isEqual(initResults, results) ||
-            !_.isEqual(initPeriod, period))) ||
-        (!_.isEqual(results, prevResults) || !_.isEqual(period, prevPeriod))
-      ) {
+      if (prevPeriodResultFiltered.length !== periodResultFiltered) {
         setState(prev => ({
           ...prev,
           boxPlotData: {
@@ -122,19 +110,18 @@ export default function ParellelBoxPlotColumn({
         }))
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    initValues,
     isFiltered,
     isInitialized,
-    period,
     periodResultFiltered,
     prevIsFiltered,
-    prevPeriod,
-    prevResults,
-    results,
-    unfiltered,
+    unfiltered
   ])
 
+  console.log(prevPeriodResultFiltered);
+  
+  // TODO: check if calculations are correct
   return (
     <GridContainer
       rows="repeat(2, 1fr)"
