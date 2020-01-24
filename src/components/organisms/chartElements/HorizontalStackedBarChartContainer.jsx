@@ -5,23 +5,11 @@ import { FlexContainer } from "../../atoms"
 import { usePrevious, useInitValues } from "../../../hooks"
 import { HorizontalStackedBar } from "../../molecules"
 
-export function getPeriodFilteredData(data, period){
-  const q = data.length/4
-  const startIndex = period[0] * q
-  const endIndex = period[1] * q
-  
-  const periodFilteredData = _.slice(data, startIndex, endIndex)
-  return periodFilteredData
-}
 
-function getResultsData({ data, isFiltered, period }) {
-  let dataSet = data
-  if (isFiltered) {
-    dataSet = getPeriodFilteredData(data, period)
-  }
+function getResultsData(data) {
   const orderedList = ["Lose", "Draw", "Win"]
-  const totalLength = dataSet.length
-  const groupped = _.groupBy(dataSet, "result")
+  const totalLength = data.length
+  const groupped = _.groupBy(data, "result")
   let percentagesObject = {}
   orderedList.forEach(
     el =>
@@ -45,16 +33,11 @@ export default function({ data, period, isFiltered, colorRange}) {
     },
   })
 
-  
-
   const { isInitialized, resultData } = state
   
   useEffect(() => {
     if (!isInitialized && data) {
-      const resultData = getResultsData({
-        data,
-        period,
-      })
+      const resultData = getResultsData(data.periodFiltered)
       setState({
         isInitialized: true,
         resultData: {
@@ -84,11 +67,7 @@ export default function({ data, period, isFiltered, colorRange}) {
           ...prev,
           resultData: {
             ...prev.resultData,
-            filteredResults: getResultsData({
-              data,
-              period,
-              isFiltered
-            }),
+            filteredResults: getResultsData(data.periodFiltered),
           },
         }))
       }

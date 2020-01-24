@@ -191,10 +191,6 @@ export default function({ data }) {
     resultCheckedObject,
   ])
 
-
-  // TODO: pass in data to columns
-  console.log(dataSets)
-
   return (
     <FlexContainer fullScreen>
       <GridContainer
@@ -302,7 +298,7 @@ export default function({ data }) {
                       </GridContainer>
                     </GridContainer>
                     <ParallelBoxPlotColumn
-                      data={dataSet.dataSet}
+                      data={dataSets[d]}
                       isFiltered={isChecked}
                       period={period}
                       results={Object.keys(resultCheckedObject).filter(
@@ -318,7 +314,7 @@ export default function({ data }) {
                         <HorizontalStackedBarChartContainer
                           isFiltered={isChecked}
                           colorRange={COLOR_RANGE}
-                          data={dataSet.dataSet}
+                          data={dataSets[d]}
                           period={period}
                         />
                       </FlexContainer>

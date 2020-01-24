@@ -5,11 +5,11 @@ import _ from "lodash"
 import { GridContainer, FlexContainer } from "../../atoms"
 import { usePrevious, useInitValues } from "../../../hooks"
 
-export function getPeriodFilteredData(data, period){
-  const q = data.length/4
+export function getPeriodFilteredData(data, period) {
+  const q = data.length / 4
   const startIndex = period[0] * q
   const endIndex = period[1] * q
-  
+
   const periodFilteredData = _.slice(data, startIndex, endIndex)
   return periodFilteredData
 }
@@ -22,16 +22,8 @@ const initialDataSets = {
   max: undefined,
 }
 
-const getResultFilteredData = (data, results) =>
-  data.filter(d => results.includes(d.result))
-const getSortedValueArray = (data, key) =>
-  data.map(d => d[key]).sort((a, b) => a - b)
-function getBoxPlotData({ data, key, isFiltered, results, period }) {
-  let dataSet = data
-  if (isFiltered) {
-    dataSet = getPeriodFilteredData(getResultFilteredData(data, results), period)
-  }
-  const sortedValues = getSortedValueArray(dataSet, key)
+function getBoxPlotData({ data, key }) {
+  const sortedValues = data.map(d => d[key]).sort((a, b) => a - b)
   const min = sortedValues[0]
   const max = sortedValues[sortedValues.length - 1]
   const q1 = quantile(sortedValues, 0.25)
@@ -52,7 +44,7 @@ function getBoxPlotData({ data, key, isFiltered, results, period }) {
 }
 
 export default function ParellelBoxPlotColumn({
-  data,
+  data: { unfiltered, periodResultFiltered },
   isFiltered,
   results,
   period,
@@ -73,17 +65,13 @@ export default function ParellelBoxPlotColumn({
   const { isInitialized, boxPlotData } = state
 
   useEffect(() => {
-    if (!isInitialized && data) {
+    if (!isInitialized && unfiltered) {
       const eloData = getBoxPlotData({
-        data,
-        results,
-        period,
+        data: unfiltered,
         key: "opponent_elo",
       })
       const movesData = getBoxPlotData({
-        data,
-        results,
-        period,
+        data: unfiltered,
         key: "moves",
       })
       setState({
@@ -123,17 +111,11 @@ export default function ParellelBoxPlotColumn({
           boxPlotData: {
             ...prev.boxPlotData,
             filteredOppElo: getBoxPlotData({
-              data,
-              results,
-              isFiltered: true,
-              period,
+              data: periodResultFiltered,
               key: "opponent_elo",
             }),
             filteredMoves: getBoxPlotData({
-              data,
-              isFiltered: true,
-              results,
-              period,
+              data: periodResultFiltered,
               key: "moves",
             }),
           },
@@ -141,15 +123,16 @@ export default function ParellelBoxPlotColumn({
       }
     }
   }, [
-    data,
     initValues,
     isFiltered,
     isInitialized,
     period,
+    periodResultFiltered,
     prevIsFiltered,
     prevPeriod,
     prevResults,
     results,
+    unfiltered,
   ])
 
   return (
