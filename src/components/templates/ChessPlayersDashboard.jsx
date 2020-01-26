@@ -404,6 +404,7 @@ export default function({ data }) {
                         <HorizontalStackedBarChartContainer
                           isFiltered={isChecked}
                           colorRange={COLOR_RANGE}
+                          results={resultCheckedObject}
                           data={dataSets[d]}
                         />
                       </FlexContainer>

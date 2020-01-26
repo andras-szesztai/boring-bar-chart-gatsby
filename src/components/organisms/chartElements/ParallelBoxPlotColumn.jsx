@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react"
-import { quantile } from "d3-array"
+import React from "react"
 import _ from "lodash"
 
 import { GridContainer, FlexContainer } from "../../atoms"
-import { usePrevious, useInitValues } from "../../../hooks"
 
 export function getPeriodFilteredData(data, period) {
   const q = data.length / 4

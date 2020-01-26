@@ -20,7 +20,12 @@ function getResultsData(data) {
   return percentagesObject
 }
 
-export default function({ data: { unfiltered, periodFiltered }, isFiltered, colorRange }) {
+export default function({
+  data: { unfiltered, periodFiltered },
+  isFiltered,
+  colorRange,
+  results,
+}) {
   const prevIsFiltered = usePrevious(isFiltered)
   const prevPeriodFiltered = usePrevious(periodFiltered)
   const [state, setState] = useState({
@@ -56,9 +61,7 @@ export default function({ data: { unfiltered, periodFiltered }, isFiltered, colo
         }))
       }
 
-      if (
-        periodFiltered.length !== prevPeriodFiltered.length
-      ) {
+      if (periodFiltered.length !== prevPeriodFiltered.length) {
         setState(prev => ({
           ...prev,
           resultData: {
@@ -68,7 +71,7 @@ export default function({ data: { unfiltered, periodFiltered }, isFiltered, colo
         }))
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFiltered, isInitialized, periodFiltered, prevIsFiltered, unfiltered])
 
   return (
@@ -86,6 +89,11 @@ export default function({ data: { unfiltered, periodFiltered }, isFiltered, colo
                 right: 10,
               }}
               colorRange={colorRange}
+              highlightArray={
+                isFiltered
+                  ? Object.keys(results).filter(d => results[d])
+                  : Object.keys(results)
+              }
             />
           </FlexContainer>
         )
