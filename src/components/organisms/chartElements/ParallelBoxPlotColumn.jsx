@@ -118,10 +118,7 @@ export default function ParellelBoxPlotColumn({
     prevIsFiltered,
     unfiltered
   ])
-
-  console.log(prevPeriodResultFiltered);
   
-  // TODO: check if calculations are correct
   return (
     <GridContainer
       rows="repeat(2, 1fr)"

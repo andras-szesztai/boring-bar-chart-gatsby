@@ -16,7 +16,7 @@ export default function HorizontalStackedBar({ data, margin, colorRange }) {
     ref: wrapperRef,
     margin,
   })
-
+  
   function initVis() {
     const keys = Object.keys(data)
     const colorScale = scaleOrdinal()
@@ -49,14 +49,17 @@ export default function HorizontalStackedBar({ data, margin, colorRange }) {
     }
   }
 
-  function updateVisData() {}
+  function updateVisData() {
+    console.log('running');
+  }
 
   const { init } = useInitUpdate({
-    data,
+    data: data && Object.values(data),
     chartHeight,
     chartWidth,
     initVis,
-    update: updateVisData,
+    noKey: true,
+    updateVis: updateVisData,
   })
 
   function updateVisDims() {}
