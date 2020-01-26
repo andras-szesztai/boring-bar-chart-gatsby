@@ -120,14 +120,8 @@ export default function({ data }) {
         : unfiltered
       const eloSorted = sortSet(periodResultFiltered, "opponent_elo")
       const movesSorted = sortSet(periodResultFiltered, "moves")
-      const eloMinMax = [
-        eloSorted[0],
-        eloSorted[eloSorted.length - 1],
-      ]
-      const movesMinMax = [
-        movesSorted[0],
-        movesSorted[movesSorted.length - 1],
-      ]
+      const eloMinMax = [eloSorted[0], eloSorted[eloSorted.length - 1]]
+      const movesMinMax = [movesSorted[0], movesSorted[movesSorted.length - 1]]
       return {
         periodResultFiltered,
         eloSorted,
@@ -239,10 +233,20 @@ export default function({ data }) {
                     colorRange={COLOR_RANGE}
                     checkedObject={resultCheckedObject}
                     handleClick={val => {
-                      setResultCheckedObject(prev => ({
-                        ...prev,
-                        [val]: !prev[val],
-                      }))
+                      setResultCheckedObject(prev => {
+                        if (
+                          Object.values(prev).filter(d => d).length === 1 &&
+                          prev[val]
+                        ) {
+                          return {
+                            ...prev,
+                          }
+                        }
+                        return {
+                          ...prev,
+                          [val]: !prev[val],
+                        }
+                      })
                     }}
                   />
                 </FlexContainer>
@@ -377,7 +381,10 @@ export default function({ data }) {
                 3: "Later games",
               }}
               defaultValue={period}
-              onChange={newPeriod => setPeriod(newPeriod)}
+              onChange={newPeriod => {
+                if(newPeriod[0] !== newPeriod[1])
+                setPeriod(newPeriod)
+              }}  
               trackStyle={[{ backgroundColor: grayDarkest }]}
               handleStyle={[
                 { backgroundColor: grayDark },

@@ -114,7 +114,7 @@ export default function ParellelBoxPlotColumn({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eloMinMax, eloSorted, prevEloSorted, isFiltered, isInitialized, movesMinMax, movesSorted, prevIsFiltered])
   
-  console.log(boxPlotData)
+  // console.log(boxPlotData)
   return (
     <GridContainer
       rows="repeat(2, 1fr)"
