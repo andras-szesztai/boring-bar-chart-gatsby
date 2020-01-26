@@ -22,16 +22,15 @@ const initialDataSets = {
   max: undefined,
 }
 
-function getBoxPlotData({ data, key }) {
-  const sortedValues = data.map(d => d[key]).sort((a, b) => a - b)
-  const min = sortedValues[0]
-  const max = sortedValues[sortedValues.length - 1]
-  const q1 = quantile(sortedValues, 0.25)
-  const median = quantile(sortedValues, 0.5)
-  const q3 = quantile(sortedValues, 0.75)
+function getBoxPlotData({ minMax, sorted }) {
+  const min = sorted[0]
+  const max = sorted[sorted.length - 1]
+  const q1 = quantile(sorted, 0.25)
+  const median = quantile(sorted, 0.5)
+  const q3 = quantile(sorted, 0.75)
   const iqr = q3 - q1
-  const r0 = Math.max(min, q1 - iqr * 1.5)
-  const r1 = Math.min(max, q3 + iqr * 1.5)
+  const r0 = Math.max(minMax[0], q1 - iqr * 1.5)
+  const r1 = Math.min(minMax[1], q3 + iqr * 1.5)
   return {
     q1,
     median,
@@ -44,11 +43,11 @@ function getBoxPlotData({ data, key }) {
 }
 
 export default function ParellelBoxPlotColumn({
-  data: { unfiltered, periodResultFiltered },
+  data: { eloMinMax, eloSorted, movesMinMax, movesSorted },
   isFiltered,
 }) {
   const prevIsFiltered = usePrevious(isFiltered)
-  const prevPeriodResultFiltered = usePrevious(periodResultFiltered)
+  const prevEloSorted= usePrevious(eloSorted)
   const [state, setState] = useState({
     isInitialized: false,
     boxPlotData: {
@@ -61,14 +60,14 @@ export default function ParellelBoxPlotColumn({
   const { isInitialized, boxPlotData } = state
 
   useEffect(() => {
-    if (!isInitialized && unfiltered) {
+    if (!isInitialized && eloSorted) {
       const eloData = getBoxPlotData({
-        data: unfiltered,
-        key: "opponent_elo",
+        sorted: eloSorted,
+        minMax: eloMinMax
       })
       const movesData = getBoxPlotData({
-        data: unfiltered,
-        key: "moves",
+        sorted: movesSorted,
+        minMax: movesMinMax
       })
       setState({
         isInitialized: true,
@@ -93,32 +92,28 @@ export default function ParellelBoxPlotColumn({
         }))
       }
 
-      if (prevPeriodResultFiltered.length !== periodResultFiltered) {
+      if (eloSorted.length !== prevEloSorted.length) {
         setState(prev => ({
           ...prev,
           boxPlotData: {
             ...prev.boxPlotData,
             filteredOppElo: getBoxPlotData({
-              data: periodResultFiltered,
-              key: "opponent_elo",
+              sorted: eloSorted,
+              minMax: eloMinMax
             }),
             filteredMoves: getBoxPlotData({
-              data: periodResultFiltered,
-              key: "moves",
+              sorted: movesSorted,
+              minMax: movesMinMax
             }),
           },
         }))
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isFiltered,
-    isInitialized,
-    periodResultFiltered,
-    prevIsFiltered,
-    unfiltered
-  ])
   
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eloMinMax, eloSorted, prevEloSorted, isFiltered, isInitialized, movesMinMax, movesSorted, prevIsFiltered])
+  
+  console.log(boxPlotData)
   return (
     <GridContainer
       rows="repeat(2, 1fr)"

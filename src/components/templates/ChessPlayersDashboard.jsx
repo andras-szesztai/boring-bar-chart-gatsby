@@ -10,7 +10,6 @@ import {
   CheckBox,
   SelectAllText,
   SortableHandle,
-  Title,
 } from "../atoms"
 import { SortableComponent, CountUpSpan } from "../molecules"
 import {
@@ -72,18 +71,31 @@ export default function({ data }) {
   const [period, setPeriod] = useState([0, 4])
   const prevPeriod = usePrevious(period)
 
+  const sortSet = (set, sortBy) => set.map(d => d[sortBy]).sort((a, b) => a - b)
+
   const [dataSets, setDataSets] = useState(undefined)
   useEffect(() => {
     if (!dataSets && dataKeys) {
       let object = {}
       dataKeys.forEach(key => {
         const set = data.find(d => d.nameId === key).dataSet
+        const eloSortedValues = sortSet(set, "opponent_elo")
+        const movesSortedValues = sortSet(set, "moves")
         object = {
           ...object,
           [key]: {
             unfiltered: set,
             periodFiltered: set,
-            periodResultFiltered: set,
+            eloSorted: eloSortedValues,
+            eloMinMax: [
+              eloSortedValues[0],
+              eloSortedValues[eloSortedValues.length - 1],
+            ],
+            movesSorted: movesSortedValues,
+            movesMinMax: [
+              movesSortedValues[0],
+              movesSortedValues[movesSortedValues.length - 1],
+            ],
           },
         }
       })
@@ -99,6 +111,7 @@ export default function({ data }) {
         const isChecked = checkedObject[key]
         const sets = dataSets[key]
         const unfiltered = sets.unfiltered
+        // TODO: add sorted values and minMax
         newDataSets = {
           ...newDataSets,
           [key]: {
@@ -192,6 +205,8 @@ export default function({ data }) {
     prevResultCheckedObject,
     resultCheckedObject,
   ])
+
+  console.log(dataSets)
 
   return (
     <FlexContainer fullScreen>
@@ -299,9 +314,9 @@ export default function({ data }) {
                         <FlexContainer justify="space-between">
                           <span>Avg. ELO:</span>
                           <CountUpSpan
-                            value={+_.meanBy(filteredSet, "player_elo").toFixed(
-                              0
-                            )}
+                            value={
+                              +_.meanBy(filteredSet, "player_elo").toFixed(0)
+                            }
                             fontWeight={3}
                           />
                         </FlexContainer>
@@ -368,6 +383,8 @@ export default function({ data }) {
                 { backgroundColor: grayDark },
               ]}
               railStyle={{ backgroundColor: grayLightest }}
+              // activeDotStyle
+              // dotStyle
             />
           </FlexContainer>
         </GridContainer>

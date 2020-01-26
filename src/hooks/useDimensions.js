@@ -39,7 +39,7 @@ export default function useDimensions({
         }
       }
     }
-    if (!dims.height && (ref.current || parentRef.current)) {
+    if (!dims.height && ref && (ref.current || parentRef.current)) {
       window.addEventListener("resize", getDimensions)
       getDimensions()
     }
