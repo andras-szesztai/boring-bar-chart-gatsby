@@ -2,6 +2,7 @@ import React from "react"
 import _ from "lodash"
 
 import { GridContainer, FlexContainer } from "../../atoms"
+import { VerticalBoxPlot } from "../../molecules"
 
 export function getPeriodFilteredData(data, period) {
   const q = data.length / 4
@@ -13,10 +14,9 @@ export function getPeriodFilteredData(data, period) {
 }
 
 export default function ParellelBoxPlotColumn({
-  data: { movesBoxPlot, eloBoxplot },
+  data: { movesBoxPlot, eloBoxPlot, eloRange, movesRange},
   isFiltered,
 }) {
-  // console.log(eloBoxplot);
   
   return (
     <GridContainer
@@ -25,10 +25,18 @@ export default function ParellelBoxPlotColumn({
       rowGap={0.5}
       columnGap={0.5}
     >
-      <FlexContainer borderColor="gray" />
-      <FlexContainer borderColor="gray" />
-      <FlexContainer borderColor="gray" />
-      <FlexContainer borderColor="gray" />
+      <FlexContainer borderColor="gray">
+        <VerticalBoxPlot/>
+      </FlexContainer>
+      <FlexContainer borderColor="gray">
+        <VerticalBoxPlot/>
+      </FlexContainer>
+      <FlexContainer borderColor="gray">
+        <VerticalBoxPlot/>
+      </FlexContainer>
+      <FlexContainer borderColor="gray">
+        <VerticalBoxPlot/>
+      </FlexContainer>
     </GridContainer>
   )
 }

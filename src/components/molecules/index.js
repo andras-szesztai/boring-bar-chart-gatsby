@@ -1,7 +1,7 @@
 import {
   VerticalDropChart,
   HorizontalStackedBar,
-  VerticalBoxplot,
+  VerticalBoxPlot,
 } from "./charts"
 import { SortableComponent } from "./containers"
 import { VerticalMutliSelect } from "./controlElements"
@@ -13,5 +13,5 @@ export {
   VerticalMutliSelect,
   HorizontalStackedBar,
   CountUpSpan,
-  VerticalBoxplot,
+  VerticalBoxPlot,
 }

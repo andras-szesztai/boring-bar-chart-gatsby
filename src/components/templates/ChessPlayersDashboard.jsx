@@ -20,7 +20,7 @@ import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelec
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
 import { usePrevious } from "../../hooks"
-import { max, quantile } from "d3-array"
+import { max, quantile, extent } from "d3-array"
 
 const { grayLightest, grayDarkest, grayDark } = colors
 
@@ -89,36 +89,42 @@ export default function({ data }) {
 
   const sortSet = (set, sortBy) => set.map(d => d[sortBy]).sort((a, b) => a - b)
 
+  const getRange = object => ({
+    ...object,
+    eloRange: extent(object.eloMinMax),
+    movesRange: extent(object.movesMinMax)
+  })
+
   const [dataSets, setDataSets] = useState(undefined)
   useEffect(() => {
     if (!dataSets && dataKeys) {
       let object = { movesMinMax: [], eloMinMax: [] }
       dataKeys.forEach(key => {
         const set = data.find(d => d.nameId === key).dataSet
-        const eloBoxplot = getBoxPlotData(sortSet(set, "opponent_elo"))
-        const movesBoxplot = getBoxPlotData(sortSet(set, "moves"))
+        const eloBoxPlot = getBoxPlotData(sortSet(set, "opponent_elo"))
+        const movesBoxPlot = getBoxPlotData(sortSet(set, "moves"))
         object = {
           ...object,
-          eloMinMax: [...object.eloMinMax, eloBoxplot.r0, eloBoxplot.r1],
+          eloMinMax: [...object.eloMinMax, eloBoxPlot.r0, eloBoxPlot.r1],
           movesMinMax: [
             ...object.movesMinMax,
-            movesBoxplot.r0,
-            movesBoxplot.r1,
+            movesBoxPlot.r0,
+            movesBoxPlot.r1,
           ],
           [key]: {
             unfiltered: set,
             periodFiltered: set,
             periodResultFiltered: set,
-            eloBoxplot: {
-              ...eloBoxplot,
+            eloBoxPlot: {
+              ...eloBoxPlot,
             },
-            movesBoxplot: {
-              ...movesBoxplot,
+            movesBoxPlot: {
+              ...movesBoxPlot,
             },
           },
         }
       })
-      setDataSets(object)
+      setDataSets(getRange(object))
     }
   }, [data, dataKeys, dataSets])
 
@@ -138,10 +144,10 @@ export default function({ data }) {
         : unfiltered
       return {
         periodResultFiltered,
-        eloBoxplot: {
+        eloBoxPlot: {
           ...getBoxPlotData(sortSet(periodResultFiltered, "opponent_elo")),
         },
-        movesBoxplot: {
+        movesBoxPlot: {
           ...getBoxPlotData(sortSet(periodResultFiltered, "moves")),
         },
       }
@@ -160,11 +166,11 @@ export default function({ data }) {
           ...newDataSets,
           eloMinMax: [
             ...newDataSets.eloMinMax,
-            ...getNewMinMax(newObject.eloBoxplot),
+            ...getNewMinMax(newObject.eloBoxPlot),
           ],
           movesMinMax: [
             ...newDataSets.movesMinMax,
-            ...getNewMinMax(newObject.movesBoxplot),
+            ...getNewMinMax(newObject.movesBoxPlot),
           ],
           [key]: {
             ...sets,
@@ -174,7 +180,7 @@ export default function({ data }) {
             ...newObject,
           },
         }
-        setDataSets(newDataSets)
+        setDataSets(getRange(newDataSets))
       })
     }
 
@@ -193,11 +199,11 @@ export default function({ data }) {
           ...newDataSets,
           eloMinMax: [
             ...newDataSets.eloMinMax,
-            ...getNewMinMax(newObject.eloBoxplot),
+            ...getNewMinMax(newObject.eloBoxPlot),
           ],
           movesMinMax: [
             ...newDataSets.movesMinMax,
-            ...getNewMinMax(newObject.movesBoxplot),
+            ...getNewMinMax(newObject.movesBoxPlot),
           ],
           [key]: {
             ...sets,
@@ -205,7 +211,7 @@ export default function({ data }) {
           },
         }
       })
-      setDataSets(newDataSets)
+      setDataSets(getRange(newDataSets))
     }
 
     if (
@@ -221,23 +227,22 @@ export default function({ data }) {
         movesMinMax: [
           ...filteredDataKeys
             .map(key => [
-              dataSets[key].eloBoxplot.r0,
-              dataSets[key].eloBoxplot.r1,
+              dataSets[key].eloBoxPlot.r0,
+              dataSets[key].eloBoxPlot.r1,
             ])
             .flat(),
         ],
         eloMinMax: [
           ...filteredDataKeys
             .map(key => [
-              dataSets[key].movesBoxplot.r0,
-              dataSets[key].movesBoxplot.r1,
+              dataSets[key].movesBoxPlot.r0,
+              dataSets[key].movesBoxPlot.r1,
             ])
             .flat(),
         ],
         ...dataSets,
       }
 
-      
       changedValues.forEach(val => {
         const isChecked = checkedObject[val]
         const sets = dataSets[val]
@@ -246,11 +251,11 @@ export default function({ data }) {
           ...newDataSets,
           eloMinMax: [
             ...newDataSets.eloMinMax,
-            ...getNewMinMax(newObject.eloBoxplot),
+            ...getNewMinMax(newObject.eloBoxPlot),
           ],
           movesMinMax: [
             ...newDataSets.movesMinMax,
-            ...getNewMinMax(newObject.movesBoxplot),
+            ...getNewMinMax(newObject.movesBoxPlot),
           ],
           [val]: {
             ...sets,
@@ -261,7 +266,7 @@ export default function({ data }) {
           },
         }
       })
-      setDataSets(newDataSets)
+      setDataSets(getRange(newDataSets))
     }
   }, [
     checkedObject,
