@@ -20,13 +20,29 @@ import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelec
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
 import { usePrevious } from "../../hooks"
-import { max } from "d3-array"
+import { max, quantile } from "d3-array"
 
 const { grayLightest, grayDarkest, grayDark } = colors
 
 const COLOR_RANGE = ["#fc5050", "#ffd00c", "#415f77"]
 
-// TODO: setup functions to filter datasets on dasboard level for all columns
+function getBoxPlotData(sorted) {
+  const min = sorted[0]
+  const max = sorted[sorted.length - 1]
+  const q1 = quantile(sorted, 0.25)
+  const median = quantile(sorted, 0.5)
+  const q3 = quantile(sorted, 0.75)
+  const iqr = q3 - q1
+  const r0 = Math.max(min, q1 - iqr * 1.5)
+  const r1 = Math.min(max, q3 + iqr * 1.5)
+  return {
+    q1,
+    median,
+    q3,
+    r0,
+    r1,
+  }
+}
 
 function getPeriodFilteredData(data, period) {
   const q = data.length / 4
@@ -76,27 +92,29 @@ export default function({ data }) {
   const [dataSets, setDataSets] = useState(undefined)
   useEffect(() => {
     if (!dataSets && dataKeys) {
-      let object = {}
+      let object = { movesMinMax: [], eloMinMax: [] }
       dataKeys.forEach(key => {
         const set = data.find(d => d.nameId === key).dataSet
-        const eloSortedValues = sortSet(set, "opponent_elo")
-        const movesSortedValues = sortSet(set, "moves")
+        const eloBoxplot = getBoxPlotData(sortSet(set, "opponent_elo"))
+        const movesBoxplot = getBoxPlotData(sortSet(set, "moves"))
         object = {
           ...object,
+          eloMinMax: [...object.eloMinMax, eloBoxplot.r0, eloBoxplot.r1],
+          movesMinMax: [
+            ...object.movesMinMax,
+            movesBoxplot.r0,
+            movesBoxplot.r1,
+          ],
           [key]: {
             unfiltered: set,
             periodFiltered: set,
             periodResultFiltered: set,
-            eloSorted: eloSortedValues,
-            eloMinMax: [
-              eloSortedValues[0],
-              eloSortedValues[eloSortedValues.length - 1],
-            ],
-            movesSorted: movesSortedValues,
-            movesMinMax: [
-              movesSortedValues[0],
-              movesSortedValues[movesSortedValues.length - 1],
-            ],
+            eloBoxplot: {
+              ...eloBoxplot,
+            },
+            movesBoxPlot: {
+              ...movesBoxplot,
+            },
           },
         }
       })
@@ -106,8 +124,8 @@ export default function({ data }) {
 
   // Filtering on change
   useEffect(() => {
-    function getNewDatasets(isChecked, unfiltered) {
-      const periodResultFiltered = isChecked
+    function getNewDatasets(unfiltered, isUnchecked) {
+      const periodResultFiltered = !isUnchecked
         ? getPeriodFilteredData(
             getResultFilteredData(
               unfiltered,
@@ -118,33 +136,42 @@ export default function({ data }) {
             period
           )
         : unfiltered
-      const eloSorted = sortSet(periodResultFiltered, "opponent_elo")
-      const movesSorted = sortSet(periodResultFiltered, "moves")
-      const eloMinMax = [eloSorted[0], eloSorted[eloSorted.length - 1]]
-      const movesMinMax = [movesSorted[0], movesSorted[movesSorted.length - 1]]
       return {
         periodResultFiltered,
-        eloSorted,
-        movesSorted,
-        eloMinMax,
-        movesMinMax,
+        eloBoxplot: {
+          ...getBoxPlotData(sortSet(periodResultFiltered, "opponent_elo")),
+        },
+        movesBoxplot: {
+          ...getBoxPlotData(sortSet(periodResultFiltered, "moves")),
+        },
       }
     }
 
+    const getNewMinMax = accessor => [accessor.r0, accessor.r1]
+
     if (dataSets && prevPeriod && !_.isEqual(period, prevPeriod)) {
-      let newDataSets = {}
+      let newDataSets = { movesMinMax: [], eloMinMax: [] }
       dataKeys.forEach(key => {
         const isChecked = checkedObject[key]
         const sets = dataSets[key]
         const unfiltered = sets.unfiltered
+        const newObject = isChecked ? getNewDatasets(unfiltered) : sets
         newDataSets = {
           ...newDataSets,
+          eloMinMax: [
+            ...newDataSets.eloMinMax,
+            ...getNewMinMax(newObject.eloBoxplot),
+          ],
+          movesMinMax: [
+            ...newDataSets.movesMinMax,
+            ...getNewMinMax(newObject.movesBoxplot),
+          ],
           [key]: {
             ...sets,
             periodFiltered: isChecked
               ? getPeriodFilteredData(unfiltered, period)
               : unfiltered,
-            ...getNewDatasets(isChecked, unfiltered),
+            ...newObject,
           },
         }
         setDataSets(newDataSets)
@@ -156,16 +183,25 @@ export default function({ data }) {
       prevResultCheckedObject &&
       !_.isEqual(resultCheckedObject, prevResultCheckedObject)
     ) {
-      let newDataSets = {}
+      let newDataSets = { movesMinMax: [], eloMinMax: [] }
       dataKeys.forEach(key => {
         const isChecked = checkedObject[key]
         const sets = dataSets[key]
         const unfiltered = sets.unfiltered
+        const newObject = isChecked ? getNewDatasets(unfiltered) : sets
         newDataSets = {
           ...newDataSets,
+          eloMinMax: [
+            ...newDataSets.eloMinMax,
+            ...getNewMinMax(newObject.eloBoxplot),
+          ],
+          movesMinMax: [
+            ...newDataSets.movesMinMax,
+            ...getNewMinMax(newObject.movesBoxplot),
+          ],
           [key]: {
             ...sets,
-            ...getNewDatasets(isChecked, unfiltered),
+            ...newObject,
           },
         }
       })
@@ -179,16 +215,37 @@ export default function({ data }) {
     ) {
       const changedValue = dataKeys.filter(
         key => checkedObject[key] !== prevCheckedObject[key]
-      )
+      )[0]
       const isChecked = checkedObject[changedValue]
+      const sets = dataSets[changedValue]
+      const filteredDataKeys = dataKeys.filter(d => d !== changedValue)
+      const newObject = getNewDatasets(sets.unfiltered, !isChecked)
       setDataSets(prev => ({
         ...prev,
+        eloMinMax: [
+          ...filteredDataKeys
+            .map(key => [
+              dataSets[key].eloBoxplot.r0,
+              dataSets[key].eloBoxplot.r1,
+            ])
+            .flat(),
+          ...getNewMinMax(newObject.eloBoxplot),
+        ],
+        movesMinMax: [
+          ...filteredDataKeys
+            .map(key => [
+              dataSets[key].movesBoxplot.r0,
+              dataSets[key].movesBoxplot.r1,
+            ])
+            .flat(),
+          ...getNewMinMax(newObject.movesBoxplot),
+        ],
         [changedValue]: {
           ...prev[changedValue],
           periodFiltered: isChecked
             ? getPeriodFilteredData(prev[changedValue].unfiltered, period)
             : prev[changedValue].unfiltered,
-          ...getNewDatasets(isChecked, prev[changedValue].unfiltered),
+          ...newObject,
         },
       }))
     }
@@ -382,9 +439,8 @@ export default function({ data }) {
               }}
               defaultValue={period}
               onChange={newPeriod => {
-                if(newPeriod[0] !== newPeriod[1])
-                setPeriod(newPeriod)
-              }}  
+                if (newPeriod[0] !== newPeriod[1]) setPeriod(newPeriod)
+              }}
               trackStyle={[{ backgroundColor: grayDarkest }]}
               handleStyle={[
                 { backgroundColor: grayDark },
