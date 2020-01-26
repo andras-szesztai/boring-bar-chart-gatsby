@@ -73,7 +73,7 @@ export default function({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFiltered, isInitialized, periodFiltered, prevIsFiltered, unfiltered])
-
+  
   return (
     <>
       {Object.keys(resultData).map((obj, i) => {

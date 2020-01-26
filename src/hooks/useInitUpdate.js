@@ -11,6 +11,7 @@ export default function useInitUpdate({
   updateVisData,
   updateVisDims,
   sortKey,
+  dataToCheck = data,
   noKey,
 }) {
   const [state, setState] = useState({
@@ -18,7 +19,7 @@ export default function useInitUpdate({
   })
   const { init } = state
 
-  const prevData = usePrevious(data)
+  const prevData = usePrevious(dataToCheck)
   const prevChartWidth = usePrevious(chartWidth)
   const prevChartHeight = usePrevious(chartHeight)
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function useInitUpdate({
     if (
       init &&
       prevData &&
-      checkIfUpdated(data.sort(sortFunc), prevData.sort(sortFunc))
+      checkIfUpdated(dataToCheck.sort(sortFunc), prevData.sort(sortFunc))
     ) {
       updateVisData()
     }
@@ -40,7 +41,21 @@ export default function useInitUpdate({
     ) {
       updateVisDims ? updateVisDims() : updateVisData()
     }
-  }, [chartHeight, chartWidth, data, init, initVis, noKey, prevChartHeight, prevChartWidth, prevData, sortKey, state, updateVisData, updateVisDims])
+  }, [
+    chartHeight,
+    chartWidth,
+    data,
+    dataToCheck,
+    init,
+    initVis,
+    noKey,
+    prevChartHeight,
+    prevChartWidth,
+    prevData,
+    sortKey,
+    updateVisData,
+    updateVisDims,
+  ])
 
   return state
 }

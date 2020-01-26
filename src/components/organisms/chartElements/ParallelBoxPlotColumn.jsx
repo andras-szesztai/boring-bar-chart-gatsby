@@ -28,20 +28,20 @@ export default function ParellelBoxPlotColumn({
   syncObject,
 }) {
   const prevSyncObject = usePrevious(syncObject)
-  const [ranges, setRanges] = useState({
+  const [domains, setDomains] = useState({
     elo: undefined,
     moves: undefined,
   })
 
   useEffect(() => {
-    if (ranges && !ranges.elo && syncObject && !!syncObject.elo) {
-      setRanges({
+    if (domains && !domains.elo && syncObject && !!syncObject.elo) {
+      setDomains({
         elo: eloRange,
         moves: movesRange,
       })
     }
-    if (ranges && !!ranges.elo && !_.isEqual(syncObject, prevSyncObject)) {
-      setRanges({
+    if (domains && !!domains.elo && !_.isEqual(syncObject, prevSyncObject)) {
+      setDomains({
         elo: syncObject.elo
           ? eloRange
           : extent([
@@ -62,7 +62,7 @@ export default function ParellelBoxPlotColumn({
     }
   }, [
     syncObject,
-    ranges,
+    domains,
     eloRange,
     movesRange,
     prevSyncObject,
@@ -73,8 +73,6 @@ export default function ParellelBoxPlotColumn({
     unfilteredMovesBoxPlot,
   ])
 
-  console.log(ranges)
-
   return (
     <GridContainer
       rows="repeat(2, 1fr)"
@@ -82,17 +80,53 @@ export default function ParellelBoxPlotColumn({
       rowGap={0.5}
       columnGap={0.5}
     >
-      <FlexContainer borderColor="gray">
-        <VerticalBoxPlot />
+      <FlexContainer>
+        <VerticalBoxPlot
+          domain={domains.elo}
+          data={unfilteredEloBoxPlot}
+          margin={{
+            top: 5,
+            right: 25,
+            bottom: 5,
+            left: 20,
+          }}
+        />
       </FlexContainer>
-      <FlexContainer borderColor="gray">
-        <VerticalBoxPlot />
+      <FlexContainer>
+        <VerticalBoxPlot
+          domain={domains.elo}
+          data={eloBoxPlot}
+          margin={{
+            top: 5,
+            right: 20,
+            bottom: 5,
+            left: 25,
+          }}
+        />
       </FlexContainer>
-      <FlexContainer borderColor="gray">
-        <VerticalBoxPlot />
+      <FlexContainer>
+        <VerticalBoxPlot
+          domain={domains.moves}
+          data={unfilteredMovesBoxPlot}
+          margin={{
+            top: 5,
+            right: 25,
+            bottom: 5,
+            left: 20,
+          }}
+        />
       </FlexContainer>
-      <FlexContainer borderColor="gray">
-        <VerticalBoxPlot />
+      <FlexContainer>
+        <VerticalBoxPlot
+          domain={domains.moves}
+          data={movesBoxPlot}
+          margin={{
+            top: 5,
+            right: 20,
+            bottom: 5,
+            left: 25,
+          }}
+        />
       </FlexContainer>
     </GridContainer>
   )

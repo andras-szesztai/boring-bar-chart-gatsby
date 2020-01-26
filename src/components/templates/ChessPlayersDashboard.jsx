@@ -304,13 +304,12 @@ export default function({ data }) {
         columns="200px 1fr"
       >
         <GridContainer rows="180px 1fr">
-          <FlexContainer borderColor="gray">Title</FlexContainer>
+          <FlexContainer>Title</FlexContainer>
           <GridContainer rows="1fr 50px">
             <GridContainer rows="1fr 100px">
               <GridContainer rows="repeat(2, 1fr)" rowGap={0.5}>
                 {SYNCED_CHECKBOXES.map(box => (
                   <FlexContainer
-                    borderColor="gray"
                     direction="column"
                     key={box}
                   >
@@ -326,7 +325,6 @@ export default function({ data }) {
                 ))}
               </GridContainer>
               <GridContainer
-                borderColor="gray"
                 rows="repeat(2, 50%)"
                 rowGap={0}
               >
@@ -369,7 +367,7 @@ export default function({ data }) {
                 </FlexContainer>
               </GridContainer>
             </GridContainer>
-            <FlexContainer borderColor="gray">Brush Control</FlexContainer>
+            <FlexContainer>Brush Control</FlexContainer>
           </GridContainer>
         </GridContainer>
         <GridContainer rows="1fr 50px">
@@ -377,7 +375,7 @@ export default function({ data }) {
             <SortableComponent
               axis="x"
               lockAxis="x"
-              columnGap={0.5}
+              columnGap={2}
               fullSize
               useDragHandle
               columns="repeat(8, 1fr)"
@@ -407,7 +405,7 @@ export default function({ data }) {
                         noGap
                         rows="repeat(4, 1fr)"
                         paddingLeft={1}
-                        paddingRight={2}
+                        paddingRight={1}
                       >
                         <FlexContainer justify="flex-start">
                           {dataSet.fullName}
@@ -444,7 +442,6 @@ export default function({ data }) {
                       movesRange={dataSets.movesRange}
                     />
                     <GridContainer
-                      borderColor="gray"
                       rows="repeat(2, 50%)"
                       rowGap={0}
                     >

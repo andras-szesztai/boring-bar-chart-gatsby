@@ -5,11 +5,13 @@ import _ from "lodash"
 import { scaleOrdinal, scaleLinear } from "d3-scale"
 import chroma from "chroma-js"
 import "d3-transition"
+import { easeCubicInOut } from "d3-ease"
 
 import { ChartSvg, FlexContainer, ChartArea } from "../../atoms"
 import { useDimensions, useInitUpdate, usePrevious } from "../../../hooks"
-import { easeCubicInOut } from "d3-ease"
 import { transition } from "../../../themes/theme"
+
+const { mdNum } = transition  
 
 export default function HorizontalStackedBar({
   data,
@@ -25,7 +27,7 @@ export default function HorizontalStackedBar({
     ref: wrapperRef,
     margin,
   })
-  const { mdNum } = transition  
+
   const makeData = keys => stack().keys(keys)([data])
 
   function initVis() {
@@ -108,7 +110,7 @@ export default function HorizontalStackedBar({
       .attr("stroke-opacity", d => highlightArray.includes(d.key) ? 1 : .2)
     }
     if(init && (!_.isEqual(prevHighlightArray, highlightArray))) updateHighlight()
-  }, [highlightArray, init, mdNum, prevHighlightArray])
+  }, [highlightArray, init, prevHighlightArray])
   
   return (
     <FlexContainer pos="relative" fullSize ref={wrapperRef}>

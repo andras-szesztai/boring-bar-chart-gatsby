@@ -7,7 +7,7 @@ export function checkIfUpdated(sortedRaw, sortedPrevRaw) {
     .includes(false);
 }
 
-export function getAxisPadding(data, key, domainPaddingValue){
+export function getAxisPadding(data, key, domainPaddingValue = 0.025){
   const minmax = extent(data, d => d[key]);
   const minmaxDiff = minmax[1] - minmax[0];
   const domainPadding = minmaxDiff * domainPaddingValue;
