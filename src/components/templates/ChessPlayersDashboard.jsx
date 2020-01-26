@@ -86,6 +86,7 @@ export default function({ data }) {
           [key]: {
             unfiltered: set,
             periodFiltered: set,
+            periodResultFiltered: set,
             eloSorted: eloSortedValues,
             eloMinMax: [
               eloSortedValues[0],
@@ -105,13 +106,43 @@ export default function({ data }) {
 
   // Filtering on change
   useEffect(() => {
+    function getNewDatasets(isChecked, unfiltered) {
+      const periodResultFiltered = isChecked
+        ? getPeriodFilteredData(
+            getResultFilteredData(
+              unfiltered,
+              Object.keys(resultCheckedObject).filter(
+                k => resultCheckedObject[k]
+              )
+            ),
+            period
+          )
+        : unfiltered
+      const eloSorted = sortSet(periodResultFiltered, "opponent_elo")
+      const movesSorted = sortSet(periodResultFiltered, "moves")
+      const eloMinMax = [
+        eloSorted[0],
+        eloSorted[eloSorted.length - 1],
+      ]
+      const movesMinMax = [
+        movesSorted[0],
+        movesSorted[movesSorted.length - 1],
+      ]
+      return {
+        periodResultFiltered,
+        eloSorted,
+        movesSorted,
+        eloMinMax,
+        movesMinMax,
+      }
+    }
+
     if (dataSets && prevPeriod && !_.isEqual(period, prevPeriod)) {
       let newDataSets = {}
       dataKeys.forEach(key => {
         const isChecked = checkedObject[key]
         const sets = dataSets[key]
         const unfiltered = sets.unfiltered
-        // TODO: add sorted values and minMax
         newDataSets = {
           ...newDataSets,
           [key]: {
@@ -119,22 +150,13 @@ export default function({ data }) {
             periodFiltered: isChecked
               ? getPeriodFilteredData(unfiltered, period)
               : unfiltered,
-            periodResultFiltered: isChecked
-              ? getPeriodFilteredData(
-                  getResultFilteredData(
-                    unfiltered,
-                    Object.keys(resultCheckedObject).filter(
-                      k => resultCheckedObject[k]
-                    )
-                  ),
-                  period
-                )
-              : unfiltered,
+            ...getNewDatasets(isChecked, unfiltered),
           },
         }
+        setDataSets(newDataSets)
       })
-      setDataSets(newDataSets)
     }
+
     if (
       dataSets &&
       prevResultCheckedObject &&
@@ -149,22 +171,13 @@ export default function({ data }) {
           ...newDataSets,
           [key]: {
             ...sets,
-            periodResultFiltered: isChecked
-              ? getPeriodFilteredData(
-                  getResultFilteredData(
-                    unfiltered,
-                    Object.keys(resultCheckedObject).filter(
-                      k => resultCheckedObject[k]
-                    )
-                  ),
-                  period
-                )
-              : unfiltered,
+            ...getNewDatasets(isChecked, unfiltered),
           },
         }
       })
       setDataSets(newDataSets)
     }
+
     if (
       dataSets &&
       prevCheckedObject &&
@@ -181,17 +194,7 @@ export default function({ data }) {
           periodFiltered: isChecked
             ? getPeriodFilteredData(prev[changedValue].unfiltered, period)
             : prev[changedValue].unfiltered,
-          periodResultFiltered: isChecked
-            ? getPeriodFilteredData(
-                getResultFilteredData(
-                  prev[changedValue].unfiltered,
-                  Object.keys(resultCheckedObject).filter(
-                    k => resultCheckedObject[k]
-                  )
-                ),
-                period
-              )
-            : prev[changedValue].unfiltered,
+          ...getNewDatasets(isChecked, prev[changedValue].unfiltered),
         },
       }))
     }
@@ -205,8 +208,6 @@ export default function({ data }) {
     prevResultCheckedObject,
     resultCheckedObject,
   ])
-
-  console.log(dataSets)
 
   return (
     <FlexContainer fullScreen>

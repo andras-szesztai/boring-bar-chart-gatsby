@@ -44,6 +44,7 @@ function getBoxPlotData({ minMax, sorted }) {
 
 export default function ParellelBoxPlotColumn({
   data: { eloMinMax, eloSorted, movesMinMax, movesSorted },
+  data,
   isFiltered,
 }) {
   const prevIsFiltered = usePrevious(isFiltered)
