@@ -112,7 +112,7 @@ export default function({ data }) {
             eloBoxplot: {
               ...eloBoxplot,
             },
-            movesBoxPlot: {
+            movesBoxplot: {
               ...movesBoxplot,
             },
           },
@@ -213,41 +213,55 @@ export default function({ data }) {
       prevCheckedObject &&
       !_.isEqual(checkedObject, prevCheckedObject)
     ) {
-      const changedValue = dataKeys.filter(
+      const changedValues = dataKeys.filter(
         key => checkedObject[key] !== prevCheckedObject[key]
-      )[0]
-      const isChecked = checkedObject[changedValue]
-      const sets = dataSets[changedValue]
-      const filteredDataKeys = dataKeys.filter(d => d !== changedValue)
-      const newObject = getNewDatasets(sets.unfiltered, !isChecked)
-      setDataSets(prev => ({
-        ...prev,
-        eloMinMax: [
+      )
+      const filteredDataKeys = dataKeys.filter(d => !changedValues.includes(d))
+      let newDataSets = {
+        movesMinMax: [
           ...filteredDataKeys
             .map(key => [
               dataSets[key].eloBoxplot.r0,
               dataSets[key].eloBoxplot.r1,
             ])
             .flat(),
-          ...getNewMinMax(newObject.eloBoxplot),
         ],
-        movesMinMax: [
+        eloMinMax: [
           ...filteredDataKeys
             .map(key => [
               dataSets[key].movesBoxplot.r0,
               dataSets[key].movesBoxplot.r1,
             ])
             .flat(),
-          ...getNewMinMax(newObject.movesBoxplot),
         ],
-        [changedValue]: {
-          ...prev[changedValue],
-          periodFiltered: isChecked
-            ? getPeriodFilteredData(prev[changedValue].unfiltered, period)
-            : prev[changedValue].unfiltered,
-          ...newObject,
-        },
-      }))
+        ...dataSets,
+      }
+
+      
+      changedValues.forEach(val => {
+        const isChecked = checkedObject[val]
+        const sets = dataSets[val]
+        const newObject = getNewDatasets(sets.unfiltered, !isChecked)
+        newDataSets = {
+          ...newDataSets,
+          eloMinMax: [
+            ...newDataSets.eloMinMax,
+            ...getNewMinMax(newObject.eloBoxplot),
+          ],
+          movesMinMax: [
+            ...newDataSets.movesMinMax,
+            ...getNewMinMax(newObject.movesBoxplot),
+          ],
+          [val]: {
+            ...sets,
+            periodFiltered: isChecked
+              ? getPeriodFilteredData(sets.unfiltered, period)
+              : sets.unfiltered,
+            ...newObject,
+          },
+        }
+      })
+      setDataSets(newDataSets)
     }
   }, [
     checkedObject,
