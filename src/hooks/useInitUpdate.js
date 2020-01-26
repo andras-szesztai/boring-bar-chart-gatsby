@@ -8,7 +8,7 @@ export default function useInitUpdate({
   chartHeight,
   chartWidth,
   initVis,
-  updateVis,
+  updateVisData,
   sortKey,
   noKey
 }) {
@@ -25,9 +25,9 @@ export default function useInitUpdate({
     }
     const sortFunc  = (a, b) => noKey ? a - b : a[sortKey] - b[sortKey]
     if(init && prevData && checkIfUpdated(data.sort(sortFunc), prevData.sort(sortFunc))){
-      updateVis()
+      updateVisData()
     }
-  }, [chartHeight, chartWidth, data, init, initVis, noKey, prevData, sortKey, state, updateVis])
+  }, [chartHeight, chartWidth, data, init, initVis, noKey, prevData, sortKey, state, updateVisData])
 
   
 

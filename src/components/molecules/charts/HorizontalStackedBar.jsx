@@ -3,9 +3,11 @@ import { stack } from "d3-shape"
 import { select } from "d3-selection"
 import { scaleOrdinal, scaleLinear } from "d3-scale"
 import chroma from 'chroma-js'
+import "d3-transition"
 
 import { ChartSvg, FlexContainer, ChartArea } from "../../atoms"
 import { useDimensions, useInitUpdate } from "../../../hooks"
+import { easeCubicInOut } from "d3-ease"
 
 export default function HorizontalStackedBar({ data, margin, colorRange }) {
   const wrapperRef = useRef()
@@ -16,6 +18,8 @@ export default function HorizontalStackedBar({ data, margin, colorRange }) {
     ref: wrapperRef,
     margin,
   })
+
+  const makeData = keys => stack().keys(keys)([data])
   
   function initVis() {
     const keys = Object.keys(data)
@@ -25,44 +29,55 @@ export default function HorizontalStackedBar({ data, margin, colorRange }) {
     const xScale = scaleLinear()
       .domain([0, 1])
       .range([0, chartWidth])
-
-    const series = stack().keys(keys)([data])
-
-    select(areaRef.current)
-      .append("g")
-      .selectAll("g")
-      .data(series)
-      .join("g")
-      .attr("fill", d => colorScale(d.key))
-      .attr("stroke", d => chroma(colorScale(d.key)).darken())
-      .selectAll("rect")
-      .data(d => d)
-      .join("rect")
-      .attr("x", d => xScale(d[0]))
-      .attr("width", d => xScale(d[1]) - xScale(d[0]))
-      .attr("y", 0)
-      .attr("height", chartHeight)
-
     valueStore.current = {
       colorScale,
       xScale,
     }
+    createUpdateRectangles()
   }
 
   function updateVisData() {
-    console.log('running');
+    createUpdateRectangles()
   }
 
-  const { init } = useInitUpdate({
+  function updateVisDims() {
+    
+  }
+
+
+  function createUpdateRectangles(){
+    const { xScale, colorScale } = valueStore.current    
+    select(areaRef.current).selectAll("rect")
+    .data(makeData(Object.keys(data)))
+    .join(
+      enter => enter.append("rect")
+        .attr("fill", d => colorScale(d.key))
+        .attr("stroke", d => chroma(colorScale(d.key)).darken())
+        .attr("x", d => xScale(d[0][0]))
+        .attr("width", d => xScale(d[0][1]) - xScale(d[0][0]))
+        .attr("y", 0)
+        .attr("height", chartHeight)
+        .call(enter => enter),
+      update => update
+        .call(update => update
+          .transition()
+          .duration(300)  
+          .ease(easeCubicInOut)
+          .attr("x", d => xScale(d[0][0]))
+          .attr("width", d =>  xScale(d[0][1]) - xScale(d[0][0]))
+        )
+    );
+  }
+
+  useInitUpdate({
     data: data && Object.values(data),
     chartHeight,
     chartWidth,
     initVis,
     noKey: true,
-    updateVis: updateVisData,
+    updateVisData,
   })
 
-  function updateVisDims() {}
 
   return (
     <FlexContainer pos="relative" fullSize ref={wrapperRef}>
