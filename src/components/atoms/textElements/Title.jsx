@@ -8,10 +8,12 @@ import {
 
 const Title = styled.span`
 
-  ${({ gridArea, marginBottom, fontSize }) =>  css`
+  ${({ gridArea, marginBottom, marginRight, fontSize, paddingBottom }) => css`
     grid-area: ${gridArea};
     margin-bottom: ${themifySpace(marginBottom)}px;
+    margin-right: ${themifySpace(marginRight)}px;
     font-size: ${themifyFontSize(fontSize)};
+    padding-bottom: ${themifyFontSize(paddingBottom)}px;
   `}
   font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight)};
   color: ${({ color }) => themifyColor(color)};
@@ -20,7 +22,8 @@ const Title = styled.span`
   a {
     text-decoration: none;
     color: ${({ color }) => themifyColor(color)};
-    font-weight: ${({ anchorFontWeight }) => themifyFontWeight(anchorFontWeight)};
+    font-weight: ${({ anchorFontWeight }) =>
+      themifyFontWeight(anchorFontWeight)};
   }
 `
 
@@ -29,5 +32,5 @@ export default Title
 Title.defaultProps = {
   color: "grayDarkest",
   lineHeight: 1.2,
-  anchorFontWeight:5
+  anchorFontWeight: 5,
 }

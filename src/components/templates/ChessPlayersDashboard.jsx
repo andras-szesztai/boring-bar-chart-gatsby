@@ -12,7 +12,11 @@ import {
   SortableHandle,
   Title,
 } from "../atoms"
-import { SortableComponent, CountUpSpan, HorizontalMultiSelect } from "../molecules"
+import {
+  SortableComponent,
+  CountUpSpan,
+  HorizontalMultiSelect,
+} from "../molecules"
 import {
   ParallelBoxPlotColumn,
   HorizontalStackedBarChartContainer,
@@ -308,10 +312,14 @@ export default function({ data }) {
             <GridContainer rows="1fr 100px">
               <GridContainer rows="repeat(2, 1fr)" rowGap={0.5}>
                 {SYNCED_CHECKBOXES.map(box => (
-                  <FlexContainer
-                    direction="column"
-                    key={box}
-                  >
+                  <FlexContainer direction="column" key={box}>
+                    <FlexContainer>
+                      <Title fontWeight={3} marginBottom={2}>
+                        {box === "elo"
+                          ? "Opponent's ELO Score"
+                          : "Number of Moves"}
+                      </Title>
+                    </FlexContainer>
                     <CheckBox
                       parentChecked
                       checked={syncObject[box]}
@@ -319,14 +327,15 @@ export default function({ data }) {
                         setSyncObject(prev => ({ ...prev, [box]: !prev[box] }))
                       }
                     />
-                    <Title>Synced y-scale</Title>
+                    <Title>
+                      {syncObject[box]
+                        ? "Uniform axis range"
+                        : "Independent axis range"}
+                    </Title>
                   </FlexContainer>
                 ))}
               </GridContainer>
-              <GridContainer
-                rows="repeat(2, 50%)"
-                rowGap={0}
-              >
+              <GridContainer rows="repeat(2, 50%)" rowGap={0}>
                 <FlexContainer>
                   <HorizontalMultiSelect
                     title="Game Result for Player"
@@ -367,7 +376,9 @@ export default function({ data }) {
                 </FlexContainer>
               </GridContainer>
             </GridContainer>
-            <FlexContainer>Brush Control</FlexContainer>
+            <FlexContainer>
+              <Title fontWeight={3}>Games in the Dataset</Title>
+            </FlexContainer>
           </GridContainer>
         </GridContainer>
         <GridContainer rows="1fr 50px">
@@ -394,6 +405,7 @@ export default function({ data }) {
                           />
                         </Container>
                         <FlexContainer>
+                          {/* TODO: when hovered over show only */}
                           <SortableHandle
                             size={15}
                             horizontal
@@ -441,10 +453,7 @@ export default function({ data }) {
                       eloRange={dataSets.eloRange}
                       movesRange={dataSets.movesRange}
                     />
-                    <GridContainer
-                      rows="repeat(2, 50%)"
-                      rowGap={0}
-                    >
+                    <GridContainer rows="repeat(2, 50%)" rowGap={0}>
                       <FlexContainer direction="column">
                         <HorizontalStackedBarChartContainer
                           isFiltered={isChecked}
@@ -479,9 +488,9 @@ export default function({ data }) {
               step={1}
               allowCross={false}
               marks={{
-                1: <p>&#8249; Early games</p>,
-                2: "Mid games",
-                3: "Later games",
+                1: <Title>Early</Title>,
+                2: <Title>Mid</Title>,
+                3: <Title>Late</Title>,
               }}
               defaultValue={period}
               onChange={newPeriod => {
@@ -493,8 +502,8 @@ export default function({ data }) {
                 { backgroundColor: grayDark },
               ]}
               railStyle={{ backgroundColor: grayLightest }}
-              // activeDotStyle
-              // dotStyle
+              activeDotStyle={{ backgroundColor: grayDarkest }}
+              // dotStyle={{ backgroundColor: grayDarkest }}
             />
           </FlexContainer>
         </GridContainer>
