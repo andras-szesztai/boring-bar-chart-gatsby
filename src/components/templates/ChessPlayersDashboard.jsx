@@ -10,6 +10,7 @@ import {
   CheckBox,
   SelectAllText,
   SortableHandle,
+  Title,
 } from "../atoms"
 import { SortableComponent } from "../molecules"
 import {
@@ -20,6 +21,7 @@ import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelec
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
 import { usePrevious } from "../../hooks"
+import { max } from "d3-array"
 
 const { grayLightest, grayDarkest, grayDark } = colors
 
@@ -258,42 +260,42 @@ export default function({ data }) {
               columns="repeat(8, 1fr)"
               items={dataKeys.map(d => {
                 const dataSet = data.find(({ nameId }) => nameId === d)
+                const filteredSet = dataSets[d].periodResultFiltered
                 const isChecked = checkedObject[d]
                 return (
                   <GridContainer rows="180px 1fr 100px" key={d} fullSize>
-                    <GridContainer
-                      noGap
-                      fullSize
-                      rows="repeat(2, 1fr)"
-                      withBorder
-                    >
-                      <GridContainer noGap columns="70% 30%" withBorder>
-                        <Container pos="relative">
+                    <GridContainer noGap fullSize rows="repeat(2, 1fr)">
+                      <GridContainer noGap columns="70% 30%">
+                        <Container pos="relative" >
                           <Image
-                            style={{ maxHeight: 90 }}
+                            style={{ maxHeight: 90, borderRadius: 2 }}
                             fluid={dataSet.image.fluid}
                           />
                         </Container>
                         <FlexContainer>
-                          <SortableHandle horizontal align="flex-start" />
+                          <SortableHandle size={15} horizontal align="flex-start" />
                         </FlexContainer>
                       </GridContainer>
                       <GridContainer
                         noGap
                         rows="repeat(4, 1fr)"
                         paddingLeft={1}
+                        paddingRight={2}
                       >
                         <FlexContainer justify="flex-start">
                           {dataSet.fullName}
                         </FlexContainer>
-                        <FlexContainer justify="flex-start">
-                          No. of games:
+                        <FlexContainer justify="space-between">
+                          <span>No. of games:</span>
+                          <Title fontWeight={3}>{filteredSet.length}</Title>
                         </FlexContainer>
-                        <FlexContainer justify="flex-start">
-                          Avg. ELO:
+                        <FlexContainer justify="space-between">
+                          <span>Avg. ELO:</span>
+                          <Title fontWeight={3}>{_.meanBy(filteredSet, "player_elo").toFixed(0)}</Title>
                         </FlexContainer>
-                        <FlexContainer justify="flex-start">
-                          Max. ELO:
+                        <FlexContainer justify="space-between">
+                          <span>Max. ELO:</span>
+                          <Title fontWeight={3}>{max(filteredSet, d => d.player_elo)}</Title>
                         </FlexContainer>
                       </GridContainer>
                     </GridContainer>
