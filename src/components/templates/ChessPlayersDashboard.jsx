@@ -10,6 +10,7 @@ import {
   CheckBox,
   SelectAllText,
   SortableHandle,
+  Title,
 } from "../atoms"
 import { SortableComponent, CountUpSpan } from "../molecules"
 import {
@@ -25,6 +26,7 @@ import { max, quantile, extent } from "d3-array"
 const { grayLightest, grayDarkest, grayDark } = colors
 
 const COLOR_RANGE = ["#fc5050", "#ffd00c", "#415f77"]
+const SYNCED_CHECKBOXES = ["elo", "moves"]
 
 function getBoxPlotData(sorted) {
   const min = sorted[0]
@@ -78,6 +80,11 @@ export default function({ data }) {
     }
   }, [dataKeys, data, checkedObject])
 
+  const [syncObject, setSyncObject] = useState({
+    elo: true,
+    moves: true,
+  })
+
   const [resultCheckedObject, setResultCheckedObject] = useState({
     Lose: true,
     Draw: true,
@@ -92,7 +99,7 @@ export default function({ data }) {
   const getRange = object => ({
     ...object,
     eloRange: extent(object.eloMinMax),
-    movesRange: extent(object.movesMinMax)
+    movesRange: extent(object.movesMinMax),
   })
 
   const [dataSets, setDataSets] = useState(undefined)
@@ -115,8 +122,14 @@ export default function({ data }) {
             unfiltered: set,
             periodFiltered: set,
             periodResultFiltered: set,
+            unfilteredEloBoxPlot: {
+              ...eloBoxPlot,
+            },
             eloBoxPlot: {
               ...eloBoxPlot,
+            },
+            unfilteredMovesBoxPlot: {
+              ...movesBoxPlot,
             },
             movesBoxPlot: {
               ...movesBoxPlot,
@@ -295,8 +308,22 @@ export default function({ data }) {
           <GridContainer rows="1fr 50px">
             <GridContainer rows="1fr 100px">
               <GridContainer rows="repeat(2, 1fr)" rowGap={0.5}>
-                <FlexContainer borderColor="gray" />
-                <FlexContainer borderColor="gray" />
+                {SYNCED_CHECKBOXES.map(box => (
+                  <FlexContainer
+                    borderColor="gray"
+                    direction="column"
+                    key={box}
+                  >
+                    <CheckBox
+                      parentChecked
+                      checked={syncObject[box]}
+                      onClick={() =>
+                        setSyncObject(prev => ({ ...prev, [box]: !prev[box] }))
+                      }
+                    />
+                    <Title>Synced</Title>
+                  </FlexContainer>
+                ))}
               </GridContainer>
               <GridContainer
                 borderColor="gray"
@@ -412,7 +439,9 @@ export default function({ data }) {
                     </GridContainer>
                     <ParallelBoxPlotColumn
                       data={dataSets[d]}
-                      isFiltered={isChecked}
+                      syncObject={syncObject}
+                      eloRange={dataSets.eloRange}
+                      movesRange={dataSets.movesRange}
                     />
                     <GridContainer
                       borderColor="gray"
