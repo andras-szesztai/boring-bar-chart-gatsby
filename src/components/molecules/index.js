@@ -4,13 +4,13 @@ import {
   VerticalBoxPlot,
 } from "./charts"
 import { SortableComponent } from "./containers"
-import { VerticalMutliSelect } from "./controlElements"
+import { HorizontalMultiSelect } from "./controlElements"
 import { CountUpSpan } from "./textElemets"
 
 export {
   VerticalDropChart,
   SortableComponent,
-  VerticalMutliSelect,
+  HorizontalMultiSelect,
   HorizontalStackedBar,
   CountUpSpan,
   VerticalBoxPlot,

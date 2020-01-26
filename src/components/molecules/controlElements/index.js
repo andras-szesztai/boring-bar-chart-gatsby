@@ -1,1 +1,1 @@
-export { default as VerticalMutliSelect } from './VerticalMultiSelect'
+export { default as HorizontalMultiSelect } from './HorizontalMultiSelect'

@@ -77,55 +77,33 @@ export default function ParellelBoxPlotColumn({
     <GridContainer
       rows="repeat(2, 1fr)"
       columns="repeat(2, 1fr)"
-      rowGap={0.5}
+      rowGap={1.5}
       columnGap={0.5}
     >
       <FlexContainer>
         <VerticalBoxPlot
           domain={domains.elo}
           data={unfilteredEloBoxPlot}
-          margin={{
-            top: 5,
-            right: 25,
-            bottom: 5,
-            left: 20,
-          }}
         />
       </FlexContainer>
       <FlexContainer>
         <VerticalBoxPlot
           domain={domains.elo}
           data={eloBoxPlot}
-          margin={{
-            top: 5,
-            right: 20,
-            bottom: 5,
-            left: 25,
-          }}
+          isFiltered={!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot)}
         />
       </FlexContainer>
       <FlexContainer>
         <VerticalBoxPlot
           domain={domains.moves}
           data={unfilteredMovesBoxPlot}
-          margin={{
-            top: 5,
-            right: 25,
-            bottom: 5,
-            left: 20,
-          }}
         />
       </FlexContainer>
       <FlexContainer>
         <VerticalBoxPlot
           domain={domains.moves}
           data={movesBoxPlot}
-          margin={{
-            top: 5,
-            right: 20,
-            bottom: 5,
-            left: 25,
-          }}
+          isFiltered={!_.isEqual(unfilteredMovesBoxPlot, movesBoxPlot)}
         />
       </FlexContainer>
     </GridContainer>

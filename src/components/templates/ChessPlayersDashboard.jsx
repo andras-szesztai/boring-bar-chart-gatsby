@@ -12,12 +12,11 @@ import {
   SortableHandle,
   Title,
 } from "../atoms"
-import { SortableComponent, CountUpSpan } from "../molecules"
+import { SortableComponent, CountUpSpan, HorizontalMultiSelect } from "../molecules"
 import {
   ParallelBoxPlotColumn,
   HorizontalStackedBarChartContainer,
 } from "../organisms"
-import VerticalMultiSelect from "../molecules/controlElements/VerticalMultiSelect"
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
 import { usePrevious } from "../../hooks"
@@ -293,7 +292,7 @@ export default function({ data }) {
   ])
 
   return (
-    <FlexContainer fullScreen>
+    <FlexContainer fullScreen color="grayDarkest">
       <GridContainer
         width="95%"
         maxWidth="1440px"
@@ -320,7 +319,7 @@ export default function({ data }) {
                         setSyncObject(prev => ({ ...prev, [box]: !prev[box] }))
                       }
                     />
-                    <Title>Synced</Title>
+                    <Title>Synced y-scale</Title>
                   </FlexContainer>
                 ))}
               </GridContainer>
@@ -329,7 +328,8 @@ export default function({ data }) {
                 rowGap={0}
               >
                 <FlexContainer>
-                  <VerticalMultiSelect
+                  <HorizontalMultiSelect
+                    title="Game Result for Player"
                     values={["Lose", "Draw", "Win"]}
                     colorRange={COLOR_RANGE}
                     checkedObject={resultCheckedObject}
@@ -375,7 +375,7 @@ export default function({ data }) {
             <SortableComponent
               axis="x"
               lockAxis="x"
-              columnGap={2}
+              columnGap={3}
               fullSize
               useDragHandle
               columns="repeat(8, 1fr)"

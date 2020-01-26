@@ -24,7 +24,7 @@ const ColoredSpan = styled.span`
 `
 
 ColoredSpan.defaultProps = {
-  color: "grayDarker",
+  color: "grayDarkest",
   fontSize: 1,
 }
 

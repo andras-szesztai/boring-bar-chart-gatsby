@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import _ from "lodash"
 
 import usePrevious from "./usePrevious"
 import { checkIfUpdated } from "../utils/chartHelpers"
@@ -13,6 +14,7 @@ export default function useInitUpdate({
   sortKey,
   dataToCheck = data,
   noKey,
+  yScaleDomain,
 }) {
   const [state, setState] = useState({
     init: false,
@@ -22,6 +24,7 @@ export default function useInitUpdate({
   const prevData = usePrevious(dataToCheck)
   const prevChartWidth = usePrevious(chartWidth)
   const prevChartHeight = usePrevious(chartHeight)
+  const prevYScaleDomain = usePrevious(yScaleDomain)
   useEffect(() => {
     if (!init && chartHeight && chartWidth && data) {
       setState(prev => ({ ...prev, init: true }))
@@ -31,7 +34,8 @@ export default function useInitUpdate({
     if (
       init &&
       prevData &&
-      checkIfUpdated(dataToCheck.sort(sortFunc), prevData.sort(sortFunc))
+      (checkIfUpdated(dataToCheck.sort(sortFunc), prevData.sort(sortFunc)) ||
+        !_.isEqual(prevYScaleDomain, yScaleDomain))
     ) {
       updateVisData()
     }
@@ -52,9 +56,11 @@ export default function useInitUpdate({
     prevChartHeight,
     prevChartWidth,
     prevData,
+    prevYScaleDomain,
     sortKey,
     updateVisData,
     updateVisDims,
+    yScaleDomain,
   ])
 
   return state

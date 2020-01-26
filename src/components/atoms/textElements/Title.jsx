@@ -1,12 +1,18 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import {
   themifyFontSize,
   themifyFontWeight,
   themifyColor,
+  themifySpace,
 } from "../../../themes/mixins"
 
 const Title = styled.span`
-  font-size: ${({ fontSize }) => themifyFontSize(fontSize)};
+
+  ${({ gridArea, marginBottom, fontSize }) =>  css`
+    grid-area: ${gridArea};
+    margin-bottom: ${themifySpace(marginBottom)}px;
+    font-size: ${themifyFontSize(fontSize)};
+  `}
   font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight)};
   color: ${({ color }) => themifyColor(color)};
   line-height: ${({ lineHeight }) => lineHeight};
@@ -21,7 +27,7 @@ const Title = styled.span`
 export default Title
 
 Title.defaultProps = {
-  color: "grayDarker",
+  color: "grayDarkest",
   lineHeight: 1.2,
   anchorFontWeight:5
 }
