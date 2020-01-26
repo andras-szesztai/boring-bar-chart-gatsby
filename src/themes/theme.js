@@ -19,8 +19,12 @@ export const ease = {
 };
 
 export const transition = {
-  xs: "0.15s",
-  sm: "0.3s"
+  xs: "150ms",
+  xsNum: 150,
+  sm: "300ms",
+  smNum: 300,
+  md: "500ms",
+  mdNum: 500
 }
 
 

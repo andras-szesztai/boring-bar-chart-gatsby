@@ -1,0 +1,1 @@
+export { default as CountUpSpan } from './CountUp'

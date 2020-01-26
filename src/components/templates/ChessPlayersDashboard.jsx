@@ -12,7 +12,7 @@ import {
   SortableHandle,
   Title,
 } from "../atoms"
-import { SortableComponent } from "../molecules"
+import { SortableComponent, CountUpSpan } from "../molecules"
 import {
   ParallelBoxPlotColumn,
   HorizontalStackedBarChartContainer,
@@ -266,14 +266,18 @@ export default function({ data }) {
                   <GridContainer rows="180px 1fr 100px" key={d} fullSize>
                     <GridContainer noGap fullSize rows="repeat(2, 1fr)">
                       <GridContainer noGap columns="70% 30%">
-                        <Container pos="relative" >
+                        <Container pos="relative">
                           <Image
                             style={{ maxHeight: 90, borderRadius: 2 }}
                             fluid={dataSet.image.fluid}
                           />
                         </Container>
                         <FlexContainer>
-                          <SortableHandle size={15} horizontal align="flex-start" />
+                          <SortableHandle
+                            size={15}
+                            horizontal
+                            align="flex-start"
+                          />
                         </FlexContainer>
                       </GridContainer>
                       <GridContainer
@@ -287,15 +291,26 @@ export default function({ data }) {
                         </FlexContainer>
                         <FlexContainer justify="space-between">
                           <span>No. of games:</span>
-                          <Title fontWeight={3}>{filteredSet.length}</Title>
+                          <CountUpSpan
+                            value={+filteredSet.length}
+                            fontWeight={3}
+                          />
                         </FlexContainer>
                         <FlexContainer justify="space-between">
                           <span>Avg. ELO:</span>
-                          <Title fontWeight={3}>{_.meanBy(filteredSet, "player_elo").toFixed(0)}</Title>
+                          <CountUpSpan
+                            value={+_.meanBy(filteredSet, "player_elo").toFixed(
+                              0
+                            )}
+                            fontWeight={3}
+                          />
                         </FlexContainer>
                         <FlexContainer justify="space-between">
                           <span>Max. ELO:</span>
-                          <Title fontWeight={3}>{max(filteredSet, d => d.player_elo)}</Title>
+                          <CountUpSpan
+                            fontWeight={3}
+                            value={+max(filteredSet, d => d.player_elo)}
+                          />
                         </FlexContainer>
                       </GridContainer>
                     </GridContainer>
