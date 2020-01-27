@@ -26,7 +26,7 @@ const Container = styled.div`
     paddingLeft,
     borderRadius,
     marginBottom,
-    marginLeft
+    marginLeft,
   }) => css`
     grid-area: ${gridArea};
     text-align: ${textAlign};
@@ -41,7 +41,7 @@ const Container = styled.div`
     padding-bottom: ${themifySpace(paddingBottom)}px;
     padding-right: ${themifySpace(paddingRight)}px;
     padding-left: ${themifySpace(paddingLeft)}px;
-    border-radius:  ${themifySpace(borderRadius)}px;
+    border-radius: ${themifySpace(borderRadius)}px;
     margin-bottom: ${themifySpace(marginBottom)}px;
     margin-left: ${themifySpace(marginLeft)}px;
   `}
@@ -55,6 +55,13 @@ const Container = styled.div`
       left: ${left}px;
       top: ${top}px;
     `}
+
+    ${({ visibility }) =>
+    visibility &&
+      css`
+        transition: opacity 300ms;
+        opacity: ${visibility === "visible" ? 1 : 0};
+      `}
 
   ${({ fullScreen }) =>
     fullScreen &&

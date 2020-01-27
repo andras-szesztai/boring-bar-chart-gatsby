@@ -37,11 +37,13 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
 
   function updateVisData() {
     const { yScale } = valueStore.current
+  console.log(domain);
+  
     yScale.domain(
       domain.map((el, i) => (i ? el + getPadding() : el - getPadding()))
     )
     valueStore.current = {
-      yScale,
+      yScale
     }
     updateBoxPlot()
   }
@@ -87,6 +89,7 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
       .attr("stroke", "#fff")
   }
 
+  // TODO: fix update bug
   function updateBoxPlot(duration = mdNum) {
     const { yScale } = valueStore.current
     const chartArea = select(areaRef.current)

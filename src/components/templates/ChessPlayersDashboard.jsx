@@ -88,6 +88,8 @@ export default function({ data }) {
     moves: true,
   })
 
+  const [ mouseOver, setMouseOver ] = useState(undefined)
+
   const [resultCheckedObject, setResultCheckedObject] = useState({
     Lose: true,
     Draw: true,
@@ -395,7 +397,13 @@ export default function({ data }) {
                 const filteredSet = dataSets[d].periodResultFiltered
                 const isChecked = checkedObject[d]
                 return (
-                  <GridContainer rows="180px 1fr 100px" key={d} fullSize>
+                  <GridContainer
+                    rows="180px 1fr 100px"
+                    key={d}
+                    fullSize
+                    onMouseEnter={() => setMouseOver(d)}
+                    onMouseLeave={() => setMouseOver(undefined)}
+                  >
                     <GridContainer noGap fullSize rows="repeat(2, 1fr)">
                       <GridContainer noGap columns="70% 30%">
                         <Container pos="relative">
@@ -404,8 +412,9 @@ export default function({ data }) {
                             fluid={dataSet.image.fluid}
                           />
                         </Container>
-                        <FlexContainer>
-                          {/* TODO: when hovered over show only */}
+                        <FlexContainer
+                          visibility={mouseOver === d ? "visible" : "hidden"}
+                        >
                           <SortableHandle
                             size={15}
                             horizontal
