@@ -461,6 +461,7 @@ export default function({ data }) {
                       syncObject={syncObject}
                       eloRange={dataSets.eloRange}
                       movesRange={dataSets.movesRange}
+                      isResultsFiltered={Object.values(resultCheckedObject).includes(false)}
                     />
                     <GridContainer rows="repeat(2, 50%)" rowGap={0}>
                       <FlexContainer direction="column">

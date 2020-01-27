@@ -89,7 +89,6 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
       .attr("stroke", "#fff")
   }
 
-  // TODO: fix update bug
   function updateBoxPlot(duration = mdNum) {
     const { yScale } = valueStore.current
     const chartArea = select(areaRef.current)

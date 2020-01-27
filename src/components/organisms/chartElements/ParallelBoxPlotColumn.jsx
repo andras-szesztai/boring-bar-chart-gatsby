@@ -26,12 +26,15 @@ export default function ParellelBoxPlotColumn({
   eloRange,
   movesRange,
   syncObject,
+  isResultsFiltered
 }) {
   const prevSyncObject = usePrevious(syncObject)
   const [domains, setDomains] = useState({
     elo: undefined,
     moves: undefined,
   })
+
+  console.log(isResultsFiltered)
 
   useEffect(() => {
     if (domains && !domains.elo && syncObject && !!syncObject.elo) {
@@ -90,7 +93,8 @@ export default function ParellelBoxPlotColumn({
         <VerticalBoxPlot
           domain={domains.elo}
           data={eloBoxPlot}
-          isFiltered={!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot)}
+          // TODO: Check why it is not working Fischer Lose unchecked
+          isFiltered={isResultsFiltered}
         />
       </FlexContainer>
       <FlexContainer>
@@ -103,7 +107,8 @@ export default function ParellelBoxPlotColumn({
         <VerticalBoxPlot
           domain={domains.moves}
           data={movesBoxPlot}
-          isFiltered={!_.isEqual(unfilteredMovesBoxPlot, movesBoxPlot)}
+          // TODO: Check why it is not working Fischer Lose unchecked
+          isFiltered={isResultsFiltered}
         />
       </FlexContainer>
     </GridContainer>
