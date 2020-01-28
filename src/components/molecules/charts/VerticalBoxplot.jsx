@@ -1,9 +1,9 @@
-import React, { useRef } from "react"
+import React, { useRef, useEffect } from "react"
 import { select } from "d3-selection"
 import "d3-transition"
 
 import { FlexContainer, ChartSvg, ChartArea } from "../../atoms"
-import { useDimensions } from "../../../hooks"
+import { useDimensions, usePrevious } from "../../../hooks"
 import { transition, colors } from "../../../themes/theme"
 import { useInitUpdate } from "../../../hooks"
 import { scaleLinear } from "d3-scale"
@@ -37,13 +37,12 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
 
   function updateVisData() {
     const { yScale } = valueStore.current
-  console.log(domain);
-  
+
     yScale.domain(
       domain.map((el, i) => (i ? el + getPadding() : el - getPadding()))
     )
     valueStore.current = {
-      yScale
+      yScale,
     }
     updateBoxPlot()
   }
@@ -89,6 +88,7 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
       .attr("stroke", "#fff")
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function updateBoxPlot(duration = mdNum) {
     const { yScale } = valueStore.current
     const chartArea = select(areaRef.current)
@@ -136,6 +136,13 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
     updateVisDims,
     yScaleDomain: domain,
   })
+
+  const prevIsFiltered = usePrevious(isFiltered)
+  useEffect(() => {
+    if (init && prevIsFiltered !== isFiltered) {
+      updateBoxPlot()
+    }
+  }, [init, isFiltered, prevIsFiltered, updateBoxPlot])
 
   return (
     <FlexContainer pos="relative" fullSize ref={wrapperRef}>

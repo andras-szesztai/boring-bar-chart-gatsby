@@ -91,7 +91,7 @@ export default function ParellelBoxPlotColumn({
         <VerticalBoxPlot
           domain={domains.elo}
           data={eloBoxPlot}
-          isFiltered={!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot)}
+          isFiltered={!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot) || isResultsFiltered}
         />
       </FlexContainer>
       <FlexContainer>
@@ -104,7 +104,6 @@ export default function ParellelBoxPlotColumn({
         <VerticalBoxPlot
           domain={domains.moves}
           data={movesBoxPlot}
-          // TODO:
           isFiltered={!_.isEqual(unfilteredMovesBoxPlot, movesBoxPlot) || isResultsFiltered}
         />
       </FlexContainer>
