@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Image from "gatsby-image"
 import Range from "rc-slider/lib/Range"
 import _ from "lodash"
@@ -89,7 +89,7 @@ export default function({ data }) {
     moves: true,
   })
 
-  const [ mouseOver, setMouseOver ] = useState(undefined)
+  const [mouseOver, setMouseOver] = useState(undefined)
 
   const [resultCheckedObject, setResultCheckedObject] = useState({
     Lose: true,
@@ -298,8 +298,11 @@ export default function({ data }) {
     resultCheckedObject,
   ])
 
+  const tooltipRef = useRef()
+  const refs = useRef(_.map(new Array(8), () => React.createRef()))
+
   return (
-    <FlexContainer fullScreen color="grayDarkest" onMouseMove={e => console.log(e.screenX)}>
+    <FlexContainer fullScreen color="grayDarkest">
       <GridContainer
         width="95%"
         maxWidth="1440px"
@@ -309,10 +312,7 @@ export default function({ data }) {
         minHeight="600px"
         columns="200px 1fr"
       >
-        <TooltipContainer
-          top={10}
-          left={10}
-        />
+        <TooltipContainer refKey={tooltipRef} top={10} left={10} />
         <GridContainer rows="180px 1fr">
           <FlexContainer>Title</FlexContainer>
           <GridContainer rows="1fr 50px">
@@ -397,7 +397,7 @@ export default function({ data }) {
               fullSize
               useDragHandle
               columns="repeat(8, 1fr)"
-              items={dataKeys.map(d => {
+              items={dataKeys.map((d, i) => {
                 const dataSet = data.find(({ nameId }) => nameId === d)
                 const filteredSet = dataSets[d].periodResultFiltered
                 const isChecked = checkedObject[d]
@@ -409,7 +409,18 @@ export default function({ data }) {
                     onMouseEnter={() => setMouseOver(d)}
                     onMouseLeave={() => setMouseOver(undefined)}
                   >
-                    <GridContainer noGap fullSize rows="repeat(2, 1fr)">
+                    <GridContainer
+                      ref={refs.current[i]}
+                      noGap
+                      fullSize
+                      rows="repeat(2, 1fr)"
+                      onMouseEnter={() => {
+                        console.log(
+                          refs.current[i].current.getBoundingClientRect()
+                        )
+                        console.log(tooltipRef.current.offsetWidth)
+                      }}
+                    >
                       <GridContainer noGap columns="70% 30%">
                         <Container pos="relative">
                           <Image
@@ -466,7 +477,9 @@ export default function({ data }) {
                       syncObject={syncObject}
                       eloRange={dataSets.eloRange}
                       movesRange={dataSets.movesRange}
-                      isResultsFiltered={Object.values(resultCheckedObject).includes(false)}
+                      isResultsFiltered={Object.values(
+                        resultCheckedObject
+                      ).includes(false)}
                     />
                     <GridContainer rows="repeat(2, 50%)" rowGap={0}>
                       <FlexContainer direction="column">
