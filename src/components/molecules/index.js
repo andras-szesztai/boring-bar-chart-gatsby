@@ -3,7 +3,7 @@ import {
   HorizontalStackedBar,
   VerticalBoxPlot,
 } from "./charts"
-import { SortableComponent } from "./containers"
+import { SortableComponent, TooltipContainer } from "./containers"
 import { HorizontalMultiSelect } from "./controlElements"
 import { CountUpSpan } from "./textElemets"
 
@@ -14,4 +14,5 @@ export {
   HorizontalStackedBar,
   CountUpSpan,
   VerticalBoxPlot,
+  TooltipContainer,
 }

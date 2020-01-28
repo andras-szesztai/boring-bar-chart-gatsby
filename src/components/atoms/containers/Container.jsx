@@ -46,8 +46,8 @@ const Container = styled.div`
     margin-left: ${themifySpace(marginLeft)}px;
   `}
 
-  ${({ absPos, bottom, right, top, left }) =>
-    absPos &&
+  ${({ absPos, pos, bottom, right, top, left }) =>
+    (absPos || pos === "fixed") &&
     css`
       position: absolute;
       bottom: ${bottom}px;
@@ -57,7 +57,7 @@ const Container = styled.div`
     `}
 
     ${({ visibility }) =>
-    visibility &&
+      visibility &&
       css`
         transition: opacity 300ms;
         opacity: ${visibility === "visible" ? 1 : 0};

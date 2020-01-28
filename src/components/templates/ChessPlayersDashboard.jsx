@@ -25,6 +25,7 @@ import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
 import { usePrevious } from "../../hooks"
 import { max, quantile, extent } from "d3-array"
+import TooltipContainer from "../molecules/containers/TooltipContainer"
 
 const { grayLightest, grayDarkest, grayDark } = colors
 
@@ -298,7 +299,7 @@ export default function({ data }) {
   ])
 
   return (
-    <FlexContainer fullScreen color="grayDarkest">
+    <FlexContainer fullScreen color="grayDarkest" onMouseMove={e => console.log(e.screenX)}>
       <GridContainer
         width="95%"
         maxWidth="1440px"
@@ -308,6 +309,10 @@ export default function({ data }) {
         minHeight="600px"
         columns="200px 1fr"
       >
+        <TooltipContainer
+          top={10}
+          left={10}
+        />
         <GridContainer rows="180px 1fr">
           <FlexContainer>Title</FlexContainer>
           <GridContainer rows="1fr 50px">
