@@ -23,7 +23,7 @@ import {
 } from "../organisms"
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
-import { usePrevious } from "../../hooks"
+import { usePrevious, useArrayRefs } from "../../hooks"
 import { max, quantile, extent } from "d3-array"
 import TooltipContainer from "../molecules/containers/TooltipContainer"
 
@@ -299,7 +299,8 @@ export default function({ data }) {
   ])
 
   const tooltipRef = useRef()
-  const refs = useRef(_.map(new Array(8), () => React.createRef()))
+  const infoContainerRefs = useArrayRefs(data.length)
+  const barContainerRefs = useArrayRefs(data.length)
 
   return (
     <FlexContainer fullScreen color="grayDarkest">
@@ -410,15 +411,16 @@ export default function({ data }) {
                     onMouseLeave={() => setMouseOver(undefined)}
                   >
                     <GridContainer
-                      ref={refs.current[i]}
+                      ref={infoContainerRefs.current[i]}
                       noGap
                       fullSize
                       rows="repeat(2, 1fr)"
                       onMouseEnter={() => {
                         console.log(
-                          refs.current[i].current.getBoundingClientRect()
+                          infoContainerRefs.current[
+                            i
+                          ].current.getBoundingClientRect()
                         )
-                        console.log(tooltipRef.current.offsetWidth)
                       }}
                     >
                       <GridContainer noGap columns="70% 30%">
@@ -481,7 +483,18 @@ export default function({ data }) {
                         resultCheckedObject
                       ).includes(false)}
                     />
-                    <GridContainer rows="repeat(2, 50%)" rowGap={0}>
+                    <GridContainer
+                      ref={barContainerRefs.current[i]}
+                      rows="repeat(2, 50%)"
+                      rowGap={0}
+                      onMouseEnter={() => {
+                        console.log(
+                          barContainerRefs.current[
+                            i
+                          ].current.getBoundingClientRect()
+                        )
+                      }}
+                    >
                       <FlexContainer direction="column">
                         <HorizontalStackedBarChartContainer
                           isFiltered={isChecked}
