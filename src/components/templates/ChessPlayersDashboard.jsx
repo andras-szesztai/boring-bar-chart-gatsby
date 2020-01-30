@@ -298,9 +298,9 @@ export default function({ data }) {
     resultCheckedObject,
   ])
 
-  const tooltipRef = useRef()
   const infoContainerRefs = useArrayRefs(data.length)
   const barContainerRefs = useArrayRefs(data.length)
+  const [hoveredElement, setHoveredElement] = useState(undefined)
 
   return (
     <FlexContainer fullScreen color="grayDarkest">
@@ -313,7 +313,9 @@ export default function({ data }) {
         minHeight="600px"
         columns="200px 1fr"
       >
-        <TooltipContainer refKey={tooltipRef} top={10} left={10} />
+        <TooltipContainer hoveredElement={hoveredElement}>
+          {mouseOver}
+        </TooltipContainer>
         <GridContainer rows="180px 1fr">
           <FlexContainer>Title</FlexContainer>
           <GridContainer rows="1fr 50px">
@@ -415,13 +417,14 @@ export default function({ data }) {
                       noGap
                       fullSize
                       rows="repeat(2, 1fr)"
-                      onMouseEnter={() => {
-                        console.log(
+                      onMouseEnter={() =>
+                        setHoveredElement(
                           infoContainerRefs.current[
                             i
                           ].current.getBoundingClientRect()
                         )
-                      }}
+                      }
+                      onMouseLeave={() => setHoveredElement(undefined)}
                     >
                       <GridContainer noGap columns="70% 30%">
                         <Container pos="relative">
@@ -487,13 +490,14 @@ export default function({ data }) {
                       ref={barContainerRefs.current[i]}
                       rows="repeat(2, 50%)"
                       rowGap={0}
-                      onMouseEnter={() => {
-                        console.log(
+                      onMouseEnter={() =>
+                        setHoveredElement(
                           barContainerRefs.current[
                             i
                           ].current.getBoundingClientRect()
                         )
-                      }}
+                      }
+                      onMouseLeave={() => setHoveredElement(undefined)}
                     >
                       <FlexContainer direction="column">
                         <HorizontalStackedBarChartContainer
