@@ -12,13 +12,21 @@ const arrowPosHorizontal = (arrowTowardsLeft, arrowTowardsRight) =>
     ? `calc(100% - ${themifySpace(2)}px)`
     : "50%"
 
+const arrowPosVertical = (arrowTowardsTop, arrowTowardsBottom) =>
+  arrowTowardsTop
+    ? `${themifySpace(2)}px`
+    : arrowTowardsBottom
+    ? `calc(100% - ${themifySpace(2)}px)`
+    : "50%"
+
 const arrowStyle = css`
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-width: ${themifySpace(2)}px;
 `
 
 const TooltipContainer = styled(GridContainer)`
@@ -35,18 +43,42 @@ const TooltipContainer = styled(GridContainer)`
           pointer-events: none;
         `}
 
-  ${({ arrowOnTop, arrowTowardsLeft, arrowTowardsRight }) =>
-    arrowOnTop &&
+  ${({ arrowAtTop, arrowTowardsLeft, arrowTowardsRight }) =>
+    arrowAtTop &&
     css`
       :after {
         bottom: 100%;
         left: ${arrowPosHorizontal(arrowTowardsLeft, arrowTowardsRight)};
         ${arrowStyle}
         border-bottom-color: #88b7d5;
-        border-width: ${themifySpace(2)}px;
         margin-left: -${themifySpace(2)}px;
       }
     `}
+
+  ${({ arrowAtBottom, arrowTowardsLeft, arrowTowardsRight }) =>
+    arrowAtBottom &&
+    css`
+      :after {
+        top: 100%;
+        left: ${arrowPosHorizontal(arrowTowardsLeft, arrowTowardsRight)};
+        ${arrowStyle}
+        border-top-color: #88b7d5;
+        margin-left: -${themifySpace(2)}px;
+      }
+    `}
+
+    ${({ arrowAtRight, arrowTowardsTop, arrowTowardsBottom   }) =>
+      arrowAtRight &&
+      css`
+        :after {
+          left: 100%;
+          top: ${arrowPosVertical(arrowTowardsTop, arrowTowardsBottom )};
+          ${arrowStyle}
+          border-left-color: #88b7d5;
+          margin-top: -${themifySpace(2)}px;
+        }
+      `}
+
 `
 
 export default function Tooltip({ hoveredElement, children }) {
@@ -68,8 +100,6 @@ export default function Tooltip({ hoveredElement, children }) {
     height = hoveredElement.height
   }
 
-  console.log(top, left, width, height)
-
   return (
     <TooltipContainer
       ref={tooltipRef}
@@ -77,7 +107,7 @@ export default function Tooltip({ hoveredElement, children }) {
       pos="fixed"
       withBorder
       width={dims.width}
-      arrowOnTop
+      height="100px"
       top={top}
       left={left}
       bgColor="#fff"
