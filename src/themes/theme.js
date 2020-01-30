@@ -11,12 +11,12 @@ export const colors = {
   grayDarker: "#4C4C4C",
   grayDarkest: "#333333",
   blackLight: "#191919",
-  black: "#000000"
+  black: "#000000",
 }
 
 export const ease = {
-  easeInOutCubic: "cubic-bezier(0.645, 0.045, 0.355, 1)"
-};
+  easeInOutCubic: "cubic-bezier(0.645, 0.045, 0.355, 1)",
+}
 
 export const transition = {
   xs: "150ms",
@@ -24,9 +24,8 @@ export const transition = {
   sm: "300ms",
   smNum: 300,
   md: "500ms",
-  mdNum: 500
+  mdNum: 500,
 }
-
 
 export const fontSize = [
   "1rem",
@@ -48,7 +47,7 @@ export const fontWeight = [200, 300, 400, 500, 600, 700, 800]
 
 export const z = {
   tooltip: 50,
-  loader: 100
+  loader: 100,
 }
 
 const theme = {
@@ -58,7 +57,7 @@ const theme = {
   colors,
   ease,
   transition,
-  z
+  z,
 }
 
 export default theme
