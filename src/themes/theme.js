@@ -47,6 +47,7 @@ export const fontSize = [
 export const fontWeight = [200, 300, 400, 500, 600, 700, 800]
 
 export const z = {
+  tooltip: 50,
   loader: 100
 }
 
