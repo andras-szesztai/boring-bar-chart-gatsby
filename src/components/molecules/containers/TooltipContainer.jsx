@@ -6,6 +6,8 @@ import { GridContainer } from "../../atoms"
 import { useWindowDimensions, usePrevious } from "../../../hooks"
 import { themifyZIndex, themifySpace } from "../../../themes/mixins"
 
+const ARROW_HEIGHT = 8
+
 const arrowPosHorizontal = (arrowTowardsLeft, arrowTowardsRight) =>
   arrowTowardsLeft
     ? `${themifySpace(2)}px`
@@ -98,7 +100,7 @@ export default function Tooltip({
   hoveredElement,
   children,
   arrowColor,
-  arrowLeftRight,
+  arrowLeftRight = true,
   arrowTopBottom,
 }) {
   const { windowWidth } = useWindowDimensions()
@@ -111,26 +113,29 @@ export default function Tooltip({
     }
   }, [dims])
 
-  const [ tooltipPosition, setTooltipPosition ] = useState()
+  const [tooltipPosition, setTooltipPosition] = useState({
+    top: undefined,
+    left: undefined,
+  })
 
   const prevHooveredElement = usePrevious(hoveredElement)
   useEffect(() => {
-    if(!_.isEqual(hoveredElement, prevHooveredElement)){
-      let top, left, width, height
+    if (!_.isEqual(hoveredElement, prevHooveredElement)) {
+      let elTop, elLeft, elWidth, elHeight, tooltipLeft, tooltipTop
       if (hoveredElement) {
-        top = hoveredElement.top
-        left = hoveredElement.left
-        width = hoveredElement.width
-        height = hoveredElement.height
+        const { top, left, width, height } = hoveredElement
+        elTop = top
+        elLeft = left
+        elWidth = width
+        elHeight = height
+        // Only calculate tooltipLeft, tooltipBottom if hoveredElement
+        if (arrowLeftRight) {
+          const isLessThanMiddle = left <= windowWidth / 2
+        }
+
+        if (arrowTopBottom) {
+        }
       }
-    }
-
-    if(arrowLeftRight){
-
-    }
-
-    if(arrowTopBottom){
-      
     }
   })
 
@@ -143,9 +148,10 @@ export default function Tooltip({
       height="100px"
       // top={top}
       // left={left}
-      s
       bgColor="#fff"
       arrowColor={arrowColor}
+      arrowLeftRight={arrowLeftRight}
+      arrowTopBottom={arrowTopBottom}
     >
       {children}
     </TooltipContainer>
