@@ -43,45 +43,57 @@ const TooltipContainer = styled(GridContainer)`
           pointer-events: none;
         `}
 
-  ${({ arrowAtTop, arrowTowardsLeft, arrowTowardsRight }) =>
+  ${({ arrowAtTop, arrowTowardsLeft, arrowTowardsRight, arrowColor }) =>
     arrowAtTop &&
     css`
       :after {
         bottom: 100%;
         left: ${arrowPosHorizontal(arrowTowardsLeft, arrowTowardsRight)};
         ${arrowStyle}
-        border-bottom-color: #88b7d5;
+        border-bottom-color: ${arrowColor};
         margin-left: -${themifySpace(2)}px;
       }
     `}
 
-  ${({ arrowAtBottom, arrowTowardsLeft, arrowTowardsRight }) =>
+  ${({ arrowAtBottom, arrowTowardsLeft, arrowTowardsRight, arrowColor }) =>
     arrowAtBottom &&
     css`
       :after {
         top: 100%;
         left: ${arrowPosHorizontal(arrowTowardsLeft, arrowTowardsRight)};
         ${arrowStyle}
-        border-top-color: #88b7d5;
+        border-top-color: ${arrowColor};
         margin-left: -${themifySpace(2)}px;
       }
     `}
 
-    ${({ arrowAtRight, arrowTowardsTop, arrowTowardsBottom   }) =>
+    ${({ arrowAtRight, arrowTowardsTop, arrowTowardsBottom, arrowColor }) =>
       arrowAtRight &&
       css`
         :after {
           left: 100%;
-          top: ${arrowPosVertical(arrowTowardsTop, arrowTowardsBottom )};
+          top: ${arrowPosVertical(arrowTowardsTop, arrowTowardsBottom)};
           ${arrowStyle}
-          border-left-color: #88b7d5;
+          border-left-color: ${arrowColor};
+          margin-top: -${themifySpace(2)}px;
+        }
+      `}
+
+      ${({ arrowAtLeft, arrowTowardsTop, arrowTowardsBottom, arrowColor }) =>
+        arrowAtLeft &&
+        css`
+        :after {
+          right: 100%;
+          top: ${arrowPosVertical(arrowTowardsTop, arrowTowardsBottom)};
+          ${arrowStyle}
+          border-right-color: ${arrowColor};
           margin-top: -${themifySpace(2)}px;
         }
       `}
 
 `
 
-export default function Tooltip({ hoveredElement, children }) {
+export default function Tooltip({ hoveredElement, children, arrowColor }) {
   const { windowWidth } = useWindowDimensions()
   const [dims, setDims] = useState({ width: undefined })
   const tooltipRef = useRef()
@@ -105,12 +117,15 @@ export default function Tooltip({ hoveredElement, children }) {
       ref={tooltipRef}
       isVisible={hoveredElement}
       pos="fixed"
-      withBorder
+      arrowAtLeft
+      arrowTowardsTop
+      // arrowTowardsBottom
       width={dims.width}
       height="100px"
       top={top}
       left={left}
       bgColor="#fff"
+      arrowColor={arrowColor}
     >
       {children}
     </TooltipContainer>
@@ -119,4 +134,5 @@ export default function Tooltip({ hoveredElement, children }) {
 
 Tooltip.defaultProps = {
   bgColor: "#fff",
+  arrowColor: "#fff",
 }
