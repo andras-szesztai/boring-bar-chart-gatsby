@@ -319,8 +319,9 @@ export default function({ data }) {
           arrowLeftRight
           arrowTowardsTop
           dx={5}
+          isInteractive
         >
-          Top
+          {mouseOver}
         </TooltipContainer>
         <TooltipContainer
           hoveredElement={hoveredElementBottom}
@@ -329,7 +330,7 @@ export default function({ data }) {
           dx={5}
           dy={40}
         >
-          Bottom
+          {mouseOver}
         </TooltipContainer>
         <GridContainer rows="180px 1fr">
           <FlexContainer>Title</FlexContainer>

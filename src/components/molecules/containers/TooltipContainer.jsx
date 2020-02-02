@@ -8,6 +8,22 @@ import { themifyZIndex, themifySpace } from "../../../themes/mixins"
 
 const ARROW_HEIGHT = 8
 
+function getTooltipTimeout(t = 200) {
+  var timer
+
+  function setTooltipTimeout(func) {
+    timer = setTimeout(function() {
+      func()
+    }, t)
+  }
+
+  function stopTooltipTimeout() {
+    clearTimeout(timer)
+  }
+
+  return { setTooltipTimeout, stopTooltipTimeout }
+}
+
 const arrowPosHorizontal = (arrowTowardsLeft, arrowTowardsRight) =>
   arrowTowardsLeft
     ? `${themifySpace(3)}px`
@@ -106,6 +122,8 @@ export default function Tooltip({
   arrowTowardsBottom,
   dy,
   dx,
+  isInteractive,
+  tooltipTimeoutDuration,
 }) {
   const { windowWidth } = useWindowDimensions()
   const [tooltipDims, setTooltipDims] = useState({ width: undefined })
@@ -177,10 +195,32 @@ export default function Tooltip({
     dx,
   ])
 
+  const timeoutFunc = useRef()
+  useEffect(() => {
+    const { setTooltipTimeout, stopTooltipTimeout } = getTooltipTimeout(
+      tooltipTimeoutDuration
+    )
+    timeoutFunc.current = { setTooltipTimeout, stopTooltipTimeout }
+  }, [tooltipTimeoutDuration])
+  const [isVisible, setIsVisible] = useState()
+  const prevHoveredElement = usePrevious(hoveredElement)
+  useEffect(() => {
+    const { stopTooltipTimeout, setTooltipTimeout } = timeoutFunc.current
+    if (!prevHoveredElement && hoveredElement) {
+      isInteractive && stopTooltipTimeout()
+      setIsVisible(true)
+    }
+    if (prevHoveredElement && !hoveredElement) {
+      isInteractive
+        ? setTooltipTimeout(() => setIsVisible(false))
+        : setIsVisible(false)
+    }
+  }, [hoveredElement, isInteractive, prevHoveredElement])
+
   return (
     <TooltipContainer
       ref={tooltipRef}
-      isVisible={hoveredElement}
+      isVisible={isVisible}
       pos="fixed"
       height="150px"
       width="250px"
@@ -192,6 +232,7 @@ export default function Tooltip({
       arrowAtLeft={arrowLeftRight && tooltipPosition.arrowAtLeft}
       arrowTowardsTop={arrowTowardsTop}
       arrowTowardsBottom={arrowTowardsBottom}
+      onMouseEnter={() => console.log(timeoutFunc.current.stopTooltipTimeout)}
     >
       {children}
     </TooltipContainer>
@@ -203,4 +244,5 @@ Tooltip.defaultProps = {
   arrowColor: "#fff",
   dx: 0,
   dy: 0,
+  tooltipTimeoutDuration: 500,
 }
