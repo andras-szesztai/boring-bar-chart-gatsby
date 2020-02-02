@@ -1,10 +1,16 @@
 import React, { useRef, useEffect, useState } from "react"
 import styled, { css } from "styled-components"
 import _ from "lodash"
+import { IoIosClose } from "react-icons/io"
 
-import { GridContainer } from "../../atoms"
+import { FlexContainer } from "../../atoms"
 import { useWindowDimensions, usePrevious } from "../../../hooks"
-import { themifyZIndex, themifySpace } from "../../../themes/mixins"
+import {
+  themifyZIndex,
+  themifySpace,
+  themifyColor,
+  themifyTransition,
+} from "../../../themes/mixins"
 
 const ARROW_HEIGHT = 8
 
@@ -44,7 +50,7 @@ const arrowStyle = css`
   border-width: ${themifySpace(2)}px;
 `
 
-const TooltipContainer = styled(GridContainer)`
+const TooltipContainer = styled(FlexContainer)`
   z-index: ${themifyZIndex("tooltip")};
   filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12)) drop-shadow(0 1px 2px rgba(0,0,0,0.24));
 
@@ -109,6 +115,18 @@ const TooltipContainer = styled(GridContainer)`
 
 `
 
+const IconContainer = styled(FlexContainer)`
+  .icon {
+    fill: #333;
+    transition: fill ${themifyTransition("sm")};
+  }
+  :hover {
+    .icon {
+      fill: ${themifyColor("red")};
+    }
+  }
+`
+
 export default function Tooltip({
   hoveredElement,
   children,
@@ -121,6 +139,7 @@ export default function Tooltip({
   dx,
   isInteractive,
   bgColor,
+  borderRadius,
 }) {
   const { windowWidth } = useWindowDimensions()
   const [tooltipDims, setTooltipDims] = useState({ width: undefined })
@@ -214,6 +233,8 @@ export default function Tooltip({
     tooltipIsHoveredOver,
   ])
 
+  const closePos =
+    arrowLeftRight && !tooltipPosition.arrowAtLeft ? { left: 0 } : { right: 0 }
   return (
     <TooltipContainer
       ref={tooltipRef}
@@ -225,6 +246,7 @@ export default function Tooltip({
       left={tooltipPosition.left}
       bgColor={bgColor}
       arrowColor={arrowColor}
+      borderRadius={borderRadius}
       arrowAtRight={arrowLeftRight && !tooltipPosition.arrowAtLeft}
       arrowAtLeft={arrowLeftRight && tooltipPosition.arrowAtLeft}
       arrowTowardsTop={arrowTowardsTop}
@@ -236,6 +258,15 @@ export default function Tooltip({
         isInteractive && setTooltipIsHoveredOver(false)
       }}
     >
+      <IconContainer
+        cursor="pointer"
+        absPos
+        top={0}
+        {...closePos}
+        onClick={() => isInteractive && setIsVisible(false)}
+      >
+        <IoIosClose className="icon" size={20} />
+      </IconContainer>
       {children}
     </TooltipContainer>
   )
@@ -246,4 +277,5 @@ Tooltip.defaultProps = {
   arrowColor: "#ffffff",
   dx: 0,
   dy: 0,
+  borderRadius: 1,
 }
