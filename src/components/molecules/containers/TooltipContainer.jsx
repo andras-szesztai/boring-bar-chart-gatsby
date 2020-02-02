@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from "react"
 import styled, { css } from "styled-components"
+import _ from "lodash"
 
 import { GridContainer } from "../../atoms"
-import { useWindowDimensions } from "../../../hooks"
+import { useWindowDimensions, usePrevious } from "../../../hooks"
 import { themifyZIndex, themifySpace } from "../../../themes/mixins"
 
 const arrowPosHorizontal = (arrowTowardsLeft, arrowTowardsRight) =>
@@ -93,7 +94,13 @@ const TooltipContainer = styled(GridContainer)`
 
 `
 
-export default function Tooltip({ hoveredElement, children, arrowColor }) {
+export default function Tooltip({
+  hoveredElement,
+  children,
+  arrowColor,
+  arrowLeftRight,
+  arrowTopBottom,
+}) {
   const { windowWidth } = useWindowDimensions()
   const [dims, setDims] = useState({ width: undefined })
   const tooltipRef = useRef()
@@ -104,26 +111,39 @@ export default function Tooltip({ hoveredElement, children, arrowColor }) {
     }
   }, [dims])
 
-  let top, left, width, height
-  if (hoveredElement) {
-    top = hoveredElement.top
-    left = hoveredElement.left
-    width = hoveredElement.width
-    height = hoveredElement.height
-  }
+  const [ tooltipPosition, setTooltipPosition ] = useState()
+
+  const prevHooveredElement = usePrevious(hoveredElement)
+  useEffect(() => {
+    if(!_.isEqual(hoveredElement, prevHooveredElement)){
+      let top, left, width, height
+      if (hoveredElement) {
+        top = hoveredElement.top
+        left = hoveredElement.left
+        width = hoveredElement.width
+        height = hoveredElement.height
+      }
+    }
+
+    if(arrowLeftRight){
+
+    }
+
+    if(arrowTopBottom){
+      
+    }
+  })
 
   return (
     <TooltipContainer
       ref={tooltipRef}
       isVisible={hoveredElement}
       pos="fixed"
-      arrowAtLeft
-      arrowTowardsTop
-      // arrowTowardsBottom
       width={dims.width}
       height="100px"
-      top={top}
-      left={left}
+      // top={top}
+      // left={left}
+      s
       bgColor="#fff"
       arrowColor={arrowColor}
     >
