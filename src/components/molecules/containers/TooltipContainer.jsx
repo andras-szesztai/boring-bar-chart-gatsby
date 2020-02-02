@@ -8,20 +8,16 @@ import { themifyZIndex, themifySpace } from "../../../themes/mixins"
 
 const ARROW_HEIGHT = 8
 
-function getTooltipTimeout(t = 200) {
-  var timer
+var timer
 
-  function setTooltipTimeout(func) {
-    timer = setTimeout(function() {
-      func()
-    }, t)
-  }
+function setTooltipTimeout(func) {
+  timer = setTimeout(function() {
+    func()
+  }, 500)
+}
 
-  function stopTooltipTimeout() {
-    clearTimeout(timer)
-  }
-
-  return { setTooltipTimeout, stopTooltipTimeout }
+function stopTooltipTimeout() {
+  clearTimeout(timer)
 }
 
 const arrowPosHorizontal = (arrowTowardsLeft, arrowTowardsRight) =>
@@ -50,7 +46,8 @@ const arrowStyle = css`
 
 const TooltipContainer = styled(GridContainer)`
   z-index: ${themifyZIndex("tooltip")};
-  filter: drop-shadow(1px 1px 3px rgba(51, 51, 51, 0.45));
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12)) drop-shadow(0 1px 2px rgba(0,0,0,0.24));
+
   ${({ isVisible }) =>
     isVisible
       ? css`
@@ -123,7 +120,7 @@ export default function Tooltip({
   dy,
   dx,
   isInteractive,
-  tooltipTimeoutDuration,
+  bgColor,
 }) {
   const { windowWidth } = useWindowDimensions()
   const [tooltipDims, setTooltipDims] = useState({ width: undefined })
@@ -195,27 +192,27 @@ export default function Tooltip({
     dx,
   ])
 
-  const timeoutFunc = useRef()
-  useEffect(() => {
-    const { setTooltipTimeout, stopTooltipTimeout } = getTooltipTimeout(
-      tooltipTimeoutDuration
-    )
-    timeoutFunc.current = { setTooltipTimeout, stopTooltipTimeout }
-  }, [tooltipTimeoutDuration])
   const [isVisible, setIsVisible] = useState()
+  const [tooltipIsHoveredOver, setTooltipIsHoveredOver] = useState(false)
   const prevHoveredElement = usePrevious(hoveredElement)
+  const prevTooltipIsHoveredOver = usePrevious(tooltipIsHoveredOver)
   useEffect(() => {
-    const { stopTooltipTimeout, setTooltipTimeout } = timeoutFunc.current
-    if (!prevHoveredElement && hoveredElement) {
+    if (hoveredElement || tooltipIsHoveredOver) {
       isInteractive && stopTooltipTimeout()
       setIsVisible(true)
     }
-    if (prevHoveredElement && !hoveredElement) {
+    if (!hoveredElement && !tooltipIsHoveredOver) {
       isInteractive
         ? setTooltipTimeout(() => setIsVisible(false))
         : setIsVisible(false)
     }
-  }, [hoveredElement, isInteractive, prevHoveredElement])
+  }, [
+    hoveredElement,
+    isInteractive,
+    prevHoveredElement,
+    prevTooltipIsHoveredOver,
+    tooltipIsHoveredOver,
+  ])
 
   return (
     <TooltipContainer
@@ -226,13 +223,18 @@ export default function Tooltip({
       width="250px"
       top={tooltipPosition.top}
       left={tooltipPosition.left}
-      bgColor="#fff"
+      bgColor={bgColor}
       arrowColor={arrowColor}
       arrowAtRight={arrowLeftRight && !tooltipPosition.arrowAtLeft}
       arrowAtLeft={arrowLeftRight && tooltipPosition.arrowAtLeft}
       arrowTowardsTop={arrowTowardsTop}
       arrowTowardsBottom={arrowTowardsBottom}
-      onMouseEnter={() => console.log(timeoutFunc.current.stopTooltipTimeout)}
+      onMouseEnter={() => {
+        isInteractive && setTooltipIsHoveredOver(true)
+      }}
+      onMouseLeave={() => {
+        isInteractive && setTooltipIsHoveredOver(false)
+      }}
     >
       {children}
     </TooltipContainer>
@@ -240,9 +242,8 @@ export default function Tooltip({
 }
 
 Tooltip.defaultProps = {
-  bgColor: "#fff",
-  arrowColor: "#fff",
+  bgColor: "#ffffff",
+  arrowColor: "#ffffff",
   dx: 0,
   dy: 0,
-  tooltipTimeoutDuration: 500,
 }
