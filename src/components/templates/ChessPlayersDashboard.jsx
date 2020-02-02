@@ -313,7 +313,7 @@ export default function({ data }) {
         minHeight="600px"
         columns="200px 1fr"
       >
-        <TooltipContainer hoveredElement={hoveredElement}>
+        <TooltipContainer hoveredElement={hoveredElement} arrowLeftRight arrowTowardsTop dx={-10}>
           {mouseOver}
         </TooltipContainer>
         <GridContainer rows="180px 1fr">

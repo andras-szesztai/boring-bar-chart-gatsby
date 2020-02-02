@@ -10,16 +10,16 @@ const ARROW_HEIGHT = 8
 
 const arrowPosHorizontal = (arrowTowardsLeft, arrowTowardsRight) =>
   arrowTowardsLeft
-    ? `${themifySpace(2)}px`
+    ? `${themifySpace(3)}px`
     : arrowTowardsRight
-    ? `calc(100% - ${themifySpace(2)}px)`
+    ? `calc(100% - ${themifySpace(3)}px)`
     : "50%"
 
 const arrowPosVertical = (arrowTowardsTop, arrowTowardsBottom) =>
   arrowTowardsTop
-    ? `${themifySpace(2)}px`
+    ? `${themifySpace(3)}px`
     : arrowTowardsBottom
-    ? `calc(100% - ${themifySpace(2)}px)`
+    ? `calc(100% - ${themifySpace(3)}px)`
     : "50%"
 
 const arrowStyle = css`
@@ -100,22 +100,27 @@ export default function Tooltip({
   hoveredElement,
   children,
   arrowColor,
-  arrowLeftRight = true,
+  arrowLeftRight,
   arrowTopBottom,
+  arrowTowardsTop,
+  arrowTowardsBottom,
+  dy,
+  dx,
 }) {
   const { windowWidth } = useWindowDimensions()
-  const [dims, setDims] = useState({ width: undefined })
+  const [tooltipDims, setTooltipDims] = useState({ width: undefined })
   const tooltipRef = useRef()
   useEffect(() => {
     if (tooltipRef && tooltipRef.current) {
       const newDims = tooltipRef.current.getBoundingClientRect()
-      dims.width !== newDims.width && setDims(newDims)
+      tooltipDims.width !== newDims.width && setTooltipDims(newDims)
     }
-  }, [dims])
+  }, [tooltipDims])
 
   const [tooltipPosition, setTooltipPosition] = useState({
     top: undefined,
     left: undefined,
+    arrowAtRight: undefined,
   })
 
   const prevHooveredElement = usePrevious(hoveredElement)
@@ -124,6 +129,7 @@ export default function Tooltip({
       let elTop, elLeft, elWidth, elHeight, tooltipLeft, tooltipTop
       if (hoveredElement) {
         const { top, left, width, height } = hoveredElement
+        const { width: tooltipWidth, height: tooltipHeight } = tooltipDims
         elTop = top
         elLeft = left
         elWidth = width
@@ -131,27 +137,61 @@ export default function Tooltip({
         // Only calculate tooltipLeft, tooltipBottom if hoveredElement
         if (arrowLeftRight) {
           const isLessThanMiddle = left <= windowWidth / 2
+          const tooltipLeft = isLessThanMiddle
+            ? elLeft + (elWidth + ARROW_HEIGHT)
+            : elLeft - (tooltipWidth + ARROW_HEIGHT)
+          let tooltipTop
+          // Where to position the top?
+          if (arrowTowardsTop) {
+            tooltipTop = elTop
+          }
+          if (arrowTowardsBottom) {
+            tooltipTop = elTop - tooltipHeight
+          }
+          if (!arrowTowardsTop && !arrowTowardsBottom) {
+            tooltipTop = elTop - tooltipHeight / 2
+          }
+
+          setTooltipPosition({
+            top: tooltipTop + dy,
+            left: tooltipLeft + dx,
+            arrowAtLeft: isLessThanMiddle,
+          })
         }
 
-        if (arrowTopBottom) {
-        }
+        // TODO:
+        // if (arrowTopBottom) {
+        // }
       }
     }
-  })
+  }, [
+    hoveredElement,
+    prevHooveredElement,
+    tooltipDims,
+    arrowLeftRight,
+    arrowTopBottom,
+    windowWidth,
+    arrowTowardsTop,
+    arrowTowardsBottom,
+    dy,
+    dx,
+  ])
 
   return (
     <TooltipContainer
       ref={tooltipRef}
       isVisible={hoveredElement}
       pos="fixed"
-      width={dims.width}
       height="100px"
-      // top={top}
-      // left={left}
+      width="200px"
+      top={tooltipPosition.top}
+      left={tooltipPosition.left}
       bgColor="#fff"
       arrowColor={arrowColor}
-      arrowLeftRight={arrowLeftRight}
-      arrowTopBottom={arrowTopBottom}
+      arrowAtRight={arrowLeftRight && !tooltipPosition.arrowAtLeft}
+      arrowAtLeft={arrowLeftRight && tooltipPosition.arrowAtLeft}
+      arrowTowardsTop={arrowTowardsTop}
+      arrowTowardsBottom={arrowTowardsBottom}
     >
       {children}
     </TooltipContainer>
@@ -161,4 +201,6 @@ export default function Tooltip({
 Tooltip.defaultProps = {
   bgColor: "#fff",
   arrowColor: "#fff",
+  dx: 0,
+  dy: 0,
 }
