@@ -300,7 +300,8 @@ export default function({ data }) {
 
   const infoContainerRefs = useArrayRefs(data.length)
   const barContainerRefs = useArrayRefs(data.length)
-  const [hoveredElement, setHoveredElement] = useState(undefined)
+  const [hoveredElementTop, setHoveredElementTop] = useState(undefined)
+  const [hoveredElementBottom, setHoveredElementBottom] = useState(undefined)
 
   return (
     <FlexContainer fullScreen color="grayDarkest">
@@ -313,8 +314,22 @@ export default function({ data }) {
         minHeight="600px"
         columns="200px 1fr"
       >
-        <TooltipContainer hoveredElement={hoveredElement} arrowLeftRight arrowTowardsTop dx={-10}>
-          {mouseOver}
+        <TooltipContainer
+          hoveredElement={hoveredElementTop}
+          arrowLeftRight
+          arrowTowardsTop
+          dx={5}
+        >
+          Top
+        </TooltipContainer>
+        <TooltipContainer
+          hoveredElement={hoveredElementBottom}
+          arrowLeftRight
+          arrowTowardsBottom
+          dx={5}
+          dy={40}
+        >
+          Bottom
         </TooltipContainer>
         <GridContainer rows="180px 1fr">
           <FlexContainer>Title</FlexContainer>
@@ -418,13 +433,13 @@ export default function({ data }) {
                       fullSize
                       rows="repeat(2, 1fr)"
                       onMouseEnter={() =>
-                        setHoveredElement(
+                        setHoveredElementTop(
                           infoContainerRefs.current[
                             i
                           ].current.getBoundingClientRect()
                         )
                       }
-                      onMouseLeave={() => setHoveredElement(undefined)}
+                      onMouseLeave={() => setHoveredElementTop(undefined)}
                     >
                       <GridContainer noGap columns="70% 30%">
                         <Container pos="relative">
@@ -449,14 +464,13 @@ export default function({ data }) {
                         paddingLeft={1}
                         paddingRight={1}
                       >
-                        <FlexContainer justify="flex-start">
+                        <FlexContainer justify="flex-start" fontWeight={3} >
                           {dataSet.fullName}
                         </FlexContainer>
                         <FlexContainer justify="space-between">
                           <span>No. of games:</span>
                           <CountUpSpan
                             value={+filteredSet.length}
-                            fontWeight={3}
                           />
                         </FlexContainer>
                         <FlexContainer justify="space-between">
@@ -465,13 +479,11 @@ export default function({ data }) {
                             value={
                               +_.meanBy(filteredSet, "player_elo").toFixed(0)
                             }
-                            fontWeight={3}
                           />
                         </FlexContainer>
                         <FlexContainer justify="space-between">
                           <span>Max. ELO:</span>
                           <CountUpSpan
-                            fontWeight={3}
                             value={+max(filteredSet, d => d.player_elo)}
                           />
                         </FlexContainer>
@@ -491,13 +503,13 @@ export default function({ data }) {
                       rows="repeat(2, 50%)"
                       rowGap={0}
                       onMouseEnter={() =>
-                        setHoveredElement(
+                        setHoveredElementBottom(
                           barContainerRefs.current[
                             i
                           ].current.getBoundingClientRect()
                         )
                       }
-                      onMouseLeave={() => setHoveredElement(undefined)}
+                      onMouseLeave={() => setHoveredElementBottom(undefined)}
                     >
                       <FlexContainer direction="column">
                         <HorizontalStackedBarChartContainer

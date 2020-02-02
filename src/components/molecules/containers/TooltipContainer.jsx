@@ -138,8 +138,8 @@ export default function Tooltip({
         if (arrowLeftRight) {
           const isLessThanMiddle = left <= windowWidth / 2
           const tooltipLeft = isLessThanMiddle
-            ? elLeft + (elWidth + ARROW_HEIGHT)
-            : elLeft - (tooltipWidth + ARROW_HEIGHT)
+            ? elLeft + (elWidth + ARROW_HEIGHT) + dx
+            : elLeft - (tooltipWidth + ARROW_HEIGHT) - dx
           let tooltipTop
           // Where to position the top?
           if (arrowTowardsTop) {
@@ -154,7 +154,7 @@ export default function Tooltip({
 
           setTooltipPosition({
             top: tooltipTop + dy,
-            left: tooltipLeft + dx,
+            left: tooltipLeft,
             arrowAtLeft: isLessThanMiddle,
           })
         }
@@ -182,8 +182,8 @@ export default function Tooltip({
       ref={tooltipRef}
       isVisible={hoveredElement}
       pos="fixed"
-      height="100px"
-      width="200px"
+      height="150px"
+      width="250px"
       top={tooltipPosition.top}
       left={tooltipPosition.left}
       bgColor="#fff"
