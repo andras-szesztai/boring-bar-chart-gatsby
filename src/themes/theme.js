@@ -13,7 +13,7 @@ export const colors = {
   blackLight: "#191919",
   black: "#000000",
 
-  red: "#bc5148",
+  red: "#bc5148"
 }
 
 export const ease = {

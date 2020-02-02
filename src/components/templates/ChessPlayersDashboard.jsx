@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 import Image from "gatsby-image"
 import Range from "rc-slider/lib/Range"
 import _ from "lodash"
@@ -11,6 +11,7 @@ import {
   SelectAllText,
   SortableHandle,
   Title,
+  CarouselContainer,
 } from "../atoms"
 import {
   SortableComponent,
@@ -313,6 +314,7 @@ export default function({ data }) {
         maxHeight="720px"
         minHeight="600px"
         columns="200px 1fr"
+        position="relative"
       >
         <TooltipContainer
           hoveredElement={hoveredElementTop}
@@ -321,7 +323,10 @@ export default function({ data }) {
           dx={5}
           isInteractive
         >
-          {mouseOver}
+          <CarouselContainer>
+            <div>1</div>
+            <div>2</div>
+          </CarouselContainer>
         </TooltipContainer>
         <TooltipContainer
           hoveredElement={hoveredElementBottom}
@@ -465,14 +470,12 @@ export default function({ data }) {
                         paddingLeft={1}
                         paddingRight={1}
                       >
-                        <FlexContainer justify="flex-start" fontWeight={3} >
+                        <FlexContainer justify="flex-start" fontWeight={3}>
                           {dataSet.fullName}
                         </FlexContainer>
                         <FlexContainer justify="space-between">
                           <span>No. of games:</span>
-                          <CountUpSpan
-                            value={+filteredSet.length}
-                          />
+                          <CountUpSpan value={+filteredSet.length} />
                         </FlexContainer>
                         <FlexContainer justify="space-between">
                           <span>Avg. ELO:</span>

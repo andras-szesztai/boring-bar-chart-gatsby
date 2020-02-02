@@ -3,7 +3,7 @@ import {
   FlexContainer,
   VerticalAxisLabelContainer,
   GridContainer,
-  SortableItem,
+  SortableItem
 } from "./containers"
 import { Title, ColoredSpan } from "./textElements"
 import { NeumorphButton } from "./buttons"
