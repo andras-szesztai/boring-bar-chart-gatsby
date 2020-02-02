@@ -117,7 +117,7 @@ const TooltipContainer = styled(FlexContainer)`
 
 const IconContainer = styled(FlexContainer)`
   .icon {
-    fill: #333;
+    fill: ${themifyColor("grayDarkest")};
     transition: fill ${themifyTransition("sm")};
   }
   :hover {

@@ -22,9 +22,9 @@ const CheckBox = styled.div`
       ${themifyEase("easeInOutCubic")};
   `}
 
-  &:active {
+  /* &:active {
     transform: scale(0.6);
-  }
+  } */
 `
 
 export default function(props) {

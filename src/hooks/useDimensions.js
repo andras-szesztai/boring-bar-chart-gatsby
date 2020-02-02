@@ -21,14 +21,14 @@ export default function useDimensions({
 
   useEffect(() => {
     function getDimensions() {
-      if ((ref || parentRef) && (ref.current || parentRef.current)) {
+      if ((ref && ref.current) || (parentRef && parentRef.current)) {
         const width = parentWidth
           ? parentRef.current.offsetWidth
           : ref.current.offsetWidth
         const height = parentHeight
           ? parentRef.current.offsetHeight
           : ref.current.offsetHeight
-        
+
         if (dims.width !== width || height !== dims.height) {
           setDims({
             width,
@@ -39,11 +39,15 @@ export default function useDimensions({
         }
       }
     }
-    if (!dims.height && (ref || parentRef) && (ref.current || parentRef.current)) {
+    if (
+      !dims.height &&
+      (ref || parentRef) &&
+      (ref.current || parentRef.current)
+    ) {
       window.addEventListener("resize", getDimensions)
       getDimensions()
     }
-    // TODO: figure out how to use it 
+    // TODO: figure out how to use it
     // return  window.removeEventListener("resize", getDimensions)
   }, [dims, margin, parentHeight, parentRef, parentWidth, ref])
 

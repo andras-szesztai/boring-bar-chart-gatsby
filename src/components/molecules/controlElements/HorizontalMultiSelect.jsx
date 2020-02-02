@@ -10,10 +10,12 @@ export default function({
 }) {
   return (
     <FlexContainer direction="column">
-      <Title fontWeight={3} marginBottom={2}>{title}</Title>
+      <Title fontWeight={3} marginBottom={2}>
+        {title}
+      </Title>
       <GridContainer columns={`repeat(${values.length}, 1fr)`}>
         {values.map((val, i) => (
-          <FlexContainer direction="column">
+          <FlexContainer key={val} direction="column">
             <CheckBox
               parentChecked
               checked={checkedObject[val]}

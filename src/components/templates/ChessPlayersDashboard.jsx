@@ -11,12 +11,12 @@ import {
   SelectAllText,
   SortableHandle,
   Title,
-  CarouselContainer,
 } from "../atoms"
 import {
   SortableComponent,
   CountUpSpan,
   HorizontalMultiSelect,
+  CarouselContainer,
 } from "../molecules"
 import {
   ParallelBoxPlotColumn,
@@ -324,8 +324,10 @@ export default function({ data }) {
           isInteractive
         >
           <CarouselContainer>
-            <div>1</div>
-            <div>2</div>
+            <div>Bio</div>
+            <div>Number of games</div>
+            <div>Average ELO</div>
+            <div>Max ELO</div>
           </CarouselContainer>
         </TooltipContainer>
         <TooltipContainer
@@ -420,6 +422,8 @@ export default function({ data }) {
               columnGap={3}
               fullSize
               useDragHandle
+              // TODO: hide tooltip on Sort start!
+              onSortStart={() =>console.log('start')}
               columns="repeat(8, 1fr)"
               items={dataKeys.map((d, i) => {
                 const dataSet = data.find(({ nameId }) => nameId === d)
@@ -506,16 +510,18 @@ export default function({ data }) {
                       ref={barContainerRefs.current[i]}
                       rows="repeat(2, 50%)"
                       rowGap={0}
-                      onMouseEnter={() =>
-                        setHoveredElementBottom(
-                          barContainerRefs.current[
-                            i
-                          ].current.getBoundingClientRect()
-                        )
-                      }
-                      onMouseLeave={() => setHoveredElementBottom(undefined)}
                     >
-                      <FlexContainer direction="column">
+                      <FlexContainer
+                        direction="column"
+                        onMouseEnter={() =>
+                          setHoveredElementBottom(
+                            barContainerRefs.current[
+                              i
+                            ].current.getBoundingClientRect()
+                          )
+                        }
+                        onMouseLeave={() => setHoveredElementBottom(undefined)}
+                      >
                         <HorizontalStackedBarChartContainer
                           isFiltered={isChecked}
                           colorRange={COLOR_RANGE}
