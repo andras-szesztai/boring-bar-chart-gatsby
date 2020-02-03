@@ -12,7 +12,7 @@ const CarouselContainer = ({ children }) => {
 
   return (
     <GridContainer fullSize rows="1fr 20%">
-      <FlexContainer>
+      <FlexContainer align="flex-end">
         {children.filter((el, i) => i === activePage)}
       </FlexContainer>
       <FlexContainer fullSize>

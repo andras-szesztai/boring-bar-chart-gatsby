@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Image from "gatsby-image"
 import Range from "rc-slider/lib/Range"
 import _ from "lodash"
@@ -71,6 +71,8 @@ function checkUncheckAll(bool, keys) {
 
 export default function({ data }) {
   const [dataKeys, setDataKeys] = useState(undefined)
+  console.log(data)
+
   useEffect(() => {
     if (!dataKeys) {
       setDataKeys(data.map(({ nameId }) => nameId))
@@ -91,6 +93,7 @@ export default function({ data }) {
   })
 
   const [mouseOver, setMouseOver] = useState(undefined)
+  const mouseOverValue = useRef()
 
   const [resultCheckedObject, setResultCheckedObject] = useState({
     Lose: true,
@@ -303,6 +306,7 @@ export default function({ data }) {
   const barContainerRefs = useArrayRefs(data.length)
   const [hoveredElementTop, setHoveredElementTop] = useState(undefined)
   const [hoveredElementBottom, setHoveredElementBottom] = useState(undefined)
+  const [shouldTooltipClose, setShouldTooltipClose] = useState(false)
 
   return (
     <FlexContainer fullScreen color="grayDarkest">
@@ -322,9 +326,24 @@ export default function({ data }) {
           arrowTowardsTop
           dx={5}
           isInteractive
+          shouldClose={shouldTooltipClose}
         >
           <CarouselContainer>
-            <div>Bio</div>
+            <FlexContainer
+              paddingLeft={2}
+              paddingRight={2}
+              direction="column"
+              align="flex-start"
+            >
+              <Title marginBottom={2} fontWeight={3}>
+                Bio
+              </Title>
+              <p>
+                {mouseOverValue.current &&
+                  data.find(({ nameId }) => nameId === mouseOverValue.current)
+                    .bio.bio}
+              </p>
+            </FlexContainer>
             <div>Number of games</div>
             <div>Average ELO</div>
             <div>Max ELO</div>
@@ -422,8 +441,8 @@ export default function({ data }) {
               columnGap={3}
               fullSize
               useDragHandle
-              // TODO: hide tooltip on Sort start!
-              onSortStart={() =>console.log('start')}
+              onSortStart={() => setShouldTooltipClose(true)}
+              onSortEnd={() => setShouldTooltipClose(false)}
               columns="repeat(8, 1fr)"
               items={dataKeys.map((d, i) => {
                 const dataSet = data.find(({ nameId }) => nameId === d)
@@ -434,7 +453,10 @@ export default function({ data }) {
                     rows="180px 1fr 100px"
                     key={d}
                     fullSize
-                    onMouseEnter={() => setMouseOver(d)}
+                    onMouseEnter={() => {
+                      setMouseOver(d)
+                      mouseOverValue.current = d
+                    }}
                     onMouseLeave={() => setMouseOver(undefined)}
                   >
                     <GridContainer

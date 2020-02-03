@@ -140,6 +140,7 @@ export default function Tooltip({
   isInteractive,
   bgColor,
   borderRadius,
+  shouldClose,
 }) {
   const { windowWidth } = useWindowDimensions()
   const [tooltipDims, setTooltipDims] = useState({ width: undefined })
@@ -215,6 +216,7 @@ export default function Tooltip({
   const [tooltipIsHoveredOver, setTooltipIsHoveredOver] = useState(false)
   const prevHoveredElement = usePrevious(hoveredElement)
   const prevTooltipIsHoveredOver = usePrevious(tooltipIsHoveredOver)
+  const prevShouldClose = usePrevious(shouldClose)
   useEffect(() => {
     if (hoveredElement || tooltipIsHoveredOver) {
       isInteractive && stopTooltipTimeout()
@@ -225,11 +227,16 @@ export default function Tooltip({
         ? setTooltipTimeout(() => setIsVisible(false))
         : setIsVisible(false)
     }
+    if (prevShouldClose && shouldClose) {
+      setIsVisible(false)
+    }
   }, [
     hoveredElement,
     isInteractive,
     prevHoveredElement,
+    prevShouldClose,
     prevTooltipIsHoveredOver,
+    shouldClose,
     tooltipIsHoveredOver,
   ])
 
