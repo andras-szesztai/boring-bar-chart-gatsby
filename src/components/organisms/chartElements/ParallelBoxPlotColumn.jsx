@@ -26,7 +26,8 @@ export default function ParellelBoxPlotColumn({
   eloRange,
   movesRange,
   syncObject,
-  isResultsFiltered
+  isResultsFiltered,
+  isChecked,
 }) {
   const prevSyncObject = usePrevious(syncObject)
   const [domains, setDomains] = useState({
@@ -82,29 +83,30 @@ export default function ParellelBoxPlotColumn({
       columnGap={0.5}
     >
       <FlexContainer>
-        <VerticalBoxPlot
-          domain={domains.elo}
-          data={unfilteredEloBoxPlot}
-        />
+        <VerticalBoxPlot domain={domains.elo} data={unfilteredEloBoxPlot} />
       </FlexContainer>
       <FlexContainer>
         <VerticalBoxPlot
           domain={domains.elo}
           data={eloBoxPlot}
-          isFiltered={!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot) || isResultsFiltered}
+          isFiltered={
+            isChecked &&
+            (!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot) || isResultsFiltered)
+          }
         />
       </FlexContainer>
       <FlexContainer>
-        <VerticalBoxPlot
-          domain={domains.moves}
-          data={unfilteredMovesBoxPlot}
-        />
+        <VerticalBoxPlot domain={domains.moves} data={unfilteredMovesBoxPlot} />
       </FlexContainer>
       <FlexContainer>
         <VerticalBoxPlot
           domain={domains.moves}
           data={movesBoxPlot}
-          isFiltered={!_.isEqual(unfilteredMovesBoxPlot, movesBoxPlot) || isResultsFiltered}
+          isFiltered={
+            isChecked &&
+            (!_.isEqual(unfilteredMovesBoxPlot, movesBoxPlot) ||
+              isResultsFiltered)
+          }
         />
       </FlexContainer>
     </GridContainer>

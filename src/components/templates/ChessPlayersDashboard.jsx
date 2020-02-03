@@ -112,6 +112,7 @@ export default function({ data }) {
   })
 
   const [dataSets, setDataSets] = useState(undefined)
+  const prevDataSets = usePrevious(dataSets)
   useEffect(() => {
     if (!dataSets && dataKeys) {
       let object = { movesMinMax: [], eloMinMax: [] }
@@ -309,7 +310,7 @@ export default function({ data }) {
 
   const [sumMetrics, setSumMetrics] = useState(undefined)
   useEffect(() => {
-    if (!sumMetrics && dataKeys && dataSets) {
+    function getSumMetrics() {
       let initSumMetrics = {}
       dataKeys.forEach(d => {
         const dataset = dataSets[d].periodResultFiltered
@@ -322,9 +323,21 @@ export default function({ data }) {
           },
         }
       })
-      setSumMetrics(initSumMetrics)
+      return initSumMetrics
     }
-  }, [sumMetrics, dataKeys, dataSets])
+    if (!sumMetrics && dataKeys && dataSets) {
+      setSumMetrics(getSumMetrics())
+    }
+    if (
+      sumMetrics &&
+      !_.isEqual(
+        dataKeys.map(d => prevDataSets[d].periodResultFiltered.length),
+        dataKeys.map(d => dataSets[d].periodResultFiltered.length)
+      )
+    ) {
+      setSumMetrics(getSumMetrics())
+    }
+  }, [sumMetrics, dataKeys, dataSets, prevDataSets])
 
   return (
     <FlexContainer fullScreen color="grayDarkest">
@@ -500,7 +513,6 @@ export default function({ data }) {
               columns="repeat(8, 1fr)"
               items={dataKeys.map((d, i) => {
                 const dataSet = data.find(({ nameId }) => nameId === d)
-                const filteredSet = dataSets[d].periodResultFiltered
                 const keySumMetrics = sumMetrics && sumMetrics[d]
                 const isChecked = checkedObject[d]
                 return (
@@ -580,6 +592,7 @@ export default function({ data }) {
                       isResultsFiltered={Object.values(
                         resultCheckedObject
                       ).includes(false)}
+                      isChecked={isChecked}
                     />
                     <GridContainer
                       ref={barContainerRefs.current[i]}
