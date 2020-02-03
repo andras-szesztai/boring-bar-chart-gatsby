@@ -141,6 +141,7 @@ export default function Tooltip({
   bgColor,
   borderRadius,
   shouldClose,
+  width, height
 }) {
   const { windowWidth } = useWindowDimensions()
   const [tooltipDims, setTooltipDims] = useState({ width: undefined })
@@ -240,15 +241,13 @@ export default function Tooltip({
     tooltipIsHoveredOver,
   ])
 
-  const closePos =
-    arrowLeftRight && !tooltipPosition.arrowAtLeft ? { left: 0 } : { right: 0 }
   return (
     <TooltipContainer
       ref={tooltipRef}
       isVisible={isVisible}
       pos="fixed"
-      height="150px"
-      width="250px"
+      height={height}
+      width={width}
       top={tooltipPosition.top}
       left={tooltipPosition.left}
       bgColor={bgColor}
@@ -268,8 +267,8 @@ export default function Tooltip({
       <IconContainer
         cursor="pointer"
         absPos
-        top={0}
-        {...closePos}
+        top={1}
+        right={1} 
         onClick={() => isInteractive && setIsVisible(false)}
       >
         <IoIosClose className="icon" size={20} />

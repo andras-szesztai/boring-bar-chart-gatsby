@@ -71,7 +71,6 @@ function checkUncheckAll(bool, keys) {
 
 export default function({ data }) {
   const [dataKeys, setDataKeys] = useState(undefined)
-  console.log(data)
 
   useEffect(() => {
     if (!dataKeys) {
@@ -308,6 +307,25 @@ export default function({ data }) {
   const [hoveredElementBottom, setHoveredElementBottom] = useState(undefined)
   const [shouldTooltipClose, setShouldTooltipClose] = useState(false)
 
+  const [sumMetrics, setSumMetrics] = useState(undefined)
+  useEffect(() => {
+    if (!sumMetrics && dataKeys && dataSets) {
+      let initSumMetrics = {}
+      dataKeys.forEach(d => {
+        const dataset = dataSets[d].periodResultFiltered
+        initSumMetrics = {
+          ...initSumMetrics,
+          [d]: {
+            noOfGames: dataset.length,
+            avgElo: +_.meanBy(dataset, "player_elo").toFixed(0),
+            maxElo: +max(dataset, d => d.player_elo),
+          },
+        }
+      })
+      setSumMetrics(initSumMetrics)
+    }
+  }, [sumMetrics, dataKeys, dataSets])
+
   return (
     <FlexContainer fullScreen color="grayDarkest">
       <GridContainer
@@ -327,15 +345,18 @@ export default function({ data }) {
           dx={5}
           isInteractive
           shouldClose={shouldTooltipClose}
+          width="300px"
+          height="220px"
         >
           <CarouselContainer>
+            {/* TODO: Make it a map */}
             <FlexContainer
               paddingLeft={2}
               paddingRight={2}
               direction="column"
               align="flex-start"
             >
-              <Title marginBottom={2} fontWeight={3}>
+              <Title marginTop={1} marginBottom={2} fontWeight={3}>
                 Bio
               </Title>
               <p>
@@ -344,9 +365,42 @@ export default function({ data }) {
                     .bio.bio}
               </p>
             </FlexContainer>
-            <div>Number of games</div>
-            <div>Average ELO</div>
-            <div>Max ELO</div>
+            <FlexContainer
+              paddingLeft={2}
+              paddingRight={2}
+              direction="column"
+              justify="flex-start"
+              align="flex-start"
+              fullSize
+            >
+              <Title marginTop={1} marginBottom={2} fontWeight={3}>
+                Number of games
+              </Title>
+            </FlexContainer>
+            <FlexContainer
+              paddingLeft={2}
+              paddingRight={2}
+              direction="column"
+              justify="flex-start"
+              align="flex-start"
+              fullSize
+            >
+              <Title marginTop={1} marginBottom={2} fontWeight={3}>
+                Average of ELO score
+              </Title>
+            </FlexContainer>
+            <FlexContainer
+              paddingLeft={2}
+              paddingRight={2}
+              direction="column"
+              justify="flex-start"
+              align="flex-start"
+              fullSize
+            >
+              <Title marginTop={1} marginBottom={2} fontWeight={3}>
+                Maximum of ELO score
+              </Title>
+            </FlexContainer>
           </CarouselContainer>
         </TooltipContainer>
         <TooltipContainer
@@ -447,6 +501,7 @@ export default function({ data }) {
               items={dataKeys.map((d, i) => {
                 const dataSet = data.find(({ nameId }) => nameId === d)
                 const filteredSet = dataSets[d].periodResultFiltered
+                const keySumMetrics = sumMetrics && sumMetrics[d]
                 const isChecked = checkedObject[d]
                 return (
                   <GridContainer
@@ -496,27 +551,25 @@ export default function({ data }) {
                         paddingLeft={1}
                         paddingRight={1}
                       >
-                        <FlexContainer justify="flex-start" fontWeight={3}>
-                          {dataSet.fullName}
-                        </FlexContainer>
-                        <FlexContainer justify="space-between">
-                          <span>No. of games:</span>
-                          <CountUpSpan value={+filteredSet.length} />
-                        </FlexContainer>
-                        <FlexContainer justify="space-between">
-                          <span>Avg. ELO:</span>
-                          <CountUpSpan
-                            value={
-                              +_.meanBy(filteredSet, "player_elo").toFixed(0)
-                            }
-                          />
-                        </FlexContainer>
-                        <FlexContainer justify="space-between">
-                          <span>Max. ELO:</span>
-                          <CountUpSpan
-                            value={+max(filteredSet, d => d.player_elo)}
-                          />
-                        </FlexContainer>
+                        {keySumMetrics && (
+                          <>
+                            <FlexContainer justify="flex-start" fontWeight={3}>
+                              {dataSet.fullName}
+                            </FlexContainer>
+                            <FlexContainer justify="space-between">
+                              <span>No. of games:</span>
+                              <CountUpSpan value={+keySumMetrics.noOfGames} />
+                            </FlexContainer>
+                            <FlexContainer justify="space-between">
+                              <span>Avg. ELO:</span>
+                              <CountUpSpan value={+keySumMetrics.avgElo} />
+                            </FlexContainer>
+                            <FlexContainer justify="space-between">
+                              <span>Max. ELO:</span>
+                              <CountUpSpan value={+keySumMetrics.maxElo} />
+                            </FlexContainer>
+                          </>
+                        )}
                       </GridContainer>
                     </GridContainer>
                     <ParallelBoxPlotColumn

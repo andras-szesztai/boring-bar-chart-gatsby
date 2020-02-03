@@ -8,9 +8,17 @@ import {
 
 const Title = styled.span`
 
-  ${({ gridArea, marginBottom, marginRight, fontSize, paddingBottom }) => css`
+  ${({
+    gridArea,
+    marginBottom,
+    marginRight,
+    fontSize,
+    paddingBottom,
+    marginTop,
+  }) => css`
     grid-area: ${gridArea};
     margin-bottom: ${themifySpace(marginBottom)}px;
+    margin-top: ${themifySpace(marginTop)}px;
     margin-right: ${themifySpace(marginRight)}px;
     font-size: ${themifyFontSize(fontSize)};
     padding-bottom: ${themifyFontSize(paddingBottom)}px;
