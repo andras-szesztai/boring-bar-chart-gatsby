@@ -17,6 +17,7 @@ import {
   CountUpSpan,
   HorizontalMultiSelect,
   CarouselContainer,
+  SimpleVerticalBarChart,
 } from "../molecules"
 import {
   ParallelBoxPlotColumn,
@@ -339,8 +340,6 @@ export default function({ data }) {
     }
   }, [sumMetrics, dataKeys, dataSets, prevDataSets])
 
-  console.log(sumMetrics);
-  
   return (
     <FlexContainer fullScreen color="grayDarkest">
       <GridContainer
@@ -391,6 +390,22 @@ export default function({ data }) {
               <Title marginTop={1} marginBottom={2} fontWeight={3}>
                 Number of games
               </Title>
+              <SimpleVerticalBarChart
+                data={
+                  dataKeys &&
+                  sumMetrics &&
+                  dataKeys.map(key => ({
+                    name: key,
+                    value:
+                      Object.values(checkedObject).every(el => el) ||
+                      Object.values(checkedObject).every(el => !el) ||
+                      checkedObject[key]
+                        ? sumMetrics[key].noOfGames
+                        : 0,
+                  }))
+                }
+                highlightedValue={mouseOver}
+              />
             </FlexContainer>
             <FlexContainer
               paddingLeft={2}
