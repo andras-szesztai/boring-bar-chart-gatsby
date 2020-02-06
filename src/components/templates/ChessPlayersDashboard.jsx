@@ -404,6 +404,8 @@ export default function({ data }) {
                         : 0,
                   }))
                 }
+                xKey="name"
+                yKey="value"
                 highlightedValue={mouseOver}
               />
             </FlexContainer>
