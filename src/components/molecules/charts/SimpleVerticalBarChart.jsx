@@ -1,32 +1,33 @@
-import React, { useRef } from "react"
-import { usePrevious } from "../../../hooks"
-import { FlexContainer, ChartArea, ChartSvg } from "../../atoms"
+import React from "react"
+import { usePrevious, useChartRefs, useDimensions } from "../../../hooks"
+import ChartStarter from "./ChartStarter"
+import { transition } from "../../../themes/theme"
+
+const { mdNum } = transition
 
 export default function SimpleVerticalBarChart({
   data,
   highlightedValue,
   margin,
-  width,
-  height,
 }) {
-  
   const prevHighlightedValue = usePrevious(highlightedValue)
+  const refs = useChartRefs()
+  const dims = useDimensions({
+    ref: refs.wrapperRef,
+    margin,
+  })
 
-  const wrapperRef = useRef()
-  const svgRef = useRef()
-  const areaRef = useRef()
+  function initVis() {}
 
-  return (
-    <FlexContainer pos="relative" fullSize ref={wrapperRef}>
-      <ChartSvg absPos ref={svgRef} width={width} height={height}>
-        <ChartArea
-          ref={areaRef}
-          marginLeft={margin.left}
-          marginTop={margin.top}
-        />
-      </ChartSvg>
-    </FlexContainer>
-  )
+  function updateVisData() {}
+
+  function highlightValue() {}
+
+  function createUpdateRectangles(duration = mdNum) {}
+
+  function createUpdateXAxis() {}
+
+  return <ChartStarter refs={refs} margin={margin} dims={dims} />
 }
 
 SimpleVerticalBarChart.defaultProps = {}
