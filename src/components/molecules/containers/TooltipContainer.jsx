@@ -264,6 +264,7 @@ export default function Tooltip({
         isInteractive && setTooltipIsHoveredOver(false)
       }}
     >
+     {/* TODO: only on hover && only interactive */}
       <IconContainer
         cursor="pointer"
         absPos

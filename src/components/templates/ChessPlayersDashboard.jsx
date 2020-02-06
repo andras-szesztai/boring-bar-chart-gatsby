@@ -339,6 +339,8 @@ export default function({ data }) {
     }
   }, [sumMetrics, dataKeys, dataSets, prevDataSets])
 
+  console.log(sumMetrics);
+  
   return (
     <FlexContainer fullScreen color="grayDarkest">
       <GridContainer
@@ -359,7 +361,7 @@ export default function({ data }) {
           isInteractive
           shouldClose={shouldTooltipClose}
           width="300px"
-          height="220px"
+          height="225px"
         >
           <CarouselContainer>
             {/* TODO: Make it a map */}
@@ -422,6 +424,8 @@ export default function({ data }) {
           arrowTowardsBottom
           dx={5}
           dy={40}
+          width="300px"
+          height="100px"
         >
           {mouseOver}
         </TooltipContainer>
