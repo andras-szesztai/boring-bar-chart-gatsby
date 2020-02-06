@@ -3,6 +3,8 @@ import { scaleBand, scaleLinear } from "d3-scale"
 import { max } from "d3-array"
 import { easeCubicInOut } from "d3-ease"
 import { select } from "d3-selection"
+import { axisBottom } from "d3-axis"
+import _ from "lodash"
 
 import {
   usePrevious,
@@ -28,8 +30,6 @@ export default function SimpleVerticalBarChart({
   highlightColor,
   itemDelay,
 }) {
-  console.log(highlightedValue)
-
   const valueStore = useRef()
   const prevHighlightedValue = usePrevious(highlightedValue)
   const refs = useChartRefs()
@@ -39,7 +39,7 @@ export default function SimpleVerticalBarChart({
   })
 
   useEffect(() => {
-    if(prevHighlightedValue !== highlightedValue){
+    if (init && prevHighlightedValue !== highlightedValue) {
       highlightValue()
     }
   })
@@ -58,10 +58,20 @@ export default function SimpleVerticalBarChart({
       yScale,
     }
     createUpdateRectangles()
-    createUpdateXAxis()
+    createUpdateXAxis({ withDelay: true })
   }
 
-  function updateVisData() {}
+  function updateVisData() {
+    const { xScale, yScale } = valueStore.current
+    xScale.domain(data.map(d => d[xKey]))
+    yScale.domain([0, max(data, d => d[yKey])])
+    valueStore.current = {
+      xScale,
+      yScale,
+    }
+    createUpdateRectangles()
+    createUpdateXAxis({ duration: mdNum })
+  }
 
   function highlightValue() {
     select(refs.areaRef.current)
@@ -75,30 +85,106 @@ export default function SimpleVerticalBarChart({
     const { xScale, yScale } = valueStore.current
     select(refs.areaRef.current)
       .selectAll("rect")
-      .data(data)
-      .join(enter =>
-        enter
-          .append("rect")
-          .attr("x", d => xScale(d[xKey]))
-          .attr("y", yScale(0))
-          .attr("width", xScale.bandwidth())
-          .attr("height", 0)
-          .attr("fill", d =>
-            d[xKey] === highlightedValue ? highlightColor : defaultColor
-          )
-          .call(enter =>
-            enter
+      .data(data, d => d[xKey])
+      .join(
+        enter =>
+          enter
+            .append("rect")
+            .attr("x", d => xScale(d[xKey]))
+            .attr("y", yScale(0))
+            .attr("width", xScale.bandwidth())
+            .attr("height", 0)
+            .attr("fill", d =>
+              d[xKey] === highlightedValue ? highlightColor : defaultColor
+            )
+            .call(enter =>
+              enter
+                .transition()
+                .duration(duration)
+                .delay((_, i) => i * itemDelay)
+                .ease(easeCubicInOut)
+                .attr("y", d => yScale(d[yKey]))
+                .attr("height", d => yScale(0) - yScale(d[yKey]))
+            ),
+        update =>
+          update.call(update =>
+            update
               .transition()
               .duration(duration)
-              .delay((_, i) => i * itemDelay)
               .ease(easeCubicInOut)
+              .attr("x", d => xScale(d[xKey]))
+              .attr("width", xScale.bandwidth())
               .attr("y", d => yScale(d[yKey]))
               .attr("height", d => yScale(0) - yScale(d[yKey]))
           )
       )
   }
 
-  function createUpdateXAxis() {}
+  function createUpdateText(duration = mdNum) {
+    // const { xScale, yScale } = valueStore.current
+    // select(refs.areaRef.current)
+    //   .selectAll("text")
+    //   .data(data)
+    //   .join(
+    //     enter =>
+    //       enter
+    //         .append("text")
+    //         .attr("x", d => xScale(d[xKey]))
+    //         .attr("y", yScale(0))
+    //         .attr("width", xScale.bandwidth())
+    //         .attr("height", 0)
+    //         .attr("fill", d =>
+    //           d[xKey] === highlightedValue ? highlightColor : defaultColor
+    //         )
+    //         .call(enter =>
+    //           enter
+    //             .transition()
+    //             .duration(duration)
+    //             .delay((_, i) => i * itemDelay)
+    //             .ease(easeCubicInOut)
+    //             .attr("y", d => yScale(d[yKey]))
+    //             .attr("height", d => yScale(0) - yScale(d[yKey]))
+    //         ),
+    //     update =>
+    //       update.call(update =>
+    //         update
+    //           .transition()
+    //           .duration(duration)
+    //           .ease(easeCubicInOut)
+    //           .attr("x", d => xScale(d[xKey]))
+    //           .attr("width", xScale.bandwidth())
+    //           .attr("y", d => yScale(d[yKey]))
+    //           .attr("height", d => yScale(0) - yScale(d[yKey]))
+    //       )
+    //   )
+  }
+
+  function createUpdateXAxis({ duration = mdNum, withDelay }) {
+    // TODO: fix this part
+    const { xScale } = valueStore.current
+    select(refs.xAxisRef.current)
+      .transition()
+      .duration(duration)
+      .call(
+        axisBottom(xScale)
+          .tickFormat(d => `${_.capitalize(d)}`)
+          .tickSizeOuter(0)
+          .tickSizeInner(1)
+      )
+      .call(g => g.selectAll(".tick line").remove())
+      .call(g =>
+        g
+          .selectAll(".tick text")
+          .attr("opacity", withDelay ? 0 : 1)
+          .transition()
+          .duration(duration)
+          .delay((_, i) => (withDelay ? i * itemDelay : 0))
+          .ease(easeCubicInOut)
+          .attr("opacity", 1)
+          .attr("text-anchor", "start")
+          .attr("transform", "rotate(35)")
+      )
+  }
 
   const { init } = useInitUpdate({
     data: data && Object.values(data),
@@ -109,18 +195,26 @@ export default function SimpleVerticalBarChart({
     updateVisData,
   })
 
-  return <ChartStarter refs={refs} margin={margin} dims={dims} />
+  return (
+    <ChartStarter
+      refs={refs}
+      margin={margin}
+      dims={dims}
+      withXAxis
+      axisBottom
+    />
+  )
 }
 
 SimpleVerticalBarChart.defaultProps = {
   margin: {
-    top: 10,
-    right: 5,
-    bottom: 10,
+    top: 15,
+    right: 15,
+    bottom: 35,
     left: 5,
   },
-  paddingInner: 0.1,
-  paddingOuter: 0.1,
+  paddingInner: 0.25,
+  paddingOuter: 0.15,
   defaultColor: grayLighter,
   highlightColor: grayDarkest,
   itemDelay: 100,

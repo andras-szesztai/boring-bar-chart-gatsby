@@ -4,6 +4,7 @@ export default function() {
   const wrapperRef = useRef()
   const svgRef = useRef()
   const areaRef = useRef()
+  const xAxisRef = useRef()
 
-  return { wrapperRef, svgRef, areaRef }
+  return { wrapperRef, svgRef, areaRef, xAxisRef }
 }

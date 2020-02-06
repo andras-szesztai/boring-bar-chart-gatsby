@@ -422,6 +422,26 @@ export default function({ data }) {
               <Title marginTop={1} marginBottom={2} fontWeight={3}>
                 Average of ELO score
               </Title>
+              <SimpleVerticalBarChart
+                data={
+                  dataKeys &&
+                  sumMetrics &&
+                  dataKeys
+                    .map(key => ({
+                      name: key,
+                      value:
+                        Object.values(checkedObject).every(el => el) ||
+                        Object.values(checkedObject).every(el => !el) ||
+                        checkedObject[key]
+                          ? sumMetrics[key].avgElo
+                          : 0,
+                    }))
+                    .sort((a, b) => b.value - a.value)
+                }
+                xKey="name"
+                yKey="value"
+                highlightedValue={mouseOverValue.current}
+              />
             </FlexContainer>
             <FlexContainer
               paddingLeft={2}
@@ -434,6 +454,26 @@ export default function({ data }) {
               <Title marginTop={1} marginBottom={2} fontWeight={3}>
                 Maximum of ELO score
               </Title>
+              <SimpleVerticalBarChart
+                data={
+                  dataKeys &&
+                  sumMetrics &&
+                  dataKeys
+                    .map(key => ({
+                      name: key,
+                      value:
+                        Object.values(checkedObject).every(el => el) ||
+                        Object.values(checkedObject).every(el => !el) ||
+                        checkedObject[key]
+                          ? sumMetrics[key].maxElo
+                          : 0,
+                    }))
+                    .sort((a, b) => b.value - a.value)
+                }
+                xKey="name"
+                yKey="value"
+                highlightedValue={mouseOverValue.current}
+              />
             </FlexContainer>
           </CarouselContainer>
         </TooltipContainer>
