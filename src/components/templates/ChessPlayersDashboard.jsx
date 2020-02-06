@@ -394,19 +394,21 @@ export default function({ data }) {
                 data={
                   dataKeys &&
                   sumMetrics &&
-                  dataKeys.map(key => ({
-                    name: key,
-                    value:
-                      Object.values(checkedObject).every(el => el) ||
-                      Object.values(checkedObject).every(el => !el) ||
-                      checkedObject[key]
-                        ? sumMetrics[key].noOfGames
-                        : 0,
-                  }))
+                  dataKeys
+                    .map(key => ({
+                      name: key,
+                      value:
+                        Object.values(checkedObject).every(el => el) ||
+                        Object.values(checkedObject).every(el => !el) ||
+                        checkedObject[key]
+                          ? sumMetrics[key].noOfGames
+                          : 0,
+                    }))
+                    .sort((a, b) => b.value - a.value)
                 }
                 xKey="name"
                 yKey="value"
-                highlightedValue={mouseOver}
+                highlightedValue={mouseOverValue.current}
               />
             </FlexContainer>
             <FlexContainer
