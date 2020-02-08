@@ -362,7 +362,14 @@ export default function({ data }) {
           width="300px"
           height="225px"
         >
-          <CarouselContainer>
+          <CarouselContainer
+            pages={[
+              "Bio",
+              "Number of Games in Dataset",
+              "Average ELO Score",
+              "Maximum ELO Score",
+            ]}
+          >
             {/* TODO: Make it a map */}
             <FlexContainer
               paddingLeft={2}
@@ -388,7 +395,7 @@ export default function({ data }) {
               fullSize
             >
               <Title marginTop={1} marginBottom={2} fontWeight={3}>
-                Number of games
+                Number of Games in Dataset
               </Title>
               <SimpleVerticalBarChart
                 key="noOfGames"

@@ -1,17 +1,13 @@
 import React, { useState } from "react"
+
 import { GridContainer, FlexContainer, CheckBox } from "../../atoms"
-import { IoIosRadioButtonOff, IoIosRadioButtonOn } from "react-icons/io"
-import { colors } from "../../../themes/theme"
 
-const { grayDarkest } = colors
-
-const CarouselContainer = ({ children }) => {
+const CarouselContainer = ({ children, pages }) => {
   const [activePage, setActivePage] = useState(0)
-
-  const iconProps = { fill: grayDarkest, size: 14 }
+  const [hoveredOver, setHoveredOver] = useState(undefined)
 
   return (
-    <GridContainer fullSize rows="1fr 20%">
+    <GridContainer fullSize rows="1fr 20%" rowGap={0}>
       <FlexContainer align="flex-start">
         {children.filter((el, i) => i === activePage)}
       </FlexContainer>
@@ -23,14 +19,29 @@ const CarouselContainer = ({ children }) => {
             marginLeft={1}
             marginRight={1}
             onClick={() => setActivePage(i)}
+            direction="column"
+            pos="relative"
+            onMouseEnter={() => setHoveredOver(i)}
+            onMouseLeave={() => setHoveredOver(undefined)}
           >
+            {hoveredOver === i && (
+              <FlexContainer
+                absPos
+                bottom={20}
+                textAlign="center"
+                width="150px"
+              >
+                {pages[i]}
+              </FlexContainer>
+            )}
             {i === activePage ? (
               <CheckBox
+                id={i}
                 parentChecked
                 checked={true}
                 isRadio
                 transitionDuration={0}
-                width={10}
+                width={12}
               />
             ) : (
               <CheckBox
@@ -38,7 +49,7 @@ const CarouselContainer = ({ children }) => {
                 checked={false}
                 isRadio
                 transitionDuration={0}
-                width={10}
+                width={12}
               />
             )}
           </FlexContainer>
