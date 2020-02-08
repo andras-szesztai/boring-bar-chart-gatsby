@@ -4,6 +4,7 @@ import { max } from "d3-array"
 import { easeCubicInOut } from "d3-ease"
 import { select } from "d3-selection"
 import { axisBottom } from "d3-axis"
+import { format } from "d3-format"
 import _ from "lodash"
 
 import {
@@ -29,7 +30,9 @@ export default function SimpleVerticalBarChart({
   defaultColor,
   highlightColor,
   itemDelay,
+  textDy
 }) {
+  
   const valueStore = useRef()
   const prevHighlightedValue = usePrevious(highlightedValue)
   const refs = useChartRefs()
@@ -58,6 +61,7 @@ export default function SimpleVerticalBarChart({
       yScale,
     }
     createUpdateRectangles()
+    createUpdateText()
     createUpdateXAxis({ withDelay: true })
   }
 
@@ -67,10 +71,11 @@ export default function SimpleVerticalBarChart({
     yScale.domain([0, max(data, d => d[yKey])])
     valueStore.current = {
       xScale,
-      yScale,
+      yScale, 
     }
     createUpdateRectangles()
-    createUpdateXAxis({ duration: mdNum })
+    createUpdateText()
+    createUpdateXAxis({})
   }
 
   function highlightValue() {
@@ -121,42 +126,39 @@ export default function SimpleVerticalBarChart({
   }
 
   function createUpdateText(duration = mdNum) {
-    // const { xScale, yScale } = valueStore.current
-    // select(refs.areaRef.current)
-    //   .selectAll("text")
-    //   .data(data)
-    //   .join(
-    //     enter =>
-    //       enter
-    //         .append("text")
-    //         .attr("x", d => xScale(d[xKey]))
-    //         .attr("y", yScale(0))
-    //         .attr("width", xScale.bandwidth())
-    //         .attr("height", 0)
-    //         .attr("fill", d =>
-    //           d[xKey] === highlightedValue ? highlightColor : defaultColor
-    //         )
-    //         .call(enter =>
-    //           enter
-    //             .transition()
-    //             .duration(duration)
-    //             .delay((_, i) => i * itemDelay)
-    //             .ease(easeCubicInOut)
-    //             .attr("y", d => yScale(d[yKey]))
-    //             .attr("height", d => yScale(0) - yScale(d[yKey]))
-    //         ),
-    //     update =>
-    //       update.call(update =>
-    //         update
-    //           .transition()
-    //           .duration(duration)
-    //           .ease(easeCubicInOut)
-    //           .attr("x", d => xScale(d[xKey]))
-    //           .attr("width", xScale.bandwidth())
-    //           .attr("y", d => yScale(d[yKey]))
-    //           .attr("height", d => yScale(0) - yScale(d[yKey]))
-    //       )
-    //   )
+    const { xScale, yScale } = valueStore.current
+    select(refs.areaRef.current)
+      .selectAll("text")
+      .data(data)
+      .join(
+        enter =>
+          enter
+            .append("text")
+            .attr("x", d => xScale(d[xKey]) + xScale.bandwidth()/2)
+            .attr("y", yScale(0))
+            .attr("dy", textDy)
+            .attr("text-anchor", "middle")
+            .text(d => format(",.0f")(d[yKey]))
+            .call(enter =>
+              enter
+                .transition()
+                .duration(duration)
+                .delay((_, i) => i * itemDelay)
+                .ease(easeCubicInOut)
+                .attr("y", d => yScale(d[yKey]))
+            ),
+        update =>
+          update.call(update =>
+            update
+              .transition()
+              .duration(duration)
+              .ease(easeCubicInOut)
+              // .attr("x", d => xScale(d[xKey]))
+              // .attr("width", xScale.bandwidth())
+              // .attr("y", d => yScale(d[yKey]))
+              // .attr("height", d => yScale(0) - yScale(d[yKey]))
+          )
+      )
   }
 
   function createUpdateXAxis({ duration = mdNum, withDelay }) {
@@ -218,4 +220,5 @@ SimpleVerticalBarChart.defaultProps = {
   defaultColor: grayLighter,
   highlightColor: grayDarkest,
   itemDelay: 100,
+  textDy: 5
 }

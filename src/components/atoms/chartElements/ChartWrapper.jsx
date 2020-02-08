@@ -8,7 +8,10 @@ const ChartWrapper = styled.div`
   align-items: center;
 
   max-height: 100%;
+  height: 100%;
   max-width: 100%;
+  width: 100%;
+
 `;
 
 export default ChartWrapper

@@ -1,5 +1,5 @@
 import React from "react"
-import { FlexContainer, ChartSvg, ChartArea } from "../../atoms"
+import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
 
 export default function({ refs, dims, margin, withXAxis, axisBottom }) {
   const { wrapperRef, svgRef, areaRef, xAxisRef } = refs
@@ -7,7 +7,7 @@ export default function({ refs, dims, margin, withXAxis, axisBottom }) {
   const { left, top } = margin
 
   return (
-    <FlexContainer pos="relative" fullSize ref={wrapperRef}>
+    <ChartWrapper ref={wrapperRef}>
       <ChartSvg absPos ref={svgRef} width={width} height={height}>
         <ChartArea ref={areaRef} marginLeft={left} marginTop={top}>
           {withXAxis && (
@@ -19,6 +19,6 @@ export default function({ refs, dims, margin, withXAxis, axisBottom }) {
           )}
         </ChartArea>
       </ChartSvg>
-    </FlexContainer>
+    </ChartWrapper>
   )
 }
