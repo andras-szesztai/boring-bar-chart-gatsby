@@ -269,8 +269,8 @@ export default function Tooltip({
         <IconContainer
           cursor="pointer"
           absPos
-          top={1}
-          right={1}
+          top={4}
+          right={3}
           onClick={() => isInteractive && setIsVisible(false)}
         >
           <IoIosClose className="icon" size={20} />

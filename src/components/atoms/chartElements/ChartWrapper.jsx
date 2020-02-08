@@ -1,5 +1,5 @@
-import styled from 'styled-components'
-import { fontSize } from '../../../themes/theme';
+import styled, { css } from "styled-components"
+import { fontSize } from "../../../themes/theme"
 
 const ChartWrapper = styled.div`
   position: relative;
@@ -13,11 +13,14 @@ const ChartWrapper = styled.div`
   max-width: 100%;
   width: 100%;
 
-
+  ${({ withBorder }) =>
+    withBorder &&
+    css`
+      border: 1px solid black;
+    `}
   text {
     font-size: ${fontSize[0]};
   }
-
-`;
+`
 
 export default ChartWrapper

@@ -15,21 +15,22 @@ const CarouselContainer = ({ children, pages }) => {
         {children.map((el, i) => (
           <FlexContainer
             key={i}
-            cursor="pointer"
             marginLeft={1}
             marginRight={1}
             onClick={() => setActivePage(i)}
             direction="column"
             pos="relative"
-            onMouseEnter={() => setHoveredOver(i)}
-            onMouseLeave={() => setHoveredOver(undefined)}
+            onMouseEnter={() => i !== activePage && setHoveredOver(i)}
+            onMouseLeave={() => i !== activePage && setHoveredOver(undefined)}
           >
-            {hoveredOver === i && (
+            {hoveredOver === i && i !== activePage && (
               <FlexContainer
                 absPos
-                bottom={20}
+                bottom={16}
                 textAlign="center"
                 width="150px"
+                fontSize={1}
+                fontWeight={3}
               >
                 {pages[i]}
               </FlexContainer>
@@ -37,18 +38,20 @@ const CarouselContainer = ({ children, pages }) => {
             {i === activePage ? (
               <CheckBox
                 id={i}
+                cursor={i === activePage && "auto"}
                 parentChecked
                 checked={true}
                 isRadio
-                transitionDuration={0}
+                transitionDuration="xs"
                 width={12}
               />
             ) : (
               <CheckBox
                 parentChecked
+                cursor={i === activePage && "auto"}
                 checked={false}
                 isRadio
-                transitionDuration={0}
+                transitionDuration="xs"
                 width={12}
               />
             )}

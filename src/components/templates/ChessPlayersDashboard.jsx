@@ -33,6 +33,12 @@ const { grayLightest, grayDarkest, grayDark } = colors
 
 const COLOR_RANGE = ["#fc5050", "#ffd00c", "#415f77"]
 const SYNCED_CHECKBOXES = ["elo", "moves"]
+const CAROUSEL_PAGES = [
+  "Bio",
+  "Number of Games in Dataset",
+  "Average ELO Score",
+  "Maximum ELO Score",
+]
 
 function getBoxPlotData(sorted) {
   const min = sorted[0]
@@ -359,141 +365,65 @@ export default function({ data }) {
           dx={5}
           isInteractive
           shouldClose={shouldTooltipClose}
-          width="300px"
+          width="325px"
           height="225px"
         >
-          <CarouselContainer
-            pages={[
-              "Bio",
-              "Number of Games in Dataset",
-              "Average ELO Score",
-              "Maximum ELO Score",
-            ]}
-          >
-            {/* TODO: Make it a map */}
-            <FlexContainer
-              paddingLeft={2}
-              paddingRight={2}
-              direction="column"
-              align="flex-start"
-            >
-              <Title marginTop={1} marginBottom={2} fontWeight={3}>
-                Bio
-              </Title>
-              <p>
-                {mouseOverValue.current &&
-                  data.find(({ nameId }) => nameId === mouseOverValue.current)
-                    .bio.bio}
-              </p>
-            </FlexContainer>
-            <FlexContainer
-              paddingLeft={2}
-              paddingRight={2}
-              direction="column"
-              justify="flex-start"
-              align="flex-start"
-              fullSize
-            >
-              <Title marginTop={1} marginBottom={2} fontWeight={3}>
-                Number of Games in Dataset
-              </Title>
-              <SimpleVerticalBarChart
-                key="noOfGames"
-                data={
-                  dataKeys &&
-                  sumMetrics &&
-                  dataKeys
-                    .map(key => {
-                      const isFilteredIn =
-                        Object.values(checkedObject).every(el => el) ||
-                        Object.values(checkedObject).every(el => !el) ||
-                        checkedObject[key]
-                      return {
-                        name: key,
-                        value: isFilteredIn ? sumMetrics[key].noOfGames : 0,
-                        filteredOut: !isFilteredIn,
+          <CarouselContainer pages={CAROUSEL_PAGES}>
+            {CAROUSEL_PAGES.map((page, i) => {
+              const getIsFilteredIn = key =>
+                Object.values(checkedObject).every(el => el) ||
+                Object.values(checkedObject).every(el => !el) ||
+                checkedObject[key]
+              return (
+                <FlexContainer
+                  key={page}
+                  paddingLeft={2}
+                  paddingRight={2}
+                  direction="column"
+                  align="flex-start"
+                  justify="flex-start"
+                  width="100%"
+                  height="100%"
+                >
+                  <Title marginTop={2} marginBottom={2} fontWeight={3}>
+                    {page}
+                  </Title>
+                  {i === 0 && (
+                    <p>
+                      {mouseOverValue.current &&
+                        data.find(
+                          ({ nameId }) => nameId === mouseOverValue.current
+                        ).bio.bio}
+                    </p>
+                  )}
+                  {i === 1 && (
+                    <SimpleVerticalBarChart
+                      key={page}
+                      data={
+                        dataKeys &&
+                        sumMetrics &&
+                        dataKeys
+                          .map(key => {
+                            const isFilteredIn = getIsFilteredIn(key)
+                            return {
+                              name: key,
+                              value: isFilteredIn
+                                ? sumMetrics[key].noOfGames
+                                : 0,
+                              filteredOut: !isFilteredIn,
+                            }
+                          })
+                          .sort((a, b) => b.value - a.value)
                       }
-                    })
-                    .sort((a, b) => b.value - a.value)
-                }
-                xKey="name"
-                yKey="value"
-                highlightedValue={mouseOverValue.current}
-                transitionDuration={0}
-              />
-            </FlexContainer>
-            <FlexContainer
-              paddingLeft={2}
-              paddingRight={2}
-              direction="column"
-              justify="flex-start"
-              align="flex-start"
-              fullSize
-            >
-              <Title marginTop={1} marginBottom={2} fontWeight={3}>
-                Average of ELO score
-              </Title>
-              <SimpleVerticalBarChart
-                key="avgElo"
-                data={
-                  dataKeys &&
-                  sumMetrics &&
-                  dataKeys
-                    .map(key => {
-                      const isFilteredIn =
-                        Object.values(checkedObject).every(el => el) ||
-                        Object.values(checkedObject).every(el => !el) ||
-                        checkedObject[key]
-                      return {
-                        name: key,
-                        value: isFilteredIn ? sumMetrics[key].avgElo : 0,
-                        filteredOut: !isFilteredIn,
-                      }
-                    })
-                    .sort((a, b) => b.value - a.value)
-                }
-                xKey="name"
-                yKey="value"
-                highlightedValue={mouseOverValue.current}
-                transitionDuration={0}
-              />
-            </FlexContainer>
-            <FlexContainer
-              paddingLeft={2}
-              paddingRight={2}
-              direction="column"
-              justify="flex-start"
-              align="flex-start"
-              fullSize
-            >
-              <Title marginTop={1} marginBottom={2} fontWeight={3}>
-                Maximum of ELO score
-              </Title>
-              <SimpleVerticalBarChart
-                key="maxElo"
-                data={
-                  dataKeys &&
-                  sumMetrics &&
-                  dataKeys
-                    .map(key => {
-                      const isFilteredIn =
-                        Object.values(checkedObject).every(el => el) ||
-                        Object.values(checkedObject).every(el => !el) ||
-                        checkedObject[key]
-                      return {
-                        name: key,
-                        value: isFilteredIn ? sumMetrics[key].maxElo : 0,
-                        filteredOut: !isFilteredIn,
-                      }
-                    })
-                    .sort((a, b) => b.value - a.value)
-                }
-                xKey="name"
-                yKey="value"
-                highlightedValue={mouseOverValue.current}
-                transitionDuration={0}
-              />
-            </FlexContainer>
+                      xKey="name"
+                      yKey="value"
+                      highlightedValue={mouseOverValue.current}
+                      transitionDuration={0}
+                    />
+                  )}
+                </FlexContainer>
+              )
+            })}
           </CarouselContainer>
         </TooltipContainer>
         <TooltipContainer
@@ -502,7 +432,7 @@ export default function({ data }) {
           arrowTowardsBottom
           dx={5}
           dy={40}
-          width="300px"
+          width="325px"
           height="100px"
         >
           {mouseOver}

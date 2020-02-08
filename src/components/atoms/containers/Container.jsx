@@ -27,14 +27,14 @@ const Container = styled.div`
     borderRadius,
     marginBottom,
     marginLeft,
-    marginRight
+    marginRight,
   }) => css`
     grid-area: ${gridArea};
     text-align: ${textAlign};
     cursor: ${cursor};
     position: ${pos};
     padding: ${padding};
-    font-size: ${themifyFontSize(fontSize || 1)};
+    font-size: ${themifyFontSize(fontSize)};
     font-weight: ${themifyFontWeight(fontWeight)};
     color: ${themifyColor(fontColor)};
     background: ${bgColor};
@@ -111,4 +111,5 @@ export default Container
 
 Container.defaultProps = {
   fontColor: "grayDarkest",
+  fontSize: 1,
 }

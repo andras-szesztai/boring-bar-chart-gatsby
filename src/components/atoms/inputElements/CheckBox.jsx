@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 import styled, { css } from "styled-components"
+import chroma from "chroma-js"
+
 import {
   themifyColor,
   themifyTransition,
@@ -7,22 +9,22 @@ import {
 } from "../../../themes/mixins"
 
 const CheckBox = styled.div`
-  cursor: pointer;
   scale: 1;
 
-  ${({ width, color, isRadio, checked, transitionDuration }) => css`
+  ${({ cursor, width, color, isRadio, checked, transitionDuration }) => css`
+    cursor: ${cursor || "pointer"};
     width: ${width}px;
     height: ${width}px;
-    border: 1px solid ${color || themifyColor("grayDarkest")};
+    border: 1px solid ${themifyColor(color)};
     border-radius: ${isRadio ? width : width * 0.15}px;
-    background: ${checked
-      ? color || themifyColor("grayDarkest")
-      : "transparent"};
-    transition: all ${themifyTransition(transitionDuration)}
+    background: ${checked ? themifyColor(color) : "transparent"};
+    transition: background ${themifyTransition(transitionDuration)}
       ${themifyEase("easeInOutCubic")};
-  `}
 
-  /* &:active {
+    :hover {
+      background: ${!checked && chroma(themifyColor(color)).brighten(3)};
+    }
+  `} /* &:active {
     transform: scale(0.6);
   } */
 `
@@ -34,7 +36,7 @@ export default function(props) {
     <CheckBox
       checked={parentChecked ? checked : check}
       onClick={() => {
-        !parentChecked && setCheck(prev => !prev);
+        !parentChecked && setCheck(prev => !prev)
         handleClick && handleClick(value)
       }}
       {...props}
@@ -44,5 +46,6 @@ export default function(props) {
 
 CheckBox.defaultProps = {
   width: 15,
-  transitionDuration: "sm"
+  transitionDuration: "sm",
+  color: "grayDarkest",
 }
