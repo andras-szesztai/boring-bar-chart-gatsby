@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { GridContainer, FlexContainer } from "../../atoms"
+import { GridContainer, FlexContainer, CheckBox } from "../../atoms"
 import { IoIosRadioButtonOff, IoIosRadioButtonOn } from "react-icons/io"
 import { colors } from "../../../themes/theme"
 
@@ -25,9 +25,21 @@ const CarouselContainer = ({ children }) => {
             onClick={() => setActivePage(i)}
           >
             {i === activePage ? (
-              <IoIosRadioButtonOn {...iconProps} />
+              <CheckBox
+                parentChecked
+                checked={true}
+                isRadio
+                transitionDuration={0}
+                width={10}
+              />
             ) : (
-              <IoIosRadioButtonOff {...iconProps} />
+              <CheckBox
+                parentChecked
+                checked={false}
+                isRadio
+                transitionDuration={0}
+                width={10}
+              />
             )}
           </FlexContainer>
         ))}

@@ -9,15 +9,14 @@ export default function({ refs, dims, margin, withXAxis, axisBottom }) {
   return (
     <ChartWrapper ref={wrapperRef}>
       <ChartSvg absPos ref={svgRef} width={width} height={height}>
-        <ChartArea ref={areaRef} marginLeft={left} marginTop={top}>
-          {withXAxis && (
-            <ChartArea
-              ref={xAxisRef}
-              marginLeft={0}
-              marginTop={axisBottom ? dims.chartHeight : 0}
-            />
-          )}
-        </ChartArea>
+        {withXAxis && (
+          <ChartArea
+            ref={xAxisRef}
+            marginLeft={0}
+            marginTop={axisBottom ? top + dims.chartHeight : top}
+          />
+        )}
+        <ChartArea ref={areaRef} marginLeft={left} marginTop={top} />
       </ChartSvg>
     </ChartWrapper>
   )

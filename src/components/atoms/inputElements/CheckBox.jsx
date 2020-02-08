@@ -10,7 +10,7 @@ const CheckBox = styled.div`
   cursor: pointer;
   scale: 1;
 
-  ${({ width, color, isRadio, checked }) => css`
+  ${({ width, color, isRadio, checked, transitionDuration }) => css`
     width: ${width}px;
     height: ${width}px;
     border: 1px solid ${color || themifyColor("grayDarkest")};
@@ -18,7 +18,7 @@ const CheckBox = styled.div`
     background: ${checked
       ? color || themifyColor("grayDarkest")
       : "transparent"};
-    transition: all ${themifyTransition("sm")}
+    transition: all ${themifyTransition(transitionDuration)}
       ${themifyEase("easeInOutCubic")};
   `}
 
@@ -43,5 +43,6 @@ export default function(props) {
 }
 
 CheckBox.defaultProps = {
-  width: 15
+  width: 15,
+  transitionDuration: "sm"
 }

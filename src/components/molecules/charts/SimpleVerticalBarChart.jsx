@@ -99,18 +99,13 @@ export default function SimpleVerticalBarChart({
 
   function highlightValue() {
     const chartArea = select(refs.areaRef.current)
+    const getIsHighlighted = d => !d.filteredOut && d[xKey] === highlightedValue
     chartArea
       .selectAll("rect")
-      .attr("fill", d =>
-        !d.filteredOut && d[xKey] === highlightedValue
-          ? highlightColor
-          : defaultColor
-      )
+      .attr("fill", d => (getIsHighlighted(d) ? highlightColor : defaultColor))
     chartArea
       .selectAll(".number-text")
-      .attr("opacity", d =>
-        !d.filteredOut && d[xKey] === highlightedValue ? 1 : 0
-      )
+      .attr("opacity", d => (getIsHighlighted(d) ? 1 : 0))
   }
 
   function createUpdateRectangles(duration = transitionDuration) {
