@@ -3,6 +3,7 @@ import { extent } from "d3-array"
 import { select } from "d3-selection"
 import { interpolateNumber } from "d3-interpolate"
 import { format } from "d3-format"
+import { easeCubicInOut } from "d3-ease"
 
 export function checkIfUpdated(sortedRaw, sortedPrevRaw) {
   return sortedRaw
@@ -36,4 +37,72 @@ export function numberTween({ value, i, n, numberFormat }) {
   return function(t) {
     el.text(format(numberFormat)(index(t)))
   }
+}
+
+export function createUpdateNumberText({
+  duration,
+  textDy,
+  xScale,
+  yScale,
+  data,
+  xKey,
+  yKey,
+  ref,
+  numberFormat,
+  prefix,
+  suffix,
+  isHidden
+}) {
+  select(ref)
+    .selectAll(".number-text")
+    .data(data, d => d[xKey])
+    .join(
+      enter =>
+        enter
+          .append("text")
+          .attr("x", d => xScale(d[xKey]) + xScale.bandwidth() / 2)
+          .attr("class", "number-text")
+          .attr("y", yScale(0))
+          .attr("dy", textDy)
+          .attr("text-anchor", "middle")
+          .attr("opacity", isHidden ? 0 : 1)
+          .text(0)
+          .call(enter =>
+            enter
+              .transition()
+              .duration(duration)
+              .delay((_, i) => (i * duration) / data.length)
+              .ease(easeCubicInOut)
+              .attr("y", d => yScale(d[yKey]))
+              .tween("text", (d, i, n) =>
+                numberTween({
+                  value: d[yKey],
+                  i,
+                  n,
+                  numberFormat,
+                  prefix,
+                  suffix,
+                })
+              )
+          ),
+      update =>
+        update.call(update =>
+          update
+            .transition()
+            .duration(duration)
+            .ease(easeCubicInOut)
+            .attr("x", d => xScale(d[xKey]) + xScale.bandwidth() / 2)
+            .attr("y", d => yScale(d[yKey]))
+            .tween("text", (d, i, n) =>
+              numberTween({
+                value: d[yKey],
+                i,
+                n,
+                numberFormat,
+                prefix,
+                suffix,
+              })
+            )
+        )
+    )
 }

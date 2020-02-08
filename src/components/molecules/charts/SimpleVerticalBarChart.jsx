@@ -4,7 +4,6 @@ import { max } from "d3-array"
 import { easeCubicInOut } from "d3-ease"
 import { select } from "d3-selection"
 import { axisBottom } from "d3-axis"
-import { format } from "d3-format"
 import _ from "lodash"
 
 import {
@@ -15,7 +14,7 @@ import {
 } from "../../../hooks"
 import ChartStarter from "./ChartStarter"
 import { transition, colors } from "../../../themes/theme"
-import { numberTween } from "../../../utils/chartHelpers"
+import { createUpdateNumberText } from "../../../utils/chartHelpers"
 
 const { mdNum } = transition
 const { grayDarkest, grayLighter } = colors
@@ -30,11 +29,12 @@ export default function SimpleVerticalBarChart({
   paddingOuter,
   defaultColor,
   highlightColor,
-  itemDelay,
   textDy,
   numberFormat,
   prefix,
   suffix,
+  transitionDuration,
+  isHiddenNumberText,
 }) {
   const valueStore = useRef()
   const prevHighlightedValue = usePrevious(highlightedValue)
@@ -48,6 +48,20 @@ export default function SimpleVerticalBarChart({
     if (init && prevHighlightedValue !== highlightedValue) {
       highlightValue()
     }
+  })
+
+  const getNumberTextParams = ({ ...otherParams }) => ({
+    ...otherParams,
+    duration: transitionDuration,
+    textDy,
+    data,
+    xKey,
+    yKey,
+    ref: refs.areaRef.current,
+    numberFormat,
+    prefix,
+    suffix,
+    isHidden: isHiddenNumberText,
   })
 
   function initVis() {
@@ -64,8 +78,9 @@ export default function SimpleVerticalBarChart({
       yScale,
     }
     createUpdateRectangles()
-    createUpdateText()
+    createUpdateNumberText(getNumberTextParams({ xScale, yScale }))
     createUpdateXAxis({ withDelay: true })
+    highlightValue()
   }
 
   function updateVisData() {
@@ -77,19 +92,28 @@ export default function SimpleVerticalBarChart({
       yScale,
     }
     createUpdateRectangles()
-    createUpdateText()
+    createUpdateNumberText(getNumberTextParams({ xScale, yScale }))
     createUpdateXAxis({})
+    highlightValue()
   }
 
   function highlightValue() {
-    select(refs.areaRef.current)
+    const chartArea = select(refs.areaRef.current)
+    chartArea
       .selectAll("rect")
       .attr("fill", d =>
-        d[xKey] === highlightedValue ? highlightColor : defaultColor
+        !d.filteredOut && d[xKey] === highlightedValue
+          ? highlightColor
+          : defaultColor
+      )
+    chartArea
+      .selectAll(".number-text")
+      .attr("opacity", d =>
+        !d.filteredOut && d[xKey] === highlightedValue ? 1 : 0
       )
   }
 
-  function createUpdateRectangles(duration = mdNum) {
+  function createUpdateRectangles(duration = transitionDuration) {
     const { xScale, yScale } = valueStore.current
     select(refs.areaRef.current)
       .selectAll("rect")
@@ -109,7 +133,7 @@ export default function SimpleVerticalBarChart({
               enter
                 .transition()
                 .duration(duration)
-                .delay((_, i) => i * itemDelay)
+                .delay((_, i) => (i * transitionDuration) / data.length)
                 .ease(easeCubicInOut)
                 .attr("y", d => yScale(d[yKey]))
                 .attr("height", d => yScale(0) - yScale(d[yKey]))
@@ -128,63 +152,7 @@ export default function SimpleVerticalBarChart({
       )
   }
 
-  function createUpdateText(duration = mdNum) {
-    const { xScale, yScale } = valueStore.current
-    console.log(data)
-    select(refs.areaRef.current)
-      .selectAll(".label-text")
-      .data(data, d => d[xKey])
-      .join(
-        enter =>
-          enter
-            .append("text")
-            .attr("x", d => xScale(d[xKey]) + xScale.bandwidth() / 2)
-            .attr("class", "label-text")
-            .attr("y", yScale(0))
-            .attr("dy", textDy)
-            .attr("text-anchor", "middle")
-            .text(0)
-            .call(enter =>
-              enter
-                .transition()
-                .duration(duration)
-                .delay((_, i) => i * itemDelay)
-                .ease(easeCubicInOut)
-                .attr("y", d => yScale(d[yKey]))
-                .tween("text", (d, i, n) =>
-                  numberTween({
-                    value: d[yKey],
-                    i,
-                    n,
-                    numberFormat,
-                    prefix,
-                    suffix,
-                  })
-                )
-            ),
-        update =>
-          update.call(update =>
-            update
-              .transition()
-              .duration(duration)
-              .ease(easeCubicInOut)
-              .attr("x", d => xScale(d[xKey]) + xScale.bandwidth() / 2)
-              .attr("y", d => yScale(d[yKey]))
-              .tween("text", (d, i, n) =>
-                numberTween({
-                  value: d[yKey],
-                  i,
-                  n,
-                  numberFormat,
-                  prefix,
-                  suffix,
-                })
-              )
-          )
-      )
-  }
-
-  function createUpdateXAxis({ duration = mdNum, withDelay }) {
+  function createUpdateXAxis({ duration = transitionDuration, withDelay }) {
     const { xScale } = valueStore.current
     select(refs.xAxisRef.current)
       .transition()
@@ -196,13 +164,14 @@ export default function SimpleVerticalBarChart({
           .tickSizeInner(1)
       )
       .call(g => g.selectAll(".tick line").remove())
+      .call(g => g.select(".domain").attr("stroke", highlightColor))
       .call(g =>
         g
           .selectAll(".tick text")
           .attr("opacity", withDelay ? 0 : 1)
           .transition()
           .duration(duration)
-          .delay((_, i) => (withDelay ? i * itemDelay : 0))
+          .delay((_, i) => (withDelay ? transitionDuration / data.length : 0))
           .ease(easeCubicInOut)
           .attr("opacity", 1)
           .attr("text-anchor", "start")
@@ -241,7 +210,8 @@ SimpleVerticalBarChart.defaultProps = {
   paddingOuter: 0.15,
   defaultColor: grayLighter,
   highlightColor: grayDarkest,
-  itemDelay: 100,
   textDy: -2,
   numberFormat: ",.0f",
+  transitionDuration: mdNum,
+  isHiddenNumberText: true,
 }

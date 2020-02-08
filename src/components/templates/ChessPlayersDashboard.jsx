@@ -391,24 +391,28 @@ export default function({ data }) {
                 Number of games
               </Title>
               <SimpleVerticalBarChart
+                key="noOfGames"
                 data={
                   dataKeys &&
                   sumMetrics &&
                   dataKeys
-                    .map(key => ({
-                      name: key,
-                      value:
+                    .map(key => {
+                      const isFilteredIn =
                         Object.values(checkedObject).every(el => el) ||
                         Object.values(checkedObject).every(el => !el) ||
                         checkedObject[key]
-                          ? sumMetrics[key].noOfGames
-                          : 0,
-                    }))
+                      return {
+                        name: key,
+                        value: isFilteredIn ? sumMetrics[key].noOfGames : 0,
+                        filteredOut: !isFilteredIn,
+                      }
+                    })
                     .sort((a, b) => b.value - a.value)
                 }
                 xKey="name"
                 yKey="value"
                 highlightedValue={mouseOverValue.current}
+                transitionDuration={0}
               />
             </FlexContainer>
             <FlexContainer
@@ -423,24 +427,28 @@ export default function({ data }) {
                 Average of ELO score
               </Title>
               <SimpleVerticalBarChart
+                key="avgElo"
                 data={
                   dataKeys &&
                   sumMetrics &&
                   dataKeys
-                    .map(key => ({
-                      name: key,
-                      value:
+                    .map(key => {
+                      const isFilteredIn =
                         Object.values(checkedObject).every(el => el) ||
                         Object.values(checkedObject).every(el => !el) ||
                         checkedObject[key]
-                          ? sumMetrics[key].avgElo
-                          : 0,
-                    }))
+                      return {
+                        name: key,
+                        value: isFilteredIn ? sumMetrics[key].avgElo : 0,
+                        filteredOut: !isFilteredIn,
+                      }
+                    })
                     .sort((a, b) => b.value - a.value)
                 }
                 xKey="name"
                 yKey="value"
                 highlightedValue={mouseOverValue.current}
+                transitionDuration={0}
               />
             </FlexContainer>
             <FlexContainer
@@ -455,24 +463,28 @@ export default function({ data }) {
                 Maximum of ELO score
               </Title>
               <SimpleVerticalBarChart
+                key="maxElo"
                 data={
                   dataKeys &&
                   sumMetrics &&
                   dataKeys
-                    .map(key => ({
-                      name: key,
-                      value:
+                    .map(key => {
+                      const isFilteredIn =
                         Object.values(checkedObject).every(el => el) ||
                         Object.values(checkedObject).every(el => !el) ||
                         checkedObject[key]
-                          ? sumMetrics[key].maxElo
-                          : 0,
-                    }))
+                      return {
+                        name: key,
+                        value: isFilteredIn ? sumMetrics[key].maxElo : 0,
+                        filteredOut: !isFilteredIn,
+                      }
+                    })
                     .sort((a, b) => b.value - a.value)
                 }
                 xKey="name"
                 yKey="value"
                 highlightedValue={mouseOverValue.current}
+                transitionDuration={0}
               />
             </FlexContainer>
           </CarouselContainer>
