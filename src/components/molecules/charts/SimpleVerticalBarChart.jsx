@@ -15,6 +15,7 @@ import {
 } from "../../../hooks"
 import ChartStarter from "./ChartStarter"
 import { transition, colors } from "../../../themes/theme"
+import { numberTween } from "../../../utils/chartHelpers"
 
 const { mdNum } = transition
 const { grayDarkest, grayLighter } = colors
@@ -30,9 +31,11 @@ export default function SimpleVerticalBarChart({
   defaultColor,
   highlightColor,
   itemDelay,
-  textDy
+  textDy,
+  numberFormat,
+  prefix,
+  suffix,
 }) {
-  
   const valueStore = useRef()
   const prevHighlightedValue = usePrevious(highlightedValue)
   const refs = useChartRefs()
@@ -71,7 +74,7 @@ export default function SimpleVerticalBarChart({
     yScale.domain([0, max(data, d => d[yKey])])
     valueStore.current = {
       xScale,
-      yScale, 
+      yScale,
     }
     createUpdateRectangles()
     createUpdateText()
@@ -127,18 +130,20 @@ export default function SimpleVerticalBarChart({
 
   function createUpdateText(duration = mdNum) {
     const { xScale, yScale } = valueStore.current
+    console.log(data)
     select(refs.areaRef.current)
-      .selectAll("text")
-      .data(data)
+      .selectAll(".label-text")
+      .data(data, d => d[xKey])
       .join(
         enter =>
           enter
             .append("text")
-            .attr("x", d => xScale(d[xKey]) + xScale.bandwidth()/2)
+            .attr("x", d => xScale(d[xKey]) + xScale.bandwidth() / 2)
+            .attr("class", "label-text")
             .attr("y", yScale(0))
             .attr("dy", textDy)
             .attr("text-anchor", "middle")
-            .text(d => format(",.0f")(d[yKey]))
+            .text(0)
             .call(enter =>
               enter
                 .transition()
@@ -146,6 +151,16 @@ export default function SimpleVerticalBarChart({
                 .delay((_, i) => i * itemDelay)
                 .ease(easeCubicInOut)
                 .attr("y", d => yScale(d[yKey]))
+                .tween("text", (d, i, n) =>
+                  numberTween({
+                    value: d[yKey],
+                    i,
+                    n,
+                    numberFormat,
+                    prefix,
+                    suffix,
+                  })
+                )
             ),
         update =>
           update.call(update =>
@@ -153,16 +168,23 @@ export default function SimpleVerticalBarChart({
               .transition()
               .duration(duration)
               .ease(easeCubicInOut)
-              // .attr("x", d => xScale(d[xKey]))
-              // .attr("width", xScale.bandwidth())
-              // .attr("y", d => yScale(d[yKey]))
-              // .attr("height", d => yScale(0) - yScale(d[yKey]))
+              .attr("x", d => xScale(d[xKey]) + xScale.bandwidth() / 2)
+              .attr("y", d => yScale(d[yKey]))
+              .tween("text", (d, i, n) =>
+                numberTween({
+                  value: d[yKey],
+                  i,
+                  n,
+                  numberFormat,
+                  prefix,
+                  suffix,
+                })
+              )
           )
       )
   }
 
   function createUpdateXAxis({ duration = mdNum, withDelay }) {
-    // TODO: fix this part
     const { xScale } = valueStore.current
     select(refs.xAxisRef.current)
       .transition()
@@ -220,5 +242,6 @@ SimpleVerticalBarChart.defaultProps = {
   defaultColor: grayLighter,
   highlightColor: grayDarkest,
   itemDelay: 100,
-  textDy: 5
+  textDy: -2,
+  numberFormat: ",.0f",
 }

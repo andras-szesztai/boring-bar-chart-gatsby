@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { fontSize } from '../../../themes/theme';
 
 const ChartWrapper = styled.div`
   position: relative;
@@ -11,6 +12,11 @@ const ChartWrapper = styled.div`
   height: 100%;
   max-width: 100%;
   width: 100%;
+
+
+  text {
+    font-size: ${fontSize[0]};
+  }
 
 `;
 
