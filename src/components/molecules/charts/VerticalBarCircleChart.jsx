@@ -5,6 +5,7 @@ import { easeCubicInOut } from "d3-ease"
 import { select } from "d3-selection"
 import { axisBottom } from "d3-axis"
 import _ from "lodash"
+import { format } from "d3-format"
 
 import {
   usePrevious,
@@ -93,7 +94,10 @@ export default function SimpleVerticalBarChart({
       yScale,
     }
     isBar && createUpdateRectangles()
-    isCircle && createUpdateCircles()
+    if (isCircle) {
+      createUpdateYRefLine()
+      createUpdateCircles()
+    }
     createUpdateNumberText(getNumberTextParams({ xScale, yScale }))
     createUpdateXAxis({ withDelay: true })
     highlightValue()
@@ -108,7 +112,10 @@ export default function SimpleVerticalBarChart({
       yScale,
     }
     isBar && createUpdateRectangles()
-    isCircle && createUpdateCircles()
+    if (isCircle) {
+      createUpdateYRefLine()
+      createUpdateCircles()
+    }
     createUpdateNumberText(getNumberTextParams({ xScale, yScale }))
     createUpdateXAxis({})
     highlightValue()
@@ -176,6 +183,44 @@ export default function SimpleVerticalBarChart({
               .attr("height", d => yScale(0) - yScale(d[yKey]))
           )
       )
+  }
+
+  function createUpdateYRefLine() {
+    const { yScale } = valueStore.current
+    const meanY = _.meanBy(data, yKey)
+    const chartArea = select(refs.areaRef.current)
+
+    if (!init) {
+      chartArea
+        .append("line")
+        .attr("class", "y-ref-line")
+        .attr("x1", 0)
+        .attr("x2", dims.chartWidth)
+        .attr("y1", yScale(meanY))
+        .attr("y2", yScale(meanY))
+        .attr("stroke", grayLighter)
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", "4, 1")
+      chartArea
+        .append("text")
+        .attr("class", "y-ref-line-text")
+        .attr("x", 0)
+        .attr("y", yScale(meanY))
+        .attr("font-weight", semiBold)
+        .attr("dy", textDy)
+        .text(`Mean: ${format(numberFormat)(meanY)}`)
+    }
+
+    if (init) {
+      chartArea
+        .select(".y-ref-line")
+        .attr("y1", yScale(meanY))
+        .attr("y2", yScale(meanY))
+      chartArea
+        .select("y-ref-line-text")
+        .attr("y", yScale(meanY))
+        .text(`Mean: ${format(numberFormat)(meanY)}`)
+    }
   }
 
   function createUpdateCircles(duration = transitionDuration) {
