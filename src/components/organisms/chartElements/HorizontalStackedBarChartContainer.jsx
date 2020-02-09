@@ -26,6 +26,7 @@ export default function({
   colorRange,
   results,
   isTooltip,
+  withNumber,
 }) {
   const prevIsFiltered = usePrevious(isFiltered)
   const prevPeriodFiltered = usePrevious(periodFiltered)
@@ -86,9 +87,9 @@ export default function({
 
   return (
     <GridContainer
-      rowGap={0}
-      rows="repeat(2, 1fr)"
       columnGap={0}
+      rows="repeat(2, 1fr)"
+      rowGap={isTooltip ? 1 : 0}
       columns={isTooltip ? "60px 1fr" : "1fr"}
       height="100%"
       width="100%"
@@ -98,17 +99,23 @@ export default function({
         return (
           <>
             {isTooltip && (
-              <FlexContainer justify="flex-start" paddingLeft={2}>
+              <FlexContainer
+                justify="flex-start"
+                paddingLeft={2}
+                paddingBottom={isFirst && 2}
+                paddingTop={!isFirst && 2}
+              >
                 {isFirst ? "Unfiltered" : "Filtered"}
               </FlexContainer>
             )}
             <FlexContainer key={obj} height="100%" width="100%">
               <HorizontalStackedBar
+                withNumber={withNumber}
                 data={resultData[obj]}
                 margin={{
-                  top: !isFirst ? 10 : isTooltip ? 5 : 0,
+                  top: !isFirst ? 10 : 0,
                   left: 10,
-                  bottom: isFirst ? 10 : isTooltip ? 5 : 0,
+                  bottom: isFirst ? 10 : 0,
                   right: 10,
                 }}
                 colorRange={colorRange}

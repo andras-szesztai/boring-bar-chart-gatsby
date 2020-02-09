@@ -28,6 +28,7 @@ const Container = styled.div`
     marginBottom,
     marginLeft,
     marginRight,
+    paddingTop
   }) => css`
     grid-area: ${gridArea};
     text-align: ${textAlign};
@@ -40,6 +41,7 @@ const Container = styled.div`
     background: ${bgColor};
     z-index: ${themifyZIndex(zIndex)};
     padding-bottom: ${themifySpace(paddingBottom)}px;
+    padding-top: ${themifySpace(paddingTop)}px;
     padding-right: ${themifySpace(paddingRight)}px;
     padding-left: ${themifySpace(paddingLeft)}px;
     border-radius: ${themifySpace(borderRadius)}px;

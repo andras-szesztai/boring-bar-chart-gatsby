@@ -311,6 +311,7 @@ export default function SimpleVerticalBarChart({
       dims={dims}
       withXAxis
       axisBottom
+      fontSize={0}
     />
   )
 }

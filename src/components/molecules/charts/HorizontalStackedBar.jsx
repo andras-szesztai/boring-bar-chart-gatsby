@@ -13,8 +13,10 @@ import {
   usePrevious,
   useChartRefs,
 } from "../../../hooks"
-import { transition } from "../../../themes/theme"
+import { transition, fontWeight, fontSize } from "../../../themes/theme"
 import ChartStarter from "./ChartStarter"
+import { numberTween } from "../../../utils/chartHelpers"
+import { format } from "d3-format"
 
 const { mdNum } = transition
 
@@ -23,6 +25,12 @@ export default function HorizontalStackedBar({
   margin,
   colorRange,
   highlightArray,
+  withNumber,
+  transitionDuration,
+  textDy,
+  numberFormat,
+  prefix,
+  suffix,
 }) {
   const refs = useChartRefs()
   const valueStore = useRef()
@@ -46,10 +54,12 @@ export default function HorizontalStackedBar({
       xScale,
     }
     createUpdateRectangles()
+    withNumber && createUpdateNumberText()
   }
 
   function updateVisData() {
     createUpdateRectangles()
+    withNumber && createUpdateNumberText()
   }
 
   function updateVisDims() {
@@ -91,6 +101,60 @@ export default function HorizontalStackedBar({
       )
   }
 
+  function createUpdateNumberText(duration = transitionDuration) {
+    const { xScale, colorScale } = valueStore.current
+    const getXPosition = d =>
+      xScale(d[0][0]) + (xScale(d[0][1]) - xScale(d[0][0])) / 2
+    select(refs.areaRef.current)
+      .selectAll("text")
+      .data(makeData(Object.keys(data)))
+      .join(
+        enter =>
+          enter
+            .append("text")
+            .attr("x", getXPosition)
+            .attr("font-size", fontSize[2])
+            .attr("font-weight", fontWeight.medium)
+            .attr("y", dims.chartHeight / 2)
+            .attr("dy", textDy)
+            .attr("text-anchor", "middle")
+            .call(enter =>
+              enter
+                .transition()
+                .duration(duration)
+                .ease(easeCubicInOut)
+                .tween("text", (d, i, n) =>
+                  numberTween({
+                    value: data[d.key],
+                    i,
+                    n,
+                    numberFormat,
+                    prefix,
+                    suffix,
+                  })
+                )
+            ),
+        update =>
+          update.call(
+            update => update
+            .transition()
+            .duration(duration)
+            .ease(easeCubicInOut)
+            .attr("x", getXPosition)
+            // .tween("text", (d, i, n) =>
+            //   numberTween({
+            //     value: data[d.key],
+            //     i,
+            //     n,
+            //     numberFormat,
+            //     prefix,
+            //     suffix,
+            //   })
+            // )
+          )
+      )
+  }
+
   const { init } = useInitUpdate({
     data: data && Object.values(data),
     chartHeight: dims.chartHeight,
@@ -124,4 +188,10 @@ export default function HorizontalStackedBar({
       axisBottom
     />
   )
+}
+
+HorizontalStackedBar.defaultProps = {
+  textDy: 5,
+  transitionDuration: mdNum,
+  numberFormat: ",.1%",
 }

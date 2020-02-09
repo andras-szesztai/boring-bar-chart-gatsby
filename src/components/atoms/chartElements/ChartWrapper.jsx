@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components"
-import { fontSize } from "../../../themes/theme"
+import { themifyFontSize } from "../../../themes/mixins"
 
 const ChartWrapper = styled.div`
   position: relative;
@@ -18,9 +18,14 @@ const ChartWrapper = styled.div`
     css`
       border: 1px solid black;
     `}
-  text {
-    font-size: ${fontSize[0]};
-  }
+  ${({ fontSize }) => css`
+    text {
+      font-size: ${themifyFontSize(fontSize)};
+    }
+  `}
 `
+ChartWrapper.defaultProps = {
+  fontSize: 1
+}
 
 export default ChartWrapper
