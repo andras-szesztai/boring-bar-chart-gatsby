@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import _ from "lodash"
 
-import { GridContainer, FlexContainer } from "../../atoms"
+import { GridContainer, FlexContainer, Title } from "../../atoms"
 import { VerticalBoxPlot, TooltipContainer } from "../../molecules"
 import { usePrevious, useArrayRefs } from "../../../hooks"
 import { extent } from "d3-array"
@@ -56,8 +56,6 @@ export default function ParellelBoxPlotColumn({
     },
   })
 
-  console.log(eloRange)
-
   useEffect(() => {
     if (
       (prevEloBoxPlot && !_.isEqual(eloBoxPlot, prevEloBoxPlot)) ||
@@ -104,7 +102,17 @@ export default function ParellelBoxPlotColumn({
     }
   }, [elHeight])
 
+  const tooltipMargin = {
+    top: 10,
+    right: 30,
+    bottom: 10,
+    left: 30,
+  }
+
   const isTop = hoveredElement.pos === "top"
+  const isFilterActive = !_.isEqual(eloBoxPlot, unfilteredEloBoxPlot)
+
+  console.log(isFilterActive)
   return (
     <GridContainer rows="repeat(2, 1fr)" rowGap={1.5}>
       <TooltipContainer
@@ -115,18 +123,29 @@ export default function ParellelBoxPlotColumn({
         dy={hoveredElement.pos === "bottom" ? elHeight * 0.8 : elHeight * 0.2}
         dx={5}
         width="250px"
-        height="325px"
+        height="345px"
       >
         <GridContainer
           columnGap={0.5}
+          rowGap={0.5}
+          paddingLeft={2}
+          paddingRight={2}
+          rows={
+            isFilterActive ? "min-content 1fr min-content" : "min-content 1fr"
+          }
           columns="repeat(2, 1fr)"
           width="100%"
           height="100%"
         >
+          <Title marginTop={2} marginBottom={1} fontWeight={3}>
+            {isTop ? "Opponent's ELO Score" : "Number of Moves"}
+          </Title>
+          <div />
           <FlexContainer>
             <VerticalBoxPlot
               domain={isTop ? domains.unSynced.elo : domains.unSynced.moves}
               data={isTop ? unfilteredEloBoxPlot : unfilteredMovesBoxPlot}
+              margin={tooltipMargin}
             />
           </FlexContainer>
           <FlexContainer>
@@ -138,8 +157,13 @@ export default function ParellelBoxPlotColumn({
                 (!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot) ||
                   isResultsFiltered)
               }
+              margin={tooltipMargin}
             />
           </FlexContainer>
+          {isFilterActive &&  
+            ["Unfiltered", "Filtered"].map(el => (
+              <FlexContainer paddingBottom={2}>{el}</FlexContainer>
+            ))}
         </GridContainer>
       </TooltipContainer>
       <GridContainer
