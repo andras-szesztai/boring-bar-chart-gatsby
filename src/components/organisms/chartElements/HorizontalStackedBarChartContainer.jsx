@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import _ from "lodash"
 
-import { FlexContainer } from "../../atoms"
+import { FlexContainer, GridContainer } from "../../atoms"
 import { usePrevious } from "../../../hooks"
 import { HorizontalStackedBar } from "../../molecules"
 
@@ -25,6 +25,7 @@ export default function({
   isFiltered,
   colorRange,
   results,
+  isTooltip,
 }) {
   const prevIsFiltered = usePrevious(isFiltered)
   const prevPeriodFiltered = usePrevious(periodFiltered)
@@ -84,29 +85,43 @@ export default function({
   }, [isFiltered, isInitialized, periodFiltered, prevIsFiltered, unfiltered])
 
   return (
-    <FlexContainer direction="column" height="100%" width="100%">
+    <GridContainer
+      rowGap={0}
+      rows="repeat(2, 1fr)"
+      columnGap={0}
+      columns={isTooltip ? "60px 1fr" : "1fr"}
+      height="100%"
+      width="100%"
+    >
       {Object.keys(resultData).map((obj, i) => {
         const isFirst = i === 1
         return (
-          <FlexContainer key={obj} height="50%" width="100%">
-            <HorizontalStackedBar
-              data={resultData[obj]}
-              margin={{
-                top: isFirst ? 0 : 10,
-                left: 10,
-                bottom: isFirst ? 10 : 0,
-                right: 10,
-              }}
-              colorRange={colorRange}
-              highlightArray={
-                isFiltered
-                  ? Object.keys(results).filter(d => results[d])
-                  : Object.keys(results)
-              }
-            />
-          </FlexContainer>
+          <>
+            {isTooltip && (
+              <FlexContainer justify="flex-start" paddingLeft={2}>
+                {isFirst ? "Unfiltered" : "Filtered"}
+              </FlexContainer>
+            )}
+            <FlexContainer key={obj} height="100%" width="100%">
+              <HorizontalStackedBar
+                data={resultData[obj]}
+                margin={{
+                  top: !isFirst || isTooltip ? 10 : 0,
+                  left: 10,
+                  bottom: isFirst || isTooltip ? 10 : 0,
+                  right: 10,
+                }}
+                colorRange={colorRange}
+                highlightArray={
+                  isFiltered
+                    ? Object.keys(results).filter(d => results[d])
+                    : Object.keys(results)
+                }
+              />
+            </FlexContainer>
+          </>
         )
       })}
-    </FlexContainer>
+    </GridContainer>
   )
 }

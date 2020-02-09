@@ -437,11 +437,12 @@ export default function({ data }) {
           arrowTowardsBottom
           dx={5}
           dy={40}
-          width="325px"
+          width="350px"
           height="100px"
         >
           {mouseOverValue.current && (
             <HorizontalStackedBarChartContainer
+              isTooltip
               isFiltered={checkedObject[mouseOverValue.current]}
               colorRange={COLOR_RANGE}
               results={resultCheckedObject}
