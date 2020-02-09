@@ -82,6 +82,14 @@ export default function ParellelBoxPlotColumn({
     pos: undefined,
   })
 
+  const [elHeight, setElHeight] = useState(0)
+
+  useEffect(() => {
+    if (!elHeight && bottomContainerRef && bottomContainerRef.current) {
+      setElHeight(bottomContainerRef.current.clientHeight)
+    }
+  }, [elHeight])
+
   return (
     <GridContainer rows="repeat(2, 1fr)" rowGap={1.5}>
       <TooltipContainer
@@ -89,14 +97,10 @@ export default function ParellelBoxPlotColumn({
         arrowLeftRight
         arrowTowardsTop={hoveredElement.pos === "top"}
         arrowTowardsBottom={hoveredElement.pos === "bottom"}
-        dy={
-          hoveredElement.pos === "bottom" &&
-          bottomContainerRef.current &&
-          bottomContainerRef.current.clientHeight
-        }
+        dy={hoveredElement.pos === "bottom" ? elHeight * 0.8 : elHeight * 0.2}
         dx={5}
-        width="325px"
-        height="225px"
+        width="250px"
+        height="325px"
       >
         Hello World
       </TooltipContainer>
@@ -110,7 +114,6 @@ export default function ParellelBoxPlotColumn({
         onMouseLeave={() =>
           setHoveredElement({ element: undefined, pos: "top" })
         }
-        withBorder
       >
         <FlexContainer>
           <VerticalBoxPlot domain={domains.elo} data={unfilteredEloBoxPlot} />
@@ -128,7 +131,6 @@ export default function ParellelBoxPlotColumn({
         </FlexContainer>
       </GridContainer>
       <GridContainer
-        withBorder
         columnGap={0.5}
         columns="repeat(2, 1fr)"
         ref={bottomContainerRef}
