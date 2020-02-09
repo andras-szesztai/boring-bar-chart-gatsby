@@ -22,57 +22,71 @@ export default function ParellelBoxPlotColumn({
     movesBoxPlot,
     unfilteredMovesBoxPlot,
   },
-  data,
   eloRange,
   movesRange,
   syncObject,
   isResultsFiltered,
   isChecked,
 }) {
-  const prevSyncObject = usePrevious(syncObject)
+  const eloDomain = extent([
+    eloBoxPlot.r0,
+    eloBoxPlot.r1,
+    unfilteredEloBoxPlot.r1,
+    unfilteredEloBoxPlot.r0,
+  ])
+  const movesDomain = extent([
+    movesBoxPlot.r0,
+    movesBoxPlot.r1,
+    unfilteredMovesBoxPlot.r1,
+    unfilteredMovesBoxPlot.r0,
+  ])
+
+  const prevEloBoxPlot = usePrevious(eloBoxPlot)
+  const prevEloRange = usePrevious(eloRange)
+  const prevMovesBoxPlot = usePrevious(movesBoxPlot)
+  const prevMovesRange = usePrevious(movesRange)
   const [domains, setDomains] = useState({
-    elo: undefined,
-    moves: undefined,
+    synced: {
+      elo: eloRange,
+      moves: movesRange,
+    },
+    unSynced: {
+      elo: eloDomain,
+      moves: movesDomain,
+    },
   })
 
+  console.log(eloRange)
+
   useEffect(() => {
-    if (domains && !domains.elo && syncObject && !!syncObject.elo) {
+    if (
+      (prevEloBoxPlot && !_.isEqual(eloBoxPlot, prevEloBoxPlot)) ||
+      !_.isEqual(movesBoxPlot, prevMovesBoxPlot) ||
+      !_.isEqual(eloRange, prevEloRange) ||
+      !_.isEqual(movesRange, prevMovesRange)
+    ) {
       setDomains({
-        elo: eloRange,
-        moves: movesRange,
-      })
-    }
-    if (domains && !!domains.elo && !_.isEqual(syncObject, prevSyncObject)) {
-      setDomains({
-        elo: syncObject.elo
-          ? eloRange
-          : extent([
-              eloBoxPlot.r0,
-              eloBoxPlot.r1,
-              unfilteredEloBoxPlot.r1,
-              unfilteredEloBoxPlot.r0,
-            ]),
-        moves: syncObject.moves
-          ? movesRange
-          : extent([
-              movesBoxPlot.r0,
-              movesBoxPlot.r1,
-              unfilteredMovesBoxPlot.r1,
-              unfilteredMovesBoxPlot.r0,
-            ]),
+        synced: {
+          elo: eloRange,
+          moves: movesRange,
+        },
+        unSynced: {
+          elo: eloDomain,
+          moves: movesDomain,
+        },
       })
     }
   }, [
-    syncObject,
-    domains,
-    eloRange,
-    movesRange,
-    prevSyncObject,
-    data,
-    movesBoxPlot,
-    unfilteredEloBoxPlot,
     eloBoxPlot,
-    unfilteredMovesBoxPlot,
+    eloDomain,
+    eloRange,
+    movesBoxPlot,
+    movesDomain,
+    movesRange,
+    prevEloBoxPlot,
+    prevEloRange,
+    prevMovesBoxPlot,
+    prevMovesRange,
   ])
 
   const topContainerRef = useRef()
@@ -90,19 +104,43 @@ export default function ParellelBoxPlotColumn({
     }
   }, [elHeight])
 
+  const isTop = hoveredElement.pos === "top"
   return (
     <GridContainer rows="repeat(2, 1fr)" rowGap={1.5}>
       <TooltipContainer
         hoveredElement={hoveredElement.element}
         arrowLeftRight
-        arrowTowardsTop={hoveredElement.pos === "top"}
+        arrowTowardsTop={isTop}
         arrowTowardsBottom={hoveredElement.pos === "bottom"}
         dy={hoveredElement.pos === "bottom" ? elHeight * 0.8 : elHeight * 0.2}
         dx={5}
         width="250px"
         height="325px"
       >
-        Hello World
+        <GridContainer
+          columnGap={0.5}
+          columns="repeat(2, 1fr)"
+          width="100%"
+          height="100%"
+        >
+          <FlexContainer>
+            <VerticalBoxPlot
+              domain={isTop ? domains.unSynced.elo : domains.unSynced.moves}
+              data={isTop ? unfilteredEloBoxPlot : unfilteredMovesBoxPlot}
+            />
+          </FlexContainer>
+          <FlexContainer>
+            <VerticalBoxPlot
+              domain={isTop ? domains.unSynced.elo : domains.unSynced.moves}
+              data={isTop ? eloBoxPlot : movesBoxPlot}
+              isFiltered={
+                isChecked &&
+                (!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot) ||
+                  isResultsFiltered)
+              }
+            />
+          </FlexContainer>
+        </GridContainer>
       </TooltipContainer>
       <GridContainer
         columnGap={0.5}
@@ -116,11 +154,14 @@ export default function ParellelBoxPlotColumn({
         }
       >
         <FlexContainer>
-          <VerticalBoxPlot domain={domains.elo} data={unfilteredEloBoxPlot} />
+          <VerticalBoxPlot
+            domain={syncObject.elo ? domains.synced.elo : domains.unSynced.elo}
+            data={unfilteredEloBoxPlot}
+          />
         </FlexContainer>
         <FlexContainer>
           <VerticalBoxPlot
-            domain={domains.elo}
+            domain={syncObject.elo ? domains.synced.elo : domains.unSynced.elo}
             data={eloBoxPlot}
             isFiltered={
               isChecked &&
@@ -143,13 +184,17 @@ export default function ParellelBoxPlotColumn({
       >
         <FlexContainer>
           <VerticalBoxPlot
-            domain={domains.moves}
+            domain={
+              syncObject.moves ? domains.synced.moves : domains.unSynced.moves
+            }
             data={unfilteredMovesBoxPlot}
           />
         </FlexContainer>
         <FlexContainer>
           <VerticalBoxPlot
-            domain={domains.moves}
+            domain={
+              syncObject.moves ? domains.synced.moves : domains.unSynced.moves
+            }
             data={movesBoxPlot}
             isFiltered={
               isChecked &&

@@ -437,7 +437,7 @@ export default function({ data }) {
           arrowTowardsBottom
           dx={5}
           dy={40}
-          width="400px"
+          width="425px"
           height="100px"
         >
           {mouseOverValue.current && (

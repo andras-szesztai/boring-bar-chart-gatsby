@@ -67,7 +67,8 @@ export default function HorizontalStackedBar({
     const { xScale } = valueStore.current
     xScale.range([0, dims.chartWidth])
     valueStore.current = {
-      xScale,
+      ...valueStore.current,
+      xScale
     }
     createUpdateRectangles()
     createUpdateNumberText()
@@ -168,7 +169,7 @@ export default function HorizontalStackedBar({
       const getFill = d =>
         isHighlighted(d)
           ? chroma(colorScale(d.key)).brighten(3)
-          :  chroma(colorScale(d.key)).darken(2)
+          : chroma(colorScale(d.key)).darken(2)
       select(refs.areaRef.current)
         .selectAll("rect")
         .transition()

@@ -21,6 +21,7 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
     ref: wrapperRef,
     margin,
   })
+  const prevDomain = usePrevious(domain)
 
   const getPadding = () => (domain[1] - domain[0]) * 0.025
   function initVis() {
@@ -35,9 +36,14 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
     createBoxPlot()
   }
 
+  useEffect(() => {
+    if(init && !_.isEqual(domain, prevDomain)) {
+      updateVisData()
+    }
+  })
+
   function updateVisData() {
     const { yScale } = valueStore.current
-
     yScale.domain(
       domain.map((el, i) => (i ? el + getPadding() : el - getPadding()))
     )
