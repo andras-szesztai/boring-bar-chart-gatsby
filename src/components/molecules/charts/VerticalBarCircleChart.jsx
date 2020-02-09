@@ -13,7 +13,7 @@ import {
   useInitUpdate,
 } from "../../../hooks"
 import ChartStarter from "./ChartStarter"
-import { transition, colors } from "../../../themes/theme"
+import { transition, colors, fontWeight } from "../../../themes/theme"
 import {
   createUpdateNumberText,
   getAxisPadding,
@@ -21,6 +21,7 @@ import {
 
 const { mdNum } = transition
 const { grayDarkest, grayLighter } = colors
+const { light, semiBold } = fontWeight
 
 export default function SimpleVerticalBarChart({
   data,
@@ -65,7 +66,7 @@ export default function SimpleVerticalBarChart({
     numberFormat,
     prefix,
     suffix,
-    moveTextHigher: isCircle ? 4 : 1
+    moveTextHigher: isCircle ? 5 : 1,
   })
 
   const getAxisDomain = () => {
@@ -115,12 +116,27 @@ export default function SimpleVerticalBarChart({
 
   function highlightValue() {
     const chartArea = select(refs.areaRef.current)
-    const settHighlighted = d =>
-      !d.filteredOut && d[xKey] === highlightedValue
-        ? highlightColor
-        : defaultColor
-    chartArea.selectAll("rect").attr("fill", d => settHighlighted(d))
-    chartArea.selectAll(".number-text").attr("fill", d => settHighlighted(d))
+    const isHighlighted = (d, noAccessor) =>
+      !d.filteredOut &&
+      (noAccessor ? d.toLowerCase() : d[xKey]) === highlightedValue
+    const setHighlightedFill = (d, noAcessor) =>
+      isHighlighted(d, noAcessor) ? highlightColor : defaultColor
+    const setHighlightedFontWeight = (d, noAcessor) =>
+      isHighlighted(d, noAcessor) ? semiBold : light
+    isBar &&
+      chartArea.selectAll("rect").attr("fill", d => setHighlightedFill(d))
+    isCircle &&
+      chartArea.selectAll("circle").attr("fill", d => setHighlightedFill(d))
+    chartArea
+      .selectAll(".number-text")
+      .attr("fill", d => setHighlightedFill(d))
+      .attr("font-weight", d => setHighlightedFontWeight(d))
+    select(refs.xAxisRef.current).call(g =>
+      g
+        .selectAll(".tick text")
+        .attr("fill", d => setHighlightedFill(d, true))
+        .attr("font-weight", d => setHighlightedFontWeight(d, true))
+    )
   }
 
   function createUpdateRectangles(duration = transitionDuration) {

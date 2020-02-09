@@ -46,7 +46,15 @@ export const fontSize = [
   "12rem",
 ]
 
-export const fontWeight = [200, 300, 400, 500, 600, 700, 800]
+export const fontWeight = {
+  ultralight: 200, 
+  light: 300, 
+  book: 400, 
+  medium: 500, 
+  semiBold: 600, 
+  bold: 700, 
+  heavy: 800
+}
 
 export const z = {
   tooltip: 50,

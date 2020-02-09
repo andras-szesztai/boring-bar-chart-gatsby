@@ -43,7 +43,7 @@ const CarouselContainer = ({ children, pages }) => {
                 checked={true}
                 isRadio
                 transitionDuration="xs"
-                width={12}
+                width={10}
               />
             ) : (
               <CheckBox
@@ -52,7 +52,7 @@ const CarouselContainer = ({ children, pages }) => {
                 checked={false}
                 isRadio
                 transitionDuration="xs"
-                width={12}
+                width={10}
               />
             )}
           </FlexContainer>

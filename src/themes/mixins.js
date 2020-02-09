@@ -17,8 +17,15 @@ export function themifyColor(color){
   }
 }
 
+export function themifyFontWeight(weight){
+  if(typeof weight === "number"){
+    const weights = Object.values(theme.fontWeight)
+    return weights[weight]
+  }
+  return theme.fontWeight[weight]
+}
+
 export const themifyFontSize= createThemify(theme.fontSize) // Pass in index
-export const themifyFontWeight= createThemify(theme.fontWeight) // Pass in index
 export const themifyEase = createThemify(theme.ease) // Pass in ease name
 export const themifyTransition = createThemify(theme.transition) // Pass in ease name
 export const themifySpace = createThemify(theme.space) // Pass in index

@@ -402,7 +402,6 @@ export default function({ data }) {
                       isBar={i === 1}
                       isCircle={i !== 1}
                       data={
-                        dataKeys &&
                         sumMetrics &&
                         dataKeys
                           .map(key => {
