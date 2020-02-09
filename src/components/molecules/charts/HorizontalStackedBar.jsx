@@ -28,8 +28,6 @@ export default function HorizontalStackedBar({
   transitionDuration,
   textDy,
   numberFormat,
-  prefix,
-  suffix,
 }) {
   const refs = useChartRefs()
   const valueStore = useRef()
@@ -71,7 +69,8 @@ export default function HorizontalStackedBar({
     valueStore.current = {
       xScale,
     }
-    createUpdateRectangles(0)
+    createUpdateRectangles()
+    createUpdateNumberText()
   }
 
   function createUpdateRectangles(duration = mdNum) {

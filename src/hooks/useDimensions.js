@@ -47,6 +47,22 @@ export default function useDimensions({
       window.addEventListener("resize", getDimensions)
       getDimensions()
     }
+    if (dims.width && dims.height) {
+      if (
+        parentRef &&
+        (parentRef.current.clientWidth !== dims.width ||
+          parentRef.current.clientHeight !== dims.height)
+      ) {
+        getDimensions()
+      }
+      if (
+        ref &&
+        (ref.current.clientWidth !== dims.width ||
+          ref.current.clientHeight !== dims.height)
+      ) {
+        getDimensions()
+      }
+    }
     // TODO: figure out how to use it
     // return  window.removeEventListener("resize", getDimensions)
   }, [dims, margin, parentHeight, parentRef, parentWidth, ref])

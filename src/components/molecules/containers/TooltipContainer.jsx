@@ -165,7 +165,12 @@ export default function Tooltip({
     if (!_.isEqual(hoveredElement, prevHooveredElement)) {
       let elTop, elLeft, elWidth, elHeight, tooltipLeft, tooltipTop
       if (hoveredElement) {
-        const { top, left, width, height } = hoveredElement
+        const {
+          top,
+          left,
+          width,
+          height,
+        } = hoveredElement.current.getBoundingClientRect()
         const { width: tooltipWidth, height: tooltipHeight } = tooltipDims
         elTop = top
         elLeft = left

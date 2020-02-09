@@ -558,11 +558,7 @@ export default function({ data }) {
                       fullSize
                       rows="repeat(2, 1fr)"
                       onMouseEnter={() =>
-                        setHoveredElementTop(
-                          infoContainerRefs.current[
-                            i
-                          ].current.getBoundingClientRect()
-                        )
+                        setHoveredElementTop(infoContainerRefs.current[i])
                       }
                       onMouseLeave={() => setHoveredElementTop(undefined)}
                     >
@@ -628,11 +624,7 @@ export default function({ data }) {
                       <FlexContainer
                         direction="column"
                         onMouseEnter={() =>
-                          setHoveredElementBottom(
-                            barContainerRefs.current[
-                              i
-                            ].current.getBoundingClientRect()
-                          )
+                          setHoveredElementBottom(barContainerRefs.current[i])
                         }
                         onMouseLeave={() => setHoveredElementBottom(undefined)}
                       >

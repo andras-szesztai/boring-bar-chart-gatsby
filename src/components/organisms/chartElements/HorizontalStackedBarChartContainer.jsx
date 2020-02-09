@@ -85,12 +85,14 @@ export default function({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFiltered, isInitialized, periodFiltered, prevIsFiltered, unfiltered])
 
+  const isFilterActive = unfiltered.length !== periodFiltered.length
+
   return (
     <GridContainer
       columnGap={0}
       rows="repeat(2, 1fr)"
       rowGap={isTooltip ? 1 : 0}
-      columns={isTooltip ? "60px 1fr" : "1fr"}
+      columns={(isTooltip && isFilterActive) ? "60px 1fr" : "1fr"}
       height="100%"
       width="100%"
     >
@@ -98,7 +100,7 @@ export default function({
         const isFirst = i === 1
         return (
           <>
-            {isTooltip && (
+            {isTooltip && isFilterActive && (
               <FlexContainer
                 justify="flex-start"
                 paddingLeft={2}

@@ -77,16 +77,24 @@ export default function ParellelBoxPlotColumn({
 
   const topContainerRef = useRef()
   const bottomContainerRef = useRef()
-  const initialHoveredElement = { element: undefined, pos: undefined }
-  const [hoveredElement, setHoveredElement] = useState(initialHoveredElement)
+  const [hoveredElement, setHoveredElement] = useState({
+    element: undefined,
+    pos: undefined,
+  })
 
-  console.log(hoveredElement)
   return (
     <GridContainer rows="repeat(2, 1fr)" rowGap={1.5}>
       <TooltipContainer
         hoveredElement={hoveredElement.element}
         arrowLeftRight
-        // arrowTowardsTop={hoveredElement.pos === "top"}
+        arrowTowardsTop={hoveredElement.pos === "top"}
+        arrowTowardsBottom={hoveredElement.pos === "bottom"}
+        dy={
+          hoveredElement.pos === "bottom" &&
+          bottomContainerRef.current &&
+          bottomContainerRef.current.clientHeight
+        }
+        dx={5}
         width="325px"
         height="225px"
       >
@@ -99,7 +107,9 @@ export default function ParellelBoxPlotColumn({
         onMouseEnter={() =>
           setHoveredElement({ element: topContainerRef, pos: "top" })
         }
-        onMouseLeave={() => setHoveredElement(initialHoveredElement)}
+        onMouseLeave={() =>
+          setHoveredElement({ element: undefined, pos: "top" })
+        }
         withBorder
       >
         <FlexContainer>
@@ -118,13 +128,16 @@ export default function ParellelBoxPlotColumn({
         </FlexContainer>
       </GridContainer>
       <GridContainer
+        withBorder
         columnGap={0.5}
         columns="repeat(2, 1fr)"
         ref={bottomContainerRef}
         onMouseEnter={() =>
-          setHoveredElement({ element: topContainerRef, pos: "bottom" })
+          setHoveredElement({ element: bottomContainerRef, pos: "bottom" })
         }
-        onMouseLeave={() => setHoveredElement(initialHoveredElement)}
+        onMouseLeave={() =>
+          setHoveredElement({ element: undefined, pos: "bottom" })
+        }
       >
         <FlexContainer>
           <VerticalBoxPlot
