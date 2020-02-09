@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react"
 import { scaleBand, scaleLinear } from "d3-scale"
-import { max } from "d3-array"
+import { max, min } from "d3-array"
 import { easeCubicInOut } from "d3-ease"
 import { select } from "d3-selection"
 import { axisBottom } from "d3-axis"
@@ -14,7 +14,10 @@ import {
 } from "../../../hooks"
 import ChartStarter from "./ChartStarter"
 import { transition, colors } from "../../../themes/theme"
-import { createUpdateNumberText } from "../../../utils/chartHelpers"
+import {
+  createUpdateNumberText,
+  getAxisPadding,
+} from "../../../utils/chartHelpers"
 
 const { mdNum } = transition
 const { grayDarkest, grayLighter } = colors
@@ -34,7 +37,8 @@ export default function SimpleVerticalBarChart({
   prefix,
   suffix,
   transitionDuration,
-  isHiddenNumberText,
+  isBar,
+  isCircle,
 }) {
   const valueStore = useRef()
   const prevHighlightedValue = usePrevious(highlightedValue)
@@ -61,8 +65,18 @@ export default function SimpleVerticalBarChart({
     numberFormat,
     prefix,
     suffix,
-    isHidden: isHiddenNumberText,
+    moveTextHigher: isCircle ? 4 : 1
   })
+
+  const getAxisDomain = () => {
+    const axisPadding = getAxisPadding(data, yKey, 0.1)
+    return isBar
+      ? [0, max(data, d => d[yKey])]
+      : [
+          min(data, d => d[yKey]) - axisPadding,
+          max(data, d => d[yKey]) + axisPadding,
+        ]
+  }
 
   function initVis() {
     const xScale = scaleBand()
@@ -71,13 +85,14 @@ export default function SimpleVerticalBarChart({
       .paddingInner(paddingInner)
       .paddingOuter(paddingOuter)
     const yScale = scaleLinear()
-      .domain([0, max(data, d => d[yKey])])
+      .domain(getAxisDomain())
       .range([dims.chartHeight, 0])
     valueStore.current = {
       xScale,
       yScale,
     }
-    createUpdateRectangles()
+    isBar && createUpdateRectangles()
+    isCircle && createUpdateCircles()
     createUpdateNumberText(getNumberTextParams({ xScale, yScale }))
     createUpdateXAxis({ withDelay: true })
     highlightValue()
@@ -86,12 +101,13 @@ export default function SimpleVerticalBarChart({
   function updateVisData() {
     const { xScale, yScale } = valueStore.current
     xScale.domain(data.map(d => d[xKey]))
-    yScale.domain([0, max(data, d => d[yKey])])
+    yScale.domain(getAxisDomain())
     valueStore.current = {
       xScale,
       yScale,
     }
-    createUpdateRectangles()
+    isBar && createUpdateRectangles()
+    isCircle && createUpdateCircles()
     createUpdateNumberText(getNumberTextParams({ xScale, yScale }))
     createUpdateXAxis({})
     highlightValue()
@@ -99,13 +115,12 @@ export default function SimpleVerticalBarChart({
 
   function highlightValue() {
     const chartArea = select(refs.areaRef.current)
-    const getIsHighlighted = d => !d.filteredOut && d[xKey] === highlightedValue
-    chartArea
-      .selectAll("rect")
-      .attr("fill", d => (getIsHighlighted(d) ? highlightColor : defaultColor))
-    chartArea
-      .selectAll(".number-text")
-      .attr("opacity", d => (getIsHighlighted(d) ? 1 : 0))
+    const settHighlighted = d =>
+      !d.filteredOut && d[xKey] === highlightedValue
+        ? highlightColor
+        : defaultColor
+    chartArea.selectAll("rect").attr("fill", d => settHighlighted(d))
+    chartArea.selectAll(".number-text").attr("fill", d => settHighlighted(d))
   }
 
   function createUpdateRectangles(duration = transitionDuration) {
@@ -143,6 +158,42 @@ export default function SimpleVerticalBarChart({
               .attr("width", xScale.bandwidth())
               .attr("y", d => yScale(d[yKey]))
               .attr("height", d => yScale(0) - yScale(d[yKey]))
+          )
+      )
+  }
+
+  function createUpdateCircles(duration = transitionDuration) {
+    const { xScale, yScale } = valueStore.current
+    const getXPos = d => xScale(d[xKey]) + xScale.bandwidth() / 2
+    select(refs.areaRef.current)
+      .selectAll("circle")
+      .data(data, d => d[xKey])
+      .join(
+        enter =>
+          enter
+            .append("circle")
+            .attr("cx", getXPos)
+            .attr("cy", yScale(0))
+            .attr("r", xScale.bandwidth() / 4)
+            .attr("fill", d =>
+              d[xKey] === highlightedValue ? highlightColor : defaultColor
+            )
+            .call(enter =>
+              enter
+                .transition()
+                .duration(duration)
+                .delay((_, i) => (i * transitionDuration) / data.length)
+                .ease(easeCubicInOut)
+                .attr("cy", d => yScale(d[yKey]))
+            ),
+        update =>
+          update.call(update =>
+            update
+              .transition()
+              .duration(duration)
+              .ease(easeCubicInOut)
+              .attr("cx", getXPos)
+              .attr("cy", d => yScale(d[yKey]))
           )
       )
   }
@@ -208,5 +259,4 @@ SimpleVerticalBarChart.defaultProps = {
   textDy: -2,
   numberFormat: ",.0f",
   transitionDuration: mdNum,
-  isHiddenNumberText: true,
 }

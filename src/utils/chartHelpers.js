@@ -51,7 +51,8 @@ export function createUpdateNumberText({
   numberFormat,
   prefix,
   suffix,
-  isHidden
+  isHidden,
+  moveTextHigher
 }) {
   select(ref)
     .selectAll(".number-text")
@@ -63,7 +64,7 @@ export function createUpdateNumberText({
           .attr("x", d => xScale(d[xKey]) + xScale.bandwidth() / 2)
           .attr("class", "number-text")
           .attr("y", yScale(0))
-          .attr("dy", textDy)
+          .attr("dy", moveTextHigher * textDy)
           .attr("text-anchor", "middle")
           .attr("opacity", isHidden ? 0 : 1)
           .text(0)

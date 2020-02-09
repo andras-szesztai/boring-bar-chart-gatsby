@@ -400,6 +400,7 @@ export default function({ data }) {
                     <VerticalBarCircleChart
                       key={page}
                       isBar={i === 1}
+                      isCircle={i !== 1}
                       data={
                         dataKeys &&
                         sumMetrics &&
@@ -409,7 +410,11 @@ export default function({ data }) {
                             return {
                               name: key,
                               value: isFilteredIn
-                                ? sumMetrics[key].noOfGames
+                                ? i === 1
+                                  ? sumMetrics[key].noOfGames
+                                  : i === 2
+                                  ? sumMetrics[key].avgElo
+                                  : sumMetrics[key].maxElo
                                 : 0,
                               filteredOut: !isFilteredIn,
                             }
