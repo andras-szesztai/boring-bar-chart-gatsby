@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import _ from "lodash"
 
 import { GridContainer, FlexContainer } from "../../atoms"
-import { VerticalBoxPlot } from "../../molecules"
-import { usePrevious } from "../../../hooks"
+import { VerticalBoxPlot, TooltipContainer } from "../../molecules"
+import { usePrevious, useArrayRefs } from "../../../hooks"
 import { extent } from "d3-array"
 
 export function getPeriodFilteredData(data, period) {
@@ -75,40 +75,75 @@ export default function ParellelBoxPlotColumn({
     unfilteredMovesBoxPlot,
   ])
 
+  const topContainerRef = useRef()
+  const bottomContainerRef = useRef()
+  const initialHoveredElement = { element: undefined, pos: undefined }
+  const [hoveredElement, setHoveredElement] = useState(initialHoveredElement)
+
+  console.log(hoveredElement)
   return (
-    <GridContainer
-      rows="repeat(2, 1fr)"
-      columns="repeat(2, 1fr)"
-      rowGap={1.5}
-      columnGap={0.5}
-    >
-      <FlexContainer>
-        <VerticalBoxPlot domain={domains.elo} data={unfilteredEloBoxPlot} />
-      </FlexContainer>
-      <FlexContainer>
-        <VerticalBoxPlot
-          domain={domains.elo}
-          data={eloBoxPlot}
-          isFiltered={
-            isChecked &&
-            (!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot) || isResultsFiltered)
-          }
-        />
-      </FlexContainer>
-      <FlexContainer>
-        <VerticalBoxPlot domain={domains.moves} data={unfilteredMovesBoxPlot} />
-      </FlexContainer>
-      <FlexContainer>
-        <VerticalBoxPlot
-          domain={domains.moves}
-          data={movesBoxPlot}
-          isFiltered={
-            isChecked &&
-            (!_.isEqual(unfilteredMovesBoxPlot, movesBoxPlot) ||
-              isResultsFiltered)
-          }
-        />
-      </FlexContainer>
+    <GridContainer rows="repeat(2, 1fr)" rowGap={1.5}>
+      <TooltipContainer
+        hoveredElement={hoveredElement.element}
+        arrowLeftRight
+        // arrowTowardsTop={hoveredElement.pos === "top"}
+        width="325px"
+        height="225px"
+      >
+        Hello World
+      </TooltipContainer>
+      <GridContainer
+        columnGap={0.5}
+        columns="repeat(2, 1fr)"
+        ref={topContainerRef}
+        onMouseEnter={() =>
+          setHoveredElement({ element: topContainerRef, pos: "top" })
+        }
+        onMouseLeave={() => setHoveredElement(initialHoveredElement)}
+        withBorder
+      >
+        <FlexContainer>
+          <VerticalBoxPlot domain={domains.elo} data={unfilteredEloBoxPlot} />
+        </FlexContainer>
+        <FlexContainer>
+          <VerticalBoxPlot
+            domain={domains.elo}
+            data={eloBoxPlot}
+            isFiltered={
+              isChecked &&
+              (!_.isEqual(unfilteredEloBoxPlot, eloBoxPlot) ||
+                isResultsFiltered)
+            }
+          />
+        </FlexContainer>
+      </GridContainer>
+      <GridContainer
+        columnGap={0.5}
+        columns="repeat(2, 1fr)"
+        ref={bottomContainerRef}
+        onMouseEnter={() =>
+          setHoveredElement({ element: topContainerRef, pos: "bottom" })
+        }
+        onMouseLeave={() => setHoveredElement(initialHoveredElement)}
+      >
+        <FlexContainer>
+          <VerticalBoxPlot
+            domain={domains.moves}
+            data={unfilteredMovesBoxPlot}
+          />
+        </FlexContainer>
+        <FlexContainer>
+          <VerticalBoxPlot
+            domain={domains.moves}
+            data={movesBoxPlot}
+            isFiltered={
+              isChecked &&
+              (!_.isEqual(unfilteredMovesBoxPlot, movesBoxPlot) ||
+                isResultsFiltered)
+            }
+          />
+        </FlexContainer>
+      </GridContainer>
     </GridContainer>
   )
 }
