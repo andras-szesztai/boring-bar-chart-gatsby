@@ -7,11 +7,16 @@ import chroma from "chroma-js"
 import "d3-transition"
 import { easeCubicInOut } from "d3-ease"
 
-import { ChartSvg, FlexContainer, ChartArea } from "../../atoms"
-import { useDimensions, useInitUpdate, usePrevious } from "../../../hooks"
+import {
+  useDimensions,
+  useInitUpdate,
+  usePrevious,
+  useChartRefs,
+} from "../../../hooks"
 import { transition } from "../../../themes/theme"
+import ChartStarter from "./ChartStarter"
 
-const { mdNum } = transition  
+const { mdNum } = transition
 
 export default function HorizontalStackedBar({
   data,
@@ -19,12 +24,10 @@ export default function HorizontalStackedBar({
   colorRange,
   highlightArray,
 }) {
-  const wrapperRef = useRef()
-  const svgRef = useRef()
-  const areaRef = useRef()
+  const refs = useChartRefs()
   const valueStore = useRef()
-  const { width, height, chartWidth, chartHeight } = useDimensions({
-    ref: wrapperRef,
+  const dims = useDimensions({
+    ref: refs.wrapperRef,
     margin,
   })
 
@@ -37,7 +40,7 @@ export default function HorizontalStackedBar({
       .range(colorRange)
     const xScale = scaleLinear()
       .domain([0, 1])
-      .range([0, chartWidth])
+      .range([0, dims.chartWidth])
     valueStore.current = {
       colorScale,
       xScale,
@@ -51,7 +54,7 @@ export default function HorizontalStackedBar({
 
   function updateVisDims() {
     const { xScale } = valueStore.current
-    xScale.range([0, chartWidth])
+    xScale.range([0, dims.chartWidth])
     valueStore.current = {
       xScale,
     }
@@ -60,7 +63,7 @@ export default function HorizontalStackedBar({
 
   function createUpdateRectangles(duration = mdNum) {
     const { xScale, colorScale } = valueStore.current
-    select(areaRef.current)
+    select(refs.areaRef.current)
       .selectAll("rect")
       .data(makeData(Object.keys(data)))
       .join(
@@ -74,7 +77,7 @@ export default function HorizontalStackedBar({
             .attr("x", d => xScale(d[0][0]))
             .attr("width", d => xScale(d[0][1]) - xScale(d[0][0]))
             .attr("y", 0)
-            .attr("height", chartHeight)
+            .attr("height", dims.chartHeight)
             .call(enter => enter),
         update =>
           update.call(update =>
@@ -88,39 +91,37 @@ export default function HorizontalStackedBar({
       )
   }
 
-  
   const { init } = useInitUpdate({
     data: data && Object.values(data),
-    chartHeight,
-    chartWidth,
+    chartHeight: dims.chartHeight,
+    chartWidth: dims.chartWidth,
     initVis,
     noKey: true,
     updateVisData,
     updateVisDims,
   })
-  
+
   const prevHighlightArray = usePrevious(highlightArray)
   useEffect(() => {
-    function updateHighlight(){
-      select(areaRef.current)
-      .selectAll("rect")
-      .transition()
-      .duration(mdNum)
-      .attr("fill-opacity", d => highlightArray.includes(d.key) ? 1 : .2)
-      .attr("stroke-opacity", d => highlightArray.includes(d.key) ? 1 : .2)
+    function updateHighlight() {
+      select(refs.areaRef.current)
+        .selectAll("rect")
+        .transition()
+        .duration(mdNum)
+        .attr("fill-opacity", d => (highlightArray.includes(d.key) ? 1 : 0.2))
+        .attr("stroke-opacity", d => (highlightArray.includes(d.key) ? 1 : 0.2))
     }
-    if(init && (!_.isEqual(prevHighlightArray, highlightArray))) updateHighlight()
-  }, [highlightArray, init, prevHighlightArray])
-  
+    if (init && !_.isEqual(prevHighlightArray, highlightArray))
+      updateHighlight()
+  }, [highlightArray, init, prevHighlightArray, refs.areaRef])
+
   return (
-    <FlexContainer pos="relative" fullSize ref={wrapperRef}>
-      <ChartSvg absPos ref={svgRef} width={width} height={height}>
-        <ChartArea
-          ref={areaRef}
-          marginLeft={margin.left}
-          marginTop={margin.top}
-        />
-      </ChartSvg>
-    </FlexContainer>
+    <ChartStarter
+      refs={refs}
+      margin={margin}
+      dims={dims}
+      withXAxis
+      axisBottom
+    />
   )
 }

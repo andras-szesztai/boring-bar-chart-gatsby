@@ -440,7 +440,14 @@ export default function({ data }) {
           width="325px"
           height="100px"
         >
-          {mouseOver}
+          {mouseOverValue.current && (
+            <HorizontalStackedBarChartContainer
+              isFiltered={checkedObject[mouseOverValue.current]}
+              colorRange={COLOR_RANGE}
+              results={resultCheckedObject}
+              data={dataSets[mouseOverValue.current]}
+            />
+          )}
         </TooltipContainer>
         <GridContainer rows="180px 1fr">
           <FlexContainer>Title</FlexContainer>

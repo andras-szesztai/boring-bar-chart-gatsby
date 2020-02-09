@@ -28,6 +28,7 @@ export default function({
 }) {
   const prevIsFiltered = usePrevious(isFiltered)
   const prevPeriodFiltered = usePrevious(periodFiltered)
+  const prevUnfiltered = usePrevious(unfiltered)
   const [state, setState] = useState({
     isInitialized: false,
     resultData: {
@@ -60,7 +61,6 @@ export default function({
           },
         }))
       }
-
       if (periodFiltered.length !== prevPeriodFiltered.length) {
         setState(prev => ({
           ...prev,
@@ -70,12 +70,21 @@ export default function({
           },
         }))
       }
+      if (unfiltered.length !== prevUnfiltered.length) {
+        setState(prev => ({
+          ...prev,
+          resultData: {
+            ...prev.resultData,
+            unfilteredResults: getResultsData(unfiltered),
+          },
+        }))
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFiltered, isInitialized, periodFiltered, prevIsFiltered, unfiltered])
-  
+
   return (
-    <>
+    <FlexContainer direction="column" height="100%" width="100%">
       {Object.keys(resultData).map((obj, i) => {
         const isFirst = i === 1
         return (
@@ -98,6 +107,6 @@ export default function({
           </FlexContainer>
         )
       })}
-    </>
+    </FlexContainer>
   )
 }
