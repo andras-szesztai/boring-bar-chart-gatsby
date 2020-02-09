@@ -17,7 +17,7 @@ import {
   CountUpSpan,
   HorizontalMultiSelect,
   CarouselContainer,
-  SimpleVerticalBarChart,
+  VerticalBarCircleChart,
 } from "../molecules"
 import {
   ParallelBoxPlotColumn,
@@ -396,9 +396,10 @@ export default function({ data }) {
                         ).bio.bio}
                     </p>
                   )}
-                  {i === 1 && (
-                    <SimpleVerticalBarChart
+                  {[1, 2, 3].includes(i) && (
+                    <VerticalBarCircleChart
                       key={page}
+                      isBar={i === 1}
                       data={
                         dataKeys &&
                         sumMetrics &&
