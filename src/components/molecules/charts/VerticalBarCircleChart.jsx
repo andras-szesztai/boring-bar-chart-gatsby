@@ -44,6 +44,7 @@ export default function SimpleVerticalBarChart({
 }) {
   const valueStore = useRef()
   const prevHighlightedValue = usePrevious(highlightedValue)
+  const prevData = usePrevious(data)
   const refs = useChartRefs()
   const dims = useDimensions({
     ref: refs.wrapperRef,
@@ -61,6 +62,7 @@ export default function SimpleVerticalBarChart({
     duration: transitionDuration,
     textDy,
     data,
+    prevData,
     xKey,
     yKey,
     ref: refs.areaRef.current,

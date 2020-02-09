@@ -18,24 +18,11 @@ export function getAxisPadding(data, key, domainPaddingValue = 0.025) {
   return domainPadding
 }
 
-export function numberTween({ value, i, n, numberFormat }) {
-  function multiplierFunction(string) {
-    const multipliers = {
-      K: 1000,
-      M: 1000000,
-      G: 1000000000,
-      "%": 0.01,
-    }
-    return multipliers[string] ? multipliers[string] : 1
-  }
-
-  const el = select(n[i])
-  const text = el.text()
-  const newNum = text.replace(/([a-zA-Z%,])/g, "")
-  const index = interpolateNumber(newNum, value)
-
+export function numberTween({ value, i, n, numberFormat, prevValue }) {
   return function(t) {
-    el.text(format(numberFormat)(index(t)))
+    select(n[i]).text(
+      format(numberFormat)(interpolateNumber(prevValue, value)(t))
+    )
   }
 }
 
@@ -45,15 +32,22 @@ export function createUpdateNumberText({
   xScale,
   yScale,
   data,
+  prevData,
   xKey,
   yKey,
   ref,
   numberFormat,
-  prefix,
-  suffix,
   isHidden,
-  moveTextHigher
+  moveTextHigher,
 }) {
+  const getNumberTween = (d, i, n) =>
+    numberTween({
+      value: data.find(el => el[xKey] === d[xKey])[yKey],
+      prevValue: prevData ? prevData.find(el => el[xKey] === d[xKey])[yKey] : 0,
+      i,
+      n,
+      numberFormat,
+    })
   select(ref)
     .selectAll(".number-text")
     .data(data, d => d[xKey])
@@ -75,16 +69,7 @@ export function createUpdateNumberText({
               .delay((_, i) => (i * duration) / data.length)
               .ease(easeCubicInOut)
               .attr("y", d => yScale(d[yKey]))
-              .tween("text", (d, i, n) =>
-                numberTween({
-                  value: d[yKey],
-                  i,
-                  n,
-                  numberFormat,
-                  prefix,
-                  suffix,
-                })
-              )
+              .tween("text", getNumberTween)
           ),
       update =>
         update.call(update =>
@@ -94,16 +79,7 @@ export function createUpdateNumberText({
             .ease(easeCubicInOut)
             .attr("x", d => xScale(d[xKey]) + xScale.bandwidth() / 2)
             .attr("y", d => yScale(d[yKey]))
-            .tween("text", (d, i, n) =>
-              numberTween({
-                value: d[yKey],
-                i,
-                n,
-                numberFormat,
-                prefix,
-                suffix,
-              })
-            )
+            .tween("text", getNumberTween)
         )
     )
 }

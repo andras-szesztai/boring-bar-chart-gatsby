@@ -16,7 +16,6 @@ import {
 import { transition, fontWeight, fontSize } from "../../../themes/theme"
 import ChartStarter from "./ChartStarter"
 import { numberTween } from "../../../utils/chartHelpers"
-import { format } from "d3-format"
 
 const { mdNum } = transition
 
@@ -38,8 +37,12 @@ export default function HorizontalStackedBar({
     ref: refs.wrapperRef,
     margin,
   })
+  const prevData = usePrevious(data)
 
-  const makeData = keys => stack().keys(keys)([data])
+  const makeData = keys =>
+    stack()
+      .keys(keys)([data])
+      .map(el => ({ ...el, value: data[el.key] }))
 
   function initVis() {
     const keys = Object.keys(data)
@@ -105,6 +108,14 @@ export default function HorizontalStackedBar({
     const { xScale, colorScale } = valueStore.current
     const getXPosition = d =>
       xScale(d[0][0]) + (xScale(d[0][1]) - xScale(d[0][0])) / 2
+    const getTween = (d, i, n) =>
+      numberTween({
+        value: data[d.key],
+        prevValue: prevData ? prevData[d.key] : 0,
+        i,
+        n,
+        numberFormat,
+      })
     select(refs.areaRef.current)
       .selectAll("text")
       .data(makeData(Object.keys(data)))
@@ -118,39 +129,22 @@ export default function HorizontalStackedBar({
             .attr("y", dims.chartHeight / 2)
             .attr("dy", textDy)
             .attr("text-anchor", "middle")
+            .text(0)
             .call(enter =>
               enter
                 .transition()
                 .duration(duration)
                 .ease(easeCubicInOut)
-                .tween("text", (d, i, n) =>
-                  numberTween({
-                    value: data[d.key],
-                    i,
-                    n,
-                    numberFormat,
-                    prefix,
-                    suffix,
-                  })
-                )
+                .tween("text", getTween)
             ),
         update =>
-          update.call(
-            update => update
-            .transition()
-            .duration(duration)
-            .ease(easeCubicInOut)
-            .attr("x", getXPosition)
-            // .tween("text", (d, i, n) =>
-            //   numberTween({
-            //     value: data[d.key],
-            //     i,
-            //     n,
-            //     numberFormat,
-            //     prefix,
-            //     suffix,
-            //   })
-            // )
+          update.call(update =>
+            update
+              .transition()
+              .duration(duration)
+              .ease(easeCubicInOut)
+              .attr("x", getXPosition)
+              .tween("text", getTween)
           )
       )
   }
