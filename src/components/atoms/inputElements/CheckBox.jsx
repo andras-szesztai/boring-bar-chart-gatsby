@@ -11,7 +11,15 @@ import {
 const CheckBox = styled.div`
   scale: 1;
 
-  ${({ cursor, width, color, isRadio, checked, transitionDuration }) => css`
+  ${({
+    cursor,
+    width,
+    color,
+    isRadio,
+    checked,
+    transitionDuration,
+    isHoverAnimation,
+  }) => css`
     cursor: ${cursor || "pointer"};
     width: ${width}px;
     height: ${width}px;
@@ -22,11 +30,11 @@ const CheckBox = styled.div`
       ${themifyEase("easeInOutCubic")};
 
     :hover {
-      background: ${!checked && chroma(themifyColor(color)).brighten(3)};
+      background: ${!checked &&
+        isRadio &&
+        chroma(themifyColor(color)).brighten(3)};
     }
-  `} /* &:active {
-    transform: scale(0.6);
-  } */
+  `}
 `
 
 export default function(props) {

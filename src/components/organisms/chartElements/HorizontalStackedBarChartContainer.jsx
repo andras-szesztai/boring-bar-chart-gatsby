@@ -106,9 +106,9 @@ export default function({
               <HorizontalStackedBar
                 data={resultData[obj]}
                 margin={{
-                  top: !isFirst || isTooltip ? 10 : 0,
+                  top: !isFirst ? 10 : isTooltip ? 5 : 0,
                   left: 10,
-                  bottom: isFirst || isTooltip ? 10 : 0,
+                  bottom: isFirst ? 10 : isTooltip ? 5 : 0,
                   right: 10,
                 }}
                 colorRange={colorRange}

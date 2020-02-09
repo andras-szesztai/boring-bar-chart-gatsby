@@ -71,11 +71,15 @@ export default function SimpleVerticalBarChart({
   })
 
   const getAxisDomain = () => {
-    const axisPadding = getAxisPadding(data, yKey, 0.1)
+    const axisPadding = getAxisPadding(
+      data.filter(d => !d.filteredOut),
+      yKey,
+      0.1
+    )
     return isBar
       ? [0, max(data, d => d[yKey])]
       : [
-          min(data, d => d[yKey]) - axisPadding,
+          min(data.filter(d => !d.filteredOut), d => d[yKey]) - axisPadding,
           max(data, d => d[yKey]) + axisPadding,
         ]
   }
@@ -130,14 +134,19 @@ export default function SimpleVerticalBarChart({
       isHighlighted(d, noAcessor) ? highlightColor : defaultColor
     const setHighlightedFontWeight = (d, noAcessor) =>
       isHighlighted(d, noAcessor) ? semiBold : light
+    const setOpacity = d => (d.isFilteredOut ? 0 : 1)
     isBar &&
       chartArea.selectAll("rect").attr("fill", d => setHighlightedFill(d))
     isCircle &&
-      chartArea.selectAll("circle").attr("fill", d => setHighlightedFill(d))
+      chartArea
+        .selectAll("circle")
+        .attr("fill", d => setHighlightedFill(d))
+        .attr("opacity", setOpacity)
     chartArea
       .selectAll(".number-text")
       .attr("fill", d => setHighlightedFill(d))
       .attr("font-weight", d => setHighlightedFontWeight(d))
+      .attr("opacity", setOpacity)
     select(refs.xAxisRef.current).call(g =>
       g
         .selectAll(".tick text")
@@ -187,7 +196,7 @@ export default function SimpleVerticalBarChart({
 
   function createUpdateYRefLine() {
     const { yScale } = valueStore.current
-    const meanY = _.meanBy(data, yKey)
+    const meanY = _.meanBy(data.filter(d => !d.filteredOut), yKey)
     const chartArea = select(refs.areaRef.current)
 
     if (!init) {
@@ -290,8 +299,8 @@ export default function SimpleVerticalBarChart({
     data: data && Object.values(data),
     chartHeight: dims.chartHeight,
     chartWidth: dims.chartWidth,
+    sortKey: yKey,
     initVis,
-    noKey: true,
     updateVisData,
   })
 
