@@ -31,7 +31,7 @@ import TooltipContainer from "../molecules/containers/TooltipContainer"
 
 const { grayLightest, grayDarkest, grayDark } = colors
 
-const COLOR_RANGE = ["#fc5050", "#ffd00c", "#415f77"]
+const COLOR_RANGE = ["#fc5050", "#FCD432", "#415f77"]
 const SYNCED_CHECKBOXES = ["elo", "moves"]
 const CAROUSEL_PAGES = [
   "Bio",
@@ -437,7 +437,7 @@ export default function({ data }) {
           arrowTowardsBottom
           dx={5}
           dy={40}
-          width="375px"
+          width="400px"
           height="100px"
         >
           {mouseOverValue.current && (

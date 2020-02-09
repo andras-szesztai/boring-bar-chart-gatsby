@@ -126,6 +126,7 @@ export default function HorizontalStackedBar({
             .attr("x", getXPosition)
             .attr("font-size", fontSize[2])
             .attr("font-weight", fontWeight.medium)
+            .attr("fill", d => chroma(colorScale(d.key)).brighten(3))
             .attr("y", dims.chartHeight / 2)
             .attr("dy", textDy)
             .attr("text-anchor", "middle")
@@ -162,12 +163,23 @@ export default function HorizontalStackedBar({
   const prevHighlightArray = usePrevious(highlightArray)
   useEffect(() => {
     function updateHighlight() {
+      const { colorScale } = valueStore.current
+      const isHighlighted = d => highlightArray.includes(d.key)
+      const getOpacity = d => (isHighlighted(d) ? 1 : 0.2)
+      const getFill = d =>
+        isHighlighted(d)
+          ? chroma(colorScale(d.key)).brighten(3)
+          :  chroma(colorScale(d.key)).darken(2)
       select(refs.areaRef.current)
         .selectAll("rect")
         .transition()
         .duration(mdNum)
-        .attr("fill-opacity", d => (highlightArray.includes(d.key) ? 1 : 0.2))
-        .attr("stroke-opacity", d => (highlightArray.includes(d.key) ? 1 : 0.2))
+        .attr("fill-opacity", getOpacity)
+        .attr("stroke-opacity", getOpacity)
+
+      select(refs.areaRef.current)
+        .selectAll("text")
+        .attr("fill", getFill)
     }
     if (init && !_.isEqual(prevHighlightArray, highlightArray))
       updateHighlight()
