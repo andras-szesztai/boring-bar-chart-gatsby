@@ -15,7 +15,9 @@ const Title = styled.span`
     fontSize,
     paddingBottom,
     marginTop,
+    display
   }) => css`
+    display: ${display || "inline-block"};
     grid-area: ${gridArea};
     margin-bottom: ${themifySpace(marginBottom)}px;
     margin-top: ${themifySpace(marginTop)}px;

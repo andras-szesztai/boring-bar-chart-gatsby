@@ -452,7 +452,21 @@ export default function({ data }) {
           )}
         </TooltipContainer>
         <GridContainer rows="180px 1fr">
-          <FlexContainer>Title</FlexContainer>
+          <GridContainer rows="1fr 20px">
+            <FlexContainer justify="flex-start" align="flex-start" direction="column" paddingLeft={3} >
+              <Title fontSize={5} fontWeight={0}>
+                Checkmate
+              </Title>
+
+              <Title fontSize={1} fontWeight={4}  marginTop={1}>
+                15,000 games
+              </Title>
+              <Title fontSize={1} fontWeight={4} marginTop={1}>
+                from 8 chess grandmasters
+              </Title>
+            </FlexContainer>
+            <FlexContainer></FlexContainer>
+          </GridContainer>
           <GridContainer rows="1fr 50px">
             <GridContainer rows="1fr 100px">
               <GridContainer rows="repeat(2, 1fr)" rowGap={0.5}>
@@ -522,7 +536,9 @@ export default function({ data }) {
               </GridContainer>
             </GridContainer>
             <FlexContainer>
-              <Title fontWeight={3}>Games in the Dataset</Title>
+              <Title fontWeight={3} marginBottom={2}>
+                Games in the Dataset
+              </Title>
             </FlexContainer>
           </GridContainer>
         </GridContainer>
@@ -687,8 +703,15 @@ export default function({ data }) {
                   height: 10,
                 },
               ]}
-              activeDotStyle={{ backgroundColor: grayDarkest }}
-              dotStyle={{ backgroundColor: grayLightest, marginBottom: 1 }}
+              activeDotStyle={{
+                backgroundColor: grayDarkest,
+                border: `solid 1px ${grayDarkest}`,
+              }}
+              dotStyle={{
+                backgroundColor: grayLightest,
+                marginBottom: 1,
+                border: `solid 1px ${grayLightest}`,
+              }}
             />
           </FlexContainer>
         </GridContainer>
