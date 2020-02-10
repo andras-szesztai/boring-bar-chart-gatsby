@@ -3,6 +3,7 @@ import Image from "gatsby-image"
 import Range from "rc-slider/lib/Range"
 import _ from "lodash"
 import "rc-slider/assets/index.css"
+import { IoIosHelpCircle } from "react-icons/io"
 
 import {
   FlexContainer,
@@ -452,20 +453,29 @@ export default function({ data }) {
           )}
         </TooltipContainer>
         <GridContainer rows="180px 1fr">
-          <GridContainer rows="1fr 20px">
-            <FlexContainer justify="flex-start" align="flex-start" direction="column" paddingLeft={3} >
-              <Title fontSize={5} fontWeight={0}>
+          <GridContainer rows="2fr 1fr" rowGap={0}>
+            <FlexContainer
+              justify="flex-start"
+              align="flex-start"
+              direction="column"
+              paddingLeft={3}
+            >
+              <Title fontSize={5} fontWeight={0} style={{ marginTop: -5 }}>
                 Checkmate
               </Title>
 
-              <Title fontSize={1} fontWeight={4}  marginTop={1}>
+              <Title fontSize={1} fontWeight={4} marginTop={1}>
                 15,000 games
               </Title>
-              <Title fontSize={1} fontWeight={4} marginTop={1}>
+              <Title fontSize={1} fontWeight={4} marginTop={2}>
                 from 8 chess grandmasters
               </Title>
             </FlexContainer>
-            <FlexContainer></FlexContainer>
+            <FlexContainer align="flex-end">
+              <FlexContainer cursor="pointer">
+                <IoIosHelpCircle size={25} fill={grayDarkest} />
+              </FlexContainer>
+            </FlexContainer>
           </GridContainer>
           <GridContainer rows="1fr 50px">
             <GridContainer rows="1fr 100px">
