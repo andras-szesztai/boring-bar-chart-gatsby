@@ -9,6 +9,7 @@ import { transition, colors } from "../../../themes/theme"
 import { useInitUpdate } from "../../../hooks"
 import { scaleLinear } from "d3-scale"
 import { easeCubicInOut } from "d3-ease"
+import { numberTween } from "../../../utils/chartHelpers"
 
 const { mdNum } = transition
 const { grayDarkest, grayLighter } = colors
@@ -62,6 +63,7 @@ export default function VerticalBoxPlot({
       yScale,
     }
     updateBoxPlot()
+    withText && createUpdateBoxPlotText()
   }
 
   function updateVisDims() {
@@ -71,6 +73,7 @@ export default function VerticalBoxPlot({
       yScale,
     }
     updateBoxPlot(0)
+    withText && createUpdateBoxPlotText(0)
   }
 
   function createBoxPlot() {
@@ -148,7 +151,7 @@ export default function VerticalBoxPlot({
       Object.keys(raw).map(key => ({ key, value: data[key] }))
     const textData = getTextData(data)
     const getNumberTween = (d, i, n) =>
-      getNumberTween({
+      numberTween({
         value: getTextData(data).find(el => el.key === d.key).value,
         prevValue: prevData
           ? getTextData(prevData).find(el => el.key === d.key).value
@@ -157,33 +160,37 @@ export default function VerticalBoxPlot({
         n,
         numberFormat,
       })
-
+    const getFill = d =>
+      isFiltered && ["q1", "median"].includes(d.key) ? grayLighter : grayDarkest
     select(areaRef.current)
       .selectAll("text")
       .data(textData, d => d.key)
-      .join(enter =>
-        enter
-          .append("text")
-          .attr("text-anchor", "middle")
-          .attr("x", chartWidth / 2)
-          .attr("y", d => yScale(d.value))
-          .attr("dy", d => (d.key === "r0" ? 10 : -5))
-          .text(0)
-          .call(
-            enter =>
+      .join(
+        enter =>
+          enter
+            .append("text")
+            .attr("text-anchor", "middle")
+            .attr("x", chartWidth / 2)
+            .attr("y", d => yScale(d.value))
+            .attr("dy", d => (d.key === "r0" ? 10 : -3))
+            .text(0)
+            .call(enter =>
               enter
                 .transition()
                 .duration(duration)
                 .ease(easeCubicInOut)
-                .each((d, i, n) =>
-                  console.log({
-                    value: getTextData(data).find(el => el.key === d.key).value,
-                    prevValue: prevData
-                      ? getTextData(prevData).find(el => el.key === d.key).value
-                      : 0,
-                  })
-                )
-            .tween("text", getNumberTween)
+                .tween("text", getNumberTween)
+                .attr("fill", getFill)
+            ),
+        update =>
+          update.call(update =>
+            update
+              .transition()
+              .duration(duration)
+              .ease(easeCubicInOut)
+              .tween("text", getNumberTween)
+              .attr("y", d => yScale(d.value))
+              .attr("fill", getFill)
           )
       )
   }
@@ -227,6 +234,6 @@ VerticalBoxPlot.defaultProps = {
     bottom: 5,
     left: 20,
   },
-  numberFormat: "",
+  numberFormat: "d",
   transitionDuration: mdNum,
 }
