@@ -669,14 +669,26 @@ export default function({ data }) {
               onChange={newPeriod => {
                 if (newPeriod[0] !== newPeriod[1]) setPeriod(newPeriod)
               }}
-              trackStyle={[{ backgroundColor: grayDarkest }]}
+              trackStyle={[{ backgroundColor: grayDarkest, height: 1 }]}
+              railStyle={{ backgroundColor: grayLightest, height: 1 }}
               handleStyle={[
-                { backgroundColor: grayDark },
-                { backgroundColor: grayDark },
+                {
+                  backgroundColor: grayLightest,
+                  top: 5,
+                  border: `solid 1px ${grayDarkest}`,
+                  width: 10,
+                  height: 10,
+                },
+                {
+                  backgroundColor: grayLightest,
+                  top: 5,
+                  border: `solid 1px ${grayDarkest}`,
+                  width: 10,
+                  height: 10,
+                },
               ]}
-              railStyle={{ backgroundColor: grayLightest }}
               activeDotStyle={{ backgroundColor: grayDarkest }}
-              // dotStyle={{ backgroundColor: grayDarkest }}
+              dotStyle={{ backgroundColor: grayLightest, marginBottom: 1 }}
             />
           </FlexContainer>
         </GridContainer>

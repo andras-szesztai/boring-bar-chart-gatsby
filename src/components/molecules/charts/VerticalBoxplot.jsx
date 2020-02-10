@@ -5,7 +5,7 @@ import "d3-transition"
 
 import { FlexContainer, ChartSvg, ChartArea } from "../../atoms"
 import { useDimensions, usePrevious } from "../../../hooks"
-import { transition, colors } from "../../../themes/theme"
+import { transition, colors, fontSize, fontWeight } from "../../../themes/theme"
 import { useInitUpdate } from "../../../hooks"
 import { scaleLinear } from "d3-scale"
 import { easeCubicInOut } from "d3-ease"
@@ -173,6 +173,7 @@ export default function VerticalBoxPlot({
             .attr("x", chartWidth / 2)
             .attr("y", d => yScale(d.value))
             .attr("dy", d => (d.key === "r0" ? 10 : -3))
+            .attr("font-weight", fontWeight.medium)
             .text(0)
             .call(enter =>
               enter
