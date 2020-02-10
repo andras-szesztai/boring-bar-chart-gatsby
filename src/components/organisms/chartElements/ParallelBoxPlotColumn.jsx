@@ -112,7 +112,6 @@ export default function ParellelBoxPlotColumn({
   const isTop = hoveredElement.pos === "top"
   const isFilterActive = !_.isEqual(eloBoxPlot, unfilteredEloBoxPlot)
 
-  console.log(isFilterActive)
   return (
     <GridContainer rows="repeat(2, 1fr)" rowGap={1.5}>
       <TooltipContainer
@@ -146,6 +145,7 @@ export default function ParellelBoxPlotColumn({
               domain={isTop ? domains.unSynced.elo : domains.unSynced.moves}
               data={isTop ? unfilteredEloBoxPlot : unfilteredMovesBoxPlot}
               margin={tooltipMargin}
+              withText
             />
           </FlexContainer>
           <FlexContainer>
@@ -158,6 +158,7 @@ export default function ParellelBoxPlotColumn({
                   isResultsFiltered)
               }
               margin={tooltipMargin}
+              withText
             />
           </FlexContainer>
           {isFilterActive &&  

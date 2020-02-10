@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react"
 import { select } from "d3-selection"
+import _ from "lodash"
 import "d3-transition"
 
 import { FlexContainer, ChartSvg, ChartArea } from "../../atoms"
@@ -12,7 +13,16 @@ import { easeCubicInOut } from "d3-ease"
 const { mdNum } = transition
 const { grayDarkest, grayLighter } = colors
 
-export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
+export default function VerticalBoxPlot({
+  data,
+  domain,
+  margin,
+  isFiltered,
+  withText,
+  numberFormat,
+  transitionDuration,
+}) {
+  const prevData = usePrevious(data)
   const wrapperRef = useRef()
   const svgRef = useRef()
   const areaRef = useRef()
@@ -34,10 +44,11 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
       yScale,
     }
     createBoxPlot()
+    withText && createUpdateBoxPlotText()
   }
 
   useEffect(() => {
-    if(init && !_.isEqual(domain, prevDomain)) {
+    if (init && !_.isEqual(domain, prevDomain)) {
       updateVisData()
     }
   })
@@ -95,7 +106,7 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  function updateBoxPlot(duration = mdNum) {
+  function updateBoxPlot(duration = transitionDuration) {
     const { yScale } = valueStore.current
     const chartArea = select(areaRef.current)
     const { q1, median, q3, r0, r1 } = data
@@ -129,6 +140,52 @@ export default function VerticalBoxPlot({ data, domain, margin, isFiltered }) {
       .attr("x2", chartWidth)
       .attr("y1", yScale(median))
       .attr("y2", yScale(median))
+  }
+
+  function createUpdateBoxPlotText(duration = transitionDuration) {
+    const { yScale } = valueStore.current
+    const getTextData = raw =>
+      Object.keys(raw).map(key => ({ key, value: data[key] }))
+    const textData = getTextData(data)
+    const getNumberTween = (d, i, n) =>
+      getNumberTween({
+        value: getTextData(data).find(el => el.key === d.key).value,
+        prevValue: prevData
+          ? getTextData(prevData).find(el => el.key === d.key).value
+          : 0,
+        i,
+        n,
+        numberFormat,
+      })
+
+    select(areaRef.current)
+      .selectAll("text")
+      .data(textData, d => d.key)
+      .join(enter =>
+        enter
+          .append("text")
+          .attr("text-anchor", "middle")
+          .attr("x", chartWidth / 2)
+          .attr("y", d => yScale(d.value))
+          .attr("dy", d => (d.key === "r0" ? 10 : -5))
+          .text(0)
+          .call(
+            enter =>
+              enter
+                .transition()
+                .duration(duration)
+                .ease(easeCubicInOut)
+                .each((d, i, n) =>
+                  console.log({
+                    value: getTextData(data).find(el => el.key === d.key).value,
+                    prevValue: prevData
+                      ? getTextData(prevData).find(el => el.key === d.key).value
+                      : 0,
+                  })
+                )
+            .tween("text", getNumberTween)
+          )
+      )
   }
 
   const { init } = useInitUpdate({
@@ -170,4 +227,6 @@ VerticalBoxPlot.defaultProps = {
     bottom: 5,
     left: 20,
   },
+  numberFormat: "",
+  transitionDuration: mdNum,
 }
