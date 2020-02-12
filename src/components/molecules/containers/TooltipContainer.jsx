@@ -133,6 +133,7 @@ export default function Tooltip({
   height,
 }) {
   const { windowWidth } = useWindowDimensions()
+  const prevWindowWidth = usePrevious(windowWidth)
   const [tooltipDims, setTooltipDims] = useState({ width: undefined })
   const tooltipRef = useRef()
   useEffect(() => {
@@ -150,7 +151,7 @@ export default function Tooltip({
 
   const prevHooveredElement = usePrevious(hoveredElement)
   useEffect(() => {
-    if (!_.isEqual(hoveredElement, prevHooveredElement)) {
+    if (!_.isEqual(hoveredElement, prevHooveredElement) || (prevWindowWidth && windowWidth)) {
       let elTop, elLeft, elWidth, elHeight, tooltipLeft, tooltipTop
       if (hoveredElement) {
         const {
@@ -166,6 +167,8 @@ export default function Tooltip({
         elHeight = height
         // Only calculate tooltipLeft, tooltipBottom if hoveredElement
         if (arrowLeftRight) {
+          console.log(windowWidth);
+          
           const isLessThanMiddle = left <= windowWidth / 2
           const tooltipLeft = isLessThanMiddle
             ? elLeft + (elWidth + ARROW_HEIGHT) + dx
@@ -194,18 +197,7 @@ export default function Tooltip({
         // }
       }
     }
-  }, [
-    hoveredElement,
-    prevHooveredElement,
-    tooltipDims,
-    arrowLeftRight,
-    arrowTopBottom,
-    windowWidth,
-    arrowTowardsTop,
-    arrowTowardsBottom,
-    dy,
-    dx,
-  ])
+  }, [hoveredElement, prevHooveredElement, tooltipDims, arrowLeftRight, arrowTopBottom, windowWidth, arrowTowardsTop, arrowTowardsBottom, dy, dx, prevWindowWidth])
 
   const [isVisible, setIsVisible] = useState()
   const [tooltipIsHoveredOver, setTooltipIsHoveredOver] = useState(false)
@@ -233,7 +225,7 @@ export default function Tooltip({
     prevTooltipIsHoveredOver,
     shouldClose,
     tooltipIsHoveredOver,
-  ])
+  ])  
 
   return (
     <TooltipContainer

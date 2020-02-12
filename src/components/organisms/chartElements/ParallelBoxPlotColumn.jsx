@@ -90,9 +90,22 @@ export default function ParellelBoxPlotColumn({
   const topContainerRef = useRef()
   const bottomContainerRef = useRef()
   const [hoveredElement, setHoveredElement] = useState({
-    element: undefined,
-    pos: undefined,
+    element: topContainerRef,
+    pos: "top",
   })
+
+  const [isInitialized, setIsInitialized] = useState(false)
+  useEffect(() => {
+    if (!isInitialized) {
+      setTimeout(() =>{
+        setHoveredElement({
+          element: undefined,
+          pos: undefined,
+        })
+        setIsInitialized(true)
+      }, 100)
+    }
+  }, [isInitialized])
 
   const [elHeight, setElHeight] = useState(0)
 
@@ -122,7 +135,7 @@ export default function ParellelBoxPlotColumn({
         dy={hoveredElement.pos === "bottom" ? elHeight * 0.8 : elHeight * 0.2}
         dx={5}
         width="250px"
-        height="345px"
+        height="355px"
       >
         <GridContainer
           columnGap={0.5}
@@ -161,7 +174,7 @@ export default function ParellelBoxPlotColumn({
               withText
             />
           </FlexContainer>
-          {isFilterActive &&  
+          {isFilterActive &&
             ["Unfiltered", "Filtered"].map(el => (
               <FlexContainer paddingBottom={2}>{el}</FlexContainer>
             ))}
