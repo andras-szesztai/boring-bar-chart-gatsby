@@ -28,6 +28,8 @@ export const transition = {
   smNum: 300,
   md: "500ms",
   mdNum: 500,
+  lg: "1000ms",
+  lgNum: 1000,
 }
 
 export const fontSize = [

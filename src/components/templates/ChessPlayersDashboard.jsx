@@ -360,7 +360,9 @@ export default function({ data }) {
         columns="200px 1fr"
         position="relative"
       >
-
+        <ModalContainer>
+          
+        </ModalContainer>
         <TooltipContainer
           hoveredElement={hoveredElementTop}
           arrowLeftRight

@@ -5,10 +5,15 @@ import {
   themifyColor,
   themifyZIndex,
   themifySpace,
+  themifyTransition,
+  themifyEase,
 } from "../../../themes/mixins"
 
 const Container = styled.div`
   user-select: none;
+  transition: opacity ${themifyTransition("sm")} ${themifyEase(
+  "easeInOutCubic"
+)};
 
   ${({
     gridArea,
@@ -28,7 +33,7 @@ const Container = styled.div`
     marginBottom,
     marginLeft,
     marginRight,
-    paddingTop
+    paddingTop,
   }) => css`
     grid-area: ${gridArea};
     text-align: ${textAlign};
@@ -105,6 +110,18 @@ const Container = styled.div`
     css`
       border: 1px solid gray;
     `}
+
+  ${({ isHideable, isVisible }) =>
+    isHideable &&
+    (isVisible
+      ? css`
+          opacity: 1;
+          pointer-events: auto;
+        `
+      : css`
+          opacity: 0;
+          pointer-events: none;
+        `)}
   
   
 `
