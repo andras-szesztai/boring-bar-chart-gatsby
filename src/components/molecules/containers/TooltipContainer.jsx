@@ -3,7 +3,7 @@ import styled, { css } from "styled-components"
 import _ from "lodash"
 import { IoIosClose } from "react-icons/io"
 
-import { FlexContainer } from "../../atoms"
+import { FlexContainer, CloseIconContainer } from "../../atoms"
 import { useWindowDimensions, usePrevious } from "../../../hooks"
 import {
   themifyZIndex,
@@ -113,18 +113,6 @@ const TooltipContainer = styled(FlexContainer)`
         }
       `}
 
-`
-
-const IconContainer = styled(FlexContainer)`
-  .icon {
-    fill: ${themifyColor("grayDarkest")};
-    transition: fill ${themifyTransition("sm")};
-  }
-  :hover {
-    .icon {
-      fill: ${themifyColor("red")};
-    }
-  }
 `
 
 export default function Tooltip({
@@ -271,7 +259,7 @@ export default function Tooltip({
       }}
     >
       {isInteractive && tooltipIsHoveredOver && (
-        <IconContainer
+        <CloseIconContainer
           cursor="pointer"
           absPos
           top={4}
@@ -279,7 +267,7 @@ export default function Tooltip({
           onClick={() => isInteractive && setIsVisible(false)}
         >
           <IoIosClose className="icon" size={20} />
-        </IconContainer>
+        </CloseIconContainer>
       )}
       {children}
     </TooltipContainer>

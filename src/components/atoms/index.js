@@ -3,7 +3,8 @@ import {
   FlexContainer,
   VerticalAxisLabelContainer,
   GridContainer,
-  SortableItem
+  SortableItem,
+  CloseIconContainer
 } from "./containers"
 import { Title, ColoredSpan } from "./textElements"
 import { NeumorphButton } from "./buttons"
@@ -23,5 +24,6 @@ export {
   SortableItem,
   CheckBox,
   SortableHandle,
-  SelectAllText
+  SelectAllText,
+  CloseIconContainer
 }

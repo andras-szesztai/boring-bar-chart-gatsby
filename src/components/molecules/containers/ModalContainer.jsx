@@ -1,9 +1,9 @@
 import React from "react"
 import chroma from "chroma-js"
+import { IoIosClose } from "react-icons/io"
 
-import { FlexContainer } from "../../atoms"
+import { FlexContainer, CloseIconContainer } from "../../atoms"
 import { colors } from "../../../themes/theme"
-
 
 export default function ModalContainer({}) {
   return (
@@ -15,8 +15,16 @@ export default function ModalContainer({}) {
       bgColor={chroma(colors.grayDarkest).alpha(0.75)}
       zIndex="overlay"
     >
-      <FlexContainer bgColor={colors.whiteDark} >
-
+      <FlexContainer bgColor={colors.whiteDark} width="80%" height="80%" pos="relative">
+        <CloseIconContainer
+          cursor="pointer"
+          absPos
+          top={4}
+          right={4}
+          onClick={() => {}}
+        >
+          <IoIosClose className="icon" size={25} />
+        </CloseIconContainer>
       </FlexContainer>
     </FlexContainer>
   )
