@@ -167,8 +167,6 @@ export default function Tooltip({
         elHeight = height
         // Only calculate tooltipLeft, tooltipBottom if hoveredElement
         if (arrowLeftRight) {
-          console.log(windowWidth);
-          
           const isLessThanMiddle = left <= windowWidth / 2
           const tooltipLeft = isLessThanMiddle
             ? elLeft + (elWidth + ARROW_HEIGHT) + dx

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import chroma from "chroma-js"
 import { IoIosClose } from "react-icons/io"
 
@@ -6,9 +6,15 @@ import { FlexContainer, CloseIconContainer } from "../../atoms"
 import { colors } from "../../../themes/theme"
 import { usePrevious } from "../../../hooks"
 
-export default function ModalContainer({ shouldOpen }) {
-  const prevShouldOpen = usePrevious(shouldOpen)
-  const [isOpen, setIsOpen] = useState(true)
+export default function ModalContainer({ shouldToggle }) {
+  const prevShouldToggle = usePrevious(shouldToggle)
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (!prevShouldToggle && shouldToggle) {
+      setIsOpen(prev => !prev)
+    }
+  }, [prevShouldToggle, shouldToggle])
 
   return (
     <FlexContainer
@@ -20,20 +26,21 @@ export default function ModalContainer({ shouldOpen }) {
       zIndex="overlay"
       isHideable
       isVisible={isOpen}
+      onClick={() => setIsOpen(false)}
     >
       <FlexContainer
         bgColor={colors.whiteDark}
         width="80%"
         height="80%"
         pos="relative"
-        onClick={() => setIsOpen(false)}
+        onClick={e => e.stopPropagation()}
       >
         <CloseIconContainer
           cursor="pointer"
           absPos
           top={4}
           right={4}
-          onClick={() => {}}
+          onClick={() => setIsOpen(false)}
         >
           <IoIosClose className="icon" size={25} />
         </CloseIconContainer>

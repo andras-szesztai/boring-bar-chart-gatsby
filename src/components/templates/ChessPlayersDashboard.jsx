@@ -27,7 +27,7 @@ import {
 } from "../organisms"
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
-import { usePrevious, useArrayRefs } from "../../hooks"
+import { usePrevious, useArrayRefs, useModalToggle } from "../../hooks"
 import { max, quantile, extent } from "d3-array"
 import TooltipContainer from "../molecules/containers/TooltipContainer"
 
@@ -348,6 +348,8 @@ export default function({ data }) {
     }
   }, [sumMetrics, dataKeys, dataSets, prevDataSets])
 
+  const { shouldModalToggle, setShouldModalToggle } = useModalToggle()
+
   return (
     <FlexContainer fullScreen color="grayDarkest">
       <GridContainer
@@ -360,9 +362,7 @@ export default function({ data }) {
         columns="200px 1fr"
         position="relative"
       >
-        <ModalContainer>
-          
-        </ModalContainer>
+        <ModalContainer shouldToggle={shouldModalToggle}></ModalContainer>
         <TooltipContainer
           hoveredElement={hoveredElementTop}
           arrowLeftRight
@@ -476,7 +476,10 @@ export default function({ data }) {
               </Title>
             </FlexContainer>
             <FlexContainer align="flex-end">
-              <FlexContainer cursor="pointer">
+              <FlexContainer
+                cursor="pointer"
+                onClick={() => setShouldModalToggle(true)}
+              >
                 <IoIosHelpCircle size={25} fill={grayDarkest} />
               </FlexContainer>
             </FlexContainer>
