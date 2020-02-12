@@ -362,7 +362,63 @@ export default function({ data }) {
         columns="200px 1fr"
         position="relative"
       >
-        <ModalContainer shouldToggle={shouldModalToggle}></ModalContainer>
+        <ModalContainer shouldToggle={shouldModalToggle}>
+          <GridContainer
+            paddingTop={2}
+            paddingLeft={3}
+            paddingRight={3}
+            paddingBottom={2}
+            columnGap={2}
+            rowGap={2}
+            rows="repeat(2, 1fr)"
+            columns="repeat(4, 1fr)"
+            areas='"datasource boxplot boxplot boxplot"
+                  "datasource interact interact credit"'
+            fullSize
+          >
+            <GridContainer gridArea="datasource" rows="min-content 1fr" withBorder>
+              <Title fontSize={2} fontWeight={3}>
+                About the data
+              </Title>
+              <FlexContainer align="flex-start" justify="flex-start" direction="column">
+                <FlexContainer align="flex-start" justify="flex-start" paddingTop={3}>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Dolore qui minus voluptates ipsum voluptas culpa praesentium
+                  consequatur temporibus laborum nobis. Eaque voluptate
+                  voluptatibus doloribus sapiente velit impedit vero
+                  necessitatibus, distinctio, beatae nisi adipisci nulla tempore
+                  rem et minus obcaecati repellat! Nihil, hic sit reiciendis
+                  iusto ratione animi dolores rem provident!
+                </FlexContainer>
+                <FlexContainer align="flex-start" justify="flex-start" paddingTop={3}>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo
+                  temporibus, repellendus ipsa incidunt tenetur accusamus
+                  commodi sint hic earum ad, sit deserunt ipsum consectetur
+                  cumque, laudantium cupiditate quis beatae officiis eius nulla
+                  quod iure unde. Repellendus, explicabo velit eum quia
+                  veritatis similique tenetur illum quisquam sint totam quo
+                  veniam, ut neque mollitia sapiente, a ab alias molestiae.
+                  Eligendi, inventore odit!
+                </FlexContainer>
+              </FlexContainer>
+            </GridContainer>
+            <GridContainer gridArea="boxplot" rows="min-content 1fr" withBorder>
+            <Title fontSize={2} fontWeight={3}>
+                What are box plots and how to read them?
+              </Title>
+            </GridContainer>
+            <GridContainer gridArea="interact" rows="min-content 1fr" withBorder>
+            <Title fontSize={2} fontWeight={3}>
+                How to interact with the dashboard?
+              </Title>
+            </GridContainer>
+            <GridContainer gridArea="credit" rows="min-content 1fr" withBorder>
+            <Title fontSize={2} fontWeight={3}>
+               Credit
+              </Title>
+            </GridContainer>
+          </GridContainer>
+        </ModalContainer>
         <TooltipContainer
           hoveredElement={hoveredElementTop}
           arrowLeftRight

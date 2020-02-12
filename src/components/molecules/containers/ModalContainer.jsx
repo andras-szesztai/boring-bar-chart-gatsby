@@ -6,7 +6,16 @@ import { FlexContainer, CloseIconContainer } from "../../atoms"
 import { colors } from "../../../themes/theme"
 import { usePrevious } from "../../../hooks"
 
-export default function ModalContainer({ shouldToggle }) {
+export default function ModalContainer({
+  shouldToggle,
+  modalWidth,
+  modalHeight,
+  children,
+  minWidth,
+  maxWidth,
+  minHeight,
+  maxHeight,
+}) {
   const prevShouldToggle = usePrevious(shouldToggle)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -22,7 +31,7 @@ export default function ModalContainer({ shouldToggle }) {
       pos="fixed"
       top={0}
       left={0}
-      bgColor={chroma(colors.grayDarkest).alpha(0.75)}
+      bgColor={chroma(colors.grayDarkest).alpha(0.8)}
       zIndex="overlay"
       isHideable
       isVisible={isOpen}
@@ -30,8 +39,12 @@ export default function ModalContainer({ shouldToggle }) {
     >
       <FlexContainer
         bgColor={colors.whiteDark}
-        width="80%"
-        height="80%"
+        width={modalWidth}
+        minWidth={minWidth}
+        maxWidth={maxWidth}
+        height={modalHeight}
+        minHeight={minHeight}
+        maxHeight={maxHeight}
         pos="relative"
         onClick={e => e.stopPropagation()}
       >
@@ -44,7 +57,17 @@ export default function ModalContainer({ shouldToggle }) {
         >
           <IoIosClose className="icon" size={25} />
         </CloseIconContainer>
+        {children}
       </FlexContainer>
     </FlexContainer>
   )
+}
+
+ModalContainer.defaultProps = {
+  modalWidth: "80%",
+  modalHeight: "80%",
+  minHeight: "600px",
+  maxHeight: "800px",
+  minWidth: "1000px",
+  maxWidth: "1400px",
 }
