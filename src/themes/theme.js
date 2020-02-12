@@ -59,6 +59,7 @@ export const fontWeight = {
 export const z = {
   tooltip: 50,
   loader: 100,
+  overlay: 120
 }
 
 const theme = {

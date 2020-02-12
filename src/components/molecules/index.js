@@ -2,9 +2,14 @@ import {
   VerticalDropChart,
   HorizontalStackedBar,
   VerticalBoxPlot,
-  VerticalBarCircleChart
+  VerticalBarCircleChart,
 } from "./charts"
-import { SortableComponent, TooltipContainer, CarouselContainer } from "./containers"
+import {
+  SortableComponent,
+  TooltipContainer,
+  CarouselContainer,
+  ModalContainer,
+} from "./containers"
 import { HorizontalMultiSelect } from "./controlElements"
 import { CountUpSpan } from "./textElemets"
 
@@ -17,5 +22,6 @@ export {
   VerticalBoxPlot,
   TooltipContainer,
   CarouselContainer,
-  VerticalBarCircleChart
+  VerticalBarCircleChart,
+  ModalContainer,
 }
