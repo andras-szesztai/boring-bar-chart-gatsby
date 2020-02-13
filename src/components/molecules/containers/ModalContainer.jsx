@@ -31,7 +31,7 @@ export default function ModalContainer({
       pos="fixed"
       top={0}
       left={0}
-      bgColor={chroma(colors.grayDarkest).alpha(0.8)}
+      bgColor={chroma(colors.grayDarkest).alpha(0.9)}
       zIndex="overlay"
       isHideable
       isVisible={isOpen}

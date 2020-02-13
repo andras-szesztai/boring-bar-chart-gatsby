@@ -20,8 +20,8 @@ import {
 } from "../../atoms"
 import { themifyFontSize } from "../../../themes/mixins"
 import { useDimensions, useDimsUpdate } from "../../../hooks"
-import Credits from "../../molecules/Credits"
-import { GridContainer, Container } from "../../atoms/containers"
+import { CreditsContainer } from "../../molecules"
+import { GridContainer, Container } from "../../atoms"
 
 const ChartContainer = styled.div`
   position: relative;
@@ -65,7 +65,7 @@ const creditElements = [
     anchorText: "#MakeoverMonday",
   },
   {
-    ...flexEndObject,
+    ...flexEndObject, 
     text: "Data source",
     link: "https://news.gallup.com/poll/4735/sports.aspx#1",
     anchorText: "Gallup",
@@ -292,7 +292,7 @@ export default function({ rawData, data, valueArray }) {
               <FlexContainer>2017</FlexContainer>
             </GridContainer>
           </FlexContainer>
-          <Credits
+          <CreditsContainer
             direction="column"
             position={{
               bottom: 0,

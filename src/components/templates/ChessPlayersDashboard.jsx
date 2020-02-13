@@ -20,6 +20,7 @@ import {
   CarouselContainer,
   VerticalBarCircleChart,
   ModalContainer,
+  CreditsContainer,
 } from "../molecules"
 import {
   ParallelBoxPlotColumn,
@@ -31,7 +32,7 @@ import { usePrevious, useArrayRefs, useModalToggle } from "../../hooks"
 import { max, quantile, extent } from "d3-array"
 import TooltipContainer from "../molecules/containers/TooltipContainer"
 
-const { grayLightest, grayDarkest, grayDark } = colors
+const { grayLightest, grayDarkest } = colors
 
 const COLOR_RANGE = ["#fc5050", "#FCD432", "#415f77"]
 const SYNCED_CHECKBOXES = ["elo", "moves"]
@@ -40,6 +41,27 @@ const CAROUSEL_PAGES = [
   "Number of Games in Dataset",
   "Average ELO Score",
   "Maximum ELO Score",
+]
+const flexEndObject = { justify: "flex-end" }
+const CREDIT_ELEMENTS = [
+  {
+    ...flexEndObject,
+    text: "Designed and built by",
+    link: "https://twitter.com/AndSzesztai",
+    anchorText: "András Szesztai",
+  },
+  {
+    ...flexEndObject,
+    text: "Project",
+    link: "https://www.boringbarchart.com/",
+    anchorText: "BoringBarChart",
+  },
+  {
+    ...flexEndObject,
+    text: "Data source",
+    link: "https://www.kaggle.com/liury123/chess-game-from-12-top-players",
+    anchorText: "chess.com",
+  },
 ]
 
 function getBoxPlotData(sorted) {
@@ -376,12 +398,24 @@ export default function({ data }) {
                   "datasource interact interact credit"'
             fullSize
           >
-            <GridContainer gridArea="datasource" rows="min-content 1fr" withBorder>
+            <GridContainer
+              gridArea="datasource"
+              rows="min-content 1fr"
+              withBorder
+            >
               <Title fontSize={2} fontWeight={3}>
                 About the data
               </Title>
-              <FlexContainer align="flex-start" justify="flex-start" direction="column">
-                <FlexContainer align="flex-start" justify="flex-start" paddingTop={3}>
+              <FlexContainer
+                align="flex-start"
+                justify="flex-start"
+                direction="column"
+              >
+                <FlexContainer
+                  align="flex-start"
+                  justify="flex-start"
+                  paddingTop={3}
+                >
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Dolore qui minus voluptates ipsum voluptas culpa praesentium
                   consequatur temporibus laborum nobis. Eaque voluptate
@@ -390,7 +424,11 @@ export default function({ data }) {
                   rem et minus obcaecati repellat! Nihil, hic sit reiciendis
                   iusto ratione animi dolores rem provident!
                 </FlexContainer>
-                <FlexContainer align="flex-start" justify="flex-start" paddingTop={3}>
+                <FlexContainer
+                  align="flex-start"
+                  justify="flex-start"
+                  paddingTop={3}
+                >
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo
                   temporibus, repellendus ipsa incidunt tenetur accusamus
                   commodi sint hic earum ad, sit deserunt ipsum consectetur
@@ -403,19 +441,31 @@ export default function({ data }) {
               </FlexContainer>
             </GridContainer>
             <GridContainer gridArea="boxplot" rows="min-content 1fr" withBorder>
-            <Title fontSize={2} fontWeight={3}>
+              <Title fontSize={2} fontWeight={3}>
                 What are box plots and how to read them?
               </Title>
             </GridContainer>
-            <GridContainer gridArea="interact" rows="min-content 1fr" withBorder>
-            <Title fontSize={2} fontWeight={3}>
+            <GridContainer
+              gridArea="interact"
+              rows="min-content 1fr"
+              withBorder
+            >
+              <Title fontSize={2} fontWeight={3}>
                 How to interact with the dashboard?
               </Title>
             </GridContainer>
             <GridContainer gridArea="credit" rows="min-content 1fr" withBorder>
-            <Title fontSize={2} fontWeight={3}>
-               Credit
+              <Title fontSize={2} fontWeight={3}>
+                Credit
               </Title>
+              <CreditsContainer
+                direction="column"
+                position={{
+                  bottom: 0,
+                  right: 0,
+                }}
+                elements={CREDIT_ELEMENTS}
+              />
             </GridContainer>
           </GridContainer>
         </ModalContainer>

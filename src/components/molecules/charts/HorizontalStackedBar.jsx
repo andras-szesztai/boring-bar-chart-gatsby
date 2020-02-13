@@ -200,4 +200,5 @@ HorizontalStackedBar.defaultProps = {
   textDy: 5,
   transitionDuration: mdNum,
   numberFormat: ",.1%",
+  withNumber: false
 }

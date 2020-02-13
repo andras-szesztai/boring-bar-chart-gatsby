@@ -132,7 +132,7 @@ export default function ParellelBoxPlotColumn({
         arrowLeftRight
         arrowTowardsTop={isTop}
         arrowTowardsBottom={hoveredElement.pos === "bottom"}
-        dy={hoveredElement.pos === "bottom" ? elHeight * 0.8 : elHeight * 0.2}
+        dy={hoveredElement.pos === "bottom" ? elHeight * 0.6 : elHeight * 0.4}
         dx={5}
         width="250px"
         height="355px"

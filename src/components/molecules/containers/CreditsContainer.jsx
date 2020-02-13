@@ -1,6 +1,5 @@
 import React from "react"
-import { GridContainer, FlexContainer } from "../atoms/containers"
-import { Title } from "../atoms"
+import { Title, GridContainer, FlexContainer  } from "../../atoms"
 
 export default function({ direction, elements = [], position }) {
   return (
