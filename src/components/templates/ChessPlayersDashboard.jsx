@@ -65,7 +65,25 @@ const CREDIT_ELEMENTS = [
   },
 ]
 
-//"https://www.kaggle.com/liury123/chess-game-from-12-top-players"
+const BOX_PLOT_EXPLAIN = [
+  {
+    title: "Median (Q2/50th Percentile)",
+    text: "the middle value of the dataset",
+  },
+  {
+    title: "First quartile (Q1/25th Percentile)",
+    text:
+      "the middle number between the smallest number (not the “minimum”) and the median of the dataset",
+  },
+  {
+    title: "Third quartile (Q3/75th Percentile)",
+    text:
+      "the middle value between the median and the highest value (not the “maximum”) of the dataset",
+  },
+  { title: "Interquartile range (IQR)", text: "25th to the 75th percentile." },
+  { title: "Maximum", text: "Q3 + 1.5*IQR" },
+  { title: "Minimum", text: "Q1 -1.5*IQR" },
+]
 
 function getBoxPlotData(sorted) {
   const min = sorted[0]
@@ -451,6 +469,24 @@ export default function({ data }) {
               <Title fontSize={2} fontWeight={3}>
                 What are box plots and how to read them?
               </Title>
+              <GridContainer columns="repeat(3, 1fr)" columnGap={3} withBorder>
+                <FlexContainer
+                  withBorder
+                  justify="flex-start"
+                  align="flex-start"
+                  direction="column"
+                >
+                  Boxplots are a standardized way of displaying the distribution
+                  of data based on a five number summary.
+                  {BOX_PLOT_EXPLAIN.map(({ title, text }) => (
+                    <Container paddingTop={1}>
+                      <Title fontWeight={3}>{title}: </Title>
+                      {text}
+                    </Container>
+                  ))}
+                </FlexContainer>
+                <FlexContainer withBorder></FlexContainer>
+              </GridContainer>
             </GridContainer>
             <GridContainer gridArea="interact" rows="min-content 1fr">
               <Title fontSize={2} fontWeight={3}>
