@@ -1,17 +1,23 @@
 import React from "react"
-import { Title, GridContainer, FlexContainer  } from "../../atoms"
+import { Title, GridContainer, FlexContainer } from "../../atoms"
 
-export default function({ direction, elements = [], position }) {
+export default function CreditsContainer({
+  direction,
+  elements = [],
+  position,
+  fontSize,
+  absPos,
+}) {
   return (
     <GridContainer
       rows={direction === "column" && `repeat(${elements.length}, 1fr)`}
       columns={direction === "row" && `repeat(${elements.length}, 1fr)`}
-      absPos
+      absPos={absPos}
       {...position}
     >
       {elements.map(({ justify, text, link, anchorText }) => (
         <FlexContainer justify={justify} key={text}>
-          <Title fontSize={0} color="grayDarkest">
+          <Title fontSize={fontSize} color="grayDarkest">
             {text}:{" "}
             <a href={`${link}`} target="_blank" rel="noopener noreferrer">
               {anchorText}
@@ -21,4 +27,9 @@ export default function({ direction, elements = [], position }) {
       ))}
     </GridContainer>
   )
+}
+
+CreditsContainer.defaultProps = {
+  fontSize: 0,
+  absPos: true,
 }

@@ -42,7 +42,7 @@ const CAROUSEL_PAGES = [
   "Average ELO Score",
   "Maximum ELO Score",
 ]
-const flexEndObject = { justify: "flex-end" }
+const flexEndObject = { justify: "flex-start" }
 const CREDIT_ELEMENTS = [
   {
     ...flexEndObject,
@@ -59,10 +59,12 @@ const CREDIT_ELEMENTS = [
   {
     ...flexEndObject,
     text: "Data source",
-    link: "https://www.kaggle.com/liury123/chess-game-from-12-top-players",
+    link: "https://www.chess.com/games",
     anchorText: "chess.com",
   },
 ]
+
+//"https://www.kaggle.com/liury123/chess-game-from-12-top-players"
 
 function getBoxPlotData(sorted) {
   const min = sorted[0]
@@ -454,19 +456,15 @@ export default function({ data }) {
                 How to interact with the dashboard?
               </Title>
             </GridContainer>
-            <GridContainer gridArea="credit" rows="min-content 1fr" withBorder>
-              <Title fontSize={2} fontWeight={3}>
-                Credit
-              </Title>
+            <FlexContainer gridArea="credit" justify="flex-start" align="flex-end" paddingBottom={1}>
               <CreditsContainer
+                justify="flex-end"
                 direction="column"
-                position={{
-                  bottom: 0,
-                  right: 0,
-                }}
+                fontSize={1}
                 elements={CREDIT_ELEMENTS}
+                absPos={false}
               />
-            </GridContainer>
+            </FlexContainer>
           </GridContainer>
         </ModalContainer>
         <TooltipContainer
