@@ -12,6 +12,7 @@ import {
   SelectAllText,
   SortableHandle,
   Title,
+  LinkAnchor,
 } from "../atoms"
 import {
   SortableComponent,
@@ -417,14 +418,14 @@ export default function({ data }) {
                   align="flex-start"
                   justify="flex-start"
                   paddingTop={3}
+                  fontSize={1}
                 >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Dolore qui minus voluptates ipsum voluptas culpa praesentium
-                  consequatur temporibus laborum nobis. Eaque voluptate
-                  voluptatibus doloribus sapiente velit impedit vero
-                  necessitatibus, distinctio, beatae nisi adipisci nulla tempore
-                  rem et minus obcaecati repellat! Nihil, hic sit reiciendis
-                  iusto ratione animi dolores rem provident!
+                  <div>
+                    The base dataset for this dashboard was collected by{" "}
+                    <LinkAnchor href="https://www.kaggle.com/liury123">
+                      Liu Renyu
+                    </LinkAnchor>
+                  </div>
                 </FlexContainer>
                 <FlexContainer
                   align="flex-start"
@@ -456,7 +457,12 @@ export default function({ data }) {
                 How to interact with the dashboard?
               </Title>
             </GridContainer>
-            <FlexContainer gridArea="credit" justify="flex-start" align="flex-end" paddingBottom={1}>
+            <FlexContainer
+              gridArea="credit"
+              justify="flex-start"
+              align="flex-end"
+              paddingBottom={1}
+            >
               <CreditsContainer
                 justify="flex-end"
                 direction="column"
