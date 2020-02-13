@@ -393,19 +393,15 @@ export default function({ data }) {
             paddingLeft={3}
             paddingRight={3}
             paddingBottom={2}
-            columnGap={2}
-            rowGap={2}
+            columnGap={3}
+            rowGap={3}
             rows="repeat(2, 1fr)"
             columns="repeat(4, 1fr)"
             areas='"datasource boxplot boxplot boxplot"
                   "datasource interact interact credit"'
             fullSize
           >
-            <GridContainer
-              gridArea="datasource"
-              rows="min-content 1fr"
-              withBorder
-            >
+            <GridContainer gridArea="datasource" rows="min-content 1fr">
               <Title fontSize={2} fontWeight={3}>
                 About the data
               </Title>
@@ -421,38 +417,42 @@ export default function({ data }) {
                   fontSize={1}
                 >
                   <div>
-                    The base dataset for this dashboard was collected by{" "}
+                    The{" "}
+                    <LinkAnchor href="https://www.kaggle.com/liury123/chess-game-from-12-top-players">
+                      base dataset
+                    </LinkAnchor>{" "}
+                    for this dashboard was collected by{" "}
                     <LinkAnchor href="https://www.kaggle.com/liury123">
                       Liu Renyu
+                    </LinkAnchor>{" "}
+                    on the games played by 12 great chess masters in history,
+                    hosted in{" "}
+                    <LinkAnchor href="https://www.chess.com/">
+                      chess.com
                     </LinkAnchor>
+                    's database.
                   </div>
                 </FlexContainer>
+
                 <FlexContainer
                   align="flex-start"
                   justify="flex-start"
                   paddingTop={3}
                 >
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo
-                  temporibus, repellendus ipsa incidunt tenetur accusamus
-                  commodi sint hic earum ad, sit deserunt ipsum consectetur
-                  cumque, laudantium cupiditate quis beatae officiis eius nulla
-                  quod iure unde. Repellendus, explicabo velit eum quia
-                  veritatis similique tenetur illum quisquam sint totam quo
-                  veniam, ut neque mollitia sapiente, a ab alias molestiae.
-                  Eligendi, inventore odit!
+                  <div>
+                    The idea behind this dashboard was to analyse and compare
+                    the their game style, results, and evolution of different
+                    grandmasters across in different phases of their career. ...
+                  </div>
                 </FlexContainer>
               </FlexContainer>
             </GridContainer>
-            <GridContainer gridArea="boxplot" rows="min-content 1fr" withBorder>
+            <GridContainer gridArea="boxplot" rows="min-content 1fr">
               <Title fontSize={2} fontWeight={3}>
                 What are box plots and how to read them?
               </Title>
             </GridContainer>
-            <GridContainer
-              gridArea="interact"
-              rows="min-content 1fr"
-              withBorder
-            >
+            <GridContainer gridArea="interact" rows="min-content 1fr">
               <Title fontSize={2} fontWeight={3}>
                 How to interact with the dashboard?
               </Title>

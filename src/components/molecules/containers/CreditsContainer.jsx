@@ -1,11 +1,12 @@
 import React from "react"
-import { Title, GridContainer, FlexContainer } from "../../atoms"
+import { Title, GridContainer, FlexContainer, LinkAnchor } from "../../atoms"
 
 export default function CreditsContainer({
   direction,
   elements = [],
   position,
   fontSize,
+  fontWeight,
   absPos,
 }) {
   return (
@@ -19,9 +20,15 @@ export default function CreditsContainer({
         <FlexContainer justify={justify} key={text}>
           <Title fontSize={fontSize} color="grayDarkest">
             {text}:{" "}
-            <a href={`${link}`} target="_blank" rel="noopener noreferrer">
+            <LinkAnchor
+              href={link}
+              fontSize={fontSize}
+              fontWeight={fontWeight}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {anchorText}
-            </a>
+            </LinkAnchor>
           </Title>
         </FlexContainer>
       ))}
@@ -32,4 +39,5 @@ export default function CreditsContainer({
 CreditsContainer.defaultProps = {
   fontSize: 0,
   absPos: true,
+  fontWeight: 3
 }

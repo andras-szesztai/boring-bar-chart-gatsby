@@ -15,7 +15,7 @@ const Link = styled.a`
   ${({ color, fontsize, fontWeight }) => css`
     color: ${themifyColor("grayDarkest")};
     font-size: ${themifyFontSize(fontsize)};
-    font-weight: ${themifyFontWeight(fontWeight)};
+    font-weight: ${themifyFontWeight(fontWeight)} !important;
     :hover {
       color: ${chroma(themifyColor(color)).brighten(2)};
       text-decoration: underline;
@@ -34,7 +34,7 @@ function LinkAnchor(props) {
 LinkAnchor.defaultProps = {
   color: "grayDarkest",
   fontsize: 1,
-  fontWeight: "medium",
+  fontWeight: 3,
 }
 
 export default LinkAnchor
