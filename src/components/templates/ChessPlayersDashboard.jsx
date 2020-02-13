@@ -63,6 +63,12 @@ const CREDIT_ELEMENTS = [
     link: "https://www.chess.com/games",
     anchorText: "chess.com",
   },
+  {
+    ...flexEndObject,
+    text: "Box plot explanation & image",
+    link: "https://towardsdatascience.com/understanding-boxplots-5e2df7bcbd51",
+    anchorText: "towards data science",
+  },
 ]
 
 const BOX_PLOT_EXPLAIN = [
@@ -121,7 +127,8 @@ function checkUncheckAll(bool, keys) {
   return checkArray
 }
 
-export default function({ data }) {
+export default function({ data, img }) {
+
   const [dataKeys, setDataKeys] = useState(undefined)
 
   useEffect(() => {
@@ -412,7 +419,7 @@ export default function({ data }) {
             paddingRight={3}
             paddingBottom={2}
             columnGap={3}
-            rowGap={3}
+            rowGap={2}
             rows="repeat(2, 1fr)"
             columns="repeat(4, 1fr)"
             areas='"datasource boxplot boxplot boxplot"
@@ -431,7 +438,7 @@ export default function({ data }) {
                 <FlexContainer
                   align="flex-start"
                   justify="flex-start"
-                  paddingTop={3}
+                  paddingTop={2}
                   fontSize={1}
                 >
                   <div>
@@ -469,23 +476,31 @@ export default function({ data }) {
               <Title fontSize={2} fontWeight={3}>
                 What are box plots and how to read them?
               </Title>
-              <GridContainer columns="repeat(3, 1fr)" columnGap={3} withBorder>
+              <GridContainer
+                columns="repeat(3, 1fr)"
+                columnGap={3}
+                areas='"text img img"'
+              >
                 <FlexContainer
-                  withBorder
                   justify="flex-start"
                   align="flex-start"
                   direction="column"
+                  paddingTop={2}
                 >
                   Boxplots are a standardized way of displaying the distribution
                   of data based on a five number summary.
                   {BOX_PLOT_EXPLAIN.map(({ title, text }) => (
                     <Container paddingTop={1}>
-                      <Title fontWeight={3}>{title}: </Title>
-                      {text}
+                      <Title fontWeight={3}>{title}:</Title> {text}
                     </Container>
                   ))}
                 </FlexContainer>
-                <FlexContainer withBorder></FlexContainer>
+                <FlexContainer gridArea="img">
+                  <Image
+                    style={{ width:250, borderRadius: 2 }}
+                    fluid={img[0].fluid}
+                  />
+                </FlexContainer>  
               </GridContainer>
             </GridContainer>
             <GridContainer gridArea="interact" rows="min-content 1fr">
