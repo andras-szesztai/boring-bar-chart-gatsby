@@ -364,7 +364,7 @@ export default function({ data, img }) {
         minHeight="600px"
         columns="200px 1fr"
         position="relative"
-        columnGap={6}
+        columnGap={8}
       >
         <ModalComponent
            shouldModalToggle={shouldModalToggle}

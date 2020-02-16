@@ -3,7 +3,7 @@ import _ from "lodash"
 
 import { GridContainer, FlexContainer, Title } from "../../atoms"
 import { VerticalBoxPlot, TooltipContainer } from "../../molecules"
-import { usePrevious, useArrayRefs } from "../../../hooks"
+import { usePrevious } from "../../../hooks"
 import { extent } from "d3-array"
 
 export function getPeriodFilteredData(data, period) {
@@ -181,7 +181,7 @@ export default function ParellelBoxPlotColumn({
         </GridContainer>
       </TooltipContainer>
       <GridContainer
-        columnGap={0.5}
+        columnGap={0}
         columns="repeat(2, 1fr)"
         ref={topContainerRef}
         onMouseEnter={() =>
@@ -210,7 +210,7 @@ export default function ParellelBoxPlotColumn({
         </FlexContainer>
       </GridContainer>
       <GridContainer
-        columnGap={0.5}
+        columnGap={0}
         columns="repeat(2, 1fr)"
         ref={bottomContainerRef}
         onMouseEnter={() =>
