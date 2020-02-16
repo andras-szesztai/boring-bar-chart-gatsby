@@ -10,85 +10,32 @@ import {
   GridContainer,
   CheckBox,
   SelectAllText,
-  SortableHandle,
   Title,
   LinkAnchor,
 } from "../atoms"
 import {
-  SortableComponent,
-  CountUpSpan,
   HorizontalMultiSelect,
   CarouselContainer,
   VerticalBarCircleChart,
   ModalContainer,
   CreditsContainer,
 } from "../molecules"
-import {
-  ParallelBoxPlotColumn,
-  HorizontalStackedBarChartContainer,
-} from "../organisms"
+import { HorizontalStackedBarChartContainer } from "../organisms"
 import { colors } from "../../themes/theme"
 import { Container } from "../atoms/containers"
-import { usePrevious, useArrayRefs, useModalToggle } from "../../hooks"
+import { usePrevious, useModalToggle } from "../../hooks"
 import { max, quantile, extent } from "d3-array"
 import TooltipContainer from "../molecules/containers/TooltipContainer"
+import { SortableColumnsComponent } from "../organisms/templateElemets/chessPlayersDashboard"
+import {
+  BOX_PLOT_EXPLAIN,
+  CREDIT_ELEMENTS,
+  CAROUSEL_PAGES,
+  COLOR_RANGE,
+  SYNCED_CHECKBOXES,
+} from "../../constants/chessPlayersDashboard"
 
 const { grayLightest, grayDarkest } = colors
-
-const COLOR_RANGE = ["#fc5050", "#FCD432", "#415f77"]
-const SYNCED_CHECKBOXES = ["elo", "moves"]
-const CAROUSEL_PAGES = [
-  "Bio",
-  "Number of Games in Dataset",
-  "Average ELO Score",
-  "Maximum ELO Score",
-]
-const flexEndObject = { justify: "flex-start" }
-const CREDIT_ELEMENTS = [
-  {
-    ...flexEndObject,
-    text: "Designed and built by",
-    link: "https://twitter.com/AndSzesztai",
-    anchorText: "András Szesztai",
-  },
-  {
-    ...flexEndObject,
-    text: "Project",
-    link: "https://www.boringbarchart.com/",
-    anchorText: "BoringBarChart",
-  },
-  {
-    ...flexEndObject,
-    text: "Data source",
-    link: "https://www.chess.com/games",
-    anchorText: "chess.com",
-  },
-  {
-    ...flexEndObject,
-    text: "Box plot explanation & image",
-    link: "https://towardsdatascience.com/understanding-boxplots-5e2df7bcbd51",
-    anchorText: "towards data science",
-  },
-]
-
-const BOX_PLOT_EXPLAIN = [
-  {
-    title: "Median (Q2/50th Percentile)",
-    text: "the middle value of the dataset",
-  },
-  {
-    title: "First quartile (Q1/25th Percentile)",
-    text:
-      "the middle number between the smallest number (not the “minimum”) and the median.",
-  },
-  {
-    title: "Third quartile (Q3/75th Percentile)",
-    text:
-      "the middle value between the median and the highest value (not the “maximum”).",
-  },
-  { title: "Interquartile range (IQR)", text: "25th to the 75th percentile." },
-  { title: "Maximum | Minimum", text: "Q3 + 1.5*IQR | Q1 -1.5*IQR" },
-]
 
 function getBoxPlotData(sorted) {
   const min = sorted[0]
@@ -359,8 +306,6 @@ export default function({ data, img }) {
     resultCheckedObject,
   ])
 
-  const infoContainerRefs = useArrayRefs(data.length)
-  const barContainerRefs = useArrayRefs(data.length)
   const [hoveredElementTop, setHoveredElementTop] = useState(undefined)
   const [hoveredElementBottom, setHoveredElementBottom] = useState(undefined)
   const [shouldTooltipClose, setShouldTooltipClose] = useState(false)
@@ -398,7 +343,22 @@ export default function({ data, img }) {
 
   const { shouldModalToggle, setShouldModalToggle } = useModalToggle()
 
-  // TODO: add disclaimer for small screen sizes
+  const sortableColumnsComponentProps = {
+    setShouldTooltipClose,
+    dataKeys,
+    data,
+    sumMetrics,
+    checkedObject,
+    setMouseOver,
+    mouseOver,
+    mouseOverValue,
+    setHoveredElementTop,
+    setHoveredElementBottom,
+    dataSets,
+    syncObject,
+    resultCheckedObject,
+    setCheckedObject,
+  }
 
   return (
     <FlexContainer fullScreen color="grayDarkest">
@@ -737,131 +697,7 @@ export default function({ data, img }) {
         </GridContainer>
         <GridContainer rows="1fr 50px">
           {checkedObject && (
-            <SortableComponent
-              axis="x"
-              lockAxis="x"
-              columnGap={8}
-              fullSize
-              useDragHandle
-              onSortStart={() => setShouldTooltipClose(true)}
-              onSortEnd={() => setShouldTooltipClose(false)}
-              columns="repeat(6, 1fr)"
-              items={dataKeys.map((d, i) => {
-                const dataSet = data.find(({ nameId }) => nameId === d)
-                const keySumMetrics = sumMetrics && sumMetrics[d]
-                const isChecked = checkedObject[d]
-                return (
-                  <GridContainer
-                    rows="180px 1fr 100px"
-                    key={d}
-                    fullSize
-                    onMouseEnter={() => {
-                      setMouseOver(d)
-                      mouseOverValue.current = d
-                    }}
-                    onMouseLeave={() => setMouseOver(undefined)}
-                  >
-                    <GridContainer
-                      ref={infoContainerRefs.current[i]}
-                      noGap
-                      fullSize
-                      rows="repeat(2, 1fr)"
-                      onMouseEnter={() =>
-                        setHoveredElementTop(infoContainerRefs.current[i])
-                      }
-                      onMouseLeave={() => setHoveredElementTop(undefined)}
-                    >
-                      <GridContainer noGap columns="70% 30%">
-                        <Container pos="relative">
-                          <Image
-                            style={{ maxHeight: 90, borderRadius: 2 }}
-                            fluid={dataSet.image.fluid}
-                          />
-                        </Container>
-                        <FlexContainer
-                          visibility={mouseOver === d ? "visible" : "hidden"}
-                        >
-                          <SortableHandle
-                            size={15}
-                            horizontal
-                            align="flex-start"
-                          />
-                        </FlexContainer>
-                      </GridContainer>
-                      <GridContainer
-                        noGap
-                        rows="repeat(4, 1fr)"
-                        paddingLeft={1}
-                        paddingRight={1}
-                      >
-                        {keySumMetrics && (
-                          <>
-                            <FlexContainer justify="flex-start" fontWeight={3}>
-                              {dataSet.fullName}
-                            </FlexContainer>
-                            <FlexContainer justify="space-between">
-                              <span>No. of games:</span>
-                              <CountUpSpan value={+keySumMetrics.noOfGames} />
-                            </FlexContainer>
-                            <FlexContainer justify="space-between">
-                              <span>Avg. ELO:</span>
-                              <CountUpSpan value={+keySumMetrics.avgElo} />
-                            </FlexContainer>
-                            <FlexContainer justify="space-between">
-                              <span>Max. ELO:</span>
-                              <CountUpSpan value={+keySumMetrics.maxElo} />
-                            </FlexContainer>
-                          </>
-                        )}
-                      </GridContainer>
-                    </GridContainer>
-                    <ParallelBoxPlotColumn
-                      data={dataSets[d]}
-                      syncObject={syncObject}
-                      eloRange={dataSets.eloRange}
-                      movesRange={dataSets.movesRange}
-                      isResultsFiltered={Object.values(
-                        resultCheckedObject
-                      ).includes(false)}
-                      isChecked={isChecked}
-                    />
-                    <GridContainer
-                      ref={barContainerRefs.current[i]}
-                      rows="repeat(2, 50%)"
-                      rowGap={0}
-                    >
-                      <FlexContainer
-                        direction="column"
-                        onMouseEnter={() =>
-                          setHoveredElementBottom(barContainerRefs.current[i])
-                        }
-                        onMouseLeave={() => setHoveredElementBottom(undefined)}
-                      >
-                        <HorizontalStackedBarChartContainer
-                          isFiltered={isChecked}
-                          colorRange={COLOR_RANGE}
-                          results={resultCheckedObject}
-                          data={dataSets[d]}
-                        />
-                      </FlexContainer>
-                      <FlexContainer>
-                        <CheckBox
-                          parentChecked
-                          checked={isChecked}
-                          value={d}
-                          onClick={() => {
-                            setCheckedObject(prev => ({
-                              ...prev,
-                              [d]: !prev[d],
-                            }))
-                          }}
-                        />
-                      </FlexContainer>
-                    </GridContainer>
-                  </GridContainer>
-                )
-              })}
-            />
+            <SortableColumnsComponent {...sortableColumnsComponentProps} />
           )}
           <FlexContainer pos="relative">
             <Range
