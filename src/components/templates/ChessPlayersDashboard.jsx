@@ -79,16 +79,15 @@ const BOX_PLOT_EXPLAIN = [
   {
     title: "First quartile (Q1/25th Percentile)",
     text:
-      "the middle number between the smallest number (not the “minimum”) and the median of the dataset",
+      "the middle number between the smallest number (not the “minimum”) and the median.",
   },
   {
     title: "Third quartile (Q3/75th Percentile)",
     text:
-      "the middle value between the median and the highest value (not the “maximum”) of the dataset",
+      "the middle value between the median and the highest value (not the “maximum”).",
   },
   { title: "Interquartile range (IQR)", text: "25th to the 75th percentile." },
-  { title: "Maximum", text: "Q3 + 1.5*IQR" },
-  { title: "Minimum", text: "Q1 -1.5*IQR" },
+  { title: "Maximum | Minimum", text: "Q3 + 1.5*IQR | Q1 -1.5*IQR" },
 ]
 
 function getBoxPlotData(sorted) {
@@ -128,7 +127,6 @@ function checkUncheckAll(bool, keys) {
 }
 
 export default function({ data, img }) {
-
   const [dataKeys, setDataKeys] = useState(undefined)
 
   useEffect(() => {
@@ -400,19 +398,26 @@ export default function({ data, img }) {
 
   const { shouldModalToggle, setShouldModalToggle } = useModalToggle()
 
+  // TODO: add disclaimer for small screen sizes
+
   return (
     <FlexContainer fullScreen color="grayDarkest">
       <GridContainer
-        width="95%"
-        maxWidth="1440px"
-        minWidth="1100px"
-        height="95%"
+        width="90%"
+        maxWidth="1400px"
+        minWidth="1200px"
+        height="90%"
         maxHeight="720px"
         minHeight="600px"
         columns="200px 1fr"
         position="relative"
+        columnGap={6}
       >
-        <ModalContainer shouldToggle={shouldModalToggle}>
+        <ModalContainer
+          shouldToggle={shouldModalToggle}
+          height="600px"
+          width="1150px"
+        >
           <GridContainer
             paddingTop={2}
             paddingLeft={3}
@@ -487,8 +492,8 @@ export default function({ data, img }) {
                   direction="column"
                   paddingTop={2}
                 >
-                  Boxplots are a standardized way of displaying the distribution
-                  of data based on a five number summary.
+                  Box plots are a standardized way of displaying the
+                  distribution of data based on a five number summary.
                   {BOX_PLOT_EXPLAIN.map(({ title, text }) => (
                     <Container paddingTop={1}>
                       <Title fontWeight={3}>{title}:</Title> {text}
@@ -497,16 +502,27 @@ export default function({ data, img }) {
                 </FlexContainer>
                 <FlexContainer gridArea="img">
                   <Image
-                    style={{ width:250, borderRadius: 2 }}
+                    style={{ width: 250, borderRadius: 2 }}
                     fluid={img[0].fluid}
                   />
-                </FlexContainer>  
+                </FlexContainer>
               </GridContainer>
             </GridContainer>
             <GridContainer gridArea="interact" rows="min-content 1fr">
               <Title fontSize={2} fontWeight={3}>
                 How to interact with the dashboard?
               </Title>
+              <GridContainer columns="repeat(2, 1fr)" columnGap={3}>
+                <FlexContainer
+                  justify="flex-start"
+                  align="flex-start"
+                  direction="column"
+                  paddingTop={2}
+                >
+                  Interaction description
+                </FlexContainer>
+                <FlexContainer paddingTop={2}>Gif</FlexContainer>
+              </GridContainer>
             </GridContainer>
             <FlexContainer
               gridArea="credit"
@@ -628,7 +644,6 @@ export default function({ data, img }) {
               <Title fontSize={5} fontWeight={0} style={{ marginTop: -5 }}>
                 Checkmate
               </Title>
-
               <Title fontSize={1} fontWeight={4} marginTop={1}>
                 15,000 games
               </Title>
@@ -725,12 +740,12 @@ export default function({ data, img }) {
             <SortableComponent
               axis="x"
               lockAxis="x"
-              columnGap={3}
+              columnGap={8}
               fullSize
               useDragHandle
               onSortStart={() => setShouldTooltipClose(true)}
               onSortEnd={() => setShouldTooltipClose(false)}
-              columns="repeat(8, 1fr)"
+              columns="repeat(6, 1fr)"
               items={dataKeys.map((d, i) => {
                 const dataSet = data.find(({ nameId }) => nameId === d)
                 const keySumMetrics = sumMetrics && sumMetrics[d]

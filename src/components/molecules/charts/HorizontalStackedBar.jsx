@@ -71,7 +71,7 @@ export default function HorizontalStackedBar({
       xScale
     }
     createUpdateRectangles()
-    createUpdateNumberText()
+    withNumber && createUpdateNumberText()
   }
 
   function createUpdateRectangles(duration = mdNum) {

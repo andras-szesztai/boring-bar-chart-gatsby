@@ -8,8 +8,8 @@ import { usePrevious } from "../../../hooks"
 
 export default function ModalContainer({
   shouldToggle,
-  modalWidth,
-  modalHeight,
+  width,
+  height,
   children,
   minWidth,
   maxWidth,
@@ -39,10 +39,10 @@ export default function ModalContainer({
     >
       <FlexContainer
         bgColor={colors.whiteDark}
-        width={modalWidth}
+        width={width}
+        height={height}
         minWidth={minWidth}
         maxWidth={maxWidth}
-        height={modalHeight}
         minHeight={minHeight}
         maxHeight={maxHeight}
         pos="relative"
@@ -64,8 +64,8 @@ export default function ModalContainer({
 }
 
 ModalContainer.defaultProps = {
-  modalWidth: "80%",
-  modalHeight: "80%",
+  width: "80%",
+  height: "80%",
   minHeight: "600px",
   maxHeight: "800px",
   minWidth: "1000px",

@@ -26,7 +26,7 @@
     "gatsby-plugin-react-helmet": "^3.1.10",
     "gatsby-plugin-sharp": "^2.3.10",
     "gatsby-plugin-styled-components": "^3.1.16",
-    "gatsby-source-contentful": "^2.1.76",
+    "gatsby-source-contentful": "^2.1.86",
     "gatsby-source-filesystem": "^2.1.28",
     "gatsby-transformer-sharp": "^2.3.9",
     "lodash": "^4.17.15",
