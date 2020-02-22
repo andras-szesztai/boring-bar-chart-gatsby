@@ -6,6 +6,7 @@ import chroma from "chroma-js"
 import { ChartStarter } from "../../../molecules/charts"
 import { useChartRefs, useDimensions, useInitUpdate } from "../../../../hooks"
 import { COUNTRY_ORDER } from "../../../../constants/trustBiases"
+import { colors } from "../../../../themes/theme"
 
 export default function TrustBiasesChart({ data }) {
   const refs = useChartRefs()
@@ -18,33 +19,35 @@ export default function TrustBiasesChart({ data }) {
 
   function initVis() {
     const scale = scaleBand().domain(COUNTRY_ORDER)
-    const xScale = scale.range([0, dims.chartHeight])
-    const yScale = scale.range([dims.chartWidth, 0])
+    const xScale = scale.range([0, dims.chartWidth])
+    const yScale = scale.range([0, dims.chartHeight])
     const colorScale = chroma
-      .scale(["yellow", "lightgreen", "008ae5"])
-      .domain([-0.2, 0, 0.4])
+      .scale(["#ef6c7f", "#ece2ec", "#415f77"])
+      .domain([-0.15, 0, 0.2])
     valueStore.current = {
       xScale,
       yScale,
+      colorScale,
     }
     createRectangles()
   }
 
   function createRectangles() {
-    const { xScale, yScale } = valueStore.current
-    console.log(data)
-
+    const { xScale, yScale, colorScale } = valueStore.current
     select(refs.areaRef.current)
       .selectAll("rect")
       .data(data)
       .join(enter =>
         enter
           .append("rect")
-          .attr("x", d => xScale(d.destination))
-          .attr("y", d => yScale(d.origin))
+          .attr("x", d => xScale(d.origin))
+          .attr("y", d => yScale(d.destination))
           .attr("width", xScale.bandwidth())
           .attr("height", xScale.bandwidth())
-          .attr("fill", "black")
+          .attr("fill", d =>
+            +d.trust !== 100 ? colorScale(+d.trust) : colors.grayLighter 
+          )
+          .attr("stroke", "#fff")
       )
   }
 

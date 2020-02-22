@@ -50,13 +50,13 @@ const countryList = COUNTRY_ORDER.map(country => (
 export default function TrustBiases({ data }) {
   return (
     <FlexContainer height="750px" width="100vw">
-      <MainContainer withBorder rows="30px 1fr 40px">
+      <MainContainer  rows="30px 1fr 40px">
         <FlexContainer justify="flex-start">
           <Title fontWeight="semiBold" fontSize={2}>
             {TITLE}
           </Title>
         </FlexContainer>
-        <FlexContainer withBorder pos="relative">
+        <FlexContainer  pos="relative">
           <FlexContainer
             withBorder
             absPos
@@ -73,7 +73,7 @@ export default function TrustBiases({ data }) {
             width="100px"
             height="100px"
           />
-          <ChartContainer withBorder pos="relative">
+          <ChartContainer pos="relative">
             <AxisContainerLeft {...axisProps} align="flex-end">
               {countryList}
             </AxisContainerLeft>
