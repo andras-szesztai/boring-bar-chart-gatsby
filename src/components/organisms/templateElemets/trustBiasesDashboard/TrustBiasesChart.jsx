@@ -13,7 +13,12 @@ import { easeCubicInOut } from "d3-ease"
 
 const { smNum } = transition
 
-export default function TrustBiasesChart({ data, margin }) {
+export default function TrustBiasesChart({
+  data,
+  margin,
+  handleMouseover,
+  handleMouseout,
+}) {
   const refs = useChartRefs()
   const valueStore = useRef()
   const dims = useDimensions({
@@ -46,6 +51,7 @@ export default function TrustBiasesChart({ data, margin }) {
       .join(enter =>
         enter
           .append("rect")
+          .attr("cursor", "pointer")
           .attr("x", d => xScale(d.origin))
           .attr("y", d => yScale(d.destination))
           .attr("width", xScale.bandwidth())
@@ -71,66 +77,37 @@ export default function TrustBiasesChart({ data, margin }) {
       .duration(smNum)
       .ease(easeCubicInOut)
 
-  function onMouseover(d, i, n) {
+  function mouseoverAnimation({ d, i, n }, interpolate) {
     const { chartArea, xScale, yScale } = valueStore.current
     const origin = d.origin
     const dest = d.destination
     const t = makeTransition(chartArea)
     const halfBandwidth = xScale.bandwidth() / 2
-    const element = select(n[i])
-    element.raise()
-    element
-      .transition(t)
-      .attrTween("transform", d =>
-        interpol_rotate(
-          xScale(d.origin) + halfBandwidth,
-          yScale(d.destination) + halfBandwidth
+    const animateElement = el => {
+      el.raise()
+      el.transition(t).attrTween("transform", dat =>
+        interpolate(
+          xScale(dat.origin) + halfBandwidth,
+          yScale(dat.destination) + halfBandwidth
         )
       )
+    }
+    animateElement(select(n[i]))
     chartArea.selectAll("rect").each((data, index, elements) => {
       if (data.origin === dest && data.destination === origin) {
-        const sibElement = select(elements[index])
-        sibElement.raise()
-        sibElement
-          .transition(t)
-          .attrTween("transform", d =>
-            interpol_rotate(
-              xScale(d.origin) + halfBandwidth,
-              yScale(d.destination) + halfBandwidth
-            )
-          )
+        animateElement(select(elements[index]))
       }
     })
   }
 
+  function onMouseover(d, i, n) {
+    mouseoverAnimation({ d, i, n }, interpol_rotate)
+    handleMouseover()
+  }
+
   function onMouseout(d, i, n) {
-    const { chartArea, xScale, yScale } = valueStore.current
-    const origin = d.origin
-    const dest = d.destination
-    const t = makeTransition(chartArea)
-    const halfBandwidth = xScale.bandwidth() / 2
-    select(n[i])
-      .transition(t)
-      .attrTween("transform", d =>
-        interpol_rotate_back(
-          xScale(d.origin) + halfBandwidth,
-          yScale(d.destination) + halfBandwidth
-        )
-      )
-    chartArea.selectAll("rect").each((data, index, elements) => {
-      if (data.origin === dest && data.destination === origin) {
-        const sibElement = select(elements[index])
-        sibElement.raise()
-        sibElement
-          .transition(t)
-          .attrTween("transform", d =>
-            interpol_rotate_back(
-              xScale(d.origin) + halfBandwidth,
-              yScale(d.destination) + halfBandwidth
-            )
-          )
-      }
-    })
+    mouseoverAnimation({ d, i, n }, interpol_rotate_back)
+    handleMouseout()
   }
 
   function onClick(d) {

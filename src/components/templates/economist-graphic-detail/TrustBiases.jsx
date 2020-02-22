@@ -46,6 +46,9 @@ const countryList = COUNTRY_ORDER.map(country => (
   <FlexContainer>{country}</FlexContainer>
 ))
 
+function handleMouseover() {}
+function handleMouseout() {}
+
 // LEFT_TEXT, RIGHT_TEXT
 export default function TrustBiases({ data }) {
   return (
@@ -68,14 +71,10 @@ export default function TrustBiases({ data }) {
             height="50px"
             direction="column"
           >
-            <FlexContainer fullSize>
-              Origin
-            </FlexContainer>
-            <FlexContainer>
-              Destination
-            </FlexContainer>
+            <FlexContainer fullSize>Origin</FlexContainer>
+            <FlexContainer>Destination</FlexContainer>
           </GridContainer>
-          
+
           <ChartContainer pos="relative">
             <AxisContainerLeft {...axisProps} align="flex-end">
               {countryList}
@@ -83,7 +82,11 @@ export default function TrustBiases({ data }) {
             <AxisContainerRight {...axisProps} align="flex-start">
               {countryList}
             </AxisContainerRight>
-            <TrustBiasesChart data={data} />
+            <TrustBiasesChart
+              data={data}
+              handleMouseover={handleMouseover}
+              handleMouseout={handleMouseout}
+            />
           </ChartContainer>
           <FlexContainer
             absPos
