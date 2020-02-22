@@ -18,8 +18,8 @@ export default function CreditsContainer({
     >
       {elements.map(({ justify, text, link, anchorText }) => (
         <FlexContainer justify={justify} key={text}>
-          <Title fontSize={fontSize} color="grayDarkest">
-            {text}:{" "}
+          <Title fontSize={fontSize} color="gray">
+            {text && `${text}: `}
             <LinkAnchor
               href={link}
               fontSize={fontSize}
@@ -37,7 +37,9 @@ export default function CreditsContainer({
 }
 
 CreditsContainer.defaultProps = {
-  fontSize: 0,
+  direction: "row",
+  color: "gray",
+  fontSize: 1,
   absPos: true,
-  fontWeight: 3
+  fontWeight: 3,
 }

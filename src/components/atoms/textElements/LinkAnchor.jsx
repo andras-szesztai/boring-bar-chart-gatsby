@@ -13,11 +13,11 @@ const Link = styled.a`
   text-decoration: none;
   transition: color ${themifyTransition("sm")};
   ${({ color, fontsize, fontWeight }) => css`
-    color: ${themifyColor("grayDarkest")};
+    color: ${themifyColor(color)} !important;
     font-size: ${themifyFontSize(fontsize)};
     font-weight: ${themifyFontWeight(fontWeight)} !important;
     :hover {
-      color: ${chroma(themifyColor(color)).brighten(2)};
+      color: ${chroma(themifyColor(color)).brighten(2)} !important;
       text-decoration: underline;
     }
   `}

@@ -21,13 +21,33 @@ const COLOR_DOMAIN = [-0.2, 0, 0.2, 0.4]
 const OFFSET_RANGE = ["0%", "33.3%", "66.6%", "100%"]
 const LEGEND_END_TEXTS = ["Less Trust", "More Trust"]
 
+const CREDIT_ELEMENTS = [
+  {
+    justify: "left",
+    text: "Built by",
+    link: "https://twitter.com/AndSzesztai",
+    anchorText: "András Szesztai",
+  },
+  {
+    justify: "center",
+    text: "Original design and article",
+    link:
+      "https://www.economist.com/graphic-detail/2020/02/15/analysts-stock-recommendations-are-coloured-by-their-cultural-biases",
+    anchorText: "The Economist",
+  },
+  {
+    justify: "flex-end",
+    text: "",
+    link: "https://editorialexpress.com/cgi-bin/conference/download.cgi?db_name=ESWM2019&paper_id=201",
+    anchorText: "Data source",
+  },
+]
+
 const GRAPH_URL =
   "https://www.economist.com/graphic-detail/2020/02/15/analysts-stock-recommendations-are-coloured-by-their-cultural-biases"
 
 const DATASET_URL =
   "https://boring-barchart-gatsby.firebaseio.com/trustBiases.json"
-
-const DATA_SOURCE = ""
 
 const TEXTS = {
   TITLE: "Trust Biases* between European Nations",
@@ -45,5 +65,6 @@ export {
   COLOR_RANGE,
   COLOR_DOMAIN,
   OFFSET_RANGE,
-  LEGEND_END_TEXTS
+  LEGEND_END_TEXTS,
+  CREDIT_ELEMENTS
 }

@@ -12,8 +12,10 @@ import {
   COLOR_DOMAIN,
   OFFSET_RANGE,
   LEGEND_END_TEXTS,
+  CREDIT_ELEMENTS
 } from "../../../constants/trustBiases"
 import { HorizontalLinearGradient } from "../../organisms"
+import { CreditsContainer } from "../../molecules"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
 const trustColor = COLOR_RANGE[3]
@@ -24,7 +26,7 @@ const gradientData = COLOR_RANGE.map((color, i) => ({
 }))
 
 const MainContainer = styled(GridContainer)`
-  height: 650px;
+  height: 700px;
   width: 700px;
   @media (max-width: 768px) {
     width: 500px;
@@ -112,8 +114,8 @@ export default function TrustBiases({ data }) {
   }
 
   return (
-    <FlexContainer height="750px" width="100vw">
-      <MainContainer rows="30px 1fr 40px">
+    <FlexContainer height="750px" width="100vw" >
+      <MainContainer rows="30px 1fr 40px 20px">
         <FlexContainer justify="flex-start">
           <Title fontWeight="semiBold" fontSize={2}>
             {TITLE}
@@ -179,7 +181,7 @@ export default function TrustBiases({ data }) {
               {getCountryList(Object.values(currHovered))}
             </AxisContainerLeft>
             <AxisContainerRight {...axisProps} align="flex-start">
-              {getCountryList(Object.values(currHovered))}
+              {getCountryList([])}
             </AxisContainerRight>
             <TrustBiasesChart
               data={data}
@@ -194,7 +196,7 @@ export default function TrustBiases({ data }) {
           <FlexContainer
             absPos
             bottom={25}
-            left={50}
+            left={40}
             width="100px"
             fontWeight="semiBold"
             textAlign="end"
@@ -204,7 +206,7 @@ export default function TrustBiases({ data }) {
           <FlexContainer
             absPos
             bottom={25}
-            right={50}
+            right={40}
             width="100px"
             fontWeight="semiBold"
           >
@@ -214,6 +216,10 @@ export default function TrustBiases({ data }) {
         <FlexContainer justify="flex-start" fontColor="gray">
           {EXPLANATION}
         </FlexContainer>
+        <CreditsContainer
+          elements={CREDIT_ELEMENTS}
+          absPos={false}
+        />
       </MainContainer>
     </FlexContainer>
   )
