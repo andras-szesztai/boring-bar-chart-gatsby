@@ -4,6 +4,8 @@ import styled from "styled-components"
 import { FlexContainer, GridContainer, Title } from "../../atoms"
 import { TrustBiasesChart } from "../../organisms/templateElemets/trustBiasesDashboard"
 
+import { COUNTRY_ORDER } from "../../../constants/trustBiases"
+
 const MainContainer = styled(GridContainer)`
   height: 650px;
   width: 700px;
@@ -13,10 +15,18 @@ const MainContainer = styled(GridContainer)`
 `
 
 const ChartContainer = styled(FlexContainer)`
-  height: 380px;
-  width: 380px;
-
+  height: 370px;
+  width: 370px;
   transform: rotate(45deg);
+  @media (max-width: 768px) {
+    height: 280px;
+    width: 280px;
+  }
+`
+
+const AxisContainer = styled(FlexContainer)`
+  top: 220px;
+  transform: rotate(-90deg);
 `
 
 export default function TrustBiases({ data }) {
@@ -31,6 +41,17 @@ export default function TrustBiases({ data }) {
         </FlexContainer>
         <FlexContainer withBorder>
           <ChartContainer withBorder pos="relative">
+            <AxisContainer
+              pos ="absolute"
+              height="100%"
+              direction="column"  
+              justify="space-evenly"
+              align="flex-end"
+            >
+              {
+                COUNTRY_ORDER.map(country => <FlexContainer>{country}</FlexContainer>)
+              }
+            </AxisContainer>
             <TrustBiasesChart data={data} />
           </ChartContainer>
         </FlexContainer>
