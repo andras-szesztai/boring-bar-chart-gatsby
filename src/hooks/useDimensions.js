@@ -44,7 +44,6 @@ export default function useDimensions({
       (ref || parentRef) &&
       (ref.current || parentRef.current)
     ) {
-      window.addEventListener("resize", getDimensions)
       getDimensions()
     }
     if (dims.width && dims.height) {
@@ -63,8 +62,6 @@ export default function useDimensions({
         getDimensions()
       }
     }
-    // TODO: figure out how to use it
-    // return  window.removeEventListener("resize", getDimensions)
   }, [dims, margin, parentHeight, parentRef, parentWidth, ref])
 
   return dims

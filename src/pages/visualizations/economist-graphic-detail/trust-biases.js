@@ -7,8 +7,6 @@ import { DATASET_URL } from "../../../constants/trustBiases"
 
 export default function() {
   const rawData = useFetchData(DATASET_URL)
-  console.log(rawData);
-  
   return (
     <>
       <Helmet title="Trust biases* between European nations" />

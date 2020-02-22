@@ -33,7 +33,7 @@ export default function useInitUpdate({
     const sortFunc = (a, b) => (noKey ? a - b : a[sortKey] - b[sortKey])
     if (
       init &&
-      prevData &&
+      prevData && updateVisData &&
       (checkIfUpdated(dataToCheck.sort(sortFunc), prevData.sort(sortFunc)) ||
         !_.isEqual(prevYScaleDomain, yScaleDomain))
     ) {
