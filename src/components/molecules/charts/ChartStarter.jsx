@@ -1,7 +1,7 @@
 import React from "react"
 import { ChartWrapper, ChartSvg, ChartArea } from "../../atoms"
 
-export default function({
+export default function ChartStarter({
   refs,
   dims,
   margin,
@@ -27,4 +27,8 @@ export default function({
       </ChartSvg>
     </ChartWrapper>
   )
+}
+
+ChartStarter.defaultProps = {
+  margin: {},
 }
