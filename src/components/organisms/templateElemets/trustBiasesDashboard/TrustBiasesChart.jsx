@@ -19,7 +19,7 @@ export default function TrustBiasesChart({
   handleMouseover,
   handleMouseout,
   colorDomain,
-  colorRange
+  colorRange,
 }) {
   const refs = useChartRefs()
   const valueStore = useRef()
@@ -32,9 +32,7 @@ export default function TrustBiasesChart({
     const scale = scaleBand().domain(COUNTRY_ORDER)
     const xScale = scale.range([0, dims.chartWidth])
     const yScale = scale.range([0, dims.chartHeight])
-    const colorScale = chroma
-      .scale(colorRange)
-      .domain(colorDomain)
+    const colorScale = chroma.scale(colorRange).domain(colorDomain)
     const chartArea = select(refs.areaRef.current)
     valueStore.current = {
       xScale,
@@ -43,6 +41,24 @@ export default function TrustBiasesChart({
       chartArea,
     }
     createRectangles()
+  }
+
+  function updateVisDims() {
+    const { xScale, yScale, chartArea } = valueStore.current
+    yScale.range([0, dims.chartWidth])
+    xScale.range([0, dims.chartHeight])
+    console.log('runninng')
+    chartArea
+      .selectAll("rect")
+      .attr("x", d => xScale(d.origin))
+      .attr("y", d => yScale(d.destination))
+      .attr("width", xScale.bandwidth())
+      .attr("height", xScale.bandwidth())
+    valueStore.current = {
+      xScale,
+      yScale,
+      chartArea,
+    }
   }
 
   function createRectangles() {
@@ -138,21 +154,17 @@ export default function TrustBiasesChart({
     console.log(d, "clicked")
   }
 
-  const { init } = useInitUpdate({
+  useInitUpdate({
     data: data && Object.values(data),
     chartHeight: dims.chartHeight,
     chartWidth: dims.chartWidth,
     initVis,
+    updateVisDims,
   })
 
   return (
     <>
-      <ChartStarter
-        refs={refs}
-        dims={dims}
-        margin={margin}
-        fontSize={0}
-      />
+      <ChartStarter refs={refs} dims={dims} margin={margin} fontSize={0} />
     </>
   )
 }
