@@ -4,7 +4,9 @@ import styled from "styled-components"
 import { FlexContainer, GridContainer, Title } from "../../atoms"
 import { TrustBiasesChart } from "../../organisms/templateElemets/trustBiasesDashboard"
 
-import { COUNTRY_ORDER } from "../../../constants/trustBiases"
+import { COUNTRY_ORDER, TEXTS } from "../../../constants/trustBiases"
+
+const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
 
 const MainContainer = styled(GridContainer)`
   height: 650px;
@@ -24,40 +26,84 @@ const ChartContainer = styled(FlexContainer)`
   }
 `
 
-const AxisContainer = styled(FlexContainer)`
+const AxisContainerLeft = styled(FlexContainer)`
   top: 220px;
   transform: rotate(-90deg);
 `
 
+const AxisContainerRight = styled(FlexContainer)`
+  left: calc(100% + 5px);
+`
+
+const axisProps = {
+  pos: "absolute",
+  height: "100%",
+  direction: "column",
+  justify: "space-evenly",
+}
+
+const countryList = COUNTRY_ORDER.map(country => (
+  <FlexContainer>{country}</FlexContainer>
+))
+
+// LEFT_TEXT, RIGHT_TEXT
 export default function TrustBiases({ data }) {
   return (
     <FlexContainer height="750px" width="100vw">
-      <MainContainer withBorder rows="45px 1fr 40px">
-        <FlexContainer withBorder justify="flex-start">
+      <MainContainer withBorder rows="30px 1fr 40px">
+        <FlexContainer justify="flex-start">
           <Title fontWeight="semiBold" fontSize={2}>
-            Equity analysts are less likely to recommend stocks from countries
-            their nation is biased against
+            {TITLE}
           </Title>
         </FlexContainer>
-        <FlexContainer withBorder>
+        <FlexContainer withBorder pos="relative">
+          <FlexContainer
+            withBorder
+            absPos
+            top={65}
+            left={35}
+            width="100px"
+            height="100px"
+          />
+          <FlexContainer
+            withBorder
+            absPos
+            top={65}
+            right={35}
+            width="100px"
+            height="100px"
+          />
           <ChartContainer withBorder pos="relative">
-            <AxisContainer
-              pos ="absolute"
-              height="100%"
-              direction="column"  
-              justify="space-evenly"
-              align="flex-end"
-            >
-              {
-                COUNTRY_ORDER.map(country => <FlexContainer>{country}</FlexContainer>)
-              }
-            </AxisContainer>
+            <AxisContainerLeft {...axisProps} align="flex-end">
+              {countryList}
+            </AxisContainerLeft>
+            <AxisContainerRight {...axisProps} align="flex-start">
+              {countryList}
+            </AxisContainerRight>
             <TrustBiasesChart data={data} />
           </ChartContainer>
+          <FlexContainer
+            absPos
+            bottom={25}
+            left={50}
+            width="100px"
+            fontWeight="semiBold"
+            textAlign="end"
+          >
+            {LEFT_TEXT}
+          </FlexContainer>
+          <FlexContainer
+            absPos
+            bottom={25}
+            right={50}
+            width="100px"
+            fontWeight="semiBold"
+          >
+            {RIGHT_TEXT}
+          </FlexContainer>
         </FlexContainer>
-        <FlexContainer withBorder justify="flex-start" fontColor="gray">
-          *How much people from one country trust people from another country,
-          relative to the consensus and their general level of trust
+        <FlexContainer justify="flex-start" fontColor="gray">
+          {EXPLANATION}
         </FlexContainer>
       </MainContainer>
     </FlexContainer>

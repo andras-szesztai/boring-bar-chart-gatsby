@@ -19,8 +19,17 @@ const COUNTRY_ORDER = [
 const GRAPH_URL =
   "https://www.economist.com/graphic-detail/2020/02/15/analysts-stock-recommendations-are-coloured-by-their-cultural-biases"
 
-const DATASET_URL = "https://boring-barchart-gatsby.firebaseio.com/trustBiases.json"
+const DATASET_URL =
+  "https://boring-barchart-gatsby.firebaseio.com/trustBiases.json"
 
 const DATA_SOURCE = ""
 
-export { COUNTRY_ORDER, DATASET_URL, GRAPH_URL }
+const TEXTS = {
+  TITLE: "Trust Biases* between European Nations",
+  EXPLANATION:
+    "*How much people from one country trust people from another country, relative to the consensus and their general level of trust",
+  LEFT_TEXT: "How much people from these countries...",
+  RIGHT_TEXT: "...trust people from these countries*",
+}
+
+export { COUNTRY_ORDER, DATASET_URL, GRAPH_URL, TEXTS }
