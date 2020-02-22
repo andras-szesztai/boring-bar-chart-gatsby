@@ -82,6 +82,7 @@ export default function TrustBiases({ data }) {
           .hex())
 
   const ColoredRects = ({ accC, accT, origin, dest, isTrust }) => {
+    // Trust itself above average?
     return (
       currHovered[accT] !== 100 && (
         <GridContainer columns="45px auto">
@@ -119,14 +120,30 @@ export default function TrustBiases({ data }) {
           </Title>
         </FlexContainer>
         <FlexContainer pos="relative">
-          <FlexContainer absPos height="45px" width="150px" top={32} right={0}>
-            <HorizontalLinearGradient
-              data={gradientData}
-              colorDomain={COLOR_DOMAIN}
-              colorRange={COLOR_RANGE}
-              endTexts={LEGEND_END_TEXTS}
-            />
-          </FlexContainer>
+          <GridContainer
+            absPos
+            top={32}
+            right={0}
+            height="45px"
+            width="225px"
+            columns="85px 140px"
+            columnGap={0}
+          >
+            <FlexContainer justify="flex-end">
+              <div>
+                <ColoredSpan fontWeight="semiBold">Trust bias, </ColoredSpan>%
+                pts
+              </div>
+            </FlexContainer>
+            <FlexContainer>
+              <HorizontalLinearGradient
+                data={gradientData}
+                colorDomain={COLOR_DOMAIN}
+                colorRange={COLOR_RANGE}
+                endTexts={LEGEND_END_TEXTS}
+              />
+            </FlexContainer>
+          </GridContainer>
           <GridContainer
             absPos
             top={35}

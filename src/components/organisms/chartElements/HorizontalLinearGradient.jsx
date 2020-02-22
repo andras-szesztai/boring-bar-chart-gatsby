@@ -7,7 +7,6 @@ import "d3-transition"
 import { ChartStarter } from "../../molecules/charts"
 import { useChartRefs, useDimensions, useInitUpdate } from "../../../hooks"
 import { extent } from "d3-array"
-import { space } from "../../../themes/theme"
 
 export default function HorizontalLinearGradient({
   data,
@@ -57,7 +56,7 @@ export default function HorizontalLinearGradient({
       .attr("text-anchor", "middle")
       .attr("fill", (_, i) => chroma(colorRange[i]).darken(1))
       .attr("y", -10)
-      .text(d => 100 * d)
+      .text(d => 100 * d) // TODO: make it dynamic
 
     chartArea
       .selectAll("line")
@@ -92,11 +91,7 @@ export default function HorizontalLinearGradient({
     initVis,
   })
 
-  return (
-    <>
-      <ChartStarter refs={refs} dims={dims} margin={margin} fontSize={1} />
-    </>
-  )
+  return <ChartStarter refs={refs} dims={dims} margin={margin} fontSize={1} />
 }
 
 HorizontalLinearGradient.defaultProps = {
