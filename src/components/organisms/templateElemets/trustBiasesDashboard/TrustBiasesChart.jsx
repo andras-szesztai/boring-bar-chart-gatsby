@@ -7,17 +7,19 @@ import "d3-transition"
 import { ChartStarter } from "../../../molecules/charts"
 import { useChartRefs, useDimensions, useInitUpdate } from "../../../../hooks"
 import { COUNTRY_ORDER } from "../../../../constants/trustBiases"
-import { colors } from "../../../../themes/theme"
+import { colors, transition } from "../../../../themes/theme"
 import { interpolateString } from "d3-interpolate"
+import { easeCubicInOut } from "d3-ease"
 
-export default function TrustBiasesChart({ data }) {
+const { smNum } = transition
+
+export default function TrustBiasesChart({ data, margin }) {
   const refs = useChartRefs()
   const valueStore = useRef()
   const dims = useDimensions({
     ref: refs.wrapperRef,
+    margin,
   })
-
-  // mouseover && mouseclick
 
   function initVis() {
     const scale = scaleBand().domain(COUNTRY_ORDER)
@@ -61,38 +63,74 @@ export default function TrustBiasesChart({ data }) {
   var interpol_rotate = (x, y) =>
     interpolateString(`rotate(0,${x},${y})`, `rotate(-45,${x},${y})`)
   var interpol_rotate_back = (x, y) =>
-    interpolateString(`rotate(0,${x},${y})`, `rotate(180,${x},${y})`)
+    interpolateString(`rotate(-45,${x},${y})`, `rotate(0,${x},${y})`)
+
+  const makeTransition = area =>
+    area
+      .transition()
+      .duration(smNum)
+      .ease(easeCubicInOut)
 
   function onMouseover(d, i, n) {
     const { chartArea, xScale, yScale } = valueStore.current
     const origin = d.origin
     const dest = d.destination
+    const t = makeTransition(chartArea)
     const halfBandwidth = xScale.bandwidth() / 2
     const element = select(n[i])
     element.raise()
     element
-      .transition()
+      .transition(t)
       .attrTween("transform", d =>
         interpol_rotate(
           xScale(d.origin) + halfBandwidth,
           yScale(d.destination) + halfBandwidth
         )
       )
+    chartArea.selectAll("rect").each((data, index, elements) => {
+      if (data.origin === dest && data.destination === origin) {
+        const sibElement = select(elements[index])
+        sibElement.raise()
+        sibElement
+          .transition(t)
+          .attrTween("transform", d =>
+            interpol_rotate(
+              xScale(d.origin) + halfBandwidth,
+              yScale(d.destination) + halfBandwidth
+            )
+          )
+      }
+    })
   }
 
   function onMouseout(d, i, n) {
     const { chartArea, xScale, yScale } = valueStore.current
     const origin = d.origin
     const dest = d.destination
+    const t = makeTransition(chartArea)
     const halfBandwidth = xScale.bandwidth() / 2
     select(n[i])
-      .transition()
+      .transition(t)
       .attrTween("transform", d =>
         interpol_rotate_back(
           xScale(d.origin) + halfBandwidth,
           yScale(d.destination) + halfBandwidth
         )
       )
+    chartArea.selectAll("rect").each((data, index, elements) => {
+      if (data.origin === dest && data.destination === origin) {
+        const sibElement = select(elements[index])
+        sibElement.raise()
+        sibElement
+          .transition(t)
+          .attrTween("transform", d =>
+            interpol_rotate_back(
+              xScale(d.origin) + halfBandwidth,
+              yScale(d.destination) + halfBandwidth
+            )
+          )
+      }
+    })
   }
 
   function onClick(d) {
@@ -108,7 +146,18 @@ export default function TrustBiasesChart({ data }) {
 
   return (
     <>
-      <ChartStarter refs={refs} dims={dims} withXAxis axisBottom fontSize={0} />
+      <ChartStarter
+        refs={refs}
+        dims={dims}
+        margin={margin}
+        withXAxis
+        axisBottom
+        fontSize={0}
+      />
     </>
   )
+}
+
+TrustBiasesChart.defaultProps = {
+  margin: { top: 10, bottom: 10, left: 10, right: 10 },
 }
