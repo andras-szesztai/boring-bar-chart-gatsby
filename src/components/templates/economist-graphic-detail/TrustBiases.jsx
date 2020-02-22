@@ -2,12 +2,18 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import chroma from "chroma-js"
 
-import { FlexContainer, GridContainer, Title } from "../../atoms"
+import { FlexContainer, GridContainer, Title, ColoredSpan } from "../../atoms"
 import { TrustBiasesChart } from "../../organisms/templateElemets/trustBiasesDashboard"
 
-import { COUNTRY_ORDER, TEXTS } from "../../../constants/trustBiases"
+import {
+  COUNTRY_ORDER,
+  TEXTS,
+  COLOR_RANGE,
+} from "../../../constants/trustBiases"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
+const trustColor = COLOR_RANGE[2]
+const distrustColor = COLOR_RANGE[0]
 
 const MainContainer = styled(GridContainer)`
   height: 650px;
@@ -45,7 +51,7 @@ const axisProps = {
   justify: "space-evenly",
 }
 
-const countryList = hoveredCountries =>
+const getCountryList = hoveredCountries =>
   COUNTRY_ORDER.map(country => (
     <FlexContainer
       fontWeight={hoveredCountries.includes(country) ? "semiBold" : "normal"}
@@ -67,16 +73,31 @@ export default function TrustBiases({ data }) {
           .brighten(3)
           .hex())
 
-  const ColoredRects = ({ accC, accT }) => {
+  const ColoredRects = ({ accC, accT, origin, dest, isTrust }) => {
     return (
       currHovered[accT] !== 100 && (
-        <FlexContainer
-          bgColor={currHovered[accC]}
-          fontWeight="semiBold"
-          fontColor={getFontColor(currHovered[accC])}
-        >
-          {currHovered[accT]}
-        </FlexContainer>
+        <GridContainer columns="45px auto">
+          <FlexContainer
+            bgColor={currHovered[accC]}
+            fontWeight="semiBold"
+            fontColor={getFontColor(currHovered[accC])}
+          >
+            {currHovered[accT]}
+          </FlexContainer>
+          <FlexContainer justify="flex-start">
+            <div>
+              <ColoredSpan fontWeight="semiBold">{origin} </ColoredSpan> tends
+              to{" "}
+              <ColoredSpan
+                color={isTrust ? trustColor : distrustColor}
+                fontWeight="semiBold"
+              >
+                {isTrust ? "trust" : "distrust"}
+              </ColoredSpan>{" "}
+              {dest === origin ? "itself" : dest}
+            </div>
+          </FlexContainer>
+        </GridContainer>
       )
     )
   }
@@ -96,21 +117,36 @@ export default function TrustBiases({ data }) {
             left={0}
             rows="repeat(2, 1fr)"
             rowGap={0}
-            width="50px"
             height="50px"
             direction="column"
           >
-            <ColoredRects accC="oColor" accT="oTrust" />
-            {currHovered.origin !== currHovered.dest && (
-              <ColoredRects accC="dColor" accT="dTrust" />
+            {!!Object.entries(currHovered).length && (
+              <>
+                <ColoredRects
+                  accC="oColor"
+                  accT="oTrust"
+                  origin={currHovered.origin}
+                  dest={currHovered.dest}
+                  isTrust={currHovered.oTrust > 0}
+                />
+                {currHovered.origin !== currHovered.dest && (
+                  <ColoredRects
+                    accC="dColor"
+                    accT="dTrust"
+                    origin={currHovered.dest}
+                    dest={currHovered.origin}
+                    isTrust={currHovered.dTrust > 0}
+                  />
+                )}
+              </>
             )}
           </GridContainer>
           <ChartContainer pos="relative">
             <AxisContainerLeft {...axisProps} align="flex-end">
-              {countryList(Object.values(currHovered))}
+              {getCountryList(Object.values(currHovered))}
             </AxisContainerLeft>
             <AxisContainerRight {...axisProps} align="flex-start">
-              {countryList(Object.values(currHovered))}
+              {getCountryList([])}
             </AxisContainerRight>
             <TrustBiasesChart
               data={data}

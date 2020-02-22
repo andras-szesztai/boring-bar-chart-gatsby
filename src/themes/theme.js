@@ -49,7 +49,7 @@ export const fontSize = [
 ]
 
 export const fontWeight = {
-  ultralight: 200, 
+  ultraLight: 200, 
   light: 300, 
   book: 400, 
   medium: 500, 
