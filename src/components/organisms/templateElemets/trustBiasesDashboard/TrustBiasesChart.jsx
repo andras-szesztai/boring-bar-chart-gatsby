@@ -77,8 +77,10 @@ export default function TrustBiasesChart({
       .duration(smNum)
       .ease(easeCubicInOut)
 
-  function mouseoverAnimation({ d, i, n }, interpolate) {
+  function mouseoverAnimation({ d, i, n }, isOut) {
     const { chartArea, xScale, yScale } = valueStore.current
+    let oColor, dColor
+    const interpolate = isOut ? interpol_rotate_back : interpol_rotate
     const origin = d.origin
     const dest = d.destination
     const t = makeTransition(chartArea)
@@ -91,22 +93,30 @@ export default function TrustBiasesChart({
           yScale(dat.destination) + halfBandwidth
         )
       )
+      return el.attr("fill")
     }
-    animateElement(select(n[i]))
+    oColor = animateElement(select(n[i]))
+    dColor = oColor
     chartArea.selectAll("rect").each((data, index, elements) => {
-      if (data.origin === dest && data.destination === origin) {
-        animateElement(select(elements[index]))
+      if (dest !== origin && data.origin === dest && data.destination === origin) {
+        dColor = animateElement(select(elements[index]))
       }
     })
+    return {
+      origin,
+      dest,
+      oColor,
+      dColor,
+    }
   }
 
   function onMouseover(d, i, n) {
-    mouseoverAnimation({ d, i, n }, interpol_rotate)
-    handleMouseover()
+    const curr = mouseoverAnimation({ d, i, n })
+    handleMouseover(curr)
   }
 
   function onMouseout(d, i, n) {
-    mouseoverAnimation({ d, i, n }, interpol_rotate_back)
+    mouseoverAnimation({ d, i, n }, true)
     handleMouseout()
   }
 

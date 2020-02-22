@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 
 import { FlexContainer, GridContainer, Title } from "../../atoms"
@@ -46,11 +46,10 @@ const countryList = COUNTRY_ORDER.map(country => (
   <FlexContainer>{country}</FlexContainer>
 ))
 
-function handleMouseover() {}
-function handleMouseout() {}
-
-// LEFT_TEXT, RIGHT_TEXT
 export default function TrustBiases({ data }) {
+  const [currHovered, setCurrHovered] = useState({})
+  console.log(currHovered)
+
   return (
     <FlexContainer height="750px" width="100vw">
       <MainContainer rows="30px 1fr 40px">
@@ -84,8 +83,8 @@ export default function TrustBiases({ data }) {
             </AxisContainerRight>
             <TrustBiasesChart
               data={data}
-              handleMouseover={handleMouseover}
-              handleMouseout={handleMouseout}
+              handleMouseover={curr => currHovered !== curr && setCurrHovered(curr)}
+              handleMouseout={() => setCurrHovered({})}
             />
           </ChartContainer>
           <FlexContainer
