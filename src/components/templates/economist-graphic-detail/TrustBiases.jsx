@@ -10,6 +10,7 @@ import {
   TEXTS,
   COLOR_RANGE,
 } from "../../../constants/trustBiases"
+import { HorizontalLinearGradient } from "../../organisms"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
 const trustColor = COLOR_RANGE[2]
@@ -111,6 +112,16 @@ export default function TrustBiases({ data }) {
           </Title>
         </FlexContainer>
         <FlexContainer pos="relative">
+          <FlexContainer
+            withBorder
+            absPos
+            height="50px"
+            width="200px"
+            top={35}
+            right={0}
+          >
+            <HorizontalLinearGradient/>
+          </FlexContainer>
           <GridContainer
             absPos
             top={35}
