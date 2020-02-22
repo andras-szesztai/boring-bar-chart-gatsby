@@ -84,6 +84,7 @@ export default function TrustBiasesChart({
     const origin = d.origin
     const dest = d.destination
     const t = makeTransition(chartArea)
+
     const halfBandwidth = xScale.bandwidth() / 2
     const animateElement = el => {
       el.raise()
@@ -97,10 +98,12 @@ export default function TrustBiasesChart({
     }
     oColor = animateElement(select(n[i]))
     oTrust = +d.trust
-    dColor = oColor
-    dTrust = oTrust
     chartArea.selectAll("rect").each((data, index, elements) => {
-      if (dest !== origin && data.origin === dest && data.destination === origin) {
+      if (
+        dest !== origin &&
+        data.origin === dest &&
+        data.destination === origin
+      ) {
         dColor = animateElement(select(elements[index]))
         dTrust = +data.trust
       }
@@ -111,7 +114,7 @@ export default function TrustBiasesChart({
       oColor,
       dColor,
       dTrust,
-      oTrust
+      oTrust,
     }
   }
 

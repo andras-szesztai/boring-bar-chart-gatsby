@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import styled from "styled-components"
+import chroma from "chroma-js"
 
 import { FlexContainer, GridContainer, Title } from "../../atoms"
 import { TrustBiasesChart } from "../../organisms/templateElemets/trustBiasesDashboard"
@@ -28,7 +29,7 @@ const ChartContainer = styled(FlexContainer)`
 
 const AxisContainerLeft = styled(FlexContainer)`
   top: 220px;
-  transform: rotate(-90deg);  
+  transform: rotate(-90deg);
   width: 50px;
   height: 10px;
 `
@@ -55,7 +56,30 @@ const countryList = hoveredCountries =>
 
 export default function TrustBiases({ data }) {
   const [currHovered, setCurrHovered] = useState({})
-  console.log(currHovered)
+
+  const getFontColor = color =>
+    color &&
+    (chroma(color).luminance() > 0.5
+      ? chroma(color)
+          .darken(3)
+          .hex()
+      : chroma(color)
+          .brighten(3)
+          .hex())
+
+  const ColoredRects = ({ accC, accT }) => {
+    return (
+      currHovered[accT] !== 100 && (
+        <FlexContainer
+          bgColor={currHovered[accC]}
+          fontWeight="semiBold"
+          fontColor={getFontColor(currHovered[accC])}
+        >
+          {currHovered[accT]}
+        </FlexContainer>
+      )
+    )
+  }
 
   return (
     <FlexContainer height="750px" width="100vw">
@@ -67,20 +91,20 @@ export default function TrustBiases({ data }) {
         </FlexContainer>
         <FlexContainer pos="relative">
           <GridContainer
-            withBorder
             absPos
-            top={40}
-            left={5}
+            top={35}
+            left={0}
             rows="repeat(2, 1fr)"
             rowGap={0}
-            width="100px"
+            width="50px"
             height="50px"
             direction="column"
           >
-            <FlexContainer bgColor="black">Origin</FlexContainer>
-            <FlexContainer>Destination</FlexContainer>
+            <ColoredRects accC="oColor" accT="oTrust" />
+            {currHovered.origin !== currHovered.dest && (
+              <ColoredRects accC="dColor" accT="dTrust" />
+            )}
           </GridContainer>
-
           <ChartContainer pos="relative">
             <AxisContainerLeft {...axisProps} align="flex-end">
               {countryList(Object.values(currHovered))}
