@@ -33,7 +33,8 @@ export default function useInitUpdate({
     const sortFunc = (a, b) => (noKey ? a - b : a[sortKey] - b[sortKey])
     if (
       init &&
-      prevData && updateVisData &&
+      prevData &&
+      updateVisData &&
       (checkIfUpdated(dataToCheck.sort(sortFunc), prevData.sort(sortFunc)) ||
         !_.isEqual(prevYScaleDomain, yScaleDomain))
     ) {
@@ -41,6 +42,7 @@ export default function useInitUpdate({
     }
     if (
       init &&
+      (updateVisDims || updateVisData) &&
       (chartWidth !== prevChartWidth || chartHeight !== prevChartHeight)
     ) {
       updateVisDims ? updateVisDims() : updateVisData()

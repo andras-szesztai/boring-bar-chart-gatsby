@@ -11,6 +11,7 @@ import {
   COLOR_RANGE,
   COLOR_DOMAIN,
   OFFSET_RANGE,
+  LEGEND_END_TEXTS,
 } from "../../../constants/trustBiases"
 import { HorizontalLinearGradient } from "../../organisms"
 
@@ -118,15 +119,13 @@ export default function TrustBiases({ data }) {
           </Title>
         </FlexContainer>
         <FlexContainer pos="relative">
-          <FlexContainer
-            withBorder
-            absPos
-            height="50px"
-            width="200px"
-            top={35}
-            right={0}
-          >
-            <HorizontalLinearGradient data={gradientData} colorDomain={COLOR_DOMAIN} />
+          <FlexContainer absPos height="40px" width="150px" top={32} right={0}>
+            <HorizontalLinearGradient
+              data={gradientData}
+              colorDomain={COLOR_DOMAIN}
+              colorRange={COLOR_RANGE}
+              endTexts={LEGEND_END_TEXTS}
+            />
           </FlexContainer>
           <GridContainer
             absPos
