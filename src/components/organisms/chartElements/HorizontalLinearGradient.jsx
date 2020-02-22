@@ -7,13 +7,15 @@ import "d3-transition"
 import { ChartStarter } from "../../molecules/charts"
 import { useChartRefs, useDimensions, useInitUpdate } from "../../../hooks"
 import { extent } from "d3-array"
-import { colors } from "../../../themes/theme"
+import { space } from "../../../themes/theme"
 
 export default function HorizontalLinearGradient({
   data,
   margin,
   colorDomain,
   colorRange,
+  endTexts,
+  expTextSpace,
 }) {
   const refs = useChartRefs()
   const dims = useDimensions({
@@ -26,8 +28,8 @@ export default function HorizontalLinearGradient({
       .range([0, dims.chartWidth])
       .domain(extent(colorDomain))
     const setXPos = d => xScale(d)
-    const svg = select(refs.areaRef.current)
-    const defs = svg.append("defs")
+    const chartArea = select(refs.areaRef.current)
+    const defs = chartArea.append("defs")
     const linearGradient = defs
       .append("linearGradient")
       .attr("id", "linear-gradient")
@@ -40,24 +42,24 @@ export default function HorizontalLinearGradient({
       .attr("offset", d => d.offset)
       .attr("stop-color", d => d.color)
 
-    svg
+    chartArea
       .append("rect")
       .attr("width", dims.chartWidth)
       .attr("height", dims.chartHeight)
       .style("fill", "url(#linear-gradient)")
 
-    svg
+    chartArea
       .selectAll("text")
       .data(colorDomain)
       .enter()
       .append("text")
       .attr("x", setXPos)
       .attr("text-anchor", "middle")
-      .attr("fill", (d, i) => chroma(colorRange[i]).darken(1))
+      .attr("fill", (_, i) => chroma(colorRange[i]).darken(1))
       .attr("y", -10)
       .text(d => 100 * d)
 
-    svg
+    chartArea
       .selectAll("line")
       .data(colorDomain)
       .enter()
@@ -66,7 +68,21 @@ export default function HorizontalLinearGradient({
       .attr("y1", -5)
       .attr("x2", setXPos)
       .attr("y2", dims.chartHeight)
-      .attr("stroke", (d, i) => colorRange[i])
+      .attr("stroke", (_, i) => colorRange[i])
+
+    chartArea
+      .selectAll(".exp-text")
+      .data(endTexts)
+      .enter()
+      .append("text")
+      .attr("class", "exp-text")
+      .attr("x", (_, i) => (i ? dims.chartWidth : 0))
+      .attr("text-anchor", (_, i) => (i ? "end" : "start"))
+      .attr("fill", (_, i) =>
+        chroma(i ? colorRange[colorRange.length - 1] : colorRange[0]).darken(1)
+      )
+      .attr("y", dims.chartHeight + expTextSpace)
+      .text(d => d)
   }
 
   useInitUpdate({
@@ -84,5 +100,6 @@ export default function HorizontalLinearGradient({
 }
 
 HorizontalLinearGradient.defaultProps = {
-  margin: { top: 20, bottom: 10, left: 10, right: 10 },
+  margin: { top: 20, bottom: 15, left: 10, right: 10 },
+  expTextSpace: 12,
 }

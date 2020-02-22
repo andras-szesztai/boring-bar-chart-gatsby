@@ -119,7 +119,7 @@ export default function TrustBiases({ data }) {
           </Title>
         </FlexContainer>
         <FlexContainer pos="relative">
-          <FlexContainer absPos height="40px" width="150px" top={32} right={0}>
+          <FlexContainer absPos height="45px" width="150px" top={32} right={0}>
             <HorizontalLinearGradient
               data={gradientData}
               colorDomain={COLOR_DOMAIN}
@@ -162,7 +162,7 @@ export default function TrustBiases({ data }) {
               {getCountryList(Object.values(currHovered))}
             </AxisContainerLeft>
             <AxisContainerRight {...axisProps} align="flex-start">
-              {getCountryList([])}
+              {getCountryList(Object.values(currHovered))}
             </AxisContainerRight>
             <TrustBiasesChart
               data={data}
