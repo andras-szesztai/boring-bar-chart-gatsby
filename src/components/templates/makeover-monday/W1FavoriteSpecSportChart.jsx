@@ -118,6 +118,7 @@ export default function({ rawData, data, valueArray }) {
   const wrapperRef = useRef()
   const { width, height } = useDimensions({ ref: wrapperRef })
   const [axisInit, setAxisInit] = useState(false)
+  
   function createUpdateAxis() {
     
     const axis = axisBottom(

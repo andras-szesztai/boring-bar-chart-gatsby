@@ -1,11 +1,5 @@
-import {
-  FavoriteSpecSportChart
-} from './makeover-monday'
-import 
-  ChessPlayersDashboard
- from './ChessPlayersDashboard'
+import { FavoriteSpecSportChart } from "./makeover-monday"
+import { TrustBiases } from "./economist-graphic-detail"
+import ChessPlayersDashboard from "./ChessPlayersDashboard"
 
-export {
-  FavoriteSpecSportChart,
-  ChessPlayersDashboard
-}
+export { FavoriteSpecSportChart, ChessPlayersDashboard }
