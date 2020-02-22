@@ -53,29 +53,46 @@ export default function TrustBiasesChart({ data }) {
           )
           .attr("stroke", "#fff")
           .on("mouseover", onMouseover)
+          .on("mouseout", onMouseout)
           .on("click", onClick)
       )
   }
 
-  var interpol_rotate = interpolateString(
-    "rotate(0,60,140)",
-    "rotate(-180,60,140)"
-  )
-  var interpol_rotate_back = interpolateString(
-    "rotate(-180,60,140)",
-    "rotate(0,60,140)"
-  )
+  var interpol_rotate = (x, y) =>
+    interpolateString(`rotate(0,${x},${y})`, `rotate(-45,${x},${y})`)
+  var interpol_rotate_back = (x, y) =>
+    interpolateString(`rotate(0,${x},${y})`, `rotate(180,${x},${y})`)
 
   function onMouseover(d, i, n) {
     const { chartArea, xScale, yScale } = valueStore.current
     const origin = d.origin
     const dest = d.destination
+    const halfBandwidth = xScale.bandwidth() / 2
+    const element = select(n[i])
+    element.raise()
+    element
+      .transition()
+      .attrTween("transform", d =>
+        interpol_rotate(
+          xScale(d.origin) + halfBandwidth,
+          yScale(d.destination) + halfBandwidth
+        )
+      )
+  }
+
+  function onMouseout(d, i, n) {
+    const { chartArea, xScale, yScale } = valueStore.current
+    const origin = d.origin
+    const dest = d.destination
+    const halfBandwidth = xScale.bandwidth() / 2
     select(n[i])
       .transition()
-      .attrTween("transform", (d,i,a) => interpol_rotate )
-
-    console.log(dest)
-    console.log(origin)
+      .attrTween("transform", d =>
+        interpol_rotate_back(
+          xScale(d.origin) + halfBandwidth,
+          yScale(d.destination) + halfBandwidth
+        )
+      )
   }
 
   function onClick(d) {
