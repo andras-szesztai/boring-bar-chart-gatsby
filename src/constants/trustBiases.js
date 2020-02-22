@@ -30,7 +30,7 @@ const CREDIT_ELEMENTS = [
   },
   {
     justify: "center",
-    text: "Original design and article",
+    text: "Original design & article",
     link:
       "https://www.economist.com/graphic-detail/2020/02/15/analysts-stock-recommendations-are-coloured-by-their-cultural-biases",
     anchorText: "The Economist",

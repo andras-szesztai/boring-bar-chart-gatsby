@@ -47,7 +47,6 @@ export default function TrustBiasesChart({
     const { xScale, yScale, chartArea } = valueStore.current
     yScale.range([0, dims.chartWidth])
     xScale.range([0, dims.chartHeight])
-    console.log('runninng')
     chartArea
       .selectAll("rect")
       .attr("x", d => xScale(d.origin))
@@ -55,6 +54,7 @@ export default function TrustBiasesChart({
       .attr("width", xScale.bandwidth())
       .attr("height", xScale.bandwidth())
     valueStore.current = {
+      ...valueStore.current,
       xScale,
       yScale,
       chartArea,

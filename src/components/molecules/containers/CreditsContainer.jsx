@@ -17,7 +17,7 @@ export default function CreditsContainer({
       {...position}
     >
       {elements.map(({ justify, text, link, anchorText }) => (
-        <FlexContainer justify={justify} key={text}>
+        <FlexContainer justify={justify} align="flex-start" key={text}>
           <Title fontSize={fontSize} color="gray">
             {text && `${text}: `}
             <LinkAnchor

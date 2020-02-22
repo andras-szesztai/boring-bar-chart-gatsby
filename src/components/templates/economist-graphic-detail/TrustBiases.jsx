@@ -29,7 +29,10 @@ const MainContainer = styled(GridContainer)`
   height: 700px;
   width: 700px;
   @media (max-width: 768px) {
-    width: 500px;
+    width: 600px;
+  }
+  @media (max-width: 620px) {
+    width: 450px;
   }
 `
 
@@ -38,6 +41,10 @@ const ChartContainer = styled(FlexContainer)`
   width: 370px;
   transform: rotate(45deg);
   @media (max-width: 768px) {
+    height: 325px;
+    width: 325px;
+  }
+  @media (max-width: 620px) {
     height: 280px;
     width: 280px;
   }
@@ -47,7 +54,12 @@ const AxisContainerLeft = styled(FlexContainer)`
   top: 220px;
   transform: rotate(-90deg);
   width: 50px;
-  height: 10px;
+  @media (max-width: 768px) {
+    top: 200px;
+  }
+  @media (max-width: 620px) {
+    top: 175px;
+  }
 `
 
 const AxisContainerRight = styled(FlexContainer)`
