@@ -12,10 +12,11 @@ import {
   COLOR_DOMAIN,
   OFFSET_RANGE,
   LEGEND_END_TEXTS,
-  CREDIT_ELEMENTS
+  CREDIT_ELEMENTS,
 } from "../../../constants/trustBiases"
 import { HorizontalLinearGradient } from "../../organisms"
 import { CreditsContainer } from "../../molecules"
+import { colors } from "../../../themes/theme"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
 const trustColor = COLOR_RANGE[3]
@@ -126,7 +127,7 @@ export default function TrustBiases({ data }) {
   }
 
   return (
-    <FlexContainer height="750px" width="100vw" >
+    <FlexContainer height="750px" width="100vw">
       <MainContainer rows="30px 1fr 40px 20px">
         <FlexContainer justify="flex-start">
           <Title fontWeight="semiBold" fontSize={2}>
@@ -157,6 +158,23 @@ export default function TrustBiases({ data }) {
                 endTexts={LEGEND_END_TEXTS}
               />
             </FlexContainer>
+          </GridContainer>
+          <GridContainer
+            absPos
+            top={90}
+            right={0}
+            height="20px"
+            width="125px"
+            columns="20px auto"
+            columnGap={2}
+          >
+            <FlexContainer
+              justify="flex-end"
+              bgColor={colors.grayLighter}
+              fullSize
+              style={{ transform: "rotate(45deg)" }}
+            />
+            <FlexContainer justify="flex-start">No data available</FlexContainer>
           </GridContainer>
           <GridContainer
             absPos
@@ -228,10 +246,7 @@ export default function TrustBiases({ data }) {
         <FlexContainer justify="flex-start" fontColor="gray">
           {EXPLANATION}
         </FlexContainer>
-        <CreditsContainer
-          elements={CREDIT_ELEMENTS}
-          absPos={false}
-        />
+        <CreditsContainer elements={CREDIT_ELEMENTS} absPos={false} />
       </MainContainer>
     </FlexContainer>
   )
