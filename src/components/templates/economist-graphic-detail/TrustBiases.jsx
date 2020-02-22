@@ -28,23 +28,30 @@ const ChartContainer = styled(FlexContainer)`
 
 const AxisContainerLeft = styled(FlexContainer)`
   top: 220px;
-  transform: rotate(-90deg);
+  transform: rotate(-90deg);  
+  width: 50px;
+  height: 10px;
 `
 
 const AxisContainerRight = styled(FlexContainer)`
-  left: calc(100% + 5px);
+  left: 100%;
 `
 
 const axisProps = {
   pos: "absolute",
-  height: "100%",
+  height: "calc(100% - 20px)",
   direction: "column",
   justify: "space-evenly",
 }
 
-const countryList = COUNTRY_ORDER.map(country => (
-  <FlexContainer>{country}</FlexContainer>
-))
+const countryList = hoveredCountries =>
+  COUNTRY_ORDER.map(country => (
+    <FlexContainer
+      fontWeight={hoveredCountries.includes(country) ? "semiBold" : "normal"}
+    >
+      {country}
+    </FlexContainer>
+  ))
 
 export default function TrustBiases({ data }) {
   const [currHovered, setCurrHovered] = useState({})
@@ -70,20 +77,22 @@ export default function TrustBiases({ data }) {
             height="50px"
             direction="column"
           >
-            <FlexContainer fullSize>Origin</FlexContainer>
+            <FlexContainer bgColor="black">Origin</FlexContainer>
             <FlexContainer>Destination</FlexContainer>
           </GridContainer>
 
           <ChartContainer pos="relative">
             <AxisContainerLeft {...axisProps} align="flex-end">
-              {countryList}
+              {countryList(Object.values(currHovered))}
             </AxisContainerLeft>
             <AxisContainerRight {...axisProps} align="flex-start">
-              {countryList}
+              {countryList(Object.values(currHovered))}
             </AxisContainerRight>
             <TrustBiasesChart
               data={data}
-              handleMouseover={curr => currHovered !== curr && setCurrHovered(curr)}
+              handleMouseover={curr =>
+                currHovered !== curr && setCurrHovered(curr)
+              }
               handleMouseout={() => setCurrHovered({})}
             />
           </ChartContainer>
