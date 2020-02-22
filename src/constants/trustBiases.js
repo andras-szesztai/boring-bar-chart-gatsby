@@ -16,7 +16,9 @@ const COUNTRY_ORDER = [
   "Greece",
 ]
 
-const COLOR_RANGE = ["#ef6c7f", "#ece2ec", "#415f77"] 
+const COLOR_RANGE = ["#ef6c7f", "#e6e1e8", "#66768e", "#415f77"]
+const COLOR_DOMAIN = [-0.2, 0, 0.2, 0.4]
+const OFFSET_RANGE = ["0%", "33.3%", "66.6%", "100%"]
 
 const GRAPH_URL =
   "https://www.economist.com/graphic-detail/2020/02/15/analysts-stock-recommendations-are-coloured-by-their-cultural-biases"
@@ -34,4 +36,12 @@ const TEXTS = {
   RIGHT_TEXT: "...trust people from these countries*",
 }
 
-export { COUNTRY_ORDER, DATASET_URL, GRAPH_URL, TEXTS, COLOR_RANGE }
+export {
+  COUNTRY_ORDER,
+  DATASET_URL,
+  GRAPH_URL,
+  TEXTS,
+  COLOR_RANGE,
+  COLOR_DOMAIN,
+  OFFSET_RANGE,
+}

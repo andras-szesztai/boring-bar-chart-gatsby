@@ -9,12 +9,18 @@ import {
   COUNTRY_ORDER,
   TEXTS,
   COLOR_RANGE,
+  COLOR_DOMAIN,
+  OFFSET_RANGE,
 } from "../../../constants/trustBiases"
 import { HorizontalLinearGradient } from "../../organisms"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
-const trustColor = COLOR_RANGE[2]
+const trustColor = COLOR_RANGE[3]
 const distrustColor = COLOR_RANGE[0]
+const gradientData = COLOR_RANGE.map((color, i) => ({
+  offset: OFFSET_RANGE[i],
+  color,
+}))
 
 const MainContainer = styled(GridContainer)`
   height: 650px;
@@ -120,7 +126,7 @@ export default function TrustBiases({ data }) {
             top={35}
             right={0}
           >
-            <HorizontalLinearGradient/>
+            <HorizontalLinearGradient data={gradientData} colorDomain={COLOR_DOMAIN} />
           </FlexContainer>
           <GridContainer
             absPos
@@ -161,6 +167,8 @@ export default function TrustBiases({ data }) {
             </AxisContainerRight>
             <TrustBiasesChart
               data={data}
+              colorDomain={COLOR_DOMAIN}
+              colorRange={COLOR_RANGE}
               handleMouseover={curr =>
                 currHovered !== curr && setCurrHovered(curr)
               }

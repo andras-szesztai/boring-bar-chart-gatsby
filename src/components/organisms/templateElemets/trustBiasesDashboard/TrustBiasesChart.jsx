@@ -18,6 +18,8 @@ export default function TrustBiasesChart({
   margin,
   handleMouseover,
   handleMouseout,
+  colorDomain,
+  colorRange
 }) {
   const refs = useChartRefs()
   const valueStore = useRef()
@@ -31,8 +33,8 @@ export default function TrustBiasesChart({
     const xScale = scale.range([0, dims.chartWidth])
     const yScale = scale.range([0, dims.chartHeight])
     const colorScale = chroma
-      .scale(["#ef6c7f", "#ece2ec", "#415f77"])
-      .domain([-0.15, 0, 0.2])
+      .scale(colorRange)
+      .domain(colorDomain)
     const chartArea = select(refs.areaRef.current)
     valueStore.current = {
       xScale,
@@ -149,8 +151,6 @@ export default function TrustBiasesChart({
         refs={refs}
         dims={dims}
         margin={margin}
-        withXAxis
-        axisBottom
         fontSize={0}
       />
     </>
