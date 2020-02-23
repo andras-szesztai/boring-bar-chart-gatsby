@@ -107,6 +107,6 @@ export const HintContainer = styled(AbsPosContainer)`
   }
   @media (max-width: 500px) {
     font-size: ${themifyFontSize(0)};
-    top: 190px;
+    top: 195px;
   }
 `

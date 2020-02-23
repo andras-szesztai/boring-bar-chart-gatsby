@@ -90,7 +90,7 @@ export default function TrustBiases({ data }) {
               <FlexContainer align="flex-end">
                 <IoMdArrowDropleft size={15} fill={colors.grayDarkest} />
               </FlexContainer>
-              Hover over the elements to find out more!
+              Hover over/tap on an element to find out more!
             </HintContainer>
           )}
           <AbsPosContainer
