@@ -1,6 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import chroma from "chroma-js"
+import _ from "lodash"
 
 import { FlexContainer, GridContainer, Title, ColoredSpan } from "../../atoms"
 import { TrustBiasesChart } from "../../organisms/templateElemets/trustBiasesDashboard"
@@ -96,8 +97,20 @@ export default function TrustBiases({ data }) {
           .brighten(3)
           .hex())
 
+  const [sameData, setSameData] = useState(undefined)
+  useEffect(() => {
+    if (!sameData && data) {
+      setSameData(
+        _.mean(
+          data
+            .filter(d => d.destination === d.origin && +d.trust !== 100)
+            .map(d => +d.trust)
+        )
+      )
+    }
+  }, [data, sameData])
+
   const ColoredRects = ({ accC, accT, origin, dest, isTrust }) => {
-    // Trust itself above average?
     return (
       currHovered[accT] !== 100 && (
         <GridContainer columns="45px auto">
@@ -118,7 +131,11 @@ export default function TrustBiases({ data }) {
               >
                 {isTrust ? "trust" : "distrust"}
               </ColoredSpan>{" "}
-              {dest === origin ? "itself" : dest}
+              {dest === origin
+                ? currHovered[accT] > sameData
+                  ? "itself above average"
+                  : "itself below average"
+                : dest}
             </div>
           </FlexContainer>
         </GridContainer>
