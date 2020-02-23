@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react"
-import styled, { css } from "styled-components"
 import _ from "lodash"
+import { IoMdArrowDropleft } from "react-icons/io"
 
-import { FlexContainer, GridContainer, Title, ColoredSpan } from "../../atoms"
+import { FlexContainer, Title, ColoredSpan } from "../../atoms"
 import {
   TrustBiasesChart,
   ColoredRects,
+  MainContainer,
+  ChartContainer,
+  AxisContainerLeft,
+  AxisContainerRight,
+  AxisTextContainer,
+  AbsPosContainer,
+  ExpContainerLeft,
+  ExpContainerRight,
+  HintContainer,
 } from "../../organisms/templateElemets/trustBiasesDashboard"
-
 import {
   COUNTRY_ORDER,
   TEXTS,
@@ -20,84 +28,12 @@ import {
 import { HorizontalLinearGradient } from "../../organisms"
 import { CreditsContainer, FullScreenLoader } from "../../molecules"
 import { colors } from "../../../themes/theme"
-import { themifyFontSize } from "../../../themes/mixins"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
 const gradientData = COLOR_RANGE.map((color, i) => ({
   offset: OFFSET_RANGE[i],
   color,
 }))
-
-const MainContainer = styled(GridContainer)`
-  height: 700px;
-  width: 700px;
-  @media (max-width: 768px) {
-    width: 600px;
-  }
-  @media (max-width: 620px) {
-    width: 450px;
-  }
-  @media (max-width: 500px) {
-    width: 350px;
-  }
-`
-
-const ChartContainer = styled(FlexContainer)`
-  height: 370px;
-  width: 370px;
-  transform: rotate(45deg);
-  @media (max-width: 768px) {
-    height: 325px;
-    width: 325px;
-  }
-  @media (max-width: 620px) {
-    height: 280px;
-    width: 280px;
-  }
-  @media (max-width: 500px) {
-    transform: translateY(40px) rotate(45deg);
-    height: 220px;
-    width: 220px;
-  }
-`
-
-const AxisContainerLeft = styled(FlexContainer)`
-  top: 220px;
-  transform: rotate(-90deg);
-  width: 50px;
-  @media (max-width: 768px) {
-    top: 200px;
-  }
-  @media (max-width: 620px) {
-    top: 175px;
-  }
-  @media (max-width: 500px) {
-    top: 140px;
-  }
-`
-
-const AxisContainerRight = styled(FlexContainer)`
-  left: 100%;
-  @media (max-width: 500px) {
-    left: 97%;
-  }
-`
-
-const AxisTextContainer = styled(FlexContainer)`
-  font-size: ${themifyFontSize(1)};
-  @media (max-width: 500px) {
-    font-size: ${themifyFontSize(0)};
-  }
-`
-
-const AbsPosContainer = styled(GridContainer)`
-  ${({ topBig, topSmall }) => css`
-    top: ${topBig}px;
-    @media (max-width: 500px) {
-      top: ${topSmall}px;
-    }
-  `}
-`
 
 const axisProps = {
   pos: "absolute",
@@ -132,6 +68,8 @@ export default function TrustBiases({ data }) {
     }
   }, [data, sameData])
 
+  const isCurrHovered = !!Object.entries(currHovered).length
+
   return (
     <FlexContainer height="750px" width="100vw">
       <FullScreenLoader />
@@ -142,6 +80,19 @@ export default function TrustBiases({ data }) {
           </Title>
         </FlexContainer>
         <FlexContainer pos="relative">
+          {!isCurrHovered && (
+            <HintContainer
+              absPos
+              width="150px"
+              columns="20px auto"
+              columnGap={0}
+            >
+              <FlexContainer align="flex-end">
+                <IoMdArrowDropleft size={15} fill={colors.grayDarkest} />
+              </FlexContainer>
+              Hover over the elements to find out more!
+            </HintContainer>
+          )}
           <AbsPosContainer
             absPos
             topBig={32}
@@ -189,7 +140,7 @@ export default function TrustBiases({ data }) {
           </AbsPosContainer>
           <AbsPosContainer
             absPos
-            topSmall={120}
+            topSmall={115}
             topBig={35}
             left={0}
             rows="repeat(2, 1fr)"
@@ -197,7 +148,7 @@ export default function TrustBiases({ data }) {
             height="50px"
             direction="column"
           >
-            {!!Object.entries(currHovered).length && (
+            {isCurrHovered && (
               <>
                 <ColoredRects
                   currHovered={currHovered}
@@ -239,25 +190,23 @@ export default function TrustBiases({ data }) {
               handleMouseout={() => setCurrHovered({})}
             />
           </ChartContainer>
-          <FlexContainer
+          <ExpContainerLeft
             absPos
             bottom={25}
-            left={40}
             width="100px"
             fontWeight="semiBold"
             textAlign="end"
           >
             {LEFT_TEXT}
-          </FlexContainer>
-          <FlexContainer
+          </ExpContainerLeft>
+          <ExpContainerRight
             absPos
             bottom={25}
-            right={40}
             width="100px"
             fontWeight="semiBold"
           >
             {RIGHT_TEXT}
-          </FlexContainer>
+          </ExpContainerRight>
         </FlexContainer>
         <FlexContainer justify="flex-start" fontColor="gray">
           {EXPLANATION}
