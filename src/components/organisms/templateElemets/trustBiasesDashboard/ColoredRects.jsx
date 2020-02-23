@@ -28,7 +28,7 @@ export default function ColoredRects({
 
   return (
     currHovered[accT] !== 100 && (
-      <GridContainer columns="45px auto">
+      <GridContainer columns="40px auto">
         <FlexContainer
           bgColor={currHovered[accC]}
           fontWeight="semiBold"
