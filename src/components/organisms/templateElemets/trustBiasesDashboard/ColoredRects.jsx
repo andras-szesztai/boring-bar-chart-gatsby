@@ -33,8 +33,10 @@ export default function ColoredRects({
           bgColor={currHovered[accC]}
           fontWeight="semiBold"
           fontColor={getFontColor(currHovered[accC])}
+          justify="flex-end"  
+          paddingRight={1}
         >
-          {currHovered[accT]}
+          {(currHovered[accT] * 100).toFixed(0)}
         </FlexContainer>
         <FlexContainer justify="flex-start">
           <div>

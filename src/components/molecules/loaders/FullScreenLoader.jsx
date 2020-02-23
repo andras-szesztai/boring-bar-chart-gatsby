@@ -23,8 +23,8 @@ export default function FullScreenLoader({
         <FlexContainer
           fullSize
           // fullScreen
-          absPos
           top={0}
+          absPos
           bgColor={bgColor}
           fontColor="grayDarkest"
           zIndex="loader"
