@@ -22,7 +22,7 @@ export default function FullScreenLoader({
       {loading && (
         <FlexContainer
           fullSize
-          fullScreen
+          // fullScreen
           absPos
           bgColor={bgColor}
           fontColor="grayDarkest"
@@ -42,6 +42,6 @@ export default function FullScreenLoader({
 FullScreenLoader.defaultProps = {
   timeOut: 2000,
   loaderSize: 10,
-  bgColor: colors.whiteDark,
-  loaderColor: colors.grayDark,
+  bgColor: colors.white,
+  loaderColor: colors.grayDarker,
 }
