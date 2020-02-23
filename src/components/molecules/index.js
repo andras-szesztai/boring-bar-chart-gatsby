@@ -13,6 +13,7 @@ import {
 } from "./containers"
 import { HorizontalMultiSelect } from "./controlElements"
 import { CountUpSpan } from "./textElemets"
+import { FullScreenLoader } from "./loaders"
 
 export {
   VerticalDropChart,
@@ -25,5 +26,6 @@ export {
   CarouselContainer,
   VerticalBarCircleChart,
   ModalContainer,
-  CreditsContainer
+  CreditsContainer,
+  FullScreenLoader
 }

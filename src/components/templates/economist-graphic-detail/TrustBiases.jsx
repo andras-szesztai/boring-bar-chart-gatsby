@@ -15,7 +15,7 @@ import {
   CREDIT_ELEMENTS,
 } from "../../../constants/trustBiases"
 import { HorizontalLinearGradient } from "../../organisms"
-import { CreditsContainer } from "../../molecules"
+import { CreditsContainer, FullScreenLoader } from "../../molecules"
 import { colors } from "../../../themes/theme"
 import { PropagateLoader } from "react-spinners"
 
@@ -127,31 +127,9 @@ export default function TrustBiases({ data }) {
     )
   }
 
-  const [loading, setLoading] = useState(true)
-  useEffect(() => {
-    if (loading) {
-      setTimeout(() => setLoading(false), 2000)
-    }
-  })
-
   return (
     <FlexContainer height="750px" width="100vw">
-      {loading && (
-        <FlexContainer
-          fullSize
-          fullScreen
-          absPos
-          bgColor={colors.grayLightest}
-          fontColor="grayDarkest"
-          zIndex="loader"
-        >
-          <PropagateLoader
-            size={10}
-            color={colors.gray}
-            loading={loading}
-          />
-        </FlexContainer>
-      )}
+      <FullScreenLoader/>
       <MainContainer rows="30px 1fr 40px 20px">
         <FlexContainer justify="flex-start">
           <Title fontWeight="semiBold" fontSize={2}>
