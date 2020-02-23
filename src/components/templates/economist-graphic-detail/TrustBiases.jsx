@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import chroma from "chroma-js"
 
@@ -17,6 +17,7 @@ import {
 import { HorizontalLinearGradient } from "../../organisms"
 import { CreditsContainer } from "../../molecules"
 import { colors } from "../../../themes/theme"
+import { PropagateLoader } from "react-spinners"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
 const trustColor = COLOR_RANGE[3]
@@ -126,8 +127,31 @@ export default function TrustBiases({ data }) {
     )
   }
 
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    if (loading) {
+      setTimeout(() => setLoading(false), 2000)
+    }
+  })
+
   return (
     <FlexContainer height="750px" width="100vw">
+      {loading && (
+        <FlexContainer
+          fullSize
+          fullScreen
+          absPos
+          bgColor={colors.grayLightest}
+          fontColor="grayDarkest"
+          zIndex="loader"
+        >
+          <PropagateLoader
+            size={10}
+            color={colors.gray}
+            loading={loading}
+          />
+        </FlexContainer>
+      )}
       <MainContainer rows="30px 1fr 40px 20px">
         <FlexContainer justify="flex-start">
           <Title fontWeight="semiBold" fontSize={2}>
@@ -174,7 +198,9 @@ export default function TrustBiases({ data }) {
               fullSize
               style={{ transform: "rotate(45deg)" }}
             />
-            <FlexContainer justify="flex-start">No data available</FlexContainer>
+            <FlexContainer justify="flex-start">
+              No data available
+            </FlexContainer>
           </GridContainer>
           <GridContainer
             absPos
