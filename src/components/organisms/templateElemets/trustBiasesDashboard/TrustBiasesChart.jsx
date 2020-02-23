@@ -80,7 +80,6 @@ export default function TrustBiasesChart({
           .attr("stroke", "#fff")
           .on("mouseover", onMouseover)
           .on("mouseout", onMouseout)
-          .on("click", onClick)
       )
   }
 
@@ -148,10 +147,6 @@ export default function TrustBiasesChart({
   function onMouseout(d, i, n) {
     mouseoverAnimation({ d, i, n }, true)
     handleMouseout()
-  }
-
-  function onClick(d) {
-    console.log(d, "clicked")
   }
 
   useInitUpdate({

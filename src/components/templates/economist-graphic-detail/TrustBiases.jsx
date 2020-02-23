@@ -17,7 +17,6 @@ import {
 import { HorizontalLinearGradient } from "../../organisms"
 import { CreditsContainer, FullScreenLoader } from "../../molecules"
 import { colors } from "../../../themes/theme"
-import { PropagateLoader } from "react-spinners"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
 const trustColor = COLOR_RANGE[3]
@@ -129,7 +128,7 @@ export default function TrustBiases({ data }) {
 
   return (
     <FlexContainer height="750px" width="100vw">
-      <FullScreenLoader/>
+      <FullScreenLoader />
       <MainContainer rows="30px 1fr 40px 20px">
         <FlexContainer justify="flex-start">
           <Title fontWeight="semiBold" fontSize={2}>

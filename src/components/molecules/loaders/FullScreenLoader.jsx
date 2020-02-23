@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { PropagateLoader } from 'react-spinners';
+import React, { useState, useEffect } from "react"
+import { PropagateLoader } from "react-spinners"
 
-import { FlexContainer } from '../../atoms';
-import { colors } from '../../../themes/theme';
+import { FlexContainer } from "../../atoms"
+import { colors } from "../../../themes/theme"
 
 export default function FullScreenLoader({
   timeOut,
-  loaderSize
-}){
-
+  loaderSize,
+  bgColor,
+  loaderColor,
+}) {
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     if (loading) {
@@ -18,26 +19,29 @@ export default function FullScreenLoader({
 
   return (
     <>
-    {loading && (
-      <FlexContainer
-        fullSize
-        fullScreen
-        absPos
-        bgColor={colors.grayLightest}
-        fontColor="grayDarkest"
-        zIndex="loader"
-      >
-        <PropagateLoader
-          size={loaderSize}
-          color={colors.gray}
-          loading={loading}
-        />
-      </FlexContainer>
-    )}
-    </>)
+      {loading && (
+        <FlexContainer
+          fullSize
+          fullScreen
+          absPos
+          bgColor={bgColor}
+          fontColor="grayDarkest"
+          zIndex="loader"
+        >
+          <PropagateLoader
+            size={loaderSize}
+            color={loaderColor}
+            loading={loading}
+          />
+        </FlexContainer>
+      )}
+    </>
+  )
 }
 
 FullScreenLoader.defaultProps = {
   timeOut: 2000,
-  loaderSize: 10
+  loaderSize: 10,
+  bgColor: colors.whiteDark,
+  loaderColor: colors.grayDark,
 }
