@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
-import chroma from "chroma-js"
 import _ from "lodash"
 
 import { FlexContainer, GridContainer, Title, ColoredSpan } from "../../atoms"
-import { TrustBiasesChart } from "../../organisms/templateElemets/trustBiasesDashboard"
+import {
+  TrustBiasesChart,
+  ColoredRects,
+} from "../../organisms/templateElemets/trustBiasesDashboard"
 
 import {
   COUNTRY_ORDER,
@@ -20,8 +22,6 @@ import { CreditsContainer, FullScreenLoader } from "../../molecules"
 import { colors } from "../../../themes/theme"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
-const trustColor = COLOR_RANGE[3]
-const distrustColor = COLOR_RANGE[0]
 const gradientData = COLOR_RANGE.map((color, i) => ({
   offset: OFFSET_RANGE[i],
   color,
@@ -78,6 +78,7 @@ const axisProps = {
 const getCountryList = hoveredCountries =>
   COUNTRY_ORDER.map(country => (
     <FlexContainer
+      key={country}
       fontWeight={hoveredCountries.includes(country) ? "semiBold" : "normal"}
     >
       {country}
@@ -86,16 +87,6 @@ const getCountryList = hoveredCountries =>
 
 export default function TrustBiases({ data }) {
   const [currHovered, setCurrHovered] = useState({})
-
-  const getFontColor = color =>
-    color &&
-    (chroma(color).luminance() > 0.5
-      ? chroma(color)
-          .darken(3)
-          .hex()
-      : chroma(color)
-          .brighten(3)
-          .hex())
 
   const [sameData, setSameData] = useState(undefined)
   useEffect(() => {
@@ -109,39 +100,6 @@ export default function TrustBiases({ data }) {
       )
     }
   }, [data, sameData])
-
-  const ColoredRects = ({ accC, accT, origin, dest, isTrust }) => {
-    return (
-      currHovered[accT] !== 100 && (
-        <GridContainer columns="45px auto">
-          <FlexContainer
-            bgColor={currHovered[accC]}
-            fontWeight="semiBold"
-            fontColor={getFontColor(currHovered[accC])}
-          >
-            {currHovered[accT]}
-          </FlexContainer>
-          <FlexContainer justify="flex-start">
-            <div>
-              <ColoredSpan fontWeight="semiBold">{origin} </ColoredSpan> tends
-              to{" "}
-              <ColoredSpan
-                color={isTrust ? trustColor : distrustColor}
-                fontWeight="semiBold"
-              >
-                {isTrust ? "trust" : "distrust"}
-              </ColoredSpan>{" "}
-              {dest === origin
-                ? currHovered[accT] > sameData
-                  ? "itself above average"
-                  : "itself below average"
-                : dest}
-            </div>
-          </FlexContainer>
-        </GridContainer>
-      )
-    )
-  }
 
   return (
     <FlexContainer height="750px" width="100vw">
@@ -208,6 +166,8 @@ export default function TrustBiases({ data }) {
             {!!Object.entries(currHovered).length && (
               <>
                 <ColoredRects
+                  currHovered={currHovered}
+                  sameData={sameData}
                   accC="oColor"
                   accT="oTrust"
                   origin={currHovered.origin}
@@ -216,6 +176,8 @@ export default function TrustBiases({ data }) {
                 />
                 {currHovered.origin !== currHovered.dest && (
                   <ColoredRects
+                    currHovered={currHovered}
+                    sameData={sameData}
                     accC="dColor"
                     accT="dTrust"
                     origin={currHovered.dest}

@@ -11,8 +11,8 @@ export default function CreditsContainer({
 }) {
   return (
     <GridContainer
-      rows={direction === "column" && `repeat(${elements.length}, 1fr)`}
-      columns={direction === "row" && `repeat(${elements.length}, 1fr)`}
+      rows={direction === "column" ? `repeat(${elements.length}, 1fr)` : ""}
+      columns={direction === "row" ? `repeat(${elements.length}, 1fr)` : ""}
       absPos={absPos}
       {...position}
     >
