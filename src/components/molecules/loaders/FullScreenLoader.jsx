@@ -24,6 +24,7 @@ export default function FullScreenLoader({
           fullSize
           // fullScreen
           absPos
+          top={0}
           bgColor={bgColor}
           fontColor="grayDarkest"
           zIndex="loader"
