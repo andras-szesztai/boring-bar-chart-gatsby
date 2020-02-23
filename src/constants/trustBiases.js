@@ -50,7 +50,7 @@ const DATASET_URL =
   "https://boring-barchart-gatsby.firebaseio.com/trustBiases.json"
 
 const TEXTS = {
-  TITLE: "Trust Biases* between European Nations",
+  TITLE: "Trust Biases* Between European Nations",
   EXPLANATION:
     "* How much people from one country trust people from another country, relative to the consensus and their general level of trust",
   LEFT_TEXT: "How much people from these countries...",

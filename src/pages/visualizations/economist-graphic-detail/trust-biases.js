@@ -9,7 +9,7 @@ export default function() {
   const rawData = useFetchData(DATASET_URL)
   return (
     <>
-      <Helmet title="Trust biases* between European nations" />
+      <Helmet title="Trust Biases Between European Nations" />
       <TrustBiases data={rawData} />
     </>
   )

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import _ from "lodash"
 
 import { FlexContainer, GridContainer, Title, ColoredSpan } from "../../atoms"
@@ -20,6 +20,7 @@ import {
 import { HorizontalLinearGradient } from "../../organisms"
 import { CreditsContainer, FullScreenLoader } from "../../molecules"
 import { colors } from "../../../themes/theme"
+import { themifyFontSize } from "../../../themes/mixins"
 
 const { TITLE, EXPLANATION, LEFT_TEXT, RIGHT_TEXT } = TEXTS
 const gradientData = COLOR_RANGE.map((color, i) => ({
@@ -36,6 +37,9 @@ const MainContainer = styled(GridContainer)`
   @media (max-width: 620px) {
     width: 450px;
   }
+  @media (max-width: 500px) {
+    width: 350px;
+  }
 `
 
 const ChartContainer = styled(FlexContainer)`
@@ -50,6 +54,11 @@ const ChartContainer = styled(FlexContainer)`
     height: 280px;
     width: 280px;
   }
+  @media (max-width: 500px) {
+    transform: translateY(40px) rotate(45deg);
+    height: 220px;
+    width: 220px;
+  }
 `
 
 const AxisContainerLeft = styled(FlexContainer)`
@@ -62,10 +71,32 @@ const AxisContainerLeft = styled(FlexContainer)`
   @media (max-width: 620px) {
     top: 175px;
   }
+  @media (max-width: 500px) {
+    top: 140px;
+  }
 `
 
 const AxisContainerRight = styled(FlexContainer)`
   left: 100%;
+  @media (max-width: 500px) {
+    left: 97%;
+  }
+`
+
+const AxisTextContainer = styled(FlexContainer)`
+  font-size: ${themifyFontSize(1)};
+  @media (max-width: 500px) {
+    font-size: ${themifyFontSize(0)};
+  }
+`
+
+const AbsPosContainer = styled(GridContainer)`
+  ${({ topBig, topSmall }) => css`
+    top: ${topBig}px;
+    @media (max-width: 500px) {
+      top: ${topSmall}px;
+    }
+  `}
 `
 
 const axisProps = {
@@ -77,12 +108,12 @@ const axisProps = {
 
 const getCountryList = hoveredCountries =>
   COUNTRY_ORDER.map(country => (
-    <FlexContainer
+    <AxisTextContainer
       key={country}
       fontWeight={hoveredCountries.includes(country) ? "semiBold" : "normal"}
     >
       {country}
-    </FlexContainer>
+    </AxisTextContainer>
   ))
 
 export default function TrustBiases({ data }) {
@@ -111,9 +142,10 @@ export default function TrustBiases({ data }) {
           </Title>
         </FlexContainer>
         <FlexContainer pos="relative">
-          <GridContainer
+          <AbsPosContainer
             absPos
-            top={32}
+            topBig={32}
+            topSmall={15}
             right={0}
             height="45px"
             width="225px"
@@ -134,10 +166,11 @@ export default function TrustBiases({ data }) {
                 endTexts={LEGEND_END_TEXTS}
               />
             </FlexContainer>
-          </GridContainer>
-          <GridContainer
+          </AbsPosContainer>
+          <AbsPosContainer
             absPos
-            top={90}
+            topBig={90}
+            topSmall={75}
             right={0}
             height="20px"
             width="125px"
@@ -153,10 +186,11 @@ export default function TrustBiases({ data }) {
             <FlexContainer justify="flex-start">
               No data available
             </FlexContainer>
-          </GridContainer>
-          <GridContainer
+          </AbsPosContainer>
+          <AbsPosContainer
             absPos
-            top={35}
+            topSmall={120}
+            topBig={35}
             left={0}
             rows="repeat(2, 1fr)"
             rowGap={0}
@@ -187,7 +221,7 @@ export default function TrustBiases({ data }) {
                 )}
               </>
             )}
-          </GridContainer>
+          </AbsPosContainer>
           <ChartContainer pos="relative">
             <AxisContainerLeft {...axisProps} align="flex-end">
               {getCountryList(Object.values(currHovered))}
