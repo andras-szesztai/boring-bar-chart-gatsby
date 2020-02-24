@@ -69,7 +69,6 @@ export default function TrustBiasesChart({
       .join(enter =>
         enter
           .append("rect")
-          .attr("cursor", "pointer")
           .attr("x", d => xScale(d.origin))
           .attr("y", d => yScale(d.destination))
           .attr("width", xScale.bandwidth())
