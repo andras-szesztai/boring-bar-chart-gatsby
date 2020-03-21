@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components"
-import Container from "./Container"
+import {Container} from "../"
 
 const GridContainer = styled(Container)`
   display: grid;

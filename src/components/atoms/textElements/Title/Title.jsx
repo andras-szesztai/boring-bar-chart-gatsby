@@ -4,7 +4,7 @@ import {
   themifyFontWeight,
   themifyColor,
   themifySpace,
-} from "../../../themes/mixins"
+} from "../../../../themes/mixins"
 
 const Title = styled.span`
 

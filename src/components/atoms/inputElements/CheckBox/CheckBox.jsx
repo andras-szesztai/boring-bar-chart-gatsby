@@ -6,7 +6,7 @@ import {
   themifyColor,
   themifyTransition,
   themifyEase,
-} from "../../../themes/mixins"
+} from "../../../../themes/mixins"
 
 const CheckBox = styled.div`
   scale: 1;

@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components"
-import Container from "./Container"
+import { Container } from "../"
 
 const FlexContainer = styled(Container)`
   display: flex;
@@ -8,7 +8,6 @@ const FlexContainer = styled(Container)`
     align-items: ${align};
     flex-direction: ${direction};
   `}
-  
 `
 
 FlexContainer.defaultProps = {

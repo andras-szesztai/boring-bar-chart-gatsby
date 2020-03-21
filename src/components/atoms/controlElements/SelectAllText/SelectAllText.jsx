@@ -2,9 +2,9 @@ import React from "react"
 import styled from "styled-components"
 import { IoIosArrowDroprightCircle } from "react-icons/io"
 
-import { FlexContainer } from "../containers"
-import { ColoredSpan } from "../textElements"
-import { colors } from "../../../themes/theme"
+import { FlexContainer } from "../../containers"
+import { ColoredSpan } from "../../textElements"
+import { colors } from "../../../../themes/theme"
 const { grayDarkest } = colors
 
 const Container = styled(FlexContainer)``

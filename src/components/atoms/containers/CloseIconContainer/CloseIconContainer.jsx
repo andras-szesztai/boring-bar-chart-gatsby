@@ -1,6 +1,6 @@
 import styled from "styled-components"
-import FlexContainer from "./FlexContainer"
-import { themifyColor, themifyTransition } from "../../../themes/mixins"
+import FlexContainer from "../FlexContainer/FlexContainer"
+import { themifyColor, themifyTransition } from "../../../../themes/mixins"
 
 
 const CloseIconContainer = styled(FlexContainer)`
