@@ -1,1 +1,1 @@
-export { default as NeumorphButton } from './NeumorphButton'
+export { default as NeumorphButton } from './NeumorphButton/NeumorphButton'

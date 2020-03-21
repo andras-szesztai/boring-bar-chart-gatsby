@@ -7,7 +7,7 @@ import {
   themifyTransition,
   themifyFontSize,
   themifyFontWeight,
-} from "../../../themes/mixins"
+} from "../../../../themes/mixins"
 
 const Link = styled.a`
   text-decoration: none;

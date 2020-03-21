@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import { themifyFontSize } from "../../../themes/mixins"
+import { themifyFontSize } from "../../../../themes/mixins"
 
 const LabelContainer = styled.div`
   padding: 5px 10px;

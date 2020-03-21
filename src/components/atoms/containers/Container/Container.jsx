@@ -7,7 +7,7 @@ import {
   themifySpace,
   themifyTransition,
   themifyEase,
-} from "../../../themes/mixins"
+} from "../../../../themes/mixins"
 
 const Container = styled.div`
   user-select: none;

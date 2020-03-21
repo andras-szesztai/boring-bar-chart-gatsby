@@ -3,8 +3,8 @@ import { SortableHandle } from "react-sortable-hoc"
 import { IoIosMove, IoIosResize } from "react-icons/io"
 import styled, { css } from "styled-components"
 
-import { FlexContainer } from "../containers"
-import { colors } from "../../../themes/theme"
+import { FlexContainer } from "../../containers"
+import { colors } from "../../../../themes/theme"
 
 const { grayDark } = colors
 

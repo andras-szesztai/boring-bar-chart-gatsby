@@ -5,7 +5,7 @@ import {
   themifyColor,
   themifyZIndex,
   themifySpace,
-} from "../../../themes/mixins"
+} from "../../../../themes/mixins"
 
 const ColoredSpan = styled.span`
   ${({ fontSize, fontWeight, color, zIndex, paddingBottom }) => css`
