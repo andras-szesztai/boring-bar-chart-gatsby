@@ -40,7 +40,6 @@ export default function useDimensions({
       }
     }
 
-    // TODO: make it without resize listener
     if (
       !dims.height &&
       (ref || parentRef) &&
