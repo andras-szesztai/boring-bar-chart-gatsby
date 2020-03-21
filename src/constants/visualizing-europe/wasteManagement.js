@@ -1,4 +1,4 @@
-const DATA_URL = "https://boring-barchart-gatsby.firebaseio.com/mm2020w1.json"
+const DATA_URL = "https://boring-barchart-gatsby.firebaseio.com/waste-management.json"
 
 const WASTE_MANAGEMENT_CONSTANTS = {
   DATA_URL,
