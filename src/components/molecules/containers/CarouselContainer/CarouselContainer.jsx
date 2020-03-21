@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-import { GridContainer, FlexContainer, CheckBox } from "../../atoms"
+import { GridContainer, FlexContainer, CheckBox } from "../../../atoms"
 
 const CarouselContainer = ({ children, pages }) => {
   const [activePage, setActivePage] = useState(0)

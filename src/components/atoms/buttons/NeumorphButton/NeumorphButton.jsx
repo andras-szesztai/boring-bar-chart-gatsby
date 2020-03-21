@@ -1,6 +1,6 @@
 import React from "react"
 import styled, { css } from "styled-components"
-import { themifyFontSize, themifyFontWeight } from "../../../themes/mixins"
+import { themifyFontSize, themifyFontWeight } from "../../../../themes/mixins"
 
 const Button = styled.div`
   position: relative;

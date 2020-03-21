@@ -20,7 +20,7 @@ import { HorizontalStackedBarChartContainer } from "../organisms"
 import { colors } from "../../themes/theme"
 import { usePrevious, useModalToggle } from "../../hooks"
 import { max, quantile, extent } from "d3-array"
-import TooltipContainer from "../molecules/containers/TooltipContainer"
+import TooltipContainer from "../molecules/containers/CarouselContainer/TooltipContainer"
 import { SortableColumnsComponent, ModalComponent } from "../organisms/templateElemets/chessPlayersDashboard"
 import {
   CAROUSEL_PAGES,

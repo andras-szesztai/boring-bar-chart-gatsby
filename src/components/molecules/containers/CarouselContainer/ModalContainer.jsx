@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react"
 import chroma from "chroma-js"
 import { IoIosClose } from "react-icons/io"
 
-import { FlexContainer, CloseIconContainer } from "../../atoms"
-import { colors } from "../../../themes/theme"
-import { usePrevious } from "../../../hooks"
+import { FlexContainer, CloseIconContainer } from "../../../atoms"
+import { colors } from "../../../../themes/theme"
+import { usePrevious } from "../../../../hooks"
 
 export default function ModalContainer({
   shouldToggle,

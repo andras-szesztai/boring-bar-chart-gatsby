@@ -3,14 +3,14 @@ import styled, { css } from "styled-components"
 import _ from "lodash"
 import { IoIosClose } from "react-icons/io"
 
-import { FlexContainer, CloseIconContainer } from "../../atoms"
-import { useWindowDimensions, usePrevious } from "../../../hooks"
+import { FlexContainer, CloseIconContainer } from "../../../atoms"
+import { useWindowDimensions, usePrevious } from "../../../../hooks"
 import {
   themifyZIndex,
   themifySpace,
   themifyColor,
   themifyTransition,
-} from "../../../themes/mixins"
+} from "../../../../themes/mixins"
 
 const ARROW_HEIGHT = 8
 

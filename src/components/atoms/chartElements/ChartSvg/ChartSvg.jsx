@@ -3,7 +3,7 @@ import {
   themifyFontSize,
   themifyFontWeight,
   themifyColor,
-} from "../../../themes/mixins"
+} from "../../../../themes/mixins"
 
 export const ChartSvg = styled.svg`
   width: ${props => props.width || 0}px;

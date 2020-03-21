@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components"
-import { themifyFontSize } from "../../../themes/mixins"
+import { themifyFontSize } from "../../../../themes/mixins"
 
 const ChartWrapper = styled.div`
   position: relative;

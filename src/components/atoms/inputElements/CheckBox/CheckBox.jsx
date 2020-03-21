@@ -17,8 +17,7 @@ const CheckBox = styled.div`
     color,
     isRadio,
     checked,
-    transitionDuration,
-    isHoverAnimation,
+    transitionDuration
   }) => css`
     cursor: ${cursor || "pointer"};
     width: ${width}px;

@@ -1,5 +1,5 @@
 import React from "react"
-import { Title, GridContainer, FlexContainer, LinkAnchor } from "../../atoms"
+import { Title, GridContainer, FlexContainer, LinkAnchor } from "../../../atoms"
 
 export default function CreditsContainer({
   direction,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { SortableContainer } from "react-sortable-hoc"
 import arrayMove from "array-move"
-import { SortableItem, GridContainer } from "../../atoms"
+import { SortableItem, GridContainer } from "../../../atoms"
 
 const SortableList = SortableContainer(props => {
   const { sortedItems } = props
