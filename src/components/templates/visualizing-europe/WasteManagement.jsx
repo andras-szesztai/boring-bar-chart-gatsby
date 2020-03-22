@@ -32,7 +32,7 @@ export default function WasteManagemetDashboard({
   return (
     <>
       <FlexContainer fullScreen>
-        {/* <FullScreenLoader loading={loading} /> */}
+        <FullScreenLoader loading={loading} />
         <MainGrid maxWidth="1400px">
           <MainChartsContainer>
             <TitleContainer metric={metric} setMetric={setMetric} />
@@ -45,7 +45,7 @@ export default function WasteManagemetDashboard({
               {!selectedCountry ? (
                 <FlexContainer>Explainer</FlexContainer>
               ) : (
-                <FlexContainer>Chart</FlexContainer>
+                <FlexContainer>{selectedCountry}</FlexContainer>
               )}
             </GridContainer>
           </MainChartsContainer>

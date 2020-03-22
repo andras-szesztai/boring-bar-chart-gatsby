@@ -10,7 +10,7 @@ function getAbsData(data) {
     recycling_material: +el.recycling_material,
     recycling_total: +el.recycling_composting + +el.recycling_material,
     waste: +el.waste,
-    year: +el.year,
+    year: new Date(+el.year),
   }))
 }
 
@@ -23,7 +23,7 @@ function getPercentageData(data) {
       recycling_total:
         (+el.recycling_material + +el.recycling_composting) / +el.waste,
       waste: 1,
-      year: +el.year,
+      year: new Date(+el.year),
     }
   })
 }
@@ -61,6 +61,7 @@ export default function SmallChartContainer({
       >
         <FlexContainer
           absPos
+          zIndex="overlay"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           bgColor={isHovered && !isSelected && "tealBlue"}
@@ -68,10 +69,9 @@ export default function SmallChartContainer({
           fullSize
           opacity={!isSelected && 0.25}
           borderColor={isSelected && "tealBlue"}
-          withBorder
           hoverable
         />
-          <AreaChart/>
+          <AreaChart data={chartData} metric={metric} value={value}/>
       </FlexContainer>
     </>
   )
