@@ -73,7 +73,7 @@ const bigScreenAreas = css`
     "chartTwo";
 `
 
-const MainChartsContainer = styled(GridContainer)`
+const MainChartsContainer = styled(GridContainer)`  
   @media (min-width: 450px) {
     ${smallScreenAreas}
   }
