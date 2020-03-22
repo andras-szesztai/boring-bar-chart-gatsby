@@ -22,9 +22,9 @@ const CheckBox = styled.div`
     cursor: ${cursor || "pointer"};
     width: ${width}px;
     height: ${width}px;
-    border: 1px solid ${themifyColor(color)};
+    ${'' /* border: 1px solid ${themifyColor(color)}; */}
     border-radius: ${isRadio ? width : width * 0.15}px;
-    background: ${checked ? themifyColor(color) : "transparent"};
+    ${'' /* background: ${checked ? themifyColor(color) : "transparent"}; */}
     transition: background ${themifyTransition(transitionDuration)}
       ${themifyEase("easeInOutCubic")};
 

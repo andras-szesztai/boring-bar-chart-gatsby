@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { FlexContainer } from "../../../../atoms"
 
 export default function SmallChartContainer({
@@ -9,8 +9,6 @@ export default function SmallChartContainer({
 }) {
   const isSelected = selectedValue === value
   const [isHovered, setIsHovered] = useState(false)
-
-  console.log(isHovered, value)
 
   return (
     <>
