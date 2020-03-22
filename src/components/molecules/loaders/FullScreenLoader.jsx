@@ -9,20 +9,23 @@ export default function FullScreenLoader({
   loaderSize,
   bgColor,
   loaderColor,
+  loading: parentLoading,
 }) {
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    if (loading) {
+    if (parentLoading) {
+      setLoading(false)
+    }
+    if (!parentLoading && loading) {
       setTimeout(() => setLoading(false), timeOut)
     }
-  })
-
+  }, [parentLoading, loading, timeOut])
   return (
     <>
-      {loading && (
+      {(loading || parentLoading) && (
         <FlexContainer
           fullSize
-          // fullScreen
+          fullScreen
           top={0}
           absPos
           bgColor={bgColor}
@@ -32,7 +35,7 @@ export default function FullScreenLoader({
           <PropagateLoader
             size={loaderSize}
             color={loaderColor}
-            loading={loading}
+            loading={parentLoading}
           />
         </FlexContainer>
       )}

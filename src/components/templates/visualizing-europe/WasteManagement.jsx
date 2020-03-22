@@ -1,16 +1,23 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
-import Switch from "react-switch"
 
 import { FlexContainer, GridContainer, Title } from "../../atoms"
-import { useWindowDimensions, useUniqValuesList } from "../../../hooks"
-import { styledComponents } from "../../organisms/templateElemets/wasteManagementDashboard"
+import { useWindowDimensions } from "../../../hooks"
+import {
+  styledComponents,
+  TitleContainer,
+} from "../../organisms/templateElemets/wasteManagementDashboard"
 import { colors } from "../../../themes/theme"
+import { FullScreenLoader } from "../../molecules"
 const { MainGrid, MainChartsContainer } = styledComponents
 
-export default function WasteManagemetDashboard({ data, loading }) {
+export default function WasteManagemetDashboard({
+  data,
+  loading,
+  countryList,
+}) {
   const { windowWidth, windowHeight } = useWindowDimensions()
-  const countryList = useUniqValuesList(data, "country", ["EU 28"])
+  const [metric, setMetric] = useState("abs")
 
   let isSmallScreen
   if (
@@ -19,42 +26,36 @@ export default function WasteManagemetDashboard({ data, loading }) {
   ) {
     isSmallScreen = true
   }
+  console.log(data)
 
   return (
-    <FlexContainer fullScreen>
-      <MainGrid maxWidth="1400px">
-        <MainChartsContainer>
-          <GridContainer columns="35fr 65fr" gridArea="title" withBorder>
-            <Title>Waste Management in Europe</Title>
-            <FlexContainer>
-              <Switch
-                uncheckedIcon={false}
-                checkedIcon={false}
-                offColor={colors.grayLight}
-                onColor={colors.grayLight}
-                height={18}
-                width={40}
-              />
-            </FlexContainer>
-          </GridContainer>
-          <GridContainer rows="30px 1fr" gridArea="chartOne" withBorder>
-            <FlexContainer>Spaceholder</FlexContainer>
-            <FlexContainer>Chart 1</FlexContainer>
-          </GridContainer>
-          <GridContainer rows="30px 1fr" gridArea="chartTwo" withBorder>
-            <FlexContainer>Selector</FlexContainer>
-            <FlexContainer>Chart 2</FlexContainer>
-          </GridContainer>
-        </MainChartsContainer>
-        {!isSmallScreen && (
-          <GridContainer columns="repeat(5, 1fr)" rows="repeat(5, 1fr)">
-            {countryList &&
-              countryList.map(country => (
-                <FlexContainer withBorder>{country}</FlexContainer>
-              ))}
-          </GridContainer>
-        )}
-      </MainGrid>
-    </FlexContainer>
+    <>
+      <FullScreenLoader loading={loading} />
+      <FlexContainer fullScreen>
+        <MainGrid maxWidth="1400px">
+          <MainChartsContainer>
+            <TitleContainer metric={metric} setMetric={setMetric} />
+            <GridContainer rows="30px 1fr" gridArea="chartOne" withBorder>
+              <div />
+              <FlexContainer>Chart 1</FlexContainer>
+            </GridContainer>
+            <GridContainer rows="30px 1fr" gridArea="chartTwo" withBorder>
+              <FlexContainer>Selector</FlexContainer>
+              <FlexContainer>Chart 2</FlexContainer>
+            </GridContainer>
+          </MainChartsContainer>
+          {!isSmallScreen && (
+            <GridContainer columns="repeat(5, 1fr)" rows="repeat(5, 1fr)">
+              {countryList &&
+                countryList.map(country => (
+                  <FlexContainer key={country} withBorder>
+                    {country}
+                  </FlexContainer>
+                ))}
+            </GridContainer>
+          )}
+        </MainGrid>
+      </FlexContainer>
+    </>
   )
 }

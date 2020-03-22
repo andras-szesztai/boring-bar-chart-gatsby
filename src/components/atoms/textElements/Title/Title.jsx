@@ -14,6 +14,7 @@ const Title = styled.span`
     marginRight,
     fontSize,
     paddingBottom,
+    marginLeft,
     marginTop,
     display
   }) => css`
@@ -22,6 +23,7 @@ const Title = styled.span`
     margin-bottom: ${themifySpace(marginBottom)}px;
     margin-top: ${themifySpace(marginTop)}px;
     margin-right: ${themifySpace(marginRight)}px;
+    margin-left: ${themifySpace(marginLeft)}px;
     font-size: ${themifyFontSize(fontSize)};
     padding-bottom: ${themifyFontSize(paddingBottom)}px;
   `}
