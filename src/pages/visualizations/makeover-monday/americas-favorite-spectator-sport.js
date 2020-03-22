@@ -9,7 +9,7 @@ const url = "https://boring-barchart-gatsby.firebaseio.com/mm2020w1.json"
 
 export default function Dashboard() {
 
-  const rawData = useFetchData(url)
+  const { response: rawData } = useFetchData(url)
   
   const [dataObject, setDataObject] = useState({
     array: undefined,

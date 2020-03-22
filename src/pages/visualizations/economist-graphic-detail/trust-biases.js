@@ -6,11 +6,11 @@ import { useFetchData } from "../../../hooks"
 import { DATASET_URL } from "../../../constants/trustBiases"
 
 export default function() {
-  const rawData = useFetchData(DATASET_URL)
+  const { response } = useFetchData(DATASET_URL)
   return (
     <>
       <Helmet title="Trust Biases Between European Nations" />
-      <TrustBiases data={rawData} />
+      <TrustBiases data={response} />
     </>
   )
 }

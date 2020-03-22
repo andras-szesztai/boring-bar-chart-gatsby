@@ -1,18 +1,24 @@
 import { useState, useEffect } from "react"
-import { json } from "d3-fetch"
 
-export default function useDataFetch(url) {
-  const [response, setResponse] = useState(undefined)
+const useFetchData = (url, options) => {
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    if (!response) {
-      console.log(url);
-      
-      json(url).then(res => {
-        console.log(res);
-        setResponse(res)
-      })
-    }
-  }, [response, url])
-  
-  return response
-}
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(url, options);
+        const json = await res.json();
+        setResponse(json);
+        setIsLoading(false)
+      } catch (error) {
+        setError(error);
+      }
+    };
+    fetchData();
+  }, [options, url]);
+  return { response, error, isLoading };
+    };
+
+export default useFetchData
