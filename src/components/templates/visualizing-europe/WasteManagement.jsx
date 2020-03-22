@@ -6,6 +6,7 @@ import { useWindowDimensions } from "../../../hooks"
 import {
   styledComponents,
   TitleContainer,
+  SmallChartContainer,
 } from "../../organisms/templateElemets/wasteManagementDashboard"
 import { colors } from "../../../themes/theme"
 import { FullScreenLoader } from "../../molecules"
@@ -18,6 +19,7 @@ export default function WasteManagemetDashboard({
 }) {
   const { windowWidth, windowHeight } = useWindowDimensions()
   const [metric, setMetric] = useState("abs")
+  const [selectedCountry, setSelectedCountry] = useState(undefined)
 
   let isSmallScreen
   if (
@@ -26,8 +28,9 @@ export default function WasteManagemetDashboard({
   ) {
     isSmallScreen = true
   }
-  console.log(data)
 
+  console.log(selectedCountry);
+  
   return (
     <>
       <FullScreenLoader loading={loading} />
@@ -48,9 +51,13 @@ export default function WasteManagemetDashboard({
             <GridContainer columns="repeat(5, 1fr)" rows="repeat(5, 1fr)">
               {countryList &&
                 countryList.map(country => (
-                  <FlexContainer key={country} withBorder>
-                    {country}
-                  </FlexContainer>
+                  <SmallChartContainer
+                    key={country}
+                    value={country}
+                    data={data[country]}
+                    setSelected={setSelectedCountry}
+                    selectedValue={selectedCountry}
+                  />
                 ))}
             </GridContainer>
           )}
