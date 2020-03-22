@@ -1,4 +1,4 @@
-import { ChartArea, ChartWrapper, ChartSvg } from "./chartElements"
+import { ChartArea, ChartWrapper, ChartSvg, AxisLine } from "./chartElements"
 import {
   FlexContainer,
   VerticalAxisLabelContainer,
@@ -28,5 +28,6 @@ export {
   SelectAllText,
   CloseIconContainer,
   Container,
-  LinkAnchor
+  LinkAnchor, 
+  AxisLine
 }

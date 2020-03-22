@@ -38,14 +38,14 @@ export default function useInitUpdate({
       (checkIfUpdated(dataToCheck.sort(sortFunc), prevData.sort(sortFunc)) ||
         !_.isEqual(prevYScaleDomain, yScaleDomain))
     ) {
-      updateVisData()
+      updateVisData && updateVisData()
     }
     if (
       init &&
       (updateVisDims || updateVisData) &&
       (chartWidth !== prevChartWidth || chartHeight !== prevChartHeight)
     ) {
-      updateVisDims ? updateVisDims() : updateVisData()
+      updateVisDims ? updateVisDims() : updateVisData && updateVisData()
     }
   }, [
     chartHeight,

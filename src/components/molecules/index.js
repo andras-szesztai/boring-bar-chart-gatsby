@@ -3,6 +3,7 @@ import {
   HorizontalStackedBar,
   VerticalBoxPlot,
   VerticalBarCircleChart,
+  ChartStarter
 } from "./charts"
 import {
   SortableComponent,
@@ -27,5 +28,6 @@ export {
   VerticalBarCircleChart,
   ModalContainer,
   CreditsContainer,
-  FullScreenLoader
+  FullScreenLoader,
+  ChartStarter
 }
