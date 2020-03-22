@@ -7,7 +7,7 @@ const MainGrid = styled(GridContainer)`
     height: 95%;
     width: 95%;
     grid-template-columns: 1fr;
-    grid-template-rows: 45fr 55fr;
+    grid-template-rows: 20fr 20fr;
   }
 
   @media (min-width: 750px) {
@@ -21,7 +21,6 @@ const MainGrid = styled(GridContainer)`
     height: 95%;
     width: 96%;
     grid-template-columns: 32.5fr 67.5fr;
-    grid-template-rows: 1fr;
   }
 
   @media (min-width: 1400px) {
@@ -58,7 +57,7 @@ const MainGrid = styled(GridContainer)`
 
 const smallScreenAreas = css`
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 20fr 80fr;
+  grid-template-rows: 20fr 70fr;
   grid-template-areas:
     "title title"
     "chartOne chartTwo";

@@ -29,12 +29,12 @@ export default function WasteManagemetDashboard({
     isSmallScreen = true
   }
 
-  console.log(selectedCountry);
-  
+  console.log(selectedCountry)
+
   return (
     <>
-      <FullScreenLoader loading={loading} />
       <FlexContainer fullScreen>
+        {/* <FullScreenLoader loading={loading} /> */}
         <MainGrid maxWidth="1400px">
           <MainChartsContainer>
             <TitleContainer metric={metric} setMetric={setMetric} />
@@ -44,7 +44,11 @@ export default function WasteManagemetDashboard({
             </GridContainer>
             <GridContainer rows="30px 1fr" gridArea="chartTwo" withBorder>
               <FlexContainer>Selector</FlexContainer>
-              <FlexContainer>Chart 2</FlexContainer>
+              {
+                !selectedCountry ?
+                <FlexContainer>Explainer</FlexContainer>:
+                <FlexContainer>Chart</FlexContainer>
+              }
             </GridContainer>
           </MainChartsContainer>
           {!isSmallScreen && (

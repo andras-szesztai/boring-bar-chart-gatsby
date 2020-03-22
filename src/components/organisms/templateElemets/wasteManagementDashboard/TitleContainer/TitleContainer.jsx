@@ -6,14 +6,14 @@ import { colors } from "../../../../../themes/theme"
 
 export default function TitleContainer({ metric, setMetric }) {
   return (
-    <GridContainer columns="35fr 65fr" gridArea="title">
+    <GridContainer columnGap={2} columns="35fr 65fr" gridArea="title">
       <FlexContainer>
-        <Title fontSize={4} fontWeight="medium">
+        <Title fontSize={3} fontWeight="medium">
           Waste Management in Europe
         </Title>
       </FlexContainer>
       <FlexContainer>
-        <Title marginRight={1}>Per Capita Abs.</Title>
+          <Title  textAlign="right" marginRight={1}>Per Capita Abs.</Title>
         <Switch
           checked={metric === "perc"}
           onChange={() => setMetric(prev => (prev === "abs" ? "perc" : "abs"))}
