@@ -2,33 +2,7 @@ import React, { useState, useEffect } from "react"
 import { FlexContainer } from "../../../../atoms"
 import { usePrevious } from "../../../../../hooks"
 import { AreaChart } from ".."
-
-function getAbsData(data) {
-  return data.map(el => ({
-    ...el,
-    recycling_composting: +el.recycling_composting,
-    recycling_material: +el.recycling_material,
-    recycling_total: +el.recycling_composting + +el.recycling_material,
-    waste: +el.waste,
-    yearString: el.year,
-    year: new Date(+el.year),
-  }))
-}
-
-function getPercentageData(data) {
-  return data.map(el => {
-    return {
-      ...el,
-      recycling_composting: +el.recycling_composting / +el.waste,
-      recycling_material: +el.recycling_material / +el.waste,
-      recycling_total:
-        (+el.recycling_material + +el.recycling_composting) / +el.waste,
-      waste: 1,
-      yearString: el.year,
-      year: new Date(+el.year),
-    }
-  })
-}
+import { getPercentageData, getAbsData } from "../dashboardHelpers"
 
 export default function SmallChartContainer({
   value,

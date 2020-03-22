@@ -1,7 +1,7 @@
 import React, { useRef } from "react"
 import { scaleTime, scaleLinear } from "d3-scale"
 import { extent } from "d3-array"
-import { area, curveMonotoneX, stack } from "d3-shape"
+import { area, curveMonotoneX } from "d3-shape"
 import { select } from "d3-selection"
 import "d3-transition"
 import { interpolatePath } from "d3-interpolate-path"
@@ -18,14 +18,15 @@ import {
   AxisLine,
   Container,
 } from "../../../../atoms"
-import { colors, transition } from "../../../../../themes/theme"
-import { easeCubicInOut } from "d3-ease"
+import { transition } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 
 const yDomain = {
   abs: [0, 800],
   perc: [0, 1],
 }
+
+const metricArray = ["waste", "recycling_total", "recycling_composting"]
 
 export default function AreaChart(props) {
   const { data, margin, metric, value, withAxes } = props
@@ -35,8 +36,6 @@ export default function AreaChart(props) {
     ref: refs.wrapperRef,
     margin,
   })
-
-  const isAbs = metric === "abs"
 
   function initVis() {
     const xScale = scaleTime()
@@ -51,8 +50,23 @@ export default function AreaChart(props) {
       xScale,
       chartArea,
     }
-    createUpdateSingleArea(true)
-    createUpdateStackedArea()
+    createUpdateSingleArea({
+      isInit: true,
+      color: "#de88a5",
+      accessor: "waste",
+    })
+    createUpdateSingleArea({
+      isInit: true,
+      color: "#7a9eaf",
+      accessor: "recycling_total",
+    })
+    createUpdateSingleArea({
+      isInit: true,
+      color: "#655989",
+      accessor: "recycling_composting",
+    })
+    select(refs.xAxisRef.current).raise()
+    select(refs.yAxisRef.current).raise()
   }
 
   function updateVisData() {
@@ -62,11 +76,14 @@ export default function AreaChart(props) {
       ...storedValues.current,
       yScale,
     }
-    createUpdateSingleArea()
-    createUpdateStackedArea()
+    metricArray.forEach(metric =>
+      createUpdateSingleArea({
+        accessor: metric,
+      })
+    )
   }
 
-  function createUpdateSingleArea(isInit) {
+  function createUpdateSingleArea({ isInit, color, accessor }) {
     const { yScale, xScale, chartArea } = storedValues.current
     const t = makeTransition(chartArea, transition.lgNum)
     const areaGeneratorZero = area()
@@ -78,81 +95,30 @@ export default function AreaChart(props) {
       .curve(curveMonotoneX)
       .x(d => xScale(d.year))
       .y0(yScale(0))
-      .y1(d => yScale(d.waste))
+      .y1(d => yScale(d[accessor]))
 
     if (isInit) {
       chartArea
         .append("path")
         .datum(data)
-        .attr("class", "total-area")
-        .attr("fill", "#E595AF")
-        .attr("fill-opacity", 0.6)
+        .attr("class", accessor)
+        .attr("fill", color)
         .attr("d", areaGeneratorZero)
       chartArea
-        .select(".total-area")
+        .select(`.${accessor}`)
         .transition(t)
         .attr("d", areaGenerator)
     }
 
     if (!isInit) {
       chartArea
-        .select(".total-area")
+        .select(`.${accessor}`)
         .datum(data)
         .transition(t)
-        .attrTween("d", (d, i, n) => {
-          const previous = select(n[i]).attr("d")
-          const next = areaGenerator(d)
-          return interpolatePath(previous, next)
-        })
+        .attrTween("d", (d, i, n) =>
+          interpolatePath(select(n[i]).attr("d"), areaGenerator(d))
+        )
     }
-  }
-
-  function createUpdateStackedArea() {
-    const { yScale, xScale, chartArea } = storedValues.current
-    const t = makeTransition(chartArea, transition.lgNum)
-    const areaGeneratorZero = area()
-      .x(d => xScale(d.data.year))
-      .y0(yScale(0))
-      .y1(yScale(0))
-      .curve(curveMonotoneX)
-
-    const areaGenerator = area()
-      .x(d => xScale(d.data.year))
-      .y0(d => yScale(d[0]))
-      .y1(d => yScale(d[1]))
-      .curve(curveMonotoneX)
-
-    var stackedData = stack().keys([
-      "recycling_material",
-      "recycling_composting",
-    ])(data)
-
-    chartArea
-      .selectAll(".rec-area")
-      .data(stackedData)
-      .join(
-        enter =>
-          enter
-            .append("path")
-            .attr("class", "rec-area")
-            .attr("fill", d =>
-              d.key === "recycling_material" ? "#655989" : "#7a9eaf"
-            )
-            .attr("d", areaGeneratorZero)
-            .call(enter => enter.transition(t).attr("d", areaGenerator)),
-        update =>
-          update.call(update =>
-            update
-              .transition(t)
-              .duration(transition.lgNum)
-              .ease(easeCubicInOut)
-              .attrTween("d", (d, i, n) => {
-                const previous = select(n[i]).attr("d")
-                const next = areaGenerator(d)
-                return interpolatePath(previous, next)
-              })
-          )
-      )
   }
 
   useInitUpdate({
@@ -183,7 +149,7 @@ export default function AreaChart(props) {
               marginTop={margin.top + dims.chartHeight}
             >
               <AxisLine
-                color="grayLightest"
+                color="gray"
                 x1={0}
                 x2={dims.chartWidth}
                 y2={0}
@@ -196,7 +162,7 @@ export default function AreaChart(props) {
               marginTop={margin.top}
             >
               <AxisLine
-                color="grayLightest"
+                color="gray"
                 x1={0}
                 x2={0}
                 y2={0}

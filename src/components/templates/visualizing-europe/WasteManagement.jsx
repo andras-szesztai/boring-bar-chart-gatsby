@@ -37,7 +37,7 @@ export default function WasteManagemetDashboard({
         <MainGrid maxWidth="1400px">
           <MainChartsContainer>
             <TitleContainer metric={metric} setMetric={setMetric} />
-            <GridContainer rows="30px 1fr" gridArea="chartOne" withBorder>
+            <GridContainer rows="30px 1fr" gridArea="chartOne">
               <div />
               <FlexContainer>Chart 1</FlexContainer>
             </GridContainer>
