@@ -8,6 +8,7 @@ import {
   themifyTransition,
   themifyEase,
 } from "../../../../themes/mixins"
+import { transition } from "../../../../themes/theme"
 
 const Container = styled.div`
   user-select: none;
@@ -20,6 +21,7 @@ const Container = styled.div`
     textAlign,
     cursor,
     pos,
+    opacity,
     padding,
     fontSize,
     fontWeight,
@@ -40,10 +42,11 @@ const Container = styled.div`
     cursor: ${cursor};
     position: ${pos};
     padding: ${padding};
+    opacity: ${opacity};
     font-size: ${themifyFontSize(fontSize)};
     font-weight: ${themifyFontWeight(fontWeight)};
     color: ${themifyColor(fontColor)};
-    background: ${bgColor};
+    background: ${themifyColor(bgColor || "transparent")};
     z-index: ${themifyZIndex(zIndex)};
     padding-bottom: ${themifySpace(paddingBottom)}px;
     padding-top: ${themifySpace(paddingTop)}px;
@@ -54,6 +57,13 @@ const Container = styled.div`
     margin-left: ${themifySpace(marginLeft)}px;
     margin-right: ${themifySpace(marginRight)}px;
   `}
+
+
+  ${({ hoverable }) =>
+    hoverable &&
+    css`
+      transition: all ${transition.sm};
+    `}
 
   ${({ absPos, pos, bottom, right, top, left }) =>
     (absPos || pos === "fixed") &&
@@ -102,7 +112,7 @@ const Container = styled.div`
   ${({ borderColor }) =>
     borderColor &&
     css`
-      border: 1px solid ${borderColor};
+      border: 1px solid ${themifyColor(borderColor)};
     `}
 
   ${({ withBorder }) =>
