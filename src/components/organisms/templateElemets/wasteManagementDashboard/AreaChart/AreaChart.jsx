@@ -1,10 +1,10 @@
 import React, { useRef } from "react"
 import { scaleTime, scaleLinear } from "d3-scale"
 import { extent } from "d3-array"
-import { area, curveCatmullRom, stack } from "d3-shape"
-import { nest } from "d3-collection"
+import { area, curveMonotoneX, stack } from "d3-shape"
 import { select } from "d3-selection"
 import "d3-transition"
+import { interpolatePath } from "d3-interpolate-path"
 
 import {
   useChartRefs,
@@ -20,13 +20,15 @@ import {
 } from "../../../../atoms"
 import { colors, transition } from "../../../../../themes/theme"
 import { easeCubicInOut } from "d3-ease"
+import { makeTransition } from "../../../../../utils/chartHelpers"
 
 const yDomain = {
   abs: [0, 800],
   perc: [0, 1],
 }
 
-export default function AreaChart({ data, margin, metric, value }) {
+export default function AreaChart(props) {
+  const { data, margin, metric, value, withAxes } = props
   const refs = useChartRefs()
   const storedValues = useRef()
   const dims = useDimensions({
@@ -49,7 +51,7 @@ export default function AreaChart({ data, margin, metric, value }) {
       xScale,
       chartArea,
     }
-    createUpdateSingleArea({ isInit: true })
+    createUpdateSingleArea(true)
     createUpdateStackedArea()
   }
 
@@ -60,56 +62,65 @@ export default function AreaChart({ data, margin, metric, value }) {
       ...storedValues.current,
       yScale,
     }
-    createUpdateSingleArea({})
+    createUpdateSingleArea()
     createUpdateStackedArea()
   }
 
-  function createUpdateSingleArea({ isInit }) {
+  function createUpdateSingleArea(isInit) {
     const { yScale, xScale, chartArea } = storedValues.current
-    const areaGenerator = area()
-      .curve(curveCatmullRom.alpha(1))
-      .x(d => xScale(d.data.year))
+    const t = makeTransition(chartArea, transition.lgNum)
+    const areaGeneratorZero = area()
+      .x(d => xScale(d.year))
       .y0(yScale(0))
-      .y1(d => yScale(d.data.waste))
+      .y1(yScale(0))
+      .curve(curveMonotoneX)
+    const areaGenerator = area()
+      .curve(curveMonotoneX)
+      .x(d => xScale(d.year))
+      .y0(yScale(0))
+      .y1(d => yScale(d.waste))
 
-    chartArea
-      .selectAll(".total-area")
-      .data([{ data }])
-      .join(enter =>
-        enter
-          .append("path")
-          .attr("class", "total-area")
-          .attr("fill", colors.grayLightest)
-          .attr("d", areaGenerator)
-      )
+    if (isInit) {
+      chartArea
+        .append("path")
+        .datum(data)
+        .attr("class", "total-area")
+        .attr("fill", "#E595AF")
+        .attr("fill-opacity", 0.6)
+        .attr("d", areaGeneratorZero)
+      chartArea
+        .select(".total-area")
+        .transition(t)
+        .attr("d", areaGenerator)
+    }
 
-    // if (isInit) {
-    //   chartArea
-    //     .append("path")
-    //     .datum(data)
-    //     .attr("class", "total-area")
-    //     .attr("fill", colors.grayLightest)
-    //     .attr("d", areaGenerator)
-    // }
-
-    // if (!isInit) {
-    //   chartArea
-    //     .select(".total-area")
-    //     .datum(data)
-    //     .transition("update")
-    //     .duration(transition.lgNum)
-    //     .ease(easeCubicInOut)
-    //     .attr("d", areaGenerator)
-    // }
+    if (!isInit) {
+      chartArea
+        .select(".total-area")
+        .datum(data)
+        .transition(t)
+        .attrTween("d", (d, i, n) => {
+          const previous = select(n[i]).attr("d")
+          const next = areaGenerator(d)
+          return interpolatePath(previous, next)
+        })
+    }
   }
 
   function createUpdateStackedArea() {
     const { yScale, xScale, chartArea } = storedValues.current
+    const t = makeTransition(chartArea, transition.lgNum)
+    const areaGeneratorZero = area()
+      .x(d => xScale(d.data.year))
+      .y0(yScale(0))
+      .y1(yScale(0))
+      .curve(curveMonotoneX)
 
     const areaGenerator = area()
       .x(d => xScale(d.data.year))
       .y0(d => yScale(d[0]))
       .y1(d => yScale(d[1]))
+      .curve(curveMonotoneX)
 
     var stackedData = stack().keys([
       "recycling_material",
@@ -125,17 +136,21 @@ export default function AreaChart({ data, margin, metric, value }) {
             .append("path")
             .attr("class", "rec-area")
             .attr("fill", d =>
-              d.key === "recycling_material" ? "#7a9eaf" : "#655989"
+              d.key === "recycling_material" ? "#655989" : "#7a9eaf"
             )
-            .attr("d", areaGenerator)
-            .call(enter => enter),
+            .attr("d", areaGeneratorZero)
+            .call(enter => enter.transition(t).attr("d", areaGenerator)),
         update =>
           update.call(update =>
             update
-              .transition("update")
+              .transition(t)
               .duration(transition.lgNum)
               .ease(easeCubicInOut)
-              .attr("d", areaGenerator)
+              .attrTween("d", (d, i, n) => {
+                const previous = select(n[i]).attr("d")
+                const next = areaGenerator(d)
+                return interpolatePath(previous, next)
+              })
           )
       )
   }
@@ -160,32 +175,36 @@ export default function AreaChart({ data, margin, metric, value }) {
         width={dims.width}
         height={dims.height}
       >
-        <ChartArea
-          ref={refs.xAxisRef}
-          marginLeft={margin.left}
-          marginTop={margin.top + dims.chartHeight}
-        >
-          {/* <AxisLine
-            color="grayLightest"
-            x1={0}
-            x2={dims.chartWidth}
-            y2={0}
-            y1={0}
-          /> */}
-        </ChartArea>
-        <ChartArea
-          ref={refs.yAxisRef}
-          marginLeft={margin.left}
-          marginTop={margin.top}
-        >
-          {/* <AxisLine
-            color="grayLightest"
-            x1={0}
-            x2={0}
-            y2={0}
-            y1={dims.chartHeight}
-          /> */}
-        </ChartArea>
+        {withAxes && (
+          <>
+            <ChartArea
+              ref={refs.xAxisRef}
+              marginLeft={margin.left}
+              marginTop={margin.top + dims.chartHeight}
+            >
+              <AxisLine
+                color="grayLightest"
+                x1={0}
+                x2={dims.chartWidth}
+                y2={0}
+                y1={0}
+              />
+            </ChartArea>
+            <ChartArea
+              ref={refs.yAxisRef}
+              marginLeft={margin.left}
+              marginTop={margin.top}
+            >
+              <AxisLine
+                color="grayLightest"
+                x1={0}
+                x2={0}
+                y2={0}
+                y1={dims.chartHeight}
+              />
+            </ChartArea>
+          </>
+        )}
         <ChartArea
           ref={refs.areaRef}
           marginLeft={margin.left}

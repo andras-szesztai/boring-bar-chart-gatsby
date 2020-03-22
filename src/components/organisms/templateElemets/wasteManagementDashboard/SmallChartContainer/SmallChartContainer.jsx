@@ -59,18 +59,18 @@ export default function SmallChartContainer({
       <FlexContainer
         pos="relative"
         onClick={() => selectedValue !== value && setSelected(value)}
-        cursor={!isSelected && "pointer"}
+        cursor={!isSelected ? "pointer" : "auto"}
       >
         <FlexContainer
           absPos
           zIndex="loader"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          bgColor={isHovered && !isSelected && "tealBlue"}
+          bgColor={isHovered && !isSelected && "grayLightest"}
           borderRadius={1}
           fullSize
-          opacity={!isSelected && 0.25}
-          borderColor={isSelected && "tealBlue"}
+          opacity={!isSelected ? 0.25 : 1}
+          borderColor={isSelected && "grayLightest"}
           hoverable
         />
           <AreaChart data={chartData} metric={metric} value={value}/>

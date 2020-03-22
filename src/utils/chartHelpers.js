@@ -26,6 +26,12 @@ export function numberTween({ value, i, n, numberFormat, prevValue }) {
   }
 }
 
+export const makeTransition = (area, duration, name) =>
+  area
+    .transition(name)
+    .duration(duration)
+    .ease(easeCubicInOut);
+
 export function createUpdateNumberText({
   duration,
   textDy,

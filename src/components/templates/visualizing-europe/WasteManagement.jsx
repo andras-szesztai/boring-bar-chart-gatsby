@@ -7,6 +7,7 @@ import {
   styledComponents,
   TitleContainer,
   SmallChartContainer,
+  ComparisonChartContainer,
 } from "../../organisms/templateElemets/wasteManagementDashboard"
 import { colors } from "../../../themes/theme"
 import { FullScreenLoader } from "../../molecules"
@@ -40,14 +41,11 @@ export default function WasteManagemetDashboard({
               <div />
               <FlexContainer>Chart 1</FlexContainer>
             </GridContainer>
-            <GridContainer rows="30px 1fr" gridArea="chartTwo" withBorder>
-              <FlexContainer>Selector</FlexContainer>
-              {!selectedCountry ? (
-                <FlexContainer>Explainer</FlexContainer>
-              ) : (
-                <FlexContainer>{selectedCountry}</FlexContainer>
-              )}
-            </GridContainer>
+            <ComparisonChartContainer
+              data={selectedCountry && data[selectedCountry]}
+              metric={metric}
+              selectedCountry={selectedCountry}
+            />
           </MainChartsContainer>
           {!isSmallScreen && (
             <GridContainer columns="repeat(5, 1fr)" rows="repeat(5, 1fr)">
