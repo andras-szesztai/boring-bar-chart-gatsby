@@ -19,8 +19,8 @@ export default function TitleContainer({ metric, setMetric }) {
           onChange={() => setMetric(prev => (prev === "abs" ? "perc" : "abs"))}
           uncheckedIcon={false}
           checkedIcon={false}
-          offColor={colors.grayLight}
-          onColor={colors.grayLight}
+          offColor={colors.grayLightest}
+          onColor={colors.grayLightest}
           height={18}
           width={40}
         />

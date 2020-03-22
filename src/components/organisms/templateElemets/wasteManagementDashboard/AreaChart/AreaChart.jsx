@@ -1,8 +1,10 @@
 import React, { useRef } from "react"
 import { scaleTime, scaleLinear } from "d3-scale"
 import { extent } from "d3-array"
-import { area, curveCatmullRom } from "d3-shape"
+import { area, curveCatmullRom, stack } from "d3-shape"
+import { nest } from "d3-collection"
 import { select } from "d3-selection"
+import "d3-transition"
 
 import {
   useChartRefs,
@@ -16,7 +18,8 @@ import {
   AxisLine,
   Container,
 } from "../../../../atoms"
-import { colors } from "../../../../../themes/theme"
+import { colors, transition } from "../../../../../themes/theme"
+import { easeCubicInOut } from "d3-ease"
 
 const yDomain = {
   abs: [0, 800],
@@ -31,6 +34,8 @@ export default function AreaChart({ data, margin, metric, value }) {
     margin,
   })
 
+  const isAbs = metric === "abs"
+
   function initVis() {
     const xScale = scaleTime()
       .domain(extent(data, d => d.year))
@@ -44,7 +49,8 @@ export default function AreaChart({ data, margin, metric, value }) {
       xScale,
       chartArea,
     }
-    createUpdateSingleArea()
+    createUpdateSingleArea({ isInit: true })
+    createUpdateStackedArea()
   }
 
   function updateVisData() {
@@ -54,38 +60,84 @@ export default function AreaChart({ data, margin, metric, value }) {
       ...storedValues.current,
       yScale,
     }
-    createUpdateSingleArea()
+    createUpdateSingleArea({})
+    createUpdateStackedArea()
   }
 
-  function createUpdateSingleArea(duration) {
+  function createUpdateSingleArea({ isInit }) {
     const { yScale, xScale, chartArea } = storedValues.current
     const areaGenerator = area()
       .curve(curveCatmullRom.alpha(1))
-      .x(d => xScale(d.year))
+      .x(d => xScale(d.data.year))
       .y0(yScale(0))
-      .y1(d => yScale(d.waste))
-
-    console.log({ data })
+      .y1(d => yScale(d.data.waste))
 
     chartArea
-      .append("path")
-      .datum(data)
-      .attr("fill", colors.grayLighter)
-      .attr("d", areaGenerator)
-    // chartArea
-    //   .selectAll(".total-area")
-    //   .datum({ data })
-    //   .join(enter =>
-    //     enter
-    //       .append("path")
-    //       .attr("class", "total-area")
-    //       .attr("fill", "steelblue")
-    //       .attr("d", areaGenerator)
-    //   )
-    // vg.append("path")
-    //   .datum(data)n
-    //   .attr("fill", "steelblue")
-    //   .attr("d", area);
+      .selectAll(".total-area")
+      .data([{ data }])
+      .join(enter =>
+        enter
+          .append("path")
+          .attr("class", "total-area")
+          .attr("fill", colors.grayLightest)
+          .attr("d", areaGenerator)
+      )
+
+    // if (isInit) {
+    //   chartArea
+    //     .append("path")
+    //     .datum(data)
+    //     .attr("class", "total-area")
+    //     .attr("fill", colors.grayLightest)
+    //     .attr("d", areaGenerator)
+    // }
+
+    // if (!isInit) {
+    //   chartArea
+    //     .select(".total-area")
+    //     .datum(data)
+    //     .transition("update")
+    //     .duration(transition.lgNum)
+    //     .ease(easeCubicInOut)
+    //     .attr("d", areaGenerator)
+    // }
+  }
+
+  function createUpdateStackedArea() {
+    const { yScale, xScale, chartArea } = storedValues.current
+
+    const areaGenerator = area()
+      .x(d => xScale(d.data.year))
+      .y0(d => yScale(d[0]))
+      .y1(d => yScale(d[1]))
+
+    var stackedData = stack().keys([
+      "recycling_material",
+      "recycling_composting",
+    ])(data)
+
+    chartArea
+      .selectAll(".rec-area")
+      .data(stackedData)
+      .join(
+        enter =>
+          enter
+            .append("path")
+            .attr("class", "rec-area")
+            .attr("fill", d =>
+              d.key === "recycling_material" ? "#7a9eaf" : "#655989"
+            )
+            .attr("d", areaGenerator)
+            .call(enter => enter),
+        update =>
+          update.call(update =>
+            update
+              .transition("update")
+              .duration(transition.lgNum)
+              .ease(easeCubicInOut)
+              .attr("d", areaGenerator)
+          )
+      )
   }
 
   useInitUpdate({
@@ -113,26 +165,26 @@ export default function AreaChart({ data, margin, metric, value }) {
           marginLeft={margin.left}
           marginTop={margin.top + dims.chartHeight}
         >
-          <AxisLine
-            color="grayLighter"
+          {/* <AxisLine
+            color="grayLightest"
             x1={0}
             x2={dims.chartWidth}
             y2={0}
             y1={0}
-          />
+          /> */}
         </ChartArea>
         <ChartArea
           ref={refs.yAxisRef}
           marginLeft={margin.left}
           marginTop={margin.top}
         >
-          <AxisLine
-            color="grayLighter"
+          {/* <AxisLine
+            color="grayLightest"
             x1={0}
             x2={0}
             y2={0}
             y1={dims.chartHeight}
-          />
+          /> */}
         </ChartArea>
         <ChartArea
           ref={refs.areaRef}
