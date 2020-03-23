@@ -37,15 +37,15 @@ export default function WasteManagemetDashboard({
         <MainGrid maxWidth="1400px">
           <MainChartsContainer>
             <TitleContainer metric={metric} setMetric={setMetric} />
-            <GridContainer rows="30px 1fr" gridArea="chartOne">
-              <div />
-              <FlexContainer>Chart 1</FlexContainer>
-            </GridContainer>
             <ComparisonChartContainer
               data={selectedCountry && data[selectedCountry]}
               metric={metric}
               selectedCountry={selectedCountry}
             />
+            <GridContainer rows="30px 1fr" gridArea="chartTwo">
+              <div />
+              <FlexContainer>Chart 1</FlexContainer>
+            </GridContainer>
           </MainChartsContainer>
           {!isSmallScreen && (
             <GridContainer columns="repeat(5, 1fr)" rows="repeat(5, 1fr)">

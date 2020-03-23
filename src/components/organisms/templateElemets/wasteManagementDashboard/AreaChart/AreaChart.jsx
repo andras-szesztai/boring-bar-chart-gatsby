@@ -22,7 +22,7 @@ import { transition } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 
 const yDomain = {
-  abs: [0, 800],
+  abs: [0, 850],
   perc: [0, 1],
 }
 
@@ -44,6 +44,7 @@ export default function AreaChart(props) {
     const yScale = scaleLinear()
       .domain(yDomain[metric])
       .range([dims.chartHeight, 0])
+    console.log(data);
     const chartArea = select(refs.areaRef.current)
     storedValues.current = {
       yScale,

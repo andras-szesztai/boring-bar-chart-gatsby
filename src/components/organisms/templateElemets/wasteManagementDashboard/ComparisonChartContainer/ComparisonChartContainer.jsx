@@ -33,9 +33,9 @@ export default function ComparisonChartContainer({
     prevSelectedCountry,
     selectedCountry,
   ])
-
+  
   return (
-    <GridContainer rows="30px 1fr" gridArea="chartTwo">
+    <GridContainer rows="30px 1fr" gridArea="chartOne">
       <FlexContainer>Selector</FlexContainer>
       {!selectedCountry ? (
         <FlexContainer>Explainer</FlexContainer>

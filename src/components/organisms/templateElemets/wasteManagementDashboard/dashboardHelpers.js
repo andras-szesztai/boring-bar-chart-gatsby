@@ -1,3 +1,4 @@
+const makeDate = num => new Date(`MM/dd/${num}`)
 export function getAbsData(data) {
   return data.map(el => ({
     ...el,
@@ -6,7 +7,7 @@ export function getAbsData(data) {
     recycling_total: +el.recycling_composting + +el.recycling_material,
     waste: +el.waste,
     yearString: el.year,
-    year: new Date(+el.year),
+    year: makeDate(+el.year),
   }))
 }
 
@@ -20,7 +21,7 @@ export function getPercentageData(data) {
         (+el.recycling_material + +el.recycling_composting) / +el.waste,
       waste: 1,
       yearString: el.year,
-      year: new Date(+el.year),
+      year: makeDate(+el.year),
     }
   })
 }
