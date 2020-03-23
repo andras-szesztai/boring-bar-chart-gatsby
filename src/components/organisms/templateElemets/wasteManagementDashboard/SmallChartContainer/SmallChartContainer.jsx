@@ -47,7 +47,7 @@ export default function SmallChartContainer({
           borderColor={isSelected && "grayLightest"}
           hoverable
         />
-          <AreaChart data={chartData} metric={metric} value={value}/>
+          <AreaChart data={chartData} metric={metric} value={value} withLabel/>
       </FlexContainer>
     </>
   )

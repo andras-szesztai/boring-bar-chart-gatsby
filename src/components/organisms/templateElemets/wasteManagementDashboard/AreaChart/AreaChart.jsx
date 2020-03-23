@@ -29,7 +29,7 @@ const yDomain = {
 const metricArray = ["waste", "recycling_total", "recycling_composting"]
 
 export default function AreaChart(props) {
-  const { data, margin, metric, value, withAxes } = props
+  const { data, margin, metric, value, withAxes, withLabel } = props
   const refs = useChartRefs()
   const storedValues = useRef()
   const dims = useDimensions({
@@ -83,6 +83,22 @@ export default function AreaChart(props) {
     )
   }
 
+  function updateVisDims(){
+    const { xScale, yScale} = storedValues.current
+    xScale.range([0, dims.chartWidth])
+    yScale.range([dims.chartHeight, 0])
+    storedValues.current = {
+      ...storedValues.current,
+      yScale,
+      xScale
+    }
+    metricArray.forEach(metric =>
+      createUpdateSingleArea({
+        accessor: metric,
+      })
+    )
+  }
+
   function createUpdateSingleArea({ isInit, color, accessor }) {
     const { yScale, xScale, chartArea } = storedValues.current
     const t = makeTransition(chartArea, transition.lgNum)
@@ -127,14 +143,17 @@ export default function AreaChart(props) {
     chartWidth: dims.chartWidth,
     initVis,
     updateVisData,
-    // updateVisDims,
+    updateVisDims,
   })
 
   return (
     <ChartWrapper ref={refs.wrapperRef}>
-      <Container absPos left={margin.left - 1} top={0}>
-        {value}
-      </Container>
+      {
+        withLabel && 
+        <Container absPos left={margin.left - 1} top={0}>
+          {value}
+        </Container>
+      }
       <ChartSvg
         absPos
         ref={refs.svgRef}
@@ -182,5 +201,5 @@ export default function AreaChart(props) {
 }
 
 AreaChart.defaultProps = {
-  margin: { top: 20, right: 5, bottom: 5, left: 5 },
+  margin: { top: 20, right: 0, bottom: 5, left: 5 },
 }

@@ -25,7 +25,14 @@ export default function ComparisonChartContainer({
         metric === "abs" ? getAbsData(data) : getPercentageData(data)
       )
     }
-  }, [chartData, data, metric, prevMetric, prevSelectedCountry, selectedCountry])
+  }, [
+    chartData,
+    data,
+    metric,
+    prevMetric,
+    prevSelectedCountry,
+    selectedCountry,
+  ])
 
   return (
     <GridContainer rows="30px 1fr" gridArea="chartTwo">
@@ -39,6 +46,7 @@ export default function ComparisonChartContainer({
             metric={metric}
             value={selectedCountry}
             withAxes
+            margin={{ top: 0, right: 0, bottom: 25, left: 25 }}
           />
         </FlexContainer>
       )}

@@ -3,6 +3,7 @@ import styled, { css } from "styled-components"
 import { GridContainer } from "../../../atoms"
 
 const MainGrid = styled(GridContainer)`
+  grid-column-gap: 3rem;
   @media (min-width: 450px) {
     height: 95%;
     width: 95%;
@@ -72,7 +73,7 @@ const bigScreenAreas = css`
     "chartTwo";
 `
 
-const MainChartsContainer = styled(GridContainer)`  
+const MainChartsContainer = styled(GridContainer)`
   @media (min-width: 450px) {
     ${smallScreenAreas}
   }
