@@ -11,6 +11,9 @@ export function checkIfUpdated(sortedRaw, sortedPrevRaw) {
     .includes(false)
 }
 
+export const getClassName = value =>
+  value && value.toLowerCase().replace(/[ -.,:]/g, "");
+  
 export function getAxisPadding(data, key, domainPaddingValue = 0.025) {
   const minmax = extent(data, d => d[key])
   const minmaxDiff = minmax[1] - minmax[0]

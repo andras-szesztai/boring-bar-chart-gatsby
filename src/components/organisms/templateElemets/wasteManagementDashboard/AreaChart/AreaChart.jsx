@@ -20,6 +20,7 @@ import {
 } from "../../../../atoms"
 import { transition } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
+import { createUpdateDelaunayCircles } from "../../../../../utils/svgElementHelpers"
 
 const yDomain = {
   abs: [0, 850],
@@ -44,12 +45,16 @@ export default function AreaChart(props) {
     const yScale = scaleLinear()
       .domain(yDomain[metric])
       .range([dims.chartHeight, 0])
-    console.log(data);
     const chartArea = select(refs.areaRef.current)
+    const delaunayData = metricArray
+      .map(metric => data.map(d => ({ ...d, metricValue: d[metric], metric })))
+      .flat()
     storedValues.current = {
       yScale,
       xScale,
       chartArea,
+      data: delaunayData,
+      dims,
     }
     createUpdateSingleArea({
       isInit: true,
@@ -65,6 +70,16 @@ export default function AreaChart(props) {
       isInit: true,
       color: "#655989",
       accessor: "recycling_composting",
+    })
+    createUpdateDelaunayCircles({
+      props: {
+        xKey: "year",
+        yKey: "metricValue",
+        hoverRadius: 10,
+        unitKey: "country",
+      },
+      storedValues,
+      functions: {},
     })
     select(refs.xAxisRef.current).raise()
     select(refs.yAxisRef.current).raise()
@@ -84,14 +99,14 @@ export default function AreaChart(props) {
     )
   }
 
-  function updateVisDims(){
-    const { xScale, yScale} = storedValues.current
+  function updateVisDims() {
+    const { xScale, yScale } = storedValues.current
     xScale.range([0, dims.chartWidth])
     yScale.range([dims.chartHeight, 0])
     storedValues.current = {
       ...storedValues.current,
       yScale,
-      xScale
+      xScale,
     }
     metricArray.forEach(metric =>
       createUpdateSingleArea({
@@ -149,12 +164,11 @@ export default function AreaChart(props) {
 
   return (
     <ChartWrapper ref={refs.wrapperRef}>
-      {
-        withLabel && 
+      {withLabel && (
         <Container absPos left={margin.left - 1} top={0}>
           {value}
         </Container>
-      }
+      )}
       <ChartSvg
         absPos
         ref={refs.svgRef}
@@ -169,7 +183,7 @@ export default function AreaChart(props) {
               marginTop={margin.top + dims.chartHeight}
             >
               <AxisLine
-                color="gray"
+                color="grayDarkest"
                 x1={0}
                 x2={dims.chartWidth}
                 y2={0}
@@ -182,7 +196,7 @@ export default function AreaChart(props) {
               marginTop={margin.top}
             >
               <AxisLine
-                color="gray"
+                color="grayDarkest"
                 x1={0}
                 x2={0}
                 y2={0}

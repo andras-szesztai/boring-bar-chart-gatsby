@@ -1,5 +1,6 @@
 export { default as styledComponents } from "./StyledComponents"
 export { default as TitleContainer } from "./TitleContainer/TitleContainer"
 export { default as AreaChart } from "./AreaChart/AreaChart"
+export { default as BigChartsContainer } from "./BigChartsContainer/BigChartsContainer"
 export { default as SmallChartContainer } from "./SmallChartContainer/SmallChartContainer"
 export { default as ComparisonChartContainer } from "./ComparisonChartContainer/ComparisonChartContainer"

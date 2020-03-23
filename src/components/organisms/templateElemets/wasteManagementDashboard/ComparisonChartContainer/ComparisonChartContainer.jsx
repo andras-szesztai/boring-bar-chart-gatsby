@@ -47,6 +47,7 @@ export default function ComparisonChartContainer({
             value={selectedCountry}
             withAxes
             margin={{ top: 0, right: 0, bottom: 25, left: 25 }}
+            isHoverable
           />
         </FlexContainer>
       )}
