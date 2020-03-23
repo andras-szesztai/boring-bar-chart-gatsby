@@ -31,6 +31,7 @@ const yDomain = {
 }
 
 const metricArray = ["waste", "recycling_total", "recycling_composting"]
+const metricNames = ["Waste", "Material recycling", "Composting"]
 
 export default function AreaChart(props) {
   const {
@@ -48,6 +49,7 @@ export default function AreaChart(props) {
   const storedValues = useRef()
   const prevHoveredYear = usePrevious(hoveredYear)
   const [delaunayData, setDelaunayData] = useState()
+  const [hoveredData, setHoveredData] = useState(undefined)
   const dims = useDimensions({
     ref: refs.wrapperRef,
     margin,
@@ -113,14 +115,15 @@ export default function AreaChart(props) {
         .attr("r", 5)
         .attr("fill", "#fff")
         .attr("stroke", colors.grayDarkest)
-      chartArea.selectAll(".hover-circle").raise()
+      setHoveredData({ data: hoveredData, maxValue })
     }
     if (!hoveredYear && prevHoveredYear) {
       const { chartArea } = storedValues.current
       chartArea.selectAll(".hover-circle").remove()
       chartArea.selectAll(".hover-line").remove()
+      setHoveredData(undefined)
     }
-  })
+  }, [hoveredYear, prevHoveredYear, delaunayData, dims.chartHeight])
 
   function updateVisData() {
     const { yScale } = storedValues.current
@@ -195,11 +198,12 @@ export default function AreaChart(props) {
 
   function createUpdateDelaunay() {
     const delaunayData = metricArray
-      .map(metric =>
+      .map((metric, i) =>
         data.map(d => ({
           ...d,
           metricValue: d[metric],
           unit: metric + d.country,
+          metric: metricNames[i],
         }))
       )
       .flat()
@@ -234,7 +238,14 @@ export default function AreaChart(props) {
           {value}
         </Container>
       )}
-      {props.isHoverable && <ChartTooltip />}
+      {props.isHoverable && (
+        <ChartTooltip
+          data={hoveredData}
+          margin={margin}
+          storedValues={storedValues}
+          metric={metric}
+        />
+      )}
       <ChartSvg
         absPos
         ref={refs.svgRef}

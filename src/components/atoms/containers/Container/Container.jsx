@@ -41,8 +41,8 @@ const Container = styled.div`
     text-align: ${textAlign};
     cursor: ${cursor};
     position: ${pos};
-    padding: ${padding};
     opacity: ${opacity};
+    padding: ${themifySpace[padding] || 0}px;
     font-size: ${themifyFontSize(fontSize)};
     font-weight: ${themifyFontWeight(fontWeight)};
     color: ${themifyColor(fontColor)};
@@ -119,6 +119,12 @@ const Container = styled.div`
     withBorder &&
     css`
       border: 1px solid gray;
+    `}
+  
+  ${({ noPointerEvents }) =>
+    noPointerEvents &&
+    css`
+      pointer-events: none;
     `}
 
   ${({ isHideable, isVisible }) =>

@@ -3,6 +3,7 @@ import { GridContainer, FlexContainer, Title } from "../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
 import { usePrevious } from "../../../../../hooks"
+import constants from "../../../../../constants/visualizing-europe/wasteManagement"
 
 export default function ComparisonChartContainer({
   selectedCountry,
@@ -51,7 +52,7 @@ export default function ComparisonChartContainer({
             metric={metric}
             value={selectedCountry}
             withAxes
-            margin={{ top: 0, right: 0, bottom: 25, left: 25 }}
+            margin={constants.CHART_MARGIN}
             isHoverable
             handleMouseover={handleChartMouseover}
             handleMouseout={handleChartMouseout}

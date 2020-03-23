@@ -4,6 +4,7 @@ import { GridContainer, FlexContainer, Title } from "../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
 import { usePrevious } from "../../../../../hooks"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
+import constants from "../../../../../constants/visualizing-europe/wasteManagement"
 
 export default function BigChartsContainer({ selectedCountry, metric, data }) {
   const [chartData, setChartData] = useState(undefined)
@@ -54,7 +55,7 @@ export default function BigChartsContainer({ selectedCountry, metric, data }) {
             metric={metric}
             value={selectedCountry}
             withAxes
-            margin={{ top: 0, right: 0, bottom: 25, left: 25 }}
+            margin={constants.CHART_MARGIN}
             isHoverable
             handleMouseover={handleChartMouseover}
             handleMouseout={handleChartMouseout}
