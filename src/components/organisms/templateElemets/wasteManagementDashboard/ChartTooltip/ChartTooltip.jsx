@@ -21,18 +21,20 @@ const TooltipContainer = styled(FlexContainer)`
   }
 `
 
-export default function ChartTooltip({ data, storedValues, margin }) {
+export default function ChartTooltip({ data, storedValues, margin, metric }) {
+  console.log(data)
   const colorArray = ["#de88a5", "#7a9eaf", "#655989"]
+  const isPerc = metric === "perc"
+  const height =
+    data && (isPerc ? (data.data.length - 1) * 25 : data.data.length * 25)
   return data ? (
     <TooltipContainer
       absPos
-      left={storedValues.current.xScale(data.data[0].year) - 65 + margin.left}
-      top={
-        storedValues.current.yScale(data.maxValue) - data.data.length * 20 - 5
-      }
+      left={storedValues.current.xScale(data.data[0].year) - 75 + margin.left}
+      top={storedValues.current.yScale(data.maxValue) - height - 5}
       borderRadius={1}
-      height={`${data.data.length * 20}px`}
-      width="130px"
+      height={`${height}px`}
+      width="150px"
       borderColor="grayDarkest"
       zIndex="overlay"
       bgColor="#ffffff"
@@ -44,14 +46,25 @@ export default function ChartTooltip({ data, storedValues, margin }) {
       paddingTop={1}
       paddingBottom={1}
     >
-      {data.data.map((el, i) => (
-        <FlexContainer key={el} fullSize justify="space-between">
-          <Title fontWeight="medium" color={colorArray[i]}>
-            {el.metric}:
-          </Title>
-          <div>1</div>
-        </FlexContainer>
-      ))}
+      {data.data.map((el, i) => {
+        const metricVal =
+          i === 1
+            ? el.metricValue - data.data[i + 1].metricValue
+            : el.metricValue
+        const shouldHide = i === 0 && isPerc
+        return shouldHide ? (
+          <div />
+        ) : (
+          <FlexContainer key={el.metric} fullSize justify="space-between">
+            <Title fontWeight="medium" color={colorArray[i]}>
+              {el.metric}:
+            </Title>
+            <div>
+              {isPerc ? `${(metricVal * 100).toFixed(0)}%` : `${metricVal}kg`}
+            </div>
+          </FlexContainer>
+        )
+      })}
     </TooltipContainer>
   ) : (
     <div />

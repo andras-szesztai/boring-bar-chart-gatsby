@@ -156,6 +156,9 @@ export default function AreaChart(props) {
         accessor: metric,
       })
     )
+    if (props.isHoverable) {
+      createUpdateDelaunay()
+    }
   }
 
   function createUpdateSingleArea({ isInit, color, accessor }) {
