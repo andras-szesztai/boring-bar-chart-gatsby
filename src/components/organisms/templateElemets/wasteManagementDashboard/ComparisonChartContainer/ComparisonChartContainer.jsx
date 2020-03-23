@@ -8,6 +8,9 @@ export default function ComparisonChartContainer({
   selectedCountry,
   data,
   metric,
+  handleChartMouseout,
+  handleChartMouseover,
+  hoveredYear
 }) {
   const [chartData, setChartData] = useState(undefined)
   const prevMetric = usePrevious(metric)
@@ -36,7 +39,7 @@ export default function ComparisonChartContainer({
   
   return (
     <GridContainer rows="30px 1fr" gridArea="chartOne">
-      <FlexContainer>Selector</FlexContainer>
+      <FlexContainer>{hoveredYear}</FlexContainer>
       {!selectedCountry ? (
         <FlexContainer>Explainer</FlexContainer>
       ) : (
@@ -48,6 +51,9 @@ export default function ComparisonChartContainer({
             withAxes
             margin={{ top: 0, right: 0, bottom: 25, left: 25 }}
             isHoverable
+            handleMouseover={handleChartMouseover}
+            handleMouseout={handleChartMouseout} 
+            hoveredYear={hoveredYear}
           />
         </FlexContainer>
       )}

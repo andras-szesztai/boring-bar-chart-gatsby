@@ -1,29 +1,31 @@
-import { Delaunay } from "d3-delaunay";
-import { getClassName } from "./chartHelpers";
+import { Delaunay } from "d3-delaunay"
+import { getClassName } from "./chartHelpers"
 
 export function createUpdateDelaunayCircles({
+  data,
+  dims,
   props,
   storedValues,
-  functions
+  functions,
 }) {
-  const { xKey, yKey, unitKey, hoverRadius } = props;
-  const { chartArea, xScale, yScale, data, dims  } = storedValues.current;
+  const { xKey, yKey, unitKey, hoverRadius } = props
+  const { chartArea, xScale, yScale } = storedValues.current
   const {
-    handleDelaunayMouseover,
-    handleDelaunayMouseout,
-    handleDelaunayClick
-  } = functions;
+    handleMouseover,
+    handleMouseout,
+    handleDelaunayClick,
+  } = functions
 
-  const setXPos = d => xScale(new Date(d[xKey]));
-  const setYPos = d => yScale(d[yKey]);
-  const makeID = d => getClassName((d[unitKey] || yKey) + d[xKey]);
+  const setXPos = d => xScale(new Date(d[xKey]))
+  const setYPos = d => yScale(d[yKey])
+  const makeID = d => getClassName((d[unitKey] || yKey) + d[xKey])
 
   const delaunay = Delaunay.from(data, setXPos, setYPos).voronoi([
     0,
     0,
     dims.chartWidth,
-    dims.chartHeight
-  ]);
+    dims.chartHeight,
+  ])
 
   chartArea
     .selectAll(".clip")
@@ -47,7 +49,7 @@ export function createUpdateDelaunayCircles({
             .attr("d", (_, i) => delaunay.renderCell(i))
         ),
       exit => exit.call(exit => exit.remove())
-    );
+    )
 
   chartArea
     .selectAll(".catcher")
@@ -62,18 +64,18 @@ export function createUpdateDelaunayCircles({
           .attr("cy", setYPos)
           .attr("r", hoverRadius)
           .attr("fill", "black")
-          .attr("opacity", .1)
+          .attr("opacity", 0.1)
           .style("pointer-events", "all")
-          .on("mouseover", handleDelaunayMouseover)
-          .on("mouseout", handleDelaunayMouseout)
-          .on("click", handleDelaunayClick)
+          .on("mouseover", handleMouseover)
+          .on("mouseout", handleMouseout)
+          .on("click", handleDelaunayClick && handleDelaunayClick)
           .call(enter => enter),
       update =>
         update
           .attr("clip-path", d => `url(#clip-${makeID(d)})`)
-          .on("mouseover", handleDelaunayMouseover)
-          .on("mouseout", handleDelaunayMouseout)
-          .on("click", handleDelaunayClick)
+          .on("mouseover", handleMouseover)
+          .on("mouseout", handleMouseout)
+          .on("click", handleDelaunayClick && handleDelaunayClick)
           .call(update =>
             update
               .attr("cx", setXPos)
@@ -81,5 +83,5 @@ export function createUpdateDelaunayCircles({
               .attr("r", hoverRadius)
           ),
       exit => exit.call(exit => exit.remove())
-    );
+    )
 }

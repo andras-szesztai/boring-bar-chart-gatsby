@@ -30,7 +30,16 @@ const yDomain = {
 const metricArray = ["waste", "recycling_total", "recycling_composting"]
 
 export default function AreaChart(props) {
-  const { data, margin, metric, value, withAxes, withLabel } = props
+  const {
+    data,
+    margin,
+    metric,
+    value,
+    withAxes,
+    withLabel,
+    handleMouseover,
+    handleMouseout,
+  } = props
   const refs = useChartRefs()
   const storedValues = useRef()
   const dims = useDimensions({
@@ -46,15 +55,10 @@ export default function AreaChart(props) {
       .domain(yDomain[metric])
       .range([dims.chartHeight, 0])
     const chartArea = select(refs.areaRef.current)
-    const delaunayData = metricArray
-      .map(metric => data.map(d => ({ ...d, metricValue: d[metric], metric })))
-      .flat()
     storedValues.current = {
       yScale,
       xScale,
       chartArea,
-      data: delaunayData,
-      dims,
     }
     createUpdateSingleArea({
       isInit: true,
@@ -71,16 +75,9 @@ export default function AreaChart(props) {
       color: "#655989",
       accessor: "recycling_composting",
     })
-    createUpdateDelaunayCircles({
-      props: {
-        xKey: "year",
-        yKey: "metricValue",
-        hoverRadius: 10,
-        unitKey: "country",
-      },
-      storedValues,
-      functions: {},
-    })
+    if (props.isHoverable) {
+      createUpdateDelaunay()
+    }
     select(refs.xAxisRef.current).raise()
     select(refs.yAxisRef.current).raise()
   }
@@ -97,6 +94,9 @@ export default function AreaChart(props) {
         accessor: metric,
       })
     )
+    if (props.isHoverable) {
+      createUpdateDelaunay()
+    }
   }
 
   function updateVisDims() {
@@ -151,6 +151,30 @@ export default function AreaChart(props) {
           interpolatePath(select(n[i]).attr("d"), areaGenerator(d))
         )
     }
+  }
+
+  function createUpdateDelaunay() {
+    const delaunayData = metricArray
+      .map(metric =>
+        data.map(d => ({
+          ...d,
+          metricValue: d[metric],
+          unit: metric + d.country,
+        }))
+      )
+      .flat()
+    createUpdateDelaunayCircles({
+      data: delaunayData,
+      dims,
+      props: {
+        xKey: "year",
+        yKey: "metricValue",
+        hoverRadius: 15,
+        unitKey: "unit",
+      },
+      storedValues,
+      functions: { handleMouseover, handleMouseout },
+    })
   }
 
   useInitUpdate({
