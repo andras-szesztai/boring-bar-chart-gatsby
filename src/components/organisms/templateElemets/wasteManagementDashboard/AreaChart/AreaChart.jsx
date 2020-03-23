@@ -23,6 +23,7 @@ import {
 import { transition, colors } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { createUpdateDelaunayCircles } from "../../../../../utils/svgElementHelpers"
+import ChartTooltip from "../ChartTooltip/ChartTooltip"
 
 const yDomain = {
   abs: [0, 850],
@@ -55,10 +56,10 @@ export default function AreaChart(props) {
   function initVis() {
     const xScale = scaleTime()
       .domain(extent(data, d => d.year))
-      .range([0, dims.chartWidth])
+      .range([0.5, dims.chartWidth])
     const yScale = scaleLinear()
       .domain(yDomain[metric])
-      .range([dims.chartHeight, 0])
+      .range([dims.chartHeight - 0.5, 0])
     const chartArea = select(refs.areaRef.current)
     storedValues.current = {
       yScale,
@@ -83,8 +84,6 @@ export default function AreaChart(props) {
     if (props.isHoverable) {
       createUpdateDelaunay()
     }
-    select(refs.xAxisRef.current).raise()
-    select(refs.yAxisRef.current).raise()
   }
 
   useEffect(() => {
@@ -95,8 +94,9 @@ export default function AreaChart(props) {
       chartArea
         .append("line")
         .attr("class", "hover-line")
-        .attr("stroke", "#000")
+        .attr("stroke", colors.grayDarkest)
         .attr("pointer-events", "none")
+        .attr("stroke-dasharray", "4, 1")
         .attr("x1", xScale(hoveredData[0].year))
         .attr("x2", xScale(hoveredData[0].year))
         .attr("y1", yScale(maxValue))
@@ -234,6 +234,7 @@ export default function AreaChart(props) {
           {value}
         </Container>
       )}
+      {props.isHoverable && <ChartTooltip />}
       <ChartSvg
         absPos
         ref={refs.svgRef}
