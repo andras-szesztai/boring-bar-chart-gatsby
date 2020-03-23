@@ -16,8 +16,6 @@ export const colors = {
 
   red: "#bc5148",
 
-
-
   tealBlue: "#8bbabb"
 }
 

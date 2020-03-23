@@ -1,15 +1,17 @@
-import React, { useRef } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import { scaleTime, scaleLinear } from "d3-scale"
 import { extent } from "d3-array"
 import { area, curveMonotoneX } from "d3-shape"
 import { select } from "d3-selection"
 import "d3-transition"
 import { interpolatePath } from "d3-interpolate-path"
+import _ from "lodash"
 
 import {
   useChartRefs,
   useDimensions,
   useInitUpdate,
+  usePrevious,
 } from "../../../../../hooks"
 import {
   ChartWrapper,
@@ -18,7 +20,7 @@ import {
   AxisLine,
   Container,
 } from "../../../../atoms"
-import { transition } from "../../../../../themes/theme"
+import { transition, colors } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { createUpdateDelaunayCircles } from "../../../../../utils/svgElementHelpers"
 
@@ -39,9 +41,12 @@ export default function AreaChart(props) {
     withLabel,
     handleMouseover,
     handleMouseout,
+    hoveredYear,
   } = props
   const refs = useChartRefs()
   const storedValues = useRef()
+  const prevHoveredYear = usePrevious(hoveredYear)
+  const [delaunayData, setDelaunayData] = useState()
   const dims = useDimensions({
     ref: refs.wrapperRef,
     margin,
@@ -81,6 +86,41 @@ export default function AreaChart(props) {
     select(refs.xAxisRef.current).raise()
     select(refs.yAxisRef.current).raise()
   }
+
+  useEffect(() => {
+    if (hoveredYear && !prevHoveredYear) {
+      const { chartArea, yScale, xScale } = storedValues.current
+      const hoveredData = delaunayData.filter(d => d.yearString === hoveredYear)
+      const maxValue = _.maxBy(hoveredData, "metricValue").metricValue
+      chartArea
+        .append("line")
+        .attr("class", "hover-line")
+        .attr("stroke", "#000")
+        .attr("pointer-events", "none")
+        .attr("x1", xScale(hoveredData[0].year))
+        .attr("x2", xScale(hoveredData[0].year))
+        .attr("y1", yScale(maxValue))
+        .attr("y2", dims.chartHeight)
+      chartArea
+        .selectAll(".hover-circle")
+        .data(hoveredData)
+        .enter()
+        .append("circle")
+        .attr("class", "hover-circle")
+        .attr("cx", d => xScale(d.year))
+        .attr("cy", d => yScale(d.metricValue))
+        .attr("pointer-events", "none")
+        .attr("r", 5)
+        .attr("fill", "#fff")
+        .attr("stroke", colors.grayDarkest)
+      chartArea.selectAll(".hover-circle").raise()
+    }
+    if (!hoveredYear && prevHoveredYear) {
+      const { chartArea } = storedValues.current
+      chartArea.selectAll(".hover-circle").remove()
+      chartArea.selectAll(".hover-line").remove()
+    }
+  })
 
   function updateVisData() {
     const { yScale } = storedValues.current
@@ -169,12 +209,13 @@ export default function AreaChart(props) {
       props: {
         xKey: "year",
         yKey: "metricValue",
-        hoverRadius: 15,
+        hoverRadius: 150,
         unitKey: "unit",
       },
       storedValues,
       functions: { handleMouseover, handleMouseout },
     })
+    setDelaunayData(delaunayData)
   }
 
   useInitUpdate({

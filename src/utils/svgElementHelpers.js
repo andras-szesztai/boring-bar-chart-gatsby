@@ -64,7 +64,7 @@ export function createUpdateDelaunayCircles({
           .attr("cy", setYPos)
           .attr("r", hoverRadius)
           .attr("fill", "black")
-          .attr("opacity", 0.1)
+          .attr("opacity", 0)
           .style("pointer-events", "all")
           .on("mouseover", handleMouseover)
           .on("mouseout", handleMouseout)

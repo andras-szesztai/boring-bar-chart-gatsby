@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { GridContainer, FlexContainer } from "../../../../atoms"
+import { GridContainer, FlexContainer, Title } from "../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
 import { usePrevious } from "../../../../../hooks"
@@ -10,7 +10,7 @@ export default function ComparisonChartContainer({
   metric,
   handleChartMouseout,
   handleChartMouseover,
-  hoveredYear
+  hoveredYear,
 }) {
   const [chartData, setChartData] = useState(undefined)
   const prevMetric = usePrevious(metric)
@@ -36,10 +36,12 @@ export default function ComparisonChartContainer({
     prevSelectedCountry,
     selectedCountry,
   ])
-  
+
   return (
     <GridContainer rows="30px 1fr" gridArea="chartOne">
-      <FlexContainer>{hoveredYear}</FlexContainer>
+      <FlexContainer justify="flex-start">
+        <Title  fontSize={2}>{selectedCountry}</Title>
+      </FlexContainer>
       {!selectedCountry ? (
         <FlexContainer>Explainer</FlexContainer>
       ) : (
@@ -52,7 +54,7 @@ export default function ComparisonChartContainer({
             margin={{ top: 0, right: 0, bottom: 25, left: 25 }}
             isHoverable
             handleMouseover={handleChartMouseover}
-            handleMouseout={handleChartMouseout} 
+            handleMouseout={handleChartMouseout}
             hoveredYear={hoveredYear}
           />
         </FlexContainer>
