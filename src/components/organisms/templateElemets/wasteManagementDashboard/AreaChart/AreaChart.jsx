@@ -20,11 +20,12 @@ import {
   AxisLine,
   Container,
 } from "../../../../atoms"
-import { transition, colors } from "../../../../../themes/theme"
+import { transition, colors, space } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { createUpdateDelaunayCircles } from "../../../../../utils/svgElementHelpers"
 import ChartTooltip from "../ChartTooltip/ChartTooltip"
 import { COLOR_ARRAY } from "../../../../../constants/visualizing-europe/wasteManagement"
+import { axisBottom, axisLeft } from "d3-axis"
 
 const yDomain = {
   abs: [0, 850],
@@ -86,6 +87,7 @@ export default function AreaChart(props) {
     })
     if (props.isHoverable) {
       createUpdateDelaunay()
+      createAxes()
     }
   }
 
@@ -226,6 +228,37 @@ export default function AreaChart(props) {
     setDelaunayData(delaunayData)
   }
 
+  function createAxes() {
+    const { yScale, xScale } = storedValues.current
+    const makeAxis = (type, ticks) =>
+      type
+        .ticks(ticks)
+        .tickSizeOuter(0)
+        .tickSizeInner(space[1])
+
+    const xAxis = makeAxis(axisBottom(xScale), dims.chartWidth / 100)
+    const yAxis = makeAxis(axisLeft(yScale), dims.chartHeight / 50)
+
+    select(refs.xAxisRef.current)
+      .transition()
+      .duration(transition.lgNum)
+      .call(xAxis)
+    select(refs.yAxisRef.current)
+      .transition()
+      .duration(transition.lgNum)
+      .call(yAxis)
+
+    select(refs.svgRef.current)
+      .selectAll("text")
+      .style("fill", colors.grayDarkest)
+    select(refs.svgRef.current)
+      .selectAll(".tick line")
+      .remove()
+    select(refs.svgRef.current)
+      .selectAll(".domain")
+      .remove()
+  }
+
   useInitUpdate({
     data: data,
     chartHeight: dims.chartHeight,
@@ -264,7 +297,7 @@ export default function AreaChart(props) {
               marginTop={margin.top + dims.chartHeight}
             >
               <AxisLine
-                color="grayDarkest"
+                color="grayDarker"
                 x1={0}
                 x2={dims.chartWidth}
                 y2={0}
@@ -277,7 +310,7 @@ export default function AreaChart(props) {
               marginTop={margin.top}
             >
               <AxisLine
-                color="grayDarkest"
+                color="grayDarker"
                 x1={0}
                 x2={0}
                 y2={0}

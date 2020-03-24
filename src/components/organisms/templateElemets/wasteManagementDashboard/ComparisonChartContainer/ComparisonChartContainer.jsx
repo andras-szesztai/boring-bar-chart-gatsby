@@ -18,16 +18,15 @@ export default function ComparisonChartContainer({
   const prevSelectedCountry = usePrevious(selectedCountry)
 
   useEffect(() => {
+    const isAbs = metric === "abs"
     if (!chartData && data) {
-      setChartData(getAbsData(data))
+      setChartData(isAbs ? getAbsData(data) : getPercentageData(data))
     }
     if (
       chartData &&
       (prevMetric !== metric || prevSelectedCountry !== selectedCountry)
     ) {
-      setChartData(
-        metric === "abs" ? getAbsData(data) : getPercentageData(data)
-      )
+      setChartData(isAbs ? getAbsData(data) : getPercentageData(data))
     }
   }, [
     chartData,
@@ -38,10 +37,12 @@ export default function ComparisonChartContainer({
     selectedCountry,
   ])
 
+  console.log(chartData)
+
   return (
     <GridContainer rows="30px 1fr" gridArea="chartOne">
       <FlexContainer justify="flex-start">
-        <Title  fontSize={2}>{selectedCountry}</Title>
+        <Title fontSize={2}>{selectedCountry}</Title>
       </FlexContainer>
       {!selectedCountry ? (
         <FlexContainer>Explainer</FlexContainer>

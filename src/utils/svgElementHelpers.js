@@ -1,5 +1,9 @@
 import { Delaunay } from "d3-delaunay"
-import { getClassName } from "./chartHelpers"
+import { axisTop, axisRight, axisBottom, axisLeft } from "d3-axis"
+
+import { getClassName, changedFormat } from "./chartHelpers"
+import { format } from "d3-format"
+import { space, colors } from "../themes/theme"
 
 export function createUpdateDelaunayCircles({
   data,
@@ -10,11 +14,7 @@ export function createUpdateDelaunayCircles({
 }) {
   const { xKey, yKey, unitKey, hoverRadius } = props
   const { chartArea, xScale, yScale } = storedValues.current
-  const {
-    handleMouseover,
-    handleMouseout,
-    handleDelaunayClick,
-  } = functions
+  const { handleMouseover, handleMouseout, handleDelaunayClick } = functions
 
   const setXPos = d => xScale(new Date(d[xKey]))
   const setYPos = d => yScale(d[yKey])
@@ -84,4 +84,70 @@ export function createUpdateDelaunayCircles({
           ),
       exit => exit.call(exit => exit.remove())
     )
+}
+
+export function createUpdateAxis({
+  selector,
+  scale,
+  type,
+  duration,
+  isGrid,
+  noTicks,
+  tickSize,
+  isDateAxis,
+  metricIsPercentage,
+  prefix,
+  suffix,
+}) {
+  const axesTypes = {
+    top: axisTop(scale),
+    right: axisRight(scale),
+    bottom: axisBottom(scale),
+    left: axisLeft(scale),
+  }
+
+  const chartDim = Math.max(...scale.range())
+  const emptyIfFalse = prop => (prop ? prop : "")
+
+  const axisCall = axesTypes[type]
+    .ticks((chartDim / 100).toFixed(0))
+    .tickSizeOuter(0)
+    .tickSizeInner(isGrid ? tickSize : space[1])
+
+  selector
+    .transition()
+    .duration(duration)
+    .call(
+      isDateAxis || isGrid
+        ? axisCall
+        : axisCall.tickFormat(
+            d =>
+              emptyIfFalse(prefix) +
+              changedFormat(d, metricIsPercentage) +
+              emptyIfFalse(suffix)
+          )
+    )
+
+  formatAxisGrid({ selector, isGrid, noTicks })
+
+  function formatAxisGrid({ selector, isGrid, noTicks }) {
+    const texts = selector.selectAll("text")
+    const ticks = selector.selectAll(".tick line")
+
+    const setStyles = (selection, strokeColor, strokeOpacity) =>
+      selection.style("stroke", strokeColor).attr("opacity", strokeOpacity)
+
+    selector.selectAll(".domain").remove()
+    // if (isGrid) {
+    //   texts.remove()
+    //   setStyles(ticks, colors.gray, opacity.grid)
+    // }
+    // if (!isGrid) {
+    //   texts.style("fill", colors.gray).attr("font-size", fontSize[1])
+    //   ticks.style("stroke", colors.gray).attr("opacity", 1)
+    // }
+    // if (noTicks) {
+    //   ticks.remove()
+    // }
+  }
 }

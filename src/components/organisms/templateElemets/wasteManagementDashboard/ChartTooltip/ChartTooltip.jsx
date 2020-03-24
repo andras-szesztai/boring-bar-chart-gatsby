@@ -16,7 +16,7 @@ const TooltipContainer = styled(FlexContainer)`
     position: absolute;
     pointer-events: none;
     border-color: rgba(136, 183, 213, 0);
-    border-top-color: ${colors.grayDarkest};
+    border-top-color: ${colors.grayDarker};
     border-width: ${space[2]}px;
     margin-left: -${space[2]}px;
   }
@@ -28,12 +28,12 @@ export default function ChartTooltip({ data, storedValues, margin, metric }) {
   return data ? (
     <TooltipContainer
       absPos
-      left={storedValues.current.xScale(data.data[0].year) - 75 + margin.left}
+      left={storedValues.current.xScale(data.data[0].year) - 70 + margin.left}
       top={storedValues.current.yScale(data.maxValue) - height - 5}
       borderRadius={1}
       height={`${height}px`}
-      width="150px"
-      borderColor="grayDarkest"
+      width="140px"
+      borderColor="grayDarker"
       zIndex="overlay"
       bgColor="#ffffff"
       noPointerEvents

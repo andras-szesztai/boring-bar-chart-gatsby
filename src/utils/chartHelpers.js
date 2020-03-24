@@ -12,8 +12,8 @@ export function checkIfUpdated(sortedRaw, sortedPrevRaw) {
 }
 
 export const getClassName = value =>
-  value && value.toLowerCase().replace(/[ -.,:]/g, "");
-  
+  value && value.toLowerCase().replace(/[ -.,:]/g, "")
+
 export function getAxisPadding(data, key, domainPaddingValue = 0.025) {
   const minmax = extent(data, d => d[key])
   const minmaxDiff = minmax[1] - minmax[0]
@@ -33,7 +33,7 @@ export const makeTransition = (area, duration, name) =>
   area
     .transition(name)
     .duration(duration)
-    .ease(easeCubicInOut);
+    .ease(easeCubicInOut)
 
 export function createUpdateNumberText({
   duration,
@@ -91,4 +91,35 @@ export function createUpdateNumberText({
             .tween("text", getNumberTween)
         )
     )
+}
+
+export function changedFormat(val, metricIsPercentage) {
+  function returnFormatString(val, metricIsPercentage) {
+    if (metricIsPercentage) {
+      if (val >= 1) return ".0%"
+      if (val >= 0.1) return ".1%"
+      return ".2%"
+    }
+    if (val < 1) return ".2f"
+    return ".3s"
+  }
+
+  return format(returnFormatString(val, metricIsPercentage))(val).replace(
+    "G",
+    "B"
+  )
+}
+
+export function newNNumberTween({
+  value,
+  i,
+  n,
+  prevValue,
+  metricIsPercentage,
+}) {
+  return function(t) {
+    select(n[i]).text(
+      changedFormat(interpolateNumber(prevValue, value)(t), metricIsPercentage)
+    )
+  }
 }
