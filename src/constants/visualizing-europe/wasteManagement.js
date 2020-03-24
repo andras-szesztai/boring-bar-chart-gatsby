@@ -1,4 +1,4 @@
-import { colors } from "../../themes/theme"
+import { colors, fontSize } from "../../themes/theme"
 
 const DATA_URL = "https://boring-barchart-gatsby.firebaseio.com/waste-management.json"
 const CHART_MARGIN = { top: 10, right: 20, bottom: 25, left: 40 }

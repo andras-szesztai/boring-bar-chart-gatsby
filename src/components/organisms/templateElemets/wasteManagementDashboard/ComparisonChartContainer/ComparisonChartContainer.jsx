@@ -5,11 +5,13 @@ import { GridContainer, FlexContainer } from "../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
 import { usePrevious } from "../../../../../hooks"
-import constants, { DROPDOWN_STYLES } from "../../../../../constants/visualizing-europe/wasteManagement"
-
+import constants, {
+  DROPDOWN_STYLES,
+} from "../../../../../constants/visualizing-europe/wasteManagement"
 
 export default function ComparisonChartContainer({
   selectedCountry,
+  setSelectedCountry,
   data,
   metric,
   handleChartMouseout,
@@ -27,10 +29,14 @@ export default function ComparisonChartContainer({
       setChartData(isAbs ? getAbsData(data) : getPercentageData(data))
     }
     if (
+      data &&
       chartData &&
       (prevMetric !== metric || prevSelectedCountry !== selectedCountry)
     ) {
       setChartData(isAbs ? getAbsData(data) : getPercentageData(data))
+    }
+    if (!data && chartData) {
+      setChartData(undefined)
     }
   }, [
     chartData,
@@ -48,6 +54,16 @@ export default function ComparisonChartContainer({
           <Select
             styles={DROPDOWN_STYLES}
             placeholder="Please select a country"
+            value={
+              selectedCountry && {
+                value: selectedCountry,
+                label: selectedCountry,
+              }
+            }
+            onChange={v => {
+              v ? setSelectedCountry(v.label) : setSelectedCountry(undefined)
+            }}
+            // onChange={v => }
             isSearchable
             isClearable
             options={countryList.map(el => ({
