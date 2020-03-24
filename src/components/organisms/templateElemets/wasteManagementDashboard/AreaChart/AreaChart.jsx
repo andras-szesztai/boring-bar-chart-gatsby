@@ -13,21 +13,13 @@ import {
   useInitUpdate,
   usePrevious,
 } from "../../../../../hooks"
-import {
-  ChartWrapper,
-  ChartSvg,
-  ChartArea,
-  AxisLine,
-  Container,
-} from "../../../../atoms"
-import { transition, colors, space } from "../../../../../themes/theme"
+import { ChartWrapper, ChartSvg, ChartArea, Container } from "../../../../atoms"
+import { transition, colors } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { createUpdateDelaunayCircles } from "../../../../../utils/svgElementHelpers"
 import ChartTooltip from "../ChartTooltip/ChartTooltip"
 import { COLOR_ARRAY } from "../../../../../constants/visualizing-europe/wasteManagement"
-import { axisBottom, axisLeft } from "d3-axis"
 import { format } from "d3-format"
-import { easeCubicInOut } from "d3-ease"
 
 const yDomain = {
   abs: [0, 850],
@@ -43,7 +35,6 @@ export default function AreaChart(props) {
     margin,
     metric,
     value,
-    withAxes,
     withLabel,
     handleMouseover,
     handleMouseout,
@@ -257,12 +248,21 @@ export default function AreaChart(props) {
             .append("text")
             .attr("class", "label")
             .attr("text-anchor", "middle")
+            .attr("pointer-events", "none")
             .attr("y", d => yScale(d))
+            .attr("dy", 3)
             .attr("x", dims.chartWidth / 2)
             .text(getText)
             .attr("opacity", 0)
             .call(enter => enter.transition(t).attr("opacity", 1)),
-        update => update.call()
+        update =>
+          update.call(update =>
+            update
+              .transition(t)
+              .attr("y", d => yScale(d))
+              .attr("x", dims.chartWidth / 2)
+              .text(getText)
+          )
       )
   }
 

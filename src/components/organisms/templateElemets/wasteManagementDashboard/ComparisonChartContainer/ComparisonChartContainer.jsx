@@ -96,10 +96,10 @@ export default function ComparisonChartContainer({
                 Explore how much per capita municipal waste-generation evolved
                 in individual countries (inside or outside of the EU) between
                 1995 and 2018, and how much of that waste on average got
-                recycled year by year? 
+                recycled year by year?{" "}
                 {isSmallScreen
                   ? "Use the selector above to find out more!"
-                  : "Click on a country or use the selector above to find out more!"}
+                  : "Click on a country chart or use the selector above to find out more!"}
               </div>
             </FlexContainer>
           </GridContainer>

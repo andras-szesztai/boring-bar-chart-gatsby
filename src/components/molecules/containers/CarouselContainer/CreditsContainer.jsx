@@ -3,11 +3,13 @@ import { Title, GridContainer, FlexContainer, LinkAnchor } from "../../../atoms"
 
 export default function CreditsContainer({
   direction,
+  linkColor,
   elements = [],
   position,
   fontSize,
   fontWeight,
   absPos,
+  color
 }) {
   return (
     <GridContainer
@@ -18,7 +20,7 @@ export default function CreditsContainer({
     >
       {elements.map(({ justify, text, link, anchorText }) => (
         <FlexContainer justify={justify} align="flex-start" key={text}>
-          <Title fontSize={fontSize} color="gray">
+          <Title fontSize={fontSize} color={color}>
             {text && `${text}: `}
             <LinkAnchor
               href={link}
@@ -26,6 +28,7 @@ export default function CreditsContainer({
               fontWeight={fontWeight}
               target="_blank"
               rel="noopener noreferrer"
+              color={linkColor}
             >
               {anchorText}
             </LinkAnchor>
