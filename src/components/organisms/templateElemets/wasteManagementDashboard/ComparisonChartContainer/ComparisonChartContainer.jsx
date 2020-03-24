@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react"
 import Select from "react-select"
 
-import { GridContainer, FlexContainer } from "../../../../atoms"
+import { GridContainer, FlexContainer, ColoredSpan, Container } from "../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
 import { usePrevious } from "../../../../../hooks"
 import constants, {
   DROPDOWN_STYLES,
+  COLOR_ARRAY,
 } from "../../../../../constants/visualizing-europe/wasteManagement"
 
 export default function ComparisonChartContainer({
@@ -73,15 +74,50 @@ export default function ComparisonChartContainer({
       </GridContainer>
       {!selectedCountry ? (
         <FlexContainer>
-          <GridContainer rows="repeat(3, min-content)">
+          <GridContainer rows="repeat(3, min-content)" lineHeight={1.8}>
             <FlexContainer justify="flex-start">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim laboriosam deserunt ipsam rem minus, ea natus quas architecto assumenda aliquam!
+              <div >
+                In the European Union, the amount of{" "}
+                <ColoredSpan
+                  fontWeight="medium"
+                  color="#fff"
+                  paddingLeft={1}
+                  paddingRight={1}
+                  bgColor={COLOR_ARRAY[0]}
+                >
+                  municipal waste generated per person
+                </ColoredSpan>{" "}
+                in 2018 amounted to 488 kg, of which on average 147kg (30%) went
+                through{" "}
+                <ColoredSpan
+                  fontWeight="medium"
+                  color="#fff"
+                  paddingLeft={1}
+                  paddingRight={1}
+                  bgColor={COLOR_ARRAY[1]}
+                >
+                  material recycling
+                </ColoredSpan>
+                , while 83kg (17%){" "}
+                <ColoredSpan
+                  fontWeight="medium"
+                  color="#fff"
+                  paddingLeft={1}
+                  paddingRight={1}
+                  bgColor={COLOR_ARRAY[2]}
+                >
+                  composting
+                </ColoredSpan>
+                .
+              </div>
             </FlexContainer>
             <FlexContainer justify="flex-start">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, modi!
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Consequatur, modi!
             </FlexContainer>
             <FlexContainer justify="flex-start">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, modi!
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Consequatur, modi!
             </FlexContainer>
           </GridContainer>
         </FlexContainer>

@@ -36,11 +36,13 @@ const Container = styled.div`
     marginLeft,
     marginRight,
     paddingTop,
+    lineHeight
   }) => css`
     grid-area: ${gridArea};
     text-align: ${textAlign};
     cursor: ${cursor};
     position: ${pos};
+    line-height: ${lineHeight};
     opacity: ${opacity};
     padding: ${themifySpace[padding] || 0}px;
     font-size: ${themifyFontSize(fontSize)};

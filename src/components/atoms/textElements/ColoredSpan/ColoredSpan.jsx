@@ -8,19 +8,33 @@ import {
 } from "../../../../themes/mixins"
 
 const ColoredSpan = styled.span`
-  ${({ fontSize, fontWeight, color, zIndex, paddingBottom }) => css`
+  ${({
+    fontSize,
+    fontWeight,
+    color,
+    zIndex,
+    paddingBottom,
+    bgColor,
+    paddingLeft,
+    paddingRight,
+  }) => css`
     font-size: ${themifyFontSize(fontSize)};
     font-weight: ${themifyFontWeight(fontWeight)};
     color: ${themifyColor(color)};
+    background-color: ${themifyColor(bgColor)};
     z-index: ${themifyZIndex(zIndex)};
     padding-bottom: ${themifySpace(paddingBottom)}px;
+    padding-left: ${themifySpace(paddingLeft)}px;
+    padding-right: ${themifySpace(paddingRight)}px;
   `}
 
-  ${({ isHoverable }) => isHoverable && css`
-    &:hover {
-      text-decoration: underline;
-    }
-  `}
+  ${({ isHoverable }) =>
+    isHoverable &&
+    css`
+      &:hover {
+        text-decoration: underline;
+      }
+    `}
 `
 
 ColoredSpan.defaultProps = {
