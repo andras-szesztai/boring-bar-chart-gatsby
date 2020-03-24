@@ -56,7 +56,7 @@ export default function BigChartsContainer({
       />
       <GridContainer rows="40px 1fr" gridArea="chartTwo">
         <FlexContainer fullSize justify="flex-start">
-          <Title fontSize={2}>European Union (28) Average</Title>
+          <Title fontSize={1}>European Union (28) Average</Title>
         </FlexContainer>
         <FlexContainer>
           <AreaChart

@@ -59,7 +59,7 @@ const MainGrid = styled(GridContainer)`
 
 const smallScreenAreas = css`
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 20fr 70fr;
+  grid-template-rows: 15fr 75fr;
   grid-template-areas:
     "title title"
     "chartOne chartTwo";
@@ -67,7 +67,7 @@ const smallScreenAreas = css`
 
 const bigScreenAreas = css`
   grid-template-columns: 1fr;
-  grid-template-rows: 20fr 40fr 40fr;
+  grid-template-rows: 16fr 42fr 42fr;
   grid-template-areas:
     "title"
     "chartOne"

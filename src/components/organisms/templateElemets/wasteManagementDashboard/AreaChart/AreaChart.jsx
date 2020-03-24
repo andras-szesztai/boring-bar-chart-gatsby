@@ -185,6 +185,7 @@ export default function AreaChart(props) {
         .datum(data)
         .attr("class", accessor)
         .attr("fill", color)
+        // .attr("fill-opacity", lowOpacity ? .25 : 1)
         .attr("d", areaGeneratorZero)
       chartArea
         .select(`.${accessor}`)
