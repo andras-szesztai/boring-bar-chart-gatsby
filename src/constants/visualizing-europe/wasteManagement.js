@@ -1,4 +1,4 @@
-import { colors, fontSize } from "../../themes/theme"
+import { colors, fontSize, fontWeight } from "../../themes/theme"
 
 const DATA_URL = "https://boring-barchart-gatsby.firebaseio.com/waste-management.json"
 const CHART_MARGIN = { top: 10, right: 20, bottom: 25, left: 40 }
@@ -30,7 +30,7 @@ export const DROPDOWN_STYLES = {
       boxShadow: "none",
       cursor: "pointer",
       "&:hover": {
-        borderColor: colors.grayDarkest,
+        borderColor: colors.grayLightest,
       },
     }
   },
@@ -54,9 +54,22 @@ export const DROPDOWN_STYLES = {
       },
     }
   },
+  input: (provided, state) => {
+    console.log(
+      provided
+    );
+    console.log(
+      state
+    );
+    
+    return {
+      ...provided,
+      fontWeight: 100
+    }
+  },
   valueContainer: styles => ({
     ...styles,
-    fontSize: fontSize[2],
+    fontSize: fontSize[2]
   }),
 }
 

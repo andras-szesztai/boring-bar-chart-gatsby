@@ -48,9 +48,12 @@ export default function BigChartsContainer({ selectedCountry, metric, data, coun
         countryList={countryList}
       />
       <GridContainer rows="40px 1fr" gridArea="chartTwo">
-        <Title fontSize={2} >
-          European Union (28) Average
-        </Title>
+
+        <FlexContainer fullSize justify="flex-start" >
+          <Title fontSize={2} >
+            European Union (28) Average
+          </Title>
+        </FlexContainer>
         <FlexContainer>
           <AreaChart
             data={chartData}

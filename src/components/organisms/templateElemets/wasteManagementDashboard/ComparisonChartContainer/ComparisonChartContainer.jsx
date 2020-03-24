@@ -60,11 +60,9 @@ export default function ComparisonChartContainer({
                 label: selectedCountry,
               }
             }
-            onChange={v => {
+            onChange={v =>
               v ? setSelectedCountry(v.label) : setSelectedCountry(undefined)
-            }}
-            // onChange={v => }
-            isSearchable
+            }
             isClearable
             options={countryList.map(el => ({
               value: el,
@@ -74,7 +72,19 @@ export default function ComparisonChartContainer({
         )}
       </GridContainer>
       {!selectedCountry ? (
-        <FlexContainer>Explainer</FlexContainer>
+        <FlexContainer>
+          <GridContainer rows="repeat(3, min-content)">
+            <FlexContainer justify="flex-start">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim laboriosam deserunt ipsam rem minus, ea natus quas architecto assumenda aliquam!
+            </FlexContainer>
+            <FlexContainer justify="flex-start">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, modi!
+            </FlexContainer>
+            <FlexContainer justify="flex-start">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, modi!
+            </FlexContainer>
+          </GridContainer>
+        </FlexContainer>
       ) : (
         <FlexContainer>
           <AreaChart
