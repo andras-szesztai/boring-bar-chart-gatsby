@@ -47,7 +47,7 @@ export default function BigChartsContainer({ selectedCountry, metric, data }) {
       />
       <GridContainer rows="30px 1fr" gridArea="chartTwo">
         <Title fontSize={2} >
-          European Union Average
+          European Union (28) Average
         </Title>
         <FlexContainer>
           <AreaChart

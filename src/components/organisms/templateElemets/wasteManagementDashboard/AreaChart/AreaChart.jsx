@@ -24,6 +24,7 @@ import { transition, colors } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { createUpdateDelaunayCircles } from "../../../../../utils/svgElementHelpers"
 import ChartTooltip from "../ChartTooltip/ChartTooltip"
+import { COLOR_ARRAY } from "../../../../../constants/visualizing-europe/wasteManagement"
 
 const yDomain = {
   abs: [0, 850],
@@ -70,17 +71,17 @@ export default function AreaChart(props) {
     }
     createUpdateSingleArea({
       isInit: true,
-      color: "#de88a5",
+      color: COLOR_ARRAY[0],
       accessor: "waste",
     })
     createUpdateSingleArea({
       isInit: true,
-      color: "#7a9eaf",
+      color: COLOR_ARRAY[1],
       accessor: "recycling_total",
     })
     createUpdateSingleArea({
       isInit: true,
-      color: "#655989",
+      color: COLOR_ARRAY[2],
       accessor: "recycling_composting",
     })
     if (props.isHoverable) {
@@ -296,5 +297,5 @@ export default function AreaChart(props) {
 }
 
 AreaChart.defaultProps = {
-  margin: { top: 20, right: 0, bottom: 5, left: 5 },
+  margin: { top: 20, right: 5, bottom: 5, left: 5 },
 }

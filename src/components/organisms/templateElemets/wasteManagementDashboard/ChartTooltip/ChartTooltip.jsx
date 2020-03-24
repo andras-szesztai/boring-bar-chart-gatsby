@@ -3,6 +3,7 @@ import styled from "styled-components"
 
 import { space, colors } from "../../../../../themes/theme"
 import { FlexContainer, Title } from "../../../../atoms"
+import { COLOR_ARRAY } from "../../../../../constants/visualizing-europe/wasteManagement"
 
 const TooltipContainer = styled(FlexContainer)`
   :after {
@@ -22,11 +23,8 @@ const TooltipContainer = styled(FlexContainer)`
 `
 
 export default function ChartTooltip({ data, storedValues, margin, metric }) {
-  console.log(data)
-  const colorArray = ["#de88a5", "#7a9eaf", "#655989"]
   const isPerc = metric === "perc"
-  const height =
-    data && (isPerc ? (data.data.length - 1) * 25 : data.data.length * 25)
+  const height = data && (isPerc ? data.data.length : data.data.length + 1) * 25
   return data ? (
     <TooltipContainer
       absPos
@@ -46,25 +44,30 @@ export default function ChartTooltip({ data, storedValues, margin, metric }) {
       paddingTop={1}
       paddingBottom={1}
     >
-      {data.data.map((el, i) => {
-        const metricVal =
-          i === 1
-            ? el.metricValue - data.data[i + 1].metricValue
-            : el.metricValue
-        const shouldHide = i === 0 && isPerc
-        return shouldHide ? (
-          <div />
-        ) : (
-          <FlexContainer key={el.metric} fullSize justify="space-between">
-            <Title fontWeight="medium" color={colorArray[i]}>
-              {el.metric}:
-            </Title>
-            <div>
-              {isPerc ? `${(metricVal * 100).toFixed(0)}%` : `${metricVal}kg`}
-            </div>
-          </FlexContainer>
-        )
-      })}
+      <>
+        <FlexContainer fullSize>
+          <Title fontWeight="medium">{data.data[0].yearString}</Title>
+        </FlexContainer>
+        {data.data.map((el, i) => {
+          const metricVal =
+            i === 1
+              ? el.metricValue - data.data[i + 1].metricValue
+              : el.metricValue
+          const shouldHide = i === 0 && isPerc
+          return shouldHide ? (
+            <div />
+          ) : (
+            <FlexContainer key={el.metric} fullSize justify="space-between">
+              <Title fontWeight="medium" color={COLOR_ARRAY[i]}>
+                {el.metric}:
+              </Title>
+              <div>
+                {isPerc ? `${(metricVal * 100).toFixed(0)}%` : `${metricVal}kg`}
+              </div>
+            </FlexContainer>
+          )
+        })}
+      </>
     </TooltipContainer>
   ) : (
     <div />
