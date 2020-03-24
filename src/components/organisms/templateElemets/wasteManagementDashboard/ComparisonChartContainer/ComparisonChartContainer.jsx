@@ -37,8 +37,6 @@ export default function ComparisonChartContainer({
     selectedCountry,
   ])
 
-  console.log(chartData)
-
   return (
     <GridContainer rows="30px 1fr" gridArea="chartOne">
       <FlexContainer justify="flex-start">

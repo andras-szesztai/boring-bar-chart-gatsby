@@ -1,13 +1,12 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 
-import { FlexContainer, GridContainer, Title } from "../../atoms"
+import { FlexContainer, GridContainer } from "../../atoms"
 import { useWindowDimensions } from "../../../hooks"
 import {
   styledComponents,
   TitleContainer,
   SmallChartContainer,
-  ComparisonChartContainer,
   BigChartsContainer,
 } from "../../organisms/templateElemets/wasteManagementDashboard"
 import { colors } from "../../../themes/theme"

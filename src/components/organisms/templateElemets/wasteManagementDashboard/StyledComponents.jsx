@@ -3,7 +3,7 @@ import styled, { css } from "styled-components"
 import { GridContainer } from "../../../atoms"
 
 const MainGrid = styled(GridContainer)`
-  grid-column-gap: 3rem;
+  grid-column-gap: 5rem;
   @media (min-width: 450px) {
     height: 95%;
     width: 95%;

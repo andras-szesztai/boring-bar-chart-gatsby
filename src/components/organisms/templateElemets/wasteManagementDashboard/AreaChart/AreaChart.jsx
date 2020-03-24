@@ -26,6 +26,8 @@ import { createUpdateDelaunayCircles } from "../../../../../utils/svgElementHelp
 import ChartTooltip from "../ChartTooltip/ChartTooltip"
 import { COLOR_ARRAY } from "../../../../../constants/visualizing-europe/wasteManagement"
 import { axisBottom, axisLeft } from "d3-axis"
+import { format } from "d3-format"
+import { easeCubicInOut } from "d3-ease"
 
 const yDomain = {
   abs: [0, 850],
@@ -87,7 +89,7 @@ export default function AreaChart(props) {
     })
     if (props.isHoverable) {
       createUpdateDelaunay()
-      createAxes()
+      createUpdateAxes()
     }
   }
 
@@ -142,13 +144,14 @@ export default function AreaChart(props) {
     )
     if (props.isHoverable) {
       createUpdateDelaunay()
+      createUpdateAxes()
     }
   }
 
   function updateVisDims() {
     const { xScale, yScale } = storedValues.current
-    xScale.range([0, dims.chartWidth])
-    yScale.range([dims.chartHeight, 0])
+    xScale.range([0.5, dims.chartWidth])
+    yScale.range([dims.chartHeight - 0.5, 0])
     storedValues.current = {
       ...storedValues.current,
       yScale,
@@ -157,16 +160,23 @@ export default function AreaChart(props) {
     metricArray.forEach(metric =>
       createUpdateSingleArea({
         accessor: metric,
+        duration: 0,
       })
     )
     if (props.isHoverable) {
       createUpdateDelaunay()
+      createUpdateAxes(0)
     }
   }
 
-  function createUpdateSingleArea({ isInit, color, accessor }) {
+  function createUpdateSingleArea({
+    isInit,
+    color,
+    accessor,
+    duration = transition.lgNum,
+  }) {
     const { yScale, xScale, chartArea } = storedValues.current
-    const t = makeTransition(chartArea, transition.lgNum)
+    const t = makeTransition(chartArea, duration)
     const areaGeneratorZero = area()
       .x(d => xScale(d.year))
       .y0(yScale(0))
@@ -228,25 +238,33 @@ export default function AreaChart(props) {
     setDelaunayData(delaunayData)
   }
 
-  function createAxes() {
+  function createUpdateAxes(duration = transition.lgNum) {
     const { yScale, xScale } = storedValues.current
     const makeAxis = (type, ticks) =>
       type
         .ticks(ticks)
         .tickSizeOuter(0)
         .tickSizeInner(space[1])
+    const callAxis = (area, axis, isDateAxis) =>
+      select(area)
+        .transition()
+        .duration(duration)
+        .ease(easeCubicInOut)
+        .call(
+          isDateAxis
+            ? axis
+            : axis.tickFormat(format(metric === "perc" ? ".0%" : ""))
+        )
 
-    const xAxis = makeAxis(axisBottom(xScale), dims.chartWidth / 100)
-    const yAxis = makeAxis(axisLeft(yScale), dims.chartHeight / 50)
-
-    select(refs.xAxisRef.current)
-      .transition()
-      .duration(transition.lgNum)
-      .call(xAxis)
-    select(refs.yAxisRef.current)
-      .transition()
-      .duration(transition.lgNum)
-      .call(yAxis)
+    callAxis(
+      refs.xAxisRef.current,
+      makeAxis(axisBottom(xScale), dims.chartWidth / 100),
+      true
+    )
+    callAxis(
+      refs.yAxisRef.current,
+      makeAxis(axisLeft(yScale), dims.chartHeight / 50)
+    )
 
     select(refs.svgRef.current)
       .selectAll("text")

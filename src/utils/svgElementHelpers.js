@@ -2,8 +2,7 @@ import { Delaunay } from "d3-delaunay"
 import { axisTop, axisRight, axisBottom, axisLeft } from "d3-axis"
 
 import { getClassName, changedFormat } from "./chartHelpers"
-import { format } from "d3-format"
-import { space, colors } from "../themes/theme"
+import { space } from "../themes/theme"
 
 export function createUpdateDelaunayCircles({
   data,
