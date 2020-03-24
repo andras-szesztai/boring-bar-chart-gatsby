@@ -17,8 +17,10 @@ const ColoredSpan = styled.span`
     bgColor,
     paddingLeft,
     paddingRight,
+    borderRadius
   }) => css`
     font-size: ${themifyFontSize(fontSize)};
+    border-radius: ${borderRadius}px;
     font-weight: ${themifyFontWeight(fontWeight)};
     color: ${themifyColor(color)};
     background-color: ${themifyColor(bgColor)};
