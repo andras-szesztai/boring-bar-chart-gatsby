@@ -39,6 +39,7 @@ export default function WasteManagemetDashboard({
             <TitleContainer metric={metric} setMetric={setMetric} />
             <BigChartsContainer
               selectedCountry={selectedCountry}
+              countryList={countryList}
               metric={metric}
               data={data}
             />

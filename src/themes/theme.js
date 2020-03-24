@@ -62,6 +62,7 @@ export const fontWeight = {
 
 export const z = {
   tooltip: 50,
+  dropdown: 60,
   loader: 100,
   overlay: 120
 }

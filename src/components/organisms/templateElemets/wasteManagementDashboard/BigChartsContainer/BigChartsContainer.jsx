@@ -6,7 +6,7 @@ import { usePrevious } from "../../../../../hooks"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
 import constants from "../../../../../constants/visualizing-europe/wasteManagement"
 
-export default function BigChartsContainer({ selectedCountry, metric, data }) {
+export default function BigChartsContainer({ selectedCountry, metric, data, countryList }) {
   const [chartData, setChartData] = useState(undefined)
   const prevMetric = usePrevious(metric)
   const prevSelectedCountry = usePrevious(selectedCountry)
@@ -44,6 +44,7 @@ export default function BigChartsContainer({ selectedCountry, metric, data }) {
         handleChartMouseover={handleChartMouseover}
         handleChartMouseout={handleChartMouseout}
         hoveredYear={hoveredYear}
+        countryList={countryList}
       />
       <GridContainer rows="30px 1fr" gridArea="chartTwo">
         <Title fontSize={2} >

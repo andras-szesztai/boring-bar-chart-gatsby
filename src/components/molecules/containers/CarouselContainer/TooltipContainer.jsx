@@ -8,8 +8,6 @@ import { useWindowDimensions, usePrevious } from "../../../../hooks"
 import {
   themifyZIndex,
   themifySpace,
-  themifyColor,
-  themifyTransition,
 } from "../../../../themes/mixins"
 
 const ARROW_HEIGHT = 8
