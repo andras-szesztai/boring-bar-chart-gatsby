@@ -4,7 +4,8 @@ import { GridContainer } from "../../../atoms"
 import { themifySpace } from "../../../../themes/mixins"
 
 const MainGrid = styled(GridContainer)`
-  grid-column-gap: 5rem;
+  grid-column-gap: 4rem;
+  grid-row-gap: 2rem;
   @media (min-width: 450px) {
     height: 95%;
     width: 95%;
@@ -59,7 +60,7 @@ const MainGrid = styled(GridContainer)`
 
 const smallScreenAreas = css`
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 15fr 75fr;
+  grid-template-rows: 20fr 80fr;
   grid-template-areas:
     "title title"
     "chartOne chartTwo";

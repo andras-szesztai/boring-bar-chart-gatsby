@@ -8,7 +8,6 @@ import {
   GridContainer,
   Title,
   FlexContainer,
-  ColoredSpan,
 } from "../../../../atoms"
 import { colors, transition } from "../../../../../themes/theme"
 import { CreditsContainer } from "../../../../molecules"
@@ -82,7 +81,7 @@ export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
             <IoMdInformationCircle size={isSmallScreen ? 20 : 25} />
           </IconContainer>
         </GridContainer>
-        <FlexContainer>
+        <FlexContainer justify={isSmallScreen ? "center" : "flex-start"}>
           <FlexContainer>
             <Title marginBottom={1} textAlign="right" marginRight={1}>
               Per capita metric: Kg
