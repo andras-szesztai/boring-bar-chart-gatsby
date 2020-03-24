@@ -8,10 +8,12 @@ export default function LegendSpan({ color, children, textColor }) {
     <ColoredSpan
       fontWeight="medium"
       color={textColor ? textColor : chroma(color).brighten(2)}
+
       borderRadius={2}
       paddingLeft={1}
       paddingRight={1}
       bgColor={color}
+      borderColor={chroma(color).darken(1)}
     >
      {children}
     </ColoredSpan>

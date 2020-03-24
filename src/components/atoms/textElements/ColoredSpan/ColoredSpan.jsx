@@ -1,4 +1,6 @@
 import styled, { css } from "styled-components"
+import chroma from "chroma-js"
+
 import {
   themifyFontSize,
   themifyFontWeight,
@@ -17,7 +19,8 @@ const ColoredSpan = styled.span`
     bgColor,
     paddingLeft,
     paddingRight,
-    borderRadius
+    borderRadius,
+    borderColor,
   }) => css`
     font-size: ${themifyFontSize(fontSize)};
     border-radius: ${borderRadius}px;
@@ -25,6 +28,7 @@ const ColoredSpan = styled.span`
     color: ${themifyColor(color)};
     background-color: ${themifyColor(bgColor)};
     z-index: ${themifyZIndex(zIndex)};
+    border: 1px solid ${themifyColor(borderColor)};
     padding-bottom: ${themifySpace(paddingBottom)}px;
     padding-left: ${themifySpace(paddingLeft)}px;
     padding-right: ${themifySpace(paddingRight)}px;

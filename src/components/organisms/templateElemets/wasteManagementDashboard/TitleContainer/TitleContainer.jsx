@@ -4,7 +4,12 @@ import { IoMdInformationCircle } from "react-icons/io"
 import ReactTooltip from "react-tooltip"
 import styled from "styled-components"
 
-import { GridContainer, Title, FlexContainer } from "../../../../atoms"
+import {
+  GridContainer,
+  Title,
+  FlexContainer,
+  ColoredSpan,
+} from "../../../../atoms"
 import { colors, transition } from "../../../../../themes/theme"
 import { CreditsContainer } from "../../../../molecules"
 import { CREDIT_ELEMENTS } from "../../../../../constants/visualizing-europe/wasteManagement"
@@ -30,16 +35,29 @@ export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
         effect="solid"
         place="bottom"
         clickable
+        multiline
         id="tooltip"
         getContent={() => {
           return (
-            <CreditsContainer
-              direction="column"
-              elements={CREDIT_ELEMENTS}
-              absPos={false}
-              color="#fff"
-              linkColor="#fff"
-            />
+            <>
+              <FlexContainer
+                fontColor="#fff"
+                width="180px"
+                marginBottom={3}
+                bgColor="transparent"
+              >
+                Chart comment: Per Capita Municipal Waste is represented as a
+                single area chart, while Material Recycling and Composting are
+                areas stacked one upon the other.
+              </FlexContainer>
+              <CreditsContainer
+                direction="column"
+                elements={CREDIT_ELEMENTS}
+                absPos={false}
+                color="#fff"
+                linkColor="#fff"
+              />
+            </>
           )
         }}
       />
@@ -79,7 +97,7 @@ export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
               offColor={colors.grayLightest}
               onColor={colors.grayLightest}
               height={18}
-              width={40}
+              width={36}
             />
             <Title marginLeft={1}>%</Title>
           </FlexContainer>

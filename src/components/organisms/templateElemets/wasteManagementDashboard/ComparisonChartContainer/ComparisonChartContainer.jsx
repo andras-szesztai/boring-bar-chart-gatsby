@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react"
 import Select from "react-select"
 
-import { GridContainer, FlexContainer, ColoredSpan } from "../../../../atoms"
+import { GridContainer, FlexContainer } from "../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
 import { usePrevious } from "../../../../../hooks"
-import constants, {
+import {
   DROPDOWN_STYLES,
   COLOR_ARRAY,
 } from "../../../../../constants/visualizing-europe/wasteManagement"
 import LegendSpan from "../LegendSpan/LegendSpan"
-import { colors } from "../../../../../themes/theme"
 
 export default function ComparisonChartContainer({
   selectedCountry,

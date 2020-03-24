@@ -8,7 +8,8 @@ import { COLOR_ARRAY } from "../../../../../constants/visualizing-europe/wasteMa
 const TooltipContainer = styled(FlexContainer)`
   :after {
     top: 100%;
-    left: 50%;
+    left: ${props => props.isLeft && 19}px;
+    right: ${props => !props.isLeft && 11}px;
     border: solid transparent;
     content: " ";
     height: 0;
@@ -22,13 +23,26 @@ const TooltipContainer = styled(FlexContainer)`
   }
 `
 
-export default function ChartTooltip({ data, storedValues, margin, metric }) {
+export default function ChartTooltip({
+  data,
+  storedValues,
+  margin,
+  metric,
+  width,
+}) {
   const isPerc = metric === "perc"
+  const halfWidth = width / 2
   const height = data && (isPerc ? data.data.length : data.data.length + 1) * 25
+  const xScale = storedValues.current && storedValues.current.xScale
   return data ? (
     <TooltipContainer
       absPos
-      left={storedValues.current.xScale(data.data[0].year) - 70 + margin.left}
+      left={
+        xScale(data.data[0].year) -
+        (xScale(data.data[0].year) <= halfWidth ? 20 : 120) +
+        margin.left
+      }
+      isLeft={xScale(data.data[0].year) <= halfWidth}
       top={storedValues.current.yScale(data.maxValue) - height + 5}
       borderRadius={1}
       height={`${height}px`}

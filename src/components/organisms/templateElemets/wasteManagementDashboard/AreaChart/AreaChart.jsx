@@ -5,6 +5,7 @@ import { area, curveMonotoneX } from "d3-shape"
 import { select } from "d3-selection"
 import "d3-transition"
 import { interpolatePath } from "d3-interpolate-path"
+import chroma from "chroma-js"
 import _ from "lodash"
 
 import {
@@ -67,6 +68,7 @@ export default function AreaChart(props) {
       isInit: true,
       color: COLOR_ARRAY[0],
       accessor: "waste",
+      withBorder: true,
     })
     createUpdateSingleArea({
       isInit: true,
@@ -165,6 +167,7 @@ export default function AreaChart(props) {
     color,
     accessor,
     duration = transition.lgNum,
+    withBorder,
   }) {
     const { yScale, xScale, chartArea } = storedValues.current
     const t = makeTransition(chartArea, duration)
@@ -185,7 +188,7 @@ export default function AreaChart(props) {
         .datum(data)
         .attr("class", accessor)
         .attr("fill", color)
-        // .attr("fill-opacity", lowOpacity ? .25 : 1)
+        .attr("stroke", chroma(color).darken(1))
         .attr("d", areaGeneratorZero)
       chartArea
         .select(`.${accessor}`)
@@ -238,7 +241,8 @@ export default function AreaChart(props) {
       abs: [200, 400, 600, 800],
       perc: [0.25, 0.5, 0.75, 1],
     }
-    const getText = d => `-  ${format(isPerc ? ".0%" : "")(d)} -`
+    const getText = d =>
+      `-  ${format(isPerc ? ".0%" : "")(d)}${isPerc ? "" : "kg"} -`
 
     chartArea
       .selectAll(".label")
@@ -285,6 +289,7 @@ export default function AreaChart(props) {
       )}
       {props.isHoverable && (
         <ChartTooltip
+          width={dims.chartWidth}
           data={hoveredData}
           margin={margin}
           storedValues={storedValues}
@@ -308,5 +313,5 @@ export default function AreaChart(props) {
 }
 
 AreaChart.defaultProps = {
-  margin: { top: 20, right: 5, bottom: 5, left: 5 },
+  margin: { top: 20, right: 6, bottom: 5, left: 6 },
 }
