@@ -46,7 +46,7 @@ export default function BigChartsContainer({ selectedCountry, metric, data, coun
         hoveredYear={hoveredYear}
         countryList={countryList}
       />
-      <GridContainer rows="30px 1fr" gridArea="chartTwo">
+      <GridContainer rows="40px 1fr" gridArea="chartTwo">
         <Title fontSize={2} >
           European Union (28) Average
         </Title>

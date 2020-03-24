@@ -5,29 +5,8 @@ import { GridContainer, FlexContainer } from "../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
 import { usePrevious } from "../../../../../hooks"
-import constants from "../../../../../constants/visualizing-europe/wasteManagement"
-import { colors } from "../../../../../themes/theme"
+import constants, { DROPDOWN_STYLES } from "../../../../../constants/visualizing-europe/wasteManagement"
 
-const customStyles = {
-  option: (provided, state) => {
-    console.log(state)
-    console.log(provided)
-
-
-    return {
-      ...provided,
-      color: state.isSelected ? "#fff" : colors.grayDarkest,
-      backgroundColor: state.isSelected
-        ? colors.grayDarkest
-        : state.isFocused
-        ? colors.grayLightest
-        : "#fff",
-      ':before':{
-        backgroundColor: "red",
-      }
-    }
-  },
-}
 
 export default function ComparisonChartContainer({
   selectedCountry,
@@ -63,11 +42,11 @@ export default function ComparisonChartContainer({
   ])
 
   return (
-    <GridContainer rows="30px 1fr" gridArea="chartOne">
-      <GridContainer columns="repeat(2, 1fr)">
+    <GridContainer rows="40px 1fr" gridArea="chartOne">
+      <GridContainer columns="3fr 2fr">
         {countryList && (
           <Select
-            styles={customStyles}
+            styles={DROPDOWN_STYLES}
             placeholder="Please select a country"
             isSearchable
             isClearable
