@@ -4,7 +4,6 @@ import { GridContainer, FlexContainer, Title } from "../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
 import { usePrevious } from "../../../../../hooks"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
-import constants from "../../../../../constants/visualizing-europe/wasteManagement"
 
 export default function BigChartsContainer({
   selectedCountry,

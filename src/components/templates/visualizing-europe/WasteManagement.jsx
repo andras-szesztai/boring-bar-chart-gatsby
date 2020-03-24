@@ -9,7 +9,6 @@ import {
   SmallChartContainer,
   BigChartsContainer,
 } from "../../organisms/templateElemets/wasteManagementDashboard"
-import { colors } from "../../../themes/theme"
 import { FullScreenLoader } from "../../molecules"
 const { MainGrid, MainChartsContainer } = styledComponents
 
@@ -36,7 +35,7 @@ export default function WasteManagemetDashboard({
         <FullScreenLoader loading={loading} />
         <MainGrid maxWidth="1400px">
           <MainChartsContainer>
-            <TitleContainer metric={metric} setMetric={setMetric} />
+            <TitleContainer metric={metric} setMetric={setMetric} isSmallScreen={isSmallScreen} />
             <BigChartsContainer
               isSmallScreen={isSmallScreen}
               selectedCountry={selectedCountry}
@@ -49,7 +48,7 @@ export default function WasteManagemetDashboard({
           {!isSmallScreen && (
             <GridContainer columns="repeat(5, 1fr)" rows="repeat(5, 1fr)">
               {countryList &&
-                countryList.map((country, i) => (
+                countryList.map(country => (
                   <SmallChartContainer
                     key={country}
                     value={country}

@@ -85,7 +85,7 @@ export const CREDIT_ELEMENTS = [
     text: "Data source",
     link:
       "https://appsso.eurostat.ec.europa.eu/nui/show.do?query=BOOKMARK_DS-150766_QID_-44B068B5_UID_-3F171EB0&layout=TIME,C,X,0;GEO,L,Y,0;WST_OPER,L,Z,0;UNIT,L,Z,1;INDICATORS,C,Z,2;&zSelection=DS-150766WST_OPER,GEN;DS-150766UNIT,KG_HAB;DS-150766INDICATORS,OBS_FLAG;&rankName1=UNIT_1_2_-1_2&rankName2=INDICATORS_1_2_-1_2&rankName3=WST-OPER_1_2_-1_2&rankName4=TIME_1_1_0_0&rankName5=GEO_1_2_0_1&sortC=DESC_-1_FIRST&rStp=&cStp=&rDCh=&cDCh=&rDM=true&cDM=true&footnes=false&empty=false&wai=false&time_mode=ROLLING&time_most_recent=true&lang=EN&cfo=%23%23%23%2C%23%23%23.%23%23%23",
-    anchorText: "Municipal waste by waste management operations",
+    anchorText: "Municipal waste dataset",
   },
 ]
 

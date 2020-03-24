@@ -2,20 +2,35 @@ import React from "react"
 import Switch from "react-switch"
 import { IoMdInformationCircle } from "react-icons/io"
 import ReactTooltip from "react-tooltip"
+import styled from "styled-components"
 
 import { GridContainer, Title, FlexContainer } from "../../../../atoms"
-import { colors } from "../../../../../themes/theme"
+import { colors, transition } from "../../../../../themes/theme"
 import { CreditsContainer } from "../../../../molecules"
 import { CREDIT_ELEMENTS } from "../../../../../constants/visualizing-europe/wasteManagement"
+import { themifyColor } from "../../../../../themes/mixins"
 
-export default function TitleContainer({ metric, setMetric }) {
+const IconContainer = styled(FlexContainer)`
+  svg {
+    transition: fill ${transition.md};
+    fill: ${themifyColor("grayLightest")};
+  }
+
+  :hover {
+    svg {
+      fill: ${themifyColor("grayDarkest")};
+    }
+  }
+`
+
+export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
   return (
-    <GridContainer columnGap={2} columns="4fr 6fr" gridArea="title">
+    <>
       <ReactTooltip
         effect="solid"
         place="bottom"
         clickable
-        id="test"
+        id="tooltip"
         getContent={() => {
           return (
             <CreditsContainer
@@ -28,24 +43,31 @@ export default function TitleContainer({ metric, setMetric }) {
           )
         }}
       />
-      <FlexContainer>
-        <Title fontSize={3} fontWeight="medium">
-          State of Waste Management in Europe
-        </Title>
-      </FlexContainer>
-      <FlexContainer direction="column" justify="space-evenly">
-        <FlexContainer data-for="test" data-tip="">
-          <IoMdInformationCircle
-            size={25}
-            fill={colors.grayDarkest}
-            cursor="pointer"
-          />
-        </FlexContainer>
-        <GridContainer rows="repeat(2, min-content)">
-          <FlexContainer>Per capita metric</FlexContainer>
+      <GridContainer
+        columnGap={2}
+        rows={isSmallScreen ? "2fr 1fr" : "min-content 1fr"}
+        gridArea="title"
+      >
+        <GridContainer
+          rows={isSmallScreen && "1fr 1fr"}
+          columns={!isSmallScreen && "2fr 1fr"}
+        >
+          <FlexContainer
+            justify={isSmallScreen ? "center" : "flex-start"}
+            fullSize
+          >
+            <Title fontSize={3} fontWeight="medium">
+              State of Waste in Europe
+            </Title>
+          </FlexContainer>
+          <IconContainer data-for="tooltip" data-tip="">
+            <IoMdInformationCircle size={isSmallScreen ? 20 : 25} />
+          </IconContainer>
+        </GridContainer>
+        <FlexContainer>
           <FlexContainer>
             <Title marginBottom={1} textAlign="right" marginRight={1}>
-              Kg
+              Per capita metric: Kg
             </Title>
             <Switch
               checked={metric === "perc"}
@@ -61,8 +83,8 @@ export default function TitleContainer({ metric, setMetric }) {
             />
             <Title marginLeft={1}>%</Title>
           </FlexContainer>
-        </GridContainer>
-      </FlexContainer>
-    </GridContainer>
+        </FlexContainer>
+      </GridContainer>
+    </>
   )
 }
