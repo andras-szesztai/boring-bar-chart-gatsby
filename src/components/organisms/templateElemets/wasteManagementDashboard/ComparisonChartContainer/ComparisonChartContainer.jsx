@@ -21,6 +21,7 @@ export default function ComparisonChartContainer({
   handleChartMouseover,
   hoveredYear,
   countryList,
+  isSmallScreen,
 }) {
   const [chartData, setChartData] = useState(undefined)
   const prevMetric = usePrevious(metric)
@@ -52,7 +53,7 @@ export default function ComparisonChartContainer({
 
   return (
     <GridContainer rows="40px 1fr" gridArea="chartOne">
-      <GridContainer columns="3fr 2fr">
+      <GridContainer>
         {countryList && (
           <Select
             styles={DROPDOWN_STYLES}
@@ -95,9 +96,10 @@ export default function ComparisonChartContainer({
                 Explore how much per capita municipal waste-generation evolved
                 in individual countries (inside or outside of the EU) between
                 1995 and 2018, and how much of that waste on average got
-                recycled year by year?{" "}
-                <LegendSpan color={colors.grayDarkest} textColor="#fff">Click</LegendSpan> on a
-                country or use the selector above to find out more!
+                recycled year by year? 
+                {isSmallScreen
+                  ? "Use the selector above to find out more!"
+                  : "Click on a country or use the selector above to find out more!"}
               </div>
             </FlexContainer>
           </GridContainer>
@@ -109,7 +111,6 @@ export default function ComparisonChartContainer({
             metric={metric}
             value={selectedCountry}
             withAxes
-            margin={constants.CHART_MARGIN}
             isHoverable
             handleMouseover={handleChartMouseover}
             handleMouseout={handleChartMouseout}

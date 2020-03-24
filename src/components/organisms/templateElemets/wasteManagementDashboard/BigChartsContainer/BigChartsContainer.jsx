@@ -6,7 +6,14 @@ import { usePrevious } from "../../../../../hooks"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
 import constants from "../../../../../constants/visualizing-europe/wasteManagement"
 
-export default function BigChartsContainer({ selectedCountry, metric, data, countryList, setSelectedCountry }) {
+export default function BigChartsContainer({
+  selectedCountry,
+  metric,
+  data,
+  countryList,
+  setSelectedCountry,
+  isSmallScreen,
+}) {
   const [chartData, setChartData] = useState(undefined)
   const prevMetric = usePrevious(metric)
   const prevSelectedCountry = usePrevious(selectedCountry)
@@ -46,13 +53,11 @@ export default function BigChartsContainer({ selectedCountry, metric, data, coun
         handleChartMouseout={handleChartMouseout}
         hoveredYear={hoveredYear}
         countryList={countryList}
+        isSmallScreen={isSmallScreen}
       />
       <GridContainer rows="40px 1fr" gridArea="chartTwo">
-
-        <FlexContainer fullSize justify="flex-start" >
-          <Title fontSize={2} >
-            European Union (28) Average
-          </Title>
+        <FlexContainer fullSize justify="flex-start">
+          <Title fontSize={2}>European Union (28) Average</Title>
         </FlexContainer>
         <FlexContainer>
           <AreaChart
@@ -60,7 +65,6 @@ export default function BigChartsContainer({ selectedCountry, metric, data, coun
             metric={metric}
             value={selectedCountry}
             withAxes
-            margin={constants.CHART_MARGIN}
             isHoverable
             handleMouseover={handleChartMouseover}
             handleMouseout={handleChartMouseout}

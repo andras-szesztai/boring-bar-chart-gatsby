@@ -29,7 +29,7 @@ export default function ChartTooltip({ data, storedValues, margin, metric }) {
     <TooltipContainer
       absPos
       left={storedValues.current.xScale(data.data[0].year) - 70 + margin.left}
-      top={storedValues.current.yScale(data.maxValue) - height - 5}
+      top={storedValues.current.yScale(data.maxValue) - height + 5}
       borderRadius={1}
       height={`${height}px`}
       width="140px"

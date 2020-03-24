@@ -239,42 +239,31 @@ export default function AreaChart(props) {
   }
 
   function createUpdateAxes(duration = transition.lgNum) {
-    const { yScale, xScale } = storedValues.current
-    const makeAxis = (type, ticks) =>
-      type
-        .ticks(ticks)
-        .tickSizeOuter(0)
-        .tickSizeInner(space[1])
-    const callAxis = (area, axis, isDateAxis) =>
-      select(area)
-        .transition()
-        .duration(duration)
-        .ease(easeCubicInOut)
-        .call(
-          isDateAxis
-            ? axis
-            : axis.tickFormat(format(metric === "perc" ? ".0%" : ""))
-        )
+    const { yScale, chartArea } = storedValues.current
+    const t = makeTransition(chartArea, duration)
+    const isPerc = metric === "perc"
+    const axisLabels = {
+      abs: [200, 400, 600, 800],
+      perc: [0.25, 0.5, 0.75, 1],
+    }
+    const getText = d => `-  ${format(isPerc ? ".0%" : "")(d)} -`
 
-    callAxis(
-      refs.xAxisRef.current,
-      makeAxis(axisBottom(xScale), dims.chartWidth / 100),
-      true
-    )
-    callAxis(
-      refs.yAxisRef.current,
-      makeAxis(axisLeft(yScale), dims.chartHeight / 50)
-    )
-
-    select(refs.svgRef.current)
-      .selectAll("text")
-      .style("fill", colors.grayDarkest)
-    select(refs.svgRef.current)
-      .selectAll(".tick line")
-      .remove()
-    select(refs.svgRef.current)
-      .selectAll(".domain")
-      .remove()
+    chartArea
+      .selectAll(".label")
+      .data(axisLabels[metric])
+      .join(
+        enter =>
+          enter
+            .append("text")
+            .attr("class", "label")
+            .attr("text-anchor", "middle")
+            .attr("y", d => yScale(d))
+            .attr("x", dims.chartWidth / 2)
+            .text(getText)
+            .attr("opacity", 0)
+            .call(enter => enter.transition(t).attr("opacity", 1)),
+        update => update.call()
+      )
   }
 
   useInitUpdate({
@@ -307,36 +296,6 @@ export default function AreaChart(props) {
         width={dims.width}
         height={dims.height}
       >
-        {withAxes && (
-          <>
-            <ChartArea
-              ref={refs.xAxisRef}
-              marginLeft={margin.left}
-              marginTop={margin.top + dims.chartHeight}
-            >
-              <AxisLine
-                color="grayDarker"
-                x1={0}
-                x2={dims.chartWidth}
-                y2={0}
-                y1={0}
-              />
-            </ChartArea>
-            <ChartArea
-              ref={refs.yAxisRef}
-              marginLeft={margin.left}
-              marginTop={margin.top}
-            >
-              <AxisLine
-                color="grayDarker"
-                x1={0}
-                x2={0}
-                y2={0}
-                y1={dims.chartHeight}
-              />
-            </ChartArea>
-          </>
-        )}
         <ChartArea
           ref={refs.areaRef}
           marginLeft={margin.left}

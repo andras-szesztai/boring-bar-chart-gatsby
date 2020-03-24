@@ -1,6 +1,7 @@
 import { colors, fontSize } from "../../themes/theme"
 
-const DATA_URL = "https://boring-barchart-gatsby.firebaseio.com/waste-management.json"
+const DATA_URL =
+  "https://boring-barchart-gatsby.firebaseio.com/waste-management.json"
 const CHART_MARGIN = { top: 10, right: 20, bottom: 25, left: 40 }
 
 export const COLOR_ARRAY = ["#de88a5", "#7a9eaf", "#655989"]
@@ -42,7 +43,7 @@ export const DROPDOWN_STYLES = {
         color: colors.grayDarkest,
       },
     }
-  },  
+  },
   dropdownIndicator: provided => {
     return {
       ...provided,
@@ -53,29 +54,21 @@ export const DROPDOWN_STYLES = {
       },
     }
   },
-  input: (provided, state) => {
-    console.log(
-      provided
-    );
-    console.log(
-      state
-    );
-    
+  input: provided => {
     return {
       ...provided,
-      fontWeight: 100
+      fontWeight: 100,
     }
   },
-  valueContainer: styles => ({
-    ...styles,
-    fontSize: fontSize[2]
+  valueContainer: provided => ({
+    ...provided,
+    fontSize: fontSize[2],
   }),
 }
 
 const WASTE_MANAGEMENT_CONSTANTS = {
   DATA_URL,
-  CHART_MARGIN
+  CHART_MARGIN,
 }
-
 
 export default WASTE_MANAGEMENT_CONSTANTS

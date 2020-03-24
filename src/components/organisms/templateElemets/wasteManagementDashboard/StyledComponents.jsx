@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components"
 
 import { GridContainer } from "../../../atoms"
+import { themifySpace } from "../../../../themes/mixins"
 
 const MainGrid = styled(GridContainer)`
   grid-column-gap: 5rem;
@@ -74,6 +75,7 @@ const bigScreenAreas = css`
 `
 
 const MainChartsContainer = styled(GridContainer)`
+  grid-column-gap: ${themifySpace(5)}px;
   @media (min-width: 450px) {
     ${smallScreenAreas}
   }
