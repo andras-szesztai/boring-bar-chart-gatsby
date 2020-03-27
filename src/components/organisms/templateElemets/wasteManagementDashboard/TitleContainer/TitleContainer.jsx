@@ -1,15 +1,16 @@
-import React, { useRef, useState, useEffect } from "react"
+import React, { useState } from "react"
 import Switch from "react-switch"
 import { IoMdInformationCircle } from "react-icons/io"
 import ReactTooltip from "react-tooltip"
 import styled from "styled-components"
+import { isBrowser, isMobile } from "react-device-detect"
 
 import { GridContainer, Title, FlexContainer } from "../../../../atoms"
 import { colors, transition } from "../../../../../themes/theme"
-import { CreditsContainer } from "../../../../molecules"
+import { CreditsContainer, ModalContainer } from "../../../../molecules"
 import { CREDIT_ELEMENTS } from "../../../../../constants/visualizing-europe/wasteManagement"
 import { themifyColor } from "../../../../../themes/mixins"
-import { usePrevious } from "../../../../../hooks"
+import { useModalToggle } from "../../../../../hooks"
 
 const IconContainer = styled(FlexContainer)`
   svg {
@@ -24,50 +25,54 @@ const IconContainer = styled(FlexContainer)`
   }
 `
 
+function InformationContainer(props) {
+  return (
+    <FlexContainer direction="column">
+      <FlexContainer
+        fontColor={props.color}
+        width="180px"
+        marginBottom={3}
+        bgColor="transparent"
+      >
+        Chart comment: Per Capita Municipal Waste is represented as a single
+        area chart, while Material Recycling and Composting are areas stacked
+        one upon the other.
+      </FlexContainer>
+      <CreditsContainer
+        direction="column"
+        elements={CREDIT_ELEMENTS}
+        absPos={false}
+        color={props.color}
+        linkColor={props.color}
+      />
+    </FlexContainer>
+  )
+}
+
 export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
-  const tooltipRef = useRef()
-  const [isOpen, setIsOpen] = useState(false)
-  const prevIsOpen = usePrevious(isOpen)
-  useEffect(() => {
-    if (!prevIsOpen && isOpen) {
-      ReactTooltip.show(tooltipRef.current)
-    }
-    if (prevIsOpen && !isOpen) {
-      ReactTooltip.hide(tooltipRef.current)
-    }
-  }, [isOpen, prevIsOpen])
+  const { shouldModalToggle, setShouldModalToggle } = useModalToggle()
+
   return (
     <>
-      <ReactTooltip
-        effect="solid"
-        place="bottom"
-        clickable
-        multiline
-        id="tooltip"
-        getContent={() => {
-          return (
-            <>
-              <FlexContainer
-                fontColor="#fff"
-                width="180px"
-                marginBottom={3}
-                bgColor="transparent"
-              >
-                Chart comment: Per Capita Municipal Waste is represented as a
-                single area chart, while Material Recycling and Composting are
-                areas stacked one upon the other.
-              </FlexContainer>
-              <CreditsContainer
-                direction="column"
-                elements={CREDIT_ELEMENTS}
-                absPos={false}
-                color="#fff"
-                linkColor="#fff"
-              />
-            </>
-          )
-        }}
-      />
+      {isBrowser && (
+        <ReactTooltip
+          effect="solid"
+          place="bottom"
+          clickable
+          multiline
+          id="tooltip"
+          getContent={() => <InformationContainer color="#fff" />}
+        />
+      )}
+      {isMobile && (
+        <ModalContainer
+          width="280px"
+          height="250px"
+          shouldToggle={shouldModalToggle}
+        >
+          <InformationContainer />
+        </ModalContainer>
+      )}
       <GridContainer
         columnGap={2}
         rows={isSmallScreen ? "2fr 1fr" : "min-content 1fr"}
@@ -86,10 +91,9 @@ export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
             </Title>
           </FlexContainer>
           <IconContainer
-            onClick={() => setIsOpen(prev => !prev)}
-            ref={tooltipRef}
             data-for="tooltip"
             data-tip=""
+            onClick={() => isMobile && setShouldModalToggle(true)}
           >
             <IoMdInformationCircle size={isSmallScreen ? 20 : 25} />
           </IconContainer>

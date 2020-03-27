@@ -16,6 +16,8 @@ export default function ModalContainer({
   minHeight,
   maxHeight,
 }) {
+  console.log(width, height);
+  
   const prevShouldToggle = usePrevious(shouldToggle)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -41,10 +43,6 @@ export default function ModalContainer({
         bgColor={colors.whiteDark}
         width={width}
         height={height}
-        minWidth={minWidth}
-        maxWidth={maxWidth}
-        minHeight={minHeight}
-        maxHeight={maxHeight}
         pos="relative"
         onClick={e => e.stopPropagation()}
       >
