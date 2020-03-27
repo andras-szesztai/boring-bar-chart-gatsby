@@ -1,18 +1,15 @@
-import React from "react"
+import React, { useRef, useState, useEffect } from "react"
 import Switch from "react-switch"
 import { IoMdInformationCircle } from "react-icons/io"
 import ReactTooltip from "react-tooltip"
 import styled from "styled-components"
 
-import {
-  GridContainer,
-  Title,
-  FlexContainer,
-} from "../../../../atoms"
+import { GridContainer, Title, FlexContainer } from "../../../../atoms"
 import { colors, transition } from "../../../../../themes/theme"
 import { CreditsContainer } from "../../../../molecules"
 import { CREDIT_ELEMENTS } from "../../../../../constants/visualizing-europe/wasteManagement"
 import { themifyColor } from "../../../../../themes/mixins"
+import { usePrevious } from "../../../../../hooks"
 
 const IconContainer = styled(FlexContainer)`
   svg {
@@ -28,6 +25,17 @@ const IconContainer = styled(FlexContainer)`
 `
 
 export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
+  const tooltipRef = useRef()
+  const [isOpen, setIsOpen] = useState(false)
+  const prevIsOpen = usePrevious(isOpen)
+  useEffect(() => {
+    if (!prevIsOpen && isOpen) {
+      ReactTooltip.show(tooltipRef.current)
+    }
+    if (prevIsOpen && !isOpen) {
+      ReactTooltip.hide(tooltipRef.current)
+    }
+  }, [isOpen, prevIsOpen])
   return (
     <>
       <ReactTooltip
@@ -77,7 +85,12 @@ export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
               State of Waste in Europe
             </Title>
           </FlexContainer>
-          <IconContainer data-for="tooltip" data-tip="">
+          <IconContainer
+            onClick={() => setIsOpen(prev => !prev)}
+            ref={tooltipRef}
+            data-for="tooltip"
+            data-tip=""
+          >
             <IoMdInformationCircle size={isSmallScreen ? 20 : 25} />
           </IconContainer>
         </GridContainer>

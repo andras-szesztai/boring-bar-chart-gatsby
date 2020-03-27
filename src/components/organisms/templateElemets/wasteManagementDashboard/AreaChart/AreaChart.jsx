@@ -68,7 +68,6 @@ export default function AreaChart(props) {
       isInit: true,
       color: COLOR_ARRAY[0],
       accessor: "waste",
-      withBorder: true,
     })
     createUpdateSingleArea({
       isInit: true,
@@ -167,15 +166,9 @@ export default function AreaChart(props) {
     color,
     accessor,
     duration = transition.lgNum,
-    withBorder,
   }) {
     const { yScale, xScale, chartArea } = storedValues.current
     const t = makeTransition(chartArea, duration)
-    const areaGeneratorZero = area()
-      .x(d => xScale(d.year))
-      .y0(yScale(0))
-      .y1(yScale(0))
-      .curve(curveMonotoneX)
     const areaGenerator = area()
       .curve(curveMonotoneX)
       .x(d => xScale(d.year))
@@ -189,10 +182,6 @@ export default function AreaChart(props) {
         .attr("class", accessor)
         .attr("fill", color)
         .attr("stroke", chroma(color).darken(1))
-        .attr("d", areaGeneratorZero)
-      chartArea
-        .select(`.${accessor}`)
-        .transition(t)
         .attr("d", areaGenerator)
     }
 
@@ -281,34 +270,36 @@ export default function AreaChart(props) {
   })
 
   return (
-    <ChartWrapper ref={refs.wrapperRef}>
-      {withLabel && (
-        <Container absPos left={margin.left - 1} top={0}>
-          {value}
-        </Container>
-      )}
-      {props.isHoverable && (
-        <ChartTooltip
-          width={dims.chartWidth}
-          data={hoveredData}
-          margin={margin}
-          storedValues={storedValues}
-          metric={metric}
-        />
-      )}
-      <ChartSvg
-        absPos
-        ref={refs.svgRef}
-        width={dims.width}
-        height={dims.height}
-      >
-        <ChartArea
-          ref={refs.areaRef}
-          marginLeft={margin.left}
-          marginTop={margin.top}
-        />
-      </ChartSvg>
-    </ChartWrapper>
+    <>
+      <ChartWrapper ref={refs.wrapperRef}>
+        {withLabel && (
+          <Container absPos left={margin.left - 1} top={0}>
+            {value}
+          </Container>
+        )}
+        {props.isHoverable && (
+          <ChartTooltip
+            width={dims.chartWidth}
+            data={hoveredData}
+            margin={margin}
+            storedValues={storedValues}
+            metric={metric}
+          />
+        )}
+        <ChartSvg
+          absPos
+          ref={refs.svgRef}
+          width={dims.width}
+          height={dims.height}
+        >
+          <ChartArea
+            ref={refs.areaRef}
+            marginLeft={margin.left}
+            marginTop={margin.top}
+          />
+        </ChartSvg>
+      </ChartWrapper>
+    </>
   )
 }
 

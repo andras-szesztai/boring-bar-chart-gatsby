@@ -67,14 +67,20 @@ export function createUpdateDelaunayCircles({
           .style("pointer-events", "all")
           .on("mouseover", handleMouseover)
           .on("mouseout", handleMouseout)
-          .on("click", handleDelaunayClick && handleDelaunayClick)
+          .on(
+            "click",
+            handleDelaunayClick ? handleDelaunayClick : handleMouseover
+          )
           .call(enter => enter),
       update =>
         update
           .attr("clip-path", d => `url(#clip-${makeID(d)})`)
           .on("mouseover", handleMouseover)
           .on("mouseout", handleMouseout)
-          .on("click", handleDelaunayClick && handleDelaunayClick)
+          .on(
+            "click",
+            handleDelaunayClick ? handleDelaunayClick : handleMouseover
+          )
           .call(update =>
             update
               .attr("cx", setXPos)

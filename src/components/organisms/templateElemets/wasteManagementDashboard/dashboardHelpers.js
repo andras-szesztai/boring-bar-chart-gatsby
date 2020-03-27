@@ -1,4 +1,4 @@
-const makeDate = num => new Date(`MM/dd/${num}`)
+const makeDate = num => new Date(num,1,1)
 export function getAbsData(data) {
   return data.map(el => ({
     ...el,

@@ -1,5 +1,10 @@
 import React, { useState } from "react"
-import styled from "styled-components"
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 
 import { FlexContainer, GridContainer } from "../../atoms"
 import { useWindowDimensions } from "../../../hooks"
@@ -29,9 +34,16 @@ export default function WasteManagemetDashboard({
     isSmallScreen = true
   }
 
+  if(isBrowser){
+    console.log('browser')
+  }
   return (
     <>
       <FlexContainer fullScreen>
+        {/* <div>{BrowserView.toString()}</div>
+        <div>{MobileView.toString()}</div>
+        <div>{isBrowser.toString()}</div>
+        <div>{isMobile.toString()}</div> */}
         <FullScreenLoader loading={loading} />
         <MainGrid maxWidth="1400px">
           <MainChartsContainer>
