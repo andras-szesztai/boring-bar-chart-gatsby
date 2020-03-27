@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import Switch from "react-switch"
 import { IoMdInformationCircle } from "react-icons/io"
 import ReactTooltip from "react-tooltip"
@@ -7,10 +7,22 @@ import { isBrowser, isMobile } from "react-device-detect"
 
 import { GridContainer, Title, FlexContainer } from "../../../../atoms"
 import { colors, transition } from "../../../../../themes/theme"
-import { CreditsContainer, ModalContainer } from "../../../../molecules"
+import { CreditsContainer } from "../../../../molecules"
 import { CREDIT_ELEMENTS } from "../../../../../constants/visualizing-europe/wasteManagement"
 import { themifyColor } from "../../../../../themes/mixins"
-import { useModalToggle } from "../../../../../hooks"
+
+import Modal from "react-modal"
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+}
 
 const IconContainer = styled(FlexContainer)`
   svg {
@@ -50,29 +62,27 @@ function InformationContainer(props) {
 }
 
 export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
-  const { shouldModalToggle, setShouldModalToggle } = useModalToggle()
-
+  const [modalIsOpen, setIsOpen] = React.useState(false)
   return (
     <>
-      {isBrowser && (
-        <ReactTooltip
-          effect="solid"
-          place="bottom"
-          clickable
-          multiline
-          id="tooltip"
-          getContent={() => <InformationContainer color="#fff" />}
-        />
-      )}
       {isMobile && (
-        <ModalContainer
-          width="280px"
-          height="250px"
-          shouldToggle={shouldModalToggle}
+        <Modal
+          isOpen={modalIsOpen}
+          style={customStyles}
+          onRequestClose={() => setIsOpen(false)}
+          contentLabel="Example Modal"
         >
-          <InformationContainer />
-        </ModalContainer>
+          <InformationContainer color={colors.grayDarkest} />
+        </Modal>
       )}
+      <ReactTooltip
+        effect="solid"
+        place="bottom"
+        clickable
+        multiline
+        id="tooltip"
+        getContent={() => <InformationContainer color="#fff" />}
+      />
       <GridContainer
         columnGap={2}
         rows={isSmallScreen ? "2fr 1fr" : "min-content 1fr"}
@@ -93,7 +103,7 @@ export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
           <IconContainer
             data-for="tooltip"
             data-tip=""
-            onClick={() => isMobile && setShouldModalToggle(true)}
+            onClick={() => isMobile && setIsOpen(true)}
           >
             <IoMdInformationCircle size={isSmallScreen ? 20 : 25} />
           </IconContainer>

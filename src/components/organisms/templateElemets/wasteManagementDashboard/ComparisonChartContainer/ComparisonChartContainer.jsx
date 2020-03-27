@@ -63,6 +63,7 @@ export default function ComparisonChartContainer({
                 label: selectedCountry,
               }
             }
+            isSearchable={false}
             onChange={v =>
               v ? setSelectedCountry(v.label) : setSelectedCountry(undefined)
             }
@@ -76,7 +77,7 @@ export default function ComparisonChartContainer({
       </GridContainer>
       {!selectedCountry ? (
         <FlexContainer>
-          <GridContainer rows="repeat(2, min-content)" lineHeight={1.6}>
+          <GridContainer rows="repeat(2, min-content)" lineHeight={1.75}>
             <FlexContainer justify="flex-start">
               <div>
                 In the European Union, the amount of{" "}

@@ -8,8 +8,8 @@ import { COLOR_ARRAY } from "../../../../../constants/visualizing-europe/wasteMa
 const TooltipContainer = styled(FlexContainer)`
   :after {
     top: 100%;
-    left: ${props => props.isLeft && 19}px;
-    right: ${props => !props.isLeft && 11}px;
+    left: ${props => props.isLeft && 14}px;
+    right: ${props => !props.isLeft && 7}px;
     border: solid transparent;
     content: " ";
     height: 0;
@@ -39,7 +39,7 @@ export default function ChartTooltip({
       absPos
       left={
         xScale(data.data[0].year) -
-        (xScale(data.data[0].year) <= halfWidth ? 20 : 120) +
+        (xScale(data.data[0].year) <= halfWidth ? 15 : 123) +
         margin.left
       }
       isLeft={xScale(data.data[0].year) <= halfWidth}
