@@ -2,7 +2,15 @@ import React from "react"
 import Switch from "react-switch"
 import { IoMdInformationCircle } from "react-icons/io"
 import ReactTooltip from "react-tooltip"
-import { MobileView, BrowserView } from "react-device-detect"
+import {
+  MobileView,
+  BrowserView,
+  withOrientationChange,
+  isMobile,
+  isMobileOnly,
+  isTablet,
+  isBrowser
+} from "react-device-detect"
 import Modal from "react-modal"
 
 import { GridContainer, Title, FlexContainer } from "../../../../atoms"
@@ -38,8 +46,17 @@ function InformationContainer(props) {
   )
 }
 
-export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
+function TitleContainer({
+  metric,
+  setMetric,
+  isSmallScreen,
+  isLandscape,
+  isPortrait,
+}) {
   const [modalIsOpen, setIsOpen] = React.useState(false)
+  console.log("isLandscape", isLandscape)
+  console.log("isPortrait", isPortrait)
+
   return (
     <>
       <GridContainer
@@ -137,3 +154,5 @@ export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
     </>
   )
 }
+
+export default withOrientationChange(TitleContainer)
