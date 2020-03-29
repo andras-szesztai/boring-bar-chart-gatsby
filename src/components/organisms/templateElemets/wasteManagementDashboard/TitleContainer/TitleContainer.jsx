@@ -3,7 +3,7 @@ import Switch from "react-switch"
 import { IoMdInformationCircle } from "react-icons/io"
 import ReactTooltip from "react-tooltip"
 import styled from "styled-components"
-import { isBrowser, isMobile } from "react-device-detect"
+import { BrowserView, MobileView, isMobile } from "react-device-detect"
 
 import { GridContainer, Title, FlexContainer } from "../../../../atoms"
 import { colors, transition } from "../../../../../themes/theme"
@@ -37,6 +37,8 @@ const IconContainer = styled(FlexContainer)`
   }
 `
 
+Modal.setAppElement("#___gatsby")
+
 function InformationContainer(props) {
   return (
     <FlexContainer direction="column">
@@ -65,29 +67,32 @@ export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
   const [modalIsOpen, setIsOpen] = React.useState(false)
   return (
     <>
-      {isMobile && (
-        <Modal
-          isOpen={modalIsOpen}
-          style={customStyles}
-          onRequestClose={() => setIsOpen(false)}
-          contentLabel="Example Modal"
-        >
-          <InformationContainer color={colors.grayDarkest} />
-        </Modal>
+      {BrowserView && !isMobile && (
+        <ReactTooltip
+          effect="solid"
+          place="bottom"
+          clickable
+          multiline
+          id="tooltip"
+          getContent={() => <InformationContainer color="#fff" />}
+        />
       )}
-      <ReactTooltip
-        effect="solid"
-        place="bottom"
-        clickable
-        multiline
-        id="tooltip"
-        getContent={() => <InformationContainer color="#fff" />}
-      />
       <GridContainer
         columnGap={2}
         rows={isSmallScreen ? "2fr 1fr" : "min-content 1fr"}
         gridArea="title"
+        id="main-grid"
       >
+        {MobileView && isMobile && (
+          <Modal
+            isOpen={modalIsOpen}
+            style={customStyles}
+            onRequestClose={() => setIsOpen(false)}
+            contentLabel="Example Modal"
+          >
+            <InformationContainer color={colors.grayDarkest} />
+          </Modal>
+        )}
         <GridContainer
           rows={isSmallScreen && "1fr 1fr"}
           columns={!isSmallScreen && "2fr 1fr"}
@@ -100,13 +105,19 @@ export default function TitleContainer({ metric, setMetric, isSmallScreen }) {
               State of Waste in Europe
             </Title>
           </FlexContainer>
-          <IconContainer
-            data-for="tooltip"
-            data-tip=""
-            onClick={() => isMobile && setIsOpen(true)}
-          >
-            <IoMdInformationCircle size={isSmallScreen ? 20 : 25} />
-          </IconContainer>
+          {MobileView && isMobile && (
+            <IconContainer onClick={() => setIsOpen(true)}>
+              <IoMdInformationCircle size={isSmallScreen ? 20 : 25} />
+            </IconContainer>
+          )}
+          {BrowserView && !isMobile && (
+            <IconContainer data-for="tooltip" data-tip="">
+              <IoMdInformationCircle
+                color={colors.grayDarkest}
+                size={isSmallScreen ? 20 : 25}
+              />
+            </IconContainer>
+          )}
         </GridContainer>
         <FlexContainer justify={isSmallScreen ? "center" : "flex-start"}>
           <FlexContainer>

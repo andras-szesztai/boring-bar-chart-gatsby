@@ -23,7 +23,7 @@ export default function WasteManagemetDashboard({
   let isSmallScreen
   if (
     (windowWidth && windowWidth <= 450 && windowHeight <= 850) ||
-    (windowHeight <= 450 && windowWidth <= 850)
+    (windowHeight <= 800 && windowWidth <= 850)
   ) {
     isSmallScreen = true
   }
