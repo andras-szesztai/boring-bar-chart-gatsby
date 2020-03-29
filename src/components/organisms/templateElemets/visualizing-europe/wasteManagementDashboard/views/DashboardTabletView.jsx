@@ -1,13 +1,14 @@
 import React from "react"
 import { withOrientationChange } from "react-device-detect"
 import styled from "styled-components"
-
-import { GridContainer } from "../../../../atoms"
+import { GridContainer } from "../../../../../atoms"
 import DashboardTitle from "../DashboardTitle/DashboardTitle"
 import DashboardExplainer from "../DashboardExplainer/DashboardExplainer"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import BigChartsContainer from "../BigChartsContainer/BigChartsContainer"
 import SubChartsContainer from "../SubChartsContainer/SubChartsContainer"
+
+
 
 const MainGridLandScape = styled(GridContainer)`
   width: 96%;

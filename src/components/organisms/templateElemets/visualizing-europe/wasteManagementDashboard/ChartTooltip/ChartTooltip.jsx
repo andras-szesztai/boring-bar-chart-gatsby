@@ -1,9 +1,10 @@
 import React from "react"
 import styled from "styled-components"
 
-import { space, colors } from "../../../../../themes/theme"
-import { FlexContainer, Title } from "../../../../atoms"
-import { COLOR_ARRAY } from "../../../../../constants/visualizing-europe/wasteManagement"
+import { FlexContainer, Title } from "../../../../../atoms"
+import { colors, space } from "../../../../../../themes/theme"
+import { COLOR_ARRAY } from "../../../../../../constants/visualizing-europe/wasteManagement"
+
 
 const TooltipContainer = styled(FlexContainer)`
   :after {
@@ -59,7 +60,7 @@ export default function ChartTooltip({
       paddingBottom={1}
     >
       <>
-        <FlexContainer fullSize>
+        <FlexContainer fullSize withBorder>
           <Title fontWeight="medium">{data.data[0].yearString}</Title>
         </FlexContainer>
         {data.data.map((el, i) => {
@@ -71,7 +72,18 @@ export default function ChartTooltip({
           return shouldHide ? (
             <div />
           ) : (
-            <FlexContainer key={el.metric} fullSize justify="space-between">
+            <FlexContainer
+              key={el.metric}
+              fullSize
+              justify="space-between"
+              withBorder
+              style={{ borderBottom: "1px solid black" }}
+              // withBorderBottom={{
+              //   thickness: 1,
+              //   color: colors.gray,
+              //   style: "solid",
+              // }}
+            >
               <Title fontWeight="medium" color={COLOR_ARRAY[i]}>
                 {el.metric}:
               </Title>

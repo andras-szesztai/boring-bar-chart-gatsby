@@ -7,20 +7,16 @@ import "d3-transition"
 import { interpolatePath } from "d3-interpolate-path"
 import chroma from "chroma-js"
 import _ from "lodash"
-
-import {
-  useChartRefs,
-  useDimensions,
-  useInitUpdate,
-  usePrevious,
-} from "../../../../../hooks"
-import { ChartWrapper, ChartSvg, ChartArea, Container } from "../../../../atoms"
-import { transition, colors } from "../../../../../themes/theme"
-import { makeTransition } from "../../../../../utils/chartHelpers"
-import { createUpdateDelaunayCircles } from "../../../../../utils/svgElementHelpers"
-import ChartTooltip from "../ChartTooltip/ChartTooltip"
-import { COLOR_ARRAY } from "../../../../../constants/visualizing-europe/wasteManagement"
 import { format } from "d3-format"
+
+import { useChartRefs, usePrevious, useDimensions, useInitUpdate } from "../../../../../../hooks"
+import { COLOR_ARRAY } from "../../../../../../constants/visualizing-europe/wasteManagement"
+import { colors } from "../../../../../../themes/theme"
+import { transition } from "d3-transition"
+import { makeTransition } from "../../../../../../utils/chartHelpers"
+import { createUpdateDelaunayCircles } from "../../../../../../utils/svgElementHelpers"
+import { ChartWrapper, Container, ChartSvg, ChartArea } from "../../../../../atoms"
+import ChartTooltip from "../ChartTooltip/ChartTooltip"
 
 const yDomain = {
   abs: [0, 850],

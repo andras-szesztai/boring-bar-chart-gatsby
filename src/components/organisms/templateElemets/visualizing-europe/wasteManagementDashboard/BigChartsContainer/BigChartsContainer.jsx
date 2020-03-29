@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react"
 import ComparisonChartContainer from "../ComparisonChartContainer/ComparisonChartContainer"
-import { GridContainer, FlexContainer, Title } from "../../../../atoms"
+import { GridContainer, FlexContainer, Title } from "../../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
-import { usePrevious } from "../../../../../hooks"
+import { usePrevious } from "../../../../../../hooks"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
+
+
 
 export default function BigChartsContainer({
   selectedCountry,

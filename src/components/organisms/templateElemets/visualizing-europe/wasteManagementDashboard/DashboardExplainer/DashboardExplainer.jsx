@@ -5,11 +5,11 @@ import ReactTooltip from "react-tooltip"
 import styled from "styled-components"
 import { IoMdInformationCircle } from "react-icons/io"
 
-import { FlexContainer } from "../../../../atoms"
-import { CreditsContainer } from "../../../../molecules"
-import { CREDIT_ELEMENTS } from "../../../../../constants/visualizing-europe/wasteManagement"
-import { colors, transition } from "../../../../../themes/theme"
-import { themifyColor } from "../../../../../themes/mixins"
+import { FlexContainer } from "../../../../../atoms"
+import { CreditsContainer } from "../../../../../molecules"
+import { CREDIT_ELEMENTS } from "../../../../../../constants/visualizing-europe/wasteManagement"
+import { colors, transition } from "../../../../../../themes/theme"
+import { themifyColor } from "../../../../../../themes/mixins"
 
 export const customStyles = {
   content: {

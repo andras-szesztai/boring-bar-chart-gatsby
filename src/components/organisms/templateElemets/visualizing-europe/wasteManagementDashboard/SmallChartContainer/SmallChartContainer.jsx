@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react"
 import { isMobile } from "react-device-detect"
 
-import { FlexContainer } from "../../../../atoms"
-import { usePrevious } from "../../../../../hooks"
-import { AreaChart } from ".."
-import { getPercentageData, getAbsData } from "../dashboardHelpers"
+import { usePrevious } from "../../../../../../hooks"
+import { getAbsData, getPercentageData } from "../dashboardHelpers"
+import { FlexContainer } from "../../../../../atoms"
+import AreaChart from "../AreaChart/AreaChart"
+
+
 
 export default function SmallChartContainer({
   value,

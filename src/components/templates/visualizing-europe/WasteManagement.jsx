@@ -8,7 +8,7 @@ import {
   DashboardMobileView,
   DashboardTabletView,
   DashboardBrowserView,
-} from "../../organisms/templateElemets/wasteManagementDashboard/views"
+} from "../../organisms/templateElemets/visualizing-europe/wasteManagementDashboard/views"
 
 export default function WasteManagemetDashboard({
   data,

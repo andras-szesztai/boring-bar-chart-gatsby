@@ -1,6 +1,9 @@
 import React from "react"
-import { GridContainer } from "../../../../atoms"
+
+import { GridContainer } from "../../../../../atoms"
 import SmallChartContainer from "../SmallChartContainer/SmallChartContainer"
+
+
 
 export default function SubChartsContainer({
   countryList,

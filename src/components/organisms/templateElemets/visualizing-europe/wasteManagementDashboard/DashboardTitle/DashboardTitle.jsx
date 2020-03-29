@@ -1,5 +1,5 @@
 import React from "react"
-import { FlexContainer, Title } from "../../../../atoms"
+import { FlexContainer, Title } from "../../../../../atoms"
 
 export default function DashboardTitle({ justify }) {
   return (

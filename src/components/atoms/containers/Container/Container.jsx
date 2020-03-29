@@ -36,7 +36,7 @@ const Container = styled.div`
     marginLeft,
     marginRight,
     paddingTop,
-    lineHeight
+    lineHeight,
   }) => css`
     grid-area: ${gridArea};
     text-align: ${textAlign};
@@ -121,6 +121,12 @@ const Container = styled.div`
     withBorder &&
     css`
       border: 1px solid gray;
+    `}
+
+  ${({ withBorderBottom }) =>
+    withBorderBottom &&
+    css`
+      border-bottom: 1px solid black;
     `}
   
   ${({ noPointerEvents }) =>

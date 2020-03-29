@@ -3,13 +3,13 @@ import { scaleBand } from "d3-scale"
 import { select } from "d3-selection"
 import chroma from "chroma-js"
 import "d3-transition"
-
-import { ChartStarter } from "../../../molecules/charts"
-import { useChartRefs, useDimensions, useInitUpdate } from "../../../../hooks"
-import { COUNTRY_ORDER } from "../../../../constants/trustBiases"
-import { colors, transition } from "../../../../themes/theme"
 import { interpolateString } from "d3-interpolate"
 import { easeCubicInOut } from "d3-ease"
+
+import { ChartStarter } from "../../../../molecules/charts"
+import { useChartRefs, useDimensions, useInitUpdate } from "../../../../../hooks"
+import { COUNTRY_ORDER } from "../../../../../constants/trustBiases"
+import { colors, transition } from "../../../../../themes/theme"
 
 const { smNum } = transition
 

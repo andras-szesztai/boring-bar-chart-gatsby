@@ -15,7 +15,7 @@ import {
   ExpContainerLeft,
   ExpContainerRight,
   HintContainer,
-} from "../../organisms/templateElemets/trustBiasesDashboard"
+} from "../../organisms/templateElemets/economist-graphic-detail/trustBiasesDashboard"
 import {
   COUNTRY_ORDER,
   TEXTS,

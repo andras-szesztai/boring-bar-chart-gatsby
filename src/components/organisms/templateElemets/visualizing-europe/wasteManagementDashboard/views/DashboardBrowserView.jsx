@@ -1,12 +1,12 @@
 import React from "react"
 import styled from "styled-components"
-
-import { GridContainer } from "../../../../atoms"
+import { GridContainer } from "../../../../../atoms"
 import DashboardTitle from "../DashboardTitle/DashboardTitle"
 import DashboardExplainer from "../DashboardExplainer/DashboardExplainer"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import BigChartsContainer from "../BigChartsContainer/BigChartsContainer"
 import SubChartsContainer from "../SubChartsContainer/SubChartsContainer"
+
 
 const MainGrid = styled(GridContainer)`
   height: 96%;

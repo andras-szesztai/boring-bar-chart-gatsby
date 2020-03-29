@@ -1,8 +1,8 @@
 import React from "react"
 import chroma from "chroma-js"
 
-import { GridContainer, FlexContainer, ColoredSpan } from "../../../atoms"
-import { COLOR_RANGE } from "../../../../constants/trustBiases"
+import { GridContainer, FlexContainer, ColoredSpan } from "../../../../atoms"
+import { COLOR_RANGE } from "../../../../../constants/trustBiases"
 
 export default function ColoredRects({
   currHovered,

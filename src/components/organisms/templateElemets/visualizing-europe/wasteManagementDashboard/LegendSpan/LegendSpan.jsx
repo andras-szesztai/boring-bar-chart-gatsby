@@ -1,7 +1,8 @@
 import React from "react"
 import chroma from "chroma-js"
 
-import { ColoredSpan } from "../../../../atoms"
+import { ColoredSpan } from "../../../../../atoms"
+
 
 export default function LegendSpan({ color, children, textColor }) {
   return (

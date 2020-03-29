@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components"
 
-import { themifyFontSize } from "../../../../themes/mixins"
-import { GridContainer, FlexContainer } from "../../../atoms"
+import { themifyFontSize } from "../../../../../themes/mixins"
+import { GridContainer, FlexContainer } from "../../../../atoms"
 
 export const MainContainer = styled(GridContainer)`
   height: 700px;

@@ -10,8 +10,9 @@ export default function useUniqValuesList(data, accessor, toFilterArray = []) {
           data
             .filter(d => !toFilterArray.includes(d[accessor]))
             .map(d => d[accessor])
+
         ),
-      ])
+      ].sort((a, b) => a.localeCompare(b)))
     }
   }, [uniqValuesList, data, accessor, toFilterArray])
 
