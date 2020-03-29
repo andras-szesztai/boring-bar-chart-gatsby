@@ -1,6 +1,6 @@
 import React from "react"
 import Modal from "react-modal"
-import { isMobile, isBrowser } from "react-device-detect"
+import { MobileView, BrowserView } from "react-device-detect"
 import ReactTooltip from "react-tooltip"
 import styled from "styled-components"
 import { IoMdInformationCircle } from "react-icons/io"
@@ -67,7 +67,7 @@ export default function DashboardExplainer() {
 
   return (
     <FlexContainer gridArea="helper">
-      {isMobile && (
+      <MobileView>
         <FlexContainer>
           <Modal
             isOpen={modalIsOpen}
@@ -81,8 +81,8 @@ export default function DashboardExplainer() {
             <IoMdInformationCircle size={20} />
           </IconContainer>
         </FlexContainer>
-      )}
-      {isBrowser && (
+      </MobileView>
+      <BrowserView>
         <FlexContainer>
           <ReactTooltip
             effect="solid"
@@ -96,7 +96,7 @@ export default function DashboardExplainer() {
             <IoMdInformationCircle size={25} />
           </IconContainer>
         </FlexContainer>
-      )}
+      </BrowserView>
     </FlexContainer>
   )
 }

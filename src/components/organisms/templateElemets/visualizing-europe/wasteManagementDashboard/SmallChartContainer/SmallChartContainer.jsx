@@ -30,26 +30,24 @@ export default function SmallChartContainer({
   }, [chartData, data, metric, prevMetric])
 
   return (
-    <>
+    <FlexContainer
+      pos="relative"
+      onClick={() => selectedValue !== value && setSelected(value)}
+      cursor={!isSelected ? "pointer" : "auto"}
+    >
       <FlexContainer
-        pos="relative"
-        onClick={() => selectedValue !== value && setSelected(value)}
-        cursor={!isSelected ? "pointer" : "auto"}
-      >
-        <FlexContainer
-          absPos
-          hoverable={!isMobile}
-          zIndex={!isMobile && "hoverOverlay"}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          bgColor={isHovered && !isSelected && "grayLightest"}
-          borderRadius={1}
-          fullSize
-          opacity={!isSelected ? 0.25 : 1}
-          borderColor={isSelected && "grayLightest"}
-        />
-        <AreaChart data={chartData} metric={metric} value={value} withLabel />
-      </FlexContainer>
-    </>
+        absPos
+        hoverable={!isMobile}
+        zIndex={!isMobile && "hoverOverlay"}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        bgColor={isHovered && !isSelected && "grayLightest"}
+        borderRadius={1}
+        fullSize
+        opacity={!isSelected ? 0.25 : 1}
+        borderColor={isSelected && "grayLightest"}
+      />
+      <AreaChart data={chartData} metric={metric} value={value} withLabel />
+    </FlexContainer>
   )
 }

@@ -24,7 +24,6 @@ export default function FullScreenLoader({
     <>
       {(loading || parentLoading) && (
         <FlexContainer
-          fullSize
           fullScreen
           top={0}
           absPos

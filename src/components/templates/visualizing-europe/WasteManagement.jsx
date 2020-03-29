@@ -29,7 +29,11 @@ export default function WasteManagemetDashboard({
   }
 
   return (
-    <FlexContainer width={`${windowWidth}px`} height={`${windowHeight}px`}>
+    <FlexContainer
+      fullScreen={isMobileOnly}
+      width={!isMobileOnly && `${windowWidth}px`}
+      height={!isMobileOnly && `${windowHeight}px`}
+    >
       <FullScreenLoader loading={loading} />
       {isMobileOnly && <DashboardMobileView {...viewProps} />}
       {isTablet && <DashboardTabletView {...viewProps} />}
