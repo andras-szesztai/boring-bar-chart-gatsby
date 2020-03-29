@@ -5,7 +5,6 @@ import { FlexContainer, Title } from "../../../../../atoms"
 import { colors, space } from "../../../../../../themes/theme"
 import { COLOR_ARRAY } from "../../../../../../constants/visualizing-europe/wasteManagement"
 
-
 const TooltipContainer = styled(FlexContainer)`
   :after {
     top: 100%;
@@ -60,7 +59,7 @@ export default function ChartTooltip({
       paddingBottom={1}
     >
       <>
-        <FlexContainer fullSize withBorder>
+        <FlexContainer fullSize>
           <Title fontWeight="medium">{data.data[0].yearString}</Title>
         </FlexContainer>
         {data.data.map((el, i) => {
@@ -68,21 +67,18 @@ export default function ChartTooltip({
             i === 1
               ? el.metricValue - data.data[i + 1].metricValue
               : el.metricValue
-          const shouldHide = i === 0 && isPerc
-          return shouldHide ? (
-            <div />
-          ) : (
+          return (
             <FlexContainer
               key={el.metric}
               fullSize
               justify="space-between"
-              withBorder
-              style={{ borderBottom: "1px solid black" }}
-              // withBorderBottom={{
-              //   thickness: 1,
-              //   color: colors.gray,
-              //   style: "solid",
-              // }}
+              withBorderBottom={
+                !i && {
+                  thickness: 1,
+                  color: colors.gray,
+                  style: "solid",
+                }
+              }
             >
               <Title fontWeight="medium" color={COLOR_ARRAY[i]}>
                 {el.metric}:

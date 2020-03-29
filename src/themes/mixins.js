@@ -6,7 +6,7 @@ function createThemify(path) {
   }
 }
 
-export function themifyColor(color = "white") {
+export function themifyColor(color = "transparent") {
   if(theme.colors[color]){
     return theme.colors[color]
   }

@@ -126,7 +126,8 @@ const Container = styled.div`
   ${({ withBorderBottom }) =>
     withBorderBottom &&
     css`
-      border-bottom: 1px solid black;
+      border-bottom: ${withBorderBottom.thickness}px
+        ${withBorderBottom.style || "solid"} ${withBorderBottom.color};
     `}
   
   ${({ noPointerEvents }) =>
