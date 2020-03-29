@@ -9,12 +9,22 @@ import chroma from "chroma-js"
 import _ from "lodash"
 import { format } from "d3-format"
 
-import { useChartRefs, usePrevious, useDimensions, useInitUpdate } from "../../../../../../hooks"
+import {
+  useChartRefs,
+  usePrevious,
+  useDimensions,
+  useInitUpdate,
+} from "../../../../../../hooks"
 import { COLOR_ARRAY } from "../../../../../../constants/visualizing-europe/wasteManagement"
 import { colors, transition } from "../../../../../../themes/theme"
 import { makeTransition } from "../../../../../../utils/chartHelpers"
 import { createUpdateDelaunayCircles } from "../../../../../../utils/svgElementHelpers"
-import { ChartWrapper, Container, ChartSvg, ChartArea } from "../../../../../atoms"
+import {
+  ChartWrapper,
+  Container,
+  ChartSvg,
+  ChartArea,
+} from "../../../../../atoms"
 import ChartTooltip from "../ChartTooltip/ChartTooltip"
 
 const yDomain = {
@@ -241,9 +251,7 @@ export default function AreaChart(props) {
             .attr("y", d => yScale(d))
             .attr("dy", 3)
             .attr("x", dims.chartWidth / 2)
-            .text(getText)
-            .attr("opacity", 0)
-            .call(enter => enter.transition(t).attr("opacity", 1)),
+            .text(getText),
         update =>
           update.call(update =>
             update
