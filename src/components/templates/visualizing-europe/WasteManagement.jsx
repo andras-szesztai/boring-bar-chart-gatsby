@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { isMobileOnly, isTablet, isBrowser } from "react-device-detect"
+import _ from "lodash"
 
 import { FlexContainer } from "../../atoms"
 import { useWindowDimensions } from "../../../hooks"
@@ -9,6 +10,7 @@ import {
   DashboardTabletView,
   DashboardBrowserView,
 } from "../../organisms/templateElemets/visualizing-europe/wasteManagementDashboard/views"
+import { COLOR_ARRAY } from "../../../constants/visualizing-europe/wasteManagement"
 
 export default function WasteManagemetDashboard({
   data,
@@ -28,16 +30,28 @@ export default function WasteManagemetDashboard({
     setSelectedCountry,
   }
 
+  const loaderColor = COLOR_ARRAY[_.random(-1, 3)]
+
   return (
-    <FlexContainer
-      fullScreen={isMobileOnly}
-      width={!isMobileOnly && `${windowWidth}px`}
-      height={!isMobileOnly && `${windowHeight}px`}
-    >
-      <FullScreenLoader loading={loading} />
-      {isMobileOnly && <DashboardMobileView {...viewProps} />}
-      {isTablet && <DashboardTabletView {...viewProps} />}
-      {isBrowser && <DashboardBrowserView {...viewProps} />}
-    </FlexContainer>
+    <>
+      {(isTablet || isBrowser) && (
+        <FlexContainer width={`${windowWidth}px`} height={`${windowHeight}px`}>
+          <FullScreenLoader loading={loading} loaderColor={loaderColor} />
+          {isTablet && <DashboardTabletView {...viewProps} />}
+          {isBrowser && <DashboardBrowserView {...viewProps} />}
+        </FlexContainer>
+      )}
+      {isMobileOnly && (
+        <FlexContainer fullScreen>
+          <FullScreenLoader
+            loading={loading}
+            loader="circle"
+            loaderSize={80}
+            loaderColor={loaderColor}
+          />
+          <DashboardMobileView {...viewProps} />
+        </FlexContainer>
+      )}
+    </>
   )
 }

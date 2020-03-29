@@ -16,8 +16,6 @@ export default function Dashboard() {
   const countryList = useUniqValuesList(response, "country", ["EU 28"])
   const grouppedData = useGrouppedData(response, "country")
 
-  console.log(countryList);
-
   return (
     <>
       <Helmet title="Waste Management in Europe" />

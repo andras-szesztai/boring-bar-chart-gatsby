@@ -11,12 +11,7 @@ export default function ModalContainer({
   width,
   height,
   children,
-  minWidth,
-  maxWidth,
-  minHeight,
-  maxHeight,
 }) {
-  console.log(width, height);
   
   const prevShouldToggle = usePrevious(shouldToggle)
   const [isOpen, setIsOpen] = useState(false)

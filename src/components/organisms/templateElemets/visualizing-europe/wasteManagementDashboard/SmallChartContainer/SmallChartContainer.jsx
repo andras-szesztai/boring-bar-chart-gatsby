@@ -47,7 +47,7 @@ export default function SmallChartContainer({
         borderRadius={1}
         fullSize
         opacity={!isSelected ? 0.25 : 1}
-        borderColor={isSelected && "grayLightest"}
+        borderColor={isSelected ? "grayLightest" : "transparent"}
       />
       <AreaChart data={chartData} metric={metric} value={value} withLabel />
     </FlexContainer>
