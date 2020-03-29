@@ -166,7 +166,6 @@ export default function AreaChart(props) {
     }
   }
 
-  
   function createUpdateSingleArea({
     isInit,
     color,
