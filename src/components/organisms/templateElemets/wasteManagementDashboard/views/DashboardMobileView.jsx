@@ -6,9 +6,13 @@ import { GridContainer } from "../../../../atoms"
 import DashboardTitle from "../DashboardTitle/DashboardTitle"
 import DashboardExplainer from "../DashboardExplainer/DashboardExplainer"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
+import BigChartsContainer from "../BigChartsContainer/BigChartsContainer"
 
 const MainGridLandScape = styled(GridContainer)`
-  grid-template-rows: 1fr 1fr 3fr;
+  width: 95%;
+  height: 98%;
+  grid-template-rows: 1fr 1fr 6fr;
+  grid-column-gap: 3rem;
   grid-template-columns: repeat(2, 1fr);
   grid-template-areas:
     "title helper"
@@ -17,7 +21,9 @@ const MainGridLandScape = styled(GridContainer)`
 `
 
 const MainGridPortrait = styled(GridContainer)`
-  grid-template-rows: 1fr 1fr 1fr repeat(2, 5fr);
+  width: 95%;
+  height: 95%;
+  grid-template-rows: 1fr 0.5fr 1fr repeat(2, 5fr);
   grid-template-areas:
     "title"
     "helper"
@@ -26,13 +32,32 @@ const MainGridPortrait = styled(GridContainer)`
     "chartTwo";
 `
 
-function DashboardMobileView({ isPortrait, metric, setMetric }) {
+function DashboardMobileView({
+  isPortrait,
+  metric,
+  setMetric,
+  data,
+  countryList,
+  selectedCountry,
+  setSelectedCountry,
+}) {
   const MainGrid = isPortrait ? MainGridPortrait : MainGridLandScape
   return (
-    <MainGrid fullSize>
-      <DashboardTitle isPortrait={isPortrait} />
+    <MainGrid>
+      <DashboardTitle justify={isPortrait && "center"} />
       <DashboardExplainer />
-      <SwitchContainer metric={metric} setMetric={setMetric} />
+      <SwitchContainer
+        metric={metric}
+        setMetric={setMetric}
+        justify="flex-start"
+      />
+      <BigChartsContainer
+        metric={metric}
+        data={data}
+        countryList={countryList}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+      />
     </MainGrid>
   )
 }

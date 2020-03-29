@@ -11,7 +11,6 @@ export default function BigChartsContainer({
   data,
   countryList,
   setSelectedCountry,
-  isSmallScreen,
 }) {
   const [chartData, setChartData] = useState(undefined)
   const prevMetric = usePrevious(metric)
@@ -52,7 +51,6 @@ export default function BigChartsContainer({
         handleChartMouseout={handleChartMouseout}
         hoveredYear={hoveredYear}
         countryList={countryList}
-        isSmallScreen={isSmallScreen}
       />
       <GridContainer rows="40px 1fr" gridArea="chartTwo">
         <FlexContainer fullSize justify="flex-start">

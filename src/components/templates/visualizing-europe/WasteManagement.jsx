@@ -18,7 +18,10 @@ import {
   BigChartsContainer,
 } from "../../organisms/templateElemets/wasteManagementDashboard"
 import { FullScreenLoader } from "../../molecules"
-import { DashboardMobileView } from "../../organisms/templateElemets/wasteManagementDashboard/views"
+import {
+  DashboardMobileView,
+  DashboardTabletView,
+} from "../../organisms/templateElemets/wasteManagementDashboard/views"
 const { MainGrid, MainChartsContainer } = styledComponents
 
 export default function WasteManagemetDashboard({
@@ -26,23 +29,33 @@ export default function WasteManagemetDashboard({
   loading,
   countryList,
 }) {
-  const { windowWidth, windowHeight } = useWindowDimensions()
   const [metric, setMetric] = useState("abs")
   const [selectedCountry, setSelectedCountry] = useState(undefined)
-
-  let isSmallScreen
-  if (
-    (windowWidth && windowWidth <= 450 && windowHeight <= 850) ||
-    (windowHeight <= 800 && windowWidth <= 850)
-  ) {
-    isSmallScreen = true
-  }
 
   return (
     <>
       <FlexContainer fullScreen>
         <FullScreenLoader loading={loading} />
-        {isMobileOnly && <DashboardMobileView metric={metric} setMetric={setMetric}/>}
+        {isMobileOnly && (
+          <DashboardMobileView
+            metric={metric}
+            setMetric={setMetric}
+            data={data}
+            countryList={countryList}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+          />
+        )}
+        {isTablet && (
+          <DashboardTabletView
+            metric={metric}
+            setMetric={setMetric}
+            data={data}
+            countryList={countryList}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+          />
+        )}
         {/* <MainGrid maxWidth="1400px">
           <MainChartsContainer>
             <TitleContainer

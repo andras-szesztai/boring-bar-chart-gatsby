@@ -23,6 +23,7 @@ export const customStyles = {
 }
 
 const IconContainer = styled(FlexContainer)`
+  padding-top: 1rem;
   svg {
     transition: fill ${transition.md};
     fill: ${({ color }) => themifyColor(color || "grayLightest")};

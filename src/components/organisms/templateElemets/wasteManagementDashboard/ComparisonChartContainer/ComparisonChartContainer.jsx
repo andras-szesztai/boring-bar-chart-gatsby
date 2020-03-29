@@ -67,6 +67,7 @@ export default function ComparisonChartContainer({
             onChange={v =>
               v ? setSelectedCountry(v.label) : setSelectedCountry(undefined)
             }
+            onMenuOpen={handleChartMouseout}
             isClearable
             options={countryList.map(el => ({
               value: el,

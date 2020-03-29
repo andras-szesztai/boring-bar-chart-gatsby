@@ -1,10 +1,10 @@
 import React from "react"
 import { FlexContainer, Title } from "../../../../atoms"
 
-export default function DashboardTitle({ isPortrait }) {
+export default function DashboardTitle({ justify }) {
   return (
     <FlexContainer
-      justify={isPortrait ? "center" : "flex-start"}
+      justify={justify ? justify : "flex-start"}
       fullSize
       gridArea="title"
     >

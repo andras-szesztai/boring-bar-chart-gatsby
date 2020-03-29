@@ -4,9 +4,9 @@ import Switch from "react-switch"
 import { FlexContainer, Title } from "../../../../atoms"
 import { colors } from "../../../../../themes/theme"
 
-export default function SwitchContainer({ metric, setMetric }) {
+export default function SwitchContainer({ metric, setMetric, justify }) {
   return (
-    <FlexContainer gridArea="switch">
+    <FlexContainer gridArea="switch" justify={justify && justify}>
       <Title marginBottom={1} textAlign="right" marginRight={1}>
         Per capita metric: Kg
       </Title>
