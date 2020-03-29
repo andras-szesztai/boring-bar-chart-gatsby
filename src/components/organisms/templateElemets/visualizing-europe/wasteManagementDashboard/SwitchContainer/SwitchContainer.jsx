@@ -4,7 +4,6 @@ import Switch from "react-switch"
 import { FlexContainer, Title } from "../../../../../atoms"
 import { colors } from "../../../../../../themes/theme"
 
-
 export default function SwitchContainer({ metric, setMetric, justify }) {
   return (
     <FlexContainer gridArea="switch" justify={justify && justify}>

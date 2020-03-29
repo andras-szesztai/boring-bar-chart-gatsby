@@ -41,12 +41,14 @@ function DashboardMobileView({
   countryList,
   selectedCountry,
   setSelectedCountry,
+  modalIsOpen,
+  setIsOpen
 }) {
   const MainGrid = isPortrait ? MainGridPortrait : MainGridLandScape
   return (
     <MainGrid>
       <DashboardTitle justify={isPortrait && "center"} />
-      <DashboardExplainer />
+      <DashboardExplainer  modalIsOpen={modalIsOpen}  setIsOpen={setIsOpen} />
       <SwitchContainer
         metric={metric}
         setMetric={setMetric}

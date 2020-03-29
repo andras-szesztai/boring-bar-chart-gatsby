@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react"
-import { isMobile } from "react-device-detect"
 
 import { usePrevious } from "../../../../../../hooks"
 import { getAbsData, getPercentageData } from "../dashboardHelpers"
 import { FlexContainer } from "../../../../../atoms"
 import AreaChart from "../AreaChart/AreaChart"
-
-
 
 export default function SmallChartContainer({
   value,
@@ -14,6 +11,7 @@ export default function SmallChartContainer({
   setSelected,
   selectedValue,
   metric,
+  modalIsOpen,
 }) {
   const isSelected = selectedValue === value
   const [isHovered, setIsHovered] = useState(false)
@@ -39,8 +37,8 @@ export default function SmallChartContainer({
     >
       <FlexContainer
         absPos
-        hoverable={!isMobile}
-        zIndex={!isMobile && "hoverOverlay"}
+        hoverable={!modalIsOpen}
+        zIndex={!modalIsOpen && "hoverOverlay"}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         bgColor={isHovered && !isSelected && "grayLightest"}

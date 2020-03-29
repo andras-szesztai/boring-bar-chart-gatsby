@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { isMobileOnly, isTablet, isBrowser } from "react-device-detect"
+import { MobileOnlyView, TabletView, BrowserView } from "react-device-detect"
 import _ from "lodash"
 
 import { FlexContainer } from "../../atoms"
@@ -20,6 +20,7 @@ export default function WasteManagemetDashboard({
   const [metric, setMetric] = useState("abs")
   const [selectedCountry, setSelectedCountry] = useState(undefined)
   const { windowWidth, windowHeight } = useWindowDimensions()
+  const [modalIsOpen, setIsOpen] = React.useState(false)
 
   const viewProps = {
     metric,
@@ -28,30 +29,35 @@ export default function WasteManagemetDashboard({
     countryList,
     selectedCountry,
     setSelectedCountry,
+    setIsOpen,
+    modalIsOpen
   }
 
-  const loaderColor = COLOR_ARRAY[_.random(-1, 3)]
+  const loaderProps = {
+    loading,
+    loaderColor: COLOR_ARRAY[_.random(-1, 3)],
+  }
 
   return (
     <>
-      {(isTablet || isBrowser) && (
-        <FlexContainer width={`${windowWidth}px`} height={`${windowHeight}px`}>
-          <FullScreenLoader loading={loading} loaderColor={loaderColor} />
-          {isTablet && <DashboardTabletView {...viewProps} />}
-          {isBrowser && <DashboardBrowserView {...viewProps} />}
-        </FlexContainer>
-      )}
-      {isMobileOnly && (
+      <MobileOnlyView>
         <FlexContainer fullScreen>
-          <FullScreenLoader
-            loading={loading}
-            loader="circle"
-            loaderSize={80}
-            loaderColor={loaderColor}
-          />
+          <FullScreenLoader {...loaderProps} loader="clip" loaderSize={75} />
           <DashboardMobileView {...viewProps} />
         </FlexContainer>
-      )}
+      </MobileOnlyView>
+      <TabletView>
+        <FlexContainer width={`${windowWidth}px`} height={`${windowHeight}px`}>
+          <FullScreenLoader {...loaderProps} loader="clip" loaderSize={85} />
+          <DashboardTabletView {...viewProps} />
+        </FlexContainer>
+      </TabletView>
+      <BrowserView>
+        <FlexContainer fullScreen>
+          <FullScreenLoader {...loaderProps} />
+          <DashboardBrowserView {...viewProps} />
+        </FlexContainer>
+      </BrowserView>
     </>
   )
 }

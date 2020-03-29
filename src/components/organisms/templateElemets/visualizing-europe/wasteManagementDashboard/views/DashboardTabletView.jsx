@@ -8,8 +8,6 @@ import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import BigChartsContainer from "../BigChartsContainer/BigChartsContainer"
 import SubChartsContainer from "../SubChartsContainer/SubChartsContainer"
 
-
-
 const MainGridLandScape = styled(GridContainer)`
   width: 96%;
   height: 95%;
@@ -57,6 +55,8 @@ function DashboardTabletView({
   countryList,
   selectedCountry,
   setSelectedCountry,
+  modalIsOpen,
+  setIsOpen,
 }) {
   const MainGrid = isPortrait ? MainGridPortrait : MainGridLandScape
   const MainChartsGrid = isPortrait
@@ -66,7 +66,7 @@ function DashboardTabletView({
     <MainGrid>
       <MainChartsGrid fullSize gridArea="mainCharts">
         <DashboardTitle />
-        <DashboardExplainer />
+        <DashboardExplainer modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} />
         <SwitchContainer
           metric={metric}
           setMetric={setMetric}
@@ -86,6 +86,7 @@ function DashboardTabletView({
         countryList={countryList}
         selectedCountry={selectedCountry}
         setSelectedCountry={setSelectedCountry}
+        modalIsOpen={modalIsOpen}
       />
     </MainGrid>
   )

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { PropagateLoader, CircleLoader } from "react-spinners"
+import { PropagateLoader, CircleLoader, ClipLoader } from "react-spinners"
 
 import { FlexContainer } from "../../atoms"
 import { colors } from "../../../themes/theme"
@@ -30,6 +30,7 @@ export default function FullScreenLoader({
   const loaders = {
     propagate: <PropagateLoader {...loaderProps} />,
     circle: <CircleLoader {...loaderProps} />,
+    clip: <ClipLoader {...loaderProps} />,
   }
   return (
     <>

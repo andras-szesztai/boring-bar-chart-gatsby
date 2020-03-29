@@ -7,7 +7,6 @@ import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import BigChartsContainer from "../BigChartsContainer/BigChartsContainer"
 import SubChartsContainer from "../SubChartsContainer/SubChartsContainer"
 
-
 const MainGrid = styled(GridContainer)`
   height: 96%;
   width: 95%;
@@ -55,12 +54,14 @@ function DashboardBrowserView({
   countryList,
   selectedCountry,
   setSelectedCountry,
+  modalIsOpen,
+  setIsOpen,
 }) {
   return (
     <MainGrid>
       <MainChartsContainer fullSize>
         <DashboardTitle />
-        <DashboardExplainer />
+        <DashboardExplainer modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} />
         <SwitchContainer
           metric={metric}
           setMetric={setMetric}
@@ -80,6 +81,7 @@ function DashboardBrowserView({
         countryList={countryList}
         selectedCountry={selectedCountry}
         setSelectedCountry={setSelectedCountry}
+        modalIsOpen={modalIsOpen}
       />
     </MainGrid>
   )
