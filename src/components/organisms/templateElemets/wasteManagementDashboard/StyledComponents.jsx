@@ -1,7 +1,8 @@
 import styled, { css } from "styled-components"
 
-import { GridContainer } from "../../../atoms"
-import { themifySpace } from "../../../../themes/mixins"
+import { GridContainer, FlexContainer } from "../../../atoms"
+import { themifySpace, themifyColor } from "../../../../themes/mixins"
+import { transition } from "../../../../themes/theme"
 
 const MainGrid = styled(GridContainer)`
   grid-column-gap: 4rem;
@@ -100,9 +101,34 @@ const MainChartsContainer = styled(GridContainer)`
   }
 `
 
+const IconContainer = styled(FlexContainer)`
+  svg {
+    transition: fill ${transition.md};
+    fill: ${({ color }) => themifyColor(color || "grayLightest")};
+  }
+
+  :hover {
+    svg {
+      fill: ${({ color }) => themifyColor(color || "grayDarkest")};
+    }
+  }
+`
+
+export const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+}
+
 const styledComponents = {
   MainGrid,
   MainChartsContainer,
+  IconContainer,
 }
 
 export default styledComponents
