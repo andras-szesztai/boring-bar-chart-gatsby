@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react"
+import { isMobile } from "react-device-detect"
+
 import { FlexContainer } from "../../../../atoms"
 import { usePrevious } from "../../../../../hooks"
 import { AreaChart } from ".."
@@ -9,7 +11,7 @@ export default function SmallChartContainer({
   data,
   setSelected,
   selectedValue,
-  metric
+  metric,
 }) {
   const isSelected = selectedValue === value
   const [isHovered, setIsHovered] = useState(false)
@@ -20,13 +22,12 @@ export default function SmallChartContainer({
     if (!chartData && data) {
       setChartData(getAbsData(data))
     }
-    if (prevMetric !== metric) {            
+    if (prevMetric !== metric) {
       setChartData(
         metric === "abs" ? getAbsData(data) : getPercentageData(data)
       )
     }
   }, [chartData, data, metric, prevMetric])
-
 
   return (
     <>
@@ -37,7 +38,8 @@ export default function SmallChartContainer({
       >
         <FlexContainer
           absPos
-          zIndex="loader"
+          hoverable={!isMobile}
+          zIndex={!isMobile && "hoverOverlay"}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           bgColor={isHovered && !isSelected && "grayLightest"}
@@ -45,9 +47,8 @@ export default function SmallChartContainer({
           fullSize
           opacity={!isSelected ? 0.25 : 1}
           borderColor={isSelected && "grayLightest"}
-          hoverable
         />
-          <AreaChart data={chartData} metric={metric} value={value} withLabel/>
+        <AreaChart data={chartData} metric={metric} value={value} withLabel />
       </FlexContainer>
     </>
   )

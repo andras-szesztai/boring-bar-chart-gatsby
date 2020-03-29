@@ -28,8 +28,8 @@ const MainChartsContainerLandScape = styled(GridContainer)`
 `
 
 const MainGridPortrait = styled(GridContainer)`
-  width: 92%;
-  height: 95%;
+  width: 95%;
+  height: 96%;
   grid-template-rows: 3fr 5fr;
   grid-row-gap: 3rem;
   grid-template-areas:
@@ -39,8 +39,8 @@ const MainGridPortrait = styled(GridContainer)`
 
 const MainChartsContainerPortrait = styled(GridContainer)`
   grid-template-rows: repeat(2, 1fr) 6fr;
-  grid-column-gap: 4rem;
-  grid-row-gap: 2rem;
+  grid-column-gap: 3rem;
+  grid-row-gap: 1rem;
   grid-template-columns: repeat(2, 1fr);
   grid-template-areas:
     "title helper"
