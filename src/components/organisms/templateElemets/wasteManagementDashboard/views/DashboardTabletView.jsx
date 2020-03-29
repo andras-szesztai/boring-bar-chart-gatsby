@@ -7,13 +7,12 @@ import DashboardTitle from "../DashboardTitle/DashboardTitle"
 import DashboardExplainer from "../DashboardExplainer/DashboardExplainer"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import BigChartsContainer from "../BigChartsContainer/BigChartsContainer"
-import SmallChartContainer from "../SmallChartContainer/SmallChartContainer"
 import SubChartsContainer from "../SubChartsContainer/SubChartsContainer"
 
 const MainGridLandScape = styled(GridContainer)`
-  width: 95%;
+  width: 96%;
   height: 95%;
-  grid-column-gap: 3rem;
+  grid-column-gap: 4rem;
   grid-template-columns: 1fr 2fr;
   grid-template-areas: "mainCharts subCharts";
 `
@@ -21,7 +20,6 @@ const MainGridLandScape = styled(GridContainer)`
 const MainChartsContainerLandScape = styled(GridContainer)`
   grid-template-rows: min-content 0.5fr repeat(2, 3fr);
   grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 3rem;
   grid-template-areas:
     "title helper"
     "switch switch"
@@ -32,8 +30,8 @@ const MainChartsContainerLandScape = styled(GridContainer)`
 const MainGridPortrait = styled(GridContainer)`
   width: 92%;
   height: 95%;
-  grid-template-rows: repeat(2, 1fr);
-  grid-row-gap: 3rem;
+  grid-template-rows: 3fr 5fr;
+  grid-row-gap: 4rem;
   grid-template-areas:
     "mainCharts"
     "subCharts";
@@ -41,7 +39,8 @@ const MainGridPortrait = styled(GridContainer)`
 
 const MainChartsContainerPortrait = styled(GridContainer)`
   grid-template-rows: repeat(2, 1fr) 6fr;
-  grid-column-gap: 3rem;
+  grid-column-gap: 4rem;
+  grid-row-gap: 2rem;
   grid-template-columns: repeat(2, 1fr);
   grid-template-areas:
     "title helper"
