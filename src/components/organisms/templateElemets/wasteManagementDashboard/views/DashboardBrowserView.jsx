@@ -7,55 +7,44 @@ import DashboardExplainer from "../DashboardExplainer/DashboardExplainer"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import BigChartsContainer from "../BigChartsContainer/BigChartsContainer"
 import SubChartsContainer from "../SubChartsContainer/SubChartsContainer"
-import { themifySpace } from "../../../../../themes/mixins"
 
 const MainGrid = styled(GridContainer)`
-  grid-column-gap: 4rem;
-  grid-row-gap: 2rem;
-  @media (min-width: 450px) {
-    height: 95%;
-    width: 95%;
-    grid-template-columns: 1fr;
-    grid-template-rows: 20fr 20fr;
-  }
+  height: 96%;
+  width: 95%;
+  grid-template-columns: 1fr;
+  grid-template-rows: 5fr 20fr;
+  grid-row-gap: 4rem;
+  grid-column-gap: 0rem;
 
-  @media (min-width: 750px) {
+  @media (min-width: 800px) {
     height: 95%;
-    width: 96%;
-    grid-template-columns: 30fr 70fr;
+    width: 97%;
     grid-template-rows: 1fr;
-  }
-
-  @media (min-width: 1000px) {
-    height: 95%;
-    width: 96%;
-    grid-template-columns: 32.5fr 67.5fr;
-  }
-
-  @media (min-width: 1400px) {
-    height: 92.5%;
-    width: 95%;
     grid-template-columns: 35fr 65fr;
+    grid-row-gap: 0rem;
+    grid-column-gap: 5rem;
   }
 `
 
 const MainChartsContainer = styled(GridContainer)`
-  grid-column-gap: ${themifySpace(5)}px;
   @media (min-width: 450px) {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 20fr 80fr;
+    grid-template-rows: min-content 1fr 10fr;
+    grid-column-gap: 3rem;
     grid-template-areas:
-      "title title"
+      "title helper"
+      "switch switch"
       "chartOne chartTwo";
   }
 
-  @media (min-width: 750px) {
-    grid-template-columns: 1fr;
-    grid-template-rows: 16fr 42fr 42fr;
+  @media (min-width: 800px) {
+    grid-template-rows: min-content 1fr repeat(2, 5fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
-      "title"
-      "chartOne"
-      "chartTwo";
+      "title helper"
+      "switch switch"
+      "chartOne chartOne"
+      "chartTwo chartTwo";
   }
 `
 
@@ -69,7 +58,7 @@ function DashboardBrowserView({
 }) {
   return (
     <MainGrid>
-      {/* <MainChartsContainer fullSize gridArea="mainCharts">
+      <MainChartsContainer fullSize>
         <DashboardTitle />
         <DashboardExplainer />
         <SwitchContainer
@@ -91,7 +80,7 @@ function DashboardBrowserView({
         countryList={countryList}
         selectedCountry={selectedCountry}
         setSelectedCountry={setSelectedCountry}
-      /> */}
+      />
     </MainGrid>
   )
 }
