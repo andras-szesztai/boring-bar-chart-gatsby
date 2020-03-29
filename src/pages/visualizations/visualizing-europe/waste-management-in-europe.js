@@ -1,5 +1,4 @@
 import React from "react"
-import _ from "lodash"
 import { Helmet } from "react-helmet"
 
 import WASTE_MANAGEMENT_CONSTANTS from "../../../constants/visualizing-europe/wasteManagement"

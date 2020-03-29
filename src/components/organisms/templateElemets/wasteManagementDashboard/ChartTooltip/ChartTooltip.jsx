@@ -39,7 +39,7 @@ export default function ChartTooltip({
       absPos
       left={
         xScale(data.data[0].year) -
-        (xScale(data.data[0].year) <= halfWidth ? 15 : 123) +
+        (xScale(data.data[0].year) <= halfWidth ? 15 : 124) +
         margin.left
       }
       isLeft={xScale(data.data[0].year) <= halfWidth}

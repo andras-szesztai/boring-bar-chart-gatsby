@@ -12,13 +12,15 @@ const MainGrid = styled(GridContainer)`
   height: 96%;
   width: 95%;
   grid-template-columns: 1fr;
-  grid-template-rows: 5fr 20fr;
-  grid-row-gap: 4rem;
+  grid-template-rows: repeat(2, 1fr);
+  grid-row-gap: 2rem;
   grid-column-gap: 0rem;
 
   @media (min-width: 800px) {
     height: 95%;
+    max-height: 700px;
     width: 97%;
+    max-width: 1440px;
     grid-template-rows: 1fr;
     grid-template-columns: 35fr 65fr;
     grid-row-gap: 0rem;
@@ -27,19 +29,17 @@ const MainGrid = styled(GridContainer)`
 `
 
 const MainChartsContainer = styled(GridContainer)`
-  @media (min-width: 450px) {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: min-content 1fr 10fr;
-    grid-column-gap: 3rem;
-    grid-template-areas:
-      "title helper"
-      "switch switch"
-      "chartOne chartTwo";
-  }
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: min-content 1fr 10fr;
+  grid-column-gap: 3rem;
+  grid-template-areas:
+    "title helper"
+    "switch switch"
+    "chartOne chartTwo";
 
   @media (min-width: 800px) {
     grid-template-rows: min-content 1fr repeat(2, 5fr);
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 2fr 1fr;
     grid-template-areas:
       "title helper"
       "switch switch"

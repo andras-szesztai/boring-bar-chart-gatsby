@@ -12,7 +12,7 @@ import SubChartsContainer from "../SubChartsContainer/SubChartsContainer"
 const MainGridLandScape = styled(GridContainer)`
   width: 96%;
   height: 95%;
-  grid-column-gap: 4rem;
+  grid-column-gap: 3rem;
   grid-template-columns: 1fr 2fr;
   grid-template-areas: "mainCharts subCharts";
 `
@@ -31,7 +31,7 @@ const MainGridPortrait = styled(GridContainer)`
   width: 92%;
   height: 95%;
   grid-template-rows: 3fr 5fr;
-  grid-row-gap: 4rem;
+  grid-row-gap: 3rem;
   grid-template-areas:
     "mainCharts"
     "subCharts";
