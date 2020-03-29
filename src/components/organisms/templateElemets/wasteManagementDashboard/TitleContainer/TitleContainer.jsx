@@ -22,29 +22,6 @@ const { IconContainer } = styledComponents
 
 Modal.setAppElement("#___gatsby")
 
-function InformationContainer(props) {
-  return (
-    <FlexContainer direction="column">
-      <FlexContainer
-        fontColor={props.color}
-        width="180px"
-        marginBottom={3}
-        bgColor="transparent"
-      >
-        Chart comment: Per Capita Municipal Waste is represented as a single
-        area chart, while Material Recycling and Composting are areas stacked
-        one upon the other.
-      </FlexContainer>
-      <CreditsContainer
-        direction="column"
-        elements={CREDIT_ELEMENTS}
-        absPos={false}
-        color={props.color}
-        linkColor={props.color}
-      />
-    </FlexContainer>
-  )
-}
 
 function TitleContainer({
   metric,
@@ -59,7 +36,7 @@ function TitleContainer({
 
   return (
     <>
-      <GridContainer
+      {/* <GridContainer
         columnGap={2}
         rows={isSmallScreen ? "2fr 1fr" : "min-content 1fr"}
         gridArea="title"
@@ -92,7 +69,7 @@ function TitleContainer({
             columns={!isSmallScreen && "2fr 1fr"}
           >
             <FlexContainer
-              justify={isSmallScreen ? "center" : "flex-start"}
+              justify={isSmallScreen}
               fullSize
             >
               <Title fontSize={3} fontWeight="medium">
@@ -100,13 +77,7 @@ function TitleContainer({
               </Title>
             </FlexContainer>
             <FlexContainer>
-              <IconContainer
-                color="grayDarkest"
-                onClick={() => setIsOpen(true)}
-              >
-                <IoMdInformationCircle size={20} />
-              </IconContainer>
-            </FlexContainer>
+             
           </GridContainer>
         </MobileView>
 
@@ -150,7 +121,7 @@ function TitleContainer({
             <Title marginLeft={1}>%</Title>
           </FlexContainer>
         </FlexContainer>
-      </GridContainer>
+      </GridContainer> */}
     </>
   )
 }

@@ -1,4 +1,13 @@
 import React, { useState } from "react"
+import {
+  MobileView,
+  BrowserView,
+  withOrientationChange,
+  isMobile,
+  isMobileOnly,
+  isTablet,
+  isBrowser,
+} from "react-device-detect"
 
 import { FlexContainer, GridContainer } from "../../atoms"
 import { useWindowDimensions } from "../../../hooks"
@@ -9,6 +18,7 @@ import {
   BigChartsContainer,
 } from "../../organisms/templateElemets/wasteManagementDashboard"
 import { FullScreenLoader } from "../../molecules"
+import { DashboardMobileView } from "../../organisms/templateElemets/wasteManagementDashboard/views"
 const { MainGrid, MainChartsContainer } = styledComponents
 
 export default function WasteManagemetDashboard({
@@ -32,7 +42,8 @@ export default function WasteManagemetDashboard({
     <>
       <FlexContainer fullScreen>
         <FullScreenLoader loading={loading} />
-        <MainGrid maxWidth="1400px">
+        {isMobileOnly && <DashboardMobileView metric={metric} setMetric={setMetric}/>}
+        {/* <MainGrid maxWidth="1400px">
           <MainChartsContainer>
             <TitleContainer
               metric={metric}
@@ -63,7 +74,7 @@ export default function WasteManagemetDashboard({
                 ))}
             </GridContainer>
           )}
-        </MainGrid>
+        </MainGrid> */}
       </FlexContainer>
     </>
   )
