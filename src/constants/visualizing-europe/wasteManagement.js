@@ -3,7 +3,7 @@ import { colors, fontSize } from "../../themes/theme"
 const DATA_URL =
   "https://boring-barchart-gatsby.firebaseio.com/waste-management.json"
 
-export const COLOR_ARRAY = ["#E58272", "#63b7af", "#35495e"]
+export const COLOR_ARRAY = ["#E58372", "#63b7af", "#35495e"]
 
 export const DROPDOWN_STYLES = {
   option: (provided, state) => {
