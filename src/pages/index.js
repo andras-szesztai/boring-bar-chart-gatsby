@@ -4,16 +4,11 @@ import { graphql } from "gatsby"
 import { Link } from "gatsby"
 import { isMobileOnly, withOrientationChange } from "react-device-detect"
 import Image from "gatsby-image"
-import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa"
 import styled from "styled-components"
 
-import {
-  FlexContainer,
-  GridContainer,
-  Container,
-} from "../components/atoms"
+import { FlexContainer, GridContainer, Container } from "../components/atoms"
 import { themifyTransition, themifySpace, themifyColor } from "../themes/mixins"
-import { colors } from "../themes/theme"
+import SOCIAL_LINKS from "../constants/social-links"
 
 const Layout = styled(GridContainer)`
   grid-template-rows: 60px 1fr;
@@ -110,33 +105,15 @@ function IndexPage({ data, isPortrait }) {
         <HeaderContainer justify="space-between">
           <FlexContainer>Icon</FlexContainer>
           <FlexContainer cursor="pointer">
-            <Container marginLeft={4} paddingTop={1}>
-              <a
-                href="https://twitter.com/AndSzesztai"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaTwitter color={colors.grayDarkest} size={25} />
-              </a>
-            </Container>
-            <Container marginLeft={4} paddingTop={1}>
-              <a
-                href="https://github.com/andras-szesztai"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaGithub color={colors.grayDarkest} size={25} />
-              </a>
-            </Container>
-            <Container marginLeft={4} paddingTop={1}>
-              <a
-                href="https://www.linkedin.com/in/andr%C3%A1s-szesztai-351a4379/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaLinkedin color={colors.grayDarkest} size={27} />
-              </a>
-            </Container>
+            {SOCIAL_LINKS.map(
+              ({ link, component: Component, componentProps }) => (
+                <Container marginLeft={isMobileOnly ? 3 : 4} paddingTop={1}>
+                  <a href={`${link}`} target="_blank" rel="noopener noreferrer">
+                    <Component {...componentProps} />
+                  </a>
+                </Container>
+              )
+            )}
           </FlexContainer>
         </HeaderContainer>
         <MainGrid>
