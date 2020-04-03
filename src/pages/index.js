@@ -7,7 +7,7 @@ import Image from "gatsby-image"
 
 import styled from "styled-components"
 
-import { FlexContainer, GridContainer } from "../components/atoms"
+import { FlexContainer, GridContainer, LinkAnchor } from "../components/atoms"
 import { themifyTransition } from "../themes/mixins"
 
 const MainGrid = styled(GridContainer)`
@@ -30,19 +30,17 @@ const MainGrid = styled(GridContainer)`
 
 const ItemContainer = styled(FlexContainer)`
   overflow: hidden;
-  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 `
 
-const HoverContainer = styled(FlexContainer)`
-  transition: filter ${themifyTransition("sm")};
-  filter: none;
+const TextContainer = styled(GridContainer)`
+  transition: all ${themifyTransition("sm")};
+  background-color: transparent;
+  color: transparent;
   :hover {
-    filter: grayscale(25%) brightness(0.25);
+    background-color: rgba(51, 51, 51, 0.8);
+    color: #fff;
   }
-`
-
-const TextContainer = styled(FlexContainer)`
-  color: "#fff";
 `
 
 export default function IndexPage({ data }) {
@@ -55,28 +53,57 @@ export default function IndexPage({ data }) {
       <Helmet title="Boring Bar Chart" />
       <FlexContainer height="80px">Header</FlexContainer>
       <MainGrid>
-        {list.map(({ node: { id, title, link, isOutside, image } }) => (
-          <ItemContainer
-            key={id}
-            height="200px"
-            align="flex-start"
-            borderRadius={1}
-          >
-            <HoverContainer fullSize pos="relative" cursor="pointer">
-              <Image style={{ minWidth: "100%" }} fluid={image.fluid}  />
-              {/* {!isOutside ? (
-                <Link to={`${link}`}>{title}</Link>
-              ) : (
-                <a href={`${link}`} target="_blank" rel="noopener noreferrer">
+        {list.map(
+          ({ node: { id, title, link, isOutside, image, description } }) => (
+            <ItemContainer
+              pos="relative"
+              key={id}
+              height="200px"
+              align="flex-start"
+              borderRadius={1}
+            >
+              <FlexContainer pos="relative" fullSize>
+                <Image style={{ minWidth: "100%" }} fluid={image.fluid} />
+              </FlexContainer>
+              <TextContainer
+                absPos
+                fullSize
+                rows="min-content 1fr min-content"
+                paddingLeft={2}
+                paddingRight={2}
+                paddingTop={1}
+                paddingBottom={1}
+              >
+                <FlexContainer
+                  justify="flex-start"
+                  fontWeight="medium"
+                  fontSize={3}
+                >
                   {title}
-                </a>
-              )} */}
-            </HoverContainer>
-            <FlexContainer noPointerEvents absPos fullSize fontColor="#fff">
-              Hello
-            </FlexContainer>
-          </ItemContainer>
-        ))}
+                </FlexContainer>
+                <FlexContainer justify="flex-start" align="flex-start">
+                  {description}
+                </FlexContainer>
+                <FlexContainer
+                  justify="flex-end"
+                  cursor="pointer"
+                >
+                  {!isOutside ? (
+                    <Link to={`${link}`}>Find out more!</Link>
+                  ) : (
+                    <LinkAnchor
+                      href={`${link}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Find out more!
+                    </LinkAnchor>
+                  )}
+                </FlexContainer>
+              </TextContainer>
+            </ItemContainer>
+          )
+        )}
       </MainGrid>
     </>
   )
@@ -103,3 +130,34 @@ export const query = graphql`
     }
   }
 `
+
+// {/* <HoverContainer fullSize pos="relative" cursor="pointer">
+//   {/* {!isOutside ? (
+//   <Link to={`${link}`}>{title}</Link>
+// ) : (
+//   <a href={`${link}`} target="_blank" rel="noopener noreferrer">
+//     {title}
+//   </a>
+// )} */}
+
+// <Image style={{ minWidth: "100%" }} fluid={image.fluid} />
+// </HoverContainer>
+// <TextContainer
+//   absPos
+//   fullSize
+//   rows="min-content 1fr"
+//   paddingLeft={2}
+//   paddingTop={1}
+// >
+//   <FlexContainer
+//     fontColor="#fff"
+//     justify="flex-start"
+//     fontWeight="medium"
+//     fontSize={3}
+//   >
+//     {title}
+//   </FlexContainer>
+//   <FlexContainer fontColor="#fff" justify="flex-start">
+//     {description}
+//   </FlexContainer>
+// </TextContainer>
