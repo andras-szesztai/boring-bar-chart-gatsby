@@ -77,13 +77,18 @@ function DataVisualizationGrid({ isPortrait, list }) {
   return (
     <MainGrid>
       {list.map(
-        ({ node: { id, title, link, isOutside, image, description } }) => (
+        ({
+          node: { id, title, link, isOutside, image, description, date },
+        }) => (
           <ItemContainer
             pos="relative"
             key={id}
             height={isSmallScreen ? "150px" : "180px"}
             borderRadius={1}
           >
+            {/* {
+              date
+            } */}
             <FlexContainer pos="relative" fullSize align="flex-start">
               <Image style={{ minWidth: "100%" }} fluid={image.fluid} />
             </FlexContainer>

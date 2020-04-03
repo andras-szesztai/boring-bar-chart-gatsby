@@ -2,9 +2,7 @@ import React from "react"
 import { Helmet } from "react-helmet"
 import { graphql } from "gatsby"
 
-
-import { Layout } from "../components/templates"
-
+import { Layout, DataVisualizationGrid } from "../components/templates"
 
 function IndexPage({ data }) {
   const {
@@ -15,8 +13,7 @@ function IndexPage({ data }) {
     <>
       <Helmet title="Boring Bar Chart" />
       <Layout>
-
-        
+        <DataVisualizationGrid list={list} />
       </Layout>
     </>
   )
