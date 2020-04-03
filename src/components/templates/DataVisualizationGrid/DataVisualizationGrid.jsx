@@ -5,72 +5,17 @@ import Image from "gatsby-image"
 import styled from "styled-components"
 import { subWeeks } from "date-fns"
 
-import { FlexContainer, GridContainer } from "../../atoms"
+import { FlexContainer, GridContainer, Ribbon } from "../../atoms"
 import {
   themifyTransition,
   themifySpace,
   themifyColor,
 } from "../../../themes/mixins"
-import { colors } from "../../../themes/theme"
 
 const MainGrid = styled(GridContainer)`
   padding: 4rem;
   overflow-y: auto;
   grid-row-gap: 1rem;
-
-  .ribbon {
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
-    position: absolute;
-    z-index: 1;
-    pointer-events: none;
-  }
-  .ribbon::before,
-  .ribbon::after {
-    position: absolute;
-    z-index: -1;
-    content: "";
-    display: block;
-    border: 5px solid ${colors.tealBlueLighter};
-  }
-  .ribbon span {
-    position: absolute;
-    display: block;
-    width: 160px;
-    padding: 5px 0;
-    background-color: ${colors.tealBlueLighter};
-    color: ${colors.tealBlueDarkest};
-    text-align: center;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-  }
-
-  .ribbon-top-right {
-    top: -10px;
-    right: -10px;
-  }
-
-  .ribbon-top-right::before,
-  .ribbon-top-right::after {
-    border-top-color: transparent;
-    border-right-color: transparent;
-  }
-
-  .ribbon-top-right::before {
-    top: 0;
-    left: 0;
-  }
-  .ribbon-top-right::after {
-    bottom: 0;
-    right: 0;
-  }
-
-  .ribbon-top-right span {
-    left: -25px;
-    top: 30px;
-    transform: rotate(45deg);
-  }
 
   @media (min-width: 700px) {
     grid-template-columns: repeat(2, 2fr);
@@ -142,11 +87,7 @@ function DataVisualizationGrid({ isPortrait, list }) {
             height={isSmallScreen ? "150px" : "180px"}
             borderRadius={1}
           >
-            {subWeeks(new Date(), 2) < new Date(date) && (
-              <div class="ribbon ribbon-top-right">
-                <span>NEW</span>
-              </div>
-            )}
+            {subWeeks(new Date(), 2) < new Date(date) && <Ribbon text="NEW" />}
             <FlexContainer pos="relative" fullSize align="flex-start">
               <Image style={{ minWidth: "100%" }} fluid={image.fluid} />
             </FlexContainer>

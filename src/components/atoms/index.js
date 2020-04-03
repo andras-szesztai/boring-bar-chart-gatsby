@@ -7,7 +7,7 @@ import {
   CloseIconContainer,
   Container
 } from "./containers"
-import { Title, ColoredSpan, LinkAnchor } from "./textElements"
+import { Title, ColoredSpan, LinkAnchor, Ribbon} from "./textElements"
 import { NeumorphButton } from "./buttons"
 import { CheckBox } from './inputElements'
 import { SortableHandle, SelectAllText } from './controlElements'
@@ -29,5 +29,6 @@ export {
   CloseIconContainer,
   Container,
   LinkAnchor, 
-  AxisLine
+  AxisLine,
+  Ribbon
 }
