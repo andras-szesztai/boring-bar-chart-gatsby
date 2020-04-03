@@ -50,14 +50,14 @@ const Container = styled.div`
     color: ${themifyColor(fontColor)};
     background: ${themifyColor(bgColor || "transparent")};
     z-index: ${themifyZIndex(zIndex)};
-    padding-bottom: ${themifySpace(paddingBottom)}px;
-    padding-top: ${themifySpace(paddingTop)}px;
-    padding-right: ${themifySpace(paddingRight)}px;
-    padding-left: ${themifySpace(paddingLeft)}px;
-    border-radius: ${themifySpace(borderRadius)}px;
-    margin-bottom: ${themifySpace(marginBottom)}px;
-    margin-left: ${themifySpace(marginLeft)}px;
-    margin-right: ${themifySpace(marginRight)}px;
+    padding-bottom: ${themifySpace(paddingBottom) || 0}px;
+    padding-top: ${themifySpace(paddingTop) || 0}px;
+    padding-right: ${themifySpace(paddingRight) || 0}px;
+    padding-left: ${themifySpace(paddingLeft) || 0}px;
+    border-radius: ${themifySpace(borderRadius) || 0}px;
+    margin-bottom: ${themifySpace(marginBottom) || 0}px;
+    margin-left: ${themifySpace(marginLeft) || 0}px;
+    margin-right: ${themifySpace(marginRight) || 0}px;
   `}
 
 
