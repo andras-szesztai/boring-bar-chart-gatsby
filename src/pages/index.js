@@ -9,6 +9,7 @@ import styled from "styled-components"
 import { FlexContainer, GridContainer, Container } from "../components/atoms"
 import { themifyTransition, themifySpace, themifyColor } from "../themes/mixins"
 import SOCIAL_LINKS from "../constants/social-links"
+import { IconChart } from "../components/molecules"
 
 const Layout = styled(GridContainer)`
   grid-template-rows: 60px 1fr;
@@ -62,7 +63,7 @@ const TextContainer = styled(GridContainer)`
   background-color: transparent;
   color: transparent;
   :hover {
-    background-color: rgba(51, 51, 51, 0.9);
+    background-color: rgba(51, 51, 51, 0.95);
     color: #fff;
   }
 `
@@ -103,7 +104,9 @@ function IndexPage({ data, isPortrait }) {
       <Helmet title="Boring Bar Chart" />
       <Layout>
         <HeaderContainer justify="space-between">
-          <FlexContainer>Icon</FlexContainer>
+          <FlexContainer>
+            <IconChart dims={40} />
+          </FlexContainer>
           <FlexContainer cursor="pointer">
             {SOCIAL_LINKS.map(
               ({ link, component: Component, componentProps }) => (
@@ -152,14 +155,14 @@ function IndexPage({ data, isPortrait }) {
                   <SingleText justify="flex-end">
                     <LinkContainer fontWeight="medium" cursor="pointer">
                       {!isOutside ? (
-                        <Link to={`${link}`}>Find out more!</Link>
+                        <Link to={`${link}`}>Find out more</Link>
                       ) : (
                         <a
                           href={`${link}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          Find out more!
+                          Find out more
                         </a>
                       )}
                     </LinkContainer>
