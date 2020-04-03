@@ -104,7 +104,7 @@ function IndexPage({ data, isPortrait }) {
       <Helmet title="Boring Bar Chart" />
       <Layout>
         <HeaderContainer justify="space-between">
-          <FlexContainer>
+          <FlexContainer cursor="pointer">
             <IconChart dims={40} />
           </FlexContainer>
           <FlexContainer cursor="pointer">
