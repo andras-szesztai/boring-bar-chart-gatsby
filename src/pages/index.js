@@ -10,11 +10,12 @@ import { FlexContainer, GridContainer, Container } from "../components/atoms"
 import { themifyTransition, themifySpace, themifyColor } from "../themes/mixins"
 import SOCIAL_LINKS from "../constants/social-links"
 import { IconChart } from "../components/molecules"
+import { useWindowDimensions } from "../hooks"
 
 const Layout = styled(GridContainer)`
   grid-template-rows: 60px 1fr;
   grid-row-gap: 0;
-  max-height: 100vh;
+  height: ${({ height }) => height + "px" || "100vh"};
   padding-bottom: 2rem;
 `
 
@@ -99,10 +100,11 @@ function IndexPage({ data, isPortrait }) {
     allContentfulVisualizationsLink: { edges: list },
   } = data
   const isSmallScreen = isPortrait && isMobileOnly
+  const { windowHeight } = useWindowDimensions()
   return (
     <>
       <Helmet title="Boring Bar Chart" />
-      <Layout>
+      <Layout height={isMobileOnly && windowHeight}>
         <HeaderContainer justify="space-between">
           <FlexContainer cursor="pointer">
             <IconChart dims={40} />

@@ -3,6 +3,7 @@ import _ from "lodash"
 import { select } from "d3-selection"
 import { scaleBand, scaleLinear } from "d3-scale"
 import "d3-transition"
+import { easeCubicInOut } from "d3-ease"
 
 import { ChartSvg, ChartArea, AxisLine } from "../../../atoms"
 import { useChartRefs, usePrevious } from "../../../../hooks"
@@ -44,7 +45,10 @@ export default function IconChart({ dims }) {
               .attr("fill", colors.grayDarkest)
               .call(enter =>
                 enter
-                  .transition(makeTransition(area, transition.lgNum, "enter"))
+                  .transition("enter")
+                  .duration(transition.lgNum)
+                  .delay((d, i) => i * transition.smNum)
+                  .ease(easeCubicInOut)
                   .attr("width", d => xScale(d))
               ),
           update =>
