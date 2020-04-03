@@ -16,7 +16,11 @@ export const colors = {
 
   red: "#bc5148",
 
-  tealBlue: "#8bbabb"
+  tealBlueLighter: "#A0D7D8",
+  tealBlue: "#8bbabb",
+  tealBlueDark: "#7AA5A5",
+  tealBlueDarker: "#678C8C",
+  tealBlueDarkest: "#547272"
 }
 
 export const ease = {
