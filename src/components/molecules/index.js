@@ -4,14 +4,15 @@ import {
   VerticalBoxPlot,
   VerticalBarCircleChart,
   ChartStarter,
-  IconChart
+  IconChart,
 } from "./charts"
 import {
   SortableComponent,
   TooltipContainer,
   CarouselContainer,
   ModalContainer,
-  CreditsContainer
+  CreditsContainer,
+  PortfolioItem,
 } from "./containers"
 import { HorizontalMultiSelect } from "./controlElements"
 import { CountUpSpan } from "./textElemets"
@@ -31,5 +32,6 @@ export {
   CreditsContainer,
   FullScreenLoader,
   ChartStarter,
-  IconChart
+  IconChart,
+  PortfolioItem,
 }
