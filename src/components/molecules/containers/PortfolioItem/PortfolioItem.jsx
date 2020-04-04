@@ -4,8 +4,9 @@ import { isMobileOnly, withOrientationChange } from "react-device-detect"
 import Image from "gatsby-image"
 import styled from "styled-components"
 import { subWeeks } from "date-fns"
+import { FaDesktop, FaTabletAlt, FaMobileAlt } from "react-icons/fa"
 
-import { FlexContainer, GridContainer, Ribbon } from "../../../atoms"
+import { FlexContainer, GridContainer, Ribbon, Container } from "../../../atoms"
 import {
   themifyTransition,
   themifySpace,
@@ -98,7 +99,12 @@ function PortfolioItem({
         <SingleText justify="flex-start" align="flex-start">
           {description}
         </SingleText>
-        <SingleText justify="flex-end">
+        <SingleText justify="space-between">
+          <SingleText width="90px" justify="space-between">
+            <FaDesktop size={20} />
+            <FaTabletAlt size={19} />
+            <FaMobileAlt size={19} />
+          </SingleText>
           <LinkContainer fontWeight="medium" cursor="pointer">
             {!isOutside ? (
               <Link to={`${link}`}>Find out more</Link>
