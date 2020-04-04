@@ -66,7 +66,14 @@ function PortfolioItem({
       height={isSmallScreen ? "150px" : "180px"}
       borderRadius={1}
     >
-      {subWeeks(new Date(), 2) < new Date(date) && <Ribbon text="NEW" />}
+      {subWeeks(new Date(), 2) < new Date(date) && (
+        <Ribbon
+          text="NEW"
+          width={isMobileOnly ? 90 : undefined}
+          top={isMobileOnly ? 15 : undefined}
+          padding={isMobileOnly ? 4 : undefined}
+        />
+      )}
       <FlexContainer pos="relative" fullSize align="flex-start">
         <Image style={{ minWidth: "100%" }} fluid={image.fluid} />
       </FlexContainer>
