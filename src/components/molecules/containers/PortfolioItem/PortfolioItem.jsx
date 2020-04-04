@@ -67,7 +67,8 @@ function PortfolioItem({
 }) {
   const isSmallScreen = isPortrait && isMobileOnly
   const devices =
-    deviceTypes && Object.keys(deviceTypes[0]).filter(el => deviceTypes[0][el])
+    deviceTypes && Object.keys(deviceTypes[0]).filter(el => deviceTypes[0][el]).reverse()
+    
   return (
     <ItemContainer
       pos="relative"
