@@ -6,12 +6,18 @@ import styled from "styled-components"
 import { subWeeks } from "date-fns"
 import { FaDesktop, FaTabletAlt, FaMobileAlt } from "react-icons/fa"
 
-import { FlexContainer, GridContainer, Ribbon, Container } from "../../../atoms"
+import { FlexContainer, GridContainer, Ribbon } from "../../../atoms"
 import {
   themifyTransition,
   themifySpace,
   themifyColor,
 } from "../../../../themes/mixins"
+
+const DEVICE_ICONS = {
+  desktop: { icon: FaDesktop, size: 20 },
+  tablet: { icon: FaTabletAlt, size: 19 },
+  mobile: { icon: FaMobileAlt, size: 19 },
+}
 
 const ItemContainer = styled(FlexContainer)`
   overflow: hidden;
@@ -57,9 +63,11 @@ const LinkContainer = styled(FlexContainer)`
 
 function PortfolioItem({
   isPortrait,
-  data: { id, title, link, isOutside, image, description, date },
+  data: { id, title, link, isOutside, image, description, date, deviceTypes },
 }) {
   const isSmallScreen = isPortrait && isMobileOnly
+  const devices =
+    deviceTypes && Object.keys(deviceTypes[0]).filter(el => deviceTypes[0][el])
   return (
     <ItemContainer
       pos="relative"
@@ -100,11 +108,18 @@ function PortfolioItem({
           {description}
         </SingleText>
         <SingleText justify="space-between">
-          <SingleText width="90px" justify="space-between">
-            <FaDesktop size={20} />
-            <FaTabletAlt size={19} />
-            <FaMobileAlt size={19} />
-          </SingleText>
+          {}
+          {Array.isArray(devices) && (
+            <SingleText
+              width={`${devices.length * 30}px`}
+              justify="space-between"
+            >
+              {devices.map(device => {
+                const { icon: Icon, size } = DEVICE_ICONS[device]
+                return <Icon size={size} />
+              })}
+            </SingleText>
+          )}
           <LinkContainer fontWeight="medium" cursor="pointer">
             {!isOutside ? (
               <Link to={`${link}`}>Find out more</Link>
