@@ -32,6 +32,11 @@ export const query = graphql`
           description
           link
           isOutside
+          deviceTypes {
+            mobile
+            tablet
+            desktop
+          }
           image {
             fluid {
               ...GatsbyContentfulFluid_tracedSVG

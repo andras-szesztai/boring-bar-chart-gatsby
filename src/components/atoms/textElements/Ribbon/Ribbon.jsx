@@ -1,15 +1,17 @@
 import React from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { colors } from "../../../../themes/theme"
 
 const RibbonContainer = styled.div`
-  width: 100px;
-  height: 100px;
+  ${({ width, top }) => css`
+    width: ${width}px;
+    height: ${width}px;
+    top: -${top}px;
+  `}
   overflow: hidden;
   position: absolute;
   z-index: 1;
   pointer-events: none;
-  top: -10px;
   right: -10px;
 
   ::before,
@@ -37,7 +39,7 @@ const RibbonContainer = styled.div`
     position: absolute;
     display: block;
     width: 160px;
-    padding: 5px 0;
+    padding: ${({ padding }) => padding}px 0;
     background-color: ${colors.tealBlueLighter};
     color: ${colors.tealBlueDarkest};
     text-align: center;
@@ -49,10 +51,16 @@ const RibbonContainer = styled.div`
   }
 `
 
-export default function Ribbon({ text }) {
+export default function Ribbon({ text, width, padding, top }) {
   return (
-    <RibbonContainer>
+    <RibbonContainer width={width} padding={padding} top={top}>
       <span>{text}</span>
     </RibbonContainer>
   )
+}
+
+Ribbon.defaultProps = {
+  width: 100,
+  padding: 5,
+  top: 10
 }
