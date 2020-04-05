@@ -74,6 +74,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               fontSize={4}
               fontWeight="ultraLight"
               lineHeight={1.2}
+              paddingBottom={2}
             >
               Az új koronavírusban elhunytak száma, korban es nembeni eloszlása
               Magyarországon
@@ -89,7 +90,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               </LinkAnchor>
             </FlexContainer>
             <FlexContainer fontSize={2} justify="flex-start" gridArea="total">
-              Összesen:
+              Összesen
             </FlexContainer>
             <FlexContainer fontSize={2} fontWeight={3} gridArea="tNum">
               {numbers.total}
@@ -132,7 +133,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             >
               {numbers.male}
             </FlexContainer>
-            <FlexContainer withBorder gridArea="barC">
+            <FlexContainer gridArea="barC">
               <HorizontalBarChart data={numbers} />
             </FlexContainer>
             <FlexContainer
