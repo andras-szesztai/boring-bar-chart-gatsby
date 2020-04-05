@@ -101,7 +101,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               {numbers.total}
             </FlexContainer>
             <FlexContainer fontSize={2} gridArea="date">
-              {format(new Date(), "Y'.' MM'.' dd'.'")}
+              {format(new Date("4/5/2020"), "Y'.' MM'.' dd'.'")}
             </FlexContainer>
             <FlexContainer withBorder gridArea="slider">
               Slider
@@ -165,7 +165,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               <StackedBarChart data={numbers} />
             </FlexContainer>
 
-            <FlexContainer withBorder gridArea="7/-1/-1/1">
+            <FlexContainer gridArea="7/-1/-1/1">
               <AgeChartBrowser  data={formattedData} />
             </FlexContainer>
           </BrowserMainGrid>

@@ -3,12 +3,17 @@ import { max, min } from "d3-array"
 import chroma from "chroma-js"
 import { select } from "d3-selection"
 import { scaleLinear } from "d3-scale"
+import { axisBottom } from "d3-axis"
+import _ from "lodash"
 
 import { ChartWrapper, ChartSvg, AxisLine, ChartArea } from "../../../../atoms"
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
-import { chartColors, lowOpacity } from "../../../../../constants/visualizations/coronavirusHungary"
+import {
+  chartColors,
+  lowOpacity,
+} from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition } from "../../../../../utils/chartHelpers"
-import { transition, space } from "../../../../../themes/theme"
+import { transition, space, colors } from "../../../../../themes/theme"
 
 export default function AgeChartBrowser({ data, margin }) {
   const { svgRef, wrapperRef, xAxisRef, areaRef } = useChartRefs()
@@ -29,7 +34,6 @@ export default function AgeChartBrowser({ data, margin }) {
       const setColor = ({ gender }) =>
         gender === "Férfi" ? chartColors.male : chartColors.female
 
-      console.log(data)
       area
         .selectAll("circle")
         .data(data, ({ number }) => number)
@@ -50,39 +54,58 @@ export default function AgeChartBrowser({ data, margin }) {
             )
         )
 
-      // select(lineRef.current).raise()
+      select(lineRef.current).raise()
+    }
+
+    function createUpdateAxis() {
+      const { xScale } = storedValues.current
+      const xAxis = select(xAxisRef.current)
+      xAxis
+        .call(
+          axisBottom(xScale)
+            .ticks(dims.chartWidth / 80)
+            .tickSizeOuter(0)
+        )
+        .call(g => g.select(".domain").remove())
+      xAxis
+          .append("text")
+          .attr("x", 0)
+          .attr("y", space[3])
+          .attr("text-anchor", "start")
+          .attr("fill", colors.grayDarkest)
+          .text("Életkor")
     }
 
     function updateDims() {
-      // const { yScale, xScale, area } = storedValues.current
-      // yScale.rangeRound([0, dims.chartHeight])
-      // xScale.range([0, dims.chartWidth])
-      // area
-      //   .selectAll("rect")
-      //   .attr("width", ({ num }) => xScale(num))
-      //   .attr("y", ({ gender }) => yScale(gender))
-      //   .attr("height", yScale.bandwidth())
-      // storedValues.current = { ...storedValues.current, yScale, xScale }
+      const { yScale, xScale, area } = storedValues.current
+      yScale.range([0, dims.chartHeight])
+      xScale.range([0, dims.chartWidth])
+      area
+        .selectAll("circle")
+        .attr("cx", ({ age }) => xScale(age))
+        .attr("cy", ({ rand }) => yScale(rand))
+      storedValues.current = { ...storedValues.current, yScale, xScale }
     }
 
     if (!init && data) {
       const area = select(areaRef.current)
       const yScale = scaleLinear()
         .range([0, dims.chartHeight])
-        .domain([0, 200])
+        .domain([200, 0])
       const xScale = scaleLinear()
         .range([0, dims.chartWidth])
         .domain([min(data, d => d.age) - 2, max(data, d => d.age) + 2])
       storedValues.current = { yScale, xScale, area }
       createUpdateRectangles()
+      createUpdateAxis()
       setInit(true)
     }
-    // if (init && !_.isEqual(data, prevData)) {
-    // }
-    if (init && !_.isEqual(prevDims, dims)) {
-      // updateDims()
+    if (init && !_.isEqual(data, prevData)) {
     }
-  }, [init, data, dims, prevData, prevDims, areaRef])
+    if (init && !_.isEqual(prevDims, dims)) {
+      updateDims()
+    }
+  }, [init, data, dims, prevData, prevDims, areaRef, xAxisRef])
 
   return (
     <ChartWrapper ref={wrapperRef}>
@@ -110,5 +133,5 @@ export default function AgeChartBrowser({ data, margin }) {
 }
 
 AgeChartBrowser.defaultProps = {
-  margin: { top: 10, right: 20, bottom: 25, left: 20 },
+  margin: { top: 20, right: 0, bottom: 25, left: 0 },
 }
