@@ -1,0 +1,1 @@
+export const DATA_URL = "https://boring-barchart-gatsby.firebaseio.com/coronavirus-hungary.json"
