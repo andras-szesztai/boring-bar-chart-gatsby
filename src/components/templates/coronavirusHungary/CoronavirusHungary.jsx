@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import {
   MobileOnlyView,
@@ -6,6 +6,7 @@ import {
   BrowserView,
   withOrientationChange,
 } from "react-device-detect"
+import { format } from "date-fns"
 
 import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
 import { space } from "../../../themes/theme"
@@ -24,7 +25,7 @@ const BrowserMainGrid = styled(GridContainer)`
   grid-column-gap: ${space[1]}px;
   grid-template-areas:
     "title title title title title title source source source source"
-    "total total total date date date slider slider slider slider"
+    "total tNum date date date date slider slider slider slider"
     "no noNum barC barC barC barC percNo percNo percFfi percFfi"
     "no noNum barC barC barC barC percNo percNo percFfi percFfi"
     "ffi ffiNum barC barC barC barC percBar percBar percBar percBar"
@@ -32,6 +33,26 @@ const BrowserMainGrid = styled(GridContainer)`
 `
 
 function CoronaVirusHungaryDashboard({ data, loading }) {
+  const [formattedData, setFormattedData] = useState(undefined)
+  useEffect(() => {
+    if (data && !formattedData) {
+      setFormattedData(
+        data.map(el => ({
+          ...el,
+          age: +el.kor,
+          rand: +el.random,
+          date: new Date(el.datum),
+          number: +el.sorszam,
+          gender: el.nem,
+        }))
+      )
+    }
+  }, [data, formattedData]);
+
+  const [ numbers, setNumbers ] = useState({ total: 0, male: 0, female: 0 })
+
+  console.log(formattedData);
+  
   return (
     <>
       <BrowserView>
@@ -43,73 +64,78 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               fontSize={4}
               fontWeight="ultraLight"
               lineHeight={1.2}
-              withBorder
             >
-              Magyarországon az új koronavírusban elhunytak száma, korban es
-              nembeni eloszlása
+              Az új koronavírusban elhunytak száma, korban es nembeni eloszlása
+              Magyarországon
             </FlexContainer>
-            <FlexContainer fontSize={2} gridArea="source" withBorder>
-              Forrás:&nbsp;<LinkAnchor fontsize={2} fontWeight="thin" href="https://koronavirus.gov.hu/" >koronavirus.gov.hu</LinkAnchor> 
+            <FlexContainer fontSize={2} gridArea="source">
+              Forrás:&nbsp;
+              <LinkAnchor
+                fontsize={2}
+                fontWeight="thin"
+                href="https://koronavirus.gov.hu/"
+              >
+                koronavirus.gov.hu
+              </LinkAnchor>
             </FlexContainer>
             <FlexContainer
-              withBorder
               fontSize={2}
               justify="flex-start"
               gridArea="total"
             >
-              Total:
+              Összesen:
             </FlexContainer>
             <FlexContainer
-              withBorder
               fontSize={2}
               fontWeight={3}
+              gridArea="tNum"
+            >
+              {formattedData && formattedData.length}
+            </FlexContainer>
+            <FlexContainer
+              fontSize={2}
               gridArea="date"
             >
-              Datum
+              {format(new Date(), "Y'.' MM'.' dd'.'")}
             </FlexContainer>
             <FlexContainer withBorder gridArea="slider">
               Slider
             </FlexContainer>
             <FlexContainer
-              withBorder
               justify="flex-start"
               fontSize={2}
               gridArea="no"
               fontColor={chartColors.female}
             >
-              No
+              Nő
             </FlexContainer>
             <FlexContainer
-              withBorder
               fontWeight={3}
               fontSize={2}
               gridArea="noNum"
               fontColor={chartColors.female}
             >
-              14
+              {formattedData && formattedData.filter(({ gender }) => gender === "Nő").length}
             </FlexContainer>
             <FlexContainer
-              withBorder
               justify="flex-start"
               fontSize={2}
               gridArea="ffi"
               fontColor={chartColors.male}
             >
-              Ferfi
+              Férfi
             </FlexContainer>
             <FlexContainer
-              withBorder
               gridArea="ffiNum"
               fontWeight={3}
               fontSize={2}
               fontColor={chartColors.male}
             >
-              21
+              {formattedData && formattedData.filter(({ gender }) => gender === "Férfi").length}
             </FlexContainer>
             <FlexContainer withBorder gridArea="barC">
               Bar chart
             </FlexContainer>
-
             <FlexContainer
               withBorder
               gridArea="percNo"
@@ -132,7 +158,9 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             <FlexContainer withBorder gridArea="percBar">
               Bar chart
             </FlexContainer>
-            <FlexContainer withBorder gridArea="7/-1/-1/1" >Chart</FlexContainer>
+            <FlexContainer withBorder gridArea="7/-1/-1/1">
+              Chart
+            </FlexContainer>
           </BrowserMainGrid>
         </FlexContainer>
       </BrowserView>
