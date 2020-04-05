@@ -1,11 +1,18 @@
-import React from 'react';
+import React from "react"
+import { FlexContainer } from "../../atoms"
 
-export default function CoronaVirusHungaryDashboard({
-  data, loading
-}){
-  console.log(data);
-  console.log(loading);
-  
+import { MobileOnlyView, TabletView, BrowserView, withOrientationChange } from "react-device-detect"
 
-  return <div>Dashboard</div>
+function CoronaVirusHungaryDashboard({ data, loading }) {
+
+  return (
+    <>
+      <BrowserView>Browser</BrowserView>
+      <TabletView>Tablet</TabletView>
+      <MobileOnlyView>Mobile</MobileOnlyView>
+    </>
+  )
 }
+
+
+export default withOrientationChange(CoronaVirusHungaryDashboard)
