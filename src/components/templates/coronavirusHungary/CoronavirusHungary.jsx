@@ -12,12 +12,14 @@ import numeral from "numeral"
 import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
 import { space } from "../../../themes/theme"
 import { chartColors } from "../../../constants/visualizations/coronavirusHungary"
+import { HorizontalBarChart } from "../../organisms/templateElemets/coronavirusHungary"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
   width: 95vw;
 
   max-height: 700px;
+  min-height: 500px;
   height: 95vh;
 
   grid-template-columns: repeat(10, 5fr);
@@ -131,7 +133,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               {numbers.male}
             </FlexContainer>
             <FlexContainer withBorder gridArea="barC">
-              Bar chart
+              <HorizontalBarChart data={numbers} />
             </FlexContainer>
             <FlexContainer
               gridArea="percNo"
