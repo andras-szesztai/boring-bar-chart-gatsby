@@ -7,15 +7,16 @@ import {
   withOrientationChange,
 } from "react-device-detect"
 
-import { FlexContainer, GridContainer } from "../../atoms"
+import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
 import { space } from "../../../themes/theme"
+import { chartColors } from "../../../constants/visualizations/coronavirusHungary"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
   width: 95vw;
 
   max-height: 700px;
-  height: 90vh;
+  height: 95vh;
 
   grid-template-columns: repeat(10, 5fr);
   grid-template-rows: min-content repeat(10, 1fr);
@@ -48,7 +49,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               nembeni eloszlása
             </FlexContainer>
             <FlexContainer fontSize={2} gridArea="source" withBorder>
-              Forrás: https://koronavirus.gov.hu/
+              Forrás:&nbsp;<LinkAnchor fontsize={2} fontWeight="thin" href="https://koronavirus.gov.hu/" >koronavirus.gov.hu</LinkAnchor> 
             </FlexContainer>
             <FlexContainer
               withBorder
@@ -72,21 +73,66 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             <FlexContainer
               withBorder
               justify="flex-start"
-              fontWeight={3}
               fontSize={2}
               gridArea="no"
+              fontColor={chartColors.female}
             >
               No
             </FlexContainer>
             <FlexContainer
               withBorder
-              justify="flex-start"
               fontWeight={3}
               fontSize={2}
+              gridArea="noNum"
+              fontColor={chartColors.female}
+            >
+              14
+            </FlexContainer>
+            <FlexContainer
+              withBorder
+              justify="flex-start"
+              fontSize={2}
               gridArea="ffi"
+              fontColor={chartColors.male}
             >
               Ferfi
             </FlexContainer>
+            <FlexContainer
+              withBorder
+              gridArea="ffiNum"
+              fontWeight={3}
+              fontSize={2}
+              fontColor={chartColors.male}
+            >
+              21
+            </FlexContainer>
+            <FlexContainer withBorder gridArea="barC">
+              Bar chart
+            </FlexContainer>
+
+            <FlexContainer
+              withBorder
+              gridArea="percNo"
+              fontWeight={3}
+              fontSize={2}
+              fontColor={chartColors.female}
+            >
+              35%
+            </FlexContainer>
+
+            <FlexContainer
+              withBorder
+              gridArea="percFfi"
+              fontWeight={3}
+              fontSize={2}
+              fontColor={chartColors.male}
+            >
+              65%
+            </FlexContainer>
+            <FlexContainer withBorder gridArea="percBar">
+              Bar chart
+            </FlexContainer>
+            <FlexContainer withBorder gridArea="7/-1/-1/1" >Chart</FlexContainer>
           </BrowserMainGrid>
         </FlexContainer>
       </BrowserView>
