@@ -6,7 +6,7 @@ import chroma from "chroma-js"
 
 import { ChartSvg, ChartWrapper, ChartArea, AxisLine } from "../../../../atoms"
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
-import { chartColors } from "../../../../../constants/visualizations/coronavirusHungary"
+import { chartColors, lowOpacity } from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { transition } from "../../../../../themes/theme"
 
@@ -46,7 +46,7 @@ export default function HorizontalBarChart({ margin, data }) {
               .attr("width", ({ num }) => xScale(num))
               .attr("y", 0)
               .attr("height", dims.chartHeight)
-              .attr("fill", d => chroma(setColor(d)).alpha(0.7))
+              .attr("fill", d => chroma(setColor(d)).alpha(lowOpacity))
               .attr("stroke", setColor),
           update =>
             update.call(update =>
@@ -58,15 +58,14 @@ export default function HorizontalBarChart({ margin, data }) {
     }
 
     function updateDims() {
-      // const { yScale, xScale, area } = storedValues.current
-      // yScale.rangeRound([0, dims.chartHeight])
-      // xScale.range([0, dims.chartWidth])
-      // area
-      //   .selectAll("rect")
-      //   .attr("width", ({ num }) => xScale(num))
-      //   .attr("y", ({ gender }) => yScale(gender))
-      //   .attr("height", yScale.bandwidth())
-      // storedValues.current = { ...storedValues.current, yScale, xScale }
+      const { xScale, area } = storedValues.current
+      xScale.range([0, dims.chartWidth])
+      area
+        .selectAll("rect")
+        .attr("x", ({ start }) => xScale(start))
+        .attr("width", ({ num }) => xScale(num))
+        .attr("height", dims.chartHeight)
+      storedValues.current = { ...storedValues.current, xScale }
     }
 
     if (!init && data.total) {

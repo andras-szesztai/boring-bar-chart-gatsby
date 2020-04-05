@@ -13,7 +13,11 @@ import _ from "lodash"
 import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
 import { space } from "../../../themes/theme"
 import { chartColors } from "../../../constants/visualizations/coronavirusHungary"
-import { HorizontalBarChart, StackedBarChart } from "../../organisms/templateElemets/coronavirusHungary"
+import {
+  HorizontalBarChart,
+  StackedBarChart,
+  AgeChartBrowser
+} from "../../organisms/templateElemets/coronavirusHungary"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -44,7 +48,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
         data.map(el => ({
           ...el,
           age: +el.kor,
-          rand: el.nem === "Férfi" ? _.random(5, 95) : _.random(105, 195),
+          rand: el.nem === "Férfi" ? _.random(10, 90) : _.random(110, 190),
           date: new Date(el.datum),
           number: +el.sorszam,
           gender: el.nem,
@@ -137,11 +141,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             <FlexContainer gridArea="barC">
               <HorizontalBarChart data={numbers} />
             </FlexContainer>
-            <FlexContainer
-              gridArea="percText"
-              align="flex-end"
-              fontSize={2}
-            >
+            <FlexContainer gridArea="percText" align="flex-end" fontSize={2}>
               Nemek százalékos megoszlása
             </FlexContainer>
             <FlexContainer
@@ -164,9 +164,9 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             <FlexContainer gridArea="percBar">
               <StackedBarChart data={numbers} />
             </FlexContainer>
-            
+
             <FlexContainer withBorder gridArea="7/-1/-1/1">
-              Age Chart
+              <AgeChartBrowser  data={formattedData} />
             </FlexContainer>
           </BrowserMainGrid>
         </FlexContainer>
