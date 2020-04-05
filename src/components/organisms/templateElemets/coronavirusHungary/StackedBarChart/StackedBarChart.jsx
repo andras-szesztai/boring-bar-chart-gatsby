@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from "react"
 import _ from "lodash"
 import { select } from "d3-selection"
-import { scaleLinear, scaleBand } from "d3-scale"
-import { max, min } from "d3-array"
+import { scaleLinear } from "d3-scale"
 import chroma from "chroma-js"
 
 import { ChartSvg, ChartWrapper, ChartArea, AxisLine } from "../../../../atoms"
@@ -12,25 +11,27 @@ import { makeTransition } from "../../../../../utils/chartHelpers"
 import { transition } from "../../../../../themes/theme"
 
 export default function HorizontalBarChart({ margin, data }) {
-  const { svgRef, wrapperRef, yAxisRef } = useChartRefs()
+  const { svgRef, wrapperRef, areaRef } = useChartRefs()
   const dims = useDimensions({
     ref: wrapperRef,
     margin,
   })
   const [init, setInit] = useState(false)
   const storedValues = useRef()
-  const lineRef = useRef()
   const prevData = usePrevious(data)
   const prevDims = usePrevious(dims)
 
   useEffect(() => {
     function createUpdateRectangles() {
-      const { yScale, xScale, area } = storedValues.current
+      const { xScale, area } = storedValues.current
       const chartData = [
-        { gender: "female", num: data.female },
-        { gender: "male", num: data.male },
+        { gender: "female", start: 0, num: data.female / data.total },
+        {
+          gender: "male",
+          start: data.female / data.total,
+          num: data.male / data.total,
+        },
       ]
-
       const setColor = ({ gender }) =>
         gender === "male" ? chartColors.male : chartColors.female
 
@@ -41,10 +42,10 @@ export default function HorizontalBarChart({ margin, data }) {
           enter =>
             enter
               .append("rect")
-              .attr("x", 0)
+              .attr("x", ({ start }) => xScale(start))
               .attr("width", ({ num }) => xScale(num))
-              .attr("y", ({ gender }) => yScale(gender))
-              .attr("height", yScale.bandwidth())
+              .attr("y", 0)
+              .attr("height", dims.chartHeight)
               .attr("fill", d => chroma(setColor(d)).alpha(0.7))
               .attr("stroke", setColor),
           update =>
@@ -54,33 +55,26 @@ export default function HorizontalBarChart({ margin, data }) {
                 .attr("width", d => xScale(d))
             )
         )
-
-      select(lineRef.current).raise()
     }
 
     function updateDims() {
-      const { yScale, xScale, area } = storedValues.current
-      yScale.rangeRound([0, dims.chartHeight])
-      xScale.range([0, dims.chartWidth])
-      area
-        .selectAll("rect")
-        .attr("width", ({ num }) => xScale(num))
-        .attr("y", ({ gender }) => yScale(gender))
-        .attr("height", yScale.bandwidth())
-      storedValues.current = { ...storedValues.current, yScale, xScale }
+      // const { yScale, xScale, area } = storedValues.current
+      // yScale.rangeRound([0, dims.chartHeight])
+      // xScale.range([0, dims.chartWidth])
+      // area
+      //   .selectAll("rect")
+      //   .attr("width", ({ num }) => xScale(num))
+      //   .attr("y", ({ gender }) => yScale(gender))
+      //   .attr("height", yScale.bandwidth())
+      // storedValues.current = { ...storedValues.current, yScale, xScale }
     }
 
     if (!init && data.total) {
-      const area = select(yAxisRef.current)
-      const yScale = scaleBand()
-        .rangeRound([0, dims.chartHeight])
-        .domain(["female", "male"])
-        .paddingOuter(0.15)
-        .paddingInner(0.4)
+      const area = select(areaRef.current)
       const xScale = scaleLinear()
         .range([0, dims.chartWidth])
-        .domain([0, max(Object.values(data)) - min(Object.values(data))])
-      storedValues.current = { yScale, xScale, area }
+        .domain([0, 1])
+      storedValues.current = { xScale, area }
       createUpdateRectangles()
       setInit(true)
     }
@@ -89,7 +83,7 @@ export default function HorizontalBarChart({ margin, data }) {
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()
     }
-  }, [init, data, yAxisRef, dims, prevData, prevDims])
+  }, [init, data, dims, prevData, prevDims, areaRef])
 
   return (
     <ChartWrapper ref={wrapperRef}>
@@ -97,21 +91,13 @@ export default function HorizontalBarChart({ margin, data }) {
         <ChartArea
           marginLeft={margin.left}
           marginTop={margin.top}
-          ref={yAxisRef}
-        >
-          <AxisLine
-            color="grayDarkest"
-            ref={lineRef}
-            stroke={0.5}
-            y1={0}
-            y2={dims.chartHeight}
-          />
-        </ChartArea>
+          ref={areaRef}
+        />
       </ChartSvg>
     </ChartWrapper>
   )
 }
 
 HorizontalBarChart.defaultProps = {
-  margin: { top: 15, right: 50, bottom: 15, left: 20 },
+  margin: { top: 19, right: 25, bottom: 33, left: 25 },
 }

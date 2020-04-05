@@ -8,11 +8,12 @@ import {
 } from "react-device-detect"
 import { format } from "date-fns"
 import numeral from "numeral"
+import _ from "lodash"
 
 import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
 import { space } from "../../../themes/theme"
 import { chartColors } from "../../../constants/visualizations/coronavirusHungary"
-import { HorizontalBarChart } from "../../organisms/templateElemets/coronavirusHungary"
+import { HorizontalBarChart, StackedBarChart } from "../../organisms/templateElemets/coronavirusHungary"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -29,7 +30,7 @@ const BrowserMainGrid = styled(GridContainer)`
   grid-template-areas:
     "title title title title title title source source source source"
     "total tNum date date date date slider slider slider slider"
-    "no noNum barC barC barC barC percNo percNo percFfi percFfi"
+    "no noNum barC barC barC barC percText percText percText percText"
     "no noNum barC barC barC barC percNo percNo percFfi percFfi"
     "ffi ffiNum barC barC barC barC percBar percBar percBar percBar"
     "ffi ffiNum barC barC barC barC percBar percBar percBar percBar";
@@ -43,7 +44,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
         data.map(el => ({
           ...el,
           age: +el.kor,
-          rand: +el.random,
+          rand: el.nem === "Férfi" ? _.random(5, 95) : _.random(105, 195),
           date: new Date(el.datum),
           number: +el.sorszam,
           gender: el.nem,
@@ -137,6 +138,13 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               <HorizontalBarChart data={numbers} />
             </FlexContainer>
             <FlexContainer
+              gridArea="percText"
+              align="flex-end"
+              fontSize={2}
+            >
+              Nemek százalékos megoszlása
+            </FlexContainer>
+            <FlexContainer
               gridArea="percNo"
               fontWeight={3}
               fontSize={2}
@@ -144,7 +152,6 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             >
               {numeral(numbers.female / numbers.total).format("0.0%")}
             </FlexContainer>
-
             <FlexContainer
               gridArea="percFfi"
               fontWeight={3}
@@ -153,11 +160,13 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             >
               {numeral(numbers.male / numbers.total).format("0.0%")}
             </FlexContainer>
-            <FlexContainer withBorder gridArea="percBar">
-              Bar chart
+
+            <FlexContainer gridArea="percBar">
+              <StackedBarChart data={numbers} />
             </FlexContainer>
+            
             <FlexContainer withBorder gridArea="7/-1/-1/1">
-              Chart
+              Age Chart
             </FlexContainer>
           </BrowserMainGrid>
         </FlexContainer>
