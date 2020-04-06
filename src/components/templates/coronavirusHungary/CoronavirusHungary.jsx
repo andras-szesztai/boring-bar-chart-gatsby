@@ -6,7 +6,7 @@ import {
   BrowserView,
   withOrientationChange,
 } from "react-device-detect"
-import { format } from "date-fns"
+import { format, differenceInDays, subDays } from "date-fns"
 import numeral from "numeral"
 import _ from "lodash"
 import Slider from "@material-ui/core/Slider"
@@ -62,6 +62,19 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
     }
   }, [data, formattedData])
 
+  const [dates, setDates] = useState({ diff: undefined, max: undefined })
+  useEffect(() => {
+    if (formattedData && !dates.max) {
+      const maxDate = _.maxBy(formattedData, "date").date
+      const minDate = _.minBy(formattedData, "date").date
+      const dateDiff = differenceInDays(minDate, maxDate)
+      setDates({
+        diff: dateDiff,
+        max: _.maxBy(formattedData, "date").date,
+      })
+    }
+  }, [dates, formattedData])
+
   const [numbers, setNumbers] = useState({ total: 0, male: 0, female: 0 })
   useEffect(() => {
     if (formattedData && !numbers.total) {
@@ -73,7 +86,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
     }
   }, [data, formattedData, numbers])
 
-  console.log(formattedData)
+  console.log(dates)
 
   return (
     <>
@@ -108,16 +121,21 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               {numbers.total}
             </FlexContainer>
             <FlexContainer fontSize={2} gridArea="date">
-              {format(new Date("4/5/2020"), "Y'.' MM'.' dd'.'")}
+              {dates.max && format(dates.max, "Y'.' MM'.' dd'.'")}
             </FlexContainer>
             <FlexContainer gridArea="slider">
-              <DateSlider
-                step={1}
-                valueLabelDisplay="auto"
-                valueLabelFormat={d => "auto"}
-                min={-2}
-                max={0}
-              />
+              {dates.max && (
+                <DateSlider
+                  defaultValue={0}
+                  step={1}
+                  valueLabelDisplay="auto"
+                  valueLabelFormat={val =>
+                    format(subDays(dates.max, -val), "MM'.' dd'.'")
+                  }
+                  min={dates.diff}
+                  max={0}
+                />
+              )}
             </FlexContainer>
             <FlexContainer
               justify="flex-start"
