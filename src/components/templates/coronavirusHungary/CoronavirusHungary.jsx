@@ -9,6 +9,7 @@ import {
 import { format } from "date-fns"
 import numeral from "numeral"
 import _ from "lodash"
+import Slider from "@material-ui/core/Slider"
 
 import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
 import { space } from "../../../themes/theme"
@@ -16,8 +17,12 @@ import { chartColors } from "../../../constants/visualizations/coronavirusHungar
 import {
   HorizontalBarChart,
   StackedBarChart,
-  AgeChartBrowser
+  AgeChartBrowser,
 } from "../../organisms/templateElemets/coronavirusHungary"
+
+const DateSlider = styled(Slider)`
+  width: 200px;
+`
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -68,6 +73,8 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
     }
   }, [data, formattedData, numbers])
 
+  console.log(formattedData)
+
   return (
     <>
       <BrowserView>
@@ -103,8 +110,14 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             <FlexContainer fontSize={2} gridArea="date">
               {format(new Date("4/5/2020"), "Y'.' MM'.' dd'.'")}
             </FlexContainer>
-            <FlexContainer withBorder gridArea="slider">
-              Slider
+            <FlexContainer gridArea="slider">
+              <DateSlider
+                step={1}
+                valueLabelDisplay="auto"
+                valueLabelFormat={d => "auto"}
+                min={-2}
+                max={0}
+              />
             </FlexContainer>
             <FlexContainer
               justify="flex-start"
@@ -166,7 +179,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             </FlexContainer>
 
             <FlexContainer gridArea="7/-1/-1/1">
-              <AgeChartBrowser  data={formattedData} />
+              <AgeChartBrowser data={formattedData} />
             </FlexContainer>
           </BrowserMainGrid>
         </FlexContainer>

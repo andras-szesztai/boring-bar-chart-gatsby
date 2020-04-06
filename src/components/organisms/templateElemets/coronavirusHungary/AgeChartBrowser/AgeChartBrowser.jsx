@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react"
 import { max, min } from "d3-array"
+import { forceSimulation, forceX, forceY, forceCollide } from "d3-force"
 import chroma from "chroma-js"
 import { select } from "d3-selection"
-import { scaleLinear } from "d3-scale"
+import { scaleLinear, scaleBand, scaleOrdinal } from "d3-scale"
 import { axisBottom } from "d3-axis"
 import _ from "lodash"
 
@@ -28,11 +29,27 @@ export default function AgeChartBrowser({ data, margin }) {
   const prevDims = usePrevious(dims)
 
   useEffect(() => {
-    function createUpdateRectangles() {
+    function createUpdateCircles() {
       const { yScale, xScale, area } = storedValues.current
 
       const setColor = ({ gender }) =>
         gender === "Férfi" ? chartColors.male : chartColors.female
+
+      forceSimulation(data)
+        .force(
+          "forceX",
+          forceX()
+            .strength(1)
+            .x(({ age }) => xScale(age))
+        )
+        .force(
+          "forceY",
+          forceY()
+            .strength(0.1)
+            .y(({ gender }) => yScale(gender) + yScale.bandwidth() / 2)
+        )
+        .force("collide", forceCollide().radius(6.5))
+        .tick(300)
 
       area
         .selectAll("circle")
@@ -42,16 +59,11 @@ export default function AgeChartBrowser({ data, margin }) {
             enter
               .append("circle")
               .attr("r", 6)
-              .attr("cx", ({ age }) => xScale(age))
-              .attr("cy", ({ rand }) => yScale(rand))
+              .attr("cx", ({ x }) => x)
+              .attr("cy", ({ y }) => y)
               .attr("fill", d => chroma(setColor(d)).alpha(lowOpacity))
               .attr("stroke", setColor),
-          update =>
-            update.call(update =>
-              update
-                .transition(makeTransition(area, transition.lgNum, "update"))
-                .attr("cx", ({ age }) => xScale(age))
-            )
+          update => update.attr("cx", ({ x }) => x).attr("cy", ({ y }) => y)
         )
 
       select(lineRef.current).raise()
@@ -59,45 +71,42 @@ export default function AgeChartBrowser({ data, margin }) {
 
     function createUpdateAxis() {
       const { xScale } = storedValues.current
-      const xAxis = select(xAxisRef.current)
-      xAxis
+      select(xAxisRef.current)
         .call(
           axisBottom(xScale)
             .ticks(dims.chartWidth / 80)
             .tickSizeOuter(0)
         )
         .call(g => g.select(".domain").remove())
-      xAxis
-          .append("text")
-          .attr("x", 0)
-          .attr("y", space[3])
-          .attr("text-anchor", "start")
-          .attr("fill", colors.grayDarkest)
-          .text("Életkor")
     }
 
     function updateDims() {
-      const { yScale, xScale, area } = storedValues.current
+      const { yScale, xScale } = storedValues.current
       yScale.range([0, dims.chartHeight])
       xScale.range([0, dims.chartWidth])
-      area
-        .selectAll("circle")
-        .attr("cx", ({ age }) => xScale(age))
-        .attr("cy", ({ rand }) => yScale(rand))
+      createUpdateCircles()
+      createUpdateAxis()
       storedValues.current = { ...storedValues.current, yScale, xScale }
     }
 
     if (!init && data) {
       const area = select(areaRef.current)
-      const yScale = scaleLinear()
+      const yScale = scaleBand()
         .range([0, dims.chartHeight])
-        .domain([200, 0])
+        .domain(["Nő", "Férfi"])
       const xScale = scaleLinear()
         .range([0, dims.chartWidth])
         .domain([min(data, d => d.age) - 2, max(data, d => d.age) + 2])
       storedValues.current = { yScale, xScale, area }
-      createUpdateRectangles()
+      createUpdateCircles()
       createUpdateAxis()
+      select(xAxisRef.current)
+        .append("text")
+        .attr("x", 0)
+        .attr("y", space[3])
+        .attr("text-anchor", "start")
+        .attr("fill", colors.grayDarkest)
+        .text("Életkor")
       setInit(true)
     }
     if (init && !_.isEqual(data, prevData)) {
@@ -133,5 +142,5 @@ export default function AgeChartBrowser({ data, margin }) {
 }
 
 AgeChartBrowser.defaultProps = {
-  margin: { top: 20, right: 0, bottom: 25, left: 0 },
+  margin: { top: 10, right: 0, bottom: 25, left: 0 },
 }
