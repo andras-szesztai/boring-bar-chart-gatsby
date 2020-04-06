@@ -10,9 +10,11 @@ import { format, differenceInDays, subDays } from "date-fns"
 import numeral from "numeral"
 import _ from "lodash"
 import Slider from "@material-ui/core/Slider"
+import { withStyles, makeStyles } from "@material-ui/core/styles"
 
 import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
-import { space } from "../../../themes/theme"
+import { usePrevious } from "../../../hooks"
+import { space, colors } from "../../../themes/theme"
 import { chartColors } from "../../../constants/visualizations/coronavirusHungary"
 import {
   HorizontalBarChart,
@@ -20,9 +22,14 @@ import {
   AgeChartBrowser,
 } from "../../organisms/templateElemets/coronavirusHungary"
 
-const DateSlider = styled(Slider)`
-  width: 200px;
-`
+const DateSlider = makeStyles({
+  root: {
+    color: colors.grayDarker,
+  },
+  valueLabel: {
+    fontSize: 8,
+  },
+})(Slider)
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -46,23 +53,14 @@ const BrowserMainGrid = styled(GridContainer)`
 `
 
 function CoronaVirusHungaryDashboard({ data, loading }) {
+  const classes = makeStyles()
   const [formattedData, setFormattedData] = useState(undefined)
-  useEffect(() => {
-    if (data && !formattedData) {
-      setFormattedData(
-        data.map(el => ({
-          ...el,
-          age: +el.kor,
-          rand: el.nem === "Férfi" ? _.random(10, 90) : _.random(110, 190),
-          date: new Date(el.datum),
-          number: +el.sorszam,
-          gender: el.nem,
-        }))
-      )
-    }
-  }, [data, formattedData])
-
-  const [dates, setDates] = useState({ diff: undefined, max: undefined })
+  const [dates, setDates] = useState({
+    diff: undefined,
+    max: undefined,
+    currDate: undefined,
+  })
+  const prevDates = usePrevious(dates)
   useEffect(() => {
     if (formattedData && !dates.max) {
       const maxDate = _.maxBy(formattedData, "date").date
@@ -70,7 +68,8 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
       const dateDiff = differenceInDays(minDate, maxDate)
       setDates({
         diff: dateDiff,
-        max: _.maxBy(formattedData, "date").date,
+        max: maxDate,
+        currDate: maxDate,
       })
     }
   }, [dates, formattedData])
@@ -86,7 +85,27 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
     }
   }, [data, formattedData, numbers])
 
-  console.log(dates)
+  useEffect(() => {
+    if (data && !formattedData) {
+      setFormattedData(
+        data.map(el => ({
+          ...el,
+          age: +el.kor,
+          rand: el.nem === "Férfi" ? _.random(10, 90) : _.random(110, 190),
+          date: new Date(el.datum),
+          number: +el.sorszam,
+          gender: el.nem,
+        }))
+      )
+    }
+    if (
+      prevDates &&
+      prevDates.currDate &&
+      !_.isEqual(dates.currDate, prevDates.currDate)
+    ) {
+      console.log("run filter data")
+    }
+  }, [data, dates, formattedData, prevDates])
 
   return (
     <>
@@ -121,7 +140,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               {numbers.total}
             </FlexContainer>
             <FlexContainer fontSize={2} gridArea="date">
-              {dates.max && format(dates.max, "Y'.' MM'.' dd'.'")}
+              {dates.currDate && format(dates.currDate, "Y'.' MM'.' dd'.'")}
             </FlexContainer>
             <FlexContainer gridArea="slider">
               {dates.max && (
@@ -129,6 +148,12 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
                   defaultValue={0}
                   step={1}
                   valueLabelDisplay="auto"
+                  onChangeCommitted={(e, val) =>
+                    setDates(prev => ({
+                      ...prev,
+                      currDate: subDays(dates.max, -val),
+                    }))
+                  }
                   valueLabelFormat={val =>
                     format(subDays(dates.max, -val), "MM'.' dd'.'")
                   }
