@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Andras Szesztai <and.szesztai@gmail.com>",
   "dependencies": {
+    "@material-ui/core": "^4.9.9",
     "array-move": "^2.2.1",
     "babel-plugin-styled-components": "^1.10.7",
     "chroma-js": "^2.1.0",
