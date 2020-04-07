@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react"
 import {
   MobileOnlyView,
   TabletView,
+  isTablet,
+  isMobileOnly,
+  isBrowser,
 } from "react-device-detect"
 import Helmet from "react-helmet"
 import { differenceInDays } from "date-fns"
@@ -102,56 +105,76 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     prevLanguage,
   ])
 
-  
+  const [device, setDevice] = useState(undefined)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!device) {
+      if (isBrowser && !isMobileOnly && !isTablet) {
+        setDevice("desktop")
+      }
+      if (!isBrowser && !isMobileOnly && isTablet) {
+        setDevice("tablet")
+      }
+      if (!isBrowser && isMobileOnly && !isTablet) {
+        setDevice("mobile")
+      }
+    }
+  })
 
   return (
     <>
       <Helmet title={TEXT.helmet[language]} />
-      <BrowserDashboard
-        language={language}
-        setLanguage={setLanguage}
-        numbers={numbers}
-        dates={dates}
-        setDates={setDates}
-        filteredData={filteredData}
-        loading={loading}
-      />
-      <TabletView>
-        <FlexContainer
-          fullScreen
-          fontSize={4}
-          textAlign="center"
-          direction="column"
-        >
-          <SwitchContainer
-            language={language}
-            setLanguage={setLanguage}
-            paddingBottom={4}
-          />
-          {TEXT.tabletExp[language]}
-          <Container paddingTop={5}>
-            <GoTools size={40} />
-          </Container>
-        </FlexContainer>
-      </TabletView>
-      <MobileOnlyView>
-        <FlexContainer
-          fontSize={3}
-          fullScreen
-          textAlign="center"
-          direction="column"
-        >
-          <SwitchContainer
-            language={language}
-            setLanguage={setLanguage}
-            paddingBottom={4}
-          />
-          {TEXT.mobileExp[language]}
-          <Container paddingTop={5}>
-            <GoTools size={30} />
-          </Container>
-        </FlexContainer>
-      </MobileOnlyView>
+      {device === "desktop" && (
+        <BrowserDashboard
+          language={language}
+          setLanguage={setLanguage}
+          numbers={numbers}
+          dates={dates}
+          setDates={setDates}
+          filteredData={filteredData}
+          loading={loading}
+        />
+      )}
+      {device === "tablet" && (
+        <TabletView>
+          <FlexContainer
+            fullScreen
+            fontSize={4}
+            textAlign="center"
+            direction="column"
+          >
+            <SwitchContainer
+              language={language}
+              setLanguage={setLanguage}
+              paddingBottom={4}
+            />
+            {TEXT.tabletExp[language]}
+            <Container paddingTop={5}>
+              <GoTools size={40} />
+            </Container>
+          </FlexContainer>
+        </TabletView>
+      )}
+      {device === "mobile" && (
+        <MobileOnlyView>
+          <FlexContainer
+            fontSize={3}
+            fullScreen
+            textAlign="center"
+            direction="column"
+          >
+            <SwitchContainer
+              language={language}
+              setLanguage={setLanguage}
+              paddingBottom={4}
+            />
+            {TEXT.mobileExp[language]}
+            <Container paddingTop={5}>
+              <GoTools size={30} />
+            </Container>
+          </FlexContainer>
+        </MobileOnlyView>
+      )}
     </>
   )
 }

@@ -7,9 +7,11 @@ import { IconChart } from "../../../molecules"
 import SOCIAL_LINKS from "../../../../constants/social-links"
 
 const HeaderContainer = styled(FlexContainer)`
+  position: fixed;
   width: 100vw;
   height: 60px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
   z-index: 1000;
   padding: 3rem 3rem;
 

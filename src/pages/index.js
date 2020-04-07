@@ -13,6 +13,7 @@ function IndexPage({ data }) {
     <>
       <Helmet title="Boring Bar Chart" />
       <Layout>
+        <div style={{ height: 60 }} />
         <DataVisualizationGrid list={list} />
       </Layout>
     </>
