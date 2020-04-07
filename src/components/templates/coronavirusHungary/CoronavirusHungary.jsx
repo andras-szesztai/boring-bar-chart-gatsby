@@ -154,4 +154,4 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   )
 }
 
-export default withOrientationChange(CoronaVirusHungaryDashboard)
+export default CoronaVirusHungaryDashboard
