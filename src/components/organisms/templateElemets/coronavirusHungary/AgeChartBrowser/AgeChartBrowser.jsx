@@ -15,6 +15,7 @@ import {
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition, numberTween } from "../../../../../utils/chartHelpers"
 import { transition, space, colors } from "../../../../../themes/theme"
+import ChartTooltip from "../ChartTooltip/ChartTooltip"
 
 const getMean = array => _.meanBy(array, "age")
 export default function AgeChartBrowser({ data, margin }) {
@@ -23,6 +24,8 @@ export default function AgeChartBrowser({ data, margin }) {
     ref: wrapperRef,
     margin,
   })
+  const [mouseoverValue, setMouseoverValue] = useState(undefined)
+  const prevMouseoverValue = usePrevious(mouseoverValue)
   const [init, setInit] = useState(false)
   const storedValues = useRef()
   const lineRef = useRef()
@@ -31,11 +34,12 @@ export default function AgeChartBrowser({ data, margin }) {
 
   const setColor = ({ gender }) =>
     gender === "Férfi" ? chartColors.male : chartColors.female
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const setFillOpaque = d => chroma(setColor(d)).alpha(lowOpacity)
 
   useEffect(() => {
     function createUpdateCircles(duration = transition.lgNum) {
       const { yScale, xScale, area } = storedValues.current
-      const hoverT = makeTransition(area, transition.sm, "hover")
 
       forceSimulation(data)
         .force(
@@ -63,18 +67,10 @@ export default function AgeChartBrowser({ data, margin }) {
               .attr("r", 0)
               .attr("cx", ({ x }) => x)
               .attr("cy", ({ y }) => y)
-              .attr("fill", d => chroma(setColor(d)).alpha(lowOpacity))
+              .attr("fill", setFillOpaque)
               .attr("stroke", setColor)
-              .on("mouseover", (d, i, n) =>
-                select(n[i])
-                  .attr("fill", chroma(setColor(d)).brighten(2))
-                  .attr("stroke", chroma(setColor(d)).darken())
-              )
-              .on("mouseout", (d, i, n) =>
-                select(n[i])
-                  .attr("fill", chroma(setColor(d)).alpha(lowOpacity))
-                  .attr("stroke", setColor(d))
-              )
+              .on("mouseover", d => setMouseoverValue(d))
+              .on("mouseout", () => setMouseoverValue(undefined))
               .call(enter =>
                 enter
                   .transition(makeTransition(area, duration, "in"))
@@ -299,10 +295,44 @@ export default function AgeChartBrowser({ data, margin }) {
         y: dims.chartHeight / 4,
       })
     }
-  }, [init, data, dims, prevData, prevDims, areaRef, xAxisRef])
+  }, [init, data, dims, prevData, prevDims, areaRef, xAxisRef, setFillOpaque])
+
+  useEffect(() => {
+    if (!mouseoverValue && prevMouseoverValue) {
+      storedValues.current.area
+        .selectAll("circle")
+        .transition(
+          makeTransition(storedValues.current.area, transition.smNum, "hover")
+        )
+        .attr("fill", setFillOpaque)
+        .attr("stroke", setColor)
+    }
+    if (mouseoverValue && !prevMouseoverValue) {
+      storedValues.current.area
+        .selectAll("circle")
+        .transition(
+          makeTransition(storedValues.current.area, transition.smNum, "hover")
+        )
+        .attr("fill", d =>
+          d.sorszam === mouseoverValue.sorszam
+            ? chroma(setColor(d)).brighten(2)
+            : setFillOpaque(d)
+        )
+        .attr("stroke", d =>
+          d.sorszam === mouseoverValue.sorszam
+            ? chroma(setColor(d)).darken()
+            : setColor(d)
+        )
+    }
+  })
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
+      <ChartTooltip
+        width={dims.chartWidth}
+        data={mouseoverValue}
+        margin={margin}
+      />
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
           marginLeft={margin.left}

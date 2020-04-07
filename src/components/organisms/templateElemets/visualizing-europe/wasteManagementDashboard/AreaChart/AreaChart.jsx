@@ -273,36 +273,34 @@ export default function AreaChart(props) {
   })
 
   return (
-    <>
-      <ChartWrapper ref={refs.wrapperRef}>
-        {withLabel && (
-          <Container absPos left={margin.left - 1} top={0}>
-            {value}
-          </Container>
-        )}
-        {props.isHoverable && (
-          <ChartTooltip
-            width={dims.chartWidth}
-            data={hoveredData}
-            margin={margin}
-            storedValues={storedValues}
-            metric={metric}
-          />
-        )}
-        <ChartSvg
-          absPos
-          ref={refs.svgRef}
-          width={dims.width}
-          height={dims.height}
-        >
-          <ChartArea
-            ref={refs.areaRef}
-            marginLeft={margin.left}
-            marginTop={margin.top}
-          />
-        </ChartSvg>
-      </ChartWrapper>
-    </>
+    <ChartWrapper ref={refs.wrapperRef}>
+      {withLabel && (
+        <Container absPos left={margin.left - 1} top={0}>
+          {value}
+        </Container>
+      )}
+      {props.isHoverable && (
+        <ChartTooltip
+          width={dims.chartWidth}
+          data={hoveredData}
+          margin={margin}
+          storedValues={storedValues}
+          metric={metric}
+        />
+      )}
+      <ChartSvg
+        absPos
+        ref={refs.svgRef}
+        width={dims.width}
+        height={dims.height}
+      >
+        <ChartArea
+          ref={refs.areaRef}
+          marginLeft={margin.left}
+          marginTop={margin.top}
+        />
+      </ChartSvg>
+    </ChartWrapper>
   )
 }
 
