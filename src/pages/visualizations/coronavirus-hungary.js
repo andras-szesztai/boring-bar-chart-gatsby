@@ -30,7 +30,6 @@ export default function() {
 
   return (
     <>
-      <Helmet title="Koronavírusban elhunytak Magyarországon" />
       <CoronaVirusHungaryDashboard loading={isLoading} data={response} enData={enData} />
     </>
   )

@@ -11,6 +11,10 @@ export const chartColors = {
 export const lowOpacity = 0.75
 
 export const TEXT = {
+  helmet: {
+    hu: "Koronavírusban elhunytak Magyarországon" ,
+    en: "Deaths caused by COVID-19 in Hungary",
+  },
   mainTitle: {
     hu:
       "Az új koronavírusban elhunytak száma, korban es nembeni eloszlása Magyarországon",

@@ -18,7 +18,7 @@ export default function BarLabels({ language, numbers }) {
         gridArea="no"
         fontColor={chartColors.female}
       >
-        <Container paddingTop={2}>
+        <Container paddingTop={1}>
           <GoPrimitiveSquare
             color={chartColors.female}
             style={{ opacity: lowOpacity }}
@@ -41,7 +41,7 @@ export default function BarLabels({ language, numbers }) {
         gridArea="ffi"
         fontColor={chartColors.male}
       >
-        <Container paddingTop={2}>
+        <Container paddingTop={1}>
           <GoPrimitiveSquare
             color={chartColors.male}
             style={{ opacity: lowOpacity }}

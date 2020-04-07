@@ -12,7 +12,7 @@ import {
   lowOpacity,
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition } from "../../../../../utils/chartHelpers"
-import { transition, space, colors } from "../../../../../themes/theme"
+import { transition } from "../../../../../themes/theme"
 
 export default function HorizontalBarChart({ margin, data }) {
   const { svgRef, wrapperRef, yAxisRef } = useChartRefs()

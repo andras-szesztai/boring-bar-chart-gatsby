@@ -3,9 +3,11 @@ import {
   MobileOnlyView,
   TabletView,
 } from "react-device-detect"
+import Helmet from "react-helmet"
 import { differenceInDays } from "date-fns"
 import _ from "lodash"
 import { GoTools } from "react-icons/go"
+
 import { FlexContainer, Container } from "../../atoms"
 import { usePrevious } from "../../../hooks"
 import { TEXT } from "../../../constants/visualizations/coronavirusHungary"
@@ -104,6 +106,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
 
   return (
     <>
+      <Helmet title={TEXT.helmet[language]} />
       <BrowserDashboard
         language={language}
         setLanguage={setLanguage}
