@@ -159,7 +159,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               </LinkAnchor>
             </FlexContainer>
             <FlexContainer fontSize={2} justify="flex-start" gridArea="total">
-              Összesen
+              Összesen: 
             </FlexContainer>
             <FlexContainer fontSize={2} fontWeight={3} gridArea="tNum">
               <Number num={numbers.total} />
@@ -168,6 +168,9 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               {dates.currDate && format(dates.currDate, "Y'.' MM'.' dd'.'")}
             </FlexContainer>
             <FlexContainer gridArea="slider">
+              <FlexContainer whiteSpace="nowrap" paddingRight={3} paddingBottom={1}>
+                Válasszon dátumot:
+              </FlexContainer>
               {dates.max && (
                 <DateSlider
                   defaultValue={0}
@@ -194,7 +197,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               gridArea="no"
               fontColor={chartColors.female}
             >
-              Nő
+              Nő:
             </FlexContainer>
             <FlexContainer
               fontWeight={3}
@@ -210,7 +213,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               gridArea="ffi"
               fontColor={chartColors.male}
             >
-              Férfi
+              Férfi:
             </FlexContainer>
             <FlexContainer
               gridArea="ffiNum"
@@ -254,9 +257,9 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             <FlexContainer gridArea="7/-1/-1/1" pos="relative">
               <FlexContainer absPos top={space[2]} left={0} fontSize={1}>
                 Mindegyik kör egy-egy elhunytat képvisel, a horizontális
-                tengelyen pozícionálva az elhunyt kora alapján
+                tengelyen pozícionálva a személy kora alapján
               </FlexContainer>
-              <AgeChartBrowser data={formattedData} />
+              <AgeChartBrowser data={filteredData} />
             </FlexContainer>
           </BrowserMainGrid>
         </FlexContainer>

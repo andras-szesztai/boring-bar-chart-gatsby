@@ -136,6 +136,12 @@ const Container = styled.div`
       pointer-events: none;
     `}
 
+    ${({ noWrap }) =>
+    noWrap &&
+      css`
+        white-space: nowrap;;
+      `}
+
   ${({ isHideable, isVisible }) =>
     isHideable &&
     (isVisible

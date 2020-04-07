@@ -28,12 +28,12 @@ export default function AgeChartBrowser({ data, margin }) {
   const prevData = usePrevious(data)
   const prevDims = usePrevious(dims)
 
+  const setColor = ({ gender }) =>
+    gender === "Férfi" ? chartColors.male : chartColors.female
+
   useEffect(() => {
     function createUpdateCircles() {
       const { yScale, xScale, area } = storedValues.current
-
-      const setColor = ({ gender }) =>
-        gender === "Férfi" ? chartColors.male : chartColors.female
 
       forceSimulation(data)
         .force(
@@ -58,12 +58,24 @@ export default function AgeChartBrowser({ data, margin }) {
           enter =>
             enter
               .append("circle")
-              .attr("r", 6)
+              .attr("r", 0)
               .attr("cx", ({ x }) => x)
               .attr("cy", ({ y }) => y)
               .attr("fill", d => chroma(setColor(d)).alpha(lowOpacity))
-              .attr("stroke", setColor),
-          update => update.attr("cx", ({ x }) => x).attr("cy", ({ y }) => y)
+              .attr("stroke", setColor)
+              .call(enter =>
+                enter
+                  .transition(makeTransition(area, transition.lgNum, "in"))
+                  .attr("r", 6)
+              ),
+          update => update.attr("cx", ({ x }) => x).attr("cy", ({ y }) => y),
+          exit =>
+          exit.call(exit =>
+            exit
+              .transition(makeTransition(area, transition.lgNum, "out"))
+              .attr("r", 0)
+              .remove()
+          )
         )
 
       select(lineRef.current).raise()
@@ -111,7 +123,9 @@ export default function AgeChartBrowser({ data, margin }) {
         .text("Életkor")
       setInit(true)
     }
-    if (init && !_.isEqual(data, prevData)) {
+
+    if (init && data.length !== prevData.length) {
+      createUpdateCircles()
     }
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()
