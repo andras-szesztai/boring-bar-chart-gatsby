@@ -21,6 +21,7 @@ import {
   StackedBarChart,
   AgeChartBrowser,
 } from "../../organisms/templateElemets/coronavirusHungary"
+import CountUp from "react-countup"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -48,10 +49,30 @@ const DateSlider = withStyles({
     color: colors.grayDarker,
     fontSize: 8,
   },
+  thumb: {
+    '&:focus, &:hover, &$active': {
+      boxShadow: "none",
+      '@media (hover: none)': {
+        boxShadow: "none",
+      },
+    },
+  },
   valueLabel: {
     fontSize: 8,
   },
 })(Slider)
+
+const Number = props => (
+  <CountUp
+    end={props.num}
+    duration={1}
+    preserveValue
+    formattingFn={val =>
+      props.isPercentage ? numeral(val).format("0.0%") : val
+    }
+    decimals={props.isPercentage && 3}
+  />
+)
 
 function makeNumbers(array) {
   return {
@@ -94,6 +115,9 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
         currDate: maxDate,
       })
     }
+    // if(!init && numbers.total){
+    //   setInit(true)
+    // }
     if (
       prevDates &&
       prevDates.currDate &&
@@ -105,7 +129,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
       setFilteredData(filteredData)
       setNumbers(makeNumbers(filteredData))
     }
-  }, [data, dates, formattedData, prevDates])
+  }, [data, dates, formattedData, numbers.total, prevDates])
 
   return (
     <>
@@ -137,7 +161,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               Összesen
             </FlexContainer>
             <FlexContainer fontSize={2} fontWeight={3} gridArea="tNum">
-              {numbers.total}
+              <Number num={numbers.total} />
             </FlexContainer>
             <FlexContainer fontSize={2} gridArea="date">
               {dates.currDate && format(dates.currDate, "Y'.' MM'.' dd'.'")}
@@ -147,6 +171,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
                 <DateSlider
                   defaultValue={0}
                   step={1}
+                  marks
                   valueLabelDisplay="auto"
                   onChange={(e, val) =>
                     setDates(prev => ({
@@ -176,7 +201,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               gridArea="noNum"
               fontColor={chartColors.female}
             >
-              {numbers.female}
+              <Number num={numbers.female} />
             </FlexContainer>
             <FlexContainer
               justify="flex-start"
@@ -192,7 +217,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               fontSize={2}
               fontColor={chartColors.male}
             >
-              {numbers.male}
+              <Number num={numbers.male} />
             </FlexContainer>
             <FlexContainer gridArea="barC">
               <HorizontalBarChart data={numbers} />
@@ -206,7 +231,9 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               fontSize={2}
               fontColor={chartColors.female}
             >
-              {numeral(numbers.female / numbers.total).format("0.0%")}
+              {numbers.total && (
+                <Number num={numbers.female / numbers.total} isPercentage />
+              )}
             </FlexContainer>
             <FlexContainer
               gridArea="percFfi"
@@ -214,7 +241,9 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               fontSize={2}
               fontColor={chartColors.male}
             >
-              {numeral(numbers.male / numbers.total).format("0.0%")}
+              {numbers.total && (
+                <Number num={numbers.male / numbers.total} isPercentage />
+              )}
             </FlexContainer>
 
             <FlexContainer gridArea="percBar">
