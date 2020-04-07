@@ -76,8 +76,10 @@ export default function AgeChartBrowser({ data, margin }) {
           axisBottom(xScale)
             .ticks(dims.chartWidth / 80)
             .tickSizeOuter(0)
+            .tickSizeInner(space[1])
         )
         .call(g => g.select(".domain").remove())
+        .call(g => g.select(".tick text").attr("fill", colors.grayDarkest))
     }
 
     function updateDims() {
@@ -103,7 +105,7 @@ export default function AgeChartBrowser({ data, margin }) {
       select(xAxisRef.current)
         .append("text")
         .attr("x", 0)
-        .attr("y", space[3])
+        .attr("y", space[2] + 6)
         .attr("text-anchor", "start")
         .attr("fill", colors.grayDarkest)
         .text("Életkor")
@@ -142,5 +144,5 @@ export default function AgeChartBrowser({ data, margin }) {
 }
 
 AgeChartBrowser.defaultProps = {
-  margin: { top: 10, right: 0, bottom: 25, left: 0 },
+  margin: { top: 15, right: 0, bottom: 25, left: 0 },
 }

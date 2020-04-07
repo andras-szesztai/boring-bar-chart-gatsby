@@ -5,6 +5,13 @@ import { themifyFontSize } from "../../../../themes/mixins"
 const ChartWrapper = styled.div`
   position: relative;
 
+  text,
+  .tick text {
+    font-family: gill-sans-nova, sans-serif !important;
+  }
+
+  
+
   display: flex;
   justify-content: center;
   align-items: center;

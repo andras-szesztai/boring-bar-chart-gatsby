@@ -22,6 +22,7 @@ import {
   AgeChartBrowser,
 } from "../../organisms/templateElemets/coronavirusHungary"
 import CountUp from "react-countup"
+import { Container } from "@material-ui/core"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -50,9 +51,9 @@ const DateSlider = withStyles({
     fontSize: 8,
   },
   thumb: {
-    '&:focus, &:hover, &$active': {
+    "&:focus, &:hover, &$active": {
       boxShadow: "none",
-      '@media (hover: none)': {
+      "@media (hover: none)": {
         boxShadow: "none",
       },
     },
@@ -222,7 +223,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             <FlexContainer gridArea="barC">
               <HorizontalBarChart data={numbers} />
             </FlexContainer>
-            <FlexContainer gridArea="percText" align="flex-end" fontSize={2}>
+            <FlexContainer gridArea="percText" justify="flex-start" align="flex-end">
               Nemek százalékos megoszlása
             </FlexContainer>
             <FlexContainer
@@ -250,7 +251,11 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               <StackedBarChart data={numbers} />
             </FlexContainer>
 
-            <FlexContainer gridArea="7/-1/-1/1">
+            <FlexContainer gridArea="7/-1/-1/1" pos="relative">
+              <FlexContainer absPos top={space[2]} left={0} fontSize={1}>
+                Mindegyik kör egy-egy elhunytat képvisel, a horizontális
+                tengelyen pozícionálva az elhunyt kora alapján
+              </FlexContainer>
               <AgeChartBrowser data={formattedData} />
             </FlexContainer>
           </BrowserMainGrid>
