@@ -21,7 +21,23 @@ function makeNumbers(array) {
   }
 }
 
-function CoronaVirusHungaryDashboard({ data, loading }) {
+function makeFormattedData({data, isHu}){
+  if(isHu){
+    return data.map(el => ({
+        ...el,
+        age: +el.kor,
+        date: new Date(el.datum),
+        number: +el.sorszam,
+        gender: el.nem,
+      }))
+  }
+  return data.map(el => ({
+    ...el,
+    date: new Date(el.date),
+  }))
+}
+
+function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [language, setLanguage] = useState("hu")
 
   const [formattedData, setFormattedData] = useState(undefined)
@@ -36,14 +52,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
 
   useEffect(() => {
     if (data && !formattedData) {
-      const formattedData = data.map(el => ({
-        ...el,
-        age: +el.kor,
-        rand: el.nem === "Férfi" ? _.random(10, 90) : _.random(110, 190),
-        date: new Date(el.datum),
-        number: +el.sorszam,
-        gender: el.nem,
-      }))
+      const formattedData = makeFormattedData({  data, isHu: true })
       const maxDate = _.maxBy(formattedData, "date").date
       const minDate = _.minBy(formattedData, "date").date
       const dateDiff = differenceInDays(minDate, maxDate)

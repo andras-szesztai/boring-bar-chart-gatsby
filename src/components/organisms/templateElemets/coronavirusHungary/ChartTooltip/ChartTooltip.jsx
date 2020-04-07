@@ -4,6 +4,7 @@ import _ from "lodash"
 
 import { FlexContainer, GridContainer } from "../../../../atoms"
 import { space, colors } from "../../../../../themes/theme"
+import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 
 const TooltipContainer = styled(FlexContainer)`
   :after {
@@ -23,7 +24,7 @@ const TooltipContainer = styled(FlexContainer)`
   }
 `
 
-export default function ChartTooltip({ data, margin, width }) {
+export default function ChartTooltip({ data, margin, width, language }) {
   const halfWidth = width / 2
   const tooltipRef = useRef()
   const [tWidth, setTWidth] = useState(0)
@@ -65,15 +66,15 @@ export default function ChartTooltip({ data, margin, width }) {
         columnGap={1.2}
       >
         <FlexContainer justify="flex-start" fontWeight={3}>
-          Neme:
+          {TEXT.tooltipGender[language]}:
         </FlexContainer>
         <FlexContainer justify="flex-start">{data.gender}</FlexContainer>
         <FlexContainer justify="flex-start" fontWeight={3}>
-          Életkor:
+          {TEXT.tooltipAge[language]}:
         </FlexContainer>
-        <FlexContainer justify="flex-start">{data.age} év</FlexContainer>
+        <FlexContainer justify="flex-start">{data.age} {TEXT.tooltipYear[language]}</FlexContainer>
         <FlexContainer justify="flex-start" fontWeight={3}>
-          Alapbetegségek:
+          {TEXT.tooltipConditions[language]}:
         </FlexContainer>
         <FlexContainer justify="flex-start">
           {_.capitalize(data.alapbetegsegek)}

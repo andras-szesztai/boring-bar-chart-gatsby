@@ -1,5 +1,7 @@
-export const DATA_URL =
+export const DATA_URL_HU =
   "https://boring-barchart-gatsby.firebaseio.com/coronavirus-hungary.json"
+
+export const DATA_URL_EN = "https://boring-barchart-gatsby.firebaseio.com/coronavirus-hungary-en.json"
 
 export const chartColors = {
   female: "#8C635B",
@@ -64,6 +66,22 @@ export const TEXT = {
   hoverText: {
     hu: "Mutasson az egérrel bármelyik körre információért az elhunyt személy alapbetegségeirõl!",
     en: "Hover over any circle to find out more about the underlying conditions of the deceased person!",
+  },
+  tooltipGender:{
+    hu: "Nem",
+    en: "Gender",
+  },
+  tooltipAge: {
+    hu: "Életkor",
+    en: "Age",
+  },
+  tooltipYear: {
+    hu: "év",
+    en: "years",
+  },
+  tooltipConditions: {
+    hu: "Alapbetegség(ek)",
+    en: "Underlying conditions",
   },
   tabletExp: {
     hu: "A tablet verzió hamarosan elkészül, köszönjük türelmét!",

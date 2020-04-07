@@ -353,6 +353,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
         width={dims.chartWidth}
         data={mouseoverValue}
         margin={margin}
+        language={language}
       />
       {!firstHover && (
         <FlexContainer absPos left={0} top={dims.chartHeight / 2 + margin.top/2} fontSize={2}>
