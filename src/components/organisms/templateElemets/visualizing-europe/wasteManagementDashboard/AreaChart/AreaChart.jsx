@@ -273,7 +273,7 @@ export default function AreaChart(props) {
   })
 
   return (
-    <ChartWrapper ref={refs.wrapperRef}>
+    <ChartWrapper areaRef={refs.wrapperRef}>
       {withLabel && (
         <Container absPos left={margin.left - 1} top={0}>
           {value}
@@ -290,12 +290,12 @@ export default function AreaChart(props) {
       )}
       <ChartSvg
         absPos
-        ref={refs.svgRef}
+        areaRef={refs.svgRef}
         width={dims.width}
         height={dims.height}
       >
         <ChartArea
-          ref={refs.areaRef}
+          areaRef={refs.areaRef}
           marginLeft={margin.left}
           marginTop={margin.top}
         />

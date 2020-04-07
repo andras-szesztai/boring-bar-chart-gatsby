@@ -11,18 +11,21 @@ import numeral from "numeral"
 import _ from "lodash"
 import Slider from "@material-ui/core/Slider"
 import { withStyles } from "@material-ui/core/styles"
+import { GoPrimitiveSquare } from "react-icons/go"
 
 import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
 import { usePrevious } from "../../../hooks"
 import { space, colors } from "../../../themes/theme"
-import { chartColors } from "../../../constants/visualizations/coronavirusHungary"
+import {
+  chartColors,
+  lowOpacity,
+} from "../../../constants/visualizations/coronavirusHungary"
 import {
   HorizontalBarChart,
   StackedBarChart,
   AgeChartBrowser,
 } from "../../organisms/templateElemets/coronavirusHungary"
 import CountUp from "react-countup"
-import { Container } from "@material-ui/core"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -201,6 +204,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               gridArea="no"
               fontColor={chartColors.female}
             >
+              <GoPrimitiveSquare style={{ opacity: lowOpacity }} size={20} />{" "}
               Nő:
             </FlexContainer>
             <FlexContainer
@@ -217,6 +221,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               gridArea="ffi"
               fontColor={chartColors.male}
             >
+              <GoPrimitiveSquare style={{ opacity: lowOpacity }} size={20} />{" "}
               Férfi:
             </FlexContainer>
             <FlexContainer

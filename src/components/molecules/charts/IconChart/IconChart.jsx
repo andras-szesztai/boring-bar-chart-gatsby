@@ -70,12 +70,12 @@ export default function IconChart({ dims }) {
 
   return (
     <ChartSvg
-      ref={svgRef}
+      areaRef={svgRef}
       height={dims}
       width={dims}
       onClick={() => setData(data.map(() => _.random(2, 10)))}
     >
-      <ChartArea marginLeft={margin.left} marginTop={margin.top} ref={yAxisRef}>
+      <ChartArea marginLeft={margin.left} marginTop={margin.top} areaRef={yAxisRef}>
         <AxisLine color="grayDarkest" stroke={0.5} y1={0} y2={chartHeight} />
       </ChartArea>
     </ChartSvg>

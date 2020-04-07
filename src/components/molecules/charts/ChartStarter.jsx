@@ -16,23 +16,23 @@ export default function ChartStarter({
   const { left, top } = margin
 
   return (
-    <ChartWrapper ref={wrapperRef} fontSize={fontSize}>
-      <ChartSvg absPos ref={svgRef} width={width} height={height}>
+    <ChartWrapper areaRef={wrapperRef} fontSize={fontSize}>
+      <ChartSvg absPos areaRef={svgRef} width={width} height={height}>
         {withXAxis && (
           <ChartArea
-            ref={xAxisRef}
+            areaRef={xAxisRef}
             marginLeft={left}
             marginTop={axisBottom ? top + dims.chartHeight : top}
           />
         )}
         {withYAxis && (
           <ChartArea
-            ref={yAxisRef}
+            areaRef={yAxisRef}
             marginLeft={axisLeft ? left : dims.chartWidth + left}
             marginTop={top}
           />
         )}
-        <ChartArea ref={areaRef} marginLeft={left} marginTop={top} />
+        <ChartArea areaRef={areaRef} marginLeft={left} marginTop={top} />
       </ChartSvg>
     </ChartWrapper>
   )

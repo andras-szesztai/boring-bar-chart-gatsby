@@ -216,10 +216,10 @@ export default function VerticalBoxPlot({
   }, [init, isFiltered, prevIsFiltered, updateBoxPlot])
 
   return (
-    <FlexContainer pos="relative" fullSize ref={wrapperRef}>
-      <ChartSvg absPos ref={svgRef} width={width} height={height}>
+    <FlexContainer pos="relative" fullSize areaRef={wrapperRef}>
+      <ChartSvg absPos areaRef={svgRef} width={width} height={height}>
         <ChartArea
-          ref={areaRef}
+          areaRef={areaRef}
           marginLeft={margin.left}
           marginTop={margin.top}
         />

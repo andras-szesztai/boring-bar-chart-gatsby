@@ -215,9 +215,9 @@ export default function VerticalDropChart({
 
   return (
     <>
-      <ChartWrapper ref={wrapperRef}>
-        <ChartSvg ref={svgRef} width={width} height={height}>
-          <ChartArea ref={areaRef} marginLeft={margin.left} />
+      <ChartWrapper areaRef={wrapperRef}>
+        <ChartSvg areaRef={svgRef} width={width} height={height}>
+          <ChartArea areaRef={areaRef} marginLeft={margin.left} />
         </ChartSvg>
       </ChartWrapper>
     </>

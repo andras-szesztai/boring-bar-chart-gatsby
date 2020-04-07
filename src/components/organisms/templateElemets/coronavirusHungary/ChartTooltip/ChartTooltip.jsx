@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useLayoutEffect, useRef, useState } from "react"
 import styled from "styled-components"
+import _ from "lodash"
 
 import { FlexContainer, GridContainer } from "../../../../atoms"
 import { space, colors } from "../../../../../themes/theme"
@@ -24,14 +25,27 @@ const TooltipContainer = styled(FlexContainer)`
 
 export default function ChartTooltip({ data, margin, width }) {
   const halfWidth = width / 2
+  const tooltipRef = useRef()
+  const [tWidth, setTWidth] = useState(0)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
+    if (tooltipRef && tooltipRef.current) {
+      const newWidth = tooltipRef.current.getBoundingClientRect().width
+      if (newWidth !== tWidth) {
+        setTWidth(newWidth)
+      }
+    }
+  })
+
   return data ? (
     <TooltipContainer
       absPos
-      left={data.x - (data.x <= halfWidth ? 15 : 124) + margin.left}
+      ref={tooltipRef}
+      left={data.x - (data.x <= halfWidth ? 15 : tWidth - 16) + margin.left}
       isLeft={data.x <= halfWidth}
-      top={data.y - 60}
+      top={data.y - 75}
       borderRadius={1}
-      height="60px"
+      height="75px"
       width="auto"
       borderColor="grayDarker"
       zIndex="overlay"
@@ -44,11 +58,26 @@ export default function ChartTooltip({ data, margin, width }) {
       paddingTop={1}
       paddingBottom={1}
     >
-      <GridContainer rows="repeat(2, min-content)" columns="1fr auto">
-        <FlexContainer justify="flex-start" fontWeight={3}>Életkor:</FlexContainer>
-        <FlexContainer justify="flex-start">{data.age}</FlexContainer>
-        <FlexContainer justify="flex-start" fontWeight={3}>Alapbetegségek:</FlexContainer>
-        <FlexContainer justify="flex-start">{data.alapbetegsegek}</FlexContainer>
+      <GridContainer
+        rows="repeat(3, min-content)"
+        columns="1fr auto"
+        rowGap={0.5}
+        columnGap={1.2}
+      >
+        <FlexContainer justify="flex-start" fontWeight={3}>
+          Neme:
+        </FlexContainer>
+        <FlexContainer justify="flex-start">{data.gender}</FlexContainer>
+        <FlexContainer justify="flex-start" fontWeight={3}>
+          Életkor:
+        </FlexContainer>
+        <FlexContainer justify="flex-start">{data.age} év</FlexContainer>
+        <FlexContainer justify="flex-start" fontWeight={3}>
+          Alapbetegségek:
+        </FlexContainer>
+        <FlexContainer justify="flex-start">
+          {_.capitalize(data.alapbetegsegek)}
+        </FlexContainer>
       </GridContainer>
     </TooltipContainer>
   ) : (
