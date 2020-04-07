@@ -1,3 +1,4 @@
+import React from 'react';
 import styled, { css } from "styled-components"
 import {
   themifyFontSize,
@@ -34,4 +35,16 @@ ChartSvg.defaultProps = {
   visible: true,
 }
 
-export default ChartSvg
+
+export default function(props) {
+  const { areaRef } = props
+  return (
+    <ChartSvg
+      ref={areaRef}
+      {...props}
+    />
+  )
+}
+
+
+

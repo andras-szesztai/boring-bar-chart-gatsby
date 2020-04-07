@@ -198,7 +198,7 @@ export default function({ rawData, data, valueArray }) {
             absPos
             top={height / 2 - axisSvgHeight / 2}
             left={margin.left}
-            ref={svgRef}
+            areaRef={svgRef}
             width={width}
             height={axisSvgHeight}
             fontSize={1}
@@ -207,7 +207,7 @@ export default function({ rawData, data, valueArray }) {
               .map(val => val.checked)
               .includes(false)}
           >
-            <AxisArea ref={axisRef} marginLeft={margin.left} />
+            <AxisArea areaRef={axisRef} marginLeft={margin.left} />
           </ChartSvg>
           <FlexContainer
             absPos

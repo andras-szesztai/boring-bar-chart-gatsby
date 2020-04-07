@@ -1,8 +1,14 @@
+import React from "react"
 import styled, { css } from "styled-components"
 import { themifyFontSize } from "../../../../themes/mixins"
 
 const ChartWrapper = styled.div`
   position: relative;
+
+  text,
+  .tick text {
+    font-family: gill-sans-nova, sans-serif !important;
+  }
 
   display: flex;
   justify-content: center;
@@ -12,6 +18,15 @@ const ChartWrapper = styled.div`
   height: 100%;
   max-width: 100%;
   width: 100%;
+
+  .ref-line,
+  .ref-group {
+    pointer-events: none;
+  }
+
+  .ref-line {
+    stroke-dasharray: 4, 1;
+  }
 
   ${({ withBorder }) =>
     withBorder &&
@@ -24,8 +39,12 @@ const ChartWrapper = styled.div`
     }
   `}
 `
-ChartWrapper.defaultProps = {
-  fontSize: 1
+
+export default function(props) {
+  const { areaRef } = props
+  return <ChartWrapper ref={areaRef} {...props} />
 }
 
-export default ChartWrapper
+ChartWrapper.defaultProps = {
+  fontSize: 1,
+}
