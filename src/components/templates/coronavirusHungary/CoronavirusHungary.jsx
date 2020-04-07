@@ -159,7 +159,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               </LinkAnchor>
             </FlexContainer>
             <FlexContainer fontSize={2} justify="flex-start" gridArea="total">
-              Összesen: 
+              Összesen:
             </FlexContainer>
             <FlexContainer fontSize={2} fontWeight={3} gridArea="tNum">
               <Number num={numbers.total} />
@@ -168,7 +168,11 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               {dates.currDate && format(dates.currDate, "Y'.' MM'.' dd'.'")}
             </FlexContainer>
             <FlexContainer gridArea="slider">
-              <FlexContainer whiteSpace="nowrap" paddingRight={3} paddingBottom={1}>
+              <FlexContainer
+                whiteSpace="nowrap"
+                paddingRight={3}
+                paddingBottom={1}
+              >
                 Válasszon dátumot:
               </FlexContainer>
               {dates.max && (
@@ -226,7 +230,11 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             <FlexContainer gridArea="barC">
               <HorizontalBarChart data={numbers} />
             </FlexContainer>
-            <FlexContainer gridArea="percText" justify="flex-start" align="flex-end">
+            <FlexContainer
+              gridArea="percText"
+              justify="flex-start"
+              align="flex-end"
+            >
               Nemek százalékos megoszlása
             </FlexContainer>
             <FlexContainer
@@ -257,7 +265,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
             <FlexContainer gridArea="7/-1/-1/1" pos="relative">
               <FlexContainer absPos top={space[2]} left={0} fontSize={1}>
                 Mindegyik kör egy-egy elhunytat képvisel, a horizontális
-                tengelyen pozícionálva a személy kora alapján
+                tengelyen pozícionálva az elhunyt személy kora alapján
               </FlexContainer>
               <AgeChartBrowser data={filteredData} />
             </FlexContainer>
