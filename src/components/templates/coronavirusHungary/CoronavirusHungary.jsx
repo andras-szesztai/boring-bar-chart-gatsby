@@ -27,7 +27,7 @@ import { space, colors } from "../../../themes/theme"
 import {
   chartColors,
   lowOpacity,
-  TEXT
+  TEXT,
 } from "../../../constants/visualizations/coronavirusHungary"
 import {
   HorizontalBarChart,
@@ -170,7 +170,9 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
                 </Title>
                 <Switch
                   checked={language === "en"}
-                  onChange={() => setLanguage(prev => prev === "hu" ? "en" : "hu")}
+                  onChange={() =>
+                    setLanguage(prev => (prev === "hu" ? "en" : "hu"))
+                  }
                   uncheckedIcon={false}
                   checkedIcon={false}
                   offColor={colors.grayLightest}
@@ -180,7 +182,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
                 />
                 <Title marginLeft={1}>English</Title>
               </FlexContainer>
-              <FlexContainer fontSize={2}>
+              <FlexContainer fontSize={2} fontWeight="thin">
                 {TEXT.sourceTitle[language]}:&nbsp;
                 <LinkAnchor
                   fontsize={2}
@@ -192,13 +194,14 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               </FlexContainer>
             </FlexContainer>
             <FlexContainer fontSize={2} justify="flex-start" gridArea="total">
-              Összesen:
+              {TEXT.total[language]}:
             </FlexContainer>
             <FlexContainer fontSize={2} fontWeight={3} gridArea="tNum">
               <Number num={numbers.total} />
             </FlexContainer>
             <FlexContainer fontSize={2} gridArea="date">
-              {dates.currDate && format(dates.currDate, "Y'.' MM'.' dd'.'")}
+              {dates.currDate &&
+                format(dates.currDate, TEXT.dateFormatLong[language])}
             </FlexContainer>
             <FlexContainer gridArea="slider">
               <FlexContainer
@@ -206,7 +209,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
                 paddingRight={3}
                 paddingBottom={1}
               >
-                Válasszon dátumot:
+                {TEXT.dateSlider[language]}:
               </FlexContainer>
               {dates.max && (
                 <DateSlider
@@ -221,7 +224,10 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
                     }))
                   }
                   valueLabelFormat={val =>
-                    format(subDays(dates.max, -val), "MM'.' dd'.'")
+                    format(
+                      subDays(dates.max, -val),
+                      TEXT.dateFormatShort[language]
+                    )
                   }
                   min={dates.diff}
                   max={0}
@@ -235,7 +241,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               fontColor={chartColors.female}
             >
               <GoPrimitiveSquare style={{ opacity: lowOpacity }} size={20} />{" "}
-              Nő:
+              {TEXT.genderF[language]}:
             </FlexContainer>
             <FlexContainer
               fontWeight={3}
@@ -252,7 +258,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               fontColor={chartColors.male}
             >
               <GoPrimitiveSquare style={{ opacity: lowOpacity }} size={20} />{" "}
-              Férfi:
+              {TEXT.genderM[language]}:
             </FlexContainer>
             <FlexContainer
               gridArea="ffiNum"
@@ -299,8 +305,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
 
             <FlexContainer gridArea="7/-1/-1/1" pos="relative">
               <FlexContainer absPos top={space[2]} left={0} fontSize={1}>
-                Mindegyik kör egy-egy elhunytat képvisel, a horizontális
-                tengelyen pozícionálva az elhunyt személy kora alapján
+                {TEXT.mainChartExpBrowser[language]}
               </FlexContainer>
               <AgeChartBrowser data={filteredData} />
             </FlexContainer>
@@ -314,7 +319,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
           textAlign="center"
           direction="column"
         >
-          A tablet verzió hamarosan érkezik, köszönjük türelmét!
+          {TEXT.tabletExp[language]}
           <Container paddingTop={5}>
             <GoTools size={40} />
           </Container>
@@ -327,7 +332,25 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
           textAlign="center"
           direction="column"
         >
-          A mobil verzió hamarosan érkezik, köszönjük türelmét!
+          <FlexContainer gridArea="switch" paddingBottom={4}>
+            <Title marginBottom={1} textAlign="right" marginRight={1}>
+              Magyar
+            </Title>
+            <Switch
+              checked={language === "en"}
+              onChange={() =>
+                setLanguage(prev => (prev === "hu" ? "en" : "hu"))
+              }
+              uncheckedIcon={false}
+              checkedIcon={false}
+              offColor={colors.grayLightest}
+              onColor={colors.grayLightest}
+              height={18}
+              width={36}
+            />
+            <Title marginLeft={1}>English</Title>
+          </FlexContainer>
+          {TEXT.mobileExp[language]}
           <Container paddingTop={5}>
             <GoTools size={30} />
           </Container>

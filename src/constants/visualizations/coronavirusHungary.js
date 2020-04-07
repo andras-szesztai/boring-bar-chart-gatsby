@@ -16,8 +16,8 @@ export const TEXT = {
       "Number of deaths by COVID-19 in Hungary and their distribution by gender and age",
   },
   sourceTitle: {
-    hu: "Forrás: ",
-    en: "Source: ",
+    hu: "Forrás",
+    en: "Source",
   },
   source: {
     hu: "koronavirus.gov.hu",
@@ -25,6 +25,48 @@ export const TEXT = {
   },
   url: {
     hu: "https://koronavirus.gov.hu/",
-    en: "http://abouthungary.hu/"
-  }
+    en: "http://abouthungary.hu/",
+  },
+  total: {
+    hu: "Összesen",
+    en: "Total",
+  },
+  dateSlider: {
+    hu: "Válasszon dátumot",
+    en: "Choose a date",
+  },
+  dateFormatLong: {
+    hu: "Y'.' MM'.' dd'.'",
+    en: "dd'.' MM'.' Y'.'",
+  },
+  dateFormatShort: {
+    hu: "MM'.' dd'.'",
+    en: "dd'.' MM'.'",
+  },
+  genderF: {
+    hu: "Nő",
+    en: "Female",
+  },
+  genderM: {
+    hu: "Férfi",
+    en: "Male",
+  },
+  genderPerc: {
+    hu: "Nemek százalékos megoszlása",
+    en: "Gender distribution",
+  },
+  mainChartExpBrowser: {
+    hu:
+      "Mindegyik kör egy-egy elhunytat képvisel, a horizontális tengelyen pozícionálva az elhunyt személy kora alapján",
+    en:
+      "Each dot represents someone passed away, the position on the horizontal axis is the age of the deceased",
+  },
+  tabletExp: {
+    hu: "A tablet verzió hamarosan elkészül, köszönjük türelmét!",
+    en: "The tablet version is coming soon, thank you for your patience!",
+  },
+  mobileExp: {
+    hu: "A mobil verzió hamarosan elkészül, köszönjük türelmét!",
+    en: "The mobile version is coming soon, thank you for your patience!",
+  },
 }
