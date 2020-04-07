@@ -12,25 +12,28 @@ import _ from "lodash"
 import Slider from "@material-ui/core/Slider"
 import { withStyles } from "@material-ui/core/styles"
 import { GoPrimitiveSquare, GoTools } from "react-icons/go"
+import Switch from "react-switch"
+import CountUp from "react-countup"
 
 import {
   FlexContainer,
   GridContainer,
   LinkAnchor,
   Container,
+  Title,
 } from "../../atoms"
 import { usePrevious } from "../../../hooks"
 import { space, colors } from "../../../themes/theme"
 import {
   chartColors,
   lowOpacity,
+  TEXT
 } from "../../../constants/visualizations/coronavirusHungary"
 import {
   HorizontalBarChart,
   StackedBarChart,
   AgeChartBrowser,
 } from "../../organisms/templateElemets/coronavirusHungary"
-import CountUp from "react-countup"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -92,6 +95,8 @@ function makeNumbers(array) {
 }
 
 function CoronaVirusHungaryDashboard({ data, loading }) {
+  const [language, setLanguage] = useState("hu")
+
   const [formattedData, setFormattedData] = useState(undefined)
   const [filteredData, setFilteredData] = useState(undefined)
   const [numbers, setNumbers] = useState({ total: 0, male: 0, female: 0 })
@@ -124,9 +129,6 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
         currDate: maxDate,
       })
     }
-    // if(!init && numbers.total){
-    //   setInit(true)
-    // }
     if (
       prevDates &&
       prevDates.currDate &&
@@ -153,18 +155,41 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
               lineHeight={1.2}
               paddingBottom={2}
             >
-              Az új koronavírusban elhunytak száma, korban es nembeni eloszlása
-              Magyarországon
+              {TEXT.mainTitle[language]}
             </FlexContainer>
-            <FlexContainer fontSize={2} gridArea="source">
-              Forrás:&nbsp;
-              <LinkAnchor
-                fontsize={2}
-                fontWeight="thin"
-                href="https://koronavirus.gov.hu/"
-              >
-                koronavirus.gov.hu
-              </LinkAnchor>
+            <FlexContainer
+              fontSize={2}
+              gridArea="source"
+              justify="space-around"
+              align="flex-end"
+              direction="column"
+            >
+              <FlexContainer gridArea="switch">
+                <Title marginBottom={1} textAlign="right" marginRight={1}>
+                  Magyar
+                </Title>
+                <Switch
+                  checked={language === "en"}
+                  onChange={() => setLanguage(prev => prev === "hu" ? "en" : "hu")}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  offColor={colors.grayLightest}
+                  onColor={colors.grayLightest}
+                  height={18}
+                  width={36}
+                />
+                <Title marginLeft={1}>English</Title>
+              </FlexContainer>
+              <FlexContainer fontSize={2}>
+                {TEXT.sourceTitle[language]}:&nbsp;
+                <LinkAnchor
+                  fontsize={2}
+                  fontWeight="thin"
+                  href={TEXT.url[language]}
+                >
+                  {TEXT.source[language]}
+                </LinkAnchor>
+              </FlexContainer>
             </FlexContainer>
             <FlexContainer fontSize={2} justify="flex-start" gridArea="total">
               Összesen:
