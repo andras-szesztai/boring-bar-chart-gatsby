@@ -30,7 +30,7 @@ export default function DateSlider({
 }) {
   return (
     <FlexContainer gridArea="slider">
-      <FlexContainer whiteSpace="nowrap" paddingRight={3} paddingBottom={1}>
+      <FlexContainer whiteSpace="nowrap" paddingRight={3} paddingBottom={2} fontSize={2}>
         {TEXT.dateSlider[language]}:
       </FlexContainer>
       {dates.max && (

@@ -6,7 +6,7 @@ import { colors } from "../../../../../themes/theme"
 
 export default function SwitchContainer({ language, setLanguage, paddingBottom }) {
   return (
-    <FlexContainer paddingBottom={paddingBottom}>
+    <FlexContainer paddingBottom={paddingBottom} fontSize={2} >
       <Title marginBottom={1} textAlign="right" marginRight={1}>
         Magyar
       </Title>

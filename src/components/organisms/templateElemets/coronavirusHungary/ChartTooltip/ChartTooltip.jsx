@@ -43,7 +43,7 @@ export default function ChartTooltip({ data, margin, width }) {
       ref={tooltipRef}
       left={data.x - (data.x <= halfWidth ? 15 : tWidth - 16) + margin.left}
       isLeft={data.x <= halfWidth}
-      top={data.y - 75}
+      top={data.y - 90 + margin.top}
       borderRadius={1}
       height="75px"
       width="auto"

@@ -11,7 +11,7 @@ import { StackedBarChart } from ".."
 export default function PercChartContainer({ language, numbers }) {
   return (
     <>
-      <FlexContainer gridArea="percText" justify="flex-start" align="flex-end">
+      <FlexContainer fontSize={2} gridArea="percText" justify="flex-start" align="flex-end">
         {TEXT.genderPerc[language]}
       </FlexContainer>
       <FlexContainer

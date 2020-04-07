@@ -7,24 +7,32 @@ import { scaleLinear, scaleBand } from "d3-scale"
 import { axisBottom } from "d3-axis"
 import _ from "lodash"
 
-import { ChartWrapper, ChartSvg, AxisLine, ChartArea } from "../../../../atoms"
+import {
+  ChartWrapper,
+  ChartSvg,
+  AxisLine,
+  ChartArea,
+  FlexContainer,
+} from "../../../../atoms"
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
 import {
   chartColors,
   lowOpacity,
+  TEXT,
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition, numberTween } from "../../../../../utils/chartHelpers"
 import { transition, space, colors } from "../../../../../themes/theme"
 import ChartTooltip from "../ChartTooltip/ChartTooltip"
 
 const getMean = array => _.meanBy(array, "age")
-export default function AgeChartBrowser({ data, margin }) {
+export default function AgeChartBrowser({ data, margin, language }) {
   const { svgRef, wrapperRef, xAxisRef, areaRef } = useChartRefs()
   const dims = useDimensions({
     ref: wrapperRef,
     margin,
   })
   const [mouseoverValue, setMouseoverValue] = useState(undefined)
+  const [firstHover, setFirstHover] = useState(false)
   const prevMouseoverValue = usePrevious(mouseoverValue)
   const [init, setInit] = useState(false)
   const storedValues = useRef()
@@ -69,7 +77,10 @@ export default function AgeChartBrowser({ data, margin }) {
               .attr("cy", ({ y }) => y)
               .attr("fill", setFillOpaque)
               .attr("stroke", setColor)
-              .on("mouseover", d => setMouseoverValue(d))
+              .on("mouseover", d => {
+                !firstHover && setFirstHover(true)
+                setMouseoverValue(d)
+              })
               .on("mouseout", () => setMouseoverValue(undefined))
               .call(enter =>
                 enter
@@ -295,7 +306,17 @@ export default function AgeChartBrowser({ data, margin }) {
         y: dims.chartHeight / 4,
       })
     }
-  }, [init, data, dims, prevData, prevDims, areaRef, xAxisRef, setFillOpaque])
+  }, [
+    init,
+    data,
+    dims,
+    prevData,
+    prevDims,
+    areaRef,
+    xAxisRef,
+    setFillOpaque,
+    firstHover,
+  ])
 
   useEffect(() => {
     if (!mouseoverValue && prevMouseoverValue) {
@@ -333,6 +354,11 @@ export default function AgeChartBrowser({ data, margin }) {
         data={mouseoverValue}
         margin={margin}
       />
+      {!firstHover && (
+        <FlexContainer absPos left={0} top={dims.chartHeight / 2 + margin.top/2} fontSize={2}>
+          {TEXT.hoverText[language]}
+        </FlexContainer>
+      )}
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
           marginLeft={margin.left}
@@ -357,5 +383,5 @@ export default function AgeChartBrowser({ data, margin }) {
 }
 
 AgeChartBrowser.defaultProps = {
-  margin: { top: 15, right: 0, bottom: 25, left: 0 },
+  margin: { top: 35, right: 0, bottom: 25, left: 0 },
 }

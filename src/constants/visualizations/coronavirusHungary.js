@@ -13,7 +13,7 @@ export const TEXT = {
     hu:
       "Az új koronavírusban elhunytak száma, korban es nembeni eloszlása Magyarországon",
     en:
-      "Number of deaths by COVID-19 in Hungary and their distribution by gender and age",
+      "Number of deaths by COVID-19 in Hungary, distribution by gender and age",
   },
   sourceTitle: {
     hu: "Forrás",
@@ -44,7 +44,7 @@ export const TEXT = {
     en: "dd'.' MM'.'",
   },
   genderF: {
-    hu: "Nő",
+    hu: "Nõ",
     en: "Female",
   },
   genderM: {
@@ -57,9 +57,13 @@ export const TEXT = {
   },
   mainChartExpBrowser: {
     hu:
-      "Mindegyik kör egy-egy elhunytat képvisel, a horizontális tengelyen pozícionálva az elhunyt személy kora alapján",
+      "Mindegyik kör egy-egy elhunytat képvisel a horizontális tengelyen pozícionálva az elhunyt személy kora alapján",
     en:
-      "Each dot represents someone passed away, the position on the horizontal axis is the age of the deceased",
+      "Each dot represents someone passed away, the position on the horizontal axis is determined by the age of the deceased",
+  },
+  hoverText: {
+    hu: "Mutasson az egérrel bármelyik körre információért az elhunyt személy alapbetegségeirõl!",
+    en: "Hover over any circle to find out more about the underlying conditions of the deceased person!",
   },
   tabletExp: {
     hu: "A tablet verzió hamarosan elkészül, köszönjük türelmét!",

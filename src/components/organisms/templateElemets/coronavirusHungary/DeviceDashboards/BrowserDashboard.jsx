@@ -61,7 +61,6 @@ export default function BrowserDashboard({
             {TEXT.mainTitle[language]}
           </FlexContainer>
           <FlexContainer
-            fontSize={2}
             gridArea="source"
             justify="space-around"
             align="flex-end"
@@ -87,10 +86,10 @@ export default function BrowserDashboard({
           </FlexContainer>
           <PercChartContainer language={language} numbers={numbers} />
           <FlexContainer gridArea="7/-1/-1/1" pos="relative">
-            <FlexContainer absPos top={space[2]} left={0} fontSize={1}>
+            <FlexContainer absPos top={space[2]} left={0} fontSize={2}>
               {TEXT.mainChartExpBrowser[language]}
             </FlexContainer>
-            <AgeChartBrowser data={filteredData} />
+            <AgeChartBrowser data={filteredData} language={language} />
           </FlexContainer>
         </BrowserMainGrid>
       </FlexContainer>
