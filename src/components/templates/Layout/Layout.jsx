@@ -6,7 +6,8 @@ import { Header } from "../../organisms"
 
 const LayoutContainer = styled(GridContainer)`
   grid-row-gap: 0;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
   padding-bottom: 2rem;
 `
 

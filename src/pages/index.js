@@ -11,9 +11,11 @@ function IndexPage({ data }) {
 
   return (
     <>
-      <Helmet title="Boring Bar Chart" />
+      <Helmet title="Boring Bar Chart">
+        <html lang="en" />
+      </Helmet>
       <Layout>
-        <div style={{ height: 60 }} />
+        <div style={{ height: 75 }} />
         <DataVisualizationGrid list={list} />
       </Layout>
     </>
