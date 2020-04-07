@@ -11,9 +11,14 @@ import numeral from "numeral"
 import _ from "lodash"
 import Slider from "@material-ui/core/Slider"
 import { withStyles } from "@material-ui/core/styles"
-import { GoPrimitiveSquare } from "react-icons/go"
+import { GoPrimitiveSquare, GoTools } from "react-icons/go"
 
-import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
+import {
+  FlexContainer,
+  GridContainer,
+  LinkAnchor,
+  Container,
+} from "../../atoms"
 import { usePrevious } from "../../../hooks"
 import { space, colors } from "../../../themes/theme"
 import {
@@ -277,8 +282,32 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
           </BrowserMainGrid>
         </FlexContainer>
       </BrowserView>
-      <TabletView>Tablet</TabletView>
-      <MobileOnlyView>Mobile</MobileOnlyView>
+      <TabletView>
+        <FlexContainer
+          fullScreen
+          fontSize={4}
+          textAlign="center"
+          direction="column"
+        >
+          A tablet verzió hamarosan érkezik, köszönjük türelmét!
+          <Container paddingTop={5}>
+            <GoTools size={40} />
+          </Container>
+        </FlexContainer>
+      </TabletView>
+      <MobileOnlyView>
+        <FlexContainer
+          fontSize={3}
+          fullScreen
+          textAlign="center"
+          direction="column"
+        >
+          A mobil verzió hamarosan érkezik, köszönjük türelmét!
+          <Container paddingTop={5}>
+            <GoTools size={30} />
+          </Container>
+        </FlexContainer>
+      </MobileOnlyView>
     </>
   )
 }
