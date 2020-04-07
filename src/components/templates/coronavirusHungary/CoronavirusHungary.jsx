@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import {
   MobileOnlyView,
   TabletView,
-  withOrientationChange,
 } from "react-device-detect"
 import { differenceInDays } from "date-fns"
 import _ from "lodash"
