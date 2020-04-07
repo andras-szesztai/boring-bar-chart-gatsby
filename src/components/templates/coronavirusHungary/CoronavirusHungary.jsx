@@ -10,7 +10,7 @@ import { format, differenceInDays, subDays } from "date-fns"
 import numeral from "numeral"
 import _ from "lodash"
 import Slider from "@material-ui/core/Slider"
-import { withStyles, makeStyles } from "@material-ui/core/styles"
+import { withStyles } from "@material-ui/core/styles"
 
 import { FlexContainer, GridContainer, LinkAnchor } from "../../atoms"
 import { usePrevious } from "../../../hooks"
@@ -53,58 +53,57 @@ const DateSlider = withStyles({
   },
 })(Slider)
 
-function CoronaVirusHungaryDashboard({ data, loading }) {
+function makeNumbers(array) {
+  return {
+    total: array.length,
+    male: array.filter(({ gender }) => gender === "Férfi").length,
+    female: array.filter(({ gender }) => gender === "Nő").length,
+  }
+}
 
+function CoronaVirusHungaryDashboard({ data, loading }) {
   const [formattedData, setFormattedData] = useState(undefined)
+  const [filteredData, setFilteredData] = useState(undefined)
+  const [numbers, setNumbers] = useState({ total: 0, male: 0, female: 0 })
   const [dates, setDates] = useState({
     diff: undefined,
     max: undefined,
     currDate: undefined,
   })
   const prevDates = usePrevious(dates)
+
   useEffect(() => {
-    if (formattedData && !dates.max) {
+    if (data && !formattedData) {
+      const formattedData = data.map(el => ({
+        ...el,
+        age: +el.kor,
+        rand: el.nem === "Férfi" ? _.random(10, 90) : _.random(110, 190),
+        date: new Date(el.datum),
+        number: +el.sorszam,
+        gender: el.nem,
+      }))
       const maxDate = _.maxBy(formattedData, "date").date
       const minDate = _.minBy(formattedData, "date").date
       const dateDiff = differenceInDays(minDate, maxDate)
+      setFormattedData(formattedData)
+      setFilteredData(formattedData)
+      setNumbers(makeNumbers(formattedData))
       setDates({
         diff: dateDiff,
         max: maxDate,
         currDate: maxDate,
       })
     }
-  }, [dates, formattedData])
-
-  const [numbers, setNumbers] = useState({ total: 0, male: 0, female: 0 })
-  useEffect(() => {
-    if (formattedData && !numbers.total) {
-      setNumbers({
-        total: formattedData.length,
-        male: formattedData.filter(({ gender }) => gender === "Férfi").length,
-        female: formattedData.filter(({ gender }) => gender === "Nő").length,
-      })
-    }
-  }, [data, formattedData, numbers])
-
-  useEffect(() => {
-    if (data && !formattedData) {
-      setFormattedData(
-        data.map(el => ({
-          ...el,
-          age: +el.kor,
-          rand: el.nem === "Férfi" ? _.random(10, 90) : _.random(110, 190),
-          date: new Date(el.datum),
-          number: +el.sorszam,
-          gender: el.nem,
-        }))
-      )
-    }
     if (
       prevDates &&
       prevDates.currDate &&
       !_.isEqual(dates.currDate, prevDates.currDate)
     ) {
-      console.log("run filter data")
+      const filteredData = formattedData.filter(
+        ({ date }) => date.getTime() <= dates.currDate.getTime()
+      )
+      setFilteredData(filteredData)
+      setNumbers(makeNumbers(filteredData))
     }
   }, [data, dates, formattedData, prevDates])
 
@@ -149,7 +148,7 @@ function CoronaVirusHungaryDashboard({ data, loading }) {
                   defaultValue={0}
                   step={1}
                   valueLabelDisplay="auto"
-                  onChangeCommitted={(e, val) =>
+                  onChange={(e, val) =>
                     setDates(prev => ({
                       ...prev,
                       currDate: subDays(dates.max, -val),

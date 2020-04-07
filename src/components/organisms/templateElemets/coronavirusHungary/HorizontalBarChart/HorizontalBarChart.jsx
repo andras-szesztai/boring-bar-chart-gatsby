@@ -7,7 +7,10 @@ import chroma from "chroma-js"
 
 import { ChartSvg, ChartWrapper, ChartArea, AxisLine } from "../../../../atoms"
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
-import { chartColors, lowOpacity } from "../../../../../constants/visualizations/coronavirusHungary"
+import {
+  chartColors,
+  lowOpacity,
+} from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { transition } from "../../../../../themes/theme"
 
@@ -30,9 +33,9 @@ export default function HorizontalBarChart({ margin, data }) {
         { gender: "female", num: data.female },
         { gender: "male", num: data.male },
       ]
-
       const setColor = ({ gender }) =>
         gender === "male" ? chartColors.male : chartColors.female
+      const setX = ({ num }) => xScale(num)
 
       area
         .selectAll("rect")
@@ -42,16 +45,16 @@ export default function HorizontalBarChart({ margin, data }) {
             enter
               .append("rect")
               .attr("x", 0)
-              .attr("width", ({ num }) => xScale(num))
               .attr("y", ({ gender }) => yScale(gender))
               .attr("height", yScale.bandwidth())
               .attr("fill", d => chroma(setColor(d)).alpha(lowOpacity))
+              .attr("width", setX)
               .attr("stroke", setColor),
           update =>
             update.call(update =>
               update
                 .transition(makeTransition(area, transition.lgNum, "update"))
-                .attr("width", d => xScale(d))
+                .attr("width", setX)
             )
         )
 
@@ -85,6 +88,7 @@ export default function HorizontalBarChart({ margin, data }) {
       setInit(true)
     }
     if (init && !_.isEqual(data, prevData)) {
+      createUpdateRectangles()
     }
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()

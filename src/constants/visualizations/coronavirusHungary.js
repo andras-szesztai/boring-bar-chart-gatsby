@@ -5,4 +5,4 @@ export const chartColors = {
   male: "#496366"
 }
 
-export const lowOpacity = .6
+export const lowOpacity = .75
