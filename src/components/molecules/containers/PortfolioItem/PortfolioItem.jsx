@@ -13,6 +13,8 @@ import {
   themifyColor,
 } from "../../../../themes/mixins"
 
+const number = 1
+
 const DEVICE_ICONS = {
   desktop: { icon: FaDesktop, size: 20 },
   tablet: { icon: FaTabletAlt, size: 19 },
