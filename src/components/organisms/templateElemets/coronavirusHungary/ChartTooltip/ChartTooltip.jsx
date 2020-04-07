@@ -38,6 +38,7 @@ export default function ChartTooltip({ data, margin, width, language }) {
     }
   })
 
+  console.log(data)
   return data ? (
     <TooltipContainer
       absPos
@@ -77,7 +78,7 @@ export default function ChartTooltip({ data, margin, width, language }) {
           {TEXT.tooltipConditions[language]}:
         </FlexContainer>
         <FlexContainer justify="flex-start">
-          {_.capitalize(data.alapbetegsegek)}
+          {_.capitalize(language === "hu" ? data.alapbetegsegek : data["underlying conditions"])}
         </FlexContainer>
       </GridContainer>
     </TooltipContainer>

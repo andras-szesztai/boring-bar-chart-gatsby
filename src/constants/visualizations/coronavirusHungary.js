@@ -45,6 +45,10 @@ export const TEXT = {
     hu: "MM'.' dd'.'",
     en: "dd'.' MM'.'",
   },
+  accessorF: {
+    hu: "Nő",
+    en: "Female"
+  },
   genderF: {
     hu: "Nõ",
     en: "Female",

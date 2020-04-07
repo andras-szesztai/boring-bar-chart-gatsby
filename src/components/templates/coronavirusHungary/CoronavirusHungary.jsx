@@ -21,24 +21,27 @@ function makeNumbers(array) {
   }
 }
 
-function makeFormattedData({data, isHu}){
-  if(isHu){
+function makeFormattedData({ data, isHu }) {
+  if (isHu) {
     return data.map(el => ({
-        ...el,
-        age: +el.kor,
-        date: new Date(el.datum),
-        number: +el.sorszam,
-        gender: el.nem,
-      }))
+      ...el,
+      age: +el.kor,
+      date: new Date(el.datum),
+      number: +el.sorszam,
+      gender: el.nem,
+    }))
   }
   return data.map(el => ({
     ...el,
     date: new Date(el.date),
+    age: +el.age,
+    number: +el.number,
   }))
 }
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [language, setLanguage] = useState("hu")
+  const prevLanguage = usePrevious(language)
 
   const [formattedData, setFormattedData] = useState(undefined)
   const [filteredData, setFilteredData] = useState(undefined)
@@ -52,7 +55,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
 
   useEffect(() => {
     if (data && !formattedData) {
-      const formattedData = makeFormattedData({  data, isHu: true })
+      const formattedData = makeFormattedData({ data, isHu: true })
       const maxDate = _.maxBy(formattedData, "date").date
       const minDate = _.minBy(formattedData, "date").date
       const dateDiff = differenceInDays(minDate, maxDate)
@@ -65,6 +68,17 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
         currDate: maxDate,
       })
     }
+    if (prevLanguage && language !== prevLanguage) {
+      const isHu = language === "hu"
+      const dataSet = isHu ? data : enData
+      const formattedData = makeFormattedData({ data: dataSet, isHu })
+      setFormattedData(formattedData)
+      setFilteredData(
+        formattedData.filter(
+          ({ date }) => date.getTime() <= dates.currDate.getTime()
+        )
+      )
+    }
     if (
       prevDates &&
       prevDates.currDate &&
@@ -76,7 +90,18 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       setFilteredData(filteredData)
       setNumbers(makeNumbers(filteredData))
     }
-  }, [data, dates, formattedData, numbers.total, prevDates])
+  }, [
+    data,
+    dates,
+    enData,
+    formattedData,
+    language,
+    numbers.total,
+    prevDates,
+    prevLanguage,
+  ])
+
+  
 
   return (
     <>

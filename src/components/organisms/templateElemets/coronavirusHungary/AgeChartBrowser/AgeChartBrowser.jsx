@@ -40,74 +40,76 @@ export default function AgeChartBrowser({ data, margin, language }) {
   const prevData = usePrevious(data)
   const prevDims = usePrevious(dims)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const setColor = ({ gender }) =>
-    gender === "Férfi" ? chartColors.male : chartColors.female
+    gender === TEXT.genderM[language] ? chartColors.male : chartColors.female
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setFillOpaque = d => chroma(setColor(d)).alpha(lowOpacity)
 
-  useEffect(() => {
-    function createUpdateCircles(duration = transition.lgNum) {
-      const { yScale, xScale, area } = storedValues.current
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  function createUpdateCircles(duration = transition.lgNum) {
+    const { yScale, xScale, area } = storedValues.current
 
-      forceSimulation(data)
-        .force(
-          "forceX",
-          forceX()
-            .strength(0.85)
-            .x(({ age }) => xScale(age))
-        )
-        .force(
-          "forceY",
-          forceY()
-            .strength(0.15)
-            .y(({ gender }) => yScale(gender) + yScale.bandwidth() / 2)
-        )
-        .force("collide", forceCollide().radius(6.5))
-        .tick(300)
-
-      area
-        .selectAll("circle")
-        .data(data, ({ number }) => number)
-        .join(
-          enter =>
-            enter
-              .append("circle")
-              .attr("r", 0)
+    forceSimulation(data)
+      .force(
+        "forceX",
+        forceX()
+          .strength(0.85)
+          .x(({ age }) => xScale(age))
+      )
+      .force(
+        "forceY",
+        forceY()
+          .strength(0.15)
+          .y(({ gender }) => yScale(gender) + yScale.bandwidth() / 2)
+      )
+      .force("collide", forceCollide().radius(6.5))
+      .tick(300)
+    area
+      .selectAll("circle")
+      .data(data, ({ number }) => number)
+      .join(
+        enter =>
+          enter
+            .append("circle")
+            .attr("r", 0)
+            .attr("cx", ({ x }) => x)
+            .attr("cy", ({ y }) => y)
+            .attr("fill", setFillOpaque)
+            .attr("stroke", setColor)
+            .on("mouseover", d => {
+              !firstHover && setFirstHover(true)
+              setMouseoverValue(d)
+            })
+            .on("mouseout", () => setMouseoverValue(undefined))
+            .call(enter =>
+              enter
+                .transition(makeTransition(area, duration, "in"))
+                .attr("r", 6)
+            ),
+        update =>
+          update.call(update =>
+            update
+              .transition(makeTransition(area, duration, "update"))
               .attr("cx", ({ x }) => x)
               .attr("cy", ({ y }) => y)
-              .attr("fill", setFillOpaque)
-              .attr("stroke", setColor)
-              .on("mouseover", d => {
-                !firstHover && setFirstHover(true)
-                setMouseoverValue(d)
-              })
-              .on("mouseout", () => setMouseoverValue(undefined))
-              .call(enter =>
-                enter
-                  .transition(makeTransition(area, duration, "in"))
-                  .attr("r", 6)
-              ),
-          update =>
-            update.call(update =>
-              update
-                .transition(makeTransition(area, duration, "update"))
-                .attr("cx", ({ x }) => x)
-                .attr("cy", ({ y }) => y)
-            ),
-          exit =>
-            exit.call(exit =>
-              exit
-                .transition(makeTransition(area, transition.mdNum, "out"))
-                .attr("r", 0)
-                .remove()
-            )
-        )
+          ),
+        exit =>
+          exit.call(exit =>
+            exit
+              .transition(makeTransition(area, transition.mdNum, "out"))
+              .attr("r", 0)
+              .remove()
+          )
+      )
 
-      select(lineRef.current).raise()
-      area.selectAll(".ref-line").raise()
-      area.selectAll(".ref-group").raise()
-    }
+    select(lineRef.current).raise()
+    area.selectAll(".ref-line").raise()
+    area.selectAll(".ref-group").raise()
+  }
 
+  useEffect(() => {
     function createUpdateRef({
       className,
       init,
@@ -220,7 +222,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
       const area = select(areaRef.current)
       const yScale = scaleBand()
         .range([0, dims.chartHeight])
-        .domain(["Nő", "Férfi"])
+        .domain([TEXT.accessorF[language], TEXT.genderM[language]])
       const xScale = scaleLinear()
         .range([0, dims.chartWidth])
         .domain([min(data, d => d.age) - 2, max(data, d => d.age) + 2])
@@ -239,7 +241,9 @@ export default function AgeChartBrowser({ data, margin, language }) {
       createUpdateRef({
         className: "male",
         init: true,
-        data: getMean(data.filter(({ gender }) => gender === "Férfi")),
+        data: getMean(
+          data.filter(({ gender }) => gender === TEXT.genderM[language])
+        ),
         y1: dims.chartHeight / 2 + space[2],
         y2: dims.chartHeight,
         y: dims.chartHeight / 2 + dims.chartHeight / 4,
@@ -248,7 +252,9 @@ export default function AgeChartBrowser({ data, margin, language }) {
       createUpdateRef({
         className: "female",
         init: true,
-        data: getMean(data.filter(({ gender }) => gender === "Nő")),
+        data: getMean(
+          data.filter(({ gender }) => gender === TEXT.accessorF[language])
+        ),
         y1: 0,
         y2: dims.chartHeight / 2 - space[2],
         y: dims.chartHeight / 4,
@@ -273,13 +279,21 @@ export default function AgeChartBrowser({ data, margin, language }) {
       })
       createUpdateRef({
         className: "male",
-        data: getMean(data.filter(({ gender }) => gender === "Férfi")),
-        prevData: getMean(prevData.filter(({ gender }) => gender === "Férfi")),
+        data: getMean(
+          data.filter(({ gender }) => gender === TEXT.genderM[language])
+        ),
+        prevData: getMean(
+          prevData.filter(({ gender }) => gender === TEXT.genderM[language])
+        ),
       })
       createUpdateRef({
         className: "female",
-        data: getMean(data.filter(({ gender }) => gender === "Nő")),
-        prevData: getMean(prevData.filter(({ gender }) => gender === "Nő")),
+        data: getMean(
+          data.filter(({ gender }) => gender === TEXT.accessorF[language])
+        ),
+        prevData: getMean(
+          prevData.filter(({ gender }) => gender === TEXT.accessorF[language])
+        ),
       })
     }
     if (init && !_.isEqual(prevDims, dims)) {
@@ -293,14 +307,18 @@ export default function AgeChartBrowser({ data, margin, language }) {
       })
       moveRefs({
         className: "male",
-        data: getMean(data.filter(({ gender }) => gender === "Férfi")),
+        data: getMean(
+          data.filter(({ gender }) => gender === TEXT.genderM[language])
+        ),
         y1: dims.chartHeight / 2 + space[2],
         y2: dims.chartHeight,
         y: dims.chartHeight / 2 + dims.chartHeight / 4,
       })
       moveRefs({
         className: "female",
-        data: getMean(data.filter(({ gender }) => gender === "Nő")),
+        data: getMean(
+          data.filter(({ gender }) => gender === TEXT.accessorF[language])
+        ),
         y1: 0,
         y2: dims.chartHeight / 2 - space[2],
         y: dims.chartHeight / 4,
@@ -316,6 +334,9 @@ export default function AgeChartBrowser({ data, margin, language }) {
     xAxisRef,
     setFillOpaque,
     firstHover,
+    setColor,
+    language,
+    createUpdateCircles,
   ])
 
   useEffect(() => {
@@ -335,15 +356,27 @@ export default function AgeChartBrowser({ data, margin, language }) {
           makeTransition(storedValues.current.area, transition.smNum, "hover")
         )
         .attr("fill", d =>
-          d.sorszam === mouseoverValue.sorszam
+          d.number === mouseoverValue.number
             ? chroma(setColor(d)).brighten(2)
             : setFillOpaque(d)
         )
         .attr("stroke", d =>
-          d.sorszam === mouseoverValue.sorszam
+          d.number === mouseoverValue.number
             ? chroma(setColor(d)).darken()
             : setColor(d)
         )
+    }
+  })
+
+  useEffect(() => {
+    if (init && prevData[0].gender !== data[0].gender) {
+      const { yScale } = storedValues.current
+      yScale.domain([TEXT.accessorF[language], TEXT.genderM[language]])
+      storedValues.current = {
+        ...storedValues.current,
+        yScale,
+      }
+      createUpdateCircles()
     }
   })
 
@@ -356,7 +389,12 @@ export default function AgeChartBrowser({ data, margin, language }) {
         language={language}
       />
       {!firstHover && (
-        <FlexContainer absPos left={0} top={dims.chartHeight / 2 + margin.top/2} fontSize={2}>
+        <FlexContainer
+          absPos
+          left={0}
+          top={dims.chartHeight / 2 + margin.top / 2}
+          fontSize={2}
+        >
           {TEXT.hoverText[language]}
         </FlexContainer>
       )}
