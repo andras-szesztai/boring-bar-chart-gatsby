@@ -15,6 +15,7 @@ import BarLabels from "../BarLabels/BarLabels"
 import HorizontalBarChart from "../HorizontalBarChart/HorizontalBarChart"
 import PercChartContainer from "../PercChartContainer/PercChartContainer"
 import AgeChartBrowser from "../AgeChartBrowser/AgeChartBrowser"
+import { FullScreenLoader } from "../../../../molecules"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -44,11 +45,12 @@ export default function BrowserDashboard({
   dates,
   setDates,
   filteredData,
-  loading
+  loading,
 }) {
   return (
     <BrowserView>
       <FlexContainer fullScreen>
+        <FullScreenLoader loading={loading} loader="clip" loaderSize={75} />
         <BrowserMainGrid>
           <FlexContainer
             gridArea="title"

@@ -6,6 +6,7 @@ import { select } from "d3-selection"
 import { scaleLinear, scaleBand } from "d3-scale"
 import { axisBottom } from "d3-axis"
 import _ from "lodash"
+import { FaQuestion } from "react-icons/fa"
 
 import {
   ChartWrapper,
@@ -13,6 +14,7 @@ import {
   AxisLine,
   ChartArea,
   FlexContainer,
+  Container,
 } from "../../../../atoms"
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
 import {
@@ -260,13 +262,6 @@ export default function AgeChartBrowser({ data, margin, language }) {
         y: dims.chartHeight / 4,
         color: chartColors.female,
       })
-      select(xAxisRef.current)
-        .append("text")
-        .attr("x", 0)
-        .attr("y", space[2] + 6)
-        .attr("text-anchor", "start")
-        .attr("fill", colors.grayDarkest)
-        .text("Életkor")
       setInit(true)
     }
 
@@ -392,12 +387,19 @@ export default function AgeChartBrowser({ data, margin, language }) {
         <FlexContainer
           absPos
           left={0}
-          top={dims.chartHeight / 2 + margin.top / 2}
+          width="240px"
+          top={dims.chartHeight / 2}
           fontSize={2}
         >
+          <Container paddingTop={1} paddingRight={2}>
+            <FaQuestion />
+          </Container>
           {TEXT.hoverText[language]}
         </FlexContainer>
       )}
+      <FlexContainer absPos bottom={6} left={0} >
+        {TEXT.tooltipAge[language]}
+      </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
           marginLeft={margin.left}

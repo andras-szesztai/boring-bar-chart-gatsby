@@ -1,13 +1,15 @@
 import React from "react"
 import { GoPrimitiveSquare } from "react-icons/go"
 
-import { FlexContainer } from "../../../../atoms"
-import { chartColors, lowOpacity, TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
+import { FlexContainer, Container } from "../../../../atoms"
+import {
+  chartColors,
+  lowOpacity,
+  TEXT,
+} from "../../../../../constants/visualizations/coronavirusHungary"
 import Number from "../Number/Number"
 
-export default function BarLabels({
-  language, numbers
-}) {
+export default function BarLabels({ language, numbers }) {
   return (
     <>
       <FlexContainer
@@ -16,7 +18,13 @@ export default function BarLabels({
         gridArea="no"
         fontColor={chartColors.female}
       >
-        <GoPrimitiveSquare style={{ opacity: lowOpacity }} size={20} />{" "}
+        <Container paddingTop={2}>
+          <GoPrimitiveSquare
+            color={chartColors.female}
+            style={{ opacity: lowOpacity }}
+            size={20}
+          />{" "}
+        </Container>
         {TEXT.genderF[language]}:
       </FlexContainer>
       <FlexContainer
@@ -33,7 +41,13 @@ export default function BarLabels({
         gridArea="ffi"
         fontColor={chartColors.male}
       >
-        <GoPrimitiveSquare style={{ opacity: lowOpacity }} size={20} />{" "}
+        <Container paddingTop={2}>
+          <GoPrimitiveSquare
+            color={chartColors.male}
+            style={{ opacity: lowOpacity }}
+            size={20}
+          />{" "}
+        </Container>
         {TEXT.genderM[language]}:
       </FlexContainer>
       <FlexContainer

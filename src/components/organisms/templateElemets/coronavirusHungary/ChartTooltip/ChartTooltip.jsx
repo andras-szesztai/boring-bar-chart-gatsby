@@ -38,7 +38,6 @@ export default function ChartTooltip({ data, margin, width, language }) {
     }
   })
 
-  console.log(data)
   return data ? (
     <TooltipContainer
       absPos

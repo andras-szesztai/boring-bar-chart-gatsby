@@ -13,11 +13,11 @@ import { TEXT } from "../../../constants/visualizations/coronavirusHungary"
 import { BrowserDashboard } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
 import SwitchContainer from "../../organisms/templateElemets/coronavirusHungary/SwitchContainer/SwitchContainer"
 
-function makeNumbers(array) {
+function makeNumbers(array, lan) {
   return {
     total: array.length,
-    male: array.filter(({ gender }) => gender === "Férfi").length,
-    female: array.filter(({ gender }) => gender === "Nő").length,
+    male: array.filter(({ gender }) => gender === TEXT.genderM[lan]).length,
+    female: array.filter(({ gender }) => gender === TEXT.accessorF[lan]).length,
   }
 }
 
@@ -61,7 +61,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       const dateDiff = differenceInDays(minDate, maxDate)
       setFormattedData(formattedData)
       setFilteredData(formattedData)
-      setNumbers(makeNumbers(formattedData))
+      setNumbers(makeNumbers(formattedData, language))
       setDates({
         diff: dateDiff,
         max: maxDate,
@@ -88,7 +88,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
         ({ date }) => date.getTime() <= dates.currDate.getTime()
       )
       setFilteredData(filteredData)
-      setNumbers(makeNumbers(filteredData))
+      setNumbers(makeNumbers(filteredData, language))
     }
   }, [
     data,
@@ -96,7 +96,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     enData,
     formattedData,
     language,
-    numbers.total,
+    numbers,
     prevDates,
     prevLanguage,
   ])

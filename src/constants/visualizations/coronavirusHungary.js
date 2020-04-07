@@ -15,7 +15,7 @@ export const TEXT = {
     hu:
       "Az új koronavírusban elhunytak száma, korban es nembeni eloszlása Magyarországon",
     en:
-      "Number of deaths by COVID-19 in Hungary, distribution by gender and age",
+      "Number of deaths caused by COVID-19 in Hungary, distribution by gender and age",
   },
   sourceTitle: {
     hu: "Forrás",

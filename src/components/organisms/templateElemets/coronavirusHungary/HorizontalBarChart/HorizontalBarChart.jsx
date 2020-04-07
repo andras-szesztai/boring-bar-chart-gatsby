@@ -85,13 +85,6 @@ export default function HorizontalBarChart({ margin, data }) {
         .domain([0, max(Object.values(data)) - min(Object.values(data))])
       storedValues.current = { yScale, xScale, area }
       createUpdateRectangles()
-      select(yAxisRef.current)
-      .append("text")
-      .attr("x", 0)
-      .attr("y", dims.chartHeight + 10)
-      .attr("text-anchor", "middle")
-      .attr("fill", colors.grayDarkest)
-      .text("0")
       setInit(true)
     }
     if (init && !_.isEqual(data, prevData)) {
