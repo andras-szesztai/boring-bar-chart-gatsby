@@ -92,16 +92,16 @@ export default function HorizontalBarChart({ margin, data }) {
   }, [init, data, yAxisRef, dims, prevData, prevDims])
 
   return (
-    <ChartWrapper ref={wrapperRef}>
-      <ChartSvg absPos ref={svgRef} width={dims.width} height={dims.height}>
+    <ChartWrapper areaRef={wrapperRef}>
+      <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
           marginLeft={margin.left}
           marginTop={margin.top}
-          ref={yAxisRef}
+          areaRef={yAxisRef}
         >
           <AxisLine
             color="grayDarkest"
-            ref={lineRef}
+            areaRef={lineRef}
             stroke={0.5}
             y1={0}
             y2={dims.chartHeight}

@@ -85,12 +85,12 @@ export default function HorizontalBarChart({ margin, data }) {
   }, [init, data, dims, prevData, prevDims, areaRef])
 
   return (
-    <ChartWrapper ref={wrapperRef}>
-      <ChartSvg absPos ref={svgRef} width={dims.width} height={dims.height}>
+    <ChartWrapper areaRef={wrapperRef}>
+      <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
           marginLeft={margin.left}
           marginTop={margin.top}
-          ref={areaRef}
+          areaRef={areaRef}
         />
       </ChartSvg>
     </ChartWrapper>

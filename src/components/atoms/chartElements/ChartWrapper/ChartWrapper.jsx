@@ -1,3 +1,4 @@
+import React from 'react';
 import styled, { css } from "styled-components"
 import { themifyFontSize } from "../../../../themes/mixins"
 
@@ -24,8 +25,19 @@ const ChartWrapper = styled.div`
     }
   `}
 `
+
+
+export default function(props) {
+  const { areaRef } = props
+  return (
+    <ChartWrapper
+      ref={areaRef}
+      {...props}
+    />
+  )
+}
+
+
 ChartWrapper.defaultProps = {
   fontSize: 1
 }
-
-export default ChartWrapper

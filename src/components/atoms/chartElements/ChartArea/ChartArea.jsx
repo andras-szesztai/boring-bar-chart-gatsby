@@ -1,3 +1,4 @@
+import React from "react"
 import styled from "styled-components"
 
 export const ChartArea = styled.g`
@@ -7,4 +8,14 @@ export const ChartArea = styled.g`
   );
 `
 
-export default ChartArea
+export default function(props) {
+  const { areaRef, marginLeft, marginTop } = props
+  return (
+    <ChartArea
+      ref={areaRef}
+      marginLeft={marginLeft}
+      marginTop={marginTop}
+      {...props}
+    />
+  )
+}

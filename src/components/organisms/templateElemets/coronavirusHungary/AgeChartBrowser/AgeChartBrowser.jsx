@@ -117,21 +117,21 @@ export default function AgeChartBrowser({ data, margin }) {
   }, [init, data, dims, prevData, prevDims, areaRef, xAxisRef])
 
   return (
-    <ChartWrapper ref={wrapperRef}>
-      <ChartSvg absPos ref={svgRef} width={dims.width} height={dims.height}>
+    <ChartWrapper areaRef={wrapperRef}>
+      <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
           marginLeft={margin.left}
           marginTop={margin.top}
-          ref={areaRef}
+          areaRef={areaRef}
         />
         <ChartArea
           marginLeft={margin.left}
           marginTop={margin.top + dims.chartHeight}
-          ref={xAxisRef}
+          areaRef={xAxisRef}
         >
           <AxisLine
             color="grayDarkest"
-            ref={lineRef}
+            areaRef={lineRef}
             stroke={0.5}
             x2={dims.chartWidth}
           />

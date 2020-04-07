@@ -22,15 +22,6 @@ import {
   AgeChartBrowser,
 } from "../../organisms/templateElemets/coronavirusHungary"
 
-const DateSlider = makeStyles({
-  root: {
-    color: colors.grayDarker,
-  },
-  valueLabel: {
-    fontSize: 8,
-  },
-})(Slider)
-
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
   width: 95vw;
@@ -52,8 +43,18 @@ const BrowserMainGrid = styled(GridContainer)`
     "ffi ffiNum barC barC barC barC percBar percBar percBar percBar";
 `
 
+const DateSlider = withStyles({
+  root: {
+    color: colors.grayDarker,
+    fontSize: 8,
+  },
+  valueLabel: {
+    fontSize: 8,
+  },
+})(Slider)
+
 function CoronaVirusHungaryDashboard({ data, loading }) {
-  const classes = makeStyles()
+
   const [formattedData, setFormattedData] = useState(undefined)
   const [dates, setDates] = useState({
     diff: undefined,
