@@ -34,12 +34,16 @@ export const TEXT = {
     en: "http://abouthungary.hu/",
   },
   total: {
-    hu: "Összesen",
-    en: "Total",
-  },
+    hu: "Összesen (kumulatív)",
+    en: "Total (cumulative)",
+  }, 
+  date: {
+    hu: "Dátum",
+    en: "Date",
+  }, 
   dateSlider: {
-    hu: "Válasszon dátumot",
-    en: "Choose a date",
+    hu: "Válasszon másik dátumot",
+    en: "Choose another date",
   },
   dateFormatLong: {
     hu: "Y'.' MM'.' dd'.'",

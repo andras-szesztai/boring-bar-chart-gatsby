@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { format } from "date-fns"
 import { BrowserView } from "react-device-detect"
 
-import { GridContainer, FlexContainer } from "../../../../atoms"
+import { GridContainer, FlexContainer, Container } from "../../../../atoms"
 import { space } from "../../../../../themes/theme"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 
@@ -78,6 +78,9 @@ export default function BrowserDashboard({
             <Number num={numbers.total} />
           </FlexContainer>
           <FlexContainer fontSize={2} gridArea="date">
+            <Container fontSize={2} paddingRight={2}>
+              {TEXT.date[language]}:
+            </Container>
             {dates.currDate &&
               format(dates.currDate, TEXT.dateFormatLong[language])}
           </FlexContainer>
