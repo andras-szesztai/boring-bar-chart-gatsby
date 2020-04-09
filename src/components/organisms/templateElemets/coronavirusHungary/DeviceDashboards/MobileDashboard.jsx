@@ -5,14 +5,19 @@ import { MobileOnlyView, withOrientationChange } from "react-device-detect"
 import { useOrientation } from "../../../../../hooks"
 import { FlexContainer, GridContainer } from "../../../../atoms"
 import { FullScreenLoader } from "../../../../molecules"
+import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
+import SwitchContainer from "../SwitchContainer/SwitchContainer"
+import SourceLink from "../SourceLink/SourceLink"
+import { space } from "../../../../../themes/theme"
 
 const MainGrid = styled(GridContainer)`
-  width: 100%;
   ${({ orientation }) =>
     orientation === "landscape"
       ? css`
+          margin-top: ${space[2]}px;
+          width: 96%;
           grid-template-columns: repeat(5, 1fr);
-          grid-template-rows: repeat(2, 80px) 150px 250px;
+          grid-template-rows: min-content 80px 150px 250px;
           grid-template-areas:
             "title title title source source"
             "total date date slider slider"
@@ -20,9 +25,11 @@ const MainGrid = styled(GridContainer)`
             "mainChart mainChart mainChart mainChart mainChart";
         `
       : css`
+          margin-top: ${space[3]}px;
+          width: 94%;
           grid-template-columns: 1fr;
           grid-template-rows:
-            100px 50px 150px repeat(2, 50px) repeat(2, 200px)
+            min-content 50px 150px repeat(2, 50px) repeat(2, 200px)
             600px;
           grid-template-areas:
             "title"
@@ -49,19 +56,43 @@ function MobileDashboard({
 }) {
   const orientation = useOrientation({ isLandscape, isPortrait })
 
+  const isLS = orientation === "landscape"
   return (
     <MobileOnlyView>
-      <MainGrid orientation={orientation} pos="relative">
-        <FullScreenLoader loading={loading} loader="clip" loaderSize={70} />
-        <FlexContainer withBorder gridArea="title" />
-        <FlexContainer withBorder gridArea="source" />
-        <FlexContainer withBorder gridArea="slider" />
-        <FlexContainer withBorder gridArea="date" />
-        <FlexContainer withBorder gridArea="total" />
-        <FlexContainer withBorder gridArea="barChart" />
-        <FlexContainer withBorder gridArea="stackedChart" />
-        <FlexContainer withBorder gridArea="mainChart" />
-      </MainGrid>
+      <FullScreenLoader loading={loading} loader="clip" loaderSize={70} />
+      <FlexContainer fullSize>
+        <MainGrid orientation={orientation} pos="relative">
+          <FlexContainer
+            gridArea="title"
+            justify="flex-start"
+            fontSize={3}
+            fontWeight="ultraLight"
+            lineHeight={1.1}
+          >
+            {TEXT.mainTitle[language]}
+          </FlexContainer>
+          <FlexContainer
+            gridArea="source"
+            justify={isLS ? "space-evenly" : "space-around"}
+            align={isLS && "flex-end"}
+            direction={isLS && "column"}
+          >
+            <SourceLink fontSize={1} language={language} />
+            <SwitchContainer
+              fontSize={1}
+              language={language}
+              setLanguage={setLanguage}
+              switchWidth={32}
+            />
+          </FlexContainer>
+          <FlexContainer withBorder gridArea="slider" />
+          <FlexContainer withBorder gridArea="date" />
+          <FlexContainer withBorder gridArea="total" />
+          <FlexContainer withBorder gridArea="barChart" />
+          <FlexContainer withBorder gridArea="stackedChart" />
+          <FlexContainer withBorder gridArea="mainChart" />
+        </MainGrid>
+      </FlexContainer>
     </MobileOnlyView>
   )
 }
