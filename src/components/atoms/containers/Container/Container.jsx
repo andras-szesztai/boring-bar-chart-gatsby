@@ -35,6 +35,7 @@ const Container = styled.div`
     marginBottom,
     marginLeft,
     marginRight,
+    marginTop,
     paddingTop,
     lineHeight,
   }) => css`
@@ -58,6 +59,7 @@ const Container = styled.div`
     margin-bottom: ${themifySpace(marginBottom) || 0}px;
     margin-left: ${themifySpace(marginLeft) || 0}px;
     margin-right: ${themifySpace(marginRight) || 0}px;
+    margin-top: ${themifySpace(marginTop) || 0}px;
   `}
 
 

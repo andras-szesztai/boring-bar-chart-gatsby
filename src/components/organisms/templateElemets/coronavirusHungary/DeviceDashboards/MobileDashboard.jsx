@@ -3,12 +3,13 @@ import styled, { css } from "styled-components"
 
 import { MobileOnlyView, withOrientationChange } from "react-device-detect"
 import { useOrientation } from "../../../../../hooks"
-import { FlexContainer, GridContainer } from "../../../../atoms"
+import { FlexContainer, GridContainer, Container } from "../../../../atoms"
 import { FullScreenLoader } from "../../../../molecules"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import SourceLink from "../SourceLink/SourceLink"
 import { space } from "../../../../../themes/theme"
+import Number from "../Number/Number"
 
 const MainGrid = styled(GridContainer)`
   ${({ orientation }) =>
@@ -87,7 +88,22 @@ function MobileDashboard({
           </FlexContainer>
           <FlexContainer withBorder gridArea="slider" />
           <FlexContainer withBorder gridArea="date" />
-          <FlexContainer withBorder gridArea="total" />
+          <FlexContainer
+            gridArea="total"
+            direction={isLS && "column"}
+            justify={isLS ? "center" : "space-evenly"}
+            align={isLS ? "flex-start" : "center"}
+          >
+            {TEXT.total[language]}:
+            <Container
+              fontWeight={3}
+              fontSize={2}
+              marginTop={isLS && 1}
+              marginBottom={!isLS && 1}
+            >
+              <Number num={numbers.total} />
+            </Container>
+          </FlexContainer>
           <FlexContainer withBorder gridArea="barChart" />
           <FlexContainer withBorder gridArea="stackedChart" />
           <FlexContainer withBorder gridArea="mainChart" />
