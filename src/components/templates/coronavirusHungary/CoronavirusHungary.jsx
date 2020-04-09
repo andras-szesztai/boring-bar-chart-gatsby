@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import {
-  MobileOnlyView,
   TabletView,
   isTablet,
   isMobileOnly,
@@ -14,7 +13,7 @@ import { GoTools } from "react-icons/go"
 import { FlexContainer, Container } from "../../atoms"
 import { usePrevious } from "../../../hooks"
 import { TEXT } from "../../../constants/visualizations/coronavirusHungary"
-import { BrowserDashboard } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
+import { BrowserDashboard, MobileDashboard } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
 import SwitchContainer from "../../organisms/templateElemets/coronavirusHungary/SwitchContainer/SwitchContainer"
 
 function makeNumbers(array, lan) {
@@ -156,24 +155,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
         </TabletView>
       )}
       {device === "mobile" && (
-        <MobileOnlyView>
-          <FlexContainer
-            fontSize={3}
-            fullScreen
-            textAlign="center"
-            direction="column"
-          >
-            <SwitchContainer
-              language={language}
-              setLanguage={setLanguage}
-              paddingBottom={4}
-            />
-            {TEXT.mobileExp[language]}
-            <Container paddingTop={5}>
-              <GoTools size={30} />
-            </Container>
-          </FlexContainer>
-        </MobileOnlyView>
+        <MobileDashboard/>
       )}
     </>
   )
