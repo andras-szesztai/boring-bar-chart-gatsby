@@ -12,3 +12,4 @@ export { default as useUniqValuesList } from "./useUniqValuesList/useUniqValuesL
 export { default as useGrouppedData } from "./useGrouppedData/useGrouppedData"
 export { default as useOrientation } from "./useOrientation/useOrientation"
 export { default as useDeviceType } from "./useDeviceType/useDeviceType"
+export { default as useScrollPosition } from "./useScrollPosition/useScrollPosition"

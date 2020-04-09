@@ -138,7 +138,17 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           </FlexContainer>
         </TabletView>
       )}
-      {device === "mobile" && <MobileDashboard />}
+      {device === "mobile" && (
+        <MobileDashboard
+          language={language}
+          setLanguage={setLanguage}
+          numbers={numbers}
+          dates={dates}
+          setDates={setDates}
+          filteredData={filteredData}
+          loading={loading}
+        />
+      )}
     </>
   )
 }

@@ -3,6 +3,7 @@ import { PropagateLoader, CircleLoader, ClipLoader } from "react-spinners"
 
 import { FlexContainer } from "../../atoms"
 import { colors } from "../../../themes/theme"
+import { useScrollPosition } from "../../../hooks"
 
 export default function FullScreenLoader({
   timeOut,
@@ -32,12 +33,15 @@ export default function FullScreenLoader({
     circle: <CircleLoader {...loaderProps} />,
     clip: <ClipLoader {...loaderProps} />,
   }
+
+  const scrollPosition = useScrollPosition()
+
   return (
     <>
       {(loading || parentLoading) && (
         <FlexContainer
           fullScreen
-          top={0}
+          top={scrollPosition}
           absPos
           bgColor={bgColor}
           fontColor="grayDarkest"
