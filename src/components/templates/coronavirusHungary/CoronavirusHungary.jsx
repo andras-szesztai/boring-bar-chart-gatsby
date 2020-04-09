@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react"
-import {
-  TabletView,
-  isTablet,
-  isMobileOnly,
-  isBrowser,
-} from "react-device-detect"
+import { TabletView } from "react-device-detect"
 import Helmet from "react-helmet"
 import { differenceInDays } from "date-fns"
 import _ from "lodash"
 import { GoTools } from "react-icons/go"
 
 import { FlexContainer, Container } from "../../atoms"
-import { usePrevious } from "../../../hooks"
+import { usePrevious, useDeviceType } from "../../../hooks"
 import { TEXT } from "../../../constants/visualizations/coronavirusHungary"
-import { BrowserDashboard, MobileDashboard } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
+import {
+  BrowserDashboard,
+  MobileDashboard,
+} from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
 import SwitchContainer from "../../organisms/templateElemets/coronavirusHungary/SwitchContainer/SwitchContainer"
 
 function makeNumbers(array, lan) {
@@ -104,21 +102,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     prevLanguage,
   ])
 
-  const [device, setDevice] = useState(undefined)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (!device) {
-      if (isBrowser && !isMobileOnly && !isTablet) {
-        setDevice("desktop")
-      }
-      if (!isBrowser && !isMobileOnly && isTablet) {
-        setDevice("tablet")
-      }
-      if (!isBrowser && isMobileOnly && !isTablet) {
-        setDevice("mobile")
-      }
-    }
-  })
+  const device = useDeviceType()
 
   return (
     <>
@@ -154,9 +138,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           </FlexContainer>
         </TabletView>
       )}
-      {device === "mobile" && (
-        <MobileDashboard/>
-      )}
+      {device === "mobile" && <MobileDashboard />}
     </>
   )
 }
