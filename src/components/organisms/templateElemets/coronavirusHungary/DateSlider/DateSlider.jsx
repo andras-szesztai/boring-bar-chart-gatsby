@@ -3,10 +3,10 @@ import { withStyles } from "@material-ui/core/styles"
 import Slider from "@material-ui/core/Slider"
 import { format, subDays } from "date-fns"
 
-import { FlexContainer, Container } from "../../../../atoms"
+import { FlexContainer, Container, GridContainer } from "../../../../atoms"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 import { colors } from "../../../../../themes/theme"
-import { useScrollPosition } from "../../../../../hooks"
+import { useScrollPosition, useWindowDimensions } from "../../../../../hooks"
 
 const DSlider = withStyles({
   root: {
@@ -33,77 +33,84 @@ export default function DateSlider({
   extraPadding,
   extraPaddingRight,
   extraPaddingLeft,
-  textPaddingRight,
-  textPaddingRightBottom,
-  textPaddingRightTop,
-  sliderPaddingTop,
-  direction,
   fontSize,
-  justify,
   isSticky,
+  loading,
+  dateFontSize,
+  fontWeight,
+  currDate,
+  justify
 }) {
   const containerRef = useRef()
   const scrollPosition = useScrollPosition()
-
+  const { windowWidth } = useWindowDimensions()
   const [containerPosition, setContainerPosition] = useState(undefined)
   useEffect(() => {
     if (!containerPosition && containerRef.current) {
       setContainerPosition(containerRef.current.getBoundingClientRect().top)
     }
   }, [containerPosition])
-
-  const isBelowPosition = isSticky && containerPosition < scrollPosition
+  const isBelowPosition =
+    !loading && isSticky && containerPosition < scrollPosition
 
   return (
-    <FlexContainer
+    <GridContainer
       ref={containerRef}
+      marginTop={isBelowPosition && 2}
       gridArea={!isBelowPosition && "slider"}
-      fixedPos={isBelowPosition && {
-        top: 0,
-        left: 0,
-        width: "94%",
-        marginLeft: "3%"
-      }}
+      fixedPos={
+        isBelowPosition && {
+          top: 0,
+          left: 0,
+          width: `${windowWidth * 0.94}px`,
+          marginLeft: "3%",
+        }
+      }
       bgColor="#FFFFFF"
       withDropShadow={isBelowPosition}
-      justify={justify}
-      direction={direction}
       paddingRight={extraPaddingRight || extraPadding}
       paddingLeft={extraPaddingLeft || extraPadding}
       zIndex={isBelowPosition && "overlay"}
+      rows="repeat(2, 1fr)"
+     
     >
       <FlexContainer
-        marginTop={isBelowPosition && 2}
-        whiteSpace="nowrap"
-        paddingRight={textPaddingRight}
-        paddingBottom={textPaddingRightBottom}
-        paddingTop={textPaddingRightTop}
-        fontSize={fontSize}
+        fontSize={dateFontSize || fontSize}
+        fontWeight={fontWeight}
+        justify={justify}
       >
-        {TEXT.dateSlider[language]}:
+        {currDate && format(currDate, TEXT.dateFormatLong[language])}
       </FlexContainer>
-      <Container width="100%" paddingTop={sliderPaddingTop}>
-        {dates.max && (
-          <DSlider
-            defaultValue={0}
-            step={1}
-            marks
-            valueLabelDisplay="auto"
-            onChangeCommitted={(e, val) =>
-              setDates(prev => ({
-                ...prev,
-                currDate: subDays(dates.max, -val),
-              }))
-            }
-            valueLabelFormat={val =>
-              format(subDays(dates.max, -val), TEXT.dateFormatShort[language])
-            }
-            min={dates.diff}
-            max={0}
-          />
-        )}
-      </Container>
-    </FlexContainer>
+      <FlexContainer direction="column" align={justify} justify="flex-end">
+        <FlexContainer
+          whiteSpace="nowrap"
+          fontSize={fontSize}
+        >
+          {TEXT.dateSlider[language]}:
+        </FlexContainer>
+        <Container width="100%" >
+          {dates.max && (
+            <DSlider
+              defaultValue={0}
+              step={1}
+              marks
+              valueLabelDisplay="auto"
+              onChangeCommitted={(e, val) =>
+                setDates(prev => ({
+                  ...prev,
+                  currDate: subDays(dates.max, -val),
+                }))
+              }
+              valueLabelFormat={val =>
+                format(subDays(dates.max, -val), TEXT.dateFormatShort[language])
+              }
+              min={dates.diff}
+              max={0}
+            />
+          )}
+        </Container>
+      </FlexContainer>
+    </GridContainer>
   )
 }
 

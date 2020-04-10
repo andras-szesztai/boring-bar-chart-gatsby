@@ -1,13 +1,13 @@
 import React from "react"
 import { GoPrimitiveSquare } from "react-icons/go"
 
-import { FlexContainer, Container } from "../../../../atoms"
+import { FlexContainer, Container, GridContainer } from "../../../../atoms"
 import { lowOpacity } from "../../../../../constants/visualizations/coronavirusHungary"
 import Number from "../Number/Number"
 
 export default function BanContainer({
   justify,
-  direction,
+  numJustify,
   gridArea,
   align,
   text,
@@ -16,15 +16,21 @@ export default function BanContainer({
   numMarginTop,
   numMarginBottom,
   color,
+  rows,
+  columns,
 }) {
   return (
-    <FlexContainer
+    <GridContainer
       gridArea={gridArea}
-      direction={direction}
-      justify={justify}
-      align={align}
+      rows={rows}
+      columns={columns}
     >
-      <FlexContainer fontColor={color} fontSize={2}>
+      <FlexContainer
+        fontColor={color}
+        fontSize={2}
+        justify={justify}
+        align={align}
+      >
         {withIcon && (
           <Container paddingTop={1}>
             <GoPrimitiveSquare
@@ -36,15 +42,17 @@ export default function BanContainer({
         )}
         {text}:
       </FlexContainer>
-      <Container
+      <FlexContainer
         fontWeight={3}
         fontSize={3}
         marginTop={numMarginTop}
         marginBottom={numMarginBottom}
         fontColor={color}
+        justify={numJustify}
+        align={align}
       >
         <Number num={number} />
-      </Container>
-    </FlexContainer>
+      </FlexContainer>
+    </GridContainer>
   )
 }

@@ -22,9 +22,6 @@ export default function CurrDateContainer({
       justify="space-evenly"
       paddingBottom={paddingBottom}
     >
-      <Container fontSize={fontSize} paddingRight={titlePaddingRight}>
-        {TEXT.date[language]}:
-      </Container>
       <Container fontSize={dateFontSize || fontSize} fontWeight={fontWeight}>
         {currDate && format(currDate, TEXT.dateFormatLong[language])}
       </Container>
