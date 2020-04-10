@@ -23,14 +23,16 @@ import BanContainer from "../BanContainer/BanContainer"
 import DateSlider from "../DateSlider/DateSlider"
 import CurrDateContainer from "../CurrDateContainer/CurrDateContainer"
 import HorizontalBarChart from "../HorizontalBarChart/HorizontalBarChart"
+import PercChartContainer from "../PercChartContainer/PercChartContainer"
+import Number from "../Number/Number"
 
 const MainGrid = styled(GridContainer)`
   margin-top: ${space[2]}px;
   margin-bottom: ${space[2]}px;
+  width: 94%;
   ${({ orientation }) =>
     orientation === "landscape"
       ? css`
-          width: 96%;
           grid-template-columns: repeat(5, 1fr);
           grid-template-rows: min-content 80px 150px 250px;
           grid-template-areas:
@@ -40,10 +42,9 @@ const MainGrid = styled(GridContainer)`
             "mainChart mainChart mainChart mainChart mainChart";
         `
       : css`
-          width: 93%;
           grid-template-columns: 1fr;
           grid-template-rows:
-            min-content repeat(4, 80px) 270px 180px
+            min-content repeat(4, 80px) 270px 175px
             600px;
           grid-template-areas:
             "title"
@@ -81,11 +82,13 @@ const StackedChartContainer = styled(GridContainer)`
     orientation === "landscape"
       ? css``
       : css`
-          grid-template-rows: 70px 1fr;
+          margin-top: ${space[2]}px;
+          grid-template-rows: repeat(2, 45px) 1fr;
           grid-template-columns: repeat(2, 1fr);
           grid-template-areas:
+            "title title"
             "fem mal"
-            "barC barC";
+            "chart chart";
         `}
 `
 
@@ -135,7 +138,7 @@ function MobileDashboard({
             language={language}
             dates={dates}
             setDates={setDates}
-            fontSize={1}
+            fontSize={2}
             extraPadding={!isLS && 3}
             extraPaddingRight={isLS && 2}
             justify={"space-evenly"}
@@ -145,7 +148,7 @@ function MobileDashboard({
             sliderPaddingTop={2}
           />
           <CurrDateContainer
-            fontSize={1}
+            fontSize={2}
             dateFontSize={3}
             language={language}
             currDate={dates.currDate}
@@ -192,7 +195,31 @@ function MobileDashboard({
               />
             </FlexContainer>
           </BarChartContainer>
-          <FlexContainer withBorder gridArea="stackedChart" />
+          <StackedChartContainer gridArea="stackedChart">
+            <FlexContainer fontSize={2} gridArea="title">
+              {TEXT.genderPerc[language]}
+            </FlexContainer>
+            <FlexContainer
+              gridArea="fem"
+              fontWeight={3}
+              fontSize={3}
+              fontColor={chartColors.female}
+            >
+              {numbers.total && (
+                <Number num={numbers.female / numbers.total} isPercentage />
+              )}
+            </FlexContainer>
+            <FlexContainer
+              gridArea="mal"
+              fontWeight={3}
+              fontSize={3}
+              fontColor={chartColors.male}
+            >
+              {numbers.total && (
+                <Number num={numbers.male / numbers.total} isPercentage />
+              )}
+            </FlexContainer>
+          </StackedChartContainer>
           <FlexContainer withBorder gridArea="mainChart" />
           <ScrollHint opacity={lowOpacity} size={50} />
         </MainGrid>

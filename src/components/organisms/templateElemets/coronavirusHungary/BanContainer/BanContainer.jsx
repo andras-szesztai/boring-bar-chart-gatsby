@@ -24,7 +24,7 @@ export default function BanContainer({
       justify={justify}
       align={align}
     >
-      <FlexContainer fontColor={color}>
+      <FlexContainer fontColor={color} fontSize={2}>
         {withIcon && (
           <Container paddingTop={1}>
             <GoPrimitiveSquare

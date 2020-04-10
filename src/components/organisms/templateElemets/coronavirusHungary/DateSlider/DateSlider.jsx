@@ -65,7 +65,7 @@ export default function DateSlider({
             step={1}
             marks
             valueLabelDisplay="auto"
-            onChange={(e, val) =>
+            onChangeCommitted={(e, val) =>
               setDates(prev => ({
                 ...prev,
                 currDate: subDays(dates.max, -val),

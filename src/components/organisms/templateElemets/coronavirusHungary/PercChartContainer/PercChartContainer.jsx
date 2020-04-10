@@ -34,7 +34,6 @@ export default function PercChartContainer({ language, numbers }) {
           <Number num={numbers.male / numbers.total} isPercentage />
         )}
       </FlexContainer>
-
       <FlexContainer gridArea="percBar">
         <StackedBarChart data={numbers} />
       </FlexContainer>
