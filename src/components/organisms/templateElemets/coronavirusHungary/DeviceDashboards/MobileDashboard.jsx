@@ -20,6 +20,8 @@ import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import SourceLink from "../SourceLink/SourceLink"
 import { space, colors } from "../../../../../themes/theme"
 import BanContainer from "../BanContainer/BanContainer"
+import DateSlider from "../DateSlider/DateSlider"
+import CurrDateContainer from "../CurrDateContainer/CurrDateContainer"
 
 const MainGrid = styled(GridContainer)`
   margin-top: ${space[2]}px;
@@ -37,10 +39,10 @@ const MainGrid = styled(GridContainer)`
             "mainChart mainChart mainChart mainChart mainChart";
         `
       : css`
-          width: 94%;
+          width: 93%;
           grid-template-columns: 1fr;
           grid-template-rows:
-            min-content 50px 150px repeat(2, 80px) 280px 180px
+            min-content repeat(4, 80px) 280px 180px
             600px;
           grid-template-areas:
             "title"
@@ -57,7 +59,13 @@ const MainGrid = styled(GridContainer)`
 const BarChartContainer = styled(GridContainer)`
   ${({ orientation }) =>
     orientation === "landscape"
-      ? css``
+      ? css`
+          grid-template-columns: 100px 1fr;
+          grid-template-rows: repeat(2, 1fr);
+          grid-template-areas:
+            "fem barC"
+            "mal barC";
+        `
       : css`
           grid-template-rows: 80px 1fr;
           grid-template-columns: repeat(2, 1fr);
@@ -122,8 +130,23 @@ function MobileDashboard({
               switchWidth={32}
             />
           </FlexContainer>
-          <FlexContainer withBorder gridArea="slider" />
-          <FlexContainer withBorder gridArea="date" />
+          <DateSlider
+            language={language}
+            dates={dates}
+            setDates={setDates}
+            fontSize={1}
+            extraPadding={!isLS && 3}
+            extraPaddingRight={isLS && 2}
+            justify={!isLS ? "space-evenly" : "center"}
+            direction={!isLS && "column"}
+          />
+          <CurrDateContainer
+            fontSize={1}
+            dateFontSize={3}
+            language={language}
+            currDate={dates.currDate}
+            direction="column"
+          />
           <BanContainer
             direction="column"
             gridArea="total"
@@ -132,16 +155,16 @@ function MobileDashboard({
             text={TEXT.total[language]}
             number={numbers.total}
             numMarginTop={isLS && 1}
-            numMarginBottom={!isLS && 1}
           />
-          <BarChartContainer withBorder gridArea="barChart">
+          <BarChartContainer gridArea="barChart" orientation={orientation}>
             <BanContainer
               direction="column"
               text={TEXT.genderF[language]}
               number={numbers.female}
               color={chartColors.female}
               withIcon={{ iconSize: 16 }}
-              numMarginTop={isLS && 1}
+              numMarginTop={!isLS && 1}
+              align={isLS ? "flex-start" : "center"}
             />
             <BanContainer
               direction="column"
@@ -149,7 +172,8 @@ function MobileDashboard({
               number={numbers.male}
               color={chartColors.male}
               withIcon={{ iconSize: 16 }}
-              numMarginTop={isLS && 1}
+              numMarginTop={!isLS && 1}
+              align={isLS ? "flex-start" : "center"}
             />
             <FlexContainer gridArea="barC" withBorder />
           </BarChartContainer>
