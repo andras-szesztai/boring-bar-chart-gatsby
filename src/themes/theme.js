@@ -40,6 +40,8 @@ export const transition = {
   lgNum: 1000,
 }
 
+export const fontFamily = "gill-sans-nova, sans-serif !important"
+
 export const fontSize = [
   "1rem",
   "1.5rem",

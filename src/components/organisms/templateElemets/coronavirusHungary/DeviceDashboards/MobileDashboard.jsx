@@ -1,8 +1,11 @@
-import React from "react"
+import React, { useState } from "react"
 import styled, { css } from "styled-components"
 import { FaArrowAltCircleDown } from "react-icons/fa"
 import { GoPrimitiveSquare } from "react-icons/go"
 import { MobileOnlyView, withOrientationChange } from "react-device-detect"
+import FormControlLabel from "@material-ui/core/FormControlLabel"
+import Checkbox from "@material-ui/core/Checkbox"
+import { withStyles } from "@material-ui/core"
 
 import {
   useOrientation,
@@ -18,7 +21,7 @@ import {
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import SourceLink from "../SourceLink/SourceLink"
-import { space, colors } from "../../../../../themes/theme"
+import { space, colors, fontFamily, fontSize, fontWeight } from "../../../../../themes/theme"
 import BanContainer from "../BanContainer/BanContainer"
 import DateSlider from "../DateSlider/DateSlider"
 import CurrDateContainer from "../CurrDateContainer/CurrDateContainer"
@@ -26,6 +29,25 @@ import HorizontalBarChart from "../HorizontalBarChart/HorizontalBarChart"
 import PercChartContainer from "../PercChartContainer/PercChartContainer"
 import Number from "../Number/Number"
 import { StackedBarChart } from ".."
+
+const ChartCheckBox = withStyles({
+  root: {
+    marginTop: 2,
+    transform: "scale(1.5)",
+    '&$checked': {
+      color: colors.grayDarkest,
+    },
+  },
+  checked: {},
+})(Checkbox)
+
+const CheckBoxLabel = withStyles({
+  label: {
+    fontFamily,
+    fontSize: fontSize[2],
+    fontWeight: fontWeight.light
+  }
+})(FormControlLabel)
 
 const MainGrid = styled(GridContainer)`
   margin-top: ${space[2]}px;
@@ -38,7 +60,7 @@ const MainGrid = styled(GridContainer)`
           grid-template-rows: min-content 100px 150px 250px;
           grid-template-areas:
             "title title title source source"
-            "total date date slider slider"
+            "total slider slider slider slider"
             "barChart barChart barChart stackedChart stackedChart"
             "mainChart mainChart mainChart mainChart mainChart";
         `
@@ -106,6 +128,7 @@ function MobileDashboard({
   loading,
 }) {
   const orientation = useOrientation({ isLandscape, isPortrait })
+  const [isWithTotal, setIsWithTotal] = useState(false)
 
   const isLS = orientation === "landscape"
   return (
@@ -124,7 +147,7 @@ function MobileDashboard({
           <FlexContainer
             gridArea="source"
             justify={isLS ? "space-evenly" : "space-around"}
-            align={isLS && "flex-start"}
+            align={isLS && "flex-end"}
             direction={isLS && "column"}
           >
             <SourceLink paddingBottom={1} fontSize={1} language={language} />
@@ -233,7 +256,20 @@ function MobileDashboard({
               />
             </FlexContainer>
           </StackedChartContainer>
-          <FlexContainer withBorder gridArea="mainChart" />
+          <FlexContainer withBorder gridArea="mainChart" pos="relative">
+            <FlexContainer absPos top={0} right={space[3]} >
+              <CheckBoxLabel
+                control={
+                  <ChartCheckBox
+                    checked={isWithTotal}
+                    onChange={() => setIsWithTotal(prev => !prev)}
+                  />
+                }
+                label="Display Total"
+                labelPlacement="start"
+              />
+            </FlexContainer>
+          </FlexContainer>
           <ScrollHint opacity={lowOpacity} size={50} />
         </MainGrid>
       </FlexContainer>
