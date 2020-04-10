@@ -45,7 +45,7 @@ const MainGrid = styled(GridContainer)`
       : css`
           grid-template-columns: 1fr;
           grid-template-rows:
-            min-content 80px 120px 80px 270px 155px
+            min-content 70px 120px 80px 270px 175px
             600px;
           grid-template-areas:
             "title"
@@ -85,11 +85,11 @@ const StackedChartContainer = styled(GridContainer)`
   ${({ orientation }) =>
     orientation === "landscape"
       ? css`
-          grid-template-rows: repeat(2, 45px) 1fr;
+          grid-template-rows: 25px 35px 1fr;
           grid-template-columns: repeat(2, 1fr);
         `
       : css`
-          grid-template-rows: repeat(2, 40px) 1fr;
+          grid-template-rows: 35px 65px 1fr;
           grid-template-columns: repeat(2, 1fr);
         `}
 `
@@ -151,34 +151,31 @@ function MobileDashboard({
           />
           <BanContainer
             gridArea="total"
-            columns="repeat(2, 1fr)"
+            columns={isLS ? "repeat(2, 1fr)" : "1fr"}
             justify={isLS ? "flex-start" : "center"}
             text={TEXT.total[language]}
-            numJustify="flex-end"
+            numJustify={isLS && "flex-end"}
             number={numbers.total}
-            numMarginTop={isLS && 1}
           />
           <BarChartContainer gridArea="barChart" orientation={orientation}>
             <BanContainer
               direction="column"
-              columns="repeat(2, 1fr)"
+              columns={isLS ? "repeat(2, 1fr)" : "1fr"}
               justify={isLS ? "flex-start" : "center"}
-              numJustify="flex-end"
+              numJustify={isLS && "flex-end"}
               text={TEXT.genderF[language]}
               number={numbers.female}
               color={chartColors.female}
               withIcon={{ iconSize: 16 }}
-              numMarginTop={!isLS && 1}
             />
             <BanContainer
               direction="column"
+              columns={isLS ? "repeat(2, 1fr)" : "1fr"}
               text={TEXT.genderM[language]}
               number={numbers.male}
               color={chartColors.male}
-              numJustify="flex-end"
+              numJustify={isLS && "flex-end"}
               withIcon={{ iconSize: 16 }}
-              numMarginTop={!isLS && 1}
-              columns="repeat(2, 1fr)"
               justify={isLS ? "flex-start" : "center"}
             />
             <FlexContainer gridArea="barC">
@@ -193,7 +190,10 @@ function MobileDashboard({
               />
             </FlexContainer>
           </BarChartContainer>
-          <StackedChartContainer gridArea="stackedChart">
+          <StackedChartContainer
+            gridArea="stackedChart"
+            orientation={orientation}
+          >
             <FlexContainer
               fontSize={2}
               gridArea="title"
@@ -226,9 +226,9 @@ function MobileDashboard({
                 data={numbers}
                 margin={{
                   top: isLS ? 14 : 5,
-                  right: isLS ? 0 : 10,
+                  right: isLS ? 0 : 15,
                   bottom: isLS ? 16 : 5,
-                  left: isLS ? 0 : 10,
+                  left: isLS ? 0 : 15,
                 }}
               />
             </FlexContainer>

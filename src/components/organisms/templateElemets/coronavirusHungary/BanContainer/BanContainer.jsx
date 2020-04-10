@@ -48,7 +48,7 @@ export default function BanContainer({
         marginTop={numMarginTop}
         marginBottom={numMarginBottom}
         fontColor={color}
-        justify={numJustify}
+        justify={numJustify || justify}
         align={align}
       >
         <Number num={number} />
