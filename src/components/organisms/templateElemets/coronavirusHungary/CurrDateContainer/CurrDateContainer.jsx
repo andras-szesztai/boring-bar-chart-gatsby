@@ -11,6 +11,8 @@ export default function CurrDateContainer({
   titlePaddingRight,
   direction,
   dateFontSize,
+  fontWeight,
+  paddingBottom
 }) {
   return (
     <FlexContainer
@@ -18,11 +20,12 @@ export default function CurrDateContainer({
       fontSize={fontSize}
       direction={direction}
       justify="space-evenly"
+      paddingBottom={paddingBottom}
     >
       <Container fontSize={fontSize} paddingRight={titlePaddingRight}>
         {TEXT.date[language]}:
       </Container>
-      <Container fontSize={dateFontSize || fontSize} fontWeight="ultraLight">
+      <Container fontSize={dateFontSize || fontSize} fontWeight={fontWeight}>
         {currDate && format(currDate, TEXT.dateFormatLong[language])}
       </Container>
     </FlexContainer>
@@ -30,6 +33,5 @@ export default function CurrDateContainer({
 }
 
 CurrDateContainer.defaultProps = {
-  fontSize: 2,
-  titlePaddingRight: 2,
+  fontSize: 2
 }

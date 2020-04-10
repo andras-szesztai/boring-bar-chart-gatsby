@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles"
 import Slider from "@material-ui/core/Slider"
 import { format, subDays } from "date-fns"
 
-import { FlexContainer } from "../../../../atoms"
+import { FlexContainer, Container } from "../../../../atoms"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 import { colors } from "../../../../../themes/theme"
 
@@ -32,6 +32,10 @@ export default function DateSlider({
   extraPadding,
   extraPaddingRight,
   extraPaddingLeft,
+  textPaddingRight,
+  textPaddingRightBottom,
+  textPaddingRightTop,
+  sliderPaddingTop,
   direction,
   fontSize,
   justify
@@ -39,6 +43,7 @@ export default function DateSlider({
   return (
     <FlexContainer
       gridArea="slider"
+      pos="relative"
       justify={justify}
       direction={direction}
       paddingRight={extraPaddingRight || extraPadding} 
@@ -46,31 +51,34 @@ export default function DateSlider({
     >
       <FlexContainer
         whiteSpace="nowrap"
-        paddingRight={3}
-        paddingBottom={2}
+        paddingRight={textPaddingRight}
+        paddingBottom={textPaddingRightBottom}
+        paddingTop={textPaddingRightTop}
         fontSize={fontSize}
       >
         {TEXT.dateSlider[language]}:
       </FlexContainer>
-      {dates.max && (
-        <DSlider
-          defaultValue={0}
-          step={1}
-          marks
-          valueLabelDisplay="auto"
-          onChange={(e, val) =>
-            setDates(prev => ({
-              ...prev,
-              currDate: subDays(dates.max, -val),
-            }))
-          }
-          valueLabelFormat={val =>
-            format(subDays(dates.max, -val), TEXT.dateFormatShort[language])
-          }
-          min={dates.diff}
-          max={0}
-        />
-      )}
+      <Container width="100%" paddingTop={sliderPaddingTop}>
+        {dates.max && (
+          <DSlider
+            defaultValue={0}
+            step={1}
+            marks
+            valueLabelDisplay="auto"
+            onChange={(e, val) =>
+              setDates(prev => ({
+                ...prev,
+                currDate: subDays(dates.max, -val),
+              }))
+            }
+            valueLabelFormat={val =>
+              format(subDays(dates.max, -val), TEXT.dateFormatShort[language])
+            }
+            min={dates.diff}
+            max={0}
+          />
+        )}
+      </Container>
     </FlexContainer>
   )
 }

@@ -34,7 +34,7 @@ export default function BanContainer({
             />
           </Container>
         )}
-        {text}
+        {text}:
       </FlexContainer>
       <Container
         fontWeight={3}

@@ -22,6 +22,7 @@ import { space, colors } from "../../../../../themes/theme"
 import BanContainer from "../BanContainer/BanContainer"
 import DateSlider from "../DateSlider/DateSlider"
 import CurrDateContainer from "../CurrDateContainer/CurrDateContainer"
+import HorizontalBarChart from "../HorizontalBarChart/HorizontalBarChart"
 
 const MainGrid = styled(GridContainer)`
   margin-top: ${space[2]}px;
@@ -42,7 +43,7 @@ const MainGrid = styled(GridContainer)`
           width: 93%;
           grid-template-columns: 1fr;
           grid-template-rows:
-            min-content repeat(4, 80px) 280px 180px
+            min-content repeat(4, 80px) 270px 180px
             600px;
           grid-template-areas:
             "title"
@@ -122,7 +123,7 @@ function MobileDashboard({
             align={isLS && "flex-end"}
             direction={isLS && "column"}
           >
-            <SourceLink fontSize={1} language={language} />
+            <SourceLink paddingBottom={1} fontSize={1} language={language} />
             <SwitchContainer
               fontSize={1}
               language={language}
@@ -137,8 +138,11 @@ function MobileDashboard({
             fontSize={1}
             extraPadding={!isLS && 3}
             extraPaddingRight={isLS && 2}
-            justify={!isLS ? "space-evenly" : "center"}
-            direction={!isLS && "column"}
+            justify={"space-evenly"}
+            direction={"column"}
+            textPaddingBottom={!isLS && 2}
+            textPaddingRightTop={isLS && 1}
+            sliderPaddingTop={2}
           />
           <CurrDateContainer
             fontSize={1}
@@ -146,6 +150,7 @@ function MobileDashboard({
             language={language}
             currDate={dates.currDate}
             direction="column"
+            fontWeight="ultraLight"
           />
           <BanContainer
             direction="column"
@@ -175,7 +180,17 @@ function MobileDashboard({
               numMarginTop={!isLS && 1}
               align={isLS ? "flex-start" : "center"}
             />
-            <FlexContainer gridArea="barC" withBorder />
+            <FlexContainer gridArea="barC">
+              <HorizontalBarChart
+                data={numbers}
+                margin={{
+                  top: isLS ? 5 : 10,
+                  right: isLS ? 15 : 10,
+                  bottom: isLS ? 5 : 10,
+                  left: isLS ? 20 : 10,
+                }}
+              />
+            </FlexContainer>
           </BarChartContainer>
           <FlexContainer withBorder gridArea="stackedChart" />
           <FlexContainer withBorder gridArea="mainChart" />

@@ -16,6 +16,7 @@ import HorizontalBarChart from "../HorizontalBarChart/HorizontalBarChart"
 import PercChartContainer from "../PercChartContainer/PercChartContainer"
 import AgeChartBrowser from "../AgeChartBrowser/AgeChartBrowser"
 import { FullScreenLoader } from "../../../../molecules"
+import CurrDateContainer from "../CurrDateContainer/CurrDateContainer"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -71,19 +72,18 @@ export default function BrowserDashboard({
             <SwitchContainer language={language} setLanguage={setLanguage} />
             <SourceLink language={language} />
           </FlexContainer>
-          <FlexContainer fontSize={2} justify="flex-start" gridArea="total">
+          <FlexContainer fontSize={2} justify="flex-start" gridArea="total" paddingBottom={2}>
             {TEXT.total[language]}:
           </FlexContainer>
-          <FlexContainer fontSize={2} fontWeight={3} gridArea="tNum">
+          <FlexContainer fontSize={2} fontWeight={3} gridArea="tNum" paddingBottom={2}>
             <Number num={numbers.total} />
           </FlexContainer>
-          <FlexContainer fontSize={2} gridArea="date">
-            <Container fontSize={2} paddingRight={2}>
-              {TEXT.date[language]}:
-            </Container>
-            {dates.currDate &&
-              format(dates.currDate, TEXT.dateFormatLong[language])}
-          </FlexContainer>
+          <CurrDateContainer
+            language={language}
+            currDate={dates.currDate}
+            titlePaddingRight={2}
+            paddingBottom={2}
+          />
           <DateSlider language={language} dates={dates} setDates={setDates} />
           <BarLabels numbers={numbers} language={language} />
           <FlexContainer gridArea="barC">
