@@ -48,7 +48,7 @@ const Container = styled.div`
     padding: ${themifySpace[padding] || 0}px;
     font-size: ${themifyFontSize(fontSize)};
     font-weight: ${themifyFontWeight(fontWeight)};
-    color: ${themifyColor(fontColor)};
+    color: ${themifyColor(fontColor) || "inherit"};
     background: ${themifyColor(bgColor || "transparent")};
     z-index: ${themifyZIndex(zIndex)};
     padding-bottom: ${themifySpace(paddingBottom) || 0}px;

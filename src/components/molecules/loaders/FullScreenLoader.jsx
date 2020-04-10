@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { PropagateLoader, CircleLoader, ClipLoader } from "react-spinners"
 
-import { FlexContainer } from "../../atoms"
+import { FlexContainer, Container } from "../../atoms"
 import { colors } from "../../../themes/theme"
 import { useScrollPosition } from "../../../hooks"
 
@@ -39,16 +39,19 @@ export default function FullScreenLoader({
   return (
     <>
       {(loading || parentLoading) && (
-        <FlexContainer
-          fullScreen
-          top={scrollPosition}
-          absPos
-          bgColor={bgColor}
-          fontColor="grayDarkest"
-          zIndex="loader"
-        >
-          {loaders[loader]}
-        </FlexContainer>
+        <>
+          <Container fullSize absPos top={0} bgColor={bgColor}  zIndex="loader" />
+          <FlexContainer
+            fullScreen
+            top={scrollPosition}
+            absPos
+            bgColor={bgColor}
+            fontColor="grayDarkest"
+            zIndex="loader"
+          >
+            {loaders[loader]}
+          </FlexContainer>
+        </>
       )}
     </>
   )

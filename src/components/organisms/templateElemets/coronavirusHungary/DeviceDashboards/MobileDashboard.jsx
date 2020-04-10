@@ -15,6 +15,7 @@ import SourceLink from "../SourceLink/SourceLink"
 import { space } from "../../../../../themes/theme"
 import Number from "../Number/Number"
 import { GoPrimitiveSquare } from "react-icons/go"
+import BanContainer from "../BanContainer/BanContainer"
 
 const MainGrid = styled(GridContainer)`
   margin-top: ${space[2]}px;
@@ -92,8 +93,8 @@ function MobileDashboard({
   const isLS = orientation === "landscape"
   return (
     <MobileOnlyView>
-      <FullScreenLoader loading={loading} loader="clip" loaderSize={70} />
-      <FlexContainer fullSize>
+      <FlexContainer fullSize pos="relative">
+        <FullScreenLoader loading={loading} loader="clip" loaderSize={70} />
         <MainGrid orientation={orientation} pos="relative">
           <FlexContainer
             gridArea="title"
@@ -120,45 +121,33 @@ function MobileDashboard({
           </FlexContainer>
           <FlexContainer withBorder gridArea="slider" />
           <FlexContainer withBorder gridArea="date" />
-          <FlexContainer
+          <BanContainer
+            direction="column"
             gridArea="total"
-            direction={"column"}
             justify={isLS ? "center" : "space-evenly"}
             align={isLS ? "flex-start" : "center"}
-          >
-            {TEXT.total[language]}
-            <Container
-              fontWeight={3}
-              fontSize={3}
-              marginTop={isLS && 1}
-              marginBottom={!isLS && 1}
-            >
-              <Number num={numbers.total} />
-            </Container>
-          </FlexContainer>
+            text={TEXT.total[language]}
+            number={numbers.total}
+            numMarginTop={isLS && 1}
+            numMarginBottom={!isLS && 1}
+          />
           <BarChartContainer withBorder gridArea="barChart">
-            <FlexContainer direction="column">
-              <FlexContainer>
-                <Container paddingTop={1}>
-                  <GoPrimitiveSquare
-                    color={chartColors.female}
-                    style={{ opacity: lowOpacity }}
-                    size={20}
-                  />{" "}
-                </Container>
-                {TEXT.genderF[language]}
-              </FlexContainer>
-              <Container
-                fontWeight={3}
-                fontSize={3}
-                gridArea="noNum"
-                fontColor={chartColors.female}
-                marginTop={isLS && 1}
-              >
-                <Number num={numbers.female} />
-              </Container>
-            </FlexContainer>
-            <FlexContainer withBorder>Male</FlexContainer>
+            <BanContainer
+              direction="column"
+              text={TEXT.genderF[language]}
+              number={numbers.female}
+              color={chartColors.female}
+              withIcon={{ iconSize: 16 }}
+              numMarginTop={isLS && 1}
+            />
+            <BanContainer
+              direction="column"
+              text={TEXT.genderM[language]}
+              number={numbers.male}
+              color={chartColors.male}
+              withIcon={{ iconSize: 16 }}
+              numMarginTop={isLS && 1}
+            />
             <FlexContainer gridArea="barC" withBorder>
               BarChart
             </FlexContainer>
