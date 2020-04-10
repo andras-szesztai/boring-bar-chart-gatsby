@@ -2,20 +2,26 @@ import React from "react"
 import styled, { css } from "styled-components"
 
 import { MobileOnlyView, withOrientationChange } from "react-device-detect"
-import { useOrientation } from "../../../../../hooks"
+import { useOrientation, useScrollPosition } from "../../../../../hooks"
 import { FlexContainer, GridContainer, Container } from "../../../../atoms"
 import { FullScreenLoader } from "../../../../molecules"
-import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
+import {
+  TEXT,
+  chartColors,
+  lowOpacity,
+} from "../../../../../constants/visualizations/coronavirusHungary"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import SourceLink from "../SourceLink/SourceLink"
 import { space } from "../../../../../themes/theme"
 import Number from "../Number/Number"
+import { GoPrimitiveSquare } from "react-icons/go"
 
 const MainGrid = styled(GridContainer)`
+  margin-top: ${space[2]}px;
+  margin-bottom: ${space[2]}px;
   ${({ orientation }) =>
     orientation === "landscape"
       ? css`
-          margin-top: ${space[2]}px;
           width: 96%;
           grid-template-columns: repeat(5, 1fr);
           grid-template-rows: min-content 80px 150px 250px;
@@ -26,11 +32,10 @@ const MainGrid = styled(GridContainer)`
             "mainChart mainChart mainChart mainChart mainChart";
         `
       : css`
-          margin-top: ${space[3]}px;
           width: 94%;
           grid-template-columns: 1fr;
           grid-template-rows:
-            min-content 50px 150px repeat(2, 50px) repeat(2, 200px)
+            min-content 50px 150px repeat(2, 80px) 280px 180px
             600px;
           grid-template-areas:
             "title"
@@ -41,6 +46,32 @@ const MainGrid = styled(GridContainer)`
             "barChart"
             "stackedChart"
             "mainChart";
+        `}
+`
+
+const BarChartContainer = styled(GridContainer)`
+  ${({ orientation }) =>
+    orientation === "landscape"
+      ? css``
+      : css`
+          grid-template-rows: 80px 1fr;
+          grid-template-columns: repeat(2, 1fr);
+          grid-template-areas:
+            "fem mal"
+            "barC barC";
+        `}
+`
+
+const StackedChartContainer = styled(GridContainer)`
+  ${({ orientation }) =>
+    orientation === "landscape"
+      ? css``
+      : css`
+          grid-template-rows: 70px 1fr;
+          grid-template-columns: repeat(2, 1fr);
+          grid-template-areas:
+            "fem mal"
+            "barC barC";
         `}
 `
 
@@ -56,6 +87,7 @@ function MobileDashboard({
   loading,
 }) {
   const orientation = useOrientation({ isLandscape, isPortrait })
+  const scrollPosition = useScrollPosition()
 
   const isLS = orientation === "landscape"
   return (
@@ -90,21 +122,47 @@ function MobileDashboard({
           <FlexContainer withBorder gridArea="date" />
           <FlexContainer
             gridArea="total"
-            direction={isLS && "column"}
+            direction={"column"}
             justify={isLS ? "center" : "space-evenly"}
             align={isLS ? "flex-start" : "center"}
           >
-            {TEXT.total[language]}:
+            {TEXT.total[language]}
             <Container
               fontWeight={3}
-              fontSize={2}
+              fontSize={3}
               marginTop={isLS && 1}
               marginBottom={!isLS && 1}
             >
               <Number num={numbers.total} />
             </Container>
           </FlexContainer>
-          <FlexContainer withBorder gridArea="barChart" />
+          <BarChartContainer withBorder gridArea="barChart">
+            <FlexContainer direction="column">
+              <FlexContainer>
+                <Container paddingTop={1}>
+                  <GoPrimitiveSquare
+                    color={chartColors.female}
+                    style={{ opacity: lowOpacity }}
+                    size={20}
+                  />{" "}
+                </Container>
+                {TEXT.genderF[language]}
+              </FlexContainer>
+              <Container
+                fontWeight={3}
+                fontSize={3}
+                gridArea="noNum"
+                fontColor={chartColors.female}
+                marginTop={isLS && 1}
+              >
+                <Number num={numbers.female} />
+              </Container>
+            </FlexContainer>
+            <FlexContainer withBorder>Male</FlexContainer>
+            <FlexContainer gridArea="barC" withBorder>
+              BarChart
+            </FlexContainer>
+          </BarChartContainer>
           <FlexContainer withBorder gridArea="stackedChart" />
           <FlexContainer withBorder gridArea="mainChart" />
         </MainGrid>
