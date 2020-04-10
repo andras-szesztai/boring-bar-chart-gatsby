@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { withStyles } from "@material-ui/core/styles"
 import Slider from "@material-ui/core/Slider"
 import { format, subDays } from "date-fns"
@@ -6,6 +6,7 @@ import { format, subDays } from "date-fns"
 import { FlexContainer, Container } from "../../../../atoms"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 import { colors } from "../../../../../themes/theme"
+import { useScrollPosition } from "../../../../../hooks"
 
 const DSlider = withStyles({
   root: {
@@ -38,18 +39,41 @@ export default function DateSlider({
   sliderPaddingTop,
   direction,
   fontSize,
-  justify
+  justify,
+  isSticky,
 }) {
+  const containerRef = useRef()
+  const scrollPosition = useScrollPosition()
+
+  const [containerPosition, setContainerPosition] = useState(undefined)
+  useEffect(() => {
+    if (!containerPosition && containerRef.current) {
+      setContainerPosition(containerRef.current.getBoundingClientRect().top)
+    }
+  }, [containerPosition])
+
+  const isBelowPosition = isSticky && containerPosition < scrollPosition
+
   return (
     <FlexContainer
-      gridArea="slider"
-      pos="relative"
+      ref={containerRef}
+      gridArea={!isBelowPosition && "slider"}
+      fixedPos={isBelowPosition && {
+        top: 0,
+        left: 0,
+        width: "94%",
+        marginLeft: "3%"
+      }}
+      bgColor="#FFFFFF"
+      withDropShadow={isBelowPosition}
       justify={justify}
       direction={direction}
-      paddingRight={extraPaddingRight || extraPadding} 
+      paddingRight={extraPaddingRight || extraPadding}
       paddingLeft={extraPaddingLeft || extraPadding}
+      zIndex={isBelowPosition && "overlay"}
     >
       <FlexContainer
+        marginTop={isBelowPosition && 2}
         whiteSpace="nowrap"
         paddingRight={textPaddingRight}
         paddingBottom={textPaddingRightBottom}
@@ -84,5 +108,5 @@ export default function DateSlider({
 }
 
 DateSlider.defaultProps = {
-  fontSize: 2
+  fontSize: 2,
 }

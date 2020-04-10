@@ -141,11 +141,12 @@ function MobileDashboard({
             fontSize={2}
             extraPadding={!isLS && 3}
             extraPaddingRight={isLS && 2}
-            justify={"space-evenly"}
-            direction={"column"}
+            justify="space-evenly"
+            direction="column"
             textPaddingBottom={!isLS && 2}
             textPaddingRightTop={isLS && 1}
             sliderPaddingTop={2}
+            isSticky={!isLS}
           />
           <CurrDateContainer
             fontSize={2}

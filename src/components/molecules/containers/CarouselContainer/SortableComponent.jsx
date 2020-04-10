@@ -18,7 +18,6 @@ export default function(props) {
   const { items: defaultItems } = props
   const [items, setItems] = useState(defaultItems)
 
-
   useEffect(() => {
     setItems(prev =>
       prev
@@ -26,6 +25,7 @@ export default function(props) {
         .flat()
     )
   }, [defaultItems])
+
   function onSortEnd({ oldIndex, newIndex }) {
     setItems(prev => arrayMove(prev, oldIndex, newIndex))
   }

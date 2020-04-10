@@ -8,7 +8,7 @@ import {
   themifyTransition,
   themifyEase,
 } from "../../../../themes/mixins"
-import { transition } from "../../../../themes/theme"
+import { transition, dropShadow } from "../../../../themes/theme"
 
 const Container = styled.div`
   user-select: none;
@@ -79,6 +79,20 @@ const Container = styled.div`
       top: ${top}px;
     `}
 
+    ${({ fixedPos }) =>
+      fixedPos &&
+      css`
+        position: fixed;
+        width: ${fixedPos.width};
+        margin-left: ${fixedPos.marginLeft};
+        bottom: ${fixedPos.bottom};
+        right: ${fixedPos.right};
+        left: ${fixedPos.left};
+        top: ${fixedPos.top};
+      `}
+
+
+
     ${({ visibility }) =>
       visibility &&
       css`
@@ -113,6 +127,13 @@ const Container = styled.div`
       white-space: ${whiteSpace};
     `}
 
+  ${({ withDropShadow }) =>
+    withDropShadow &&
+    css`
+      filter: drop-shadow(${dropShadow.primary})
+        drop-shadow(${dropShadow.secondary});
+    `}
+
   ${({ borderColor }) =>
     borderColor &&
     css`
@@ -139,9 +160,9 @@ const Container = styled.div`
     `}
 
     ${({ noWrap }) =>
-    noWrap &&
+      noWrap &&
       css`
-        white-space: nowrap;;
+        white-space: nowrap;
       `}
 
   ${({ isHideable, isVisible }) =>

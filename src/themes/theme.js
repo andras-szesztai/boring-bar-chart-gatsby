@@ -74,6 +74,11 @@ export const z = {
   overlay: 120
 }
 
+export const dropShadow = {
+  primary: "0 1px 3px rgba(0,0,0,0.12)",
+  secondary: "0 1px 2px rgba(0,0,0,0.24)"
+}
+
 const theme = {
   space,
   fontSize,
@@ -82,6 +87,7 @@ const theme = {
   ease,
   transition,
   z,
+  dropShadow,
 }
 
 export default theme

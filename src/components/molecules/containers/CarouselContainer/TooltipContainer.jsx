@@ -5,10 +5,8 @@ import { IoIosClose } from "react-icons/io"
 
 import { FlexContainer, CloseIconContainer } from "../../../atoms"
 import { useWindowDimensions, usePrevious } from "../../../../hooks"
-import {
-  themifyZIndex,
-  themifySpace,
-} from "../../../../themes/mixins"
+import { themifyZIndex, themifySpace } from "../../../../themes/mixins"
+import { dropShadow } from "../../../../themes/theme"
 
 const ARROW_HEIGHT = 8
 
@@ -50,7 +48,9 @@ const arrowStyle = css`
 
 const TooltipContainer = styled(FlexContainer)`
   z-index: ${themifyZIndex("tooltip")};
-  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12)) drop-shadow(0 1px 2px rgba(0,0,0,0.24));
+  filter: drop-shadow(${dropShadow.primary}) drop-shadow(${
+  dropShadow.secondary
+});
 
   ${({ isVisible }) =>
     isVisible
@@ -149,7 +149,10 @@ export default function Tooltip({
 
   const prevHooveredElement = usePrevious(hoveredElement)
   useEffect(() => {
-    if (!_.isEqual(hoveredElement, prevHooveredElement) || (prevWindowWidth && windowWidth)) {
+    if (
+      !_.isEqual(hoveredElement, prevHooveredElement) ||
+      (prevWindowWidth && windowWidth)
+    ) {
       let elTop, elLeft, elWidth, elHeight, tooltipLeft, tooltipTop
       if (hoveredElement) {
         const {
@@ -193,7 +196,19 @@ export default function Tooltip({
         // }
       }
     }
-  }, [hoveredElement, prevHooveredElement, tooltipDims, arrowLeftRight, arrowTopBottom, windowWidth, arrowTowardsTop, arrowTowardsBottom, dy, dx, prevWindowWidth])
+  }, [
+    hoveredElement,
+    prevHooveredElement,
+    tooltipDims,
+    arrowLeftRight,
+    arrowTopBottom,
+    windowWidth,
+    arrowTowardsTop,
+    arrowTowardsBottom,
+    dy,
+    dx,
+    prevWindowWidth,
+  ])
 
   const [isVisible, setIsVisible] = useState()
   const [tooltipIsHoveredOver, setTooltipIsHoveredOver] = useState(false)
@@ -221,7 +236,7 @@ export default function Tooltip({
     prevTooltipIsHoveredOver,
     shouldClose,
     tooltipIsHoveredOver,
-  ])  
+  ])
 
   return (
     <TooltipContainer
