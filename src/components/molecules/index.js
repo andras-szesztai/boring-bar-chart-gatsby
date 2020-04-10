@@ -17,6 +17,7 @@ import {
 import { HorizontalMultiSelect } from "./controlElements"
 import { CountUpSpan } from "./textElemets"
 import { FullScreenLoader } from "./loaders"
+import { ScrollHint } from "./miscComponents"
 
 export {
   VerticalDropChart,
@@ -34,4 +35,5 @@ export {
   ChartStarter,
   IconChart,
   PortfolioItem,
+  ScrollHint
 }

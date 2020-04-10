@@ -1,10 +1,16 @@
 import React from "react"
 import styled, { css } from "styled-components"
-
+import { FaArrowAltCircleDown } from "react-icons/fa"
+import { GoPrimitiveSquare } from "react-icons/go"
 import { MobileOnlyView, withOrientationChange } from "react-device-detect"
-import { useOrientation, useScrollPosition } from "../../../../../hooks"
-import { FlexContainer, GridContainer, Container } from "../../../../atoms"
-import { FullScreenLoader } from "../../../../molecules"
+
+import {
+  useOrientation,
+  useScrollPosition,
+  useWindowDimensions,
+} from "../../../../../hooks"
+import { FlexContainer, GridContainer } from "../../../../atoms"
+import { FullScreenLoader, ScrollHint } from "../../../../molecules"
 import {
   TEXT,
   chartColors,
@@ -12,9 +18,7 @@ import {
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import SourceLink from "../SourceLink/SourceLink"
-import { space } from "../../../../../themes/theme"
-import Number from "../Number/Number"
-import { GoPrimitiveSquare } from "react-icons/go"
+import { space, colors } from "../../../../../themes/theme"
 import BanContainer from "../BanContainer/BanContainer"
 
 const MainGrid = styled(GridContainer)`
@@ -88,7 +92,6 @@ function MobileDashboard({
   loading,
 }) {
   const orientation = useOrientation({ isLandscape, isPortrait })
-  const scrollPosition = useScrollPosition()
 
   const isLS = orientation === "landscape"
   return (
@@ -148,12 +151,11 @@ function MobileDashboard({
               withIcon={{ iconSize: 16 }}
               numMarginTop={isLS && 1}
             />
-            <FlexContainer gridArea="barC" withBorder>
-              BarChart
-            </FlexContainer>
+            <FlexContainer gridArea="barC" withBorder />
           </BarChartContainer>
           <FlexContainer withBorder gridArea="stackedChart" />
           <FlexContainer withBorder gridArea="mainChart" />
+          <ScrollHint opacity={lowOpacity} size={50} />
         </MainGrid>
       </FlexContainer>
     </MobileOnlyView>

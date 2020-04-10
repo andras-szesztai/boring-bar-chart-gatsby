@@ -17,7 +17,6 @@ export default function BanContainer({
   numMarginBottom,
   color,
 }) {
-  console.log(color)
   return (
     <FlexContainer
       gridArea={gridArea}
