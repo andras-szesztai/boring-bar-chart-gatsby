@@ -208,7 +208,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
             .tickSizeInner(space[1])
         )
         .call(g => g.select(".domain").remove())
-        .call(g => g.select(".tick text").attr("fill", colors.grayDarkest))
+        .call(g => g.selectAll(".tick text").attr("fill", colors.grayDarkest))
     }
 
     function updateDims() {

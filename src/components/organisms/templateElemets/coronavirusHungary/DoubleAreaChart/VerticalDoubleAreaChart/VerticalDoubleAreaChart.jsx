@@ -1,29 +1,46 @@
 import React, { useState, useEffect, useRef } from "react"
 import _ from "lodash"
+import { select } from "d3-selection"
+import { scaleLinear } from "d3-scale"
+import { extent, max, min } from "d3-array"
+import { axisLeft } from "d3-axis"
+import chroma from "chroma-js"
 
-import { ChartWrapper, ChartSvg } from "../../../../../atoms"
+import {
+  ChartWrapper,
+  ChartSvg,
+  ChartArea,
+  AxisLine,
+} from "../../../../../atoms"
 import {
   useChartRefs,
   useDimensions,
   usePrevious,
 } from "../../../../../../hooks"
-import { TEXT } from "../../../../../../constants/visualizations/coronavirusHungary"
-import { select } from "d3-selection"
-import { scaleLinear } from "d3-scale"
-import { extent } from "d3-array"
+import {
+  TEXT,
+  chartColors,
+  lowestOpacity,
+  lowOpacity,
+} from "../../../../../../constants/visualizations/coronavirusHungary"
+import { space, colors } from "../../../../../../themes/theme"
+import { area, curveCatmullRom } from "d3-shape"
 
-const makeAreaData = data => {
-  let newData = []
+const makeAreaData = (data, fullList) => {
   const grouped = _.groupBy(data, "age")
-  for (const age in grouped) {
-    newData = [...newData, { age, number: grouped[age].length }]
-  }
+  const newData = fullList.map(age => ({
+    age: +age,
+    number: grouped[age] ? grouped[age].length : 0,
+  }))
+
   return newData
 }
 
 export default function VerticalDoubleAreaChart({ margin, data, language }) {
-  const { svgRef, wrapperRef } = useChartRefs()
+  const { svgRef, wrapperRef, yAxisRef } = useChartRefs()
   const storedValues = useRef()
+  const leftArea = useRef()
+  const rightArea = useRef()
   const dims = useDimensions({
     ref: wrapperRef,
     margin,
@@ -33,49 +50,167 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
   const [areaDataSets, setAreaDataSets] = useState({})
 
   useEffect(() => {
-    const setDataSets = () =>
+    const setDataSets = () => {
+      if (!storedValues.current) {
+        const fullDomain = [
+          min(data, ({ age }) => age) - 2,
+          max(data, ({ age }) => age) + 2,
+        ]
+        const fullList = []
+        for (var i = fullDomain[0]; i <= fullDomain[1]; i++) {
+          fullList.push(i)
+        }
+        storedValues.current = { fullList, fullDomain }
+      }
+      const { fullList } = storedValues.current
       setAreaDataSets({
-        total: makeAreaData(data),
+        total: makeAreaData(data, fullList),
         female: makeAreaData(
-          data.filter(({ gender }) => gender === TEXT.genderF[language])
+          data.filter(({ gender }) => gender === TEXT.accessorF[language]),
+          fullList
         ),
         male: makeAreaData(
-          data.filter(({ gender }) => gender === TEXT.genderM[language])
+          data.filter(({ gender }) => gender === TEXT.accessorM[language]),
+          fullList
         ),
       })
-    if (!prevData && !!data) {
+    }
+    if (!!prevData && !!data && !areaDataSets.total) {
       setDataSets()
       return
     }
-    if (prevData && prevData.length !== data.length) {
+    if (!!prevData && prevData.length !== data.length) {
       setDataSets()
     }
-  }, [prevData, data, language])
+  }, [prevData, data, language, areaDataSets.total])
 
   useEffect(() => {
     function createUpdateAxisLabels() {
-      const { svg, yScale } = storedValues.current
+      const { yScale } = storedValues.current
+      select(yAxisRef.current)
+        .call(
+          axisLeft(yScale)
+            .ticks(dims.chartHeight / 50)
+            .tickSize(0)
+        )
+        .call(g => g.select(".domain").remove())
+        .call(g =>
+          g
+            .selectAll(".tick text")
+            .attr("fill", colors.grayDarkest)
+            .attr("text-anchor", "middle")
+            .attr("dx", 3)
+        )
+        .call(g => g.selectAll(".tick line").remove())
     }
-    function createUpdateAreas() {}
+    function createUpdateAreaLeft({ data, accessor, init }) {
+      const { yScale, xScale } = storedValues.current
+      const chartArea = select(leftArea.current)
+      xScale.range([0, -(dims.width / 2 - space[4])])
+      var areaGenerator = area()
+        .y(({ age }) => yScale(age))
+        .x1(({ number }) => xScale(number))
+        .x0(xScale(0))
+        .curve(curveCatmullRom)
+      if (init) {
+        chartArea
+          .append("path")
+          .datum(data)
+          .attr("class", `${accessor}-path`)
+          .attr("fill", chroma(chartColors[accessor]).alpha(lowOpacity))
+          .attr("stroke", chartColors[accessor])
+          .attr("d", areaGenerator)
+      }
+      select(yAxisRef.current).raise()
+    }
+    function createUpdateAreaRight({ data, accessor, init }) {
+      const { yScale, xScale } = storedValues.current
+      const chartArea = select(rightArea.current)
+      xScale.range([0, dims.width / 2 - space[4]])
+      var areaGenerator = area()
+        .y(({ age }) => yScale(age))
+        .x1(({ number }) => xScale(number))
+        .x0(xScale(0))
+        .curve(curveCatmullRom)
+      if (init) {
+        chartArea
+          .append("path")
+          .datum(data)
+          .attr("class", `${accessor}-path`)
+          .attr("fill", chroma(chartColors[accessor]).alpha(lowOpacity))
+          .attr("stroke", chartColors[accessor])
+          .attr("d", areaGenerator)
+      }
+      select(yAxisRef.current).raise()
+    }
     if (!init && areaDataSets.total) {
-      const svg = select(svgRef.current)
+      const { fullDomain } = storedValues.current
       const yScale = scaleLinear()
         .range([0, dims.chartHeight])
-        .domain(extent(data, ({ age }) => age))
-      storedValues.current = { yScale, svg }
+        .domain(fullDomain)
+      const xScale = scaleLinear().domain([
+        0,
+        max(areaDataSets.total, ({ number }) => number),
+      ])
+      storedValues.current = { ...storedValues.current, yScale, xScale }
       createUpdateAxisLabels()
+      createUpdateAreaLeft({
+        data: areaDataSets.female,
+        accessor: "female",
+        init: true,
+      })
+      createUpdateAreaRight({
+        data: areaDataSets.male,
+        accessor: "male",
+        init: true,
+      })
       setInit(true)
     }
-  }, [areaDataSets, data, dims, init, svgRef])
+  }, [areaDataSets, data, dims, init, svgRef, yAxisRef])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
-      <ChartSvg
-        absPos
-        areaRef={svgRef}
-        width={dims.width}
-        height={dims.height}
-      ></ChartSvg>
+      <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
+        <ChartArea
+          areaRef={yAxisRef}
+          marginLeft={dims.width / 2}
+          marginTop={margin.top}
+        >
+          <rect
+            x={0 - space[3]}
+            width={2 * space[3]}
+            y={0}
+            height={dims.chartHeight}
+            fill="#FFF"
+          />
+          <AxisLine
+            y1={0}
+            y2={dims.chartHeight}
+            x1={0 - space[3]}
+            x2={0 - space[3]}
+          />
+          <AxisLine
+            y1={0}
+            y2={dims.chartHeight}
+            x1={0 + space[3]}
+            x2={0 + space[3]}
+          />
+        </ChartArea>
+        <ChartArea
+          areaRef={leftArea}
+          marginLeft={dims.width / 2 - space[3]}
+          marginTop={margin.top}
+        />
+        <ChartArea
+          areaRef={rightArea}
+          marginLeft={dims.width / 2 + space[3]}
+          marginTop={margin.top}
+        />
+      </ChartSvg>
     </ChartWrapper>
   )
+}
+
+VerticalDoubleAreaChart.defaultProps = {
+  margin: { top: 25, right: 5, bottom: 10, left: 5 },
 }

@@ -1,3 +1,5 @@
+import { colors } from "../../themes/theme"
+
 export const DATA_URL_HU =
   "https://boring-barchart-gatsby.firebaseio.com/coronavirus-hungary.json"
 
@@ -6,9 +8,11 @@ export const DATA_URL_EN = "https://boring-barchart-gatsby.firebaseio.com/corona
 export const chartColors = {
   female: "#8C635B",
   male: "#496366",
+  total: colors.grayDarkest
 }
 
 export const lowOpacity = 0.75
+export const lowestOpacity = 0.25
 
 export const TEXT = {
   helmet: {

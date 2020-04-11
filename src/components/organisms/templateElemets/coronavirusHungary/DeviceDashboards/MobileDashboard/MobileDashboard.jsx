@@ -46,7 +46,7 @@ const MainGrid = styled(GridContainer)`
           grid-template-columns: 1fr;
           grid-template-rows:
             min-content 75px 120px 80px 270px 175px
-            600px;
+            650px;
           grid-template-areas:
             "title"
             "source"
@@ -252,25 +252,7 @@ function MobileDashboard({
               )}
             </FlexContainer>
           </StackedChartContainer>
-          <FlexContainer
-            withBorder
-            gridArea="mainChart"
-            pos="relative"
-            marginTop={3}
-          >
-            <FlexContainer
-              absPos
-              top={isLS ? 0 : space[5]}
-              left={isLS && space[3]}
-              right={!isLS && space[3]}
-            >
-              <CheckBox
-                setIsChecked={setIsWithTotal}
-                isChecked={isWithTotal}
-                labelText={TEXT.checkBox[language]}
-                labelPlacement={isLS ? "end" : "start"}
-              />
-            </FlexContainer>
+          <FlexContainer gridArea="mainChart" pos="relative" marginTop={3}>
             {!isLS && (
               <VerticalDoubleAreaChart
                 data={filteredData}
