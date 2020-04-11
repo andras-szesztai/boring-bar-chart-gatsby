@@ -1,9 +1,8 @@
 import React from "react"
 import styled from "styled-components"
-import { format } from "date-fns"
 import { BrowserView } from "react-device-detect"
 
-import { GridContainer, FlexContainer, Container } from "../../../../../atoms"
+import { GridContainer, FlexContainer } from "../../../../../atoms"
 import { space } from "../../../../../../themes/theme"
 import { TEXT } from "../../../../../../constants/visualizations/coronavirusHungary"
 

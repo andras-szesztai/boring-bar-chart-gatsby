@@ -304,6 +304,33 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       select(yAxisRef.current).raise()
     }
 
+    function createUpdateAvgLines({ isInit }) {
+      const { yScale, xScaleLeft, xScaleRight } = storedValues.current
+      const leftChartArea = select(leftArea.current)
+      const rightChartArea = select(rightArea.current)
+      const yAxis = select(yAxisRef.current)
+
+      const createUpdateLine = ({ area, className, pos , color}) => {
+        if (isInit) {
+          area
+          .append("line")
+          .attr("class", `ref-line ref-${className}`)
+          .attr("y1", pos.y1)
+          .attr("y2", pos.y2)
+          .attr("x1",pos.x1)
+          .attr("x2", pos.x2)
+          .attr("stroke", color)
+        }
+      }
+      // createUpdateLine({
+      //   area: leftArea,
+      //   className: "female",
+      //   pos: {
+      //     y1: yScale
+      //   }
+      // })
+    }
+
     if (!init && areaDataSets.female) {
       const { fullDomain } = storedValues.current
       const xDomain = [
@@ -343,6 +370,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
         accessor: "male",
         isInit: true,
       })
+      createUpdateAvgLines({})
       setInit(true)
     }
 

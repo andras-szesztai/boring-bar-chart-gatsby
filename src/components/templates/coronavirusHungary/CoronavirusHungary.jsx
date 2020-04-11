@@ -22,6 +22,20 @@ function makeNumbers(array, lan) {
   }
 }
 
+function makeAverages(array, lan) {
+  return {
+    total: _.meanBy(array, "age"),
+    male: _.meanBy(
+      array.filter(({ gender }) => gender === TEXT.genderM[lan]),
+      "age"
+    ),
+    female: _.meanBy(
+      array.filter(({ gender }) => gender === TEXT.accessorF[lan]),
+      "age"
+    ),
+  }
+}
+
 function makeFormattedData({ data, isHu }) {
   if (isHu) {
     return data.map(el => ({
@@ -47,12 +61,19 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [formattedData, setFormattedData] = useState(undefined)
   const [filteredData, setFilteredData] = useState(undefined)
   const [numbers, setNumbers] = useState({ total: 0, male: 0, female: 0 })
+  const [averages, setAverages] = useState({
+    total: undefined,
+    male: undefined,
+    female: undefined,
+  })
   const [dates, setDates] = useState({
     diff: undefined,
     max: undefined,
     currDate: undefined,
   })
   const prevDates = usePrevious(dates)
+
+  console.log(averages)
 
   useEffect(() => {
     if (data && !formattedData) {
@@ -63,6 +84,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       setFormattedData(formattedData)
       setFilteredData(formattedData)
       setNumbers(makeNumbers(formattedData, language))
+      setAverages(makeAverages(formattedData, language))
       setDates({
         diff: dateDiff,
         max: maxDate,

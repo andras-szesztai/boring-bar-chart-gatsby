@@ -68,6 +68,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
       )
       .force("collide", forceCollide().radius(6.5))
       .tick(300)
+      
     area
       .selectAll("circle")
       .data(data, ({ number }) => number)
