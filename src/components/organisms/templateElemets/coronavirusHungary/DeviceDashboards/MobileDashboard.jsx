@@ -57,7 +57,7 @@ const MainGrid = styled(GridContainer)`
     orientation === "landscape"
       ? css`
           grid-template-columns: repeat(5, 1fr);
-          grid-template-rows: min-content 100px 150px 250px;
+          grid-template-rows: min-content 120px 150px 250px;
           grid-template-areas:
             "title title title source source"
             "total slider slider slider slider"
@@ -67,7 +67,7 @@ const MainGrid = styled(GridContainer)`
       : css`
           grid-template-columns: 1fr;
           grid-template-rows:
-            min-content 70px 120px 80px 270px 175px
+            min-content 75px 120px 80px 270px 175px
             600px;
           grid-template-areas:
             "title"
@@ -173,6 +173,10 @@ function MobileDashboard({
             currDate={dates.currDate}
             fontWeight="ultraLight"
             justify={isLS ? "flex-start" : "center"}
+            extraPaddingLeft={isLS && 4}
+            paddingBottom={isLS && 2}
+            sliderColumns={isLS && "min-content 1fr"}
+            sliderRows={!isLS && "repeat(2, 1fr)"}
           />
           <BanContainer
             gridArea="total"
@@ -208,9 +212,9 @@ function MobileDashboard({
                 data={numbers}
                 margin={{
                   top: isLS ? 5 : 10,
-                  right: isLS ? 15 : 10,
+                  right: isLS ? 20 : 10,
                   bottom: isLS ? 5 : 10,
-                  left: isLS ? 20 : 10,
+                  left: isLS ? 22 : 10,
                 }}
               />
             </FlexContainer>
@@ -258,7 +262,7 @@ function MobileDashboard({
               />
             </FlexContainer>
           </StackedChartContainer>
-          <FlexContainer withBorder gridArea="mainChart" pos="relative" marginTop={2}>
+          <FlexContainer withBorder gridArea="mainChart" pos="relative" marginTop={3}>
             <FlexContainer absPos top={0} left={isLS && space[3]} right={!isLS && space[3]} >
               <CheckBoxLabel
                 control={

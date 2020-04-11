@@ -39,7 +39,9 @@ export default function DateSlider({
   dateFontSize,
   fontWeight,
   currDate,
-  justify
+  justify,
+  sliderColumns,
+  sliderRows
 }) {
   const containerRef = useRef()
   const scrollPosition = useScrollPosition()
@@ -72,7 +74,6 @@ export default function DateSlider({
       paddingLeft={extraPaddingLeft || extraPadding}
       zIndex={isBelowPosition && "overlay"}
       rows="repeat(2, 1fr)"
-     
     >
       <FlexContainer
         fontSize={dateFontSize || fontSize}
@@ -81,14 +82,15 @@ export default function DateSlider({
       >
         {currDate && format(currDate, TEXT.dateFormatLong[language])}
       </FlexContainer>
-      <FlexContainer direction="column" align={justify} justify="flex-end">
+      <GridContainer rowGap={0} columnGap={2} columns={sliderColumns} rows={sliderRows}>
         <FlexContainer
           whiteSpace="nowrap"
           fontSize={fontSize}
+          paddingBottom={2}
         >
           {TEXT.dateSlider[language]}:
         </FlexContainer>
-        <Container width="100%" >
+        <FlexContainer fullSize >
           {dates.max && (
             <DSlider
               defaultValue={0}
@@ -108,8 +110,8 @@ export default function DateSlider({
               max={0}
             />
           )}
-        </Container>
-      </FlexContainer>
+        </FlexContainer>
+      </GridContainer>
     </GridContainer>
   )
 }

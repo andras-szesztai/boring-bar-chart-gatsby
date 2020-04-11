@@ -4,7 +4,7 @@ import { select } from "d3-selection"
 import { scaleLinear } from "d3-scale"
 import chroma from "chroma-js"
 
-import { ChartSvg, ChartWrapper, ChartArea, AxisLine } from "../../../../atoms"
+import { ChartSvg, ChartWrapper, ChartArea } from "../../../../atoms"
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
 import {
   chartColors,
