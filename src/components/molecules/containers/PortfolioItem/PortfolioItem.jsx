@@ -13,8 +13,6 @@ import {
   themifyColor,
 } from "../../../../themes/mixins"
 
-const number = 1
-
 const DEVICE_ICONS = {
   desktop: { icon: FaDesktop, size: 20 },
   tablet: { icon: FaTabletAlt, size: 19 },
@@ -75,7 +73,7 @@ function PortfolioItem({
     <ItemContainer
       pos="relative"
       key={id}
-      height={isSmallScreen ? "150px" : "180px"}
+      height={isSmallScreen ? "160px" : "180px"}
       borderRadius={1}
     >
       {subWeeks(new Date(), 2) < new Date(date) && (

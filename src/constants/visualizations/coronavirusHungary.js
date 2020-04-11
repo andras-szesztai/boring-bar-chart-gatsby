@@ -79,6 +79,10 @@ export const TEXT = {
     hu: "Mutasson az egérrel bármelyik körre információért az elhunyt személy alapbetegségeirõl!",
     en: "Hover over any circle to find out more about the underlying conditions of the deceased person!",
   },
+  checkBox: {
+    hu: "Összes",
+    en: "Display total",
+  },
   tooltipGender:{
     hu: "Nem",
     en: "Gender",

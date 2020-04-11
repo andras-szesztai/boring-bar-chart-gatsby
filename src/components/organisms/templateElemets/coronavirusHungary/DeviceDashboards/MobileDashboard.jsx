@@ -130,6 +130,8 @@ function MobileDashboard({
   const orientation = useOrientation({ isLandscape, isPortrait })
   const [isWithTotal, setIsWithTotal] = useState(false)
 
+
+  // Fix dateSlider
   const isLS = orientation === "landscape"
   return (
     <MobileOnlyView>
@@ -256,8 +258,8 @@ function MobileDashboard({
               />
             </FlexContainer>
           </StackedChartContainer>
-          <FlexContainer withBorder gridArea="mainChart" pos="relative">
-            <FlexContainer absPos top={0} right={space[3]} >
+          <FlexContainer withBorder gridArea="mainChart" pos="relative" marginTop={2}>
+            <FlexContainer absPos top={0} left={isLS && space[3]} right={!isLS && space[3]} >
               <CheckBoxLabel
                 control={
                   <ChartCheckBox
@@ -265,8 +267,8 @@ function MobileDashboard({
                     onChange={() => setIsWithTotal(prev => !prev)}
                   />
                 }
-                label="Display Total"
-                labelPlacement="start"
+                label={TEXT.checkBox[language]}
+                labelPlacement={isLS ? "end" : "start"}
               />
             </FlexContainer>
           </FlexContainer>
