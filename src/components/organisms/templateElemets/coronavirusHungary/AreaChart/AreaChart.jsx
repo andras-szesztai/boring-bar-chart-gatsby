@@ -3,6 +3,8 @@ import { select } from "d3-selection"
 import { scaleLinear } from "d3-scale"
 import { axisLeft, axisBottom, axisRight } from "d3-axis"
 import chroma from "chroma-js"
+import { area, curveCatmullRom } from "d3-shape"
+import { interpolatePath } from "d3-interpolate-path"
 
 import {
   ChartWrapper,
@@ -14,16 +16,13 @@ import {
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
 import { space, transition, colors } from "../../../../../themes/theme"
 import { makeAreaData } from "../utils/dataHelpers"
-import { area, curveCatmullRom } from "d3-shape"
 import {
   lowOpacity,
   lowestOpacity,
   chartColors,
   TEXT,
 } from "../../../../../constants/visualizations/coronavirusHungary"
-import { makeTransition } from "../../../../../utils/chartHelpers"
-import { interpolatePath } from "d3-interpolate-path"
-import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io"
+import { makeTransition, numberTween } from "../../../../../utils/chartHelpers"
 
 export default function AreaChart({
   margin,
@@ -45,9 +44,8 @@ export default function AreaChart({
 
   useEffect(() => {
     function createUpdateArea() {
-      const { yScale, xScale } = storedValues.current
+      const { yScale, xScale, chartArea } = storedValues.current
       const areaData = makeAreaData(data, fullListDomain.fullAgeList)
-      const chartArea = select(areaRef.current)
       var areaGenerator = area()
         .x(({ age }) => xScale(age))
         .y0(yScale(0))
@@ -70,6 +68,52 @@ export default function AreaChart({
             interpolatePath(select(n[i]).attr("d"), areaGenerator(d))
           )
       }
+    }
+    function createUpdateAvgLine({ num, prevNum, currAccessor, textAnchor }) {
+      const { xScale, chartArea } = storedValues.current
+      const t = makeTransition(chartArea, transition.lgNum, "update")
+      const setX = xScale(num)
+      const getTween = (d, i, n) =>
+        numberTween({
+          value: +num,
+          prevValue: +prevNum,
+          i,
+          n,
+          numberFormat: ".3n",
+        })
+      if (!init) {
+        chartArea
+          .append("line")
+          .attr("class", `ref-line ref-${currAccessor}`)
+          .attr("y1", dims.chartHeight)
+          .attr("y2", 0)
+          .attr("x1", setX)
+          .attr("x2", setX)
+          .attr("stroke", chartColors[currAccessor])
+        chartArea
+          .append("text")
+          .attr("class", `ref-text-${currAccessor}`)
+          .attr("y", 0)
+          .attr("dy", space[2] + 4)
+          .attr("x", setX)
+          .attr("dx", textAnchor === "start" ? space[1] : -space[1])
+          .attr("text-anchor", textAnchor)
+          .attr("fill", chartColors[currAccessor])
+          .text(num.toFixed(1))
+        return
+      }
+      chartArea
+        .select(`.ref-${currAccessor}`)
+        .transition(t)
+        .attr("x1", setX)
+        .attr("x2", setX)
+      chartArea
+        .select(`.ref-text-${currAccessor}`)
+        .transition(t)
+        .attr("x", setX)
+        .attr("text-anchor", textAnchor)
+        .attr("dx", textAnchor === "start" ? space[1] : -space[1])
+        .tween("text", getTween)
     }
     function createAxes() {
       const { yScale, xScale } = storedValues.current
@@ -119,21 +163,46 @@ export default function AreaChart({
       const yScale = scaleLinear()
         .range([0, dims.chartHeight])
         .domain([fullListDomain.maxNumber, 0])
+      const chartArea = select(areaRef.current)
       storedValues.current = {
         yScale,
         xScale,
+        chartArea,
       }
-      createUpdateArea()
       createAxes()
+      createUpdateArea()
+      createUpdateAvgLine({
+        num: averages.total,
+        currAccessor: "total",
+        textAnchor: averages.total > averages[accessor] ? "start" : "end",
+      })
+      createUpdateAvgLine({
+        num: averages[accessor],
+        currAccessor: accessor,
+        textAnchor: averages.total > averages[accessor] ? "end" : "start",
+      })
       setInit(true)
     }
     if (init && prevData.length !== data.length) {
       const { xScale, yScale } = storedValues.current
       storedValues.current = {
+        ...storedValues.current,
         yScale,
         xScale,
       }
       createUpdateArea()
+      createUpdateAvgLine({
+        num: averages.total,
+        prevNum: prevAverages.total,
+        currAccessor: "total",
+        textAnchor: averages.total > averages[accessor] ? "start" : "end",
+      })
+      createUpdateAvgLine({
+        num: averages[accessor],
+        prevNum: prevAverages[accessor],
+        currAccessor: accessor,
+        textAnchor: averages.total > averages[accessor] ? "end" : "start",
+      })
     }
   }, [
     init,
@@ -145,11 +214,13 @@ export default function AreaChart({
     yAxisRef,
     xAxisRef,
     accessor,
+    averages,
+    prevAverages,
   ])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
-      <FlexContainer absPos top={2} left={margin.left + 1}>
+      <FlexContainer absPos top={3} left={margin.left + 1}>
         {TEXT.chartAxisNumber[language]}
       </FlexContainer>
       <FlexContainer absPos bottom={6} left={margin.left + 1}>

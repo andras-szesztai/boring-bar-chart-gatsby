@@ -63,6 +63,7 @@ export default function VerticalDoubleAreaChart({
   const [init, setInit] = useState(false)
   const prevData = usePrevious(data)
   const prevAverages = usePrevious(averages)
+  const prevPrevAverages = usePrevious(prevAverages)
   const [areaDataSets, setAreaDataSets] = useState({})
   const prevAreaDataSets = usePrevious(areaDataSets)
   const leftLeft = dims.width / 2 - space[3]
@@ -308,7 +309,7 @@ export default function VerticalDoubleAreaChart({
         const getTween = (d, i, n) =>
           numberTween({
             value: +averages[accessor],
-            prevValue: +prevAverages[accessor],
+            prevValue: +prevPrevAverages[accessor],
             i,
             n,
             numberFormat: ".3n",
@@ -431,6 +432,7 @@ export default function VerticalDoubleAreaChart({
       _.sumBy(areaDataSets.female, "number") !==
         _.sumBy(prevAreaDataSets.female, "number")
     ) {
+      createUpdateAvgLines()
       createUpdateAreaLeft({
         data: areaDataSets.female,
         accessor: "female",
@@ -439,22 +441,8 @@ export default function VerticalDoubleAreaChart({
         data: areaDataSets.male,
         accessor: "male",
       })
-      createUpdateAvgLines()
     }
-  }, [
-    areaDataSets,
-    averages,
-    data,
-    dims,
-    fullListDomain,
-    init,
-    leftLeft,
-    prevAreaDataSets,
-    prevAverages,
-    rightLeft,
-    svgRef,
-    yAxisRef,
-  ])
+  }, [areaDataSets, averages, data, dims, fullListDomain, init, leftLeft, prevAreaDataSets, prevAverages, prevPrevAverages, rightLeft, svgRef, yAxisRef])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>

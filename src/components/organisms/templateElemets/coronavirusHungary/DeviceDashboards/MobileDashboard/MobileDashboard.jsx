@@ -286,6 +286,7 @@ function MobileDashboard({
                   fullListDomain={fullListDomain}
                   language={language}
                   accessor="female"
+                  averages={averages}
                 />
                 <AreaChart
                   key="maleArea"
@@ -295,6 +296,7 @@ function MobileDashboard({
                       ({ gender }) => gender === TEXT.accessorM[language]
                     )
                   }
+                  averages={averages}
                   language={language}
                   fullListDomain={fullListDomain}
                   accessor="male"
