@@ -3,7 +3,7 @@ import _ from "lodash"
 import { select } from "d3-selection"
 import { scaleLinear } from "d3-scale"
 import { extent, max, min } from "d3-array"
-import { axisLeft } from "d3-axis"
+import { axisLeft, axisTop, axisBottom } from "d3-axis"
 import chroma from "chroma-js"
 
 import {
@@ -41,6 +41,8 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
   const storedValues = useRef()
   const leftArea = useRef()
   const rightArea = useRef()
+  const rightGridArea = useRef()
+  const leftGridArea = useRef()
   const dims = useDimensions({
     ref: wrapperRef,
     margin,
@@ -103,10 +105,52 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
         )
         .call(g => g.selectAll(".tick line").remove())
     }
+    function createUpdateXAxisLeft() {
+      const { xScale } = storedValues.current
+      xScale.range([0, -(dims.width / 2 - space[5])])
+      select(leftArea.current)
+        .call(
+          axisTop(xScale)
+            .ticks((dims.width / 2 - space[5]) / 50)
+            .tickSizeInner(space[1])
+            .tickSizeOuter(0)
+        )
+        .call(g => g.select(".tick line").remove())
+        .call(g => g.select(".tick text").remove())
+        .call(g =>
+          g
+            .select(".domain")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        )
+        .call(g => g.selectAll(".tick text").attr("fill", colors.grayDarkest))
+        .call(g =>
+          g
+            .selectAll(".tick line")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        )
+
+      select(leftGridArea.current)
+        .call(
+          axisBottom(xScale)
+            .ticks((dims.width / 2 - space[5]) / 50)
+            .tickSizeInner(dims.chartHeight)
+            .tickSizeOuter(0)
+        )
+        .call(g =>
+          g
+            .selectAll(".tick line")
+            .attr("stroke", chroma(colors.grayDarkest).alpha(lowestOpacity))
+            .attr("stroke-width", 0.5)
+        )
+        .call(g => g.selectAll(".tick text").remove())
+        .call(g => g.select(".domain").remove())
+    }
     function createUpdateAreaLeft({ data, accessor, init }) {
       const { yScale, xScale } = storedValues.current
       const chartArea = select(leftArea.current)
-      xScale.range([0, -(dims.width / 2 - space[4])])
+      xScale.range([0, -(dims.width / 2 - space[5])])
       var areaGenerator = area()
         .y(({ age }) => yScale(age))
         .x1(({ number }) => xScale(number))
@@ -122,6 +166,48 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
           .attr("d", areaGenerator)
       }
       select(yAxisRef.current).raise()
+    }
+    function createUpdateXAxisRight() {
+      const { xScale } = storedValues.current
+      xScale.range([0, dims.width / 2 - space[5]])
+      select(rightArea.current)
+        .call(
+          axisTop(xScale)
+            .ticks((dims.width / 2 - space[5]) / 50)
+            .tickSizeInner(space[1])
+            .tickSizeOuter(0)
+        )
+        .call(g => g.select(".tick line").remove())
+        .call(g => g.select(".tick text").remove())
+        .call(g =>
+          g
+            .select(".domain")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        )
+        .call(g => g.selectAll(".tick text").attr("fill", colors.grayDarkest))
+        .call(g =>
+          g
+            .selectAll(".tick line")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        )
+
+      select(rightGridArea.current)
+        .call(
+          axisBottom(xScale)
+            .ticks((dims.width / 2 - space[5]) / 50)
+            .tickSizeInner(dims.chartHeight)
+            .tickSizeOuter(0)
+        )
+        .call(g =>
+          g
+            .selectAll(".tick line")
+            .attr("stroke", chroma(colors.grayDarkest).alpha(lowestOpacity))
+            .attr("stroke-width", 0.5)
+        )
+        .call(g => g.selectAll(".tick text").remove())
+        .call(g => g.select(".domain").remove())
     }
     function createUpdateAreaRight({ data, accessor, init }) {
       const { yScale, xScale } = storedValues.current
@@ -154,6 +240,8 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       ])
       storedValues.current = { ...storedValues.current, yScale, xScale }
       createUpdateAxisLabels()
+      createUpdateXAxisRight()
+      createUpdateXAxisLeft()
       createUpdateAreaLeft({
         data: areaDataSets.female,
         accessor: "female",
@@ -188,12 +276,14 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
             y2={dims.chartHeight}
             x1={0 - space[3]}
             x2={0 - space[3]}
+            stroke={0.5}
           />
           <AxisLine
             y1={0}
             y2={dims.chartHeight}
             x1={0 + space[3]}
             x2={0 + space[3]}
+            stroke={0.5}
           />
         </ChartArea>
         <ChartArea
@@ -202,7 +292,17 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
           marginTop={margin.top}
         />
         <ChartArea
+          areaRef={leftGridArea}
+          marginLeft={dims.width / 2 - space[3]}
+          marginTop={margin.top}
+        />
+        <ChartArea
           areaRef={rightArea}
+          marginLeft={dims.width / 2 + space[3]}
+          marginTop={margin.top}
+        />
+        <ChartArea
+          areaRef={rightGridArea}
           marginLeft={dims.width / 2 + space[3]}
           marginTop={margin.top}
         />
