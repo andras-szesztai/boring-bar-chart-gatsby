@@ -23,8 +23,10 @@ import {
   lowestOpacity,
   lowOpacity,
 } from "../../../../../../constants/visualizations/coronavirusHungary"
-import { space, colors } from "../../../../../../themes/theme"
+import { space, colors, transition } from "../../../../../../themes/theme"
 import { area, curveCatmullRom } from "d3-shape"
+import { interpolatePath } from "d3-interpolate-path"
+import { makeTransition } from "../../../../../../utils/chartHelpers"
 
 const makeAreaData = (data, fullList) => {
   const grouped = _.groupBy(data, "age")
@@ -50,6 +52,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
   const [init, setInit] = useState(false)
   const prevData = usePrevious(data)
   const [areaDataSets, setAreaDataSets] = useState({})
+  const prevAreaDataSets = usePrevious(areaDataSets)
 
   useEffect(() => {
     const setDataSets = () => {
@@ -106,12 +109,11 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
         .call(g => g.selectAll(".tick line").remove())
     }
     function createUpdateXAxisLeft() {
-      const { xScale } = storedValues.current
-      xScale.range([0, -(dims.width / 2 - space[5])])
+      const { xScaleLeft, xRangeMax } = storedValues.current
       select(leftArea.current)
         .call(
-          axisTop(xScale)
-            .ticks((dims.width / 2 - space[5]) / 50)
+          axisTop(xScaleLeft)
+            .ticks(xRangeMax / 50)
             .tickSizeInner(space[1])
             .tickSizeOuter(0)
         )
@@ -133,7 +135,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
 
       select(leftGridArea.current)
         .call(
-          axisBottom(xScale)
+          axisBottom(xScaleLeft)
             .ticks((dims.width / 2 - space[5]) / 50)
             .tickSizeInner(dims.chartHeight)
             .tickSizeOuter(0)
@@ -147,16 +149,15 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
         .call(g => g.selectAll(".tick text").remove())
         .call(g => g.select(".domain").remove())
     }
-    function createUpdateAreaLeft({ data, accessor, init }) {
-      const { yScale, xScale } = storedValues.current
+    function createUpdateAreaLeft({ data, accessor, isInit }) {
+      const { yScale, xScaleLeft } = storedValues.current
       const chartArea = select(leftArea.current)
-      xScale.range([0, -(dims.width / 2 - space[5])])
       var areaGenerator = area()
         .y(({ age }) => yScale(age))
-        .x1(({ number }) => xScale(number))
-        .x0(xScale(0))
+        .x1(({ number }) => xScaleLeft(number))
+        .x0(xScaleLeft(0))
         .curve(curveCatmullRom)
-      if (init) {
+      if (isInit) {
         chartArea
           .append("path")
           .datum(data)
@@ -165,15 +166,23 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
           .attr("stroke", chartColors[accessor])
           .attr("d", areaGenerator)
       }
+      if (!isInit) {
+        chartArea
+          .select(`.${accessor}-path`)
+          .datum(data)
+          .transition(makeTransition(chartArea, transition.lgNum))
+          .attrTween("d", (d, i, n) =>
+            interpolatePath(select(n[i]).attr("d"), areaGenerator(d))
+          )
+      }
       select(yAxisRef.current).raise()
     }
     function createUpdateXAxisRight() {
-      const { xScale } = storedValues.current
-      xScale.range([0, dims.width / 2 - space[5]])
+      const { xScaleRight, xRangeMax } = storedValues.current
       select(rightArea.current)
         .call(
-          axisTop(xScale)
-            .ticks((dims.width / 2 - space[5]) / 50)
+          axisTop(xScaleRight)
+            .ticks(xRangeMax / 50)
             .tickSizeInner(space[1])
             .tickSizeOuter(0)
         )
@@ -195,7 +204,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
 
       select(rightGridArea.current)
         .call(
-          axisBottom(xScale)
+          axisBottom(xScaleRight)
             .ticks((dims.width / 2 - space[5]) / 50)
             .tickSizeInner(dims.chartHeight)
             .tickSizeOuter(0)
@@ -209,16 +218,16 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
         .call(g => g.selectAll(".tick text").remove())
         .call(g => g.select(".domain").remove())
     }
-    function createUpdateAreaRight({ data, accessor, init }) {
-      const { yScale, xScale } = storedValues.current
+
+    function createUpdateAreaRight({ data, accessor, isInit }) {
+      const { yScale, xScaleRight } = storedValues.current
       const chartArea = select(rightArea.current)
-      xScale.range([0, dims.width / 2 - space[4]])
       var areaGenerator = area()
         .y(({ age }) => yScale(age))
-        .x1(({ number }) => xScale(number))
-        .x0(xScale(0))
+        .x1(({ number }) => xScaleRight(number))
+        .x0(xScaleRight(0))
         .curve(curveCatmullRom)
-      if (init) {
+      if (isInit) {
         chartArea
           .append("path")
           .datum(data)
@@ -227,34 +236,71 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
           .attr("stroke", chartColors[accessor])
           .attr("d", areaGenerator)
       }
+      if (!isInit) {
+        chartArea
+          .select(`.${accessor}-path`)
+          .datum(data)
+          .transition(makeTransition(chartArea, transition.lgNum))
+          .attrTween("d", (d, i, n) =>
+            interpolatePath(select(n[i]).attr("d"), areaGenerator(d))
+          )
+      }
       select(yAxisRef.current).raise()
     }
+    
     if (!init && areaDataSets.total) {
       const { fullDomain } = storedValues.current
+      const xDomain = [0, max(areaDataSets.total, ({ number }) => number)]
+      const xRangeMax = dims.width / 2 - space[5]
       const yScale = scaleLinear()
         .range([0, dims.chartHeight])
         .domain(fullDomain)
-      const xScale = scaleLinear().domain([
-        0,
-        max(areaDataSets.total, ({ number }) => number),
-      ])
-      storedValues.current = { ...storedValues.current, yScale, xScale }
+      const xScaleLeft = scaleLinear()
+        .domain(xDomain)
+        .range([0, -xRangeMax])
+      const xScaleRight = scaleLinear()
+        .domain(xDomain)
+        .range([0, xRangeMax])
+      storedValues.current = {
+        ...storedValues.current,
+        yScale,
+        xScaleLeft,
+        xScaleRight,
+        xRangeMax,
+      }
       createUpdateAxisLabels()
       createUpdateXAxisRight()
       createUpdateXAxisLeft()
       createUpdateAreaLeft({
         data: areaDataSets.female,
         accessor: "female",
-        init: true,
+        isInit: true,
       })
       createUpdateAreaRight({
         data: areaDataSets.male,
         accessor: "male",
-        init: true,
+        isInit: true,
       })
       setInit(true)
     }
-  }, [areaDataSets, data, dims, init, svgRef, yAxisRef])
+
+    if (
+      init &&
+      prevAreaDataSets &&
+      prevAreaDataSets.total &&
+      _.sumBy(areaDataSets.total, "number") !==
+        _.sumBy(prevAreaDataSets.total, "number")
+    ) {
+      createUpdateAreaLeft({
+        data: areaDataSets.female,
+        accessor: "female",
+      })
+      createUpdateAreaRight({
+        data: areaDataSets.male,
+        accessor: "male",
+      })
+    }
+  }, [areaDataSets, data, dims, init, prevAreaDataSets, svgRef, yAxisRef])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
