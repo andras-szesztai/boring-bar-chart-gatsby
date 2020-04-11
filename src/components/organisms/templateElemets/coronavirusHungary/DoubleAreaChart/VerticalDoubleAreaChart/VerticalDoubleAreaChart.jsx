@@ -37,16 +37,7 @@ import {
   IoMdArrowDropright,
   IoMdArrowDropleft,
 } from "react-icons/io"
-
-const makeAreaData = (data, fullList) => {
-  const grouped = _.groupBy(data, "age")
-  const newData = fullList.map(age => ({
-    age: +age,
-    number: grouped[age] ? grouped[age].length : 0,
-  }))
-
-  return newData
-}
+import { makeAreaData } from "../../utils/dataHelpers"
 
 const ticksDividerX = 75
 
@@ -55,6 +46,7 @@ export default function VerticalDoubleAreaChart({
   data,
   language,
   averages,
+  fullListDomain,
 }) {
   const { svgRef, wrapperRef, yAxisRef } = useChartRefs()
   const storedValues = useRef()
@@ -78,26 +70,14 @@ export default function VerticalDoubleAreaChart({
 
   useEffect(() => {
     const setDataSets = () => {
-      if (!storedValues.current) {
-        const fullDomain = [
-          min(data, ({ age }) => age) - 2,
-          max(data, ({ age }) => age) + 2,
-        ]
-        const fullList = []
-        for (var i = fullDomain[0]; i <= fullDomain[1]; i++) {
-          fullList.push(i)
-        }
-        storedValues.current = { fullList, fullDomain }
-      }
-      const { fullList } = storedValues.current
       setAreaDataSets({
         female: makeAreaData(
           data.filter(({ gender }) => gender === TEXT.accessorF[language]),
-          fullList
+          fullListDomain.fullList
         ),
         male: makeAreaData(
           data.filter(({ gender }) => gender === TEXT.accessorM[language]),
-          fullList
+          fullListDomain.fullList
         ),
       })
     }
@@ -108,7 +88,7 @@ export default function VerticalDoubleAreaChart({
     if (!!prevData && prevData.length !== data.length) {
       setDataSets()
     }
-  }, [prevData, data, language, areaDataSets])
+  }, [prevData, data, language, areaDataSets, fullListDomain])
 
   useEffect(() => {
     function createUpdateAxisLabels() {
@@ -403,7 +383,6 @@ export default function VerticalDoubleAreaChart({
     }
 
     if (!init && areaDataSets.female) {
-      const { fullDomain } = storedValues.current
       const xDomain = [
         0,
         max(
@@ -414,7 +393,7 @@ export default function VerticalDoubleAreaChart({
       const xRangeMax = dims.width / 2 - space[5]
       const yScale = scaleLinear()
         .range([0, dims.chartHeight])
-        .domain(fullDomain)
+        .domain(fullListDomain.fullDomain)
       const xScaleLeft = scaleLinear()
         .domain(xDomain)
         .range([0, -xRangeMax])
@@ -467,6 +446,7 @@ export default function VerticalDoubleAreaChart({
     averages,
     data,
     dims,
+    fullListDomain,
     init,
     leftLeft,
     prevAreaDataSets,

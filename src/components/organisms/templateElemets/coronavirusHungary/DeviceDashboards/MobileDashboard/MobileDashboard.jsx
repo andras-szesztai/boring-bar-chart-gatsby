@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import styled, { css } from "styled-components"
 import { MobileOnlyView, withOrientationChange } from "react-device-detect"
 
@@ -12,13 +12,14 @@ import {
 } from "../../../../../../constants/visualizations/coronavirusHungary"
 import SwitchContainer from "../../SwitchContainer/SwitchContainer"
 import SourceLink from "../../SourceLink/SourceLink"
-import { space, fontSize, fontWeight } from "../../../../../../themes/theme"
+import { space } from "../../../../../../themes/theme"
 import BanContainer from "../../BanContainer/BanContainer"
 import DateSlider from "../../DateSlider/DateSlider"
 import HorizontalBarChart from "../../HorizontalBarChart/HorizontalBarChart"
 import Number from "../../Number/Number"
 import StackedBarChart from "../../StackedBarChart/StackedBarChart"
 import { VerticalDoubleAreaChart } from "../../DoubleAreaChart"
+import AreaChart from "../../AreaChart/AreaChart"
 
 const MainGrid = styled(GridContainer)`
   margin-top: ${space[2]}px;
@@ -97,7 +98,8 @@ function MobileDashboard({
   setDates,
   filteredData,
   loading,
-  averages
+  averages,
+  fullListDomain,
 }) {
   const orientation = useOrientation({ isLandscape, isPortrait })
   const isLS = orientation === "landscape"
@@ -145,7 +147,7 @@ function MobileDashboard({
             extraPaddingLeft={isLS && 5}
             paddingBottom={isLS && 2}
             sliderColumns={isLS && "min-content 1fr"}
-            sliderRows={!isLS && "repeat(2, 1fr)"}
+            sliderRows={!isLS ? "repeat(2, 1fr)" : "1fr"}
           />
           <BanContainer
             gridArea="total"
@@ -259,17 +261,42 @@ function MobileDashboard({
               )}
             </FlexContainer>
           </StackedChartContainer>
-          <FlexContainer gridArea="mainChart" pos="relative" marginTop={!isLS ? 6 : 2}>
+          <FlexContainer
+            gridArea="mainChart"
+            pos="relative"
+            marginTop={!isLS ? 6 : 2}
+          >
             {!isLS ? (
               <VerticalDoubleAreaChart
                 data={filteredData}
                 language={language}
                 averages={averages}
+                fullListDomain={fullListDomain}
               />
             ) : (
               <GridContainer fullSize rows="repeat(2, 1fr)">
-                <FlexContainer withBorder/>
-                <FlexContainer withBorder/>
+                <AreaChart
+                  key="maleArea"
+                  data={
+                    filteredData &&
+                    filteredData.filter(
+                      ({ gender }) => gender === TEXT.accessorF[language]
+                    )
+                  }
+                  fullListDomain={fullListDomain}
+                  language={language}
+                />
+                <AreaChart
+                  key="male"
+                  data={
+                    filteredData &&
+                    filteredData.filter(
+                      ({ gender }) => gender === TEXT.accessorM[language]
+                    )
+                  }
+                  language={language}
+                  fullListDomain={fullListDomain}
+                />
               </GridContainer>
             )}
           </FlexContainer>

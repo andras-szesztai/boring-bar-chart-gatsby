@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles"
 import Slider from "@material-ui/core/Slider"
 import { format, subDays } from "date-fns"
 
-import { FlexContainer, Container, GridContainer } from "../../../../atoms"
+import { FlexContainer, GridContainer } from "../../../../atoms"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 import { colors } from "../../../../../themes/theme"
 import { useScrollPosition, useWindowDimensions } from "../../../../../hooks"

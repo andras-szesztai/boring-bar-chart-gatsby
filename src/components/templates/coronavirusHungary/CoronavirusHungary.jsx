@@ -13,6 +13,7 @@ import {
   MobileDashboard,
 } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
 import SwitchContainer from "../../organisms/templateElemets/coronavirusHungary/SwitchContainer/SwitchContainer"
+import { min, max } from "d3-array"
 
 function makeNumbers(array, lan) {
   return {
@@ -61,6 +62,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [formattedData, setFormattedData] = useState(undefined)
   const [filteredData, setFilteredData] = useState(undefined)
   const [numbers, setNumbers] = useState({ total: 0, male: 0, female: 0 })
+  const [fullListDomain, setFullListDomain] = useState(undefined)
   const [averages, setAverages] = useState({
     total: undefined,
     male: undefined,
@@ -79,7 +81,16 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       const maxDate = _.maxBy(formattedData, "date").date
       const minDate = _.minBy(formattedData, "date").date
       const dateDiff = differenceInDays(minDate, maxDate)
+      const fullDomain = [
+        min(formattedData, ({ age }) => age) - 2,
+        max(formattedData, ({ age }) => age) + 2,
+      ]
+      const fullList = []
+      for (var i = fullDomain[0]; i <= fullDomain[1]; i++) {
+        fullList.push(i)
+      }
       setAverages(makeAverages(formattedData, language))
+      setFullListDomain({ fullDomain, fullList })
       setFormattedData(formattedData)
       setFilteredData(formattedData)
       setNumbers(makeNumbers(formattedData, language))
@@ -169,6 +180,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           setDates={setDates}
           filteredData={filteredData}
           loading={loading}
+          fullListDomain={fullListDomain}
         />
       )}
     </>
