@@ -1,17 +1,8 @@
 import React, { useState } from "react"
 import styled, { css } from "styled-components"
-import { FaArrowAltCircleDown } from "react-icons/fa"
-import { GoPrimitiveSquare } from "react-icons/go"
 import { MobileOnlyView, withOrientationChange } from "react-device-detect"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Checkbox from "@material-ui/core/Checkbox"
-import { withStyles } from "@material-ui/core"
 
-import {
-  useOrientation,
-  useScrollPosition,
-  useWindowDimensions,
-} from "../../../../../hooks"
+import { useOrientation } from "../../../../../hooks"
 import { FlexContainer, GridContainer } from "../../../../atoms"
 import { FullScreenLoader, ScrollHint } from "../../../../molecules"
 import {
@@ -21,33 +12,19 @@ import {
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import SourceLink from "../SourceLink/SourceLink"
-import { space, colors, fontFamily, fontSize, fontWeight } from "../../../../../themes/theme"
+import {
+  space,
+  colors,
+  fontFamily,
+  fontSize,
+  fontWeight,
+} from "../../../../../themes/theme"
 import BanContainer from "../BanContainer/BanContainer"
 import DateSlider from "../DateSlider/DateSlider"
-import CurrDateContainer from "../CurrDateContainer/CurrDateContainer"
 import HorizontalBarChart from "../HorizontalBarChart/HorizontalBarChart"
-import PercChartContainer from "../PercChartContainer/PercChartContainer"
 import Number from "../Number/Number"
-import { StackedBarChart } from ".."
-
-const ChartCheckBox = withStyles({
-  root: {
-    marginTop: 2,
-    transform: "scale(1.5)",
-    '&$checked': {
-      color: colors.grayDarkest,
-    },
-  },
-  checked: {},
-})(Checkbox)
-
-const CheckBoxLabel = withStyles({
-  label: {
-    fontFamily,
-    fontSize: fontSize[2],
-    fontWeight: fontWeight.light
-  }
-})(FormControlLabel)
+import StackedBarChart from "../StackedBarChart/StackedBarChart"
+import CheckBox from "../CheckBox/CheckBox"
 
 const MainGrid = styled(GridContainer)`
   margin-top: ${space[2]}px;
@@ -129,10 +106,8 @@ function MobileDashboard({
 }) {
   const orientation = useOrientation({ isLandscape, isPortrait })
   const [isWithTotal, setIsWithTotal] = useState(false)
-
-
-  // Fix dateSlider
   const isLS = orientation === "landscape"
+
   return (
     <MobileOnlyView>
       <FlexContainer fullSize pos="relative">
@@ -251,27 +226,47 @@ function MobileDashboard({
               )}
             </FlexContainer>
             <FlexContainer gridArea="chart">
-              <StackedBarChart
-                data={numbers}
-                margin={{
-                  top: isLS ? 14 : 5,
-                  right: isLS ? 0 : 15,
-                  bottom: isLS ? 16 : 5,
-                  left: isLS ? 0 : 15,
-                }}
-              />
+              {isLS ? (
+                <StackedBarChart
+                  data={numbers}
+                  key="ls"
+                  margin={{
+                    top: 14,
+                    right: 0,
+                    bottom: 16,
+                    left: 0,
+                  }}
+                />
+              ) : (
+                <StackedBarChart
+                  data={numbers}
+                  key="pr"
+                  margin={{
+                    top: 5,
+                    right: 15,
+                    bottom: 5,
+                    left: 15,
+                  }}
+                />
+              )}
             </FlexContainer>
           </StackedChartContainer>
-          <FlexContainer withBorder gridArea="mainChart" pos="relative" marginTop={3}>
-            <FlexContainer absPos top={0} left={isLS && space[3]} right={!isLS && space[3]} >
-              <CheckBoxLabel
-                control={
-                  <ChartCheckBox
-                    checked={isWithTotal}
-                    onChange={() => setIsWithTotal(prev => !prev)}
-                  />
-                }
-                label={TEXT.checkBox[language]}
+          <FlexContainer
+            withBorder
+            gridArea="mainChart"
+            pos="relative"
+            marginTop={3}
+          >
+            <FlexContainer
+              absPos
+              top={0}
+              left={isLS && space[3]}
+              right={!isLS && space[3]}
+            >
+              <CheckBox
+                setIsChecked={setIsWithTotal}
+                isChecked={isWithTotal}
+                labelText={TEXT.checkBox[language]}
                 labelPlacement={isLS ? "end" : "start"}
               />
             </FlexContainer>
