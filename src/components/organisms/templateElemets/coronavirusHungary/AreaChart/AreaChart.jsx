@@ -4,7 +4,13 @@ import { scaleLinear } from "d3-scale"
 import { axisLeft, axisBottom, axisRight } from "d3-axis"
 import chroma from "chroma-js"
 
-import { ChartWrapper, ChartSvg, ChartArea, AxisLine } from "../../../../atoms"
+import {
+  ChartWrapper,
+  ChartSvg,
+  ChartArea,
+  AxisLine,
+  FlexContainer,
+} from "../../../../atoms"
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
 import { space, transition, colors } from "../../../../../themes/theme"
 import { makeAreaData } from "../utils/dataHelpers"
@@ -12,9 +18,12 @@ import { area, curveCatmullRom } from "d3-shape"
 import {
   lowOpacity,
   lowestOpacity,
+  chartColors,
+  TEXT,
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { interpolatePath } from "d3-interpolate-path"
+import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io"
 
 export default function AreaChart({
   margin,
@@ -22,7 +31,7 @@ export default function AreaChart({
   language,
   averages,
   fullListDomain,
-  color,
+  accessor,
 }) {
   const { svgRef, wrapperRef, areaRef, xAxisRef, yAxisRef } = useChartRefs()
   const storedValues = useRef()
@@ -33,8 +42,6 @@ export default function AreaChart({
   const [init, setInit] = useState(false)
   const prevData = usePrevious(data)
   const prevAverages = usePrevious(averages)
-  const [areaDataSets, setAreaDataSets] = useState({})
-  const prevAreaDataSets = usePrevious(areaDataSets)
 
   useEffect(() => {
     function createUpdateArea() {
@@ -50,8 +57,8 @@ export default function AreaChart({
         chartArea
           .append("path")
           .datum(areaData)
-          .attr("fill", chroma(color).alpha(lowOpacity))
-          .attr("stroke", color)
+          .attr("fill", chroma(chartColors[accessor]).alpha(lowOpacity))
+          .attr("stroke", chartColors[accessor])
           .attr("d", areaGenerator)
       }
       if (init) {
@@ -135,37 +142,19 @@ export default function AreaChart({
     fullListDomain,
     dims,
     areaRef,
-    color,
     yAxisRef,
     xAxisRef,
+    accessor,
   ])
-
-  useEffect(() => {})
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
-      {/* <FlexContainer
-        absPos
-        left={dims.width / 2 - (language === "hu" ? 50 : 54)}
-        top={-space[3]}
-        fontSize={2}
-        direction="column"
-        zIndex="hoverOverlay"
-      >
-        <FlexContainer>
-          <Container paddingTop={1}>
-            <IoMdArrowDropleft />
-          </Container>
-          {TEXT.chartAxisNumber[language]}
-          <Container paddingTop={1}>
-            <IoMdArrowDropright />
-          </Container>
-        </FlexContainer>
-        <FlexContainer direction="column">
-          {TEXT.tooltipAge[language]}
-          <IoMdArrowDropdown />
-        </FlexContainer>
-      </FlexContainer> */}
+      <FlexContainer absPos top={2} left={margin.left + 1}>
+        {TEXT.chartAxisNumber[language]}
+      </FlexContainer>
+      <FlexContainer absPos bottom={6} left={margin.left + 1}>
+        {TEXT.tooltipAge[language]}
+      </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
           areaRef={areaRef}

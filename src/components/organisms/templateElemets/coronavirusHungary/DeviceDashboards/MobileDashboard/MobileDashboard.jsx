@@ -29,7 +29,7 @@ const MainGrid = styled(GridContainer)`
     orientation === "landscape"
       ? css`
           grid-template-columns: repeat(5, 1fr);
-          grid-template-rows: min-content 120px 150px 280px;
+          grid-template-rows: min-content 120px 150px 320px;
           grid-template-areas:
             "title title title source source"
             "total slider slider slider slider"
@@ -285,7 +285,7 @@ function MobileDashboard({
                   }
                   fullListDomain={fullListDomain}
                   language={language}
-                  color={chartColors.female}
+                  accessor="female"
                 />
                 <AreaChart
                   key="maleArea"
@@ -297,7 +297,7 @@ function MobileDashboard({
                   }
                   language={language}
                   fullListDomain={fullListDomain}
-                  color={chartColors.male}
+                  accessor="male"
                 />
               </GridContainer>
             )}
