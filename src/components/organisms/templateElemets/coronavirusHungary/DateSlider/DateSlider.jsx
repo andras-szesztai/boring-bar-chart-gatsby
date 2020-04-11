@@ -41,7 +41,7 @@ export default function DateSlider({
   currDate,
   justify,
   sliderColumns,
-  sliderRows
+  sliderRows,
 }) {
   const containerRef = useRef()
   const scrollPosition = useScrollPosition()
@@ -49,11 +49,14 @@ export default function DateSlider({
   const [containerPosition, setContainerPosition] = useState(undefined)
   useEffect(() => {
     if (!containerPosition && containerRef.current) {
-      setContainerPosition(containerRef.current.getBoundingClientRect().top)
+      setContainerPosition(containerRef.current.getBoundingClientRect())
     }
   }, [containerPosition])
   const isBelowPosition =
-    !loading && isSticky && containerPosition < scrollPosition
+    !loading &&
+    isSticky &&
+    containerPosition &&
+    containerPosition.top < scrollPosition
 
   return (
     <GridContainer
@@ -82,7 +85,12 @@ export default function DateSlider({
       >
         {currDate && format(currDate, TEXT.dateFormatLong[language])}
       </FlexContainer>
-      <GridContainer rowGap={0} columnGap={2} columns={sliderColumns} rows={sliderRows}>
+      <GridContainer
+        rowGap={0}
+        columnGap={2}
+        columns={sliderColumns}
+        rows={sliderRows}
+      >
         <FlexContainer
           whiteSpace="nowrap"
           fontSize={fontSize}
@@ -90,7 +98,7 @@ export default function DateSlider({
         >
           {TEXT.dateSlider[language]}:
         </FlexContainer>
-        <FlexContainer fullSize >
+        <FlexContainer fullSize>
           {dates.max && (
             <DSlider
               defaultValue={0}

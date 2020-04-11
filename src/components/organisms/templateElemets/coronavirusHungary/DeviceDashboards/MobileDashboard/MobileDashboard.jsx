@@ -28,7 +28,7 @@ const MainGrid = styled(GridContainer)`
     orientation === "landscape"
       ? css`
           grid-template-columns: repeat(5, 1fr);
-          grid-template-rows: min-content 120px 150px 250px;
+          grid-template-rows: min-content 120px 150px 280px;
           grid-template-areas:
             "title title title source source"
             "total slider slider slider slider"
@@ -136,7 +136,7 @@ function MobileDashboard({
             fontSize={2}
             extraPadding={!isLS && 4}
             extraPaddingRight={isLS && 2}
-            isSticky={!isLS}
+            isSticky
             loading={loading}
             dateFontSize={3}
             currDate={dates.currDate}
@@ -259,13 +259,18 @@ function MobileDashboard({
               )}
             </FlexContainer>
           </StackedChartContainer>
-          <FlexContainer gridArea="mainChart" pos="relative" marginTop={6}>
-            {!isLS && (
+          <FlexContainer gridArea="mainChart" pos="relative" marginTop={!isLS ? 6 : 2}>
+            {!isLS ? (
               <VerticalDoubleAreaChart
                 data={filteredData}
                 language={language}
                 averages={averages}
               />
+            ) : (
+              <GridContainer fullSize rows="repeat(2, 1fr)">
+                <FlexContainer withBorder/>
+                <FlexContainer withBorder/>
+              </GridContainer>
             )}
           </FlexContainer>
           <ScrollHint opacity={lowOpacity} size={50} />
