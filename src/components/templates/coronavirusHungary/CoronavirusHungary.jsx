@@ -73,18 +73,16 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   })
   const prevDates = usePrevious(dates)
 
-  console.log(averages)
-
   useEffect(() => {
     if (data && !formattedData) {
       const formattedData = makeFormattedData({ data, isHu: true })
       const maxDate = _.maxBy(formattedData, "date").date
       const minDate = _.minBy(formattedData, "date").date
       const dateDiff = differenceInDays(minDate, maxDate)
+      setAverages(makeAverages(formattedData, language))
       setFormattedData(formattedData)
       setFilteredData(formattedData)
       setNumbers(makeNumbers(formattedData, language))
-      setAverages(makeAverages(formattedData, language))
       setDates({
         diff: dateDiff,
         max: maxDate,
@@ -110,6 +108,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       const filteredData = formattedData.filter(
         ({ date }) => date.getTime() <= dates.currDate.getTime()
       )
+      setAverages(makeAverages(filteredData, language))
       setFilteredData(filteredData)
       setNumbers(makeNumbers(filteredData, language))
     }
@@ -165,6 +164,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           language={language}
           setLanguage={setLanguage}
           numbers={numbers}
+          averages={averages}
           dates={dates}
           setDates={setDates}
           filteredData={filteredData}

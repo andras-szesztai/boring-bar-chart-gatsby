@@ -28,7 +28,10 @@ import {
 import { space, colors, transition } from "../../../../../../themes/theme"
 import { area, curveCatmullRom } from "d3-shape"
 import { interpolatePath } from "d3-interpolate-path"
-import { makeTransition } from "../../../../../../utils/chartHelpers"
+import {
+  makeTransition,
+  numberTween,
+} from "../../../../../../utils/chartHelpers"
 import {
   IoMdArrowDropdown,
   IoMdArrowDropright,
@@ -47,7 +50,12 @@ const makeAreaData = (data, fullList) => {
 
 const ticksDividerX = 75
 
-export default function VerticalDoubleAreaChart({ margin, data, language }) {
+export default function VerticalDoubleAreaChart({
+  margin,
+  data,
+  language,
+  averages,
+}) {
   const { svgRef, wrapperRef, yAxisRef } = useChartRefs()
   const storedValues = useRef()
   const leftArea = useRef()
@@ -62,8 +70,11 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
   })
   const [init, setInit] = useState(false)
   const prevData = usePrevious(data)
+  const prevAverages = usePrevious(averages)
   const [areaDataSets, setAreaDataSets] = useState({})
   const prevAreaDataSets = usePrevious(areaDataSets)
+  const leftLeft = dims.width / 2 - space[3]
+  const rightLeft = dims.width / 2 + space[3]
 
   useEffect(() => {
     const setDataSets = () => {
@@ -304,31 +315,91 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       select(yAxisRef.current).raise()
     }
 
-    function createUpdateAvgLines({ isInit }) {
-      const { yScale, xScaleLeft, xScaleRight } = storedValues.current
+    function createUpdateAvgLines(isInit) {
+      const { yScale, xRangeMax } = storedValues.current
       const leftChartArea = select(leftArea.current)
       const rightChartArea = select(rightArea.current)
       const yAxis = select(yAxisRef.current)
+      const textWith = 22
 
-      const createUpdateLine = ({ area, className, pos , color}) => {
+      const createUpdateLine = ({ area, accessor, pos, withText }) => {
+        const t = makeTransition(area, transition.lgNum, "update")
+        const setY = yScale(averages[accessor])
+        const getTween = (d, i, n) =>
+          numberTween({
+            value: +averages[accessor],
+            prevValue: +prevAverages[accessor],
+            i,
+            n,
+            numberFormat: ".3n",
+          })
         if (isInit) {
           area
-          .append("line")
-          .attr("class", `ref-line ref-${className}`)
-          .attr("y1", pos.y1)
-          .attr("y2", pos.y2)
-          .attr("x1",pos.x1)
-          .attr("x2", pos.x2)
-          .attr("stroke", color)
+            .append("line")
+            .attr("class", `ref-line ref-${accessor}`)
+            .attr("y1", setY)
+            .attr("y2", setY)
+            .attr("x1", pos.x1)
+            .attr("x2", pos.x2)
+            .attr("stroke", chartColors[accessor])
+          if (withText) {
+            area
+              .append("text")
+              .attr("class", `ref-text-${accessor}`)
+              .attr("y", setY)
+              .attr("dy", space[1])
+              .attr("x", withText.x)
+              .attr("text-anchor", withText.anchor)
+              .attr("fill", chartColors[accessor])
+              .text(averages[accessor].toFixed(1))
+          }
+          return
+        }
+        area
+          .select(`.ref-${accessor}`)
+          .transition(t)
+          .attr("y1", setY)
+          .attr("y2", setY)
+        if (withText) {
+          area
+            .select(`.ref-text-${accessor}`)
+            .transition(t)
+            .attr("y", setY)
+            .tween("text", getTween)
         }
       }
-      // createUpdateLine({
-      //   area: leftArea,
-      //   className: "female",
-      //   pos: {
-      //     y1: yScale
-      //   }
-      // })
+      createUpdateLine({
+        area: leftChartArea,
+        accessor: "female",
+        pos: {
+          x1: 0,
+          x2: -(xRangeMax - textWith),
+        },
+        withText: {
+          x: -xRangeMax,
+          anchor: "start",
+        },
+      })
+      createUpdateLine({
+        area: rightChartArea,
+        accessor: "male",
+        pos: {
+          x1: 0,
+          x2: xRangeMax - textWith,
+        },
+        withText: {
+          x: xRangeMax,
+          anchor: "end",
+        },
+      })
+      createUpdateLine({
+        area: yAxis,
+        accessor: "total",
+        pos: {
+          x1: -space[3],
+          x2: space[3],
+        },
+      })
     }
 
     if (!init && areaDataSets.female) {
@@ -370,7 +441,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
         accessor: "male",
         isInit: true,
       })
-      createUpdateAvgLines({})
+      createUpdateAvgLines(true)
       setInit(true)
     }
 
@@ -389,11 +460,22 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
         data: areaDataSets.male,
         accessor: "male",
       })
+      createUpdateAvgLines()
     }
-  }, [areaDataSets, data, dims, init, prevAreaDataSets, svgRef, yAxisRef])
+  }, [
+    areaDataSets,
+    averages,
+    data,
+    dims,
+    init,
+    leftLeft,
+    prevAreaDataSets,
+    prevAverages,
+    rightLeft,
+    svgRef,
+    yAxisRef,
+  ])
 
-  const leftLeft = dims.width / 2 - space[3]
-  const rightLeft = dims.width / 2 + space[3]
   return (
     <ChartWrapper areaRef={wrapperRef}>
       <FlexContainer

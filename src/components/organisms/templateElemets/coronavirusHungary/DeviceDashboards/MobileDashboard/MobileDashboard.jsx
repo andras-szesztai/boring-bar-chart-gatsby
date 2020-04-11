@@ -97,9 +97,9 @@ function MobileDashboard({
   setDates,
   filteredData,
   loading,
+  averages
 }) {
   const orientation = useOrientation({ isLandscape, isPortrait })
-  const [isWithTotal, setIsWithTotal] = useState(false)
   const isLS = orientation === "landscape"
 
   return (
@@ -264,6 +264,7 @@ function MobileDashboard({
               <VerticalDoubleAreaChart
                 data={filteredData}
                 language={language}
+                averages={averages}
               />
             )}
           </FlexContainer>
