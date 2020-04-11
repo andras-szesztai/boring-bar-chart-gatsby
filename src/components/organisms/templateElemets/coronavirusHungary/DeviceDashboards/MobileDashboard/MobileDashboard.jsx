@@ -2,29 +2,30 @@ import React, { useState } from "react"
 import styled, { css } from "styled-components"
 import { MobileOnlyView, withOrientationChange } from "react-device-detect"
 
-import { useOrientation } from "../../../../../hooks"
-import { FlexContainer, GridContainer } from "../../../../atoms"
-import { FullScreenLoader, ScrollHint } from "../../../../molecules"
+import { useOrientation } from "../../../../../../hooks"
+import { FlexContainer, GridContainer } from "../../../../../atoms"
+import { FullScreenLoader, ScrollHint } from "../../../../../molecules"
 import {
   TEXT,
   chartColors,
   lowOpacity,
-} from "../../../../../constants/visualizations/coronavirusHungary"
-import SwitchContainer from "../SwitchContainer/SwitchContainer"
-import SourceLink from "../SourceLink/SourceLink"
+} from "../../../../../../constants/visualizations/coronavirusHungary"
+import SwitchContainer from "../../SwitchContainer/SwitchContainer"
+import SourceLink from "../../SourceLink/SourceLink"
 import {
   space,
   colors,
   fontFamily,
   fontSize,
   fontWeight,
-} from "../../../../../themes/theme"
-import BanContainer from "../BanContainer/BanContainer"
-import DateSlider from "../DateSlider/DateSlider"
-import HorizontalBarChart from "../HorizontalBarChart/HorizontalBarChart"
-import Number from "../Number/Number"
-import StackedBarChart from "../StackedBarChart/StackedBarChart"
-import CheckBox from "../CheckBox/CheckBox"
+} from "../../../../../../themes/theme"
+import BanContainer from "../../BanContainer/BanContainer"
+import DateSlider from "../../DateSlider/DateSlider"
+import HorizontalBarChart from "../../HorizontalBarChart/HorizontalBarChart"
+import Number from "../../Number/Number"
+import StackedBarChart from "../../StackedBarChart/StackedBarChart"
+import CheckBox from "../../CheckBox/CheckBox"
+import { VerticalDoubleAreaChart } from "../../DoubleAreaChart"
 
 const MainGrid = styled(GridContainer)`
   margin-top: ${space[2]}px;
@@ -125,7 +126,7 @@ function MobileDashboard({
             gridArea="source"
             justify={isLS ? "space-evenly" : "space-around"}
             align={isLS && "flex-end"}
-            direction={isLS && "column"}
+            direction={isLS ? "column" : "row"}
           >
             <SourceLink paddingBottom={1} fontSize={1} language={language} />
             <SwitchContainer
@@ -270,6 +271,7 @@ function MobileDashboard({
                 labelPlacement={isLS ? "end" : "start"}
               />
             </FlexContainer>
+            {!isLS && <VerticalDoubleAreaChart data={filteredData} />}
           </FlexContainer>
           <ScrollHint opacity={lowOpacity} size={50} />
         </MainGrid>
