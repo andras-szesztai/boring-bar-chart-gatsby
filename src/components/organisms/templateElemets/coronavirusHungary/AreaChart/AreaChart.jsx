@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import _ from "lodash"
 import { select } from "d3-selection"
 import { scaleLinear } from "d3-scale"
-import { max, min } from "d3-array"
+import { max, min, extent } from "d3-array"
 import { axisLeft, axisTop, axisBottom } from "d3-axis"
 import chroma from "chroma-js"
 
@@ -18,7 +18,13 @@ import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
 import { space } from "../../../../../themes/theme"
 import { makeAreaData } from "../utils/dataHelpers"
 
-export default function AreaChart({ margin, data, language, averages }) {
+export default function AreaChart({
+  margin,
+  data,
+  language,
+  averages,
+  fullListDomain,
+}) {
   const { svgRef, wrapperRef, areaRef } = useChartRefs()
   const storedValues = useRef()
   const dims = useDimensions({
@@ -32,10 +38,18 @@ export default function AreaChart({ margin, data, language, averages }) {
   const prevAreaDataSets = usePrevious(areaDataSets)
 
   useEffect(() => {
-    if(!init && data){
-      // const areaData = makeAreaData(data, )
+    if (!init && data) {
+      const areaData = makeAreaData(data, fullListDomain.fullAgeList)
+      const xScale = scaleLinear()
+        .range([0, dims.chartWidth])
+        .domain(fullListDomain.fullAgeDomain)
+      const yScale = scaleLinear()
+        .range([0, dims.chartHeight])
+        .domain([fullListDomain.maxNumber, 0])
     }
-    
+    if (init && prevData.length !== data.length) {
+      const areaData = makeAreaData(data, fullListDomain.fullList)
+    }
   })
 
   useEffect(() => {})

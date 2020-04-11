@@ -14,6 +14,10 @@ import {
 } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
 import SwitchContainer from "../../organisms/templateElemets/coronavirusHungary/SwitchContainer/SwitchContainer"
 import { min, max } from "d3-array"
+import {
+  makeAreaData,
+  filterGender,
+} from "../../organisms/templateElemets/coronavirusHungary/utils/dataHelpers"
 
 function makeNumbers(array, lan) {
   return {
@@ -81,16 +85,34 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       const maxDate = _.maxBy(formattedData, "date").date
       const minDate = _.minBy(formattedData, "date").date
       const dateDiff = differenceInDays(minDate, maxDate)
-      const fullDomain = [
+      const fullAgeDomain = [
         min(formattedData, ({ age }) => age) - 2,
         max(formattedData, ({ age }) => age) + 2,
-      ]
-      const fullList = []
-      for (var i = fullDomain[0]; i <= fullDomain[1]; i++) {
-        fullList.push(i)
+      ].sort()
+      const fullAgeList = []
+      for (var i = fullAgeDomain[0]; i <= fullAgeDomain[1]; i++) {
+        fullAgeList.push(i)
       }
+      const maxNumber = max([
+        ...makeAreaData(
+          filterGender({
+            accessor: "accessorF",
+            language,
+            data: formattedData,
+          }),
+          fullAgeList
+        ).map(({ number }) => number),
+        ...makeAreaData(
+          filterGender({
+            accessor: "accessorM",
+            language,
+            data: formattedData,
+          }),
+          fullAgeList
+        ).map(({ number }) => number),
+      ])
       setAverages(makeAverages(formattedData, language))
-      setFullListDomain({ fullDomain, fullList })
+      setFullListDomain({ fullAgeDomain, fullAgeList, maxNumber })
       setFormattedData(formattedData)
       setFilteredData(formattedData)
       setNumbers(makeNumbers(formattedData, language))

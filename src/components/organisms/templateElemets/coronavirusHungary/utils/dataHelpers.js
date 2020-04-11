@@ -1,4 +1,5 @@
 import _ from "lodash"
+import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 
 export const makeAreaData = (data, fullList) => {
   const grouped = _.groupBy(data, "age")
@@ -8,3 +9,6 @@ export const makeAreaData = (data, fullList) => {
   }))
   return newData
 }
+
+export const filterGender = ({ accessor, data, language }) =>
+  data.filter(({ gender }) => gender === TEXT[accessor][language])

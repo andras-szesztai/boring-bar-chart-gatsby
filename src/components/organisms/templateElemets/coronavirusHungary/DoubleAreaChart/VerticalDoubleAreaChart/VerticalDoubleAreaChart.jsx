@@ -73,11 +73,11 @@ export default function VerticalDoubleAreaChart({
       setAreaDataSets({
         female: makeAreaData(
           data.filter(({ gender }) => gender === TEXT.accessorF[language]),
-          fullListDomain.fullList
+          fullListDomain.fullAgeList
         ),
         male: makeAreaData(
           data.filter(({ gender }) => gender === TEXT.accessorM[language]),
-          fullListDomain.fullList
+          fullListDomain.fullAgeList
         ),
       })
     }
@@ -393,7 +393,7 @@ export default function VerticalDoubleAreaChart({
       const xRangeMax = dims.width / 2 - space[5]
       const yScale = scaleLinear()
         .range([0, dims.chartHeight])
-        .domain(fullListDomain.fullDomain)
+        .domain(fullListDomain.fullAgeDomain)
       const xScaleLeft = scaleLinear()
         .domain(xDomain)
         .range([0, -xRangeMax])
