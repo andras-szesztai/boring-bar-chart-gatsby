@@ -44,6 +44,8 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
   const leftArea = useRef()
   const rightArea = useRef()
   const rightGridArea = useRef()
+  const leftAxisAreaBottom = useRef()
+  const rightAxisAreaBottom = useRef()
   const leftGridArea = useRef()
   const dims = useDimensions({
     ref: wrapperRef,
@@ -69,7 +71,6 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       }
       const { fullList } = storedValues.current
       setAreaDataSets({
-        total: makeAreaData(data, fullList),
         female: makeAreaData(
           data.filter(({ gender }) => gender === TEXT.accessorF[language]),
           fullList
@@ -80,14 +81,14 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
         ),
       })
     }
-    if (!!prevData && !!data && !areaDataSets.total) {
+    if (!!prevData && !!data && !areaDataSets.female) {
       setDataSets()
       return
     }
     if (!!prevData && prevData.length !== data.length) {
       setDataSets()
     }
-  }, [prevData, data, language, areaDataSets.total])
+  }, [prevData, data, language, areaDataSets])
 
   useEffect(() => {
     function createUpdateAxisLabels() {
@@ -113,6 +114,29 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       select(leftArea.current)
         .call(
           axisTop(xScaleLeft)
+            .ticks(xRangeMax / 50)
+            .tickSizeInner(space[1])
+            .tickSizeOuter(0)
+        )
+        .call(g => g.select(".tick line").remove())
+        .call(g => g.select(".tick text").remove())
+        .call(g =>
+          g
+            .select(".domain")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        )
+        .call(g => g.selectAll(".tick text").attr("fill", colors.grayDarkest))
+        .call(g =>
+          g
+            .selectAll(".tick line")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        )
+
+      select(leftAxisAreaBottom.current)
+        .call(
+          axisBottom(xScaleLeft)
             .ticks(xRangeMax / 50)
             .tickSizeInner(space[1])
             .tickSizeOuter(0)
@@ -202,6 +226,29 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
             .attr("stroke-width", 0.5)
         )
 
+      select(rightAxisAreaBottom.current)
+        .call(
+          axisBottom(xScaleRight)
+            .ticks(xRangeMax / 50)
+            .tickSizeInner(space[1])
+            .tickSizeOuter(0)
+        )
+        .call(g => g.select(".tick line").remove())
+        .call(g => g.select(".tick text").remove())
+        .call(g =>
+          g
+            .select(".domain")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        )
+        .call(g => g.selectAll(".tick text").attr("fill", colors.grayDarkest))
+        .call(g =>
+          g
+            .selectAll(".tick line")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        )
+
       select(rightGridArea.current)
         .call(
           axisBottom(xScaleRight)
@@ -247,10 +294,16 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       }
       select(yAxisRef.current).raise()
     }
-    
-    if (!init && areaDataSets.total) {
+
+    if (!init && areaDataSets.female) {
       const { fullDomain } = storedValues.current
-      const xDomain = [0, max(areaDataSets.total, ({ number }) => number)]
+      const xDomain = [
+        0,
+        max(
+          [...areaDataSets.female, ...areaDataSets.male],
+          ({ number }) => number
+        ),
+      ]
       const xRangeMax = dims.width / 2 - space[5]
       const yScale = scaleLinear()
         .range([0, dims.chartHeight])
@@ -287,9 +340,9 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
     if (
       init &&
       prevAreaDataSets &&
-      prevAreaDataSets.total &&
-      _.sumBy(areaDataSets.total, "number") !==
-        _.sumBy(prevAreaDataSets.total, "number")
+      prevAreaDataSets.female &&
+      _.sumBy(areaDataSets.female, "number") !==
+        _.sumBy(prevAreaDataSets.female, "number")
     ) {
       createUpdateAreaLeft({
         data: areaDataSets.female,
@@ -302,6 +355,8 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
     }
   }, [areaDataSets, data, dims, init, prevAreaDataSets, svgRef, yAxisRef])
 
+  const leftLeft = dims.width / 2 - space[3]
+  const rightLeft = dims.width / 2 + space[3]
   return (
     <ChartWrapper areaRef={wrapperRef}>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
@@ -334,23 +389,33 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
         </ChartArea>
         <ChartArea
           areaRef={leftArea}
-          marginLeft={dims.width / 2 - space[3]}
+          marginLeft={leftLeft}
           marginTop={margin.top}
         />
         <ChartArea
           areaRef={leftGridArea}
-          marginLeft={dims.width / 2 - space[3]}
+          marginLeft={leftLeft}
           marginTop={margin.top}
         />
         <ChartArea
+          areaRef={leftAxisAreaBottom}
+          marginLeft={leftLeft}
+          marginTop={margin.top + dims.chartHeight}
+        />
+        <ChartArea
           areaRef={rightArea}
-          marginLeft={dims.width / 2 + space[3]}
+          marginLeft={rightLeft}
           marginTop={margin.top}
         />
         <ChartArea
           areaRef={rightGridArea}
-          marginLeft={dims.width / 2 + space[3]}
+          marginLeft={rightLeft}
           marginTop={margin.top}
+        />
+        <ChartArea
+          areaRef={rightAxisAreaBottom}
+          marginLeft={rightLeft}
+          marginTop={margin.top + dims.chartHeight}
         />
       </ChartSvg>
     </ChartWrapper>
@@ -358,5 +423,5 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
 }
 
 VerticalDoubleAreaChart.defaultProps = {
-  margin: { top: 25, right: 5, bottom: 10, left: 5 },
+  margin: { top: 25, right: 5, bottom: 25, left: 5 },
 }

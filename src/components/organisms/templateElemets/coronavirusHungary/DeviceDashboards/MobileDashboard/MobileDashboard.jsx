@@ -12,19 +12,12 @@ import {
 } from "../../../../../../constants/visualizations/coronavirusHungary"
 import SwitchContainer from "../../SwitchContainer/SwitchContainer"
 import SourceLink from "../../SourceLink/SourceLink"
-import {
-  space,
-  colors,
-  fontFamily,
-  fontSize,
-  fontWeight,
-} from "../../../../../../themes/theme"
+import { space, fontSize, fontWeight } from "../../../../../../themes/theme"
 import BanContainer from "../../BanContainer/BanContainer"
 import DateSlider from "../../DateSlider/DateSlider"
 import HorizontalBarChart from "../../HorizontalBarChart/HorizontalBarChart"
 import Number from "../../Number/Number"
 import StackedBarChart from "../../StackedBarChart/StackedBarChart"
-import CheckBox from "../../CheckBox/CheckBox"
 import { VerticalDoubleAreaChart } from "../../DoubleAreaChart"
 
 const MainGrid = styled(GridContainer)`
@@ -46,7 +39,7 @@ const MainGrid = styled(GridContainer)`
           grid-template-columns: 1fr;
           grid-template-rows:
             min-content 75px 120px 80px 270px 175px
-            650px;
+            680px;
           grid-template-areas:
             "title"
             "source"
