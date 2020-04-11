@@ -276,7 +276,7 @@ function MobileDashboard({
             ) : (
               <GridContainer fullSize rows="repeat(2, 1fr)">
                 <AreaChart
-                  key="maleArea"
+                  key="femaleArea"
                   data={
                     filteredData &&
                     filteredData.filter(
@@ -285,9 +285,10 @@ function MobileDashboard({
                   }
                   fullListDomain={fullListDomain}
                   language={language}
+                  color={chartColors.female}
                 />
                 <AreaChart
-                  key="male"
+                  key="maleArea"
                   data={
                     filteredData &&
                     filteredData.filter(
@@ -296,6 +297,7 @@ function MobileDashboard({
                   }
                   language={language}
                   fullListDomain={fullListDomain}
+                  color={chartColors.male}
                 />
               </GridContainer>
             )}

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import _ from "lodash"
 import { select } from "d3-selection"
 import { scaleLinear } from "d3-scale"
-import { max, min } from "d3-array"
+import { max } from "d3-array"
 import { axisLeft, axisTop, axisBottom } from "d3-axis"
 import chroma from "chroma-js"
 
