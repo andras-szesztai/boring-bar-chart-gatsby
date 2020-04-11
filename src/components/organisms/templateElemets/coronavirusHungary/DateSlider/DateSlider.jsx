@@ -73,8 +73,12 @@ export default function DateSlider({
       }
       bgColor="#FFFFFF"
       withDropShadow={isBelowPosition}
-      paddingRight={extraPaddingRight || extraPadding}
-      paddingLeft={extraPaddingLeft || extraPadding}
+      paddingRight={
+        isBelowPosition && extraPaddingLeft
+          ? 3
+          : extraPaddingRight || extraPadding
+      }
+      paddingLeft={isBelowPosition ? 3 : (extraPaddingLeft || extraPadding)}
       zIndex={isBelowPosition && "overlay"}
       rows="repeat(2, 1fr)"
     >

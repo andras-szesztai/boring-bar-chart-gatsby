@@ -142,7 +142,7 @@ function MobileDashboard({
             currDate={dates.currDate}
             fontWeight="ultraLight"
             justify={isLS ? "flex-start" : "center"}
-            extraPaddingLeft={isLS && 4}
+            extraPaddingLeft={isLS && 5}
             paddingBottom={isLS && 2}
             sliderColumns={isLS && "min-content 1fr"}
             sliderRows={!isLS && "repeat(2, 1fr)"}
@@ -183,9 +183,9 @@ function MobileDashboard({
                   data={numbers}
                   margin={{
                     top: 5,
-                    right: 20,
+                    right: 25,
                     bottom: 5,
-                    left: 22,
+                    left: 30,
                   }}
                 />
               ) : (
