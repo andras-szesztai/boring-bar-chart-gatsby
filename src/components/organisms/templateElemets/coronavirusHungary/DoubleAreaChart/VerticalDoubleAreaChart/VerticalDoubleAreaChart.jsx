@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import _ from "lodash"
 import { select } from "d3-selection"
 import { scaleLinear } from "d3-scale"
-import { extent, max, min } from "d3-array"
+import { max, min } from "d3-array"
 import { axisLeft, axisTop, axisBottom } from "d3-axis"
 import chroma from "chroma-js"
 
@@ -11,6 +11,8 @@ import {
   ChartSvg,
   ChartArea,
   AxisLine,
+  FlexContainer,
+  Container,
 } from "../../../../../atoms"
 import {
   useChartRefs,
@@ -27,6 +29,11 @@ import { space, colors, transition } from "../../../../../../themes/theme"
 import { area, curveCatmullRom } from "d3-shape"
 import { interpolatePath } from "d3-interpolate-path"
 import { makeTransition } from "../../../../../../utils/chartHelpers"
+import {
+  IoMdArrowDropdown,
+  IoMdArrowDropright,
+  IoMdArrowDropleft,
+} from "react-icons/io"
 
 const makeAreaData = (data, fullList) => {
   const grouped = _.groupBy(data, "age")
@@ -37,6 +44,8 @@ const makeAreaData = (data, fullList) => {
 
   return newData
 }
+
+const ticksDividerX = 75
 
 export default function VerticalDoubleAreaChart({ margin, data, language }) {
   const { svgRef, wrapperRef, yAxisRef } = useChartRefs()
@@ -114,7 +123,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       select(leftArea.current)
         .call(
           axisTop(xScaleLeft)
-            .ticks(xRangeMax / 50)
+            .ticks(xRangeMax / ticksDividerX)
             .tickSizeInner(space[1])
             .tickSizeOuter(0)
         )
@@ -137,7 +146,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       select(leftAxisAreaBottom.current)
         .call(
           axisBottom(xScaleLeft)
-            .ticks(xRangeMax / 50)
+            .ticks(xRangeMax / ticksDividerX)
             .tickSizeInner(space[1])
             .tickSizeOuter(0)
         )
@@ -160,7 +169,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       select(leftGridArea.current)
         .call(
           axisBottom(xScaleLeft)
-            .ticks((dims.width / 2 - space[5]) / 50)
+            .ticks(xRangeMax / ticksDividerX)
             .tickSizeInner(dims.chartHeight)
             .tickSizeOuter(0)
         )
@@ -206,7 +215,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       select(rightArea.current)
         .call(
           axisTop(xScaleRight)
-            .ticks(xRangeMax / 50)
+            .ticks(xRangeMax / ticksDividerX)
             .tickSizeInner(space[1])
             .tickSizeOuter(0)
         )
@@ -229,7 +238,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       select(rightAxisAreaBottom.current)
         .call(
           axisBottom(xScaleRight)
-            .ticks(xRangeMax / 50)
+            .ticks(xRangeMax / ticksDividerX)
             .tickSizeInner(space[1])
             .tickSizeOuter(0)
         )
@@ -252,7 +261,7 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
       select(rightGridArea.current)
         .call(
           axisBottom(xScaleRight)
-            .ticks((dims.width / 2 - space[5]) / 50)
+            .ticks(xRangeMax / ticksDividerX)
             .tickSizeInner(dims.chartHeight)
             .tickSizeOuter(0)
         )
@@ -359,6 +368,28 @@ export default function VerticalDoubleAreaChart({ margin, data, language }) {
   const rightLeft = dims.width / 2 + space[3]
   return (
     <ChartWrapper areaRef={wrapperRef}>
+      <FlexContainer
+        absPos
+        left={dims.width / 2 - 50}
+        top={-space[3]}
+        fontSize={2}
+        direction="column"
+        zIndex="hoverOverlay"
+      >
+        <FlexContainer>
+          <Container paddingTop={1}>
+            <IoMdArrowDropleft />
+          </Container>
+          {TEXT.chartAxisNumber[language]}
+          <Container paddingTop={1}>
+            <IoMdArrowDropright />
+          </Container>
+        </FlexContainer>
+        <FlexContainer direction="column">
+          {TEXT.tooltipAge[language]}
+          <IoMdArrowDropdown />
+        </FlexContainer>
+      </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
           areaRef={yAxisRef}

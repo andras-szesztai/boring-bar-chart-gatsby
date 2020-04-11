@@ -99,6 +99,10 @@ export const TEXT = {
     hu: "Életkor",
     en: "Age",
   },
+  chartAxisNumber: {
+    hu: "Elhunytak száma",
+    en: "Number of deaths",
+  }, 
   tooltipYear: {
     hu: "év",
     en: "years",

@@ -177,15 +177,29 @@ function MobileDashboard({
               justify={isLS ? "flex-start" : "center"}
             />
             <FlexContainer gridArea="barC">
-              <HorizontalBarChart
-                data={numbers}
-                margin={{
-                  top: isLS ? 5 : 10,
-                  right: isLS ? 20 : 10,
-                  bottom: isLS ? 5 : 10,
-                  left: isLS ? 22 : 10,
-                }}
-              />
+              {isLS ? (
+                <HorizontalBarChart
+                  key="ls"
+                  data={numbers}
+                  margin={{
+                    top: 5,
+                    right: 20,
+                    bottom: 5,
+                    left: 22,
+                  }}
+                />
+              ) : (
+                <HorizontalBarChart
+                  key="pt"
+                  data={numbers}
+                  margin={{
+                    top: 10,
+                    right: 10,
+                    bottom: 10,
+                    left: 10,
+                  }}
+                />
+              )}
             </FlexContainer>
           </BarChartContainer>
           <StackedChartContainer
@@ -245,7 +259,7 @@ function MobileDashboard({
               )}
             </FlexContainer>
           </StackedChartContainer>
-          <FlexContainer gridArea="mainChart" pos="relative" marginTop={3}>
+          <FlexContainer gridArea="mainChart" pos="relative" marginTop={6}>
             {!isLS && (
               <VerticalDoubleAreaChart
                 data={filteredData}
