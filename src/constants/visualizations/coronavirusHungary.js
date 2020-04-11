@@ -65,6 +65,10 @@ export const TEXT = {
     hu: "Férfi",
     en: "Male",
   },
+  accessorM: {
+    hu: "Férfi",
+    en: "Male",
+  },
   genderPerc: {
     hu: "Nemek százalékos megoszlása",
     en: "Gender distribution",

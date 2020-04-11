@@ -260,7 +260,7 @@ function MobileDashboard({
           >
             <FlexContainer
               absPos
-              top={0}
+              top={isLS ? 0 : space[5]}
               left={isLS && space[3]}
               right={!isLS && space[3]}
             >
@@ -271,7 +271,12 @@ function MobileDashboard({
                 labelPlacement={isLS ? "end" : "start"}
               />
             </FlexContainer>
-            {!isLS && <VerticalDoubleAreaChart data={filteredData} />}
+            {!isLS && (
+              <VerticalDoubleAreaChart
+                data={filteredData}
+                language={language}
+              />
+            )}
           </FlexContainer>
           <ScrollHint opacity={lowOpacity} size={50} />
         </MainGrid>
