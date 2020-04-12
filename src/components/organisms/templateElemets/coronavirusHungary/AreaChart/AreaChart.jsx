@@ -156,7 +156,7 @@ export default function AreaChart({
       )
       formatAxis(select(areaRef.current), true, true)
     }
-    if (!init && data) {
+    if (!init && data && dims.height) {
       const xScale = scaleLinear()
         .range([0, dims.chartWidth])
         .domain(fullListDomain.fullAgeDomain)

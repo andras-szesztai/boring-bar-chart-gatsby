@@ -21,7 +21,7 @@ export const TEXT = {
   },
   mainTitle: {
     hu:
-      "Az új koronavírusban elhunytak száma, korban és nembeni eloszlása Magyarországon",
+      "Az új koronavírusban elhunytak száma, korban és nembeni megoszlása Magyarországon",
     en:
       "Number of deaths caused by COVID-19 in Hungary, distribution by gender and age",
   },

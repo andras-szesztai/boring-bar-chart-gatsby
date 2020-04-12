@@ -28,6 +28,7 @@ const MainGrid = styled(GridContainer)`
   ${({ orientation }) =>
     orientation === "landscape"
       ? css`
+          margin-bottom: ${space[2]}px;
           grid-template-columns: repeat(5, 1fr);
           grid-template-rows: min-content 120px 150px 320px;
           grid-template-areas:
@@ -37,6 +38,7 @@ const MainGrid = styled(GridContainer)`
             "mainChart mainChart mainChart mainChart mainChart";
         `
       : css`
+          margin-bottom: ${space[6]}px;
           grid-template-columns: 1fr;
           grid-template-rows:
             min-content 75px 125px 80px 270px 175px

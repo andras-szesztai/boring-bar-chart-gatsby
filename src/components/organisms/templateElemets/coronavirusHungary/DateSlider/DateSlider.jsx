@@ -62,7 +62,7 @@ export default function DateSlider({
       ref={containerRef}
       marginTop={isBelowPosition ? 2 : 0}
       paddingTop={isBelowPosition && !isBelowAndLandscape ? 2 : 0}
-      gridArea={!isBelowPosition ? "slider" : "undefined"}
+      gridArea={!isBelowPosition && "slider"}
       fixedPos={
         isBelowPosition && {
           top: 0,
@@ -104,7 +104,10 @@ export default function DateSlider({
         <FlexContainer whiteSpace="nowrap" fontSize={fontSize}>
           {TEXT.dateSlider[language]}:
         </FlexContainer>
-        <FlexContainer fullSize paddingTop={isBelowAndLandscape || isLandscape ? 1 : 0}>
+        <FlexContainer
+          fullSize
+          paddingTop={isBelowAndLandscape || isLandscape ? 1 : 0}
+        >
           {dates.max && (
             <DSlider
               defaultValue={0}
