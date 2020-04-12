@@ -15,7 +15,6 @@ export default function PercChartContainer({ language, numbers, loading }) {
         fontSize={2}
         gridArea="percText"
         justify="flex-start"
-        align="flex-end"
       >
         {TEXT.genderPerc[language]}
       </FlexContainer>

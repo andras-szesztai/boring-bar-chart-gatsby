@@ -25,8 +25,8 @@ const MainGrid = styled(GridContainer)`
   ${({ orientation }) =>
     orientation === "landscape"
       ? css`
-          width: 94%;
-          margin-top: ${space[2]}px;
+          width: 95%;
+          margin-top: ${space[3]}px;
           margin-bottom: ${space[2]}px;
           grid-template-columns: repeat(5, 1fr);
           grid-template-rows: min-content 120px 150px 320px;

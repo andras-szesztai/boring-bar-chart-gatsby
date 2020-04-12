@@ -148,8 +148,8 @@ export default function AgeChartBrowser({ data, margin, language }) {
         refGroup
           .append("rect")
           .attr("y", y - 8)
-          .attr("width", 40)
-          .attr("x", xScale(data) - 20)
+          .attr("width", 30)
+          .attr("x", xScale(data) - 15)
           .attr("height", space[3])
           .attr("fill", "#fff")
           .attr("fill-opacity", 0.9)
@@ -177,7 +177,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
       refGroup
         .select("rect")
         .transition(t)
-        .attr("x", xScale(data) - 20)
+        .attr("x", xScale(data) - 15)
     }
 
     function moveRefs({ className, data, y1, y2, y }) {
@@ -221,7 +221,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
       storedValues.current = { ...storedValues.current, yScale, xScale }
     }
 
-    if (!init && data) {
+    if (!init && data && dims.chartHeight) {
       const area = select(areaRef.current)
       const yScale = scaleBand()
         .range([0, dims.chartHeight])

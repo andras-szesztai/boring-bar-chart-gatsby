@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react"
 import _ from "lodash"
 import { select } from "d3-selection"
 import { scaleLinear, scaleBand } from "d3-scale"
-import { max, min } from "d3-array"
 import chroma from "chroma-js"
 
 import { ChartSvg, ChartWrapper, ChartArea, AxisLine } from "../../../../atoms"
@@ -117,5 +116,5 @@ export default function HorizontalBarChart({ margin, data, fullListDomain }) {
 }
 
 HorizontalBarChart.defaultProps = {
-  margin: { top: 15, right: 50, bottom: 30, left: 20 },
+  margin: { top: 15, right: 50, bottom: 15, left: 20 },
 }

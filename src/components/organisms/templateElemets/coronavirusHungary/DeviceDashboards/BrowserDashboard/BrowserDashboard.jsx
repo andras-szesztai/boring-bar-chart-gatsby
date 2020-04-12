@@ -18,14 +18,14 @@ import { FullScreenLoader } from "../../../../../molecules"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
-  width: 95vw;
+  width: 94vw;
 
   max-height: 700px;
   min-height: 500px;
-  height: 95vh;
+  height: 96vh;
 
   grid-template-columns: repeat(10, 5fr);
-  grid-template-rows: repeat(2, min-content) repeat(9, 1fr);
+  grid-template-rows: repeat(2, min-content) repeat(11, 1fr);
   grid-row-gap: ${space[1]}px;
   grid-column-gap: ${space[1]}px;
   grid-template-areas:
@@ -84,20 +84,25 @@ export default function BrowserDashboard({
           />
           <BarLabels numbers={numbers} language={language} />
           <FlexContainer gridArea="barC" fullSize>
-            {
-              !loading && 
+            {!loading && (
               <HorizontalBarChart
                 data={numbers}
                 fullListDomain={fullListDomain}
               />
-            }
+            )}
           </FlexContainer>
-          <PercChartContainer language={language} numbers={numbers} loading={loading} />
+          <PercChartContainer
+            language={language}
+            numbers={numbers}
+            loading={loading}
+          />
           <FlexContainer gridArea="7/-1/-1/1" pos="relative">
             <FlexContainer absPos top={space[2]} left={0} fontSize={2}>
               {TEXT.mainChartExpBrowser[language]}
             </FlexContainer>
-            <AgeChartBrowser data={filteredData} language={language} />
+            {!loading && (
+              <AgeChartBrowser data={filteredData} language={language} />
+            )}
           </FlexContainer>
         </BrowserMainGrid>
       </FlexContainer>

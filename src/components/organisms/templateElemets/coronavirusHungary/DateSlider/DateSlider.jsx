@@ -118,8 +118,8 @@ export function DateSliderMobile({
         isBelowPosition && {
           top: 0,
           left: 0,
-          width: `${windowWidth * (isLandscape ? 0.97 : 0.94)}px`,
-          marginLeft: isLandscape ? `${containerPosition.x / 2}px` : "3%",
+          width: `${windowWidth * (isLandscape ? 0.97 : 0.92)}px`,
+          marginLeft: isLandscape ? `${containerPosition.x / 2}px` : "4%",
         }
       }
       bgColor="#FFFFFF"
