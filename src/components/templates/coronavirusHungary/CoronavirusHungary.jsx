@@ -178,7 +178,8 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       {device === "tablet" && (
         <TabletView>
           <FlexContainer
-            fullScreen
+            fullSize
+            height="100vh"
             fontSize={4}
             textAlign="center"
             direction="column"
