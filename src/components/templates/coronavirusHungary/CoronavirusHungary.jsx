@@ -85,6 +85,16 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       const maxDate = _.maxBy(formattedData, "date").date
       const minDate = _.minBy(formattedData, "date").date
       const dateDiff = differenceInDays(minDate, maxDate)
+      const femaleData = filterGender({
+        accessor: "accessorF",
+        language,
+        data: formattedData,
+      })
+      const maleData = filterGender({
+        accessor: "accessorM",
+        language,
+        data: formattedData,
+      })
       const fullAgeDomain = [
         min(formattedData, ({ age }) => age) - 2,
         max(formattedData, ({ age }) => age) + 2,
@@ -94,25 +104,17 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
         fullAgeList.push(i)
       }
       const maxNumber = max([
-        ...makeAreaData(
-          filterGender({
-            accessor: "accessorF",
-            language,
-            data: formattedData,
-          }),
-          fullAgeList
-        ).map(({ number }) => number),
-        ...makeAreaData(
-          filterGender({
-            accessor: "accessorM",
-            language,
-            data: formattedData,
-          }),
-          fullAgeList
-        ).map(({ number }) => number),
+        ...makeAreaData(femaleData, fullAgeList).map(({ number }) => number),
+        ...makeAreaData(maleData, fullAgeList).map(({ number }) => number),
       ])
+      const maxGenderNumber = max([femaleData.length, maleData.length])
       setAverages(makeAverages(formattedData, language))
-      setFullListDomain({ fullAgeDomain, fullAgeList, maxNumber })
+      setFullListDomain({
+        fullAgeDomain,
+        fullAgeList,
+        maxNumber,
+        maxGenderNumber,
+      })
       setFormattedData(formattedData)
       setFilteredData(formattedData)
       setNumbers(makeNumbers(formattedData, language))

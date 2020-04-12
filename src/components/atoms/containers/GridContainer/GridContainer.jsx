@@ -3,7 +3,7 @@ import { Container } from "../"
 
 const GridContainer = styled(Container)`
   display: grid;
-  ${({ columns, rows, areas, rowGap, columnGap, align, justify }) => css`
+  ${({ columns, rows, areas, rowGap, columnGap, align, justify, alignContent }) => css`
     grid-template-columns: ${columns};
     grid-template-rows: ${rows};
     grid-template-areas: ${areas};
@@ -11,6 +11,7 @@ const GridContainer = styled(Container)`
     grid-column-gap: ${columnGap}rem;
     align-items: ${align};
     justify-items: ${justify};
+    align-content:  ${alignContent};
   `}
 
   ${({ noGap }) =>

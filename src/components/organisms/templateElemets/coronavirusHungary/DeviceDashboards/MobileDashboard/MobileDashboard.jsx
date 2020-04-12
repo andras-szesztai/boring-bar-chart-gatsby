@@ -22,22 +22,23 @@ import { VerticalDoubleAreaChart } from "../../DoubleAreaChart"
 import AreaChart from "../../AreaChart/AreaChart"
 
 const MainGrid = styled(GridContainer)`
-  margin-top: ${space[2]}px;
-  margin-bottom: ${space[6]}px;
-  width: 94%;
   ${({ orientation }) =>
     orientation === "landscape"
       ? css`
+          width: 94%;
+          margin-top: ${space[2]}px;
           margin-bottom: ${space[2]}px;
           grid-template-columns: repeat(5, 1fr);
           grid-template-rows: min-content 120px 150px 320px;
           grid-template-areas:
             "title title title source source"
-            "total slider slider slider slider"
+            "total . . slider slider"
             "barChart barChart barChart stackedChart stackedChart"
             "mainChart mainChart mainChart mainChart mainChart";
         `
       : css`
+          width: 92%;
+          margin-top: ${space[3]}px;
           margin-bottom: ${space[6]}px;
           grid-template-columns: 1fr;
           grid-template-rows:
@@ -138,10 +139,9 @@ function MobileDashboard({
             dates={dates}
             setDates={setDates}
             fontSize={2}
-            extraPadding={!isLS && 4}
-            extraPaddingRight={isLS && 2}
-            extraPaddingLeft={isLS && 5}
-            paddingBottom={isLS && 2}
+            extraPadding={!isLS && 3}
+            extraPaddingRight={isLS && 1}
+            paddingBottom={isLS && 1}
             isSticky
             loading={loading}
             dateFontSize={3}
@@ -183,6 +183,7 @@ function MobileDashboard({
                 <HorizontalBarChart
                   key="ls"
                   data={numbers}
+                  fullListDomain={fullListDomain}
                   margin={{
                     top: 5,
                     right: 25,
@@ -194,6 +195,7 @@ function MobileDashboard({
                 <HorizontalBarChart
                   key="pt"
                   data={numbers}
+                  fullListDomain={fullListDomain}
                   margin={{
                     top: 10,
                     right: 10,

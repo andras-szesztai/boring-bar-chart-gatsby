@@ -14,7 +14,7 @@ import {
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { transition } from "../../../../../themes/theme"
 
-export default function HorizontalBarChart({ margin, data }) {
+export default function HorizontalBarChart({ margin, data, fullListDomain }) {
   const { svgRef, wrapperRef, yAxisRef } = useChartRefs()
   const dims = useDimensions({
     ref: wrapperRef,
@@ -82,7 +82,7 @@ export default function HorizontalBarChart({ margin, data }) {
         .paddingInner(0.4)
       const xScale = scaleLinear()
         .range([0, dims.chartWidth])
-        .domain([0, max(Object.values(data)) - min(Object.values(data))])
+        .domain([0, fullListDomain.maxGenderNumber])
       storedValues.current = { yScale, xScale, area }
       createUpdateRectangles()
       setInit(true)
@@ -93,7 +93,7 @@ export default function HorizontalBarChart({ margin, data }) {
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()
     }
-  }, [init, data, yAxisRef, dims, prevData, prevDims])
+  }, [init, data, yAxisRef, dims, prevData, prevDims, fullListDomain])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>

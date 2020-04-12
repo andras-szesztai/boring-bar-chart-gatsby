@@ -46,6 +46,7 @@ export default function BrowserDashboard({
   setDates,
   filteredData,
   loading,
+  fullListDomain
 }) {
   return (
     <BrowserView>
@@ -86,7 +87,7 @@ export default function BrowserDashboard({
           <DateSlider language={language} dates={dates} setDates={setDates} />
           <BarLabels numbers={numbers} language={language} />
           <FlexContainer gridArea="barC">
-            <HorizontalBarChart data={numbers} />
+            <HorizontalBarChart data={numbers} fullListDomain={fullListDomain} />
           </FlexContainer>
           <PercChartContainer language={language} numbers={numbers} />
           <FlexContainer gridArea="7/-1/-1/1" pos="relative">

@@ -32,7 +32,6 @@ export default function DateSlider({
   setDates,
   extraPadding,
   extraPaddingRight,
-  extraPaddingLeft,
   fontSize,
   isSticky,
   loading,
@@ -75,15 +74,10 @@ export default function DateSlider({
       bgColor="#FFFFFF"
       withDropShadow={isBelowPosition}
       paddingRight={isBelowAndLandscape ? 3 : extraPaddingRight || extraPadding}
-      paddingLeft={isBelowPosition ? 3 : extraPaddingLeft || extraPadding}
+      paddingLeft={isBelowPosition ? 3 : extraPadding}
       zIndex={isBelowPosition && "overlay"}
-      rows={
-        isBelowAndLandscape
-          ? "1fr"
-          : isLandscape
-          ? "repeat(2, 1fr)"
-          : "min-content 1fr"
-      }
+      alignContent="center" 
+      rows={isBelowAndLandscape ? "1fr" : "repeat(2, 1fr)"}
       columns={isBelowAndLandscape ? "min-content 1fr" : "1fr"}
     >
       <FlexContainer
@@ -97,12 +91,17 @@ export default function DateSlider({
       <GridContainer
         rowGap={0}
         columnGap={2}
-        columns={isLandscape ? "min-content 1fr" : "1fr"}
-        rows={isLandscape ? "1fr" : "repeat(2, 1fr)"}
+        columns={isBelowAndLandscape ? "min-content 1fr" : "1fr"}
+        rows="repeat(2, min-content)"
         paddingLeft={isBelowAndLandscape ? 3 : 0}
         paddingRight={isBelowAndLandscape ? 2 : 0}
+        paddingTop={isBelowAndLandscape ? 2 : 0}
       >
-        <FlexContainer whiteSpace="nowrap" fontSize={fontSize}>
+        <FlexContainer
+          justify={isLandscape ? "flex-start" : "center"}
+          whiteSpace="nowrap"
+          fontSize={fontSize}
+        >
           {TEXT.dateSlider[language]}:
         </FlexContainer>
         <FlexContainer
