@@ -1,5 +1,7 @@
 import React from "react"
 import styled, { css } from "styled-components"
+import chroma from "chroma-js"
+
 import { colors } from "../../../../themes/theme"
 
 const RibbonContainer = styled.div`
@@ -40,7 +42,7 @@ const RibbonContainer = styled.div`
     display: block;
     width: 160px;
     padding: ${({ padding }) => padding}px 0;
-    background-color: ${colors.tealBlueLighter};
+    background-color: ${chroma(colors.tealBlueLighter).alpha(.75)};
     color: ${colors.tealBlueDarkest};
     text-align: center;
     font-weight: 600;
