@@ -30,6 +30,7 @@ export const query = graphql`
       edges {
         node {
           date
+          updated
           title
           id
           description

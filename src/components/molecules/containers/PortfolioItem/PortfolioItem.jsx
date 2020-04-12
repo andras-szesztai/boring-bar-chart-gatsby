@@ -63,12 +63,25 @@ const LinkContainer = styled(FlexContainer)`
 
 function PortfolioItem({
   isPortrait,
-  data: { id, title, link, isOutside, image, description, date, deviceTypes },
+  data: {
+    id,
+    title,
+    link,
+    isOutside,
+    image,
+    description,
+    date,
+    deviceTypes,
+    updated,
+  },
 }) {
   const isSmallScreen = isPortrait && isMobileOnly
   const devices =
-    deviceTypes && Object.keys(deviceTypes[0]).filter(el => deviceTypes[0][el]).reverse()
-    
+    deviceTypes &&
+    Object.keys(deviceTypes[0])
+      .filter(el => deviceTypes[0][el])
+      .reverse()
+
   return (
     <ItemContainer
       pos="relative"
@@ -76,12 +89,12 @@ function PortfolioItem({
       height={isSmallScreen ? "160px" : "180px"}
       borderRadius={1}
     >
-      {subWeeks(new Date(), 2) < new Date(date) && (
+      {subWeeks(new Date(), 1) < new Date(updated ? updated : date) && (
         <Ribbon
-          text="NEW"
-          width={isMobileOnly ? 85 : undefined}
-          top={isMobileOnly ? 20 : undefined}
-          padding={isMobileOnly ? 4 : undefined}
+          text={updated ? "UPDATED" : "NEW"}
+          width={isMobileOnly ? 90 : undefined}
+          top={isMobileOnly ? 15 : undefined}
+          padding={isMobileOnly ? 5 : undefined}
         />
       )}
       <FlexContainer pos="relative" fullSize align="flex-start">
