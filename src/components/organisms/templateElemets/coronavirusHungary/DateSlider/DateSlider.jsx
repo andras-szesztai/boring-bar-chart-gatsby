@@ -39,9 +39,7 @@ export default function DateSlider({
   dateFontSize,
   fontWeight,
   currDate,
-  justify,
-  sliderColumns,
-  sliderRows,
+  isLandscape,
 }) {
   const containerRef = useRef()
   const scrollPosition = useScrollPosition()
@@ -57,52 +55,56 @@ export default function DateSlider({
     isSticky &&
     containerPosition &&
     containerPosition.top < scrollPosition
+  const isBelowAndLandscape = isLandscape && isBelowPosition
 
   return (
     <GridContainer
       ref={containerRef}
-      marginTop={isBelowPosition && 2}
-      gridArea={!isBelowPosition && "slider"}
+      marginTop={isBelowPosition ? 2 : 0}
+      paddingTop={isBelowPosition && !isBelowAndLandscape ? 2 : 0}
+      gridArea={!isBelowPosition ? "slider" : "undefined"}
       fixedPos={
         isBelowPosition && {
           top: 0,
           left: 0,
-          width: `${windowWidth * 0.94}px`,
-          marginLeft: "3%",
+          width: `${windowWidth * (isLandscape ? 0.96 : 0.94)}px`,
+          marginLeft: isLandscape ? "2%" : "3%",
         }
       }
       bgColor="#FFFFFF"
       withDropShadow={isBelowPosition}
-      paddingRight={
-        isBelowPosition && extraPaddingLeft
-          ? 3
-          : extraPaddingRight || extraPadding
-      }
-      paddingLeft={isBelowPosition ? 3 : (extraPaddingLeft || extraPadding)}
+      paddingRight={isBelowAndLandscape ? 3 : extraPaddingRight || extraPadding}
+      paddingLeft={isBelowPosition ? 3 : extraPaddingLeft || extraPadding}
       zIndex={isBelowPosition && "overlay"}
-      rows="repeat(2, 1fr)"
+      rows={
+        isBelowAndLandscape
+          ? "1fr"
+          : isLandscape
+          ? "repeat(2, 1fr)"
+          : "min-content 1fr"
+      }
+      columns={isBelowAndLandscape ? "min-content 1fr" : "1fr"}
     >
       <FlexContainer
         fontSize={dateFontSize || fontSize}
         fontWeight={fontWeight}
-        justify={justify}
+        justify={isLandscape ? "flex-start" : "center"}
+        whiteSpace="nowrap"
       >
         {currDate && format(currDate, TEXT.dateFormatLong[language])}
       </FlexContainer>
       <GridContainer
         rowGap={0}
         columnGap={2}
-        columns={sliderColumns}
-        rows={sliderRows}
+        columns={isLandscape ? "min-content 1fr" : "1fr"}
+        rows={isLandscape ? "1fr" : "repeat(2, 1fr)"}
+        paddingLeft={isBelowAndLandscape ? 3 : 0}
+        paddingRight={isBelowAndLandscape ? 3 : 0}
       >
-        <FlexContainer
-          whiteSpace="nowrap"
-          fontSize={fontSize}
-          paddingBottom={2}
-        >
+        <FlexContainer whiteSpace="nowrap" fontSize={fontSize}>
           {TEXT.dateSlider[language]}:
         </FlexContainer>
-        <FlexContainer fullSize>
+        <FlexContainer fullSize paddingTop={isBelowAndLandscape || isLandscape ? 1 : 0}>
           {dates.max && (
             <DSlider
               defaultValue={0}

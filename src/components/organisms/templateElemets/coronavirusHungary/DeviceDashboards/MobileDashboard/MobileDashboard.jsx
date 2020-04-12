@@ -23,7 +23,7 @@ import AreaChart from "../../AreaChart/AreaChart"
 
 const MainGrid = styled(GridContainer)`
   margin-top: ${space[2]}px;
-  margin-bottom: ${space[2]}px;
+  margin-bottom: ${space[6]}px;
   width: 94%;
   ${({ orientation }) =>
     orientation === "landscape"
@@ -39,7 +39,7 @@ const MainGrid = styled(GridContainer)`
       : css`
           grid-template-columns: 1fr;
           grid-template-rows:
-            min-content 75px 120px 80px 270px 175px
+            min-content 75px 125px 80px 270px 175px
             680px;
           grid-template-areas:
             "title"
@@ -138,16 +138,14 @@ function MobileDashboard({
             fontSize={2}
             extraPadding={!isLS && 4}
             extraPaddingRight={isLS && 2}
+            extraPaddingLeft={isLS && 5}
+            paddingBottom={isLS && 2}
             isSticky
             loading={loading}
             dateFontSize={3}
             currDate={dates.currDate}
             fontWeight="ultraLight"
-            justify={isLS ? "flex-start" : "center"}
-            extraPaddingLeft={isLS && 5}
-            paddingBottom={isLS && 2}
-            sliderColumns={isLS && "min-content 1fr"}
-            sliderRows={!isLS ? "repeat(2, 1fr)" : "1fr"}
+            isLandscape={isLS}
           />
           <BanContainer
             gridArea="total"

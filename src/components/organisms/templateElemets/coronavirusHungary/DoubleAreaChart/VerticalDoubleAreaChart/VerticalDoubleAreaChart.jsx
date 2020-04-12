@@ -36,6 +36,7 @@ import {
   IoMdArrowDropdown,
   IoMdArrowDropright,
   IoMdArrowDropleft,
+  IoMdArrowDropup,
 } from "react-icons/io"
 import { makeAreaData } from "../../utils/dataHelpers"
 
@@ -442,7 +443,21 @@ export default function VerticalDoubleAreaChart({
         accessor: "male",
       })
     }
-  }, [areaDataSets, averages, data, dims, fullListDomain, init, leftLeft, prevAreaDataSets, prevAverages, prevPrevAverages, rightLeft, svgRef, yAxisRef])
+  }, [
+    areaDataSets,
+    averages,
+    data,
+    dims,
+    fullListDomain,
+    init,
+    leftLeft,
+    prevAreaDataSets,
+    prevAverages,
+    prevPrevAverages,
+    rightLeft,
+    svgRef,
+    yAxisRef,
+  ])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
@@ -466,6 +481,28 @@ export default function VerticalDoubleAreaChart({
         <FlexContainer direction="column">
           {TEXT.tooltipAge[language]}
           <IoMdArrowDropdown />
+        </FlexContainer>
+      </FlexContainer>
+      <FlexContainer
+        absPos
+        left={dims.width / 2 - (language === "hu" ? 50 : 54)}
+        bottom={-space[4]}
+        fontSize={2}
+        direction="column"
+        zIndex="hoverOverlay"
+      >
+        <FlexContainer direction="column">
+          <IoMdArrowDropup />
+          {TEXT.tooltipAge[language]}
+        </FlexContainer>
+        <FlexContainer>
+          <Container paddingTop={1}>
+            <IoMdArrowDropleft />
+          </Container>
+          {TEXT.chartAxisNumber[language]}
+          <Container paddingTop={1}>
+            <IoMdArrowDropright />
+          </Container>
         </FlexContainer>
       </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
