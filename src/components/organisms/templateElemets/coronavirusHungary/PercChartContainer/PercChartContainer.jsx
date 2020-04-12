@@ -8,16 +8,21 @@ import {
 import Number from "../Number/Number"
 import { StackedBarChart } from ".."
 
-export default function PercChartContainer({ language, numbers }) {
+export default function PercChartContainer({ language, numbers, loading }) {
   return (
     <>
-      <FlexContainer fontSize={2} gridArea="percText" justify="flex-start" align="flex-end">
+      <FlexContainer
+        fontSize={2}
+        gridArea="percText"
+        justify="flex-start"
+        align="flex-end"
+      >
         {TEXT.genderPerc[language]}
       </FlexContainer>
       <FlexContainer
         gridArea="percNo"
         fontWeight={3}
-        fontSize={2}
+        fontSize={3}
         fontColor={chartColors.female}
       >
         {numbers.total && (
@@ -27,7 +32,7 @@ export default function PercChartContainer({ language, numbers }) {
       <FlexContainer
         gridArea="percFfi"
         fontWeight={3}
-        fontSize={2}
+        fontSize={3}
         fontColor={chartColors.male}
       >
         {numbers.total && (
@@ -35,7 +40,7 @@ export default function PercChartContainer({ language, numbers }) {
         )}
       </FlexContainer>
       <FlexContainer gridArea="percBar">
-        <StackedBarChart data={numbers} />
+        {!loading && <StackedBarChart data={numbers} />}
       </FlexContainer>
     </>
   )

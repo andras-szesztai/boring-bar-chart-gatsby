@@ -9,13 +9,12 @@ import { TEXT } from "../../../../../../constants/visualizations/coronavirusHung
 import SwitchContainer from "../../SwitchContainer/SwitchContainer"
 import SourceLink from "../../SourceLink/SourceLink"
 import Number from "../../Number/Number"
-import DateSlider from "../../DateSlider/DateSlider"
+import { DateSliderBrowser } from "../../DateSlider/DateSlider"
 import BarLabels from "../../BarLabels/BarLabels"
 import HorizontalBarChart from "../../HorizontalBarChart/HorizontalBarChart"
 import PercChartContainer from "../../PercChartContainer/PercChartContainer"
 import AgeChartBrowser from "../../AgeChartBrowser/AgeChartBrowser"
 import { FullScreenLoader } from "../../../../../molecules"
-import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -26,12 +25,12 @@ const BrowserMainGrid = styled(GridContainer)`
   height: 95vh;
 
   grid-template-columns: repeat(10, 5fr);
-  grid-template-rows: min-content repeat(10, 1fr);
+  grid-template-rows: repeat(2, min-content) repeat(9, 1fr);
   grid-row-gap: ${space[1]}px;
   grid-column-gap: ${space[1]}px;
   grid-template-areas:
     "title title title title title title source source source source"
-    "total tNum date date date date slider slider slider slider"
+    "total tNum . . . . dateSlider dateSlider dateSlider dateSlider"
     "no noNum barC barC barC barC percText percText percText percText"
     "no noNum barC barC barC barC percNo percNo percFfi percFfi"
     "ffi ffiNum barC barC barC barC percBar percBar percBar percBar"
@@ -46,7 +45,7 @@ export default function BrowserDashboard({
   setDates,
   filteredData,
   loading,
-  fullListDomain
+  fullListDomain,
 }) {
   return (
     <BrowserView>
@@ -72,24 +71,28 @@ export default function BrowserDashboard({
             <SwitchContainer language={language} setLanguage={setLanguage} />
             <SourceLink language={language} />
           </FlexContainer>
-          <FlexContainer fontSize={2} justify="flex-start" gridArea="total" paddingBottom={2}>
+          <FlexContainer fontSize={2} justify="flex-start" gridArea="total">
             {TEXT.total[language]}:
           </FlexContainer>
-          <FlexContainer fontSize={2} fontWeight={3} gridArea="tNum" paddingBottom={2}>
+          <FlexContainer fontSize={3} fontWeight={3} gridArea="tNum">
             <Number num={numbers.total} />
           </FlexContainer>
-          <CurrDateContainer
+          <DateSliderBrowser
+            dates={dates}
             language={language}
-            currDate={dates.currDate}
-            titlePaddingRight={2}
-            paddingBottom={2}
+            setDates={setDates}
           />
-          <DateSlider language={language} dates={dates} setDates={setDates} />
           <BarLabels numbers={numbers} language={language} />
-          <FlexContainer gridArea="barC">
-            <HorizontalBarChart data={numbers} fullListDomain={fullListDomain} />
+          <FlexContainer gridArea="barC" fullSize>
+            {
+              !loading && 
+              <HorizontalBarChart
+                data={numbers}
+                fullListDomain={fullListDomain}
+              />
+            }
           </FlexContainer>
-          <PercChartContainer language={language} numbers={numbers} />
+          <PercChartContainer language={language} numbers={numbers} loading={loading} />
           <FlexContainer gridArea="7/-1/-1/1" pos="relative">
             <FlexContainer absPos top={space[2]} left={0} fontSize={2}>
               {TEXT.mainChartExpBrowser[language]}

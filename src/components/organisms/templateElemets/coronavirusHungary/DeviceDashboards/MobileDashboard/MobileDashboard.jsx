@@ -14,7 +14,7 @@ import SwitchContainer from "../../SwitchContainer/SwitchContainer"
 import SourceLink from "../../SourceLink/SourceLink"
 import { space } from "../../../../../../themes/theme"
 import BanContainer from "../../BanContainer/BanContainer"
-import DateSlider from "../../DateSlider/DateSlider"
+import {DateSliderMobile} from "../../DateSlider/DateSlider"
 import HorizontalBarChart from "../../HorizontalBarChart/HorizontalBarChart"
 import Number from "../../Number/Number"
 import StackedBarChart from "../../StackedBarChart/StackedBarChart"
@@ -134,7 +134,7 @@ function MobileDashboard({
               switchWidth={32}
             />
           </FlexContainer>
-          <DateSlider
+          <DateSliderMobile
             language={language}
             dates={dates}
             setDates={setDates}

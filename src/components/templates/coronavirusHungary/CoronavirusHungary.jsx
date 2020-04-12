@@ -172,6 +172,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           setDates={setDates}
           filteredData={filteredData}
           loading={loading}
+          fullListDomain={fullListDomain}
         />
       )}
       {device === "tablet" && (

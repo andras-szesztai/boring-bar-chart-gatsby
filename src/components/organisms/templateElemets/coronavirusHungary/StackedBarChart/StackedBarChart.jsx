@@ -105,5 +105,5 @@ export default function HorizontalBarChart({ margin, data }) {
 }
 
 HorizontalBarChart.defaultProps = {
-  margin: { top: 19, right: 0, bottom: 33, left: 0 },
+  margin: { top: 10, right: 0, bottom: 46, left: 0 },
 }

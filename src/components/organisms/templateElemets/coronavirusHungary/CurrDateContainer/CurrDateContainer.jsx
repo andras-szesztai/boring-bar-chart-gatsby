@@ -4,25 +4,10 @@ import { format } from "date-fns"
 import { FlexContainer, Container } from "../../../../atoms"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 
-export default function CurrDateContainer({
-  fontSize,
-  language,
-  currDate,
-  titlePaddingRight,
-  direction,
-  dateFontSize,
-  fontWeight,
-  paddingBottom
-}) {
+export default function CurrDateContainer({ language, currDate }) {
   return (
-    <FlexContainer
-      gridArea="date"
-      fontSize={fontSize}
-      direction={direction}
-      justify="space-evenly"
-      paddingBottom={paddingBottom}
-    >
-      <Container fontSize={dateFontSize || fontSize} fontWeight={fontWeight}>
+    <FlexContainer justify="flex-start">
+      <Container fontSize={3} fontWeight="ultraLight">
         {currDate && format(currDate, TEXT.dateFormatLong[language])}
       </Container>
     </FlexContainer>
@@ -30,5 +15,5 @@ export default function CurrDateContainer({
 }
 
 CurrDateContainer.defaultProps = {
-  fontSize: 2
+  fontSize: 2,
 }

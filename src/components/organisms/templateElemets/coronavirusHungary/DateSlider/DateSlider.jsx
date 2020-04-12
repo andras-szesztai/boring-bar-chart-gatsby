@@ -3,12 +3,13 @@ import { withStyles } from "@material-ui/core/styles"
 import Slider from "@material-ui/core/Slider"
 import { format, subDays } from "date-fns"
 
-import { FlexContainer, GridContainer } from "../../../../atoms"
+import { FlexContainer, GridContainer, Container } from "../../../../atoms"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 import { colors } from "../../../../../themes/theme"
 import { useScrollPosition, useWindowDimensions } from "../../../../../hooks"
+import CurrDateContainer from "../CurrDateContainer/CurrDateContainer"
 
-const DSlider = withStyles({
+export const DSlider = withStyles({
   root: {
     color: colors.grayDarker,
     fontSize: 8,
@@ -26,7 +27,56 @@ const DSlider = withStyles({
   },
 })(Slider)
 
-export default function DateSlider({
+export function StyledDateSlider({ setDates, dates, language }) {
+  return (
+    <DSlider
+      defaultValue={0}
+      step={1}
+      marks
+      valueLabelDisplay="auto"
+      onChangeCommitted={(e, val) =>
+        setDates(prev => ({
+          ...prev,
+          currDate: subDays(dates.max, -val),
+        }))
+      }
+      valueLabelFormat={val =>
+        format(subDays(dates.max, -val), TEXT.dateFormatShort[language])
+      }
+      min={dates.diff}
+      max={0}
+    />
+  )
+}
+
+export function DateSliderBrowser({
+  language, dates, setDates
+}) {
+  return (
+    <GridContainer gridArea="dateSlider" rowGap={2} rows="repeat(2, min-content)">
+      <CurrDateContainer language={language} currDate={dates.currDate} />
+      <FlexContainer justify="flex-start" whiteSpace="nowrap">
+        <Container
+          paddingRight={3}
+          paddingBottom={1}
+          fontSize={2}
+          whiteSpace="nowrap"
+        >
+          {TEXT.dateSlider[language]}:
+        </Container>
+        {dates.max && (
+          <StyledDateSlider
+            dates={dates}
+            language={language}
+            setDates={setDates}
+          />
+        )}
+      </FlexContainer>
+    </GridContainer>
+  )
+}
+
+export function DateSliderMobile({
   language,
   dates,
   setDates,
@@ -63,13 +113,13 @@ export default function DateSlider({
       paddingTop={isBelowPosition && !isBelowAndLandscape ? 2 : 0}
       gridArea={!isBelowPosition && "slider"}
       borderRadius={1}
-      height={isBelowAndLandscape ? "50px" : "auto"}
+      height={isBelowAndLandscape ? "55px" : "auto"}
       fixedPos={
         isBelowPosition && {
           top: 0,
           left: 0,
-          width: `${windowWidth * (isLandscape ? 0.96 : 0.94)}px`,
-          marginLeft: isLandscape ? "2%" : "3%",
+          width: `${windowWidth * (isLandscape ? 0.97 : 0.94)}px`,
+          marginLeft: isLandscape ? `${containerPosition.x / 2}px` : "3%",
         }
       }
       bgColor="#FFFFFF"
@@ -77,7 +127,7 @@ export default function DateSlider({
       paddingRight={isBelowAndLandscape ? 3 : extraPaddingRight || extraPadding}
       paddingLeft={isBelowPosition ? 3 : extraPadding}
       zIndex={isBelowPosition && "overlay"}
-      alignContent="center" 
+      alignContent="center"
       rows={isBelowAndLandscape ? "1fr" : "repeat(2, 1fr)"}
       columns={isBelowAndLandscape ? "min-content 1fr" : "1fr"}
     >
@@ -110,30 +160,14 @@ export default function DateSlider({
           paddingTop={isBelowAndLandscape || isLandscape ? 1 : 0}
         >
           {dates.max && (
-            <DSlider
-              defaultValue={0}
-              step={1}
-              marks
-              valueLabelDisplay="auto"
-              onChangeCommitted={(e, val) =>
-                setDates(prev => ({
-                  ...prev,
-                  currDate: subDays(dates.max, -val),
-                }))
-              }
-              valueLabelFormat={val =>
-                format(subDays(dates.max, -val), TEXT.dateFormatShort[language])
-              }
-              min={dates.diff}
-              max={0}
+            <StyledDateSlider
+              dates={dates}
+              language={language}
+              setDates={setDates}
             />
           )}
         </FlexContainer>
       </GridContainer>
     </GridContainer>
   )
-}
-
-DateSlider.defaultProps = {
-  fontSize: 2,
 }

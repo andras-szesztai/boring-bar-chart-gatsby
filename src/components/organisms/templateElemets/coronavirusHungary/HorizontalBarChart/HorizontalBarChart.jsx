@@ -73,7 +73,7 @@ export default function HorizontalBarChart({ margin, data, fullListDomain }) {
       storedValues.current = { ...storedValues.current, yScale, xScale }
     }
 
-    if (!init && data.total) {
+    if (!init && data.total && dims.chartHeight) {
       const area = select(yAxisRef.current)
       const yScale = scaleBand()
         .rangeRound([0, dims.chartHeight])
@@ -117,5 +117,5 @@ export default function HorizontalBarChart({ margin, data, fullListDomain }) {
 }
 
 HorizontalBarChart.defaultProps = {
-  margin: { top: 15, right: 50, bottom: 15, left: 20 },
+  margin: { top: 15, right: 50, bottom: 30, left: 20 },
 }

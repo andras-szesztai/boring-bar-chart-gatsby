@@ -29,7 +29,7 @@ export default function BarLabels({ language, numbers }) {
       </FlexContainer>
       <FlexContainer
         fontWeight={3}
-        fontSize={2}
+        fontSize={3}
         gridArea="noNum"
         fontColor={chartColors.female}
       >
@@ -53,7 +53,7 @@ export default function BarLabels({ language, numbers }) {
       <FlexContainer
         gridArea="ffiNum"
         fontWeight={3}
-        fontSize={2}
+        fontSize={3}
         fontColor={chartColors.male}
       >
         <Number num={numbers.male} />
