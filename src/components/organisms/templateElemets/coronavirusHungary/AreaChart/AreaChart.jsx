@@ -223,7 +223,7 @@ export default function AreaChart({
       <FlexContainer absPos top={3} left={margin.left + 1}>
         {TEXT.chartAxisNumber[language]}
       </FlexContainer>
-      <FlexContainer absPos bottom={6} left={margin.left + 1}>
+      <FlexContainer absPos bottom={6} left={margin.left - 4}>
         {TEXT.tooltipAge[language]}
       </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>

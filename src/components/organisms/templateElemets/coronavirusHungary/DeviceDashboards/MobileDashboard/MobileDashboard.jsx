@@ -264,7 +264,7 @@ function MobileDashboard({
           <FlexContainer
             gridArea="mainChart"
             pos="relative"
-            marginTop={!isLS ? 6 : 2}
+            marginTop={!isLS ? 6 : 3}
           >
             {!isLS ? (
               <VerticalDoubleAreaChart

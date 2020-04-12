@@ -464,7 +464,7 @@ export default function VerticalDoubleAreaChart({
       <FlexContainer
         absPos
         left={dims.width / 2 - (language === "hu" ? 50 : 54)}
-        top={-space[3]}
+        top={-space[4]}
         fontSize={2}
         direction="column"
         zIndex="hoverOverlay"

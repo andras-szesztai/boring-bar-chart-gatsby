@@ -63,6 +63,7 @@ export default function DateSlider({
       marginTop={isBelowPosition ? 2 : 0}
       paddingTop={isBelowPosition && !isBelowAndLandscape ? 2 : 0}
       gridArea={!isBelowPosition && "slider"}
+      height={isBelowAndLandscape ? "50px" : "auto"}
       fixedPos={
         isBelowPosition && {
           top: 0,
@@ -99,7 +100,7 @@ export default function DateSlider({
         columns={isLandscape ? "min-content 1fr" : "1fr"}
         rows={isLandscape ? "1fr" : "repeat(2, 1fr)"}
         paddingLeft={isBelowAndLandscape ? 3 : 0}
-        paddingRight={isBelowAndLandscape ? 3 : 0}
+        paddingRight={isBelowAndLandscape ? 2 : 0}
       >
         <FlexContainer whiteSpace="nowrap" fontSize={fontSize}>
           {TEXT.dateSlider[language]}:
