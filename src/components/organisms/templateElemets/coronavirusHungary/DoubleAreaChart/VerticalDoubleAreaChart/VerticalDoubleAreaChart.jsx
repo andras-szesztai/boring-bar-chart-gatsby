@@ -463,7 +463,7 @@ export default function VerticalDoubleAreaChart({
     <ChartWrapper areaRef={wrapperRef}>
       <FlexContainer
         absPos
-        left={dims.width / 2 - (language === "hu" ? 50 : 54)}
+        left={dims.width / 2 - (language === "hu" ? 50 : 55)}
         top={-space[4]}
         fontSize={2}
         direction="column"
@@ -485,7 +485,7 @@ export default function VerticalDoubleAreaChart({
       </FlexContainer>
       <FlexContainer
         absPos
-        left={dims.width / 2 - (language === "hu" ? 50 : 54)}
+        left={dims.width / 2 - (language === "hu" ? 50 : 55)}
         bottom={-space[4]}
         fontSize={2}
         direction="column"

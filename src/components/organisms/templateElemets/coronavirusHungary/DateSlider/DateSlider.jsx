@@ -59,9 +59,10 @@ export default function DateSlider({
   return (
     <GridContainer
       ref={containerRef}
-      marginTop={isBelowPosition ? 2 : 0}
+      marginTop={2}
       paddingTop={isBelowPosition && !isBelowAndLandscape ? 2 : 0}
       gridArea={!isBelowPosition && "slider"}
+      borderRadius={1}
       height={isBelowAndLandscape ? "50px" : "auto"}
       fixedPos={
         isBelowPosition && {

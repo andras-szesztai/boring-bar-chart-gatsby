@@ -42,7 +42,7 @@ const MainGrid = styled(GridContainer)`
           margin-bottom: ${space[6]}px;
           grid-template-columns: 1fr;
           grid-template-rows:
-            min-content 75px 125px 80px 270px 175px
+            min-content 70px 125px 80px 270px 175px
             680px;
           grid-template-areas:
             "title"
