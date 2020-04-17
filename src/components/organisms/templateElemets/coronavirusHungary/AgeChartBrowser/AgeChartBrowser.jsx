@@ -66,7 +66,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
           .strength(0.15)
           .y(({ gender }) => yScale(gender) + yScale.bandwidth() / 2)
       )
-      .force("collide", forceCollide().radius(6.5))
+      .force("collide", forceCollide().radius(6))
       .tick(300)
       
     area
@@ -89,7 +89,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
             .call(enter =>
               enter
                 .transition(makeTransition(area, duration, "in"))
-                .attr("r", 6)
+                .attr("r", 5)
             ),
         update =>
           update.call(update =>
@@ -147,7 +147,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
         const refGroup = select(`.ref-group-${className}`)
         refGroup
           .append("rect")
-          .attr("y", y - 8)
+          .attr("y", y - 7)
           .attr("width", 30)
           .attr("x", xScale(data) - 15)
           .attr("height", space[3])

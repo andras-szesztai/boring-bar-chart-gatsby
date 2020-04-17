@@ -1,5 +1,5 @@
 import React from "react"
-import { CheckBox, GridContainer, FlexContainer, Title } from "../../atoms"
+import { CheckBox, GridContainer, FlexContainer, Title } from "../../../atoms"
 
 export default function({
   values,
