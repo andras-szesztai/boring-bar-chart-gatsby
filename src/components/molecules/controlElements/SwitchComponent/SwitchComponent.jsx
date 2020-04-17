@@ -1,8 +1,8 @@
 import React from "react"
 import Switch from "react-switch"
 
-import { FlexContainer, Title } from "../../../../../atoms"
-import { colors } from "../../../../../../themes/theme"
+import { FlexContainer, Title } from "../../../atoms"
+import { colors } from "../../../../themes/theme"
 
 export default function SwitchComponent({
   gridArea,
@@ -13,7 +13,7 @@ export default function SwitchComponent({
   containerPaddingBottom,
   textPaddingBottom,
   textPaddingTop,
-  textMargin,
+  textSideMargin,
   switchWidth,
   isChecked
 }) {
@@ -28,7 +28,7 @@ export default function SwitchComponent({
         paddingBottom={textPaddingBottom}
         paddingTop={textPaddingTop}
         textAlign="right"
-        marginRight={textMargin}
+        marginRight={textSideMargin}
       >
         {text[0]}
       </Title>
@@ -43,7 +43,7 @@ export default function SwitchComponent({
         width={switchWidth}
       />
       <Title
-        marginLeft={textMargin}
+        marginLeft={textSideMargin}
         paddingBottom={textPaddingBottom}
         paddingTop={textPaddingTop}
       >
