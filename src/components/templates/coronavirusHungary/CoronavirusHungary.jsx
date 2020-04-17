@@ -4,6 +4,7 @@ import Helmet from "react-helmet"
 import { differenceInDays } from "date-fns"
 import _ from "lodash"
 import { GoTools } from "react-icons/go"
+import { min, max } from "d3-array"
 
 import { FlexContainer, Container } from "../../atoms"
 import { usePrevious, useDeviceType } from "../../../hooks"
@@ -13,7 +14,6 @@ import {
   MobileDashboard,
 } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
 import SwitchContainer from "../../organisms/templateElemets/coronavirusHungary/SwitchContainer/SwitchContainer"
-import { min, max } from "d3-array"
 import {
   makeAreaData,
   filterGender,

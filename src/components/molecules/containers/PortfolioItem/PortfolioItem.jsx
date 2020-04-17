@@ -92,8 +92,8 @@ function PortfolioItem({
       {subWeeks(new Date(), 1) < new Date(updated ? updated : date) && (
         <Ribbon
           text={updated ? "UPDATED" : "NEW"}
-          width={isMobileOnly ? 90 : undefined}
-          top={isMobileOnly ? 15 : undefined}
+          width={isMobileOnly ? 100 : undefined}
+          top={isMobileOnly ? 10 : undefined}
           padding={isMobileOnly ? 5 : undefined}
         />
       )}

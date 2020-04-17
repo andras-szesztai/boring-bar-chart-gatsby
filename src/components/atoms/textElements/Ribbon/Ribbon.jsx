@@ -14,7 +14,7 @@ const RibbonContainer = styled.div`
   position: absolute;
   z-index: 1;
   pointer-events: none;
-  right: -10px;
+  right: -13px;
 
   ::before,
   ::after {
