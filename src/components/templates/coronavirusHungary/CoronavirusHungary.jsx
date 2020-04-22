@@ -5,6 +5,8 @@ import { differenceInDays } from "date-fns"
 import _ from "lodash"
 import { GoTools } from "react-icons/go"
 import { min, max } from "d3-array"
+import { useSpring, animated as a } from "react-spring"
+import styled from "styled-components"
 
 import { FlexContainer, Container } from "../../atoms"
 import { usePrevious, useDeviceType } from "../../../hooks"
@@ -18,6 +20,11 @@ import {
   makeAreaData,
   filterGender,
 } from "../../organisms/templateElemets/coronavirusHungary/utils/dataHelpers"
+
+
+const SideA = styled(a.div)`
+
+`
 
 function makeNumbers(array, lan) {
   return {
@@ -160,22 +167,35 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
 
   const device = useDeviceType()
 
+  const [flipped, set] = useState(false)
+  const { transform, opacity } = useSpring({
+    opacity: flipped ? 1 : 0,
+    transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
+    config: { mass: 5, tension: 500, friction: 80 },
+  })
+
   return (
     <>
-      <Helmet title={TEXT.helmet[language]} />
+      <Helmet
+        title={TEXT.helmet[language]}
+        onClick={() => set(state => !state)}
+      />
       {device === "desktop" && (
-        <BrowserDashboard
-          language={language}
-          setLanguage={setLanguage}
-          numbers={numbers}
-          dates={dates}
-          setDates={setDates}
-          filteredData={filteredData}
-          loading={loading}
-          fullListDomain={fullListDomain}
-        />
+        <FlexContainer fullScreen>
+          <a.div
+            class="c back"
+            style={{ opacity: opacity.interpolate(o => 1 - o), transform }}
+          />
+          <a.div
+            class="c front"
+            style={{
+              opacity,
+              transform: transform.interpolate(t => `${t} rotateX(180deg)`),
+            }}
+          />
+        </FlexContainer>
       )}
-      {device === "tablet" && (
+      {/* {device === "tablet" && (
         <TabletView>
           <FlexContainer
             fullSize
@@ -208,9 +228,19 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           loading={loading}
           fullListDomain={fullListDomain}
         />
-      )}
+      )} */}
     </>
   )
 }
 
 export default CoronaVirusHungaryDashboard
+// {/* <BrowserDashboard
+//         language={language}
+//         setLanguage={setLanguage}
+//         numbers={numbers}
+//         dates={dates}
+//         setDates={setDates}
+//         filteredData={filteredData}
+//         loading={loading}
+//         fullListDomain={fullListDomain}
+//       /> */}
