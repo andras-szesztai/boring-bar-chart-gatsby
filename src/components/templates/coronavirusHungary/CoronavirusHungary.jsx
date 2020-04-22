@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { TabletView } from "react-device-detect"
 import Helmet from "react-helmet"
 import { differenceInDays } from "date-fns"
 import _ from "lodash"
 import { GoTools } from "react-icons/go"
 import { min, max } from "d3-array"
-import { useSpring, animated as a } from "react-spring"
+import { useSpring, animated as a, config } from "react-spring"
 import styled from "styled-components"
 
 import { FlexContainer, Container } from "../../atoms"
@@ -20,11 +20,27 @@ import {
   makeAreaData,
   filterGender,
 } from "../../organisms/templateElemets/coronavirusHungary/utils/dataHelpers"
+import { dropShadow, colors } from "../../../themes/theme"
 
+const TestDiv = styled(a.div)`
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  cursor: pointer;
+  will-change: transform, opacity;
 
-const SideA = styled(a.div)`
+  background-color: #fff;
+
+  box-shadow: ${dropShadow.primary}, ${dropShadow.secondary};
+
+  background-size: cover;
+`
+
+const SideBack = styled(TestDiv)`
 
 `
+
+const SideFront = styled(TestDiv)``
 
 function makeNumbers(array, lan) {
   return {
@@ -170,29 +186,28 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [flipped, set] = useState(false)
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
-    transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
-    config: { mass: 5, tension: 500, friction: 80 },
+    transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
+    config: config.slow,
   })
 
   return (
     <>
-      <Helmet
-        title={TEXT.helmet[language]}
-        onClick={() => set(state => !state)}
-      />
+      <Helmet title={TEXT.helmet[language]} />
       {device === "desktop" && (
-        <FlexContainer fullScreen>
-          <a.div
-            class="c back"
-            style={{ opacity: opacity.interpolate(o => 1 - o), transform }}
-          />
-          <a.div
-            class="c front"
+        <FlexContainer fullScreen onClick={() => set(state => !state)}>
+          <SideFront
             style={{
               opacity,
-              transform: transform.interpolate(t => `${t} rotateX(180deg)`),
+              transform: transform.interpolate(t => `${t} rotateY(180deg)`),
             }}
-          />
+          >
+            Front
+          </SideFront>
+          <SideBack
+            style={{ opacity: opacity.interpolate(o => 1 - o), transform }}
+          >
+            Back
+          </SideBack>
         </FlexContainer>
       )}
       {/* {device === "tablet" && (

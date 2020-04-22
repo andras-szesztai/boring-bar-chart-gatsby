@@ -77,8 +77,8 @@ export const z = {
 }
 
 export const dropShadow = {
-  primary: "0 1px 3px rgba(0,0,0,0.12)",
-  secondary: "0 1px 2px rgba(0,0,0,0.24)"
+  primary: "0 1px 3px rgba(51,51,51,0.12)",
+  secondary: "0 1px 2px rgba(51,51,51,0.24)"
 }
 
 const theme = {
