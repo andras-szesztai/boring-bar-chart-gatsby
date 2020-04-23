@@ -25,7 +25,7 @@ import { dropShadow, colors } from "../../../themes/theme"
 function makeNumbers(array, lan) {
   return {
     total: array.length,
-    male: array.filter(({ gender }) => gender === TEXT.genderM[lan]).length,
+    male: array.filter(({ gender }) => gender === TEXT.accessorM[lan]).length,
     female: array.filter(({ gender }) => gender === TEXT.accessorF[lan]).length,
   }
 }
@@ -34,7 +34,7 @@ function makeAverages(array, lan) {
   return {
     total: _.meanBy(array, "age"),
     male: _.meanBy(
-      array.filter(({ gender }) => gender === TEXT.genderM[lan]),
+      array.filter(({ gender }) => gender === TEXT.accessorM[lan]),
       "age"
     ),
     female: _.meanBy(
@@ -64,8 +64,6 @@ function makeFormattedData({ data, isHu }) {
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   
-
-
   const [language, setLanguage] = useState("hu")
   const prevLanguage = usePrevious(language)
 
