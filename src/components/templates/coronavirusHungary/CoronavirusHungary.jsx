@@ -63,6 +63,9 @@ function makeFormattedData({ data, isHu }) {
 }
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
+  
+
+
   const [language, setLanguage] = useState("hu")
   const prevLanguage = usePrevious(language)
 
