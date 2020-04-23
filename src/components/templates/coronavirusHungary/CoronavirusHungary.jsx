@@ -22,6 +22,13 @@ import {
 } from "../../organisms/templateElemets/coronavirusHungary/utils/dataHelpers"
 import { dropShadow, colors } from "../../../themes/theme"
 
+
+const BackGroundDiv = styled(FlexContainer)`
+  background: #bdc3c7; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #bdc3c7, #2c3e50); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #bdc3c7, #2c3e50);
+`
+
 const TestDiv = styled(a.div)`
   position: absolute;
   width: 400px;
@@ -187,7 +194,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
     transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
-    config: config.slow,
+    config: { mass: 8, tension: 500, friction: 80 }
   })
 
   return (
