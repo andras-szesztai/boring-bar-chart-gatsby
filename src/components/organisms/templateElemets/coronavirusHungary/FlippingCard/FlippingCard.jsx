@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useSpring, animated as a } from "react-spring"
 import styled from "styled-components"
+import useResizeAware from "react-resize-aware"
 
 import { dropShadow, space } from "../../../../../themes/theme"
 import { FlexContainer } from "../../../../atoms"
@@ -24,34 +25,47 @@ export default function FlippingCard({
   front,
   back,
   gridArea,
-  transition,
+  transition: groupTransition,
   toggle,
 }) {
   const prevToggle = usePrevious(toggle)
-  const [flipped, set] = useState(false)
+  const [isFlipped, setIsFlipped] = useState(false)
   const currTransition = useSpring({
     config: { mass: 6, tension: 500, friction: 80 },
-    opacity: flipped ? 1 : 0,
-    transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
+    opacity: isFlipped ? 1 : 0,
+    transform: `perspective(600px) rotateY(${isFlipped ? 180 : 0}deg)`,
   })
-  let transitionObject = currTransition
-  if (
-    prevToggle !== "undefined" &&
-    toggle !== prevToggle &&
-    flipped !== toggle
-  ) {
-    transitionObject = transition
-  }
-  const { opacity, transform } = transitionObject
+  const transitionObject = useRef(currTransition)
+  useEffect(() => {
+    transitionObject.current = currTransition
+    if (
+      prevToggle !== "undefined" &&
+      toggle !== prevToggle &&
+      toggle !== isFlipped
+    ) {
+      setIsFlipped(toggle)
+      transitionObject.current = groupTransition
+    }
+  }, [
+    prevToggle,
+    toggle,
+    isFlipped,
+    transitionObject,
+    groupTransition,
+    currTransition,
+  ])
+  const { opacity, transform } = transitionObject.current
 
-  console.log(toggle, flipped, gridArea)
+  const [resizeListener, sizes] = useResizeAware()
 
+  console.log(sizes)
   return (
     <FlexContainer
-      onClick={() => set(prev => !prev)}
+      onClick={() => setIsFlipped(prev => !prev)}
       gridArea={gridArea}
       pos="relative"
     >
+      {resizeListener}
       <Card
         style={{
           opacity,
