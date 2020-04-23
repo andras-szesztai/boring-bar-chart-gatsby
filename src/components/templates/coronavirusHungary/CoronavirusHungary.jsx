@@ -22,7 +22,6 @@ import {
 import { dropShadow, colors } from "../../../themes/theme"
 
 
-
 function makeNumbers(array, lan) {
   return {
     total: array.length,

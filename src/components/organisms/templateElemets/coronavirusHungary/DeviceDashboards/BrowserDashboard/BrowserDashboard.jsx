@@ -25,22 +25,40 @@ const BrowserMainGrid = styled(GridContainer)`
 
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 120px 100px 400px 400px;
-  grid-row-gap: 2rem;
-  grid-column-gap: 2rem;
+  grid-row-gap: 3rem;
+  grid-column-gap: 3rem;
   grid-template-areas:
     "title title title source"
     "control control control control"
     "cumulative daily age ratio"
     "main main main main";
+
+  @media (max-width: 1000px) {
+    grid-template-rows: 120px 100px 400px 400px 500px;
+    grid-row-gap: 1.5rem;
+    grid-column-gap: 1.5rem;
+    grid-template-areas:
+      "title title title source"
+      "control control control control"
+      "cumulative cumulative daily daily"
+      "age age ratio ratio"
+      "main main main main";
+  }
 `
 
 const charts = [
-  { area: "cumulative", perspective: 600, zIndex: "hoverOverlay" },
-  { area: "daily", perspective: 600, zIndex: "hoverOverlay" },
-  { area: "age", perspective: 600, zIndex: "hoverOverlay" },
-  { area: "ratio", perspective: 600, zIndex: "hoverOverlay" },
-  { area: "main", perspective: 800, zIndex: "none" },
+  { gridArea: "cumulative", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "daily", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "age", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "ratio", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "main", perspective: 5000, zIndex: "none" },
 ]
+
+const CARD_STYLE_PROPS = {
+  withDropShadow: true,
+  bgColor: "#ffffff",
+  borderRadius: 1,
+}
 
 export default function BrowserDashboard({
   language,
@@ -61,24 +79,33 @@ export default function BrowserDashboard({
 
   return (
     <BrowserView>
-      <FlexContainer bgColor="#f2f2f2" fullSize>
+      <FlexContainer bgColor="#f2f2f2">
         <BrowserMainGrid>
-          <FlexContainer withBorder gridArea="title" />
-          <FlexContainer withBorder gridArea="source" />
           <FlexContainer
-            withBorder
+            gridArea="title"
+            fontSize={5}
+            fontWeight="ultraLight"
+            lineHeight={1.2}
+            paddingBottom={2}
+            textAlign="left"
+          >
+            {TEXT.mainTitle[language]}
+          </FlexContainer>
+          <FlexContainer gridArea="source" />
+          <FlexContainer
+            {...CARD_STYLE_PROPS}
             gridArea="control"
             onClick={() => set(state => !state)}
           />
           {trail.map((trans, i) => (
             <FlippingCard
               key={charts[i].area}
-              gridArea={charts[i].area}
               toggle={toggle}
               transition={trans}
-              front="Front"
-              back="Back"
-              styleProps={...charts[i].area}
+              frontContent="Front"
+              backContent="Back"
+              fullCardIsClickable
+              {...charts[i]}
             />
           ))}
         </BrowserMainGrid>

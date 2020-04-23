@@ -18,16 +18,13 @@ const Card = styled(a.div)`
   background-color: #fff;
   cursor: pointer;
   will-change: transform, opacity;
-  box-shadow: ${dropShadow.primary}, ${dropShadow.secondary};
+  /* box-shadow: ${dropShadow.primary}, ${dropShadow.secondary}; */
+  filter: drop-shadow(${dropShadow.primary})
+    drop-shadow(${dropShadow.secondary});
 `
 
-export default function FlippingCard({
-  front,
-  back,
-  gridArea,
-  transition: groupTransition,
-  toggle: parentIsFlipped,
-}) {
+export default function FlippingCard(props) {
+  const { transition: groupTransition, toggle: parentIsFlipped } = props
   const prevParentIsFlipped = usePrevious(parentIsFlipped)
   const [isFlipped, setIsFlipped] = useState(false)
   const currTransition = useSpring({
@@ -58,33 +55,36 @@ export default function FlippingCard({
 
   const [resizeListener, sizes] = useResizeAware()
   const rotateDirection = sizes.height > sizes.width ? "rotateY" : "rotateX"
+
   return (
     <FlexContainer
-      onClick={() => setIsFlipped(prev => !prev)}
-      gridArea={gridArea}
+      onClick={() => props.fullCardIsClickable && setIsFlipped(prev => !prev)}
+      gridArea={props.gridArea}
       pos="relative"
+      zIndex={props.zIndex}
     >
       {resizeListener}
       <Card
         style={{
           opacity: opacity.interpolate(o => 1 - o),
           transform: transform.interpolate(
-            t => `perspective(600px) ${rotateDirection}(${t}deg)`
+            t =>
+              `perspective(${props.perspective}px) ${rotateDirection}(${t}deg)`
           ),
         }}
       >
-        {front} {gridArea}
+        {props.frontContent} {props.gridArea}
       </Card>
       <Card
         style={{
           opacity,
           transform: transform.interpolate(
             t =>
-              ` perspective(600px) ${rotateDirection}(${t}deg) ${rotateDirection}(180deg)`
+              ` perspective(${props.perspective}px) ${rotateDirection}(${t}deg) ${rotateDirection}(180deg)`
           ),
         }}
       >
-        {back} {gridArea}
+        {props.backContent} {props.gridArea}
       </Card>
     </FlexContainer>
   )
