@@ -26,29 +26,29 @@ export default function FlippingCard({
   back,
   gridArea,
   transition: groupTransition,
-  toggle,
+  toggle: parentIsFlipped,
 }) {
-  const prevToggle = usePrevious(toggle)
+  const prevParentIsFlipped = usePrevious(parentIsFlipped)
   const [isFlipped, setIsFlipped] = useState(false)
   const currTransition = useSpring({
     config: { mass: 6, tension: 500, friction: 80 },
     opacity: isFlipped ? 1 : 0,
-    transform: `perspective(600px) rotateY(${isFlipped ? 180 : 0}deg)`,
+    transform: isFlipped ? 180 : 0,
   })
   const transitionObject = useRef(currTransition)
   useEffect(() => {
     transitionObject.current = currTransition
     if (
-      prevToggle !== "undefined" &&
-      toggle !== prevToggle &&
-      toggle !== isFlipped
+      prevParentIsFlipped !== "undefined" &&
+      parentIsFlipped !== prevParentIsFlipped &&
+      parentIsFlipped !== isFlipped
     ) {
-      setIsFlipped(toggle)
+      setIsFlipped(parentIsFlipped)
       transitionObject.current = groupTransition
     }
   }, [
-    prevToggle,
-    toggle,
+    prevParentIsFlipped,
+    parentIsFlipped,
     isFlipped,
     transitionObject,
     groupTransition,
@@ -57,8 +57,7 @@ export default function FlippingCard({
   const { opacity, transform } = transitionObject.current
 
   const [resizeListener, sizes] = useResizeAware()
-
-  console.log(sizes)
+  const rotateDirection = sizes.height > sizes.width ? "rotateY" : "rotateX"
   return (
     <FlexContainer
       onClick={() => setIsFlipped(prev => !prev)}
@@ -68,13 +67,23 @@ export default function FlippingCard({
       {resizeListener}
       <Card
         style={{
-          opacity,
-          transform: transform.interpolate(t => `${t} rotateY(180deg)`),
+          opacity: opacity.interpolate(o => 1 - o),
+          transform: transform.interpolate(
+            t => `perspective(600px) ${rotateDirection}(${t}deg)`
+          ),
         }}
       >
         {front} {gridArea}
       </Card>
-      <Card style={{ opacity: opacity.interpolate(o => 1 - o), transform }}>
+      <Card
+        style={{
+          opacity,
+          transform: transform.interpolate(
+            t =>
+              ` perspective(600px) ${rotateDirection}(${t}deg) ${rotateDirection}(180deg)`
+          ),
+        }}
+      >
         {back} {gridArea}
       </Card>
     </FlexContainer>

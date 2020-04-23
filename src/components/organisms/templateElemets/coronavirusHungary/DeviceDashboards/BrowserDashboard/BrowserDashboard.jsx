@@ -35,11 +35,11 @@ const BrowserMainGrid = styled(GridContainer)`
 `
 
 const charts = [
-  { area: "cumulative" },
-  { area: "daily" },
-  { area: "age" },
-  { area: "ratio" },
-  // { area: "main" },
+  { area: "cumulative", perspective: 600, zIndex: "hoverOverlay" },
+  { area: "daily", perspective: 600, zIndex: "hoverOverlay" },
+  { area: "age", perspective: 600, zIndex: "hoverOverlay" },
+  { area: "ratio", perspective: 600, zIndex: "hoverOverlay" },
+  { area: "main", perspective: 800, zIndex: "none" },
 ]
 
 export default function BrowserDashboard({
@@ -56,7 +56,7 @@ export default function BrowserDashboard({
   const trail = useTrail(charts.length, {
     config: { mass: 6, tension: 500, friction: 80 },
     opacity: toggle ? 1 : 0,
-    transform: `perspective(600px) rotateY(${toggle ? 180 : 0}deg)`,
+    transform: toggle ? 180 : 0,
   })
 
   return (
@@ -78,6 +78,7 @@ export default function BrowserDashboard({
               transition={trans}
               front="Front"
               back="Back"
+              styleProps={...charts[i].area}
             />
           ))}
         </BrowserMainGrid>
