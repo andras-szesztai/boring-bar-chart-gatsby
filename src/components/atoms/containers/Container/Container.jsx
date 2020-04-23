@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components"
+import { animated as a } from "react-spring"
 import {
   themifyFontSize,
   themifyFontWeight,
@@ -10,7 +11,7 @@ import {
 } from "../../../../themes/mixins"
 import { transition, dropShadow } from "../../../../themes/theme"
 
-const Container = styled.div`
+const Container = styled(a.div)`
   user-select: none;
   transition: opacity ${themifyTransition("sm")} ${themifyEase(
   "easeInOutCubic"

@@ -16,32 +16,19 @@ import HorizontalBarChart from "../../HorizontalBarChart/HorizontalBarChart"
 import PercChartContainer from "../../PercChartContainer/PercChartContainer"
 import AgeChartBrowser from "../../AgeChartBrowser/AgeChartBrowser"
 import { FullScreenLoader } from "../../../../../molecules"
-
-const Flipping = styled(a.div)`
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  cursor: pointer;
-  will-change: transform, opacity;
-
-  background-color: #fff;
-
-  box-shadow: ${dropShadow.primary}, ${dropShadow.secondary};
-
-  background-size: cover;
-`
-
-const SideBack = styled(Flipping)``
-
-const SideFront = styled(Flipping)``
+import FlippingCard from "../../FlippingCard/FlippingCard"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
   width: 94vw;
+  margin: ${space[4]}px 0;
 
-  max-height: 700px;
-  min-height: 500px;
-  height: 96vh;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 120px) 400px;
+  grid-template-areas:
+    "title title title source"
+    "control control control control"
+    "cumulative daily age ratio";
 `
 
 export default function BrowserDashboard({
@@ -61,17 +48,22 @@ export default function BrowserDashboard({
     config: { mass: 8, tension: 500, friction: 80 },
   })
 
-
   return (
     <BrowserView>
+      <FlexContainer bgColor="#f2f2f2" fullSize>
         <BrowserMainGrid>
-
+          <FlexContainer withBorder gridArea="title" />
+          <FlexContainer withBorder gridArea="source" />
+          <FlexContainer withBorder gridArea="control" />
+          <FlippingCard gridArea="cumulative" front="Front" back="Back" />
+          <FlippingCard gridArea="daily" front="Front" back="Back" />
+          <FlexContainer withBorder gridArea="age" />
+          <FlexContainer withBorder gridArea="ratio" />
         </BrowserMainGrid>
+      </FlexContainer>
     </BrowserView>
   )
 }
-
-
 
 // {/* <FlexContainer fullScreen>
 // <FullScreenLoader loading={loading} loader="clip" loaderSize={75} />

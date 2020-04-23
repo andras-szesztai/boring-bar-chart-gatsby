@@ -5,7 +5,6 @@ import { differenceInDays } from "date-fns"
 import _ from "lodash"
 import { GoTools } from "react-icons/go"
 import { min, max } from "d3-array"
-import { useSpring, animated as a, config } from "react-spring"
 import styled from "styled-components"
 
 import { FlexContainer, Container } from "../../atoms"
@@ -23,31 +22,6 @@ import {
 import { dropShadow, colors } from "../../../themes/theme"
 
 
-const BackGroundDiv = styled(FlexContainer)`
-  background: #bdc3c7; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #bdc3c7, #2c3e50); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #bdc3c7, #2c3e50);
-`
-
-const TestDiv = styled(a.div)`
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  cursor: pointer;
-  will-change: transform, opacity;
-
-  background-color: #fff;
-
-  box-shadow: ${dropShadow.primary}, ${dropShadow.secondary};
-
-  background-size: cover;
-`
-
-const SideBack = styled(TestDiv)`
-
-`
-
-const SideFront = styled(TestDiv)``
 
 function makeNumbers(array, lan) {
   return {
@@ -190,32 +164,22 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
 
   const device = useDeviceType()
 
-  const [flipped, set] = useState(false)
-  const { transform, opacity } = useSpring({
-    opacity: flipped ? 1 : 0,
-    transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
-    config: { mass: 8, tension: 500, friction: 80 }
-  })
+
 
   return (
     <>
       <Helmet title={TEXT.helmet[language]} />
       {device === "desktop" && (
-        <FlexContainer fullScreen onClick={() => set(state => !state)}>
-          <SideFront
-            style={{
-              opacity,
-              transform: transform.interpolate(t => `${t} rotateY(180deg)`),
-            }}
-          >
-            Front
-          </SideFront>
-          <SideBack
-            style={{ opacity: opacity.interpolate(o => 1 - o), transform }}
-          >
-            Back
-          </SideBack>
-        </FlexContainer>
+        <BrowserDashboard
+          language={language}
+          setLanguage={setLanguage}
+          numbers={numbers}
+          dates={dates}
+          setDates={setDates}
+          filteredData={filteredData}
+          loading={loading}
+          fullListDomain={fullListDomain}
+        />
       )}
       {/* {device === "tablet" && (
         <TabletView>
@@ -256,13 +220,3 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
 }
 
 export default CoronaVirusHungaryDashboard
-// {/* <BrowserDashboard
-//         language={language}
-//         setLanguage={setLanguage}
-//         numbers={numbers}
-//         dates={dates}
-//         setDates={setDates}
-//         filteredData={filteredData}
-//         loading={loading}
-//         fullListDomain={fullListDomain}
-//       /> */}
