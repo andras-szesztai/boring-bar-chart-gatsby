@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { BrowserView } from "react-device-detect"
-import { useSpring, animated as a, config } from "react-spring"
+import { useSpring, animated as a, config, useTrail } from "react-spring"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
 import { space, dropShadow } from "../../../../../../themes/theme"
@@ -24,12 +24,23 @@ const BrowserMainGrid = styled(GridContainer)`
   margin: ${space[4]}px 0;
 
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 120px) 400px;
+  grid-template-rows: 120px 100px 400px 400px;
+  grid-row-gap: 2rem;
+  grid-column-gap: 2rem;
   grid-template-areas:
     "title title title source"
     "control control control control"
-    "cumulative daily age ratio";
+    "cumulative daily age ratio"
+    "main main main main";
 `
+
+const charts = [
+  { area: "cumulative" },
+  { area: "daily" },
+  { area: "age" },
+  { area: "ratio" },
+  // { area: "main" },
+]
 
 export default function BrowserDashboard({
   language,
@@ -41,11 +52,11 @@ export default function BrowserDashboard({
   loading,
   fullListDomain,
 }) {
-  const [flipped, set] = useState(false)
-  const { transform, opacity } = useSpring({
-    opacity: flipped ? 1 : 0,
-    transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
-    config: { mass: 8, tension: 500, friction: 80 },
+  const [toggle, set] = useState(false)
+  const trail = useTrail(charts.length, {
+    config: { mass: 6, tension: 500, friction: 80 },
+    opacity: toggle ? 1 : 0,
+    transform: `perspective(600px) rotateY(${toggle ? 180 : 0}deg)`,
   })
 
   return (
@@ -54,11 +65,21 @@ export default function BrowserDashboard({
         <BrowserMainGrid>
           <FlexContainer withBorder gridArea="title" />
           <FlexContainer withBorder gridArea="source" />
-          <FlexContainer withBorder gridArea="control" />
-          <FlippingCard gridArea="cumulative" front="Front" back="Back" />
-          <FlippingCard gridArea="daily" front="Front" back="Back" />
-          <FlexContainer withBorder gridArea="age" />
-          <FlexContainer withBorder gridArea="ratio" />
+          <FlexContainer
+            withBorder
+            gridArea="control"
+            onClick={() => set(state => !state)}
+          />
+          {trail.map((trans, i) => (
+            <FlippingCard
+              key={charts[i].area}
+              gridArea={charts[i].area}
+              toggle={toggle}
+              transition={trans}
+              front="Front"
+              back="Back"
+            />
+          ))}
         </BrowserMainGrid>
       </FlexContainer>
     </BrowserView>
