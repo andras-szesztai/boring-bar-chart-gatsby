@@ -69,7 +69,7 @@ export const actions = {
   setFullListDomain: dispatch => dispatch({ type: SET_FULL_LIST_DOMAIN }),
 }
 
-export const initialState = {
+export const  coronavirusDashboardInitialState = {
   language: "hu",
   dates: {
     diff: undefined,
