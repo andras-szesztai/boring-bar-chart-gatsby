@@ -23,8 +23,8 @@ import { dropShadow, colors } from "../../../themes/theme"
 import {
   coronavirusDashboardReducer,
   coronavirusDashboardInitialState,
+  actions,
 } from "../../../reducers/coronavirusDashboard/coronavirusDashboardReducer"
-
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [state, dispatch] = useReducer(
@@ -33,74 +33,37 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   )
   const prevState = usePrevious(state)
 
+  const {
+    setFormattedData,
+    setLanguage,
+    setInitialDates,
+    setFilteredData,
+    setNumbers,
+    setAverages,
+    setFullListDomain,
+  } = actions
+
   useEffect(() => {
-    // if (data && !formattedData) {
-    //   const formattedData = makeFormattedData({ data, isHu: true })
-    //   const maxDate = _.maxBy(formattedData, "date").date
-    //   const minDate = _.minBy(formattedData, "date").date
-    //   const dateDiff = differenceInDays(minDate, maxDate)
-    //   const femaleData = filterGender({
-    //     accessor: "accessorF",
-    //     language,
-    //     data: formattedData,
-    //   })
-    //   const maleData = filterGender({
-    //     accessor: "accessorM",
-    //     language,
-    //     data: formattedData,
-    //   })
-    //   const fullAgeDomain = [
-    //     min(formattedData, ({ age }) => age) - 2,
-    //     max(formattedData, ({ age }) => age) + 2,
-    //   ].sort()
-    //   const fullAgeList = []
-    //   for (var i = fullAgeDomain[0]; i <= fullAgeDomain[1]; i++) {
-    //     fullAgeList.push(i)
-    //   }
-    //   const maxNumber = max([
-    //     ...makeAreaData(femaleData, fullAgeList).map(({ number }) => number),
-    //     ...makeAreaData(maleData, fullAgeList).map(({ number }) => number),
-    //   ])
-    //   const maxGenderNumber = max([femaleData.length, maleData.length])
-    //   setAverages(makeAverages(formattedData, language))
-    //   setFullListDomain({
-    //     fullAgeDomain,
-    //     fullAgeList,
-    //     maxNumber,
-    //     maxGenderNumber,
-    //   })
-    //   setFormattedData(formattedData)
-    //   setFilteredData(formattedData)
-    //   setNumbers(makeNumbers(formattedData, language))
-    //   setDates({
-    //     diff: dateDiff,
-    //     max: maxDate,
-    //     currDate: maxDate,
-    //   })
-    // }
-    // if (prevLanguage && language !== prevLanguage) {
-    //   const isHu = language === "hu"
-    //   const dataSet = isHu ? data : enData
-    //   const formattedData = makeFormattedData({ data: dataSet, isHu })
-    //   setFormattedData(formattedData)
-    //   setFilteredData(
-    //     formattedData.filter(
-    //       ({ date }) => date.getTime() <= dates.currDate.getTime()
-    //     )
-    //   )
-    // }
-    // if (
-    //   prevDates &&
-    //   prevDates.currDate &&
-    //   !_.isEqual(dates.currDate, prevDates.currDate)
-    // ) {
-    //   const filteredData = formattedData.filter(
-    //     ({ date }) => date.getTime() <= dates.currDate.getTime()
-    //   )
-    //   setAverages(makeAverages(filteredData, language))
-    //   setFilteredData(filteredData)
-    //   setNumbers(makeNumbers(filteredData, language))
-    // }
+    if (data && !state.dataSets.formattedData) {
+      setFormattedData(dispatch, { data: data })
+      setInitialDates(dispatch)
+      setFilteredData(dispatch)
+      setNumbers(dispatch)
+      setAverages(dispatch)
+      setFullListDomain(dispatch)
+    }
+    if (prevState) {
+      if (prevState.language !== state.language) {
+        const currData = state.language === "en" ? enData : data
+        setFormattedData(dispatch, { data: currData })
+        setFilteredData(dispatch)
+      }
+      if (!_.isEqual(state.dates.currDate, prevState.dates.currDate)) {
+        setFilteredData(dispatch)
+        setNumbers(dispatch)
+        setAverages(dispatch)
+      }
+    }
   })
 
   const device = useDeviceType()

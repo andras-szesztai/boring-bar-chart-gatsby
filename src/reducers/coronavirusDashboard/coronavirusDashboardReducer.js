@@ -99,7 +99,7 @@ export const  coronavirusDashboardInitialState = {
 }
 
 export const coronavirusDashboardReducer = (state, { type, payload }) => {
-  const { formattedData, language } = state
+  const { dataSets: {  formattedData  }, language } = state
   const types = {
     SET_LANGUAGE: () => ({
       ...state,
@@ -121,9 +121,9 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
       return {
         ...state,
         dates: {
-          diff: minDate,
-          max: maxDate,
-          currDate: differenceInDays(minDate, maxDate),
+          diff: differenceInDays(minDate, maxDate),
+          max: minDate,
+          currDate: maxDate 
         },
       }
     },
