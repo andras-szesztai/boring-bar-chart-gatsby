@@ -52,6 +52,7 @@ function makeAverages(array, lan) {
 
 const SET_FORMATTED_DATA = "SET_FORMATTED_DATA"
 const SET_INITIAL_DATES = "SET_INITIAL_DATES"
+const UPDATE_CURR_DATE= "UPDATE_CURR_DATE"
 const SET_FILTERED_DATA = "SET_FILTERED_DATA"
 const SET_LANGUAGE = "SET_LANGUAGE"
 const SET_NUMBERS = "SET_NUMBERS"
@@ -63,6 +64,7 @@ export const actions = {
   setFormattedData: (dispatch, payload) =>
     dispatch({ type: SET_FORMATTED_DATA, payload }),
   setInitialDates: dispatch => dispatch({ type: SET_INITIAL_DATES }),
+  updateCurrDate: (dispatch, payload) => dispatch({ type: UPDATE_CURR_DATE, payload }),
   setFilteredData: dispatch => dispatch({ type: SET_FILTERED_DATA }),
   setNumbers: dispatch => dispatch({ type: SET_NUMBERS }),
   setAverages: dispatch => dispatch({ type: SET_AVERAGES }),
@@ -127,6 +129,13 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
         },
       }
     },
+    UPDATE_CURR_DATE: () => ({
+      ...state,
+      dates: {
+        ...state.dates,
+        currDate: payload
+      }
+    }),
     SET_FILTERED_DATA: () => ({
       ...state,
       dataSets: {

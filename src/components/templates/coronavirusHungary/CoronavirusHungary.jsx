@@ -71,7 +71,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   return (
     <>
       <Helmet
-      // title={TEXT.helmet[language]}
+        title={TEXT.helmet[state.language]}
       />
       {device === "desktop" && (
         <BrowserDashboard

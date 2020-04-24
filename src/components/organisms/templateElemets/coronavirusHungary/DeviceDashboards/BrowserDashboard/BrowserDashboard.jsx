@@ -99,7 +99,7 @@ export default function BrowserDashboard({
           />
           {trail.map((trans, i) => (
             <FlippingCard
-              key={charts[i].area}
+              key={charts[i].gridArea}
               toggle={toggle}
               transition={trans}
               frontContent="Front"
