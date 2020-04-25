@@ -20,11 +20,12 @@ import { FullScreenLoader } from "../../../../../molecules"
 import FlippingCard from "../../FlippingCard/FlippingCard"
 import { SwitchComponent } from "../../../../../molecules/controlElements"
 import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
+import CardGrid from "../../CardGrid/CardGrid"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
   width: 94vw;
-  margin: ${space[4]}px 0;
+  margin: ${space[3]}px 0;
 
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: minmax(120px, min-content) 70px 400px 400px;
@@ -146,58 +147,23 @@ export default function BrowserDashboard({
               justify="flex-end"
             />
           </GridContainer>
-          {trail.map((trans, i) => (
-            <FlippingCard
-              key={charts[i].gridArea}
-              toggle={isGender}
-              transition={trans}
-              fullCardIsClickable
-              frontContent="Front"
-              backContent="Back"
-              {...charts[i]}
-            />
-          ))}
+          {trail.map((trans, i) => {
+            const area = charts[i].gridArea
+            const isMain = area === "main"
+            return (
+              <FlippingCard
+                key={area}
+                toggle={isGender}
+                transition={trans}
+                fullCardIsClickable
+                frontContent={<CardGrid onlyChart={isMain} />}
+                backContent={<CardGrid onlyChart={isMain} />}
+                {...charts[i]}
+              />
+            )
+          })}
         </BrowserMainGrid>
       </FlexContainer>
     </BrowserView>
   )
 }
-
-// {/* <FlexContainer fullScreen>
-// <FullScreenLoader loading={loading} loader="clip" loaderSize={75} />
-// <BrowserMainGrid>
-//   <FlexContainer fontSize={2} justify="flex-start" gridArea="total">
-//     {TEXT.total[language]}:
-//   </FlexContainer>
-//   <FlexContainer fontSize={3} fontWeight={3} gridArea="tNum">
-//     <Number num={numbers.total} />
-//   </FlexContainer>
-//   <DateSliderBrowser
-//     dates={dates}
-//     language={language}
-//     setDates={setDates}
-//   />
-//   <BarLabels numbers={numbers} language={language} />
-//   <FlexContainer gridArea="barC" fullSize>
-//     {!loading && (
-//       <HorizontalBarChart
-//         data={numbers}
-//         fullListDomain={fullListDomain}
-//       />
-//     )}
-//   </FlexContainer>
-//   <PercChartContainer
-//     language={language}
-//     numbers={numbers}
-//     loading={loading}
-//   />
-//   <FlexContainer gridArea="7/-1/-1/1" pos="relative">
-//     <FlexContainer absPos top={space[2]} left={0} fontSize={2}>
-//       {TEXT.mainChartExpBrowser[language]}
-//     </FlexContainer>
-//     {!loading && (
-//       <AgeChartBrowser data={filteredData} language={language} />
-//     )}
-//   </FlexContainer>
-// </BrowserMainGrid>
-// </FlexContainer> */}
