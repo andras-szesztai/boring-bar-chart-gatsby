@@ -12,6 +12,8 @@ export const chartColors = {
   total: colors.grayDarkest,
 }
 
+export const CIRCLE_RADIUS = 5
+
 export const lowOpacity = 0.75
 export const lowestOpacity = 0.25
 
@@ -86,18 +88,22 @@ export const TEXT = {
       },
       gender: {
         hu: "Elhunytak száma március 20-a óta nemek szerint (kumulatív)",
-        en: "Number of deceased per gender since the 20th of March (cumulative)",
-      }
+        en:
+          "Number of deceased per gender since the 20th of March (cumulative)",
+      },
     },
     daily: {
       total: {
         hu: "Elhunytak száma naponta március 26-a óta (7 napos mozgóátlag)",
-        en: "Number of death/day since the 26th of March (7 day moving average)",
+        en:
+          "Number of death/day since the 26th of March (7 day moving average)",
       },
       gender: {
-        hu: "Elhunytak száma naponta március 26-a óta nemek szerint (7 napos mozgóátlag)",
-        en: "Number of death/day since the 26th of March (7 day moving average per gender)",
-      }
+        hu:
+          "Elhunytak száma naponta március 26-a óta nemek szerint (7 napos mozgóátlag)",
+        en:
+          "Number of death/day since the 26th of March (7 day moving average per gender)",
+      },
     },
     age: {
       total: {
@@ -107,7 +113,7 @@ export const TEXT = {
       gender: {
         hu: "Elhunytak átlagéletkora nemek szerint",
         en: "Average age of the deceased over time per gender",
-      }
+      },
     },
     ratio: {
       total: {
@@ -117,17 +123,21 @@ export const TEXT = {
       gender: {
         hu: "Nemek százalékos megoszlása",
         en: "Gender distribution",
-      }
+      },
     },
     main: {
       total: {
-        hu: "Mindegyik kör egy-egy elhunytat képvisel a horizontális tengelyen pozícionálva az elhunyt személy kora alapján",
-        en: "Each dot represents someone passed away, the position on the horizontal axis is determined by the age of the deceased",
+        hu:
+          "Mindegyik kör egy-egy elhunytat képvisel a horizontális tengelyen pozícionálva az elhunyt személy kora alapján",
+        en:
+          "Each dot represents someone passed away, the position on the horizontal axis is determined by the age of the deceased",
       },
       gender: {
-        hu: "Mindegyik kör egy-egy elhunytat képvisel a horizontális tengelyen pozícionálva az elhunyt személy kora alapján (nemek szerint megosztva vertikálisan)",
-        en: "Each dot represents someone passed away, the position on the horizontal axis is determined by the age of the deceased (grouped by gender on the y-axis)",
-      }
+        hu:
+          "Mindegyik kör egy-egy elhunytat képvisel a horizontális tengelyen pozícionálva az elhunyt személy kora alapján (nemek szerint megosztva vertikálisan)",
+        en:
+          "Each dot represents someone passed away, the position on the horizontal axis is determined by the age of the deceased (grouped by gender on the y-axis)",
+      },
     },
   },
   mainChartExpBrowser: {
@@ -185,5 +195,27 @@ export const TEXT = {
   mobileExp: {
     hu: "A mobil verzió hamarosan elkészül, köszönjük türelmét!",
     en: "The mobile version is coming soon, thank you for your patience!",
+  },
+  cardExplanation: {
+    browser: {
+      back: {
+        hu: "Kattintson a kártyára a kombinált adatokért",
+        en: "Click on the card to see total",
+      },
+      front: {
+        hu: "Kattintson a kártyára a nemek szerinti adatokért",
+        en: "Click on the card to see per gender data",
+      },
+    },
+    mobile: {
+      back: {
+        hu: "Koppitnson a kártyára a kombinált adatokért",
+        en: "Tap on the card to see total",
+      },
+      front: {
+        hu: "Koppitnson a kártyára a nemek szerinti adatokért",
+        en: "Tap on the card to see per gender data",
+      },
+    },
   },
 }

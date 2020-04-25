@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useLayoutEffect, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { BrowserView } from "react-device-detect"
 import { useSpring, animated as a, config, useTrail } from "react-spring"
@@ -25,7 +25,7 @@ import CardGrid from "../../CardGrid/CardGrid"
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
   width: 94vw;
-  margin: ${space[3]}px 0;
+  margin: ${space[3]}px 0 ${space[4]}px 0;
 
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: minmax(120px, min-content) 70px 400px 400px;
@@ -52,10 +52,10 @@ const BrowserMainGrid = styled(GridContainer)`
 
 const charts = [
   { gridArea: "cumulative", perspective: 700, zIndex: "hoverOverlay" },
-  // { gridArea: "daily", perspective: 700, zIndex: "hoverOverlay" },
-  // { gridArea: "age", perspective: 700, zIndex: "hoverOverlay" },
-  // { gridArea: "ratio", perspective: 700, zIndex: "hoverOverlay" },
-  // { gridArea: "main", perspective: 5000, zIndex: "none" },
+  { gridArea: "daily", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "age", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "ratio", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "main", perspective: 5000, zIndex: "none" },
 ]
 
 const CARD_STYLE_PROPS = {
@@ -70,14 +70,12 @@ export default function BrowserDashboard({
   updateDisplay,
   state,
   dispatch,
+  loading,
 }) {
   const {
     language,
     display,
-    numbers,
     dates,
-    loading,
-    fullListDomain,
     dataSets: { filteredData },
   } = state
   const isGender = state.display === "gender"
@@ -89,7 +87,8 @@ export default function BrowserDashboard({
 
   return (
     <BrowserView>
-      <FlexContainer bgColor="#f2f2f2">
+      <FlexContainer bgColor="#f2f2f2" loader="circle" loaderSize={20}>
+        <FullScreenLoader loading={loading} />
         <BrowserMainGrid>
           <FlexContainer
             gridArea="title"
@@ -165,6 +164,7 @@ export default function BrowserDashboard({
                     data={isMain ? filteredData : state.dataSets[area].total}
                     language={language}
                     type="front"
+                    device="browser"
                   />
                 }
                 backContent={
@@ -175,6 +175,7 @@ export default function BrowserDashboard({
                     currDate={state.dates.currDate}
                     data={isMain ? filteredData : state.dataSets[area].gender}
                     language={language}
+                    device="browser"
                     type="back"
                   />
                 }

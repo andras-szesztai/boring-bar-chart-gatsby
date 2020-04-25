@@ -15,7 +15,8 @@ export default function CardGrid({
   currDate,
   area,
   language,
-  type
+  type,
+  device,
 }) {
   const currNumbers =
     data &&
@@ -27,14 +28,19 @@ export default function CardGrid({
       style={{ padding: `${space[2]}px ${space[3]}px` }}
       fullSize
       textAlign="left"
-      rows={onlyChart ? "25px 1fr" : "50px 1fr 100px"}
+      rows={onlyChart ? "25px 1fr 25px" : "50px 1fr 100px 25px"}
     >
       <FlexContainer justify="flex-start" align="flex-start" fontSize={2}>
         {title}
       </FlexContainer>
       <FlexContainer>
         {!onlyChart && (
-          <LineChart key={type + area} data={data} currDate={currDate} />
+          <LineChart
+            key={type + area}
+            data={data}
+            currDate={currDate}
+            isPercentage={area === "ratio"}
+          />
         )}
       </FlexContainer>
       {!onlyChart && (
@@ -65,6 +71,7 @@ export default function CardGrid({
             ))}
         </GridContainer>
       )}
+      <FlexContainer>{TEXT.cardExplanation[device][type][language]}</FlexContainer>
     </GridContainer>
   )
 }

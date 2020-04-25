@@ -7,13 +7,18 @@ import { extent } from "d3-array"
 import { nest } from "d3-collection"
 import { select } from "d3-selection"
 import { line, curveMonotoneX } from "d3-shape"
-import { chartColors } from "../../../../../constants/visualizations/coronavirusHungary"
+
+import {
+  chartColors,
+  CIRCLE_RADIUS,
+} from "../../../../../constants/visualizations/coronavirusHungary"
 import { space, colors } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { transition } from "../../../../../themes/theme"
+import { axisLeft } from "d3-axis"
 
 const axisPadding = space[2]
-export default function LineChart({ data, currDate, margin }) {
+export default function LineChart({ data, currDate, margin, isPercentage }) {
   const { svgRef, wrapperRef, yAxisRef, xAxisRef } = useChartRefs()
   const dims = useDimensions({
     ref: wrapperRef,
@@ -24,27 +29,24 @@ export default function LineChart({ data, currDate, margin }) {
   const prevCurrDate = usePrevious(currDate)
 
   useEffect(() => {
-    function createUpdateLines(currData) {
+    function createUpdateLines() {
       const { yScale, xScale, area } = storedValues.current
-      const dataSet = currData ? currData : data
       const lineGenerator = line()
         .x(d => xScale(d.date))
         .y(d => yScale(d.value))
         .curve(curveMonotoneX)
       const nestedData = nest()
         .key(({ key }) => key)
-        .entries(dataSet)
-      const className = currData ? "line" : "path-line"
+        .entries(data)
       area
-        .selectAll(`.${className}`)
+        .selectAll(".line")
         .data(nestedData)
         .join(enter =>
           enter
             .append("path")
-            .attr("class", className)
-            .attr("id", ({ key }) => (currData ? `${key}-line` : "line"))
+            .attr("class", "line")
             .attr("fill", "none")
-            .attr("stroke", ({ key }) => (currData ? "none" : chartColors[key]))
+            .attr("stroke", ({ key }) => chartColors[key])
             .attr("stroke-width", 1.5)
             .attr("stroke-linejoin", "round")
             .attr("stroke-linecap", "round")
@@ -54,13 +56,9 @@ export default function LineChart({ data, currDate, margin }) {
     function createUpdateRefElements() {
       const { yScale, xScale, area } = storedValues.current
       const t = makeTransition(area, transition.lgNum, "update")
-      const isLessDate = currDate < prevCurrDate
-      const betweenData = data.filter(({ date }) =>
-        isLessDate
-          ? date >= currDate && date <= prevCurrDate
-          : date >= prevCurrDate && date <= currDate
+      const currDateData = data.filter(
+        ({ date }) => date.toString() === currDate.toString()
       )
-      const currDateData = data.filter(({ date }) => date === currDate)
       area
         .selectAll(".ref-line")
         .data([currDate])
@@ -83,19 +81,30 @@ export default function LineChart({ data, currDate, margin }) {
                 .attr("x2", xScale)
             )
         )
-      createUpdateLines(betweenData)
-      if(!init){
-        area
-          .selectAll("circle")
-          .data(currDateData)
-          .enter()
-          .append("circle")
-          .attr("id", ({key}) => `${key}-circle` )
-          .attr("cx", )
-
-      }
-
-      area.selectAll(".path-line").remove()
+      area
+        .selectAll("circle")
+        .data(currDateData)
+        .join(
+          enter =>
+            enter
+              .append("circle")
+              .attr("cx", ({ date }) => xScale(date))
+              .attr("cy", ({ value }) => yScale(value))
+              .attr("r", CIRCLE_RADIUS)
+              .attr("fill", ({ key }) => chartColors[key])
+              .attr("stroke", "#fff"),
+          update =>
+            update
+              .attr("r", 0)
+              .attr("cx", ({ date }) => xScale(date))
+              .attr("cy", ({ value }) => yScale(value))
+              .call(update =>
+                update
+                  .transition(t)
+                  .delay(transition.lgNum)
+                  .attr("r", CIRCLE_RADIUS)
+              )
+        )
     }
     if (!init && data && dims.chartHeight) {
       const xScale = scaleTime()
@@ -112,12 +121,18 @@ export default function LineChart({ data, currDate, margin }) {
       }
       createUpdateLines()
       createUpdateRefElements()
+      area.call(axisLeft(yScale).ticks(5, isPercentage ? ".0%" : "d")).call(g => {
+        g.select(".domain").remove()
+        g.selectAll(".tick line")
+          .attr("stroke", colors.grayDarkest)
+          .attr("stroke-width", 0.5)
+      })
       setInit(true)
     }
     if (init && prevCurrDate.toString() !== currDate.toString()) {
       createUpdateRefElements()
     }
-  }, [init, data, dims, svgRef, yAxisRef, prevCurrDate, currDate])
+  }, [init, data, dims, svgRef, yAxisRef, prevCurrDate, currDate, isPercentage])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
@@ -152,5 +167,5 @@ export default function LineChart({ data, currDate, margin }) {
 }
 
 LineChart.defaultProps = {
-  margin: { top: 15, right: 10, bottom: 25, left: 25 },
+  margin: { top: 15, right: 10, bottom: 25, left: 30 },
 }

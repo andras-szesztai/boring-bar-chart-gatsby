@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react"
 import { PropagateLoader, CircleLoader, ClipLoader } from "react-spinners"
 
 import { FlexContainer, Container } from "../../atoms"
@@ -34,13 +34,33 @@ export default function FullScreenLoader({
     clip: <ClipLoader {...loaderProps} />,
   }
 
+  const windowScroll = useRef(null)
+
+  useLayoutEffect(() => {
+    if (loading) {
+      windowScroll.current = window.getComputedStyle(document.body).overflow
+      document.body.style.overflow = "hidden"
+    }
+    if (!loading) {
+      setTimeout(() => {
+        document.body.style.overflow = windowScroll.current
+      }, 200)
+    }
+  }, [loading])
+
   const scrollPosition = useScrollPosition()
 
   return (
     <>
       {(loading || parentLoading) && (
         <>
-          <Container fullSize absPos top={0} bgColor={bgColor}  zIndex="loader" />
+          <Container
+            fullSize
+            absPos
+            top={0}
+            bgColor={bgColor}
+            zIndex="loader"
+          />
           <FlexContainer
             fullScreen
             top={scrollPosition}

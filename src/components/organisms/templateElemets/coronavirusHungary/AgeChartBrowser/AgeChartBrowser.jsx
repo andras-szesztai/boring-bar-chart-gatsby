@@ -21,6 +21,7 @@ import {
   chartColors,
   lowOpacity,
   TEXT,
+  CIRCLE_RADIUS,
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition, numberTween } from "../../../../../utils/chartHelpers"
 import { transition, space, colors } from "../../../../../themes/theme"
@@ -89,7 +90,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
             .call(enter =>
               enter
                 .transition(makeTransition(area, duration, "in"))
-                .attr("r", 5)
+                .attr("r", CIRCLE_RADIUS)
             ),
         update =>
           update.call(update =>
