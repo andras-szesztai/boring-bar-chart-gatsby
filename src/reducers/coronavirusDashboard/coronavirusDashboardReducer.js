@@ -26,6 +26,58 @@ function makeFormattedData({ data, isHu }) {
   }))
 }
 
+function makeRunningTotal(dateGrouped, key) {
+  const allDates = Object.keys(dateGrouped)
+  let accumulator = 0
+  return allDates.map(date => {
+    const currAcc = accumulator
+    const currVal = dateGrouped[date].length
+    accumulator = accumulator + currVal
+    return { key, date, value: currAcc + currVal }
+  })
+}
+
+function getDaysArray(start, end) {
+  console.log(start, end)
+  var arr = []
+  for (
+    var dt = new Date(start);
+    dt <= new Date(end);
+    dt.setDate(dt.getDate() + 1)
+  ) {
+    arr.push(new Date(dt))
+  }
+  return arr
+}
+
+function makeRunningAvg(dateGrouped, key) {
+  const allDates = Object.keys(dateGrouped)
+  const enrichedAllDates = getDaysArray(
+    allDates[0],
+    allDates[allDates.length - 1]
+  )
+  const enrichedDateGroupped = enrichedAllDates.map(date => ({
+    date,
+    num: dateGrouped[date] ? dateGrouped[date].length : 0,
+  }))
+  const movingAvg = enrichedAllDates.map((date, i) => {
+    if (
+      new Date(date) <
+      new Date(
+        "Thu Mar 26 2020 00:00:00 GMT+0100 (Central European Standard Time)"
+      )
+    )
+      return { date, key, value: 0 }
+    const value = _.meanBy(enrichedDateGroupped.slice(i - 6, i), "num")
+    return {
+      date,
+      key,
+      value
+    }
+  })
+  return movingAvg
+}
+
 function makeNumbers(array, lan) {
   const sharedParams = { data: array, language: lan }
   return {
@@ -101,6 +153,10 @@ export const coronavirusDashboardInitialState = {
       total: undefined,
       gender: undefined,
     },
+    daily: {
+      total: undefined,
+      gender: undefined,
+    },
   },
   fullListDomain: {
     fullAgeDomain: undefined,
@@ -160,15 +216,37 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
       },
     }),
     SET_DATA_SETS: () => {
-      const fullData = state.formattedData
-      console.log(fullData)
+      const dateSortedData = formattedData.sort((a, b) => a.date - b.date)
+      const fullMaleData = filterGender({
+        accessor: "accessorM",
+        language,
+        data: dateSortedData,
+      })
+      const fullFemaleData = filterGender({
+        accessor: "accessorF",
+        language,
+        data: dateSortedData,
+      })
+      const groupedFull = _.groupBy(dateSortedData, "date")
+      const groupedFemale = _.groupBy(fullMaleData, "date")
+      const groupedMale = _.groupBy(fullFemaleData, "date")
       return {
         ...state,
         dataSets: {
           ...state.dataSets,
           cumulative: {
-            total: undefined,
-            gender: undefined,
+            total: makeRunningTotal(groupedFull, "total"),
+            gender: [
+              ...makeRunningTotal(groupedFemale, "male"),
+              ...makeRunningTotal(groupedMale, "female"),
+            ],
+          },
+          daily: {
+            total: makeRunningAvg(groupedFull, "total"),
+            gender: [
+              ...makeRunningAvg(groupedFemale, "male"),
+              ...makeRunningAvg(groupedMale, "female"),
+            ],
           },
         },
       }
