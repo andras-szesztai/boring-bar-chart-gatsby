@@ -10,7 +10,7 @@ const Number = props => (
     formattingFn={val =>
       props.isPercentage ? numeral(val).format("0.0%") : val
     }
-    decimals={props.isPercentage && 3}
+    decimals={props.isPercentage ? 3 : props.oneDecimal ? 1 : 0}
   />
 )
 

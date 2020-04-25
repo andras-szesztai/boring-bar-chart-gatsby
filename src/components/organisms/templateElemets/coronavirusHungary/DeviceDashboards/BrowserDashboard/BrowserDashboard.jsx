@@ -158,22 +158,22 @@ export default function BrowserDashboard({
                 fullCardIsClickable
                 frontContent={
                   <CardGrid
+                    area={area}
                     onlyChart={isMain}
                     title={TEXT.chartTitles[area].total[language]}
                     currDate={state.dates.currDate}
-                    data={
-                      isMain ? filteredData : state.dataSets[area].total
-                    }
+                    data={isMain ? filteredData : state.dataSets[area].total}
+                    language={language}
                   />
                 }
                 backContent={
                   <CardGrid
+                    area={area}
                     onlyChart={isMain}
                     title={TEXT.chartTitles[area].gender[language]}
                     currDate={state.dates.currDate}
-                    data={
-                      isMain ? filteredData : state.dataSets[area].gender
-                    }
+                    data={isMain ? filteredData : state.dataSets[area].gender}
+                    language={language}
                   />
                 }
                 {...charts[i]}

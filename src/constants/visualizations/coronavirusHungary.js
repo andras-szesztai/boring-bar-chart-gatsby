@@ -38,10 +38,6 @@ export const TEXT = {
     hu: "https://koronavirus.gov.hu/",
     en: "http://abouthungary.hu/",
   },
-  total: {
-    hu: "Összesen (kumulatív)",
-    en: "Total (cumulative)",
-  },
   date: {
     hu: "Dátum",
     en: "Date",
@@ -145,6 +141,18 @@ export const TEXT = {
       "Mutasson az egérrel bármelyik körre információért az elhunyt személy alapbetegségeirõl!",
     en:
       "Hover over any circle to find out more about the underlying conditions of the deceased person!",
+  },
+  total: {
+    en: "Total",
+    hu: "Összesen",
+  },
+  female: {
+    hu: "Nõ",
+    en: "Female",
+  },
+  male: {
+    en: "Male",
+    hu: "Férfi",
   },
   checkBox: {
     hu: "Összes",

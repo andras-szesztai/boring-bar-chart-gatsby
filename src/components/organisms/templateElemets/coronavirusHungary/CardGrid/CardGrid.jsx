@@ -1,9 +1,22 @@
 import React from "react"
+import _ from "lodash"
 import { GridContainer, FlexContainer } from "../../../../atoms"
 import { space } from "../../../../../themes/theme"
 import LineChart from "../LineChart/LineChart"
+import Number from "../Number/Number"
+import {
+  TEXT,
+  chartColors,
+} from "../../../../../constants/visualizations/coronavirusHungary"
 
-export default function CardGrid({ onlyChart, title, data, currDate }) {
+export default function CardGrid({
+  onlyChart,
+  title,
+  data,
+  currDate,
+  area,
+  language,
+}) {
   const currNumbers =
     data &&
     currDate &&
@@ -21,14 +34,31 @@ export default function CardGrid({ onlyChart, title, data, currDate }) {
       </FlexContainer>
       <FlexContainer withBorder>{!onlyChart && <LineChart />}</FlexContainer>
       {!onlyChart && (
-        <FlexContainer withBorder>
+        <GridContainer
+          rows={
+            currNumbers && (currNumbers.length > 1 ? "repeat(2, 1fr)" : "1fr")
+          }
+        >
           {currNumbers &&
             currNumbers.map(({ key, value }) => (
-              <div>
-                {key} {value}
-              </div>
+              <GridContainer columns="repeat(2, 1fr)" key={key + area}>
+                <FlexContainer fontSize={2} fontColor={chartColors[key]}>
+                  {TEXT[key][language]}:
+                </FlexContainer>
+                <FlexContainer
+                  fontSize={2}
+                  fontWeight="medium"
+                  fontColor={chartColors[key]}
+                >
+                  <Number
+                    num={value}
+                    isPercentage={area === "ratio"}
+                    oneDecimal={area === "age"}
+                  />
+                </FlexContainer>
+              </GridContainer>
             ))}
-        </FlexContainer>
+        </GridContainer>
       )}
     </GridContainer>
   )
