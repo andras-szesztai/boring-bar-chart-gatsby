@@ -78,7 +78,7 @@ export default function BrowserDashboard({
     dates,
     loading,
     fullListDomain,
-    dataSets: { filteredData, cumulative, daily, age, ratio },
+    dataSets: { filteredData },
   } = state
   const isGender = state.display === "gender"
   const trail = useTrail(charts.length, {
@@ -86,8 +86,6 @@ export default function BrowserDashboard({
     opacity: isGender ? 1 : 0,
     transform: isGender ? 180 : 0,
   })
-
-  console.log(cumulative, daily, age, ratio)
 
   return (
     <BrowserView>
@@ -163,6 +161,9 @@ export default function BrowserDashboard({
                     onlyChart={isMain}
                     title={TEXT.chartTitles[area].total[language]}
                     currDate={state.dates.currDate}
+                    data={
+                      isMain ? filteredData : state.dataSets[area].total
+                    }
                   />
                 }
                 backContent={
@@ -170,6 +171,9 @@ export default function BrowserDashboard({
                     onlyChart={isMain}
                     title={TEXT.chartTitles[area].gender[language]}
                     currDate={state.dates.currDate}
+                    data={
+                      isMain ? filteredData : state.dataSets[area].gender
+                    }
                   />
                 }
                 {...charts[i]}

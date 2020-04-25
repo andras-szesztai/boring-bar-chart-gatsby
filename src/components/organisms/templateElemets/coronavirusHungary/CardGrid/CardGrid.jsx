@@ -3,7 +3,12 @@ import { GridContainer, FlexContainer } from "../../../../atoms"
 import { space } from "../../../../../themes/theme"
 import LineChart from "../LineChart/LineChart"
 
-export default function CardGrid({ onlyChart, title }) {
+export default function CardGrid({ onlyChart, title, data, currDate }) {
+  const currNumbers =
+    data &&
+    currDate &&
+    !onlyChart &&
+    data.filter(({ date }) => currDate.toString() === date.toString())
   return (
     <GridContainer
       style={{ padding: `${space[2]}px ${space[3]}px` }}
@@ -15,7 +20,16 @@ export default function CardGrid({ onlyChart, title }) {
         {title}
       </FlexContainer>
       <FlexContainer withBorder>{!onlyChart && <LineChart />}</FlexContainer>
-      {!onlyChart && <FlexContainer withBorder>Numbers</FlexContainer>}
+      {!onlyChart && (
+        <FlexContainer withBorder>
+          {currNumbers &&
+            currNumbers.map(({ key, value }) => (
+              <div>
+                {key} {value}
+              </div>
+            ))}
+        </FlexContainer>
+      )}
     </GridContainer>
   )
 }

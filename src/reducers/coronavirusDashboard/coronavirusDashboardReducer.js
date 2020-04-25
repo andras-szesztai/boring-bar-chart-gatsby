@@ -90,8 +90,8 @@ function makeAvgAge(dateGrouped, key) {
   )
   let accumulator = []
   const avgAge = enrichedAllDates.map(date => {
-    const currAvgAge = _.meanBy(dateGrouped[date], "age")
-    accumulator.push(currAvgAge)
+    const currAgeArray = dateGrouped[date] ? dateGrouped[date].map(({age}) => age) : []
+    accumulator = [...accumulator, ...currAgeArray]
     return {
       date,
       key,
@@ -200,6 +200,14 @@ export const coronavirusDashboardInitialState = {
       total: undefined,
       gender: undefined,
     },
+    age: {
+      total: undefined,
+      gender: undefined,
+    },
+    ratio: {
+      total: undefined,
+      gender: undefined,
+    }
   },
   fullListDomain: {
     fullAgeDomain: undefined,
