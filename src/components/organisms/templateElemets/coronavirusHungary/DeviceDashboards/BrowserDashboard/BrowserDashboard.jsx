@@ -141,7 +141,7 @@ export default function BrowserDashboard({
             <SwitchComponent
               language={language}
               onChange={() => updateDisplay(dispatch)}
-              isChecked={display === "total"}
+              isChecked={display === "gender"}
               text={TEXT.displayTest[language]}
               marginRight={3}
               justify="flex-end"

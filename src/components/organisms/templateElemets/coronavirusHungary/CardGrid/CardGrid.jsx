@@ -32,7 +32,11 @@ export default function CardGrid({
       <FlexContainer justify="flex-start" align="flex-start" fontSize={2}>
         {title}
       </FlexContainer>
-      <FlexContainer withBorder>{!onlyChart && <LineChart />}</FlexContainer>
+      <FlexContainer>
+        {!onlyChart && (
+          <LineChart key={area} data={data} currDate={currDate} />
+        )}
+      </FlexContainer>
       {!onlyChart && (
         <GridContainer
           rows={
@@ -55,6 +59,7 @@ export default function CardGrid({
                     isPercentage={area === "ratio"}
                     oneDecimal={area === "age"}
                   />
+                  {area === "age" ? `‎‎‏‏‎ ‎${TEXT.tooltipYear[language]}` : ""}
                 </FlexContainer>
               </GridContainer>
             ))}

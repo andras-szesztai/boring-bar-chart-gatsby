@@ -82,31 +82,31 @@ export const TEXT = {
     cumulative: {
       total: {
         hu: "Elhunytak száma március 20-a óta összesen (kumulatív)",
-        en: "Total Number of decceased since the 20th of March (cumulative)",
+        en: "Total number of decceased since the 20th of March (cumulative)",
       },
       gender: {
         hu: "Elhunytak száma március 20-a óta nemek szerint (kumulatív)",
-        en: "Number of decceased per gender since the 20th of March (cumulative)",
+        en: "Number of deceased per gender since the 20th of March (cumulative)",
       }
     },
     daily: {
       total: {
-        hu: "Nemek százalékos megoszlása",
-        en: "Gender distribution",
+        hu: "Elhunytak száma naponta március 26-a óta (7 napos mozgóátlag)",
+        en: "Number of death/day since the 26th of March (7 day moving average)",
       },
       gender: {
-        hu: "Nemek százalékos megoszlása",
-        en: "Gender distribution",
+        hu: "Elhunytak száma naponta március 26-a óta nemek szerint (7 napos mozgóátlag)",
+        en: "Number of death/day since the 26th of March (7 day moving average per gender)",
       }
     },
     age: {
       total: {
-        hu: "Nemek százalékos megoszlása",
-        en: "Gender distribution",
+        hu: "Elhunytak átlagéletkora",
+        en: "Average age of the deceased over time",
       },
       gender: {
-        hu: "Nemek százalékos megoszlása",
-        en: "Gender distribution",
+        hu: "Elhunytak átlagéletkora nemek szerint",
+        en: "Average age of the deceased over time per gender",
       }
     },
     ratio: {
@@ -144,7 +144,7 @@ export const TEXT = {
   },
   total: {
     en: "Total",
-    hu: "Összesen",
+    hu: "Összes",
   },
   female: {
     hu: "Nõ",
