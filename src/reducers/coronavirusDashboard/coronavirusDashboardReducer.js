@@ -52,8 +52,9 @@ function makeAverages(array, lan) {
 
 const SET_FORMATTED_DATA = "SET_FORMATTED_DATA"
 const SET_INITIAL_DATES = "SET_INITIAL_DATES"
-const UPDATE_CURR_DATE= "UPDATE_CURR_DATE"
+const UPDATE_CURR_DATE = "UPDATE_CURR_DATE"
 const SET_FILTERED_DATA = "SET_FILTERED_DATA"
+const SET_DATA_SETS = "SET_DATA_SETS"
 const SET_LANGUAGE = "SET_LANGUAGE"
 const SET_NUMBERS = "SET_NUMBERS"
 const SET_AVERAGES = "SET_AVERAGES"
@@ -65,15 +66,17 @@ export const actions = {
   setFormattedData: (dispatch, payload) =>
     dispatch({ type: SET_FORMATTED_DATA, payload }),
   setInitialDates: dispatch => dispatch({ type: SET_INITIAL_DATES }),
-  updateCurrDate: (dispatch, payload) => dispatch({ type: UPDATE_CURR_DATE, payload }),
+  updateCurrDate: (dispatch, payload) =>
+    dispatch({ type: UPDATE_CURR_DATE, payload }),
   setFilteredData: dispatch => dispatch({ type: SET_FILTERED_DATA }),
+  setDataSets: dispatch => dispatch({ type: SET_DATA_SETS }),
   setNumbers: dispatch => dispatch({ type: SET_NUMBERS }),
   setAverages: dispatch => dispatch({ type: SET_AVERAGES }),
   setFullListDomain: dispatch => dispatch({ type: SET_FULL_LIST_DOMAIN }),
   updateDisplay: dispatch => dispatch({ type: UPDATE_DISPLAY }),
 }
 
-export const  coronavirusDashboardInitialState = {
+export const coronavirusDashboardInitialState = {
   language: "hu",
   display: "total",
   dates: {
@@ -94,6 +97,10 @@ export const  coronavirusDashboardInitialState = {
   dataSets: {
     formattedData: undefined,
     filteredData: undefined,
+    cumulative: {
+      total: undefined,
+      gender: undefined,
+    },
   },
   fullListDomain: {
     fullAgeDomain: undefined,
@@ -104,7 +111,10 @@ export const  coronavirusDashboardInitialState = {
 }
 
 export const coronavirusDashboardReducer = (state, { type, payload }) => {
-  const { dataSets: {  formattedData  }, language } = state
+  const {
+    dataSets: { formattedData },
+    language,
+  } = state
   const types = {
     SET_LANGUAGE: () => ({
       ...state,
@@ -129,7 +139,7 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
           diff: differenceInDays(minDate, maxDate),
           min: minDate,
           max: maxDate,
-          currDate: maxDate 
+          currDate: maxDate,
         },
       }
     },
@@ -137,8 +147,8 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
       ...state,
       dates: {
         ...state.dates,
-        currDate: payload
-      }
+        currDate: payload,
+      },
     }),
     SET_FILTERED_DATA: () => ({
       ...state,
@@ -149,6 +159,20 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
         ),
       },
     }),
+    SET_DATA_SETS: () => {
+      const fullData = state.formattedData
+      console.log(fullData)
+      return {
+        ...state,
+        dataSets: {
+          ...state.dataSets,
+          cumulative: {
+            total: undefined,
+            gender: undefined,
+          },
+        },
+      }
+    },
     SET_NUMBERS: () => ({
       ...state,
       numbers: makeNumbers(formattedData, language),
@@ -159,7 +183,7 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
     }),
     UPDATE_DISPLAY: () => ({
       ...state,
-      display: state.display === "total" ? "gender" : "total"
+      display: state.display === "total" ? "gender" : "total",
     }),
     SET_FULL_LIST_DOMAIN: () => {
       const femaleData = filterGender({

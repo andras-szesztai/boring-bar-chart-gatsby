@@ -160,12 +160,14 @@ export default function BrowserDashboard({
                   <CardGrid
                     onlyChart={isMain}
                     title={TEXT.chartTitles[area].total[language]}
+                    currDate={state.dates.currDate}
                   />
                 }
                 backContent={
                   <CardGrid
                     onlyChart={isMain}
                     title={TEXT.chartTitles[area].gender[language]}
+                    currDate={state.dates.currDate}
                   />
                 }
                 {...charts[i]}

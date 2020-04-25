@@ -29,7 +29,8 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     setAverages,
     setFullListDomain,
     updateCurrDate,
-    updateDisplay
+    updateDisplay,
+    setDataSets
   } = actions
 
   useEffect(() => {
@@ -37,6 +38,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       setFormattedData(dispatch, { data: data })
       setInitialDates(dispatch)
       setFilteredData(dispatch)
+      setDataSets(dispatch)
       setNumbers(dispatch)
       setAverages(dispatch)
       setFullListDomain(dispatch)

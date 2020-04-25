@@ -85,12 +85,12 @@ export const TEXT = {
   chartTitles: {
     cumulative: {
       total: {
-        hu: "Nemek százalékos megoszlása",
-        en: "Gender distribution",
+        hu: "Elhunytak száma március 20-a óta összesen (kumulatív)",
+        en: "Total Number of decceased since the 20th of March (cumulative)",
       },
       gender: {
-        hu: "Nemek százalékos megoszlása",
-        en: "Gender distribution",
+        hu: "Elhunytak száma március 20-a óta nemek szerint (kumulatív)",
+        en: "Number of decceased per gender since the 20th of March (cumulative)",
       }
     },
     daily: {
@@ -125,12 +125,12 @@ export const TEXT = {
     },
     main: {
       total: {
-        hu: "Nemek százalékos megoszlása",
-        en: "Gender distribution",
+        hu: "Mindegyik kör egy-egy elhunytat képvisel a horizontális tengelyen pozícionálva az elhunyt személy kora alapján",
+        en: "Each dot represents someone passed away, the position on the horizontal axis is determined by the age of the deceased",
       },
       gender: {
-        hu: "Nemek százalékos megoszlása",
-        en: "Gender distribution",
+        hu: "Mindegyik kör egy-egy elhunytat képvisel a horizontális tengelyen pozícionálva az elhunyt személy kora alapján (nemek szerint megosztva vertikálisan)",
+        en: "Each dot represents someone passed away, the position on the horizontal axis is determined by the age of the deceased (grouped by gender on the y-axis)",
       }
     },
   },
