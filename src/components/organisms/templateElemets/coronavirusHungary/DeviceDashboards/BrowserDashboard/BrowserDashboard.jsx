@@ -17,6 +17,8 @@ import PercChartContainer from "../../PercChartContainer/PercChartContainer"
 import AgeChartBrowser from "../../AgeChartBrowser/AgeChartBrowser"
 import { FullScreenLoader } from "../../../../../molecules"
 import FlippingCard from "../../FlippingCard/FlippingCard"
+import { SwitchComponent } from "../../../../../molecules/controlElements"
+import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
 
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
@@ -24,7 +26,7 @@ const BrowserMainGrid = styled(GridContainer)`
   margin: ${space[4]}px 0;
 
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 120px 100px 400px 400px;
+  grid-template-rows: minmax(120px, min-content) 100px 400px 400px;
   grid-row-gap: 3rem;
   grid-column-gap: 3rem;
   grid-template-areas:
@@ -34,7 +36,7 @@ const BrowserMainGrid = styled(GridContainer)`
     "main main main main";
 
   @media (max-width: 1000px) {
-    grid-template-rows: 120px 100px 400px 400px 500px;
+    grid-template-rows: minmax(120px, min-content) 100px 400px 400px 500px;
     grid-row-gap: 1.5rem;
     grid-column-gap: 1.5rem;
     grid-template-areas:
@@ -61,15 +63,19 @@ const CARD_STYLE_PROPS = {
 }
 
 export default function BrowserDashboard({
-  language,
   setLanguage,
-  numbers,
-  dates,
-  setDates,
-  filteredData,
-  loading,
-  fullListDomain,
+  updateCurrDate,
+  state,
+  dispatch,
 }) {
+  const {
+    language,
+    numbers,
+    dates,
+    loading,
+    fullListDomain,
+    dataSets: { filteredData },
+  } = state
   const [toggle, set] = useState(false)
   const trail = useTrail(charts.length, {
     config: { mass: 6, tension: 500, friction: 80 },
@@ -91,7 +97,26 @@ export default function BrowserDashboard({
           >
             {TEXT.mainTitle[language]}
           </FlexContainer>
-          <FlexContainer gridArea="source" />
+          <GridContainer gridArea="source" bgColor="#f2f2f2" rowGap={2}>
+            <SwitchComponent
+              language={language}
+              onChange={() => setLanguage(dispatch)}
+              isChecked={language === "en"}
+              text={["Magyar", "English"]}
+              justify="flex-end"
+              align="flex-end"
+              textMarginBottom={1}
+              textSideMargin={2}
+            />
+            <SourceLink
+              language={language}
+              justify="flex-end"
+              align="flex-start"
+            />
+          </GridContainer>
+          <GridContainer gridArea="control" columns="min-content 1fr min-content" >
+            <CurrDateContainer language={language} currDate={state.dates.currDate}/>
+          </GridContainer>
           <FlexContainer
             {...CARD_STYLE_PROPS}
             gridArea="control"
@@ -102,8 +127,6 @@ export default function BrowserDashboard({
               key={charts[i].gridArea}
               toggle={toggle}
               transition={trans}
-              frontContent="Front"
-              backContent="Back"
               fullCardIsClickable
               {...charts[i]}
             />
@@ -117,25 +140,6 @@ export default function BrowserDashboard({
 // {/* <FlexContainer fullScreen>
 // <FullScreenLoader loading={loading} loader="clip" loaderSize={75} />
 // <BrowserMainGrid>
-//   <FlexContainer
-//     gridArea="title"
-//     justify="flex-start"
-//     fontSize={4}
-//     fontWeight="ultraLight"
-//     lineHeight={1.2}
-//     paddingBottom={2}
-//   >
-//     {TEXT.mainTitle[language]}
-//   </FlexContainer>
-//   <FlexContainer
-//     gridArea="source"
-//     justify="space-around"
-//     align="flex-end"
-//     direction="column"
-//   >
-//     <SwitchContainer language={language} setLanguage={setLanguage} />
-//     <SourceLink language={language} />
-//   </FlexContainer>
 //   <FlexContainer fontSize={2} justify="flex-start" gridArea="total">
 //     {TEXT.total[language]}:
 //   </FlexContainer>

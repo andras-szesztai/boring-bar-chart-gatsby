@@ -1,25 +1,12 @@
-import React, { useState, useEffect, useRef, useReducer } from "react"
-import { TabletView } from "react-device-detect"
+import React, { useEffect, useReducer } from "react"
 import Helmet from "react-helmet"
-import { differenceInDays } from "date-fns"
 import _ from "lodash"
-import { GoTools } from "react-icons/go"
-import { min, max } from "d3-array"
-import styled from "styled-components"
 
-import { FlexContainer, Container } from "../../atoms"
 import { usePrevious, useDeviceType } from "../../../hooks"
 import { TEXT } from "../../../constants/visualizations/coronavirusHungary"
 import {
   BrowserDashboard,
-  MobileDashboard,
 } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
-import SwitchContainer from "../../organisms/templateElemets/coronavirusHungary/SwitchContainer/SwitchContainer"
-import {
-  makeAreaData,
-  filterGender,
-} from "../../organisms/templateElemets/coronavirusHungary/utils/dataHelpers"
-import { dropShadow, colors } from "../../../themes/theme"
 import {
   coronavirusDashboardReducer,
   coronavirusDashboardInitialState,
@@ -41,6 +28,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     setNumbers,
     setAverages,
     setFullListDomain,
+    updateCurrDate
   } = actions
 
   useEffect(() => {
@@ -75,14 +63,12 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       />
       {device === "desktop" && (
         <BrowserDashboard
-        // language={language}
-        // setLanguage={setLanguage}
-        // numbers={numbers}
-        // dates={dates}
-        // setDates={setDates}
-        // filteredData={filteredData}
-        // loading={loading}
-        // fullListDomain={fullListDomain}
+        state={state}
+        dispatch={dispatch}
+        setLanguage={setLanguage}
+        updateCurrDate={updateCurrDate}
+        numbers={state.numbers}
+        loading={loading}
         />
       )}
       {/* {device === "tablet" && (

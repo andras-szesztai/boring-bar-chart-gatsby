@@ -18,7 +18,6 @@ const Card = styled(a.div)`
   background-color: #fff;
   cursor: pointer;
   will-change: transform, opacity;
-  /* box-shadow: ${dropShadow.primary}, ${dropShadow.secondary}; */
   filter: drop-shadow(${dropShadow.primary})
     drop-shadow(${dropShadow.secondary});
 `
@@ -73,7 +72,7 @@ export default function FlippingCard(props) {
           ),
         }}
       >
-        {props.frontContent} {props.gridArea}
+        {props.frontContent}
       </Card>
       <Card
         style={{
@@ -84,7 +83,7 @@ export default function FlippingCard(props) {
           ),
         }}
       >
-        {props.backContent} {props.gridArea}
+        {props.backContent}
       </Card>
     </FlexContainer>
   )

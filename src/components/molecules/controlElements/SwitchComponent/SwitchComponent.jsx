@@ -11,21 +11,23 @@ export default function SwitchComponent({
   text,
   fontSize,
   containerPaddingBottom,
-  textPaddingBottom,
+  textMarginBottom,
   textPaddingTop,
   textSideMargin,
   switchWidth,
-  isChecked
+  isChecked,
+  align
 }) {
   return (
     <FlexContainer
       gridArea={gridArea}
       justify={justify}
+      align={align}
       fontSize={fontSize}
       paddingBottom={containerPaddingBottom}
     >
       <Title
-        paddingBottom={textPaddingBottom}
+        marginBottom={textMarginBottom}
         paddingTop={textPaddingTop}
         textAlign="right"
         marginRight={textSideMargin}
@@ -39,12 +41,12 @@ export default function SwitchComponent({
         checkedIcon={false}
         offColor={colors.grayLightest}
         onColor={colors.grayLightest}
-        height={switchWidth}
+        height={switchWidth/2}
         width={switchWidth}
       />
       <Title
         marginLeft={textSideMargin}
-        paddingBottom={textPaddingBottom}
+        marginBottom={textMarginBottom}
         paddingTop={textPaddingTop}
       >
         {text[1]}

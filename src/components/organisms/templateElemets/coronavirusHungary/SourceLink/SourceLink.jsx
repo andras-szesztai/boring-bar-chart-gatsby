@@ -3,9 +3,21 @@ import React from "react"
 import { FlexContainer, LinkAnchor } from "../../../../atoms"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 
-export default function SourceLink({ language, fontSize, paddingBottom }) {
+export default function SourceLink({
+  language,
+  fontSize,
+  paddingBottom,
+  justify,
+  align
+}) {
   return (
-    <FlexContainer fontSize={fontSize} fontWeight="thin" paddingBottom={paddingBottom}>
+    <FlexContainer
+      fontSize={fontSize}
+      fontWeight="thin"
+      paddingBottom={paddingBottom}
+      justify={justify}
+      align={align}
+    >
       {TEXT.sourceTitle[language]}:&nbsp;
       <LinkAnchor
         fontsize={fontSize}
