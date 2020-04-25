@@ -28,11 +28,15 @@ function makeFormattedData({ data, isHu }) {
 
 function makeRunningTotal(dateGrouped, key) {
   const allDates = Object.keys(dateGrouped)
+  const enrichedAllDates = getDaysArray(
+    allDates[0],
+    allDates[allDates.length - 1]
+  )
   let accumulator = 0
-  return allDates.map(date => {
+  return enrichedAllDates.map(date => {
     const currAcc = accumulator
-    const currVal = dateGrouped[date].length
-    accumulator = accumulator + currVal
+    const currVal = dateGrouped[date] ? dateGrouped[date].length : 0
+    accumulator += currVal
     return { key, date, value: currAcc + currVal }
   })
 }
@@ -71,25 +75,50 @@ function makeRunningAvg(dateGrouped, key) {
     return {
       date,
       key,
-      value
+      value,
     }
   })
   return movingAvg
 }
 
-function makeAvgAge(dateGrouped, key){
+// TODO: make it ccleaner, move out allDates and ENRICHED ALL ADATES
+function makeAvgAge(dateGrouped, key) {
   const allDates = Object.keys(dateGrouped)
+  const enrichedAllDates = getDaysArray(
+    allDates[0],
+    allDates[allDates.length - 1]
+  )
   let accumulator = []
-  const avgAge = allDates.map(date => {
+  const avgAge = enrichedAllDates.map(date => {
     const currAvgAge = _.meanBy(dateGrouped[date], "age")
     accumulator.push(currAvgAge)
     return {
       date,
       key,
-      value: _.mean(accumulator)
+      value: _.mean(accumulator),
     }
   })
   return avgAge
+}
+
+function makeRatio(dateGrouped, key, runningTotal) {
+  const allDates = Object.keys(dateGrouped)
+  const enrichedAllDates = getDaysArray(
+    allDates[0],
+    allDates[allDates.length - 1]
+  )
+  let accumulator = 0
+  const ratio = enrichedAllDates.map(date => {
+    const num = dateGrouped[date] ? dateGrouped[date].length : 0
+    accumulator += num
+    const runningT = runningTotal.find(d => d.date.toString() === date.toString()).value
+    return {
+      date,
+      key,
+      value: accumulator/runningT,
+    }
+  })
+  return ratio
 }
 
 function makeNumbers(array, lan) {
@@ -244,12 +273,13 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
       const groupedFull = _.groupBy(dateSortedData, "date")
       const groupedFemale = _.groupBy(fullMaleData, "date")
       const groupedMale = _.groupBy(fullFemaleData, "date")
+      const runningTotal = makeRunningTotal(groupedFull, "total")
       return {
         ...state,
         dataSets: {
           ...state.dataSets,
           cumulative: {
-            total: makeRunningTotal(groupedFull, "total"),
+            total: runningTotal,
             gender: [
               ...makeRunningTotal(groupedFemale, "male"),
               ...makeRunningTotal(groupedMale, "female"),
@@ -268,7 +298,13 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
               ...makeAvgAge(groupedFemale, "male"),
               ...makeAvgAge(groupedMale, "female"),
             ],
-          }
+          },
+          ratio: {
+            gender: [
+              ...makeRatio(groupedFemale, "male", runningTotal),
+              ...makeRatio(groupedMale, "female", runningTotal),
+            ],
+          },
         },
       }
     },

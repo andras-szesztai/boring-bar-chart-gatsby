@@ -78,7 +78,7 @@ export default function BrowserDashboard({
     dates,
     loading,
     fullListDomain,
-    dataSets: { filteredData, cumulative, daily, age },
+    dataSets: { filteredData, cumulative, daily, age, ratio },
   } = state
   const isGender = state.display === "gender"
   const trail = useTrail(charts.length, {
@@ -87,7 +87,7 @@ export default function BrowserDashboard({
     transform: isGender ? 180 : 0,
   })
 
-  console.log(age)
+  console.log(cumulative, daily, age, ratio)
 
   return (
     <BrowserView>
