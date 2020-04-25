@@ -66,22 +66,24 @@ const CARD_STYLE_PROPS = {
 export default function BrowserDashboard({
   setLanguage,
   updateCurrDate,
+  updateDisplay,
   state,
   dispatch,
 }) {
   const {
     language,
+    display,
     numbers,
     dates,
     loading,
     fullListDomain,
     dataSets: { filteredData },
   } = state
-  const [toggle, set] = useState(false)
+  const isGender = state.display === "gender"
   const trail = useTrail(charts.length, {
     config: { mass: 6, tension: 500, friction: 80 },
-    opacity: toggle ? 1 : 0,
-    transform: toggle ? 180 : 0,
+    opacity: isGender ? 1 : 0,
+    transform: isGender ? 180 : 0,
   })
 
   return (
@@ -98,7 +100,12 @@ export default function BrowserDashboard({
           >
             {TEXT.mainTitle[language]}
           </FlexContainer>
-          <GridContainer gridArea="source" bgColor="#f2f2f2" rowGap={2}>
+          <GridContainer
+            gridArea="source"
+            bgColor="#f2f2f2"
+            rowGap={2}
+            marginRight={3}
+          >
             <SwitchComponent
               language={language}
               onChange={() => setLanguage(dispatch)}
@@ -116,7 +123,7 @@ export default function BrowserDashboard({
           <GridContainer
             {...CARD_STYLE_PROPS}
             gridArea="control"
-            columns="160px 1fr 40px 250px"
+            columns="160px 1fr 25px 250px"
           >
             <CurrDateContainer
               language={language}
@@ -129,25 +136,24 @@ export default function BrowserDashboard({
               dispatch={dispatch}
               updateCurrDate={updateCurrDate}
             />
-           <div/>
+            <div />
             <SwitchComponent
               language={language}
-              onChange={() => set(dispatch)}
-              isChecked={language === "en"}
-              text={["Összesen", "Nemek szerint",]}
+              onChange={() => updateDisplay(dispatch)}
+              isChecked={display === "total"}
+              text={TEXT.displayTest[language]}
+              marginRight={3}
+              justify="flex-end"
             />
           </GridContainer>
-          {/* <FlexContainer
-
-            gridArea="control"
-            onClick={() => set(state => !state)}
-          /> */}
           {trail.map((trans, i) => (
             <FlippingCard
               key={charts[i].gridArea}
-              toggle={toggle}
+              toggle={isGender}
               transition={trans}
               fullCardIsClickable
+              frontContent="Front"
+              backContent="Back"
               {...charts[i]}
             />
           ))}

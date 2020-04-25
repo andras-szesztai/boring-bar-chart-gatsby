@@ -58,6 +58,7 @@ const SET_LANGUAGE = "SET_LANGUAGE"
 const SET_NUMBERS = "SET_NUMBERS"
 const SET_AVERAGES = "SET_AVERAGES"
 const SET_FULL_LIST_DOMAIN = "SET_FULL_LIST_DOMAIN"
+const UPDATE_DISPLAY = "UPDATE_DISPLAY"
 
 export const actions = {
   setLanguage: dispatch => dispatch({ type: SET_LANGUAGE }),
@@ -69,10 +70,12 @@ export const actions = {
   setNumbers: dispatch => dispatch({ type: SET_NUMBERS }),
   setAverages: dispatch => dispatch({ type: SET_AVERAGES }),
   setFullListDomain: dispatch => dispatch({ type: SET_FULL_LIST_DOMAIN }),
+  updateDisplay: dispatch => dispatch({ type: UPDATE_DISPLAY }),
 }
 
 export const  coronavirusDashboardInitialState = {
   language: "hu",
+  display: "total",
   dates: {
     diff: undefined,
     max: undefined,
@@ -152,6 +155,10 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
     SET_AVERAGES: () => ({
       ...state,
       averages: makeAverages(formattedData, language),
+    }),
+    UPDATE_DISPLAY: () => ({
+      ...state,
+      display: state.display === "total" ? "gender" : "total"
     }),
     SET_FULL_LIST_DOMAIN: () => {
       const femaleData = filterGender({

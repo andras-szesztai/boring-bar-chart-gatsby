@@ -5,7 +5,6 @@ import { FlexContainer, Container } from "../../../../atoms"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 
 export default function CurrDateContainer({ language, currDate, justify }) {
-  console.log(currDate)
   return (
     <FlexContainer justify={justify} noWrap>
       <Container fontSize={3} fontWeight="ultraLight">

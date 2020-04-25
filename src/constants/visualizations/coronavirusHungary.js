@@ -77,6 +77,10 @@ export const TEXT = {
     hu: "Nemek százalékos megoszlása",
     en: "Gender distribution",
   },
+  displayTest: {
+    hu: ["Összesen", "Nemek szerint",],
+    en: ["Total", "Per gender"],
+  },
   mainChartExpBrowser: {
     hu:
       "Mindegyik kör egy-egy elhunytat képvisel a horizontális tengelyen pozícionálva az elhunyt személy kora alapján",

@@ -28,7 +28,8 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     setNumbers,
     setAverages,
     setFullListDomain,
-    updateCurrDate
+    updateCurrDate,
+    updateDisplay
   } = actions
 
   useEffect(() => {
@@ -67,6 +68,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
         dispatch={dispatch}
         setLanguage={setLanguage}
         updateCurrDate={updateCurrDate}
+        updateDisplay={updateDisplay}
         numbers={state.numbers}
         loading={loading}
         />

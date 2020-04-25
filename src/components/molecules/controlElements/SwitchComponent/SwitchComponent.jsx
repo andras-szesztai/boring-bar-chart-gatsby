@@ -16,7 +16,8 @@ export default function SwitchComponent({
   textSideMargin,
   switchWidth,
   isChecked,
-  align
+  align,
+  marginRight
 }) {
   return (
     <FlexContainer
@@ -24,6 +25,7 @@ export default function SwitchComponent({
       justify={justify}
       align={align}
       fontSize={fontSize}
+      marginRight={marginRight}
       paddingBottom={containerPaddingBottom}
     >
       <Title
