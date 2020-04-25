@@ -127,7 +127,8 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
         ...state,
         dates: {
           diff: differenceInDays(minDate, maxDate),
-          max: minDate,
+          min: minDate,
+          max: maxDate,
           currDate: maxDate 
         },
       }

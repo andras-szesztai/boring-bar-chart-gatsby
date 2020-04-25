@@ -156,8 +156,18 @@ export default function BrowserDashboard({
                 toggle={isGender}
                 transition={trans}
                 fullCardIsClickable
-                frontContent={<CardGrid onlyChart={isMain} />}
-                backContent={<CardGrid onlyChart={isMain} />}
+                frontContent={
+                  <CardGrid
+                    onlyChart={isMain}
+                    title={TEXT.chartTitles[area].total[language]}
+                  />
+                }
+                backContent={
+                  <CardGrid
+                    onlyChart={isMain}
+                    title={TEXT.chartTitles[area].gender[language]}
+                  />
+                }
                 {...charts[i]}
               />
             )

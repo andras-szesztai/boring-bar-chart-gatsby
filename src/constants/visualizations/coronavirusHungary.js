@@ -3,12 +3,13 @@ import { colors } from "../../themes/theme"
 export const DATA_URL_HU =
   "https://boring-barchart-gatsby.firebaseio.com/coronavirus-hungary.json"
 
-export const DATA_URL_EN = "https://boring-barchart-gatsby.firebaseio.com/coronavirus-hungary-en.json"
+export const DATA_URL_EN =
+  "https://boring-barchart-gatsby.firebaseio.com/coronavirus-hungary-en.json"
 
 export const chartColors = {
   female: "#8C635B",
   male: "#496366",
-  total: colors.grayDarkest
+  total: colors.grayDarkest,
 }
 
 export const lowOpacity = 0.75
@@ -16,7 +17,7 @@ export const lowestOpacity = 0.25
 
 export const TEXT = {
   helmet: {
-    hu: "Koronavírusban elhunytak Magyarországon" ,
+    hu: "Koronavírusban elhunytak Magyarországon",
     en: "Deaths caused by COVID-19 in Hungary",
   },
   mainTitle: {
@@ -40,11 +41,11 @@ export const TEXT = {
   total: {
     hu: "Összesen (kumulatív)",
     en: "Total (cumulative)",
-  }, 
+  },
   date: {
     hu: "Dátum",
     en: "Date",
-  }, 
+  },
   dateSlider: {
     hu: "Válasszon másik dátumot",
     en: "Choose another date",
@@ -59,7 +60,7 @@ export const TEXT = {
   },
   accessorF: {
     hu: "Nő",
-    en: "Female"
+    en: "Female",
   },
   genderF: {
     hu: "Nõ",
@@ -78,8 +79,60 @@ export const TEXT = {
     en: "Gender distribution",
   },
   displayTest: {
-    hu: ["Összesen", "Nemek szerint",],
+    hu: ["Összesen", "Nemek szerint"],
     en: ["Total", "Per gender"],
+  },
+  chartTitles: {
+    cumulative: {
+      total: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      },
+      gender: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      }
+    },
+    daily: {
+      total: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      },
+      gender: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      }
+    },
+    age: {
+      total: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      },
+      gender: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      }
+    },
+    ratio: {
+      total: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      },
+      gender: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      }
+    },
+    main: {
+      total: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      },
+      gender: {
+        hu: "Nemek százalékos megoszlása",
+        en: "Gender distribution",
+      }
+    },
   },
   mainChartExpBrowser: {
     hu:
@@ -88,14 +141,16 @@ export const TEXT = {
       "Each dot represents someone passed away, the position on the horizontal axis is determined by the age of the deceased",
   },
   hoverText: {
-    hu: "Mutasson az egérrel bármelyik körre információért az elhunyt személy alapbetegségeirõl!",
-    en: "Hover over any circle to find out more about the underlying conditions of the deceased person!",
+    hu:
+      "Mutasson az egérrel bármelyik körre információért az elhunyt személy alapbetegségeirõl!",
+    en:
+      "Hover over any circle to find out more about the underlying conditions of the deceased person!",
   },
   checkBox: {
     hu: "Összes",
     en: "Display total",
   },
-  tooltipGender:{
+  tooltipGender: {
     hu: "Nem",
     en: "Gender",
   },
@@ -106,7 +161,7 @@ export const TEXT = {
   chartAxisNumber: {
     hu: "Elhunytak száma",
     en: "Number of deaths",
-  }, 
+  },
   tooltipYear: {
     hu: "év",
     en: "years",
