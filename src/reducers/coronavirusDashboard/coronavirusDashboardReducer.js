@@ -38,7 +38,6 @@ function makeRunningTotal(dateGrouped, key) {
 }
 
 function getDaysArray(start, end) {
-  console.log(start, end)
   var arr = []
   for (
     var dt = new Date(start);
@@ -76,6 +75,21 @@ function makeRunningAvg(dateGrouped, key) {
     }
   })
   return movingAvg
+}
+
+function makeAvgAge(dateGrouped, key){
+  const allDates = Object.keys(dateGrouped)
+  let accumulator = []
+  const avgAge = allDates.map(date => {
+    const currAvgAge = _.meanBy(dateGrouped[date], "age")
+    accumulator.push(currAvgAge)
+    return {
+      date,
+      key,
+      value: _.mean(accumulator)
+    }
+  })
+  return avgAge
 }
 
 function makeNumbers(array, lan) {
@@ -248,6 +262,13 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
               ...makeRunningAvg(groupedMale, "female"),
             ],
           },
+          age: {
+            total: makeAvgAge(groupedFull, "total"),
+            gender: [
+              ...makeAvgAge(groupedFemale, "male"),
+              ...makeAvgAge(groupedMale, "female"),
+            ],
+          }
         },
       }
     },
