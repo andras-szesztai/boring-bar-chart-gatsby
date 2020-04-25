@@ -1,5 +1,4 @@
 import React from "react"
-import _ from "lodash"
 import { GridContainer, FlexContainer } from "../../../../atoms"
 import { space } from "../../../../../themes/theme"
 import LineChart from "../LineChart/LineChart"
@@ -16,6 +15,7 @@ export default function CardGrid({
   currDate,
   area,
   language,
+  type
 }) {
   const currNumbers =
     data &&
@@ -34,7 +34,7 @@ export default function CardGrid({
       </FlexContainer>
       <FlexContainer>
         {!onlyChart && (
-          <LineChart key={area} data={data} currDate={currDate} />
+          <LineChart key={type + area} data={data} currDate={currDate} />
         )}
       </FlexContainer>
       {!onlyChart && (

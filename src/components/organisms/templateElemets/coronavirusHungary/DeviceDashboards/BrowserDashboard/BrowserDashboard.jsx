@@ -52,10 +52,10 @@ const BrowserMainGrid = styled(GridContainer)`
 
 const charts = [
   { gridArea: "cumulative", perspective: 700, zIndex: "hoverOverlay" },
-  { gridArea: "daily", perspective: 700, zIndex: "hoverOverlay" },
-  { gridArea: "age", perspective: 700, zIndex: "hoverOverlay" },
-  { gridArea: "ratio", perspective: 700, zIndex: "hoverOverlay" },
-  { gridArea: "main", perspective: 5000, zIndex: "none" },
+  // { gridArea: "daily", perspective: 700, zIndex: "hoverOverlay" },
+  // { gridArea: "age", perspective: 700, zIndex: "hoverOverlay" },
+  // { gridArea: "ratio", perspective: 700, zIndex: "hoverOverlay" },
+  // { gridArea: "main", perspective: 5000, zIndex: "none" },
 ]
 
 const CARD_STYLE_PROPS = {
@@ -164,6 +164,7 @@ export default function BrowserDashboard({
                     currDate={state.dates.currDate}
                     data={isMain ? filteredData : state.dataSets[area].total}
                     language={language}
+                    type="front"
                   />
                 }
                 backContent={
@@ -174,6 +175,7 @@ export default function BrowserDashboard({
                     currDate={state.dates.currDate}
                     data={isMain ? filteredData : state.dataSets[area].gender}
                     language={language}
+                    type="back"
                   />
                 }
                 {...charts[i]}
