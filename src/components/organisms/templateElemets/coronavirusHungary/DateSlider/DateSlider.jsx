@@ -27,7 +27,12 @@ export const DSlider = withStyles({
   },
 })(Slider)
 
-export function StyledDateSlider({ setDates, dates, language }) {
+export function StyledDateSlider({
+  updateCurrDate,
+  dates,
+  language,
+  dispatch,
+}) {
   return (
     <DSlider
       defaultValue={0}
@@ -35,10 +40,7 @@ export function StyledDateSlider({ setDates, dates, language }) {
       marks
       valueLabelDisplay="auto"
       onChangeCommitted={(e, val) =>
-        setDates(prev => ({
-          ...prev,
-          currDate: subDays(dates.max, -val),
-        }))
+        updateCurrDate(dispatch, subDays(dates.max, -val))
       }
       valueLabelFormat={val =>
         format(subDays(dates.max, -val), TEXT.dateFormatShort[language])
@@ -49,30 +51,26 @@ export function StyledDateSlider({ setDates, dates, language }) {
   )
 }
 
-export function DateSliderBrowser({
-  language, dates, setDates
-}) {
+export function DateSlider({ language, dates, updateCurrDate, dispatch }) {
   return (
-    <GridContainer gridArea="dateSlider" rowGap={2} rows="repeat(2, min-content)">
-      <CurrDateContainer language={language} currDate={dates.currDate} />
-      <FlexContainer justify="flex-start" whiteSpace="nowrap">
-        <Container
-          paddingRight={3}
-          paddingBottom={1}
-          fontSize={2}
-          whiteSpace="nowrap"
-        >
-          {TEXT.dateSlider[language]}:
-        </Container>
-        {dates.max && (
-          <StyledDateSlider
-            dates={dates}
-            language={language}
-            setDates={setDates}
-          />
-        )}
-      </FlexContainer>
-    </GridContainer>
+    <FlexContainer justify="flex-start" whiteSpace="nowrap" paddingTop={1}>
+      <Container
+        paddingRight={3}
+        paddingBottom={1}
+        fontSize={2}
+        whiteSpace="nowrap"
+      >
+        {TEXT.dateSlider[language]}:
+      </Container>
+      {dates.max && (
+        <StyledDateSlider
+          dates={dates}
+          language={language}
+          updateCurrDate={updateCurrDate}
+          dispatch={dispatch}
+        />
+      )}
+    </FlexContainer>
   )
 }
 

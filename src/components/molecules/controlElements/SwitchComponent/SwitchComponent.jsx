@@ -58,4 +58,6 @@ export default function SwitchComponent({
 SwitchComponent.defaultProps = {
   fontSize: 2,
   switchWidth: 36,
+  textMarginBottom: 1,
+  textSideMargin: 2
 }

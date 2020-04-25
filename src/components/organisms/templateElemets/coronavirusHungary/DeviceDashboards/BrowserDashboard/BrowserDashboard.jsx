@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { BrowserView } from "react-device-detect"
 import { useSpring, animated as a, config, useTrail } from "react-spring"
+import { format, subDays } from "date-fns"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
 import { space, dropShadow } from "../../../../../../themes/theme"
@@ -10,7 +11,7 @@ import { TEXT } from "../../../../../../constants/visualizations/coronavirusHung
 import SwitchContainer from "../../SwitchContainer/SwitchContainer"
 import SourceLink from "../../SourceLink/SourceLink"
 import Number from "../../Number/Number"
-import { DateSliderBrowser } from "../../DateSlider/DateSlider"
+import { DateSliderBrowser, DateSlider } from "../../DateSlider/DateSlider"
 import BarLabels from "../../BarLabels/BarLabels"
 import HorizontalBarChart from "../../HorizontalBarChart/HorizontalBarChart"
 import PercChartContainer from "../../PercChartContainer/PercChartContainer"
@@ -26,7 +27,7 @@ const BrowserMainGrid = styled(GridContainer)`
   margin: ${space[4]}px 0;
 
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: minmax(120px, min-content) 100px 400px 400px;
+  grid-template-rows: minmax(120px, min-content) 70px 400px 400px;
   grid-row-gap: 3rem;
   grid-column-gap: 3rem;
   grid-template-areas:
@@ -36,7 +37,7 @@ const BrowserMainGrid = styled(GridContainer)`
     "main main main main";
 
   @media (max-width: 1000px) {
-    grid-template-rows: minmax(120px, min-content) 100px 400px 400px 500px;
+    grid-template-rows: minmax(120px, min-content) 70px 400px 400px 500px;
     grid-row-gap: 1.5rem;
     grid-column-gap: 1.5rem;
     grid-template-areas:
@@ -105,8 +106,6 @@ export default function BrowserDashboard({
               text={["Magyar", "English"]}
               justify="flex-end"
               align="flex-end"
-              textMarginBottom={1}
-              textSideMargin={2}
             />
             <SourceLink
               language={language}
@@ -114,14 +113,35 @@ export default function BrowserDashboard({
               align="flex-start"
             />
           </GridContainer>
-          <GridContainer gridArea="control" columns="min-content 1fr min-content" >
-            <CurrDateContainer language={language} currDate={state.dates.currDate}/>
-          </GridContainer>
-          <FlexContainer
+          <GridContainer
             {...CARD_STYLE_PROPS}
             gridArea="control"
+            columns="160px 1fr 40px 250px"
+          >
+            <CurrDateContainer
+              language={language}
+              currDate={state.dates.currDate}
+              justify="center"
+            />
+            <DateSlider
+              dates={dates}
+              language={language}
+              dispatch={dispatch}
+              updateCurrDate={updateCurrDate}
+            />
+           <div/>
+            <SwitchComponent
+              language={language}
+              onChange={() => set(dispatch)}
+              isChecked={language === "en"}
+              text={["Összesen", "Nemek szerint",]}
+            />
+          </GridContainer>
+          {/* <FlexContainer
+
+            gridArea="control"
             onClick={() => set(state => !state)}
-          />
+          /> */}
           {trail.map((trans, i) => (
             <FlippingCard
               key={charts[i].gridArea}
