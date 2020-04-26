@@ -24,7 +24,7 @@ const MobileMainGrid = styled(GridContainer)`
           margin-top: ${space[3]}px;
           margin-bottom: ${space[2]}px;
           grid-template-columns: repeat(4, 1fr);
-          grid-template-rows: min-content 120px 150px 320px;
+          grid-template-rows: min-content 70px 120px 150px 320px;
 
           grid-template-areas:
             "title title title source"
@@ -37,12 +37,11 @@ const MobileMainGrid = styled(GridContainer)`
           margin-top: ${space[2]}px;
           margin-bottom: ${space[4]}px;
           grid-template-columns: 1fr;
-          grid-template-rows: min-content 100px min-content 80px 270px 175px 680px;
+          grid-template-rows: min-content 100px 160px repeat(4, 380px) 780px;
           grid-template-areas:
             "title"
             "source"
             "control"
-            "cumulative"
             "cumulative"
             "daily"
             "age"
@@ -142,6 +141,7 @@ function MobileDashboard({
           isPortrait={isPortrait}
           gridArea={!isBelowPosition && "control"}
           zIndex={isBelowPosition && "overlay"}
+          height={!isPortrait ? "70px" : "160px"}
           fixedPos={
             isBelowPosition && {
               top: 0,
@@ -156,12 +156,17 @@ function MobileDashboard({
             language={language}
             currDate={state.dates.currDate}
             justify="center"
+            marginLeft={!isPortrait && 3}
           />
           <DateSlider
             dates={dates}
             language={language}
             dispatch={dispatch}
             updateCurrDate={updateCurrDate}
+            direction={isPortrait && "column"}
+            paddingRight={!isPortrait && 2}
+            marginRight={!isPortrait && 3}
+            paddingBottom={!isPortrait && 1}
           />
           <SwitchComponent
             language={language}
@@ -169,9 +174,10 @@ function MobileDashboard({
             isChecked={display === "gender"}
             text={TEXT.displayTest[language]}
             justify={isPortrait ? "center" : "flex-end"}
+            marginRight={!isPortrait && 3}
           />
         </FilterContainer>
-        {/* {trail.map((trans, i) => {
+        {trail.map((trans, i) => {
           const area = charts[i].gridArea
           const isMain = area === "main"
           return (
@@ -190,7 +196,8 @@ function MobileDashboard({
                   language={language}
                   type="front"
                   fullListDomain={state.fullListDomain}
-                  device={device}
+                  isPortrait={isPortrait}
+                  device="mobile"
                 />
               }
               backContent={
@@ -201,15 +208,16 @@ function MobileDashboard({
                   currDate={state.dates.currDate}
                   data={isMain ? filteredData : state.dataSets[area].gender}
                   language={language}
-                  device={device}
                   fullListDomain={state.fullListDomain}
+                  isPortrait={isPortrait}
                   type="back"
+                  device="mobile"
                 />
               }
               {...charts[i]}
             />
           )
-        })} */}
+        })}
       </MobileMainGrid>
     </FlexContainer>
   )

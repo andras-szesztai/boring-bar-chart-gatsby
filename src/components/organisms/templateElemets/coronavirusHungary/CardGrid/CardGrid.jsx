@@ -9,6 +9,7 @@ import {
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import AgeChartBrowser from "../AgeChartBrowser/AgeChartBrowser"
 import AreaChart from "../AreaChart/AreaChart"
+import VerticalDoubleAreaChart from "../DoubleAreaChart/VerticalDoubleAreaChart/VerticalDoubleAreaChart"
 
 export default function CardGrid({
   onlyChart,
@@ -20,6 +21,7 @@ export default function CardGrid({
   type,
   device,
   fullListDomain,
+  isPortrait,
 }) {
   const currNumbers =
     data &&
@@ -34,20 +36,33 @@ export default function CardGrid({
         "Thu Mar 26 2020 00:00:00 GMT+0100 (Central European Standard Time)"
       )
 
+  const isMobile = device === "mobile"
   const isFront = type === "front"
   const deviceAccessor = device === "desktop" ? device : "mobile"
   const isRatioFront = area === "ratio" && isFront
+  const extraMargin = onlyChart && isMobile && isPortrait && 4
   return (
     <GridContainer
       style={{ padding: `${space[2]}px ${space[3]}px` }}
       fullSize
       textAlign="left"
-      rows={onlyChart ? "35px 1fr 25px" : "50px 1fr 100px 25px"}
+      rows={
+        onlyChart
+          ? isMobile
+            ? "min-content 1fr 30px"
+            : "35px 1fr 25px"
+          : isMobile
+          ? "50px 1fr 75px 25px"
+          : "50px 1fr 100px 25px"
+      }
     >
       <FlexContainer justify="flex-start" align="flex-start" fontSize={2}>
         {title}
       </FlexContainer>
-      <FlexContainer>
+      <FlexContainer
+        marginTop={extraMargin}
+        marginBottom={extraMargin}
+      >
         {!isRatioFront ? (
           !onlyChart ? (
             <LineChart
@@ -64,18 +79,36 @@ export default function CardGrid({
               isCombined={type === "front"}
             />
           ) : (
-            <GridContainer fullSize rows={isFront ? "1fr" : "repeat(2, 1fr)"}>
+            <GridContainer
+              fullSize
+              rows={isFront || isMobile ? "1fr" : "repeat(2, 1fr)"}
+            >
               {isFront ? (
                 <FlexContainer fullSize>
-                  <AreaChart
-                    key="combinedArea"
-                    data={data}
-                    accessor="total"
-                    fullListDomain={fullListDomain}
-                    language={language}
-                    isCombined={true}
-                  />
+                  {!isMobile ? (
+                    <AreaChart
+                      key="combinedArea"
+                      data={data}
+                      accessor="total"
+                      fullListDomain={fullListDomain}
+                      language={language}
+                      isCombined={true}
+                    />
+                  ) : (
+                    <VerticalDoubleAreaChart
+                      data={data}
+                      language={language}
+                      fullListDomain={fullListDomain}
+                      isCombined={true}
+                    />
+                  )}
                 </FlexContainer>
+              ) : isMobile ? (
+                <VerticalDoubleAreaChart
+                  data={data}
+                  language={language}
+                  fullListDomain={fullListDomain}
+                />
               ) : (
                 <>
                   <FlexContainer>

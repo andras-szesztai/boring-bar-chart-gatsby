@@ -46,7 +46,6 @@ export default function VerticalDoubleAreaChart({
   margin,
   data,
   language,
-  averages,
   fullListDomain,
 }) {
   const { svgRef, wrapperRef, yAxisRef } = useChartRefs()
@@ -63,8 +62,6 @@ export default function VerticalDoubleAreaChart({
   })
   const [init, setInit] = useState(false)
   const prevData = usePrevious(data)
-  const prevAverages = usePrevious(averages)
-  const prevPrevAverages = usePrevious(prevAverages)
   const [areaDataSets, setAreaDataSets] = useState({})
   const prevAreaDataSets = usePrevious(areaDataSets)
   const leftLeft = dims.width / 2 - space[3]
@@ -297,93 +294,6 @@ export default function VerticalDoubleAreaChart({
       select(yAxisRef.current).raise()
     }
 
-    function createUpdateAvgLines(isInit) {
-      const { yScale, xRangeMax } = storedValues.current
-      const leftChartArea = select(leftArea.current)
-      const rightChartArea = select(rightArea.current)
-      const yAxis = select(yAxisRef.current)
-      const textWith = 22
-
-      const createUpdateLine = ({ area, accessor, pos, withText }) => {
-        const t = makeTransition(area, transition.lgNum, "update")
-        const setY = yScale(averages[accessor])
-        const getTween = (d, i, n) =>
-          numberTween({
-            value: +averages[accessor],
-            prevValue: +prevPrevAverages[accessor],
-            i,
-            n,
-            numberFormat: ".3n",
-          })
-        if (isInit) {
-          area
-            .append("line")
-            .attr("class", `ref-line ref-${accessor}`)
-            .attr("y1", setY)
-            .attr("y2", setY)
-            .attr("x1", pos.x1)
-            .attr("x2", pos.x2)
-            .attr("stroke", chartColors[accessor])
-          if (withText) {
-            area
-              .append("text")
-              .attr("class", `ref-text-${accessor}`)
-              .attr("y", setY)
-              .attr("dy", space[1])
-              .attr("x", withText.x)
-              .attr("text-anchor", withText.anchor)
-              .attr("fill", chartColors[accessor])
-              .text(averages[accessor].toFixed(1))
-          }
-          return
-        }
-        area
-          .select(`.ref-${accessor}`)
-          .transition(t)
-          .attr("y1", setY)
-          .attr("y2", setY)
-        if (withText) {
-          area
-            .select(`.ref-text-${accessor}`)
-            .transition(t)
-            .attr("y", setY)
-            .tween("text", getTween)
-        }
-      }
-      createUpdateLine({
-        area: leftChartArea,
-        accessor: "female",
-        pos: {
-          x1: 0,
-          x2: -(xRangeMax - textWith),
-        },
-        withText: {
-          x: -xRangeMax,
-          anchor: "start",
-        },
-      })
-      createUpdateLine({
-        area: rightChartArea,
-        accessor: "male",
-        pos: {
-          x1: 0,
-          x2: xRangeMax - textWith,
-        },
-        withText: {
-          x: xRangeMax,
-          anchor: "end",
-        },
-      })
-      createUpdateLine({
-        area: yAxis,
-        accessor: "total",
-        pos: {
-          x1: -space[3],
-          x2: space[3],
-        },
-      })
-    }
-
     if (!init && areaDataSets.female) {
       const xDomain = [
         0,
@@ -422,7 +332,6 @@ export default function VerticalDoubleAreaChart({
         accessor: "male",
         isInit: true,
       })
-      createUpdateAvgLines(true)
       setInit(true)
     }
 
@@ -433,7 +342,6 @@ export default function VerticalDoubleAreaChart({
       _.sumBy(areaDataSets.female, "number") !==
         _.sumBy(prevAreaDataSets.female, "number")
     ) {
-      createUpdateAvgLines()
       createUpdateAreaLeft({
         data: areaDataSets.female,
         accessor: "female",
@@ -443,21 +351,7 @@ export default function VerticalDoubleAreaChart({
         accessor: "male",
       })
     }
-  }, [
-    areaDataSets,
-    averages,
-    data,
-    dims,
-    fullListDomain,
-    init,
-    leftLeft,
-    prevAreaDataSets,
-    prevAverages,
-    prevPrevAverages,
-    rightLeft,
-    svgRef,
-    yAxisRef,
-  ])
+  }, [areaDataSets, data, dims, fullListDomain, init, leftLeft, prevAreaDataSets, rightLeft, svgRef, yAxisRef])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>

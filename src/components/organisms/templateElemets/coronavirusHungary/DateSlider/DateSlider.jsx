@@ -58,7 +58,8 @@ export function DateSlider({
   dispatch,
   marginRight,
   paddingRight,
-  paddingBottom
+  paddingBottom,
+  direction
 }) {
   return (
     <FlexContainer
@@ -66,7 +67,7 @@ export function DateSlider({
       whiteSpace="nowrap"
       paddingTop={1}
       marginRight={marginRight}
-      direction="column"
+      direction={direction}
     >
       <Container
         paddingRight={paddingRight}

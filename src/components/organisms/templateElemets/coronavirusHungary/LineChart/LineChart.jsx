@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react"
+import _ from "lodash"
 
 import { AxisLine, ChartArea, ChartWrapper, ChartSvg } from "../../../../atoms"
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
@@ -204,5 +205,5 @@ export default function LineChart({ data, currDate, margin, isPercentage }) {
 }
 
 LineChart.defaultProps = {
-  margin: { top: 15, right: 10, bottom: 25, left: 30 },
+  margin: { top: 15, right: 10, bottom: 10, left: 30 },
 }
