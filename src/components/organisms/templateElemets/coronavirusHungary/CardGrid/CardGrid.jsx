@@ -40,7 +40,7 @@ export default function CardGrid({
   const isFront = type === "front"
   const deviceAccessor = device === "desktop" ? device : "mobile"
   const isRatioFront = area === "ratio" && isFront
-  const extraMargin = onlyChart && isMobile && isPortrait && 4
+  const mobilePortrait = onlyChart && isMobile && isPortrait
   return (
     <GridContainer
       style={{ padding: `${space[2]}px ${space[3]}px` }}
@@ -48,10 +48,10 @@ export default function CardGrid({
       textAlign="left"
       rows={
         onlyChart
-          ? isMobile
+          ? mobilePortrait
             ? "min-content 1fr 30px"
             : "35px 1fr 25px"
-          : isMobile
+          : mobilePortrait
           ? "50px 1fr 75px 25px"
           : "50px 1fr 100px 25px"
       }
@@ -60,8 +60,8 @@ export default function CardGrid({
         {title}
       </FlexContainer>
       <FlexContainer
-        marginTop={extraMargin}
-        marginBottom={extraMargin}
+        marginTop={mobilePortrait && 4}
+        marginBottom={mobilePortrait && 4}
       >
         {!isRatioFront ? (
           !onlyChart ? (
@@ -81,11 +81,11 @@ export default function CardGrid({
           ) : (
             <GridContainer
               fullSize
-              rows={isFront || isMobile ? "1fr" : "repeat(2, 1fr)"}
+              rows={isFront || mobilePortrait ? "1fr" : "repeat(2, 1fr)"}
             >
               {isFront ? (
                 <FlexContainer fullSize>
-                  {!isMobile ? (
+                  {!mobilePortrait ? (
                     <AreaChart
                       key="combinedArea"
                       data={data}
@@ -103,7 +103,7 @@ export default function CardGrid({
                     />
                   )}
                 </FlexContainer>
-              ) : isMobile ? (
+              ) : mobilePortrait ? (
                 <VerticalDoubleAreaChart
                   data={data}
                   language={language}

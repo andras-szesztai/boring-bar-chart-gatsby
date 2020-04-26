@@ -24,12 +24,13 @@ const MobileMainGrid = styled(GridContainer)`
           margin-top: ${space[3]}px;
           margin-bottom: ${space[2]}px;
           grid-template-columns: repeat(4, 1fr);
-          grid-template-rows: min-content 70px 120px 150px 320px;
-
+          grid-template-rows: min-content 70px repeat(3, 350px);
+          grid-gap: 2rem;
           grid-template-areas:
             "title title title source"
             "control control control control"
-            "cumulative daily age ratio"
+            "cumulative cumulative daily daily"
+            "age age ratio ratio"
             "main main main main";
         `
       : css`
