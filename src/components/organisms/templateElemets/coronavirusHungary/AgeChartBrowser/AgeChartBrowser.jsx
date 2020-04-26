@@ -21,6 +21,7 @@ import {
   chartColors,
   lowOpacity,
   TEXT,
+
   CIRCLE_RADIUS,
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition, numberTween } from "../../../../../utils/chartHelpers"
@@ -114,91 +115,6 @@ export default function AgeChartBrowser({ data, margin, language }) {
   }
 
   useEffect(() => {
-    function createUpdateRef({
-      className,
-      init,
-      data,
-      prevData,
-      y1,
-      y2,
-      y,
-      color,
-    }) {
-      const { xScale, area } = storedValues.current
-      const t = makeTransition(area, transition.lgNum, "update")
-      const getTween = (d, i, n) =>
-        numberTween({
-          value: data,
-          prevValue: prevData,
-          i,
-          n,
-          numberFormat: ".3n",
-        })
-
-      if (init) {
-        area
-          .append("line")
-          .attr("class", `ref-line ref-${className}`)
-          .attr("y1", y1)
-          .attr("y2", y2)
-          .attr("x1", xScale(data))
-          .attr("x2", xScale(data))
-          .attr("stroke", color)
-        area.append("g").attr("class", `ref-group ref-group-${className}`)
-        const refGroup = select(`.ref-group-${className}`)
-        refGroup
-          .append("rect")
-          .attr("y", y - 7)
-          .attr("width", 30)
-          .attr("x", xScale(data) - 15)
-          .attr("height", space[3])
-          .attr("fill", "#fff")
-          .attr("fill-opacity", 0.9)
-        refGroup
-          .append("text")
-          .attr("y", y)
-          .attr("dy", 5)
-          .attr("x", xScale(data))
-          .attr("text-anchor", "middle")
-          .attr("fill", color)
-          .text(data.toFixed(1))
-        return
-      }
-      const refGroup = select(`.ref-group-${className}`)
-      area
-        .select(`.ref-${className}`)
-        .transition(t)
-        .attr("x1", xScale(data))
-        .attr("x2", xScale(data))
-      refGroup
-        .select("text")
-        .transition(t)
-        .attr("x", xScale(data))
-        .tween("text", (d, i, n) => getTween(d, i, n))
-      refGroup
-        .select("rect")
-        .transition(t)
-        .attr("x", xScale(data) - 15)
-    }
-
-    function moveRefs({ className, data, y1, y2, y }) {
-      const { xScale, area } = storedValues.current
-      const refGroup = select(`.ref-group-${className}`)
-      area
-        .select(`.ref-${className}`)
-        .attr("x1", xScale(data))
-        .attr("x2", xScale(data))
-        .attr("y1", y1)
-        .attr("y2", y2)
-      refGroup
-        .select("text")
-        .attr("x", xScale(data))
-        .attr("y", y)
-      refGroup
-        .select("rect")
-        .attr("y", y - 8)
-        .attr("x", xScale(data) - 20)
-    }
 
     function createUpdateAxis() {
       const { xScale } = storedValues.current
@@ -233,93 +149,14 @@ export default function AgeChartBrowser({ data, margin, language }) {
       storedValues.current = { yScale, xScale, area }
       createUpdateCircles()
       createUpdateAxis(0)
-      createUpdateRef({
-        className: "total",
-        init: true,
-        data: getMean(data),
-        y1: dims.chartHeight,
-        y2: 0,
-        y: dims.chartHeight / 2,
-        color: colors.grayDarkest,
-      })
-      createUpdateRef({
-        className: "male",
-        init: true,
-        data: getMean(
-          data.filter(({ gender }) => gender === TEXT.genderM[language])
-        ),
-        y1: dims.chartHeight / 2 + space[2],
-        y2: dims.chartHeight,
-        y: dims.chartHeight / 2 + dims.chartHeight / 4,
-        color: chartColors.male,
-      })
-      createUpdateRef({
-        className: "female",
-        init: true,
-        data: getMean(
-          data.filter(({ gender }) => gender === TEXT.accessorF[language])
-        ),
-        y1: 0,
-        y2: dims.chartHeight / 2 - space[2],
-        y: dims.chartHeight / 4,
-        color: chartColors.female,
-      })
       setInit(true)
     }
 
     if (init && data.length !== prevData.length) {
       createUpdateCircles()
-      createUpdateRef({
-        className: "total",
-        data: getMean(data),
-        prevData: getMean(prevData),
-      })
-      createUpdateRef({
-        className: "male",
-        data: getMean(
-          data.filter(({ gender }) => gender === TEXT.genderM[language])
-        ),
-        prevData: getMean(
-          prevData.filter(({ gender }) => gender === TEXT.genderM[language])
-        ),
-      })
-      createUpdateRef({
-        className: "female",
-        data: getMean(
-          data.filter(({ gender }) => gender === TEXT.accessorF[language])
-        ),
-        prevData: getMean(
-          prevData.filter(({ gender }) => gender === TEXT.accessorF[language])
-        ),
-      })
     }
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()
-      moveRefs({
-        className: "total",
-        data: getMean(data),
-        y1: dims.chartHeight,
-        y2: 0,
-        y: dims.chartHeight / 2,
-      })
-      moveRefs({
-        className: "male",
-        data: getMean(
-          data.filter(({ gender }) => gender === TEXT.genderM[language])
-        ),
-        y1: dims.chartHeight / 2 + space[2],
-        y2: dims.chartHeight,
-        y: dims.chartHeight / 2 + dims.chartHeight / 4,
-      })
-      moveRefs({
-        className: "female",
-        data: getMean(
-          data.filter(({ gender }) => gender === TEXT.accessorF[language])
-        ),
-        y1: 0,
-        y2: dims.chartHeight / 2 - space[2],
-        y: dims.chartHeight / 4,
-      })
     }
   }, [
     init,

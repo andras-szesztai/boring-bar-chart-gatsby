@@ -7,6 +7,7 @@ import {
   TEXT,
   chartColors,
 } from "../../../../../constants/visualizations/coronavirusHungary"
+import AgeChartBrowser from "../AgeChartBrowser/AgeChartBrowser"
 
 export default function CardGrid({
   onlyChart,
@@ -27,7 +28,9 @@ export default function CardGrid({
   const isRunningLessThanMinDate =
     area === "daily" &&
     currDate <
-      new Date("Thu Mar 26 2020 00:00:00 GMT+0100 (Central European Standard Time)")
+      new Date(
+        "Thu Mar 26 2020 00:00:00 GMT+0100 (Central European Standard Time)"
+      )
   return (
     <GridContainer
       style={{ padding: `${space[2]}px ${space[3]}px` }}
@@ -39,13 +42,15 @@ export default function CardGrid({
         {title}
       </FlexContainer>
       <FlexContainer>
-        {!onlyChart && (
+        {!onlyChart ? (
           <LineChart
             key={type + area}
             data={data}
             currDate={currDate}
             isPercentage={area === "ratio"}
           />
+        ) : (
+          <AgeChartBrowser data={data} language={language} />
         )}
       </FlexContainer>
       {!onlyChart && (
@@ -78,7 +83,9 @@ export default function CardGrid({
                 </GridContainer>
               ))
             ) : (
-              <FlexContainer fontSize={2}>Not available before the 26th of March</FlexContainer>
+              <FlexContainer fontSize={2}>
+                {TEXT.dailyBefore[language]}
+              </FlexContainer>
             ))}
         </GridContainer>
       )}
