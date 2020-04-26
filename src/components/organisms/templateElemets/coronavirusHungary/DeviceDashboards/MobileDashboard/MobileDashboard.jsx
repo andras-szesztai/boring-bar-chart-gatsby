@@ -38,7 +38,7 @@ const MobileMainGrid = styled(GridContainer)`
           margin-top: ${space[2]}px;
           margin-bottom: ${space[4]}px;
           grid-template-columns: 1fr;
-          grid-template-rows: min-content 100px 160px repeat(4, 380px) 780px;
+          grid-template-rows: min-content 100px 180px repeat(4, 380px) 780px;
           grid-template-areas:
             "title"
             "source"
@@ -142,7 +142,7 @@ function MobileDashboard({
           isPortrait={isPortrait}
           gridArea={!isBelowPosition && "control"}
           zIndex={isBelowPosition && "overlay"}
-          height={!isPortrait ? "70px" : "160px"}
+          height={!isPortrait ? "70px" : "180px"}
           fixedPos={
             isBelowPosition && {
               top: 0,

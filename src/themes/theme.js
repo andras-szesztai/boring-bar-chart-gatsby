@@ -73,7 +73,8 @@ export const z = {
   tooltip: 50,
   dropdown: 60,
   loader: 100,
-  overlay: 120
+  overlay: 120,
+  fixed: 9999
 }
 
 export const dropShadow = {

@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react"
+import React, { useState, useEffect, useLayoutEffect } from "react"
 import { PropagateLoader, CircleLoader, ClipLoader } from "react-spinners"
 
 import { FlexContainer } from "../../atoms"
 import { colors } from "../../../themes/theme"
-import { useScrollPosition } from "../../../hooks"
+import { useScrollPosition, usePrevious } from "../../../hooks"
 import { useTransition } from "react-spring"
 
 export default function FullScreenLoader({
@@ -15,6 +15,7 @@ export default function FullScreenLoader({
   loader,
 }) {
   const [loading, setLoading] = useState(true)
+  const prevParentLoading = usePrevious(parentLoading)
   useEffect(() => {
     if (parentLoading) {
       setLoading(false)
@@ -35,19 +36,16 @@ export default function FullScreenLoader({
     clip: <ClipLoader {...loaderProps} />,
   }
 
-  const windowScroll = useRef(null)
-
   useLayoutEffect(() => {
-    if (loading) {
-      windowScroll.current = window.getComputedStyle(document.body).overflow
+    if (parentLoading) {
       document.body.style.overflow = "hidden"
     }
-    if (!loading) {
+    if (!parentLoading && prevParentLoading) {
       setTimeout(() => {
-        document.body.style.overflow = windowScroll.current
-      }, 300)
+        document.body.style.overflow = "visible"
+      }, 500)
     }
-  }, [loading])
+  }, [loading, parentLoading, prevParentLoading])
 
   const scrollPosition = useScrollPosition()
 

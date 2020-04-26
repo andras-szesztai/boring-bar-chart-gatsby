@@ -70,6 +70,7 @@ export default function CardGrid({
               data={data}
               currDate={currDate}
               isPercentage={area === "ratio"}
+              noTransition={device !== "desktop"}
             />
           ) : device === "desktop" ? (
             <AgeChartBrowser

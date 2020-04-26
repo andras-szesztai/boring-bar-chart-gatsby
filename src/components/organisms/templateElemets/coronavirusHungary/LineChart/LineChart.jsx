@@ -19,7 +19,13 @@ import { transition } from "../../../../../themes/theme"
 import { axisLeft } from "d3-axis"
 
 const axisPadding = space[2]
-export default function LineChart({ data, currDate, margin, isPercentage }) {
+export default function LineChart({
+  data,
+  currDate,
+  margin,
+  isPercentage,
+  noTransition,
+}) {
   const { svgRef, wrapperRef, yAxisRef, xAxisRef } = useChartRefs()
   const dims = useDimensions({
     ref: wrapperRef,
@@ -57,7 +63,8 @@ export default function LineChart({ data, currDate, margin, isPercentage }) {
     }
     function createUpdateRefElements() {
       const { yScale, xScale, area } = storedValues.current
-      const t = makeTransition(area, transition.lgNum, "update")
+      const duration = noTransition ? 0 : transition.lgNum
+      const t = makeTransition(area, duration, "update")
       const currDateData = data.filter(
         ({ date }) => date.toString() === currDate.toString()
       )
@@ -160,17 +167,7 @@ export default function LineChart({ data, currDate, margin, isPercentage }) {
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()
     }
-  }, [
-    init,
-    data,
-    dims,
-    svgRef,
-    yAxisRef,
-    prevCurrDate,
-    currDate,
-    isPercentage,
-    prevDims,
-  ])
+  }, [init, data, dims, svgRef, yAxisRef, prevCurrDate, currDate, isPercentage, prevDims, noTransition])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>

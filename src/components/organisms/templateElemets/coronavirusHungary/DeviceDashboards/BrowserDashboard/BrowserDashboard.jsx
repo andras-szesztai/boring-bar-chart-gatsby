@@ -117,7 +117,7 @@ export default function BrowserDashboard({
           {...CARD_STYLE_PROPS}
           ref={filterContainerRef}
           gridArea={!isBelowPosition && "control"}
-          zIndex={isBelowPosition && "overlay"}
+          zIndex={isBelowPosition && "fixed"}
           height="70px"
           fixedPos={
             isBelowPosition && {
