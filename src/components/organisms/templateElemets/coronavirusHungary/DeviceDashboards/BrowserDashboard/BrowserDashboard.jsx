@@ -1,6 +1,5 @@
 import React from "react"
 import styled from "styled-components"
-import { BrowserView } from "react-device-detect"
 import { useTrail } from "react-spring"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
@@ -18,7 +17,7 @@ import CardGrid from "../../CardGrid/CardGrid"
 const BrowserMainGrid = styled(GridContainer)`
   max-width: 1400px;
   width: 94vw;
-  margin: ${space[3]}px 0 ${space[4]}px 0;
+  margin: ${space[3]}px 0 ${space[5]}px 0;
 
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: minmax(120px, min-content) 70px 400px 400px;
@@ -40,6 +39,14 @@ const BrowserMainGrid = styled(GridContainer)`
       "cumulative cumulative daily daily"
       "age age ratio ratio"
       "main main main main";
+  }
+`
+
+const FilterContainer = styled(GridContainer)`
+  grid-template-columns: 160px 1fr 25px 250px;
+
+  @media (max-width: 1000px) {
+    grid-template-columns: 140px 1fr 5px 200px;
   }
 `
 
@@ -67,6 +74,7 @@ export default function BrowserDashboard({
   windowWidth,
   isBelowPosition,
   filterContainerRef,
+  device
 }) {
   const {
     language,
@@ -82,7 +90,6 @@ export default function BrowserDashboard({
   })
 
   return (
-    <BrowserView>
       <FlexContainer bgColor="#f2f2f2" loader="circle" loaderSize={20}>
         <FullScreenLoader loading={loading} />
         <BrowserMainGrid>
@@ -93,7 +100,7 @@ export default function BrowserDashboard({
             lineHeight={1.2}
             paddingBottom={2}
             textAlign="left"
-            marginLeft={3}
+            marginLeft={2}
           >
             {TEXT.mainTitle[language]}
           </FlexContainer>
@@ -117,11 +124,10 @@ export default function BrowserDashboard({
               align="flex-start"
             />
           </GridContainer>
-          <GridContainer
+          <FilterContainer
             {...CARD_STYLE_PROPS}
             ref={filterContainerRef}
             gridArea={!isBelowPosition && "control"}
-            columns="160px 1fr 25px 250px"
             zIndex={isBelowPosition && "overlay"}
             fixedPos={
               isBelowPosition && {
@@ -154,7 +160,7 @@ export default function BrowserDashboard({
               marginRight={3}
               justify="flex-end"
             />
-          </GridContainer>
+          </FilterContainer>
           {trail.map((trans, i) => {
             const area = charts[i].gridArea
             const isMain = area === "main"
@@ -173,7 +179,7 @@ export default function BrowserDashboard({
                     data={isMain ? filteredData : state.dataSets[area].total}
                     language={language}
                     type="front"
-                    device="browser"
+                    device={device}
                   />
                 }
                 backContent={
@@ -184,7 +190,7 @@ export default function BrowserDashboard({
                     currDate={state.dates.currDate}
                     data={isMain ? filteredData : state.dataSets[area].gender}
                     language={language}
-                    device="browser"
+                    device={device}
                     type="back"
                   />
                 }
@@ -194,6 +200,5 @@ export default function BrowserDashboard({
           })}
         </BrowserMainGrid>
       </FlexContainer>
-    </BrowserView>
   )
 }

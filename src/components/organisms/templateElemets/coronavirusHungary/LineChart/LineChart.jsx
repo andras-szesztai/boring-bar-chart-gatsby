@@ -24,6 +24,7 @@ export default function LineChart({ data, currDate, margin, isPercentage }) {
     ref: wrapperRef,
     margin,
   })
+  const prevDims = usePrevious(dims)
   const [init, setInit] = useState(false)
   const storedValues = useRef()
   const prevCurrDate = usePrevious(currDate)
@@ -102,6 +103,31 @@ export default function LineChart({ data, currDate, margin, isPercentage }) {
             )
         )
     }
+    function updateDims() {
+      const { yScale, xScale, area } = storedValues.current
+      xScale.range([axisPadding, dims.chartWidth - axisPadding])
+      yScale.range([dims.chartHeight - axisPadding, axisPadding])
+      const lineGenerator = line()
+        .x(d => xScale(d.date))
+        .y(d => yScale(d.value))
+        .curve(curveMonotoneX)
+
+      area.selectAll(".line").attr("d", d => lineGenerator(d.values))
+      area
+        .selectAll(".ref-line")
+        .attr("x1", xScale)
+        .attr("x2", xScale)
+      area
+        .selectAll("circle")
+        .attr("cx", ({ date }) => xScale(date))
+        .attr("cy", ({ value }) => yScale(value))
+
+      storedValues.current = {
+        ...storedValues.current,
+        yScale,
+        xScale,
+      }
+    }
     if (!init && data && dims.chartHeight) {
       const xScale = scaleTime()
         .domain(extent(data, ({ date }) => date))
@@ -130,7 +156,20 @@ export default function LineChart({ data, currDate, margin, isPercentage }) {
     if (init && prevCurrDate.toString() !== currDate.toString()) {
       createUpdateRefElements()
     }
-  }, [init, data, dims, svgRef, yAxisRef, prevCurrDate, currDate, isPercentage])
+    if (init && !_.isEqual(prevDims, dims)) {
+      updateDims()
+    }
+  }, [
+    init,
+    data,
+    dims,
+    svgRef,
+    yAxisRef,
+    prevCurrDate,
+    currDate,
+    isPercentage,
+    prevDims,
+  ])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>

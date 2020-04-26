@@ -15,6 +15,7 @@ import {
   coronavirusDashboardInitialState,
   actions,
 } from "../../../reducers/coronavirusDashboard/coronavirusDashboardReducer"
+import { TabletView } from "react-device-detect"
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [state, dispatch] = useReducer(
@@ -32,7 +33,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       setContainerPosition(filterContainerRef.current.getBoundingClientRect())
     }
   })
-  
+
   const isBelowPosition =
     !loading && containerPosition && containerPosition.top < scrollPosition
 
@@ -75,10 +76,16 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
 
   const device = useDeviceType()
 
+  const isTablet = device === "tablet"
+  const isBrowser = device === "desktop"
+  const isMobile = device === "mobile"
+
+  console.log(device)
+
   return (
     <>
       <Helmet title={TEXT.helmet[state.language]} />
-      {device === "desktop" && (
+      {(isBrowser || isTablet) && (
         <BrowserDashboard
           state={state}
           dispatch={dispatch}
@@ -90,30 +97,10 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           windowWidth={windowWidth}
           filterContainerRef={filterContainerRef}
           isBelowPosition={isBelowPosition}
+          device={device}
         />
       )}
-      {/* {device === "tablet" && (
-        <TabletView>
-          <FlexContainer
-            fullSize
-            height="100vh"
-            fontSize={4}
-            textAlign="center"
-            direction="column"
-          >
-            <SwitchContainer
-              language={language}
-              setLanguage={setLanguage}
-              paddingBottom={4}
-            />
-            {TEXT.tabletExp[language]}
-            <Container paddingTop={5}>
-              <GoTools size={40} />
-            </Container>
-          </FlexContainer>
-        </TabletView>
-      )}
-      {device === "mobile" && (
+      {/* {device === "mobile" && (
         <MobileDashboard
           language={language}
           setLanguage={setLanguage}

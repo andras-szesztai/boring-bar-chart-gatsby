@@ -201,7 +201,7 @@ export const TEXT = {
     en: "Not applicable before the 26th of March",
   },
   ratioFront: {
-    browser: {
+    desktop: {
       hu:
         "A nemek szerinti százalékos megoszlás nem elérhetõ kombinált számolással, kérjük kattintson a kártyára a nemek szerinti adatokért",
       en:
@@ -215,7 +215,7 @@ export const TEXT = {
     },
   },
   cardExplanation: {
-    browser: {
+    desktop: {
       back: {
         hu: "Kattintson a kártyára a kombinált adatokért",
         en: "Click on the card to see total",
