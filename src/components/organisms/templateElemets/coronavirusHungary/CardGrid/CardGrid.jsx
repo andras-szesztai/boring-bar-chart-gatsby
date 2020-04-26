@@ -31,6 +31,7 @@ export default function CardGrid({
       new Date(
         "Thu Mar 26 2020 00:00:00 GMT+0100 (Central European Standard Time)"
       )
+  const isRatioFront = area === "ratio" && type === "front"
   return (
     <GridContainer
       style={{ padding: `${space[2]}px ${space[3]}px` }}
@@ -42,15 +43,26 @@ export default function CardGrid({
         {title}
       </FlexContainer>
       <FlexContainer>
-        {!onlyChart ? (
-          <LineChart
-            key={type + area}
-            data={data}
-            currDate={currDate}
-            isPercentage={area === "ratio"}
-          />
+        {!isRatioFront ? (
+          !onlyChart ? (
+            <LineChart
+              key={type + area}
+              data={data}
+              currDate={currDate}
+              isPercentage={area === "ratio"}
+            />
+          ) : (
+            <AgeChartBrowser
+              key={type + area}
+              data={data}
+              language={language}
+              isCombined={type === "front"}
+            />
+          )
         ) : (
-          <AgeChartBrowser data={data} language={language} />
+          <FlexContainer fontSize={2}>
+            {TEXT.ratioFront[device][language]}
+          </FlexContainer>
         )}
       </FlexContainer>
       {!onlyChart && (
@@ -90,7 +102,7 @@ export default function CardGrid({
         </GridContainer>
       )}
       <FlexContainer>
-        {TEXT.cardExplanation[device][type][language]}
+        {!isRatioFront && TEXT.cardExplanation[device][type][language]}
       </FlexContainer>
     </GridContainer>
   )

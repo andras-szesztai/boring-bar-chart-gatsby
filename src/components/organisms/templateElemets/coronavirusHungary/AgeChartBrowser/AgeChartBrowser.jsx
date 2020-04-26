@@ -21,15 +21,18 @@ import {
   chartColors,
   lowOpacity,
   TEXT,
-
   CIRCLE_RADIUS,
 } from "../../../../../constants/visualizations/coronavirusHungary"
-import { makeTransition, numberTween } from "../../../../../utils/chartHelpers"
+import { makeTransition } from "../../../../../utils/chartHelpers"
 import { transition, space, colors } from "../../../../../themes/theme"
 import ChartTooltip from "../ChartTooltip/ChartTooltip"
 
-const getMean = array => _.meanBy(array, "age")
-export default function AgeChartBrowser({ data, margin, language }) {
+export default function AgeChartBrowser({
+  data,
+  margin,
+  language,
+  isCombined,
+}) {
   const { svgRef, wrapperRef, xAxisRef, areaRef } = useChartRefs()
   const dims = useDimensions({
     ref: wrapperRef,
@@ -46,7 +49,11 @@ export default function AgeChartBrowser({ data, margin, language }) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setColor = ({ gender }) =>
-    gender === TEXT.genderM[language] ? chartColors.male : chartColors.female
+    isCombined
+      ? chartColors.total
+      : gender === TEXT.genderM[language]
+      ? chartColors.male
+      : chartColors.female
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setFillOpaque = d => chroma(setColor(d)).alpha(lowOpacity)
@@ -66,11 +73,15 @@ export default function AgeChartBrowser({ data, margin, language }) {
         "forceY",
         forceY()
           .strength(0.15)
-          .y(({ gender }) => yScale(gender) + yScale.bandwidth() / 2)
+          .y(({ gender }) =>
+            isCombined
+              ? dims.chartHeight / 2
+              : yScale(gender) + yScale.bandwidth() / 2
+          )
       )
       .force("collide", forceCollide().radius(6))
       .tick(300)
-      
+
     area
       .selectAll("circle")
       .data(data, ({ number }) => number)
@@ -115,7 +126,6 @@ export default function AgeChartBrowser({ data, margin, language }) {
   }
 
   useEffect(() => {
-
     function createUpdateAxis() {
       const { xScale } = storedValues.current
       select(xAxisRef.current)
@@ -171,6 +181,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
     setColor,
     language,
     createUpdateCircles,
+    isCombined,
   ])
 
   useEffect(() => {
@@ -227,8 +238,9 @@ export default function AgeChartBrowser({ data, margin, language }) {
           absPos
           left={0}
           width="240px"
-          top={dims.chartHeight / 2}
+          top={isCombined ? 10 : dims.chartHeight / 2}
           fontSize={2}
+          textAlign="left"
         >
           <Container paddingTop={1} paddingRight={2}>
             <FaQuestion />
@@ -236,7 +248,7 @@ export default function AgeChartBrowser({ data, margin, language }) {
           {TEXT.hoverText[language]}
         </FlexContainer>
       )}
-      <FlexContainer absPos bottom={6} left={0} >
+      <FlexContainer absPos bottom={6} left={0}>
         {TEXT.tooltipAge[language]}
       </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>

@@ -196,9 +196,23 @@ export const TEXT = {
     hu: "A mobil verzió hamarosan elkészül, köszönjük türelmét!",
     en: "The mobile version is coming soon, thank you for your patience!",
   },
-  dailyBefore:{
+  dailyBefore: {
     hu: "Nem elérhetõ adat március 26-a elõtt",
-    en: "Not applicable before the 26th of March"
+    en: "Not applicable before the 26th of March",
+  },
+  ratioFront: {
+    browser: {
+      hu:
+        "A nemek szerinti százalékos megoszlás nem elérhetõ kombinált számolással, kérjük kattintson a kártyára a nemek szerinti adatokért",
+      en:
+        "Data revealing gender distribution is not applicable on combined level, please click on the card to see per gender data",
+    },
+    mobile: {
+      hu:
+        "A nemek szerinti százalékos megoszlás nem elérhetõ kombinált számolással, kérjük koppintson a kártyára a nemek szerinti adatokért",
+      en:
+        "Data revealing gender distribution is not applicable on combined level, please tap on the card to see per gender data",
+    },
   },
   cardExplanation: {
     browser: {

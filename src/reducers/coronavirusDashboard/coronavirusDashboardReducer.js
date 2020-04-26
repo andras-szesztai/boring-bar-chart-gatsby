@@ -289,28 +289,28 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
           cumulative: {
             total: runningTotal,
             gender: [
-              ...makeRunningTotal(groupedFemale, "male"),
               ...makeRunningTotal(groupedMale, "female"),
+              ...makeRunningTotal(groupedFemale, "male"),
             ],
           },
           daily: {
             total: makeRunningAvg(groupedFull, "total"),
             gender: [
-              ...makeRunningAvg(groupedFemale, "male"),
               ...makeRunningAvg(groupedMale, "female"),
+              ...makeRunningAvg(groupedFemale, "male"),
             ],
           },
           age: {
             total: makeAvgAge(groupedFull, "total"),
             gender: [
-              ...makeAvgAge(groupedFemale, "male"),
               ...makeAvgAge(groupedMale, "female"),
+              ...makeAvgAge(groupedFemale, "male"),
             ],
           },
           ratio: {
             gender: [
-              ...makeRatio(groupedFemale, "male", runningTotal),
               ...makeRatio(groupedMale, "female", runningTotal),
+              ...makeRatio(groupedFemale, "male", runningTotal),
             ],
           },
         },

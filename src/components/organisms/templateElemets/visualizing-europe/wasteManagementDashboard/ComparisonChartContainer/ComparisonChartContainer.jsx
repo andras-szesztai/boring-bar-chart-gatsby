@@ -76,7 +76,7 @@ export default function ComparisonChartContainer({
       {!selectedCountry ? (
         <FlexContainer>
           <GridContainer rows="repeat(2, min-content)" lineHeight={1.75}>
-            <FlexContainer justify="flex-start">
+            <FlexContainer justify="flex-start" textAlign="left">
               <div>
                 In the European Union, the amount of{" "}
                 <LegendSpan color={COLOR_ARRAY[0]}>municipal waste</LegendSpan>{" "}
@@ -89,7 +89,7 @@ export default function ComparisonChartContainer({
                 <LegendSpan color={COLOR_ARRAY[2]}>composting</LegendSpan>.
               </div>
             </FlexContainer>
-            <FlexContainer justify="flex-start">
+            <FlexContainer justify="flex-start" textAlign="left">
               <div>
                 Explore how per capita municipal waste-generation evolved in
                 European countries between 1995 and 2018, and
