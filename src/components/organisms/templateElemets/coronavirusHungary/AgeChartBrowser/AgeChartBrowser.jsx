@@ -4,7 +4,7 @@ import { forceSimulation, forceX, forceY, forceCollide } from "d3-force"
 import chroma from "chroma-js"
 import { select } from "d3-selection"
 import { scaleLinear, scaleBand } from "d3-scale"
-import { axisBottom } from "d3-axis"
+import { axisBottom, axisTop } from "d3-axis"
 import _ from "lodash"
 import { FaQuestion } from "react-icons/fa"
 
@@ -33,7 +33,7 @@ export default function AgeChartBrowser({
   language,
   isCombined,
 }) {
-  const { svgRef, wrapperRef, xAxisRef, areaRef } = useChartRefs()
+  const { svgRef, wrapperRef, xAxisRef, areaRef, xGridRef } = useChartRefs()
   const dims = useDimensions({
     ref: wrapperRef,
     margin,
@@ -127,15 +127,11 @@ export default function AgeChartBrowser({
               .remove()
           )
       )
-
-    select(lineRef.current).raise()
-    area.selectAll(".ref-line").raise()
-    area.selectAll(".ref-group").raise()
   }
 
   useEffect(() => {
     function createUpdateAxis() {
-      const { xScale } = storedValues.current
+      const { xScale, area } = storedValues.current
       select(xAxisRef.current)
         .call(
           axisBottom(xScale)
@@ -143,22 +139,37 @@ export default function AgeChartBrowser({
             .tickSizeOuter(0)
             .tickSizeInner(space[1])
         )
-        .call(g => g.select(".domain").remove())
-        .call(g => g.selectAll(".tick text").attr("fill", colors.grayDarkest))
-        .call(g =>
-          g
-            .selectAll(".tick line")
+        .call(g => {
+          g.select(".domain").remove()
+          g.selectAll(".tick text").attr("ggfill", colors.grayDarkest)
+          g.selectAll(".tick line")
             .attr("stroke", colors.grayDarkest)
             .attr("stroke-width", 0.5)
+        })
+
+      select(xGridRef.current)
+        .call(
+          axisTop(xScale)
+            .ticks(dims.chartWidth / 80)
+            .tickSizeOuter(0)
+            .tickSizeInner(dims.chartHeight)
         )
+        .call(g => {
+          g.select(".domain").remove()
+          g.selectAll(".tick text").remove()
+          g.selectAll(".tick line")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-opacity", 0.25)
+            .attr("stroke-width", 0.5)
+        })
     }
 
     function updateDims() {
       const { yScale, xScale } = storedValues.current
       yScale.range([0, dims.chartHeight])
       xScale.range([0, dims.chartWidth])
-      createUpdateCircles(0)
       createUpdateAxis()
+      createUpdateCircles(0)
       storedValues.current = { ...storedValues.current, yScale, xScale }
     }
 
@@ -171,8 +182,8 @@ export default function AgeChartBrowser({
         .range([0, dims.chartWidth])
         .domain([min(data, d => d.age) - 2, max(data, d => d.age) + 2])
       storedValues.current = { yScale, xScale, area }
-      createUpdateCircles()
       createUpdateAxis(0)
+      createUpdateCircles()
       setInit(true)
     }
 
@@ -196,6 +207,7 @@ export default function AgeChartBrowser({
     language,
     createUpdateCircles,
     isCombined,
+    xGridRef,
   ])
 
   useEffect(() => {
@@ -269,8 +281,8 @@ export default function AgeChartBrowser({
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
           marginLeft={margin.left}
-          marginTop={margin.top}
-          areaRef={areaRef}
+          marginTop={margin.top + dims.chartHeight}
+          areaRef={xGridRef}
         />
         <ChartArea
           marginLeft={margin.left}
@@ -284,6 +296,11 @@ export default function AgeChartBrowser({
             x2={dims.chartWidth}
           />
         </ChartArea>
+        <ChartArea
+          marginLeft={margin.left}
+          marginTop={margin.top}
+          areaRef={areaRef}
+        />
       </ChartSvg>
     </ChartWrapper>
   )

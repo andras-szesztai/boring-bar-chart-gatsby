@@ -29,10 +29,10 @@ const BrowserMainGrid = styled(GridContainer)`
     "cumulative daily age ratio"
     "main main main main";
 
-  @media (max-width: 1000px) {
+  @media (max-width: 1024px) {
     grid-template-rows: minmax(120px, min-content) 70px 400px 400px 500px;
     grid-row-gap: 1.5rem;
-    grid-column-gap: 1.5rem;
+    grid-column-gap: 2rem;
     grid-template-areas:
       "title title title source"
       "control control control control"
@@ -131,12 +131,12 @@ export default function BrowserDashboard({
             ref={filterContainerRef}
             gridArea={!isBelowPosition && "control"}
             zIndex={isBelowPosition && "overlay"}
+            height="70px"
             fixedPos={
               isBelowPosition && {
                 top: 0,
                 left: 0,
                 width: `${windowWidth * 0.94}px`,
-                height: "70px",
                 marginLeft: "3%",
                 marginTop: space[2],
               }

@@ -54,12 +54,13 @@ export default function CardGrid({
               isPercentage={area === "ratio"}
             />
           ) : (
+            device === "desktop" ? 
             <AgeChartBrowser
               key={type + area}
               data={data}
               language={language}
               isCombined={type === "front"}
-            />
+            /> : <div>Other chart</div> 
           )
         ) : (
           <FlexContainer fontSize={2}>

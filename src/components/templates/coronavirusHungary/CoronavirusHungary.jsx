@@ -15,7 +15,6 @@ import {
   coronavirusDashboardInitialState,
   actions,
 } from "../../../reducers/coronavirusDashboard/coronavirusDashboardReducer"
-import { TabletView } from "react-device-detect"
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [state, dispatch] = useReducer(
@@ -79,7 +78,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const isTablet = device === "tablet"
   const isBrowser = device === "desktop"
   const isMobile = device === "mobile"
-  
+
   return (
     <>
       <Helmet title={TEXT.helmet[state.language]} />
