@@ -27,6 +27,7 @@ export default function SwitchComponent({
       fontSize={fontSize}
       marginRight={marginRight}
       paddingBottom={containerPaddingBottom}
+      noWrap
     >
       <Title
         marginBottom={textMarginBottom}

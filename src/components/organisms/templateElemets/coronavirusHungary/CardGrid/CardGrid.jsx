@@ -8,6 +8,7 @@ import {
   chartColors,
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import AgeChartBrowser from "../AgeChartBrowser/AgeChartBrowser"
+import AreaChart from "../AreaChart/AreaChart"
 
 export default function CardGrid({
   onlyChart,
@@ -18,6 +19,7 @@ export default function CardGrid({
   language,
   type,
   device,
+  fullListDomain,
 }) {
   const currNumbers =
     data &&
@@ -32,14 +34,15 @@ export default function CardGrid({
         "Thu Mar 26 2020 00:00:00 GMT+0100 (Central European Standard Time)"
       )
 
+  const isFront = type === "front"
   const deviceAccessor = device === "desktop" ? device : "mobile"
-  const isRatioFront = area === "ratio" && type === "front"
+  const isRatioFront = area === "ratio" && isFront
   return (
     <GridContainer
       style={{ padding: `${space[2]}px ${space[3]}px` }}
       fullSize
       textAlign="left"
-      rows={onlyChart ? "25px 1fr 25px" : "50px 1fr 100px 25px"}
+      rows={onlyChart ? "35px 1fr 25px" : "50px 1fr 100px 25px"}
     >
       <FlexContainer justify="flex-start" align="flex-start" fontSize={2}>
         {title}
@@ -53,14 +56,50 @@ export default function CardGrid({
               currDate={currDate}
               isPercentage={area === "ratio"}
             />
-          ) : (
-            device === "desktop" ? 
+          ) : device === "desktop" ? (
             <AgeChartBrowser
               key={type + area}
               data={data}
               language={language}
               isCombined={type === "front"}
-            /> : <div>Other chart</div> 
+            />
+          ) : (
+            <GridContainer fullSize rows={isFront ? "1fr" : "repeat(2, 1fr)"}>
+              {isFront ? (
+                <FlexContainer fullSize withBorder></FlexContainer>
+              ) : (
+                <>
+                  <FlexContainer>
+                    <AreaChart
+                      key="femaleArea"
+                      data={
+                        data &&
+                        data.filter(
+                          ({ gender }) => gender === TEXT.accessorF[language]
+                        )
+                      }
+                      accessor="female"
+                      fullListDomain={fullListDomain}
+                      language={language}
+                    />
+                  </FlexContainer>
+                  <FlexContainer>
+                    <AreaChart
+                      key="femaleArea"
+                      data={
+                        data &&
+                        data.filter(
+                          ({ gender }) => gender === TEXT.accessorM[language]
+                        )
+                      }
+                      accessor="male"
+                      fullListDomain={fullListDomain}
+                      language={language}
+                    />
+                  </FlexContainer>
+                </>
+              )}
+            </GridContainer>
           )
         ) : (
           <FlexContainer fontSize={2}>

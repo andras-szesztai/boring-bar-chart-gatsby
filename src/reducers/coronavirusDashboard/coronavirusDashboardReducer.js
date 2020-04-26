@@ -90,7 +90,9 @@ function makeAvgAge(dateGrouped, key) {
   )
   let accumulator = []
   const avgAge = enrichedAllDates.map(date => {
-    const currAgeArray = dateGrouped[date] ? dateGrouped[date].map(({age}) => age) : []
+    const currAgeArray = dateGrouped[date]
+      ? dateGrouped[date].map(({ age }) => age)
+      : []
     accumulator = [...accumulator, ...currAgeArray]
     return {
       date,
@@ -111,11 +113,13 @@ function makeRatio(dateGrouped, key, runningTotal) {
   const ratio = enrichedAllDates.map(date => {
     const num = dateGrouped[date] ? dateGrouped[date].length : 0
     accumulator += num
-    const runningT = runningTotal.find(d => d.date.toString() === date.toString()).value
+    const runningT = runningTotal.find(
+      d => d.date.toString() === date.toString()
+    ).value
     return {
       date,
       key,
-      value: accumulator/runningT,
+      value: accumulator / runningT,
     }
   })
   return ratio
@@ -207,7 +211,7 @@ export const coronavirusDashboardInitialState = {
     ratio: {
       total: undefined,
       gender: undefined,
-    }
+    },
   },
   fullListDomain: {
     fullAgeDomain: undefined,
@@ -342,7 +346,7 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
       const fullAgeDomain = [
         min(formattedData, ({ age }) => age) - 2,
         max(formattedData, ({ age }) => age) + 2,
-      ].sort()
+      ].sort((a, b) => a - b)
       const fullAgeList = []
       for (var i = fullAgeDomain[0]; i <= fullAgeDomain[1]; i++) {
         fullAgeList.push(i)

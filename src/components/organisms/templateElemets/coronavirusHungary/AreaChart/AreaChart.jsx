@@ -148,11 +148,8 @@ export default function AreaChart({
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
-      <FlexContainer absPos top={3} left={margin.left + 1}>
+      <FlexContainer absPos top={margin.top - 4} left={margin.left + 1}>
         {TEXT.chartAxisNumber[language]}
-      </FlexContainer>
-      <FlexContainer absPos bottom={6} left={margin.left - 4}>
-        {TEXT.tooltipAge[language]}
       </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
@@ -187,5 +184,5 @@ export default function AreaChart({
 }
 
 AreaChart.defaultProps = {
-  margin: { top: 5, right: 10, bottom: 25, left: 25 },
+  margin: { top: 15, right: 10, bottom: 25, left: 25 },
 }

@@ -21,8 +21,7 @@ const BrowserMainGrid = styled(GridContainer)`
 
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: minmax(120px, min-content) 70px 400px 400px;
-  grid-row-gap: 3rem;
-  grid-column-gap: 3rem;
+  grid-gap: 3rem;
   grid-template-areas:
     "title title title source"
     "control control control control"
@@ -31,8 +30,7 @@ const BrowserMainGrid = styled(GridContainer)`
 
   @media (max-width: 1024px) {
     grid-template-rows: minmax(120px, min-content) 70px 400px 400px 500px;
-    grid-row-gap: 1.5rem;
-    grid-column-gap: 2rem;
+    grid-gap: 2em;
     grid-template-areas:
       "title title title source"
       "control control control control"
@@ -43,11 +41,8 @@ const BrowserMainGrid = styled(GridContainer)`
 `
 
 const FilterContainer = styled(GridContainer)`
-  grid-template-columns: 160px 1fr 25px 250px;
-
-  @media (max-width: 1000px) {
-    grid-template-columns: 140px 1fr 5px 200px;
-  }
+  grid-template-columns: min-content 1fr min-content;
+  grid-column-gap: 3rem;
 `
 
 const charts = [
@@ -102,7 +97,6 @@ export default function BrowserDashboard({
             lineHeight={1.2}
             paddingBottom={2}
             textAlign="left"
-            marginLeft={2}
           >
             {TEXT.mainTitle[language]}
           </FlexContainer>
@@ -110,7 +104,6 @@ export default function BrowserDashboard({
             gridArea="source"
             bgColor="#f2f2f2"
             rowGap={2}
-            marginRight={3}
           >
             <SwitchComponent
               language={language}
@@ -138,7 +131,7 @@ export default function BrowserDashboard({
                 left: 0,
                 width: `${windowWidth * 0.94}px`,
                 marginLeft: "3%",
-                marginTop: space[2],
+                marginTop: space[3],
               }
             }
           >
@@ -153,7 +146,6 @@ export default function BrowserDashboard({
               dispatch={dispatch}
               updateCurrDate={updateCurrDate}
             />
-            <div />
             <SwitchComponent
               language={language}
               onChange={() => updateDisplay(dispatch)}
@@ -193,6 +185,7 @@ export default function BrowserDashboard({
                     data={isMain ? filteredData : state.dataSets[area].gender}
                     language={language}
                     device={device}
+                    fullListDomain={state.fullListDomain}
                     type="back"
                   />
                 }
