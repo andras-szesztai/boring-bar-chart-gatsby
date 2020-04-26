@@ -112,13 +112,14 @@ function PortfolioItem({
       >
         <SingleText
           justify="flex-start"
+          textAlign="left"
           fontWeight="medium"
           fontSize={isSmallScreen ? 2 : 3}
           lineHeight={1.25}
         >
           {title}
         </SingleText>
-        <SingleText justify="flex-start" align="flex-start">
+        <SingleText textAlign="left" justify="flex-start" align="flex-start">
           {description}
         </SingleText>
         <SingleText justify="space-between">

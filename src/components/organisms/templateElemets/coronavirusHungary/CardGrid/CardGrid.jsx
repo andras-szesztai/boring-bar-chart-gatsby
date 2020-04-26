@@ -50,10 +50,10 @@ export default function CardGrid({
         onlyChart
           ? mobilePortrait
             ? "min-content 1fr 30px"
-            : "35px 1fr 25px"
+            : "35px 1fr 30px"
           : mobilePortrait
-          ? "50px 1fr 75px 25px"
-          : "50px 1fr 100px 25px"
+          ? "50px 1fr 75px 30px"
+          : "50px 1fr 100px 30px"
       }
     >
       <FlexContainer justify="flex-start" align="flex-start" fontSize={2}>

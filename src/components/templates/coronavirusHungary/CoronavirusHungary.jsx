@@ -18,6 +18,7 @@ import {
   coronavirusDashboardInitialState,
   actions,
 } from "../../../reducers/coronavirusDashboard/coronavirusDashboardReducer"
+import { useSpring } from "react-spring"
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [state, dispatch] = useReducer(
@@ -82,6 +83,19 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const isBrowser = device === "desktop"
   const isMobile = device === "mobile"
 
+  const [cardClicked, setCardClicked] = useState(false)
+  useEffect(() => {
+    if (cardClicked) {
+      clearTimeout()
+      setTimeout(() => {
+        setCardClicked(false)
+      }, 2000)
+    }
+  }, [cardClicked])
+  const props = useSpring({
+    top: cardClicked && isBelowPosition ? -1000 : 0,
+  })
+
   return (
     <>
       <Helmet title={TEXT.helmet[state.language]} />
@@ -98,6 +112,8 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           filterContainerRef={filterContainerRef}
           isBelowPosition={isBelowPosition}
           device={device}
+          setCardClicked={setCardClicked}
+          filterTransitionProps={props}
         />
       )}
       {isMobile && (
@@ -112,6 +128,8 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           windowWidth={windowWidth}
           filterContainerRef={filterContainerRef}
           isBelowPosition={isBelowPosition}
+          setCardClicked={setCardClicked}
+          filterTransitionProps={props}
         />
       )}
     </>

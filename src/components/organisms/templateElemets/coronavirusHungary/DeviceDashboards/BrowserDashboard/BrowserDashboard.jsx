@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
-import { useTrail } from "react-spring"
+import { useTrail, useSpring } from "react-spring"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
 import { space } from "../../../../../../themes/theme"
@@ -70,6 +70,8 @@ export default function BrowserDashboard({
   isBelowPosition,
   filterContainerRef,
   device,
+  setCardClicked,
+  filterTransitionProps,
 }) {
   const {
     language,
@@ -124,6 +126,7 @@ export default function BrowserDashboard({
           ref={filterContainerRef}
           gridArea={!isBelowPosition && "control"}
           zIndex={isBelowPosition && "overlay"}
+          style={filterTransitionProps}
           height="70px"
           fixedPos={
             isBelowPosition && {
@@ -152,7 +155,10 @@ export default function BrowserDashboard({
           />
           <SwitchComponent
             language={language}
-            onChange={() => updateDisplay(dispatch)}
+            onChange={() => {
+              device !== "desktop" && isBelowPosition && setCardClicked(true)
+              updateDisplay(dispatch)
+            }}
             isChecked={display === "gender"}
             text={TEXT.displayTest[language]}
             marginRight={3}
@@ -166,6 +172,9 @@ export default function BrowserDashboard({
             <FlippingCard
               key={area}
               toggle={isGender}
+              handleClick={() =>
+                device !== "desktop" && isBelowPosition && setCardClicked(true)
+              }
               transition={trans}
               fullCardIsClickable
               frontContent={

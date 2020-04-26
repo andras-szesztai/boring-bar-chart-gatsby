@@ -92,8 +92,9 @@ function MobileDashboard({
   windowWidth,
   isBelowPosition,
   filterContainerRef,
-  device,
   isPortrait,
+  setCardClicked,
+  filterTransitionProps,
 }) {
   const {
     language,
@@ -106,19 +107,6 @@ function MobileDashboard({
   const trail = useTrail(charts.length, {
     config: { mass: 6, tension: 500, friction: 80 },
     transform: isGender ? 180 : 0,
-  })
-
-  const [cardClicked, setCardClicked] = useState(false)
-  useEffect(() => {
-    if (cardClicked) {
-      clearTimeout()
-      setTimeout(() => {
-        setCardClicked(false)
-      }, 2000)
-    }
-  }, [cardClicked])
-  const props = useSpring({
-    top: cardClicked && isBelowPosition ? -1000 : 0,
   })
 
   return (
@@ -161,7 +149,7 @@ function MobileDashboard({
           {...CARD_STYLE_PROPS}
           ref={filterContainerRef}
           isPortrait={isPortrait}
-          style={props}
+          style={filterTransitionProps}
           gridArea={!isBelowPosition && "control"}
           zIndex={isBelowPosition && "overlay"}
           height={!isPortrait ? "70px" : "165px"}
@@ -192,7 +180,10 @@ function MobileDashboard({
           />
           <SwitchComponent
             language={language}
-            onChange={() => updateDisplay(dispatch)}
+            onChange={() => {
+              updateDisplay(dispatch)
+              isBelowPosition && setCardClicked(true)
+            }}
             isChecked={display === "gender"}
             text={TEXT.displayTest[language]}
             justify={isPortrait ? "center" : "flex-end"}
@@ -206,7 +197,7 @@ function MobileDashboard({
           return (
             <FlippingCard
               key={area}
-              handleClick={() => setCardClicked(true)}
+              handleClick={() => isBelowPosition && setCardClicked(true)}
               toggle={isGender}
               transition={trans}
               fullCardIsClickable
