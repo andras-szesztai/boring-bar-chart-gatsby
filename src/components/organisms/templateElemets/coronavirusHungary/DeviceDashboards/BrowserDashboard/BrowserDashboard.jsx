@@ -89,6 +89,8 @@ export default function BrowserDashboard({
     transform: isGender ? 180 : 0,
   })
 
+
+
   return (
       <FlexContainer bgColor="#f2f2f2" loader="circle" loaderSize={20}>
         <FullScreenLoader loading={loading} />

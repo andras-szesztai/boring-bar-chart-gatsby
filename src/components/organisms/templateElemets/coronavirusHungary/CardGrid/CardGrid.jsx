@@ -31,6 +31,8 @@ export default function CardGrid({
       new Date(
         "Thu Mar 26 2020 00:00:00 GMT+0100 (Central European Standard Time)"
       )
+
+  const deviceAccessor = device === "desktop" ? device : "mobile"
   const isRatioFront = area === "ratio" && type === "front"
   return (
     <GridContainer
@@ -61,7 +63,7 @@ export default function CardGrid({
           )
         ) : (
           <FlexContainer fontSize={2}>
-            {TEXT.ratioFront[device][language]}
+            {TEXT.ratioFront[deviceAccessor][language]}
           </FlexContainer>
         )}
       </FlexContainer>
@@ -102,7 +104,7 @@ export default function CardGrid({
         </GridContainer>
       )}
       <FlexContainer>
-        {!isRatioFront && TEXT.cardExplanation[device][type][language]}
+        {!isRatioFront && TEXT.cardExplanation[deviceAccessor][type][language]}
       </FlexContainer>
     </GridContainer>
   )

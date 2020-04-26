@@ -22,13 +22,12 @@ import {
   chartColors,
   TEXT,
 } from "../../../../../constants/visualizations/coronavirusHungary"
-import { makeTransition, numberTween } from "../../../../../utils/chartHelpers"
+import { makeTransition } from "../../../../../utils/chartHelpers"
 
 export default function AreaChart({
   margin,
   data,
   language,
-  averages,
   fullListDomain,
   accessor,
 }) {
@@ -40,7 +39,6 @@ export default function AreaChart({
   })
   const [init, setInit] = useState(false)
   const prevData = usePrevious(data)
-  const prevAverages = usePrevious(averages)
 
   useEffect(() => {
     function createUpdateArea() {
@@ -68,52 +66,6 @@ export default function AreaChart({
             interpolatePath(select(n[i]).attr("d"), areaGenerator(d))
           )
       }
-    }
-    function createUpdateAvgLine({ num, prevNum, currAccessor, textAnchor }) {
-      const { xScale, chartArea } = storedValues.current
-      const t = makeTransition(chartArea, transition.lgNum, "update")
-      const setX = xScale(num)
-      const getTween = (d, i, n) =>
-        numberTween({
-          value: +num,
-          prevValue: +prevNum,
-          i,
-          n,
-          numberFormat: ".3n",
-        })
-      if (!init) {
-        chartArea
-          .append("line")
-          .attr("class", `ref-line ref-${currAccessor}`)
-          .attr("y1", dims.chartHeight)
-          .attr("y2", 0)
-          .attr("x1", setX)
-          .attr("x2", setX)
-          .attr("stroke", chartColors[currAccessor])
-        chartArea
-          .append("text")
-          .attr("class", `ref-text-${currAccessor}`)
-          .attr("y", 0)
-          .attr("dy", space[2] + 4)
-          .attr("x", setX)
-          .attr("dx", textAnchor === "start" ? space[1] : -space[1])
-          .attr("text-anchor", textAnchor)
-          .attr("fill", chartColors[currAccessor])
-          .text(num.toFixed(1))
-        return
-      }
-      chartArea
-        .select(`.ref-${currAccessor}`)
-        .transition(t)
-        .attr("x1", setX)
-        .attr("x2", setX)
-      chartArea
-        .select(`.ref-text-${currAccessor}`)
-        .transition(t)
-        .attr("x", setX)
-        .attr("text-anchor", textAnchor)
-        .attr("dx", textAnchor === "start" ? space[1] : -space[1])
-        .tween("text", getTween)
     }
     function createAxes() {
       const { yScale, xScale } = storedValues.current
@@ -171,16 +123,6 @@ export default function AreaChart({
       }
       createAxes()
       createUpdateArea()
-      createUpdateAvgLine({
-        num: averages.total,
-        currAccessor: "total",
-        textAnchor: averages.total > averages[accessor] ? "start" : "end",
-      })
-      createUpdateAvgLine({
-        num: averages[accessor],
-        currAccessor: accessor,
-        textAnchor: averages.total > averages[accessor] ? "end" : "start",
-      })
       setInit(true)
     }
     if (init && prevData.length !== data.length) {
@@ -191,18 +133,6 @@ export default function AreaChart({
         xScale,
       }
       createUpdateArea()
-      createUpdateAvgLine({
-        num: averages.total,
-        prevNum: prevAverages.total,
-        currAccessor: "total",
-        textAnchor: averages.total > averages[accessor] ? "start" : "end",
-      })
-      createUpdateAvgLine({
-        num: averages[accessor],
-        prevNum: prevAverages[accessor],
-        currAccessor: accessor,
-        textAnchor: averages.total > averages[accessor] ? "end" : "start",
-      })
     }
   }, [
     init,
@@ -214,8 +144,6 @@ export default function AreaChart({
     yAxisRef,
     xAxisRef,
     accessor,
-    averages,
-    prevAverages,
   ])
 
   return (

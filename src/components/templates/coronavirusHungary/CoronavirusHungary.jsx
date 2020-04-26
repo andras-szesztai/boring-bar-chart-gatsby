@@ -79,9 +79,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const isTablet = device === "tablet"
   const isBrowser = device === "desktop"
   const isMobile = device === "mobile"
-
-  console.log(device)
-
+  
   return (
     <>
       <Helmet title={TEXT.helmet[state.language]} />
