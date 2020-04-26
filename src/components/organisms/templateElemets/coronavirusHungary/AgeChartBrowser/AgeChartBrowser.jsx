@@ -82,18 +82,25 @@ export default function AgeChartBrowser({
       .force("collide", forceCollide().radius(6))
       .tick(300)
 
+    const updateStoredPos = g =>
+      g
+        .each(d => (isCombined ? (d.combinedY = d.y) : (d.genderY = d.y)))
+        .each(d => (isCombined ? (d.combinedX = d.x) : (d.genderX = d.x)))
+
     area
-      .selectAll("circle")
+      .selectAll(isCombined ? ".combined-circle" : ".gender-circle")
       .data(data, ({ number }) => number)
       .join(
         enter =>
           enter
             .append("circle")
+            .attr("class", isCombined ? "combined-circle" : "gender-circle")
             .attr("r", 0)
             .attr("cx", ({ x }) => x)
             .attr("cy", ({ y }) => y)
             .attr("fill", setFillOpaque)
             .attr("stroke", setColor)
+            .call(updateStoredPos)
             .on("mouseover", d => {
               !firstHover && setFirstHover(true)
               setMouseoverValue(d)
@@ -107,6 +114,7 @@ export default function AgeChartBrowser({
         update =>
           update.call(update =>
             update
+              .call(updateStoredPos)
               .transition(makeTransition(area, duration, "update"))
               .attr("cx", ({ x }) => x)
               .attr("cy", ({ y }) => y)
@@ -187,7 +195,7 @@ export default function AgeChartBrowser({
   useEffect(() => {
     if (!mouseoverValue && prevMouseoverValue) {
       storedValues.current.area
-        .selectAll("circle")
+        .selectAll(isCombined ? ".combined-circle" : ".gender-circle")
         .transition(
           makeTransition(storedValues.current.area, transition.smNum, "hover")
         )
@@ -196,7 +204,7 @@ export default function AgeChartBrowser({
     }
     if (mouseoverValue && !prevMouseoverValue) {
       storedValues.current.area
-        .selectAll("circle")
+        .selectAll(isCombined ? ".combined-circle" : ".gender-circle")
         .transition(
           makeTransition(storedValues.current.area, transition.smNum, "hover")
         )
@@ -232,6 +240,7 @@ export default function AgeChartBrowser({
         data={mouseoverValue}
         margin={margin}
         language={language}
+        isCombined={isCombined}
       />
       {!firstHover && (
         <FlexContainer

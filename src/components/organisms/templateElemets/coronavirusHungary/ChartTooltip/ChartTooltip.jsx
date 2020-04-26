@@ -24,7 +24,13 @@ const TooltipContainer = styled(FlexContainer)`
   }
 `
 
-export default function ChartTooltip({ data, margin, width, language }) {
+export default function ChartTooltip({
+  data,
+  margin,
+  width,
+  language,
+  isCombined,
+}) {
   const halfWidth = width / 2
   const tooltipRef = useRef()
   const [tWidth, setTWidth] = useState(0)
@@ -38,13 +44,20 @@ export default function ChartTooltip({ data, margin, width, language }) {
     }
   })
 
+  const xAccessor = isCombined ? "combinedX" : "genderX"
+  const yAccessor = isCombined ? "combinedY" : "genderY"
+
   return data ? (
     <TooltipContainer
       absPos
       ref={tooltipRef}
-      left={data.x - (data.x <= halfWidth ? 15 : tWidth - 16) + margin.left}
-      isLeft={data.x <= halfWidth}
-      top={data.y - 90 + margin.top}
+      left={
+        data[xAccessor] -
+        (data[xAccessor] <= halfWidth ? 15 : tWidth - 16) +
+        margin.left
+      }
+      isLeft={data[xAccessor] <= halfWidth}
+      top={data[yAccessor] - 90 + margin.top}
       borderRadius={1}
       height="75px"
       width="auto"
@@ -72,12 +85,18 @@ export default function ChartTooltip({ data, margin, width, language }) {
         <FlexContainer justify="flex-start" fontWeight={3}>
           {TEXT.tooltipAge[language]}:
         </FlexContainer>
-        <FlexContainer justify="flex-start">{data.age} {TEXT.tooltipYear[language]}</FlexContainer>
+        <FlexContainer justify="flex-start">
+          {data.age} {TEXT.tooltipYear[language]}
+        </FlexContainer>
         <FlexContainer justify="flex-start" fontWeight={3}>
           {TEXT.tooltipConditions[language]}:
         </FlexContainer>
         <FlexContainer justify="flex-start">
-          {_.capitalize(language === "hu" ? data.alapbetegsegek : data["underlying conditions"])}
+          {_.capitalize(
+            language === "hu"
+              ? data.alapbetegsegek
+              : data["underlying conditions"]
+          )}
         </FlexContainer>
       </GridContainer>
     </TooltipContainer>
