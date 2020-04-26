@@ -5,6 +5,7 @@ import { axisLeft, axisBottom, axisRight } from "d3-axis"
 import chroma from "chroma-js"
 import { area, curveCatmullRom } from "d3-shape"
 import { interpolatePath } from "d3-interpolate-path"
+import _ from "lodash"
 
 import {
   ChartWrapper,
@@ -23,6 +24,7 @@ import {
   TEXT,
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition } from "../../../../../utils/chartHelpers"
+import { max } from "d3-array"
 
 export default function AreaChart({
   margin,
@@ -30,6 +32,7 @@ export default function AreaChart({
   language,
   fullListDomain,
   accessor,
+  isCombined,
 }) {
   const { svgRef, wrapperRef, areaRef, xAxisRef, yAxisRef } = useChartRefs()
   const storedValues = useRef()
@@ -39,9 +42,10 @@ export default function AreaChart({
   })
   const [init, setInit] = useState(false)
   const prevData = usePrevious(data)
+  const prevDims = usePrevious(dims)
 
   useEffect(() => {
-    function createUpdateArea() {
+    function createUpdateArea(duration = transition.lgNum) {
       const { yScale, xScale, chartArea } = storedValues.current
       const areaData = makeAreaData(data, fullListDomain.fullAgeList)
       var areaGenerator = area()
@@ -61,13 +65,13 @@ export default function AreaChart({
         chartArea
           .select("path")
           .datum(areaData)
-          .transition(makeTransition(chartArea, transition.lgNum))
+          .transition(makeTransition(chartArea, duration))
           .attrTween("d", (d, i, n) =>
             interpolatePath(select(n[i]).attr("d"), areaGenerator(d))
           )
       }
     }
-    function createAxes() {
+    function createUpdateAxes() {
       const { yScale, xScale } = storedValues.current
       const formatAxis = (axis, removeFirstTick, opaqueTicks) =>
         axis.call(g => {
@@ -113,15 +117,24 @@ export default function AreaChart({
         .range([0, dims.chartWidth])
         .domain(fullListDomain.fullAgeDomain)
       const yScale = scaleLinear()
-        .range([0, dims.chartHeight])
-        .domain([fullListDomain.maxNumber, 0])
+        .range([isCombined ? space[4] : space[2], dims.chartHeight])
+        .domain([
+          isCombined
+            ? max(
+                makeAreaData(data, fullListDomain.fullAgeList).map(
+                  ({ number }) => number
+                )
+              )
+            : fullListDomain.maxNumber,
+          0,
+        ])
       const chartArea = select(areaRef.current)
       storedValues.current = {
         yScale,
         xScale,
         chartArea,
       }
-      createAxes()
+      createUpdateAxes()
       createUpdateArea()
       setInit(true)
     }
@@ -134,17 +147,14 @@ export default function AreaChart({
       }
       createUpdateArea()
     }
-  }, [
-    init,
-    data,
-    prevData,
-    fullListDomain,
-    dims,
-    areaRef,
-    yAxisRef,
-    xAxisRef,
-    accessor,
-  ])
+    if (init && !_.isEqual(dims, prevDims)) {
+      const { yScale, xScale } = storedValues.current
+      xScale.range([0, dims.chartWidth])
+      yScale.range([isCombined ? space[4] : space[2], dims.chartHeight])
+      createUpdateAxes()
+      createUpdateArea(0)
+    }
+  }, [init, data, prevData, fullListDomain, dims, areaRef, yAxisRef, xAxisRef, accessor, isCombined, prevDims])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>

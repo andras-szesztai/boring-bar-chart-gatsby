@@ -7,6 +7,7 @@ import { scaleLinear, scaleBand } from "d3-scale"
 import { axisBottom, axisTop } from "d3-axis"
 import _ from "lodash"
 import { FaQuestion } from "react-icons/fa"
+import useResizeAware from "react-resize-aware"
 
 import {
   ChartWrapper,
@@ -46,6 +47,7 @@ export default function AgeChartBrowser({
   const lineRef = useRef()
   const prevData = usePrevious(data)
   const prevDims = usePrevious(dims)
+  const [resizeListener, sizes] = useResizeAware()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setColor = ({ gender }) =>
@@ -131,7 +133,7 @@ export default function AgeChartBrowser({
 
   useEffect(() => {
     function createUpdateAxis() {
-      const { xScale, area } = storedValues.current
+      const { xScale } = storedValues.current
       select(xAxisRef.current)
         .call(
           axisBottom(xScale)
@@ -190,6 +192,7 @@ export default function AgeChartBrowser({
     if (init && data.length !== prevData.length) {
       createUpdateCircles()
     }
+
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()
     }
@@ -208,6 +211,7 @@ export default function AgeChartBrowser({
     createUpdateCircles,
     isCombined,
     xGridRef,
+    sizes,
   ])
 
   useEffect(() => {
@@ -253,6 +257,7 @@ export default function AgeChartBrowser({
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
+      {resizeListener}
       <ChartTooltip
         width={dims.chartWidth}
         data={mouseoverValue}
@@ -263,9 +268,9 @@ export default function AgeChartBrowser({
       {!firstHover && (
         <FlexContainer
           absPos
-          left={0}
+          left={margin.left}
           width="240px"
-          top={isCombined ? 10 : dims.chartHeight / 2}
+          top={isCombined ? 0 : dims.chartHeight / 2 - 45}
           fontSize={2}
           textAlign="left"
         >
@@ -275,7 +280,7 @@ export default function AgeChartBrowser({
           {TEXT.hoverText[language]}
         </FlexContainer>
       )}
-      <FlexContainer absPos bottom={28} left={0}>
+      <FlexContainer absPos bottom={28} left={margin.left + 2}>
         {TEXT.tooltipAge[language]}
       </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
@@ -307,5 +312,5 @@ export default function AgeChartBrowser({
 }
 
 AgeChartBrowser.defaultProps = {
-  margin: { top: 35, right: 5, bottom: 25, left: 5 },
+  margin: { top: 0, right: 5, bottom: 25, left: 5 },
 }

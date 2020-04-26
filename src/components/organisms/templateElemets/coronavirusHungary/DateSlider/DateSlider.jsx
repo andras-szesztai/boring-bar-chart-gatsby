@@ -51,9 +51,20 @@ export function StyledDateSlider({
   )
 }
 
-export function DateSlider({ language, dates, updateCurrDate, dispatch }) {
+export function DateSlider({
+  language,
+  dates,
+  updateCurrDate,
+  dispatch,
+  marginRight,
+}) {
   return (
-    <FlexContainer justify="flex-start" whiteSpace="nowrap" paddingTop={1}>
+    <FlexContainer
+      justify="flex-start"
+      whiteSpace="nowrap"
+      paddingTop={1}
+      marginRight={marginRight}
+    >
       <Container
         paddingRight={3}
         paddingBottom={1}

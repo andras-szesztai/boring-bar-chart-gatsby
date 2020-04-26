@@ -42,7 +42,7 @@ const BrowserMainGrid = styled(GridContainer)`
 
 const FilterContainer = styled(GridContainer)`
   grid-template-columns: min-content 1fr min-content;
-  grid-column-gap: 3rem;
+  grid-column-gap: 2rem;
 `
 
 const charts = [
@@ -139,12 +139,14 @@ export default function BrowserDashboard({
               language={language}
               currDate={state.dates.currDate}
               justify="center"
+              marginLeft={3}
             />
             <DateSlider
               dates={dates}
               language={language}
               dispatch={dispatch}
               updateCurrDate={updateCurrDate}
+              marginRight={3}
             />
             <SwitchComponent
               language={language}
@@ -173,6 +175,7 @@ export default function BrowserDashboard({
                     data={isMain ? filteredData : state.dataSets[area].total}
                     language={language}
                     type="front"
+                    fullListDomain={state.fullListDomain}
                     device={device}
                   />
                 }

@@ -66,7 +66,16 @@ export default function CardGrid({
           ) : (
             <GridContainer fullSize rows={isFront ? "1fr" : "repeat(2, 1fr)"}>
               {isFront ? (
-                <FlexContainer fullSize withBorder></FlexContainer>
+                <FlexContainer fullSize>
+                  <AreaChart
+                    key="combinedArea"
+                    data={data}
+                    accessor="total"
+                    fullListDomain={fullListDomain}
+                    language={language}
+                    isCombined={true}
+                  />
+                </FlexContainer>
               ) : (
                 <>
                   <FlexContainer>
@@ -121,8 +130,8 @@ export default function CardGrid({
                     {TEXT[key][language]}:
                   </FlexContainer>
                   <FlexContainer
-                    fontSize={2}
-                    fontWeight="medium"
+                    fontSize={3}
+                    fontWeight="ultraLight"
                     fontColor={chartColors[key]}
                   >
                     <Number
