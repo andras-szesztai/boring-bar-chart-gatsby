@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react"
 import { PropagateLoader, CircleLoader, ClipLoader } from "react-spinners"
 
-import { FlexContainer, Container } from "../../atoms"
+import { FlexContainer } from "../../atoms"
 import { colors } from "../../../themes/theme"
 import { useScrollPosition } from "../../../hooks"
+import { useTransition } from "react-spring"
 
 export default function FullScreenLoader({
   timeOut,
@@ -26,7 +27,7 @@ export default function FullScreenLoader({
   const loaderProps = {
     size: loaderSize,
     color: loaderColor,
-    loading: parentLoading,
+    loading: true,
   }
   const loaders = {
     propagate: <PropagateLoader {...loaderProps} />,
@@ -44,36 +45,35 @@ export default function FullScreenLoader({
     if (!loading) {
       setTimeout(() => {
         document.body.style.overflow = windowScroll.current
-      }, 200)
+      }, 300)
     }
   }, [loading])
 
   const scrollPosition = useScrollPosition()
 
-  return (
-    <>
-      {(loading || parentLoading) && (
-        <>
-          <Container
-            fullSize
-            absPos
-            top={0}
-            bgColor={bgColor}
-            zIndex="loader"
-          />
-          <FlexContainer
-            fullScreen
-            top={scrollPosition}
-            absPos
-            bgColor={bgColor}
-            fontColor="grayDarkest"
-            zIndex="loader"
-          >
-            {loaders[loader]}
-          </FlexContainer>
-        </>
-      )}
-    </>
+  const transitions = useTransition(parentLoading || loading, null, {
+    from: { opacity: 1 },
+    enter: { opacity: 1 },
+    leave: { opacity: -1 },
+  })
+  console.log(loader)
+
+  return transitions.map(
+    ({ item, key, props }) =>
+      item && (
+        <FlexContainer
+          key={key}
+          style={props}
+          fullScreen
+          top={scrollPosition}
+          absPos
+          bgColor={bgColor}
+          fontColor="grayDarkest"
+          zIndex="loader"
+        >
+          {loaders[loader]}
+        </FlexContainer>
+      )
   )
 }
 
