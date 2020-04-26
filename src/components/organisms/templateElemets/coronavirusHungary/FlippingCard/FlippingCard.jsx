@@ -20,6 +20,9 @@ const Card = styled(a.div)`
   will-change: transform, opacity;
   filter: drop-shadow(${dropShadow.primary})
     drop-shadow(${dropShadow.secondary});
+
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 `
 
 export default function FlippingCard(props) {
@@ -28,7 +31,6 @@ export default function FlippingCard(props) {
   const [isFlipped, setIsFlipped] = useState(false)
   const currTransition = useSpring({
     config: { mass: 6, tension: 500, friction: 80 },
-    opacity: isFlipped ? 1 : 0,
     transform: isFlipped ? 180 : 0,
   })
   const transitionObject = useRef(currTransition)
@@ -50,7 +52,7 @@ export default function FlippingCard(props) {
     groupTransition,
     currTransition,
   ])
-  const { opacity, transform } = transitionObject.current
+  const { transform } = transitionObject.current
 
   const [resizeListener, sizes] = useResizeAware()
   const rotateDirection = sizes.height > sizes.width ? "rotateY" : "rotateX"
@@ -65,7 +67,6 @@ export default function FlippingCard(props) {
       {resizeListener}
       <Card
         style={{
-          opacity: opacity.interpolate(o => 1 - o),
           transform: transform.interpolate(
             t =>
               `perspective(${props.perspective}px) ${rotateDirection}(${t}deg)`
@@ -76,7 +77,6 @@ export default function FlippingCard(props) {
       </Card>
       <Card
         style={{
-          opacity,
           transform: transform.interpolate(
             t =>
               ` perspective(${props.perspective}px) ${rotateDirection}(${t}deg) ${rotateDirection}(180deg)`

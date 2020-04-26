@@ -81,7 +81,6 @@ export default function BrowserDashboard({
   const isGender = state.display === "gender"
   const trail = useTrail(charts.length, {
     config: { mass: 6, tension: 500, friction: 80 },
-    opacity: isGender ? 1 : 0,
     transform: isGender ? 180 : 0,
   })
 

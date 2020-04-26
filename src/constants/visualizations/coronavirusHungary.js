@@ -196,6 +196,9 @@ export const TEXT = {
     hu: "A mobil verzió hamarosan elkészül, köszönjük türelmét!",
     en: "The mobile version is coming soon, thank you for your patience!",
   },
+  dailyBefore:{
+    hu: "Nem elérhetõ márccius 26-a elõtt"
+  },
   cardExplanation: {
     browser: {
       back: {

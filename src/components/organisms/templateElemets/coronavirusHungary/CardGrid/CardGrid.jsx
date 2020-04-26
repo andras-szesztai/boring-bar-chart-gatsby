@@ -23,6 +23,11 @@ export default function CardGrid({
     currDate &&
     !onlyChart &&
     data.filter(({ date }) => currDate.toString() === date.toString())
+
+  const isRunningLessThanMinDate =
+    area === "daily" &&
+    currDate <
+      new Date("Thu Mar 26 2020 00:00:00 GMT+0100 (Central European Standard Time)")
   return (
     <GridContainer
       style={{ padding: `${space[2]}px ${space[3]}px` }}
@@ -50,28 +55,36 @@ export default function CardGrid({
           }
         >
           {currNumbers &&
-            currNumbers.map(({ key, value }) => (
-              <GridContainer columns="repeat(2, 1fr)" key={key + area}>
-                <FlexContainer fontSize={2} fontColor={chartColors[key]}>
-                  {TEXT[key][language]}:
-                </FlexContainer>
-                <FlexContainer
-                  fontSize={2}
-                  fontWeight="medium"
-                  fontColor={chartColors[key]}
-                >
-                  <Number
-                    num={value}
-                    isPercentage={area === "ratio"}
-                    oneDecimal={area === "age"}
-                  />
-                  {area === "age" ? `‎‎‏‏‎ ‎${TEXT.tooltipYear[language]}` : ""}
-                </FlexContainer>
-              </GridContainer>
+            (!isRunningLessThanMinDate ? (
+              currNumbers.map(({ key, value }) => (
+                <GridContainer columns="repeat(2, 1fr)" key={key + area}>
+                  <FlexContainer fontSize={2} fontColor={chartColors[key]}>
+                    {TEXT[key][language]}:
+                  </FlexContainer>
+                  <FlexContainer
+                    fontSize={2}
+                    fontWeight="medium"
+                    fontColor={chartColors[key]}
+                  >
+                    <Number
+                      num={value}
+                      isPercentage={area === "ratio"}
+                      oneDecimal={area === "age"}
+                    />
+                    {area === "age"
+                      ? `‎‎‏‏‎ ‎${TEXT.tooltipYear[language]}`
+                      : ""}
+                  </FlexContainer>
+                </GridContainer>
+              ))
+            ) : (
+              <FlexContainer fontSize={2}>Not available before the 26th of March</FlexContainer>
             ))}
         </GridContainer>
       )}
-      <FlexContainer>{TEXT.cardExplanation[device][type][language]}</FlexContainer>
+      <FlexContainer>
+        {TEXT.cardExplanation[device][type][language]}
+      </FlexContainer>
     </GridContainer>
   )
 }
