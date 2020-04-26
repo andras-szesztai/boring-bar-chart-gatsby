@@ -32,6 +32,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       setContainerPosition(filterContainerRef.current.getBoundingClientRect())
     }
   })
+  
   const isBelowPosition =
     !loading && containerPosition && containerPosition.top < scrollPosition
 

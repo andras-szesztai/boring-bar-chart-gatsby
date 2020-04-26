@@ -7,6 +7,7 @@ import { space, colors } from "../../../../../themes/theme"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
 
 const TooltipContainer = styled(FlexContainer)`
+  max-width: 300px;
   :after {
     top: 100%;
     left: ${props => props.isLeft && 14}px;
@@ -33,13 +34,14 @@ export default function ChartTooltip({
 }) {
   const halfWidth = width / 2
   const tooltipRef = useRef()
-  const [tWidth, setTWidth] = useState(0)
+  const [tDims, setTooltipDims] = useState({ width: 0, height: 0 })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
     if (tooltipRef && tooltipRef.current) {
-      const newWidth = tooltipRef.current.getBoundingClientRect().width
-      if (newWidth !== tWidth) {
-        setTWidth(newWidth)
+      const boundingRect = tooltipRef.current.getBoundingClientRect()
+      const newDims = { width: boundingRect.width, height: boundingRect.height }
+      if (!_.isEqual(tDims, newDims)) {
+        setTooltipDims(newDims)
       }
     }
   })
@@ -53,13 +55,13 @@ export default function ChartTooltip({
       ref={tooltipRef}
       left={
         data[xAccessor] -
-        (data[xAccessor] <= halfWidth ? 15 : tWidth - 16) +
+        (data[xAccessor] <= halfWidth ? 15 : tDims.width - 16) +
         margin.left
       }
       isLeft={data[xAccessor] <= halfWidth}
-      top={data[yAccessor] - 90 + margin.top}
+      top={data[yAccessor] - (tDims.height +15) + margin.top}
       borderRadius={1}
-      height="75px"
+      height="auto"
       width="auto"
       borderColor="grayDarker"
       zIndex="overlay"
@@ -78,20 +80,22 @@ export default function ChartTooltip({
         rowGap={0.5}
         columnGap={1.2}
       >
-        <FlexContainer justify="flex-start" fontWeight={3}>
+        <FlexContainer justify="flex-start" fontWeight={3} textAlign="left">
           {TEXT.tooltipGender[language]}:
         </FlexContainer>
-        <FlexContainer justify="flex-start">{data.gender}</FlexContainer>
-        <FlexContainer justify="flex-start" fontWeight={3}>
+        <FlexContainer justify="flex-start" textAlign="left">
+          {data.gender}
+        </FlexContainer>
+        <FlexContainer justify="flex-start" fontWeight={3} textAlign="left">
           {TEXT.tooltipAge[language]}:
         </FlexContainer>
-        <FlexContainer justify="flex-start">
+        <FlexContainer justify="flex-start" textAlign="left">
           {data.age} {TEXT.tooltipYear[language]}
         </FlexContainer>
-        <FlexContainer justify="flex-start" fontWeight={3}>
+        <FlexContainer justify="flex-start" fontWeight={3} textAlign="left">
           {TEXT.tooltipConditions[language]}:
         </FlexContainer>
-        <FlexContainer justify="flex-start">
+        <FlexContainer justify="flex-start" textAlign="left">
           {_.capitalize(
             language === "hu"
               ? data.alapbetegsegek

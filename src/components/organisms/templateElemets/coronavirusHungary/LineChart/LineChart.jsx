@@ -94,16 +94,12 @@ export default function LineChart({ data, currDate, margin, isPercentage }) {
               .attr("fill", ({ key }) => chartColors[key])
               .attr("stroke", "#fff"),
           update =>
-            update
-              .attr("r", 0)
-              .attr("cx", ({ date }) => xScale(date))
-              .attr("cy", ({ value }) => yScale(value))
-              .call(update =>
-                update
-                  .transition(t)
-                  .delay(transition.lgNum)
-                  .attr("r", CIRCLE_RADIUS)
-              )
+            update.call(update =>
+              update
+                .transition(t)
+                .attr("cx", ({ date }) => xScale(date))
+                .attr("cy", ({ value }) => yScale(value))
+            )
         )
     }
     if (!init && data && dims.chartHeight) {
@@ -121,12 +117,14 @@ export default function LineChart({ data, currDate, margin, isPercentage }) {
       }
       createUpdateLines()
       createUpdateRefElements()
-      area.call(axisLeft(yScale).ticks(5, isPercentage ? ".0%" : "d")).call(g => {
-        g.select(".domain").remove()
-        g.selectAll(".tick line")
-          .attr("stroke", colors.grayDarkest)
-          .attr("stroke-width", 0.5)
-      })
+      area
+        .call(axisLeft(yScale).ticks(5, isPercentage ? ".0%" : "d"))
+        .call(g => {
+          g.select(".domain").remove()
+          g.selectAll(".tick line")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        })
       setInit(true)
     }
     if (init && prevCurrDate.toString() !== currDate.toString()) {
