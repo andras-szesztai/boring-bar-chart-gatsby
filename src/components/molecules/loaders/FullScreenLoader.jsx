@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useLayoutEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { PropagateLoader, CircleLoader, ClipLoader } from "react-spinners"
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import { FlexContainer } from "../../atoms"
 import { colors } from "../../../themes/theme"
@@ -36,16 +37,19 @@ export default function FullScreenLoader({
     clip: <ClipLoader {...loaderProps} />,
   }
 
-  useLayoutEffect(() => {
-    if (parentLoading) {
-      document.body.style.overflow = "hidden"
+  const [init, setInit] = useState(false)
+
+  useEffect(() => {
+    if (!init) {
+      disableBodyScroll();
+      setInit(true)
     }
     if (!parentLoading && prevParentLoading) {
       setTimeout(() => {
-        document.body.style.overflow = "visible"
-      }, 500)
+        clearAllBodyScrollLocks()
+      }, 1000)
     }
-  }, [loading, parentLoading, prevParentLoading])
+  }, [init, loading, parentLoading, prevParentLoading])
 
   const scrollPosition = useScrollPosition()
 

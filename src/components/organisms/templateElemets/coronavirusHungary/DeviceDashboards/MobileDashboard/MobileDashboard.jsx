@@ -16,7 +16,6 @@ import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
 import CardGrid from "../../CardGrid/CardGrid"
 
 const MobileMainGrid = styled(GridContainer)`
-  grid-row-gap: 2rem;
   ${({ orientation }) =>
     orientation === "landscape"
       ? css`
@@ -34,7 +33,7 @@ const MobileMainGrid = styled(GridContainer)`
             "main main main main";
         `
       : css`
-          width: 94%;
+          width: 92%;
           margin-top: ${space[2]}px;
           margin-bottom: ${space[4]}px;
           grid-template-columns: 1fr;
@@ -107,7 +106,7 @@ function MobileDashboard({
   return (
     <FlexContainer bgColor="#f2f2f2">
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
-      <MobileMainGrid orientation={isPortrait ? "portrait" : "landscape"}>
+      <MobileMainGrid rowGap={isPortrait && 3} orientation={isPortrait ? "portrait" : "landscape"}>
         <FlexContainer
           gridArea="title"
           fontSize={4}
@@ -122,17 +121,18 @@ function MobileDashboard({
           gridArea="source"
           bgColor="#f2f2f2"
           paddingLeft={isPortrait && 1}
-          marginTop={isPortrait && 1}
+          columns={isPortrait && "repeat(2, 1fr)"}
         >
+          <SourceLink
+            language={language}
+            justify={isPortrait ? "center" : "flex-end"}
+            paddingBottom={isPortrait  && 1}
+          />
           <SwitchComponent
             language={language}
             onChange={() => setLanguage(dispatch)}
             isChecked={language === "en"}
             text={["Magyar", "English"]}
-            justify={isPortrait ? "center" : "flex-end"}
-          />
-          <SourceLink
-            language={language}
             justify={isPortrait ? "center" : "flex-end"}
           />
         </GridContainer>
