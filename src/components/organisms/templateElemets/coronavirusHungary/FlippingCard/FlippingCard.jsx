@@ -64,7 +64,7 @@ export default function FlippingCard(props) {
   return (
     <FlexContainer
       onClick={() => {
-        handleClick()
+        _.isFunction(handleClick) && handleClick()
         props.fullCardIsClickable && setIsFlipped(prev => !prev)
       }}
       gridArea={props.gridArea}

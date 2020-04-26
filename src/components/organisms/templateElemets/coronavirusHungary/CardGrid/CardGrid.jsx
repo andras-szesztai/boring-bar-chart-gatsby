@@ -97,6 +97,7 @@ export default function CardGrid({
                     />
                   ) : (
                     <VerticalDoubleAreaChart
+                      key="double-total"
                       data={data}
                       language={language}
                       fullListDomain={fullListDomain}
@@ -106,6 +107,7 @@ export default function CardGrid({
                 </FlexContainer>
               ) : mobilePortrait ? (
                 <VerticalDoubleAreaChart
+                  key="double-gender"
                   data={data}
                   language={language}
                   fullListDomain={fullListDomain}

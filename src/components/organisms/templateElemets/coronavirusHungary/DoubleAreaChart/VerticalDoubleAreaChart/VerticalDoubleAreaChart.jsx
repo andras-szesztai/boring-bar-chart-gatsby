@@ -28,10 +28,7 @@ import {
 import { space, colors, transition } from "../../../../../../themes/theme"
 import { area, curveCatmullRom } from "d3-shape"
 import { interpolatePath } from "d3-interpolate-path"
-import {
-  makeTransition,
-  numberTween,
-} from "../../../../../../utils/chartHelpers"
+import { makeTransition } from "../../../../../../utils/chartHelpers"
 import {
   IoMdArrowDropdown,
   IoMdArrowDropright,
@@ -47,6 +44,7 @@ export default function VerticalDoubleAreaChart({
   data,
   language,
   fullListDomain,
+  isCombined,
 }) {
   const { svgRef, wrapperRef, yAxisRef } = useChartRefs()
   const storedValues = useRef()
@@ -70,6 +68,7 @@ export default function VerticalDoubleAreaChart({
   useEffect(() => {
     const setDataSets = () => {
       setAreaDataSets({
+        total: makeAreaData(data, fullListDomain.fullAgeList),
         female: makeAreaData(
           data.filter(({ gender }) => gender === TEXT.accessorF[language]),
           fullListDomain.fullAgeList
@@ -298,7 +297,9 @@ export default function VerticalDoubleAreaChart({
       const xDomain = [
         0,
         max(
-          [...areaDataSets.female, ...areaDataSets.male],
+          isCombined
+            ? areaDataSets.total
+            : [...areaDataSets.female, ...areaDataSets.male],
           ({ number }) => number
         ),
       ]
@@ -323,13 +324,13 @@ export default function VerticalDoubleAreaChart({
       createUpdateXAxisRight()
       createUpdateXAxisLeft()
       createUpdateAreaLeft({
-        data: areaDataSets.female,
-        accessor: "female",
+        data: isCombined ? areaDataSets.total : areaDataSets.female,
+        accessor: isCombined ? "total" : "female",
         isInit: true,
       })
       createUpdateAreaRight({
-        data: areaDataSets.male,
-        accessor: "male",
+        data: isCombined ? areaDataSets.total : areaDataSets.male,
+        accessor: isCombined ? "total" : "male",
         isInit: true,
       })
       setInit(true)
@@ -343,22 +344,34 @@ export default function VerticalDoubleAreaChart({
         _.sumBy(prevAreaDataSets.female, "number")
     ) {
       createUpdateAreaLeft({
-        data: areaDataSets.female,
-        accessor: "female",
+        data: isCombined ? areaDataSets.total : areaDataSets.female,
+        accessor: isCombined ? "total" : "female",
       })
       createUpdateAreaRight({
-        data: areaDataSets.male,
-        accessor: "male",
+        data: isCombined ? areaDataSets.total : areaDataSets.male,
+        accessor: isCombined ? "total" : "male",
       })
     }
-  }, [areaDataSets, data, dims, fullListDomain, init, leftLeft, prevAreaDataSets, rightLeft, svgRef, yAxisRef])
+  }, [
+    areaDataSets,
+    data,
+    dims,
+    fullListDomain,
+    init,
+    isCombined,
+    leftLeft,
+    prevAreaDataSets,
+    rightLeft,
+    svgRef,
+    yAxisRef,
+  ])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
       <FlexContainer
         absPos
         left={dims.width / 2 - (language === "hu" ? 50 : 55)}
-        top={-space[4]}
+        top={-space[5]}
         fontSize={2}
         direction="column"
         zIndex="hoverOverlay"
@@ -380,7 +393,7 @@ export default function VerticalDoubleAreaChart({
       <FlexContainer
         absPos
         left={dims.width / 2 - (language === "hu" ? 50 : 55)}
-        bottom={-space[4]}
+        bottom={-space[5]}
         fontSize={2}
         direction="column"
         zIndex="hoverOverlay"

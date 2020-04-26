@@ -17,6 +17,7 @@ import { space, colors } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { transition } from "../../../../../themes/theme"
 import { axisLeft } from "d3-axis"
+import { format } from "d3-format"
 
 const axisPadding = space[2]
 export default function LineChart({
@@ -152,7 +153,11 @@ export default function LineChart({
       createUpdateLines()
       createUpdateRefElements()
       area
-        .call(axisLeft(yScale).ticks(5, isPercentage ? ".0%" : "d"))
+        .call(
+          axisLeft(yScale)
+            .ticks(4)
+            .tickFormat(format(isPercentage ? ".0%" : ".0f"))
+        )
         .call(g => {
           g.select(".domain").remove()
           g.selectAll(".tick line")
@@ -167,7 +172,18 @@ export default function LineChart({
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()
     }
-  }, [init, data, dims, svgRef, yAxisRef, prevCurrDate, currDate, isPercentage, prevDims, noTransition])
+  }, [
+    init,
+    data,
+    dims,
+    svgRef,
+    yAxisRef,
+    prevCurrDate,
+    currDate,
+    isPercentage,
+    prevDims,
+    noTransition,
+  ])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>

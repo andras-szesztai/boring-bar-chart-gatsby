@@ -95,10 +95,16 @@ export default function BrowserDashboard({
           lineHeight={1.2}
           paddingBottom={2}
           textAlign="left"
+          paddingLeft={2}
         >
           {TEXT.mainTitle[language]}
         </FlexContainer>
-        <GridContainer gridArea="source" bgColor="#f2f2f2" rowGap={2}>
+        <GridContainer
+          gridArea="source"
+          bgColor="#f2f2f2"
+          rowGap={2}
+          paddingRight={2}
+        >
           <SwitchComponent
             language={language}
             onChange={() => setLanguage(dispatch)}
@@ -117,7 +123,7 @@ export default function BrowserDashboard({
           {...CARD_STYLE_PROPS}
           ref={filterContainerRef}
           gridArea={!isBelowPosition && "control"}
-          zIndex={isBelowPosition && "fixed"}
+          zIndex={isBelowPosition && "overlay"}
           height="70px"
           fixedPos={
             isBelowPosition && {

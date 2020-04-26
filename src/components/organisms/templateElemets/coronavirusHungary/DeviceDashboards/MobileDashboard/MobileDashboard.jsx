@@ -63,11 +63,16 @@ const FilterContainer = styled(GridContainer)`
         `}
 `
 
+const smallPerspective = 1600
 const charts = [
-  { gridArea: "cumulative", perspective: 1000, zIndex: "hoverOverlay" },
-  { gridArea: "daily", perspective: 1000, zIndex: "hoverOverlay" },
-  { gridArea: "age", perspective: 1000, zIndex: "hoverOverlay" },
-  { gridArea: "ratio", perspective: 1000, zIndex: "hoverOverlay" },
+  {
+    gridArea: "cumulative",
+    perspective: smallPerspective,
+    zIndex: "hoverOverlay",
+  },
+  { gridArea: "daily", perspective: smallPerspective, zIndex: "hoverOverlay" },
+  { gridArea: "age", perspective: smallPerspective, zIndex: "hoverOverlay" },
+  { gridArea: "ratio", perspective: smallPerspective, zIndex: "hoverOverlay" },
   { gridArea: "main", perspective: 5000, zIndex: "none" },
 ]
 
@@ -109,16 +114,18 @@ function MobileDashboard({
       clearTimeout()
       setTimeout(() => {
         setCardClicked(false)
-      }, 500)
+      }, 2000)
     }
   }, [cardClicked])
-  const props = useSpring({ top: cardClicked && isBelowPosition ? -200 : 0 })
+  const props = useSpring({
+    top: cardClicked && isBelowPosition ? -1000 : 0,
+  })
 
   return (
     <FlexContainer bgColor="#f2f2f2">
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
       <MobileMainGrid
-        rowGap={isPortrait ? 5 : 3}
+        rowGap={isPortrait ? 4 : 3}
         orientation={isPortrait ? "portrait" : "landscape"}
       >
         <FlexContainer
