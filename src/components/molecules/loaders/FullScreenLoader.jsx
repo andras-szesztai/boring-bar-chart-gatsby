@@ -56,7 +56,6 @@ export default function FullScreenLoader({
     enter: { opacity: 1 },
     leave: { opacity: -1 },
   })
-  console.log(loader)
 
   return transitions.map(
     ({ item, key, props }) =>

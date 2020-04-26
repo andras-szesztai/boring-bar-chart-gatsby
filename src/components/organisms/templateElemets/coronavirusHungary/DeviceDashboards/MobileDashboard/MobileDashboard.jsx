@@ -1,315 +1,217 @@
 import React from "react"
 import styled, { css } from "styled-components"
-import { MobileOnlyView, withOrientationChange } from "react-device-detect"
+import { useTrail } from "react-spring"
+import { withOrientationChange } from "react-device-detect"
 
-import { useOrientation } from "../../../../../../hooks"
-import { FlexContainer, GridContainer } from "../../../../../atoms"
-import { FullScreenLoader, ScrollHint } from "../../../../../molecules"
-import {
-  TEXT,
-  chartColors,
-  lowOpacity,
-} from "../../../../../../constants/visualizations/coronavirusHungary"
-import SwitchContainer from "../../SwitchContainer/SwitchContainer"
-import SourceLink from "../../SourceLink/SourceLink"
+import { GridContainer, FlexContainer } from "../../../../../atoms"
 import { space } from "../../../../../../themes/theme"
-import BanContainer from "../../BanContainer/BanContainer"
-import {DateSliderMobile} from "../../DateSlider/DateSlider"
-import HorizontalBarChart from "../../HorizontalBarChart/HorizontalBarChart"
-import Number from "../../Number/Number"
-import StackedBarChart from "../../StackedBarChart/StackedBarChart"
-import { VerticalDoubleAreaChart } from "../../DoubleAreaChart"
-import AreaChart from "../../AreaChart/AreaChart"
+import { TEXT } from "../../../../../../constants/visualizations/coronavirusHungary"
 
-const MainGrid = styled(GridContainer)`
+import SourceLink from "../../SourceLink/SourceLink"
+import { DateSlider } from "../../DateSlider/DateSlider"
+import { FullScreenLoader } from "../../../../../molecules"
+import FlippingCard from "../../FlippingCard/FlippingCard"
+import { SwitchComponent } from "../../../../../molecules/controlElements"
+import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
+import CardGrid from "../../CardGrid/CardGrid"
+
+const MobileMainGrid = styled(GridContainer)`
+  grid-row-gap: 2rem;
   ${({ orientation }) =>
     orientation === "landscape"
       ? css`
-          width: 95%;
+          width: 94%;
           margin-top: ${space[3]}px;
           margin-bottom: ${space[2]}px;
-          grid-template-columns: repeat(5, 1fr);
+          grid-template-columns: repeat(4, 1fr);
           grid-template-rows: min-content 120px 150px 320px;
+
           grid-template-areas:
-            "title title title source source"
-            "total . . slider slider"
-            "barChart barChart barChart stackedChart stackedChart"
-            "mainChart mainChart mainChart mainChart mainChart";
+            "title title title source"
+            "control control control control"
+            "cumulative daily age ratio"
+            "main main main main";
         `
       : css`
-          width: 92%;
-          margin-top: ${space[3]}px;
-          margin-bottom: ${space[6]}px;
+          width: 94%;
+          margin-top: ${space[2]}px;
+          margin-bottom: ${space[4]}px;
           grid-template-columns: 1fr;
-          grid-template-rows:
-            min-content 70px 125px 80px 270px 175px
-            680px;
+          grid-template-rows: min-content 100px min-content 80px 270px 175px 680px;
           grid-template-areas:
             "title"
             "source"
-            "slider"
-            "total"
-            "barChart"
-            "stackedChart"
-            "mainChart";
+            "control"
+            "cumulative"
+            "cumulative"
+            "daily"
+            "age"
+            "ratio"
+            "main";
         `}
 `
 
-const BarChartContainer = styled(GridContainer)`
-  ${({ orientation }) =>
-    orientation === "landscape"
+const FilterContainer = styled(GridContainer)`
+  ${({ isPortrait }) =>
+    isPortrait
       ? css`
-          grid-template-columns: 1fr 2fr;
-          grid-template-rows: repeat(2, 1fr);
-          grid-template-areas:
-            "fem barC"
-            "mal barC";
+          grid-template-rows: min-content 1fr min-content;
+          padding: 1rem 3rem 2rem 3rem;
         `
       : css`
-          grid-template-rows: 80px 1fr;
-          grid-template-columns: repeat(2, 1fr);
-          grid-template-areas:
-            "fem mal"
-            "barC barC";
+          grid-template-columns: min-content 1fr min-content;
+          grid-column-gap: 2rem;
         `}
 `
 
-const StackedChartContainer = styled(GridContainer)`
-  grid-template-areas:
-    "title title"
-    "fem mal"
-    "chart chart";
-  ${({ orientation }) =>
-    orientation === "landscape"
-      ? css`
-          grid-template-rows: 25px 35px 1fr;
-          grid-template-columns: repeat(2, 1fr);
-        `
-      : css`
-          grid-template-rows: 35px 65px 1fr;
-          grid-template-columns: repeat(2, 1fr);
-        `}
-`
+const charts = [
+  { gridArea: "cumulative", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "daily", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "age", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "ratio", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "main", perspective: 5000, zIndex: "none" },
+]
+
+const CARD_STYLE_PROPS = {
+  withDropShadow: true,
+  bgColor: "#ffffff",
+  borderRadius: 1,
+}
 
 function MobileDashboard({
-  isLandscape,
-  isPortrait,
-  language,
   setLanguage,
-  numbers,
-  dates,
-  setDates,
-  filteredData,
+  updateCurrDate,
+  updateDisplay,
+  state,
+  dispatch,
   loading,
-  averages,
-  fullListDomain,
+  windowWidth,
+  isBelowPosition,
+  filterContainerRef,
+  device,
+  isPortrait,
 }) {
-  const orientation = useOrientation({ isLandscape, isPortrait })
-  const isLS = orientation === "landscape"
+  const {
+    language,
+    display,
+    dates,
+    dataSets: { filteredData },
+  } = state
+
+  const isGender = state.display === "gender"
+  const trail = useTrail(charts.length, {
+    config: { mass: 6, tension: 500, friction: 80 },
+    transform: isGender ? 180 : 0,
+  })
 
   return (
-    <MobileOnlyView>
-      <FlexContainer fullSize pos="relative">
-        <FullScreenLoader loading={loading} loader="clip" loaderSize={70} />
-        <MainGrid orientation={orientation} pos="relative">
-          <FlexContainer
-            gridArea="title"
-            fontSize={3}
-            fontWeight="ultraLight"
-            lineHeight={1.2}
-          >
-            {TEXT.mainTitle[language]}
-          </FlexContainer>
-          <FlexContainer
-            gridArea="source"
-            justify={isLS ? "space-evenly" : "space-around"}
-            align={isLS && "flex-end"}
-            direction={isLS ? "column" : "row"}
-          >
-            <SourceLink paddingBottom={1} fontSize={1} language={language} />
-            <SwitchContainer
-              fontSize={1}
-              language={language}
-              setLanguage={setLanguage}
-              switchWidth={32}
-            />
-          </FlexContainer>
-          <DateSliderMobile
+    <FlexContainer bgColor="#f2f2f2">
+      <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
+      <MobileMainGrid orientation={isPortrait ? "portrait" : "landscape"}>
+        <FlexContainer
+          gridArea="title"
+          fontSize={4}
+          fontWeight="ultraLight"
+          lineHeight={1.2}
+          paddingBottom={2}
+          textAlign="left"
+        >
+          {TEXT.mainTitle[language]}
+        </FlexContainer>
+        <GridContainer
+          gridArea="source"
+          bgColor="#f2f2f2"
+          paddingLeft={isPortrait && 1}
+          marginTop={isPortrait && 1}
+        >
+          <SwitchComponent
             language={language}
+            onChange={() => setLanguage(dispatch)}
+            isChecked={language === "en"}
+            text={["Magyar", "English"]}
+            justify={isPortrait ? "center" : "flex-end"}
+          />
+          <SourceLink
+            language={language}
+            justify={isPortrait ? "center" : "flex-end"}
+          />
+        </GridContainer>
+        <FilterContainer
+          {...CARD_STYLE_PROPS}
+          ref={filterContainerRef}
+          isPortrait={isPortrait}
+          gridArea={!isBelowPosition && "control"}
+          zIndex={isBelowPosition && "overlay"}
+          fixedPos={
+            isBelowPosition && {
+              top: 0,
+              left: 0,
+              width: `${windowWidth * 0.94}px`,
+              marginLeft: "3%",
+              marginTop: space[3],
+            }
+          }
+        >
+          <CurrDateContainer
+            language={language}
+            currDate={state.dates.currDate}
+            justify="center"
+          />
+          <DateSlider
             dates={dates}
-            setDates={setDates}
-            fontSize={2}
-            extraPadding={!isLS && 3}
-            extraPaddingRight={isLS && 1}
-            paddingBottom={isLS && 1}
-            isSticky
-            loading={loading}
-            dateFontSize={3}
-            currDate={dates.currDate}
-            fontWeight="ultraLight"
-            isLandscape={isLS}
+            language={language}
+            dispatch={dispatch}
+            updateCurrDate={updateCurrDate}
           />
-          <BanContainer
-            gridArea="total"
-            columns={isLS ? "repeat(2, 1fr)" : "1fr"}
-            justify={isLS ? "flex-start" : "center"}
-            text={TEXT.total[language]}
-            numJustify={isLS && "flex-end"}
-            number={numbers.total}
+          <SwitchComponent
+            language={language}
+            onChange={() => updateDisplay(dispatch)}
+            isChecked={display === "gender"}
+            text={TEXT.displayTest[language]}
+            justify={isPortrait ? "center" : "flex-end"}
           />
-          <BarChartContainer gridArea="barChart" orientation={orientation}>
-            <BanContainer
-              direction="column"
-              columns={isLS ? "repeat(2, 1fr)" : "1fr"}
-              justify={isLS ? "flex-start" : "center"}
-              numJustify={isLS && "flex-end"}
-              text={TEXT.genderF[language]}
-              number={numbers.female}
-              color={chartColors.female}
-              withIcon={{ iconSize: 16 }}
-            />
-            <BanContainer
-              direction="column"
-              columns={isLS ? "repeat(2, 1fr)" : "1fr"}
-              text={TEXT.genderM[language]}
-              number={numbers.male}
-              color={chartColors.male}
-              numJustify={isLS && "flex-end"}
-              withIcon={{ iconSize: 16 }}
-              justify={isLS ? "flex-start" : "center"}
-            />
-            <FlexContainer gridArea="barC">
-              {isLS ? (
-                <HorizontalBarChart
-                  key="ls"
-                  data={numbers}
-                  fullListDomain={fullListDomain}
-                  margin={{
-                    top: 5,
-                    right: 25,
-                    bottom: 5,
-                    left: 30,
-                  }}
-                />
-              ) : (
-                <HorizontalBarChart
-                  key="pt"
-                  data={numbers}
-                  fullListDomain={fullListDomain}
-                  margin={{
-                    top: 10,
-                    right: 10,
-                    bottom: 10,
-                    left: 10,
-                  }}
-                />
-              )}
-            </FlexContainer>
-          </BarChartContainer>
-          <StackedChartContainer
-            gridArea="stackedChart"
-            orientation={orientation}
-          >
-            <FlexContainer
-              fontSize={2}
-              gridArea="title"
-              justify={isLS ? "flex-start" : "center"}
-            >
-              {TEXT.genderPerc[language]}
-            </FlexContainer>
-            <FlexContainer
-              gridArea="fem"
-              fontWeight={3}
-              fontSize={3}
-              fontColor={chartColors.female}
-            >
-              {numbers.total && (
-                <Number num={numbers.female / numbers.total} isPercentage />
-              )}
-            </FlexContainer>
-            <FlexContainer
-              gridArea="mal"
-              fontWeight={3}
-              fontSize={3}
-              fontColor={chartColors.male}
-            >
-              {numbers.total && (
-                <Number num={numbers.male / numbers.total} isPercentage />
-              )}
-            </FlexContainer>
-            <FlexContainer gridArea="chart">
-              {isLS ? (
-                <StackedBarChart
-                  data={numbers}
-                  key="ls"
-                  margin={{
-                    top: 14,
-                    right: 0,
-                    bottom: 16,
-                    left: 0,
-                  }}
-                />
-              ) : (
-                <StackedBarChart
-                  data={numbers}
-                  key="pr"
-                  margin={{
-                    top: 5,
-                    right: 15,
-                    bottom: 5,
-                    left: 15,
-                  }}
-                />
-              )}
-            </FlexContainer>
-          </StackedChartContainer>
-          <FlexContainer
-            gridArea="mainChart"
-            pos="relative"
-            marginTop={!isLS ? 6 : 3}
-          >
-            {!isLS ? (
-              <VerticalDoubleAreaChart
-                data={filteredData}
-                language={language}
-                averages={averages}
-                fullListDomain={fullListDomain}
-              />
-            ) : (
-              <GridContainer fullSize rows="repeat(2, 1fr)">
-                <AreaChart
-                  key="femaleArea"
-                  data={
-                    filteredData &&
-                    filteredData.filter(
-                      ({ gender }) => gender === TEXT.accessorF[language]
-                    )
-                  }
-                  fullListDomain={fullListDomain}
+        </FilterContainer>
+        {/* {trail.map((trans, i) => {
+          const area = charts[i].gridArea
+          const isMain = area === "main"
+          return (
+            <FlippingCard
+              key={area}
+              toggle={isGender}
+              transition={trans}
+              fullCardIsClickable
+              frontContent={
+                <CardGrid
+                  area={area}
+                  onlyChart={isMain}
+                  title={TEXT.chartTitles[area].total[language]}
+                  currDate={state.dates.currDate}
+                  data={isMain ? filteredData : state.dataSets[area].total}
                   language={language}
-                  accessor="female"
-                  averages={averages}
+                  type="front"
+                  fullListDomain={state.fullListDomain}
+                  device={device}
                 />
-                <AreaChart
-                  key="maleArea"
-                  data={
-                    filteredData &&
-                    filteredData.filter(
-                      ({ gender }) => gender === TEXT.accessorM[language]
-                    )
-                  }
-                  averages={averages}
+              }
+              backContent={
+                <CardGrid
+                  area={area}
+                  onlyChart={isMain}
+                  title={TEXT.chartTitles[area].gender[language]}
+                  currDate={state.dates.currDate}
+                  data={isMain ? filteredData : state.dataSets[area].gender}
                   language={language}
-                  fullListDomain={fullListDomain}
-                  accessor="male"
+                  device={device}
+                  fullListDomain={state.fullListDomain}
+                  type="back"
                 />
-              </GridContainer>
-            )}
-          </FlexContainer>
-          <ScrollHint opacity={lowOpacity} size={50} />
-        </MainGrid>
-      </FlexContainer>
-    </MobileOnlyView>
+              }
+              {...charts[i]}
+            />
+          )
+        })} */}
+      </MobileMainGrid>
+    </FlexContainer>
   )
 }
 

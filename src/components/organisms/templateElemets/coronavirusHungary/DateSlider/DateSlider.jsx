@@ -57,6 +57,8 @@ export function DateSlider({
   updateCurrDate,
   dispatch,
   marginRight,
+  paddingRight,
+  paddingBottom
 }) {
   return (
     <FlexContainer
@@ -64,10 +66,11 @@ export function DateSlider({
       whiteSpace="nowrap"
       paddingTop={1}
       marginRight={marginRight}
+      direction="column"
     >
       <Container
-        paddingRight={3}
-        paddingBottom={1}
+        paddingRight={paddingRight}
+        paddingBottom={paddingBottom}
         fontSize={2}
         whiteSpace="nowrap"
       >

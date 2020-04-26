@@ -158,7 +158,7 @@ export default function AreaChart({
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
-      <FlexContainer absPos top={margin.top - 4} left={margin.left + 1}>
+      <FlexContainer absPos top={margin.top - 4} left={margin.left + 2}>
         {TEXT.chartAxisNumber[language]}
       </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>

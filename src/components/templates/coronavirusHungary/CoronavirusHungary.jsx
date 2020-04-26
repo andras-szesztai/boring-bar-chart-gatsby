@@ -9,7 +9,10 @@ import {
   useWindowDimensions,
 } from "../../../hooks"
 import { TEXT } from "../../../constants/visualizations/coronavirusHungary"
-import { BrowserDashboard } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
+import {
+  BrowserDashboard,
+  MobileDashboard,
+} from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
 import {
   coronavirusDashboardReducer,
   coronavirusDashboardInitialState,
@@ -97,19 +100,20 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           device={device}
         />
       )}
-      {/* {device === "mobile" && (
+      {isMobile && (
         <MobileDashboard
-          language={language}
+          state={state}
+          dispatch={dispatch}
           setLanguage={setLanguage}
-          numbers={numbers}
-          averages={averages}
-          dates={dates}
-          setDates={setDates}
-          filteredData={filteredData}
+          updateCurrDate={updateCurrDate}
+          updateDisplay={updateDisplay}
+          numbers={state.numbers}
           loading={loading}
-          fullListDomain={fullListDomain}
+          windowWidth={windowWidth}
+          filterContainerRef={filterContainerRef}
+          isBelowPosition={isBelowPosition}
         />
-      )} */}
+      )}
     </>
   )
 }

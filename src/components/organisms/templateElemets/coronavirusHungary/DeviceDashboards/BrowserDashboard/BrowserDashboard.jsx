@@ -86,7 +86,7 @@ export default function BrowserDashboard({
 
   return (
     <FlexContainer bgColor="#f2f2f2">
-      <FullScreenLoader loader="clip" loading={loading} loaderSize={40} />
+      <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
       <BrowserMainGrid>
         <FlexContainer
           gridArea="title"
@@ -141,6 +141,8 @@ export default function BrowserDashboard({
             dispatch={dispatch}
             updateCurrDate={updateCurrDate}
             marginRight={3}
+            paddingRight={3}
+            paddingBottom={1}
           />
           <SwitchComponent
             language={language}
