@@ -1,21 +1,14 @@
-import React, { useState, useLayoutEffect, useEffect, useRef } from "react"
+import React from "react"
 import styled from "styled-components"
 import { BrowserView } from "react-device-detect"
-import { useSpring, animated as a, config, useTrail } from "react-spring"
-import { format, subDays } from "date-fns"
+import { useTrail } from "react-spring"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
-import { space, dropShadow } from "../../../../../../themes/theme"
+import { space } from "../../../../../../themes/theme"
 import { TEXT } from "../../../../../../constants/visualizations/coronavirusHungary"
 
-import SwitchContainer from "../../SwitchContainer/SwitchContainer"
 import SourceLink from "../../SourceLink/SourceLink"
-import Number from "../../Number/Number"
-import { DateSliderBrowser, DateSlider } from "../../DateSlider/DateSlider"
-import BarLabels from "../../BarLabels/BarLabels"
-import HorizontalBarChart from "../../HorizontalBarChart/HorizontalBarChart"
-import PercChartContainer from "../../PercChartContainer/PercChartContainer"
-import AgeChartBrowser from "../../AgeChartBrowser/AgeChartBrowser"
+import { DateSlider } from "../../DateSlider/DateSlider"
 import { FullScreenLoader } from "../../../../../molecules"
 import FlippingCard from "../../FlippingCard/FlippingCard"
 import { SwitchComponent } from "../../../../../molecules/controlElements"
@@ -71,6 +64,9 @@ export default function BrowserDashboard({
   state,
   dispatch,
   loading,
+  windowWidth,
+  isBelowPosition,
+  filterContainerRef,
 }) {
   const {
     language,
@@ -78,6 +74,7 @@ export default function BrowserDashboard({
     dates,
     dataSets: { filteredData },
   } = state
+
   const isGender = state.display === "gender"
   const trail = useTrail(charts.length, {
     config: { mass: 6, tension: 500, friction: 80 },
@@ -96,6 +93,7 @@ export default function BrowserDashboard({
             lineHeight={1.2}
             paddingBottom={2}
             textAlign="left"
+            marginLeft={3}
           >
             {TEXT.mainTitle[language]}
           </FlexContainer>
@@ -121,8 +119,20 @@ export default function BrowserDashboard({
           </GridContainer>
           <GridContainer
             {...CARD_STYLE_PROPS}
-            gridArea="control"
+            ref={filterContainerRef}
+            gridArea={!isBelowPosition && "control"}
             columns="160px 1fr 25px 250px"
+            zIndex={isBelowPosition && "overlay"}
+            fixedPos={
+              isBelowPosition && {
+                top: 0,
+                left: 0,
+                width: `${windowWidth * 0.94}px`,
+                height: "70px",
+                marginLeft: "3%",
+                marginTop: space[2],
+              }
+            }
           >
             <CurrDateContainer
               language={language}

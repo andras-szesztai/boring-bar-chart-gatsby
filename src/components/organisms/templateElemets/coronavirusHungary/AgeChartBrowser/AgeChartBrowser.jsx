@@ -145,6 +145,12 @@ export default function AgeChartBrowser({
         )
         .call(g => g.select(".domain").remove())
         .call(g => g.selectAll(".tick text").attr("fill", colors.grayDarkest))
+        .call(g =>
+          g
+            .selectAll(".tick line")
+            .attr("stroke", colors.grayDarkest)
+            .attr("stroke-width", 0.5)
+        )
     }
 
     function updateDims() {
@@ -257,7 +263,7 @@ export default function AgeChartBrowser({
           {TEXT.hoverText[language]}
         </FlexContainer>
       )}
-      <FlexContainer absPos bottom={6} left={0}>
+      <FlexContainer absPos bottom={28} left={0}>
         {TEXT.tooltipAge[language]}
       </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
@@ -284,5 +290,5 @@ export default function AgeChartBrowser({
 }
 
 AgeChartBrowser.defaultProps = {
-  margin: { top: 35, right: 0, bottom: 25, left: 0 },
+  margin: { top: 35, right: 5, bottom: 25, left: 5 },
 }

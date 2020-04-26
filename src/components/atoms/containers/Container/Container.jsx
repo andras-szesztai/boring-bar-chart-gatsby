@@ -85,7 +85,9 @@ const Container = styled(a.div)`
       css`
         position: fixed;
         width: ${fixedPos.width};
+        height: ${fixedPos.height};
         margin-left: ${fixedPos.marginLeft};
+        margin-top: ${fixedPos.marginTop}px;
         bottom: ${fixedPos.bottom};
         right: ${fixedPos.right};
         left: ${fixedPos.left};

@@ -1,12 +1,15 @@
-import React, { useEffect, useReducer } from "react"
+import React, { useEffect, useReducer, useRef, useState } from "react"
 import Helmet from "react-helmet"
 import _ from "lodash"
 
-import { usePrevious, useDeviceType } from "../../../hooks"
-import { TEXT } from "../../../constants/visualizations/coronavirusHungary"
 import {
-  BrowserDashboard,
-} from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
+  usePrevious,
+  useDeviceType,
+  useScrollPosition,
+  useWindowDimensions,
+} from "../../../hooks"
+import { TEXT } from "../../../constants/visualizations/coronavirusHungary"
+import { BrowserDashboard } from "../../organisms/templateElemets/coronavirusHungary/DeviceDashboards"
 import {
   coronavirusDashboardReducer,
   coronavirusDashboardInitialState,
@@ -19,6 +22,18 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     coronavirusDashboardInitialState
   )
   const prevState = usePrevious(state)
+  const filterContainerRef = useRef(null)
+  const scrollPosition = useScrollPosition()
+  const { windowWidth } = useWindowDimensions()
+  const [containerPosition, setContainerPosition] = useState(undefined)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!containerPosition && filterContainerRef.current) {
+      setContainerPosition(filterContainerRef.current.getBoundingClientRect())
+    }
+  })
+  const isBelowPosition =
+    !loading && containerPosition && containerPosition.top < scrollPosition
 
   const {
     setFormattedData,
@@ -30,7 +45,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     setFullListDomain,
     updateCurrDate,
     updateDisplay,
-    setDataSets
+    setDataSets,
   } = actions
 
   useEffect(() => {
@@ -61,18 +76,19 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
 
   return (
     <>
-      <Helmet
-        title={TEXT.helmet[state.language]}
-      />
+      <Helmet title={TEXT.helmet[state.language]} />
       {device === "desktop" && (
         <BrowserDashboard
-        state={state}
-        dispatch={dispatch}
-        setLanguage={setLanguage}
-        updateCurrDate={updateCurrDate}
-        updateDisplay={updateDisplay}
-        numbers={state.numbers}
-        loading={loading}
+          state={state}
+          dispatch={dispatch}
+          setLanguage={setLanguage}
+          updateCurrDate={updateCurrDate}
+          updateDisplay={updateDisplay}
+          numbers={state.numbers}
+          loading={loading}
+          windowWidth={windowWidth}
+          filterContainerRef={filterContainerRef}
+          isBelowPosition={isBelowPosition}
         />
       )}
       {/* {device === "tablet" && (
