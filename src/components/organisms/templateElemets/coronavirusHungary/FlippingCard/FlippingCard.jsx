@@ -26,7 +26,11 @@ const Card = styled(a.div)`
 `
 
 export default function FlippingCard(props) {
-  const { transition: groupTransition, toggle: parentIsFlipped } = props
+  const {
+    transition: groupTransition,
+    toggle: parentIsFlipped,
+    handleClick,
+  } = props
   const prevParentIsFlipped = usePrevious(parentIsFlipped)
   const [isFlipped, setIsFlipped] = useState(false)
   const currTransition = useSpring({
@@ -59,7 +63,10 @@ export default function FlippingCard(props) {
 
   return (
     <FlexContainer
-      onClick={() => props.fullCardIsClickable && setIsFlipped(prev => !prev)}
+      onClick={() => {
+        handleClick()
+        props.fullCardIsClickable && setIsFlipped(prev => !prev)
+      }}
       gridArea={props.gridArea}
       pos="relative"
       zIndex={props.zIndex}

@@ -172,6 +172,7 @@ export default function CardGrid({
                       num={value}
                       isPercentage={area === "ratio"}
                       oneDecimal={area === "age"}
+                      noAnimate={device !== "desktop"}
                     />
                     {area === "age"
                       ? `‎‎‏‏‎ ‎${TEXT.tooltipYear[language]}`

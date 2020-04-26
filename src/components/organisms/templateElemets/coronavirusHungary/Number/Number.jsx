@@ -5,7 +5,7 @@ import numeral from "numeral"
 const Number = props => (
   <CountUp
     end={props.num}
-    duration={1}
+    duration={props.noAnimate ? 0.01 : 1}
     preserveValue
     formattingFn={val =>
       props.isPercentage ? numeral(val).format("0.0%") : val

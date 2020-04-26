@@ -209,7 +209,7 @@ export const TEXT = {
     },
     mobile: {
       hu:
-        "A nemek szerinti százalékos megoszlás nem elérhetõ kombinált számolással, kérjük koppintson a kártyára a nemek szerinti adatokért",
+        "A nemek szerinti százalékos megoszlás nem elérhetõ kombinált számolással, kérjük érintse meg a kártyát a nemek szerinti adatokért",
       en:
         "Data revealing gender distribution is not applicable on combined level, please tap on the card to see per gender data",
     },
@@ -227,11 +227,11 @@ export const TEXT = {
     },
     mobile: {
       back: {
-        hu: "Koppitnson a kártyára a kombinált adatokért",
+        hu: "Érintse meg a kártyát a kombinált adatokért",
         en: "Tap on the card to see total",
       },
       front: {
-        hu: "Koppitnson a kártyára a nemek szerinti adatokért",
+        hu: "Érintse meg a kártyát a nemek szerinti adatokért",
         en: "Tap on the card to see per gender data",
       },
     },

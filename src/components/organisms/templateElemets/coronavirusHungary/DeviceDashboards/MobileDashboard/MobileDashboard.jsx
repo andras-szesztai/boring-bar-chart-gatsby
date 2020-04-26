@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
-import { useTrail } from "react-spring"
+import { useTrail, useSpring } from "react-spring"
 import { withOrientationChange } from "react-device-detect"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
@@ -37,7 +37,7 @@ const MobileMainGrid = styled(GridContainer)`
           margin-top: ${space[2]}px;
           margin-bottom: ${space[4]}px;
           grid-template-columns: 1fr;
-          grid-template-rows: min-content 100px 180px repeat(4, 380px) 780px;
+          grid-template-rows: min-content 50px 165px repeat(4, 380px) 780px;
           grid-template-areas:
             "title"
             "source"
@@ -54,20 +54,20 @@ const FilterContainer = styled(GridContainer)`
   ${({ isPortrait }) =>
     isPortrait
       ? css`
-          grid-template-rows: min-content 1fr min-content;
           padding: 1rem 3rem 2rem 3rem;
+          grid-template-rows: min-content repeat(2, 50px);
         `
       : css`
-          grid-template-columns: min-content 1fr min-content;
           grid-column-gap: 2rem;
+          grid-template-columns: min-content 1fr min-content;
         `}
 `
 
 const charts = [
-  { gridArea: "cumulative", perspective: 700, zIndex: "hoverOverlay" },
-  { gridArea: "daily", perspective: 700, zIndex: "hoverOverlay" },
-  { gridArea: "age", perspective: 700, zIndex: "hoverOverlay" },
-  { gridArea: "ratio", perspective: 700, zIndex: "hoverOverlay" },
+  { gridArea: "cumulative", perspective: 1000, zIndex: "hoverOverlay" },
+  { gridArea: "daily", perspective: 1000, zIndex: "hoverOverlay" },
+  { gridArea: "age", perspective: 1000, zIndex: "hoverOverlay" },
+  { gridArea: "ratio", perspective: 1000, zIndex: "hoverOverlay" },
   { gridArea: "main", perspective: 5000, zIndex: "none" },
 ]
 
@@ -103,10 +103,24 @@ function MobileDashboard({
     transform: isGender ? 180 : 0,
   })
 
+  const [cardClicked, setCardClicked] = useState(false)
+  useEffect(() => {
+    if (cardClicked) {
+      clearTimeout()
+      setTimeout(() => {
+        setCardClicked(false)
+      }, 500)
+    }
+  }, [cardClicked])
+  const props = useSpring({ top: cardClicked && isBelowPosition ? -200 : 0 })
+
   return (
     <FlexContainer bgColor="#f2f2f2">
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
-      <MobileMainGrid rowGap={isPortrait && 3} orientation={isPortrait ? "portrait" : "landscape"}>
+      <MobileMainGrid
+        rowGap={isPortrait ? 5 : 3}
+        orientation={isPortrait ? "portrait" : "landscape"}
+      >
         <FlexContainer
           gridArea="title"
           fontSize={4}
@@ -126,7 +140,7 @@ function MobileDashboard({
           <SourceLink
             language={language}
             justify={isPortrait ? "center" : "flex-end"}
-            paddingBottom={isPortrait  && 1}
+            paddingBottom={isPortrait && 1}
           />
           <SwitchComponent
             language={language}
@@ -140,12 +154,12 @@ function MobileDashboard({
           {...CARD_STYLE_PROPS}
           ref={filterContainerRef}
           isPortrait={isPortrait}
+          style={props}
           gridArea={!isBelowPosition && "control"}
           zIndex={isBelowPosition && "overlay"}
-          height={!isPortrait ? "70px" : "180px"}
+          height={!isPortrait ? "70px" : "165px"}
           fixedPos={
             isBelowPosition && {
-              top: 0,
               left: 0,
               width: `${windowWidth * 0.94}px`,
               marginLeft: "3%",
@@ -176,6 +190,7 @@ function MobileDashboard({
             text={TEXT.displayTest[language]}
             justify={isPortrait ? "center" : "flex-end"}
             marginRight={!isPortrait && 3}
+            containerPaddingTop={!isPortrait && 2}
           />
         </FilterContainer>
         {trail.map((trans, i) => {
@@ -184,6 +199,7 @@ function MobileDashboard({
           return (
             <FlippingCard
               key={area}
+              handleClick={() => setCardClicked(true)}
               toggle={isGender}
               transition={trans}
               fullCardIsClickable

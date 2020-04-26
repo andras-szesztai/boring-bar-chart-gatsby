@@ -74,7 +74,7 @@ export const z = {
   dropdown: 60,
   loader: 100,
   overlay: 120,
-  fixed: 9999
+  super: 9999
 }
 
 export const dropShadow = {
