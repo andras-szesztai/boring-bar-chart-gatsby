@@ -48,8 +48,6 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     setLanguage,
     setInitialDates,
     setFilteredData,
-    setNumbers,
-    setAverages,
     setFullListDomain,
     updateCurrDate,
     updateDisplay,
@@ -62,8 +60,6 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       setInitialDates(dispatch)
       setFilteredData(dispatch)
       setDataSets(dispatch)
-      setNumbers(dispatch)
-      setAverages(dispatch)
       setFullListDomain(dispatch)
     }
     if (prevState) {
@@ -74,8 +70,6 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       }
       if (!_.isEqual(state.dates.currDate, prevState.dates.currDate)) {
         setFilteredData(dispatch)
-        setNumbers(dispatch)
-        setAverages(dispatch)
       }
     }
   })

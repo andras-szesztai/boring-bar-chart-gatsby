@@ -145,12 +145,7 @@ export function createUpdateAxis({
 
   formatAxisGrid({ selector, isGrid, noTicks })
 
-  function formatAxisGrid({ selector, isGrid, noTicks }) {
-    const texts = selector.selectAll("text")
-    const ticks = selector.selectAll(".tick line")
-
-    const setStyles = (selection, strokeColor, strokeOpacity) =>
-      selection.style("stroke", strokeColor).attr("opacity", strokeOpacity)
+  function formatAxisGrid({ selector }) {
 
     selector.selectAll(".domain").remove()
     // if (isGrid) {

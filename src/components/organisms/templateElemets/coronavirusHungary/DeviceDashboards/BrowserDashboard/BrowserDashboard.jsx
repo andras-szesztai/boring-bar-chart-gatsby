@@ -149,7 +149,7 @@ export default function BrowserDashboard({
             updateCurrDate={updateCurrDate}
             sliderMarginRight={2}
             labelPaddingRight={2}
-            sliderMarginTop={4}
+            sliderMarginTop={2}
           />
           <SwitchComponent
             language={language}

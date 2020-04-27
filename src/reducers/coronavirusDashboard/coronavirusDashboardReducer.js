@@ -125,38 +125,12 @@ function makeRatio(dateGrouped, key, runningTotal) {
   return ratio
 }
 
-function makeNumbers(array, lan) {
-  const sharedParams = { data: array, language: lan }
-  return {
-    total: array.length,
-    female: filterGender({ ...sharedParams, accessor: "accessorF" }),
-    male: filterGender({ ...sharedParams, accessor: "accessorM" }),
-  }
-}
-
-function makeAverages(array, lan) {
-  const sharedParams = { data: array, language: lan }
-  return {
-    total: _.meanBy(array, "age"),
-    female: _.meanBy(
-      filterGender({ ...sharedParams, accessor: "accessorF" }),
-      "age"
-    ),
-    male: _.meanBy(
-      filterGender({ ...sharedParams, accessor: "accessorM" }),
-      "age"
-    ),
-  }
-}
-
 const SET_FORMATTED_DATA = "SET_FORMATTED_DATA"
 const SET_INITIAL_DATES = "SET_INITIAL_DATES"
 const UPDATE_CURR_DATE = "UPDATE_CURR_DATE"
 const SET_FILTERED_DATA = "SET_FILTERED_DATA"
 const SET_DATA_SETS = "SET_DATA_SETS"
 const SET_LANGUAGE = "SET_LANGUAGE"
-const SET_NUMBERS = "SET_NUMBERS"
-const SET_AVERAGES = "SET_AVERAGES"
 const SET_FULL_LIST_DOMAIN = "SET_FULL_LIST_DOMAIN"
 const UPDATE_DISPLAY = "UPDATE_DISPLAY"
 
@@ -169,8 +143,6 @@ export const actions = {
     dispatch({ type: UPDATE_CURR_DATE, payload }),
   setFilteredData: dispatch => dispatch({ type: SET_FILTERED_DATA }),
   setDataSets: dispatch => dispatch({ type: SET_DATA_SETS }),
-  setNumbers: dispatch => dispatch({ type: SET_NUMBERS }),
-  setAverages: dispatch => dispatch({ type: SET_AVERAGES }),
   setFullListDomain: dispatch => dispatch({ type: SET_FULL_LIST_DOMAIN }),
   updateDisplay: dispatch => dispatch({ type: UPDATE_DISPLAY }),
 }
@@ -182,16 +154,6 @@ export const coronavirusDashboardInitialState = {
     diff: undefined,
     max: undefined,
     currDate: undefined,
-  },
-  numbers: {
-    total: 0,
-    female: 0,
-    male: 0,
-  },
-  averages: {
-    total: undefined,
-    female: undefined,
-    male: undefined,
   },
   dataSets: {
     formattedData: undefined,
@@ -320,14 +282,6 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
         },
       }
     },
-    SET_NUMBERS: () => ({
-      ...state,
-      numbers: makeNumbers(formattedData, language),
-    }),
-    SET_AVERAGES: () => ({
-      ...state,
-      averages: makeAverages(formattedData, language),
-    }),
     UPDATE_DISPLAY: () => ({
       ...state,
       display: state.display === "total" ? "gender" : "total",
