@@ -43,6 +43,7 @@ export default function CardGrid({
       )
 
   const isMobile = device === "mobile"
+  const isDesktop = device === "desktop"
   const isFront = type === "front"
   const deviceAccessor = device === "desktop" ? device : "mobile"
   const isRatioFront = area === "ratio" && isFront
@@ -54,27 +55,27 @@ export default function CardGrid({
       textAlign="left"
       rows={
         onlyChart
-          ? isMobile && isPortrait
-            ? "min-content 1fr 30px"
+          ? !isDesktop
+            ? "1fr 30px"
             : "35px 1fr 30px"
           : isMobile && isPortrait
           ? "min-content 1fr 80px 30px"
           : "45px 1fr 80px 30px"
       }
     >
-      <FlexContainer
-        justify="flex-start"
-        align="flex-start"
-        onClick={e => {
-          if (!onlyChart) {
-            setIsModal(area)
-            e.stopPropagation()
-          }
-        }}
-      >
-        <Container textAlign="left" fontSize={2}>
-          {title}{" "}
-          {!onlyChart && (
+      {!onlyChart && (
+        <FlexContainer
+          justify="flex-start"
+          align="flex-start"
+          onClick={e => {
+            if (!onlyChart) {
+              setIsModal(area)
+              e.stopPropagation()
+            }
+          }}
+        >
+          <Container textAlign="left" fontSize={2}>
+            {title}{" "}
             <div
               style={{
                 display: "inline-block",
@@ -83,11 +84,11 @@ export default function CardGrid({
             >
               <IoMdInformationCircle size={16} color={colors.grayDarkest} />
             </div>
-          )}
-        </Container>
-      </FlexContainer>
+          </Container>
+        </FlexContainer>
+      )}
       <FlexContainer
-        marginTop={mobilePortrait && 4}
+        marginTop={mobilePortrait && 6}
         marginBottom={mobilePortrait && 4}
       >
         {!isRatioFront ? (
@@ -97,9 +98,9 @@ export default function CardGrid({
               data={data}
               currDate={currDate}
               isPercentage={area === "ratio"}
-              noTransition={device !== "desktop"}
+              noTransition={!isDesktop}
             />
-          ) : device === "desktop" ? (
+          ) : isDesktop ? (
             <AgeChartBrowser
               key={type + area}
               data={data}
@@ -204,7 +205,7 @@ export default function CardGrid({
                       num={value}
                       isPercentage={area === "ratio"}
                       oneDecimal={area === "age"}
-                      noAnimate={device !== "desktop"}
+                      noAnimate={!isDesktop}
                     />
                     {area === "age"
                       ? `‎‎‏‏‎ ‎${TEXT.tooltipYear[language]}`
@@ -220,7 +221,8 @@ export default function CardGrid({
         </GridContainer>
       )}
       <FlexContainer>
-        {area !== "ratio" && TEXT.cardExplanation[deviceAccessor][type][language]}
+        {area !== "ratio" &&
+          TEXT.cardExplanation[deviceAccessor][type][language]}
       </FlexContainer>
     </GridContainer>
   )

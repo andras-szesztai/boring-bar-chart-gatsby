@@ -13,6 +13,7 @@ import {
   ChartArea,
   AxisLine,
   FlexContainer,
+  Container,
 } from "../../../../atoms"
 import { useChartRefs, useDimensions, usePrevious } from "../../../../../hooks"
 import { space, transition, colors } from "../../../../../themes/theme"
@@ -25,6 +26,7 @@ import {
 } from "../../../../../constants/visualizations/coronavirusHungary"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { max } from "d3-array"
+import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io"
 
 export default function AreaChart({
   margin,
@@ -154,12 +156,39 @@ export default function AreaChart({
       createUpdateAxes()
       createUpdateArea(0)
     }
-  }, [init, data, prevData, fullListDomain, dims, areaRef, yAxisRef, xAxisRef, accessor, isCombined, prevDims])
+  }, [
+    init,
+    data,
+    prevData,
+    fullListDomain,
+    dims,
+    areaRef,
+    yAxisRef,
+    xAxisRef,
+    accessor,
+    isCombined,
+    prevDims,
+  ])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
-      <FlexContainer absPos top={margin.top - 4} left={margin.left + 2}>
+      <FlexContainer
+        absPos
+        top={margin.top - 4}
+        left={margin.left + 2}
+        direction="column"
+        align="flex-start"
+      >
         {TEXT.chartAxisNumber[language]}
+        <Container style={{ transform: "translateY(-6px)" }} >
+          <IoMdArrowDropdown />
+        </Container>
+      </FlexContainer>
+      <FlexContainer absPos bottom={0} left={margin.left + 2}>
+        {TEXT.tooltipAge[language]}{" "}
+        <Container paddingTop={1}>
+          <IoMdArrowDropright />
+        </Container>
       </FlexContainer>
       <ChartSvg absPos areaRef={svgRef} width={dims.width} height={dims.height}>
         <ChartArea
@@ -194,5 +223,5 @@ export default function AreaChart({
 }
 
 AreaChart.defaultProps = {
-  margin: { top: 15, right: 10, bottom: 25, left: 25 },
+  margin: { top: 15, right: 10, bottom: 35, left: 25 },
 }
