@@ -132,7 +132,7 @@ export default function BrowserDashboard({
               left: 0,
               width: `${windowWidth * 0.94}px`,
               marginLeft: "3%",
-              marginTop: space[3],
+              marginTop: space[3]
             }
           }
         >
@@ -151,17 +151,19 @@ export default function BrowserDashboard({
             labelPaddingRight={2}
             sliderMarginTop={2}
           />
-          <SwitchComponent
-            language={language}
-            onChange={() => {
-              device !== "desktop" && isBelowPosition && setCardClicked(true)
-              updateDisplay(dispatch)
-            }}
-            isChecked={display === "gender"}
-            text={TEXT.displayTest[language]}
-            marginRight={3}
-            justify="flex-end"
-          />
+          {!isBelowPosition && (
+            <SwitchComponent
+              language={language}
+              onChange={() => {
+                device !== "desktop" && isBelowPosition && setCardClicked(true)
+                updateDisplay(dispatch)
+              }}
+              isChecked={display === "gender"}
+              text={TEXT.displayTest[language]}
+              marginRight={3}
+              justify="flex-end"
+            />
+          )}
         </FilterContainer>
         {trail.map((trans, i) => {
           const area = charts[i].gridArea

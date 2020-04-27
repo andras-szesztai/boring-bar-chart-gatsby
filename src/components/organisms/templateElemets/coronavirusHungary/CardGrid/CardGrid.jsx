@@ -220,7 +220,7 @@ export default function CardGrid({
         </GridContainer>
       )}
       <FlexContainer>
-        {!isRatioFront && TEXT.cardExplanation[deviceAccessor][type][language]}
+        {area !== "ratio" && TEXT.cardExplanation[deviceAccessor][type][language]}
       </FlexContainer>
     </GridContainer>
   )

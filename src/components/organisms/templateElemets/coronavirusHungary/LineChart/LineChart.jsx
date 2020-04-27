@@ -113,46 +113,9 @@ export default function LineChart({
             )
         )
     }
-    function updateDims() {
-      const { yScale, xScale, area } = storedValues.current
-      xScale.range([axisPadding, dims.chartWidth - axisPadding])
-      yScale.range([dims.chartHeight - axisPadding, axisPadding])
-      const lineGenerator = line()
-        .x(d => xScale(d.date))
-        .y(d => yScale(d.value))
-        .curve(curveMonotoneX)
 
-      area.selectAll(".line").attr("d", d => lineGenerator(d.values))
-      area
-        .selectAll(".ref-line")
-        .attr("x1", xScale)
-        .attr("x2", xScale)
-      area
-        .selectAll("circle")
-        .attr("cx", ({ date }) => xScale(date))
-        .attr("cy", ({ value }) => yScale(value))
-
-      storedValues.current = {
-        ...storedValues.current,
-        yScale,
-        xScale,
-      }
-    }
-    if (!init && data && dims.chartHeight) {
-      const xScale = scaleTime()
-        .domain(extent(data, ({ date }) => date))
-        .range([axisPadding, dims.chartWidth - axisPadding])
-      const yScale = scaleLinear()
-        .domain(extent(data, ({ value }) => value))
-        .range([dims.chartHeight - axisPadding, axisPadding])
-      const area = select(yAxisRef.current)
-      storedValues.current = {
-        yScale,
-        xScale,
-        area,
-      }
-      createUpdateLines()
-      createUpdateRefElements()
+    function createUpdateAxes() {
+      const { yScale, area } = storedValues.current
       area
         .call(
           axisLeft(yScale)
@@ -176,6 +139,49 @@ export default function LineChart({
             .tickSizeInner(dims.chartWidth)
         )
         .call(makeGridStyle)
+    }
+
+    function updateDims() {
+      const { yScale, xScale, area } = storedValues.current
+      xScale.range([axisPadding, dims.chartWidth - axisPadding])
+      yScale.range([dims.chartHeight - axisPadding, axisPadding])
+      const lineGenerator = line()
+        .x(d => xScale(d.date))
+        .y(d => yScale(d.value))
+        .curve(curveMonotoneX)
+
+      area.selectAll(".line").attr("d", d => lineGenerator(d.values))
+      area
+        .selectAll(".ref-line")
+        .attr("x1", xScale)
+        .attr("x2", xScale)
+      area
+        .selectAll("circle")
+        .attr("cx", ({ date }) => xScale(date))
+        .attr("cy", ({ value }) => yScale(value))
+      createUpdateAxes()
+      storedValues.current = {
+        ...storedValues.current,
+        yScale,
+        xScale,
+      }
+    }
+    if (!init && data && dims.chartHeight) {
+      const xScale = scaleTime()
+        .domain(extent(data, ({ date }) => date))
+        .range([axisPadding, dims.chartWidth - axisPadding])
+      const yScale = scaleLinear()
+        .domain(extent(data, ({ value }) => value))
+        .range([dims.chartHeight - axisPadding, axisPadding])
+      const area = select(yAxisRef.current)
+      storedValues.current = {
+        yScale,
+        xScale,
+        area,
+      }
+      createUpdateLines()
+      createUpdateRefElements()
+      createUpdateAxes()
       setInit(true)
     }
     if (init && prevCurrDate.toString() !== currDate.toString()) {
@@ -184,7 +190,19 @@ export default function LineChart({
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()
     }
-  }, [init, data, dims, svgRef, yAxisRef, prevCurrDate, currDate, isPercentage, prevDims, noTransition, yGridRef])
+  }, [
+    init,
+    data,
+    dims,
+    svgRef,
+    yAxisRef,
+    prevCurrDate,
+    currDate,
+    isPercentage,
+    prevDims,
+    noTransition,
+    yGridRef,
+  ])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
