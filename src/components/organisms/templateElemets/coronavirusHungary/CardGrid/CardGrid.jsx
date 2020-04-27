@@ -53,7 +53,7 @@ export default function CardGrid({
             : "35px 1fr 30px"
           : isMobile && isPortrait
           ? "min-content 1fr 80px 30px"
-          : "50px 1fr 100px 30px"
+          : "50px 1fr 80px 30px"
       }
     >
       <FlexContainer justify="flex-start" align="flex-start" fontSize={2}>

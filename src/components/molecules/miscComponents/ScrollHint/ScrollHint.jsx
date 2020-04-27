@@ -21,7 +21,7 @@ export default function ScrollHint({ color, opacity, size }) {
       absPos
       top={windowHeight - size * 1.5}
       left={windowWidth / 2 - size / 2}
-      style={{ transform: "translateX(-25%)" }}
+      zIndex="tooltip"
     >
       <FaArrowAltCircleDown color={color} style={{ opacity }} size={size} />
     </FlexContainer>

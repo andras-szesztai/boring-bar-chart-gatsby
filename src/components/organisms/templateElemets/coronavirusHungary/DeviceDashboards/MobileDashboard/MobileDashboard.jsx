@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import styled, { css } from "styled-components"
-import { useTrail, useSpring } from "react-spring"
+import { useTrail } from "react-spring"
 import { withOrientationChange } from "react-device-detect"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
@@ -12,7 +12,7 @@ import {
 
 import SourceLink from "../../SourceLink/SourceLink"
 import { DateSlider } from "../../DateSlider/DateSlider"
-import { FullScreenLoader } from "../../../../../molecules"
+import { FullScreenLoader, ScrollHint } from "../../../../../molecules"
 import FlippingCard from "../../FlippingCard/FlippingCard"
 import { SwitchComponent } from "../../../../../molecules/controlElements"
 import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
@@ -26,7 +26,7 @@ const MobileMainGrid = styled(GridContainer)`
           margin-top: ${space[3]}px;
           margin-bottom: ${space[2]}px;
           grid-template-columns: repeat(4, 1fr);
-          grid-template-rows: min-content 70px repeat(3, 350px);
+          grid-template-rows: min-content 70px repeat(3, 360px);
           grid-gap: 2rem;
           grid-template-areas:
             "title title title source"
@@ -114,6 +114,7 @@ function MobileDashboard({
 
   return (
     <FlexContainer bgColor={chartColors.bgColor}>
+      <ScrollHint size={40} opacity={.75}/>
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
       <MobileMainGrid
         rowGap={isPortrait ? 4 : 3}

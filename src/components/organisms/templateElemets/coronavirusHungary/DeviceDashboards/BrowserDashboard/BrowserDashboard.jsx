@@ -8,7 +8,7 @@ import { TEXT, chartColors } from "../../../../../../constants/visualizations/co
 
 import SourceLink from "../../SourceLink/SourceLink"
 import { DateSlider } from "../../DateSlider/DateSlider"
-import { FullScreenLoader } from "../../../../../molecules"
+import { FullScreenLoader, ScrollHint } from "../../../../../molecules"
 import FlippingCard from "../../FlippingCard/FlippingCard"
 import { SwitchComponent } from "../../../../../molecules/controlElements"
 import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
@@ -89,6 +89,7 @@ export default function BrowserDashboard({
   return (
     <FlexContainer bgColor={chartColors.bgColor} >
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
+      <ScrollHint size={40} opacity={.75}/>
       <BrowserMainGrid >
         <FlexContainer
           gridArea="title"
