@@ -1,4 +1,7 @@
-import React from "react"
+import React, { useState } from "react"
+import Modal from "react-modal"
+import { IoMdInformationCircle } from "react-icons/io"
+
 import { GridContainer, FlexContainer, Container } from "../../../../atoms"
 import { space, colors } from "../../../../../themes/theme"
 import LineChart from "../LineChart/LineChart"
@@ -10,7 +13,8 @@ import {
 import AgeChartBrowser from "../AgeChartBrowser/AgeChartBrowser"
 import AreaChart from "../AreaChart/AreaChart"
 import VerticalDoubleAreaChart from "../DoubleAreaChart/VerticalDoubleAreaChart/VerticalDoubleAreaChart"
-import { IoMdInformationCircle } from "react-icons/io"
+
+Modal.setAppElement("#___gatsby")
 
 export default function CardGrid({
   onlyChart,
@@ -23,6 +27,7 @@ export default function CardGrid({
   device,
   fullListDomain,
   isPortrait,
+  setIsModal,
 }) {
   const currNumbers =
     data &&
@@ -54,18 +59,32 @@ export default function CardGrid({
             : "35px 1fr 30px"
           : isMobile && isPortrait
           ? "min-content 1fr 80px 30px"
-          : "50px 1fr 80px 30px"
+          : "40px 1fr 80px 30px"
       }
     >
-      <FlexContainer justify="flex-start" align="flex-start" fontSize={2}>
+      <FlexContainer
+        justify="flex-start"
+        align="flex-start"
+        fontSize={2}
+        onClick={e => {
+          if (!onlyChart) {
+            setIsModal(area)
+            e.stopPropagation()
+          }
+        }}
+      >
         <Container textAlign="left">
           {title}{" "}
-          <div style={{ display: "inline-block", transform: "translateY(4px)" }}>
-            <IoMdInformationCircle
-              size={16}
-              color={colors.grayDarkest}
-            />
-          </div>
+          {!onlyChart && (
+            <div
+              style={{
+                display: "inline-block",
+                transform: "translate(2px, 4px)",
+              }}
+            >
+              <IoMdInformationCircle size={16} color={colors.grayDarkest} />
+            </div>
+          )}
         </Container>
       </FlexContainer>
       <FlexContainer

@@ -98,6 +98,7 @@ function MobileDashboard({
   isPortrait,
   setCardClicked,
   filterTransitionProps,
+  setIsModal,
 }) {
   const {
     language,
@@ -114,7 +115,6 @@ function MobileDashboard({
 
   return (
     <FlexContainer bgColor={chartColors.bgColor}>
-      {/* <ScrollHint size={40} opacity={.75}/> */}
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
       <MobileMainGrid
         rowGap={isPortrait ? 4 : 3}
@@ -211,6 +211,7 @@ function MobileDashboard({
                   title={TEXT.chartTitles[area].total[language]}
                   currDate={state.dates.currDate}
                   data={isMain ? filteredData : state.dataSets[area].total}
+                  setIsModal={setIsModal}
                   language={language}
                   type="front"
                   fullListDomain={state.fullListDomain}
@@ -225,6 +226,7 @@ function MobileDashboard({
                   title={TEXT.chartTitles[area].gender[language]}
                   currDate={state.dates.currDate}
                   data={isMain ? filteredData : state.dataSets[area].gender}
+                  setIsModal={setIsModal}
                   language={language}
                   fullListDomain={state.fullListDomain}
                   isPortrait={isPortrait}

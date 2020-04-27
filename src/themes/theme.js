@@ -74,6 +74,7 @@ export const z = {
   dropdown: 60,
   loader: 100,
   overlay: 120,
+  modal: 130,
   super: 9999
 }
 

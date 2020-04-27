@@ -59,7 +59,7 @@ export default function ChartTooltip({
         margin.left
       }
       isLeft={data[xAccessor] <= halfWidth}
-      top={data[yAccessor] - (tDims.height +15) + margin.top}
+      top={data[yAccessor] - (tDims.height + 15) + margin.top}
       borderRadius={1}
       height="auto"
       width="auto"

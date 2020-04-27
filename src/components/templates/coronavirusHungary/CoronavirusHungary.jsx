@@ -1,6 +1,8 @@
 import React, { useEffect, useReducer, useRef, useState } from "react"
 import Helmet from "react-helmet"
 import _ from "lodash"
+import Modal from "react-modal"
+import { useSpring } from "react-spring"
 
 import {
   usePrevious,
@@ -18,7 +20,23 @@ import {
   coronavirusDashboardInitialState,
   actions,
 } from "../../../reducers/coronavirusDashboard/coronavirusDashboardReducer"
-import { useSpring } from "react-spring"
+import { z } from "../../../themes/theme"
+import { FlexContainer } from "../../atoms"
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+  overlay: {
+    zIndex: z.modal,
+    cursor: "pointer",
+  },
+}
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [state, dispatch] = useReducer(
@@ -96,9 +114,21 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
     top: cardClicked && isBelowPosition ? -1000 : 0,
   })
 
+  const [isModal, setIsModal] = useState(undefined)
+
   return (
     <>
       <Helmet title={TEXT.helmet[state.language]} />
+      {isModal && (
+        <Modal
+          isOpen={isModal}
+          style={customStyles}
+          onRequestClose={() => setIsModal(undefined)}
+          contentLabel="Example Modal"
+        >
+          <FlexContainer>{isModal}</FlexContainer>
+        </Modal>
+      )}
       {(isBrowser || isTablet) && (
         <BrowserDashboard
           state={state}
@@ -107,6 +137,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           updateCurrDate={updateCurrDate}
           updateDisplay={updateDisplay}
           numbers={state.numbers}
+          setIsModal={setIsModal}
           loading={loading}
           windowWidth={windowWidth}
           filterContainerRef={filterContainerRef}
@@ -122,6 +153,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           dispatch={dispatch}
           setLanguage={setLanguage}
           updateCurrDate={updateCurrDate}
+          setIsModal={setIsModal}
           updateDisplay={updateDisplay}
           numbers={state.numbers}
           loading={loading}

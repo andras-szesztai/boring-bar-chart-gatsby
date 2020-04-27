@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import styled from "styled-components"
-import { useTrail, useSpring } from "react-spring"
+import { useTrail } from "react-spring"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
 import { space } from "../../../../../../themes/theme"
-import { TEXT, chartColors } from "../../../../../../constants/visualizations/coronavirusHungary"
+import {
+  TEXT,
+  chartColors,
+} from "../../../../../../constants/visualizations/coronavirusHungary"
 
 import SourceLink from "../../SourceLink/SourceLink"
 import { DateSlider } from "../../DateSlider/DateSlider"
-import { FullScreenLoader, ScrollHint } from "../../../../../molecules"
+import { FullScreenLoader } from "../../../../../molecules"
 import FlippingCard from "../../FlippingCard/FlippingCard"
 import { SwitchComponent } from "../../../../../molecules/controlElements"
 import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
@@ -71,6 +74,7 @@ export default function BrowserDashboard({
   filterContainerRef,
   device,
   setCardClicked,
+  setIsModal,
   filterTransitionProps,
 }) {
   const {
@@ -87,13 +91,12 @@ export default function BrowserDashboard({
   })
 
   return (
-    <FlexContainer bgColor={chartColors.bgColor} >
+    <FlexContainer bgColor={chartColors.bgColor}>
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
-      {/* <ScrollHint size={40} opacity={.75}/> */}
-      <BrowserMainGrid >
+      <BrowserMainGrid>
         <FlexContainer
           gridArea="title"
-          fontSize={device === "desktop" ?  6 : 5}
+          fontSize={device === "desktop" ? 6 : 5}
           fontWeight="ultraLight"
           lineHeight={1.2}
           paddingBottom={2}
@@ -102,11 +105,7 @@ export default function BrowserDashboard({
         >
           {TEXT.mainTitle[language]}
         </FlexContainer>
-        <GridContainer
-          gridArea="source"
-          rowGap={2}
-          paddingRight={2}
-        >
+        <GridContainer gridArea="source" rowGap={2} paddingRight={2}>
           <SwitchComponent
             language={language}
             onChange={() => setLanguage(dispatch)}
@@ -183,6 +182,7 @@ export default function BrowserDashboard({
                   onlyChart={isMain}
                   title={TEXT.chartTitles[area].total[language]}
                   currDate={state.dates.currDate}
+                  setIsModal={setIsModal}
                   data={isMain ? filteredData : state.dataSets[area].total}
                   language={language}
                   type="front"
@@ -196,6 +196,7 @@ export default function BrowserDashboard({
                   onlyChart={isMain}
                   title={TEXT.chartTitles[area].gender[language]}
                   currDate={state.dates.currDate}
+                  setIsModal={setIsModal}
                   data={isMain ? filteredData : state.dataSets[area].gender}
                   language={language}
                   device={device}
