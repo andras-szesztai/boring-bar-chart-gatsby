@@ -44,7 +44,7 @@ const BrowserMainGrid = styled(GridContainer)`
 `
 
 const FilterContainer = styled(GridContainer)`
-  grid-template-columns: 150px 1fr min-content;
+  grid-template-columns: min-content 1fr min-content;
   grid-column-gap: 2rem;
 `
 
@@ -100,7 +100,6 @@ export default function BrowserDashboard({
           fontSize={device === "desktop" ? 6 : 5}
           fontWeight="ultraLight"
           lineHeight={1.2}
-          paddingBottom={2}
           textAlign="left"
           paddingLeft={2}
         >
@@ -127,7 +126,6 @@ export default function BrowserDashboard({
           gridArea={!isBelowPosition && "control"}
           zIndex={isBelowPosition && "overlay"}
           style={filterTransitionProps}
-          height="70px"
           fixedPos={
             isBelowPosition && {
               top: 0,
@@ -149,10 +147,9 @@ export default function BrowserDashboard({
             language={language}
             dispatch={dispatch}
             updateCurrDate={updateCurrDate}
-            marginRight={3}
-            paddingRight={3}
-            paddingBottom={1}
-            sliderMarginTop={21}
+            sliderMarginRight={2}
+            labelPaddingRight={2}
+            sliderMarginTop={4}
           />
           <SwitchComponent
             language={language}

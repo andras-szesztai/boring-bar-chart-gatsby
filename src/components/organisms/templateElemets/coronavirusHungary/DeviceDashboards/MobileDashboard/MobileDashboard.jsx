@@ -12,11 +12,13 @@ import {
 
 import SourceLink from "../../SourceLink/SourceLink"
 import { DateSlider } from "../../DateSlider/DateSlider"
-import { FullScreenLoader, ScrollHint } from "../../../../../molecules"
+import { FullScreenLoader } from "../../../../../molecules"
 import FlippingCard from "../../FlippingCard/FlippingCard"
 import { SwitchComponent } from "../../../../../molecules/controlElements"
 import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
 import CardGrid from "../../CardGrid/CardGrid"
+
+const filterHeight = 220
 
 const MobileMainGrid = styled(GridContainer)`
   ${({ orientation }) =>
@@ -40,7 +42,9 @@ const MobileMainGrid = styled(GridContainer)`
           margin-top: ${space[2]}px;
           margin-bottom: ${space[4]}px;
           grid-template-columns: 1fr;
-          grid-template-rows: min-content 50px 165px repeat(4, 380px) 780px;
+          grid-template-rows:
+            min-content 50px ${filterHeight}px repeat(4, 380px)
+            780px;
           grid-template-areas:
             "title"
             "source"
@@ -57,12 +61,12 @@ const FilterContainer = styled(GridContainer)`
   ${({ isPortrait }) =>
     isPortrait
       ? css`
-          padding: 1rem 3rem 2rem 3rem;
-          grid-template-rows: min-content repeat(2, 50px);
+          padding: 2rem 3rem 2rem 3rem;
+          grid-template-rows: min-content min-content 50px;
         `
       : css`
           grid-column-gap: 2rem;
-          grid-template-columns: 150px 1fr min-content;
+          grid-template-columns: min-content 1fr min-content;
         `}
 `
 
@@ -156,7 +160,7 @@ function MobileDashboard({
           style={filterTransitionProps}
           gridArea={!isBelowPosition && "control"}
           zIndex={isBelowPosition && "overlay"}
-          height={!isPortrait ? "70px" : "165px"}
+          height={!isPortrait ? "70px" : `${filterHeight - 65}px`}
           fixedPos={
             isBelowPosition && {
               left: 0,
@@ -178,22 +182,24 @@ function MobileDashboard({
             dispatch={dispatch}
             updateCurrDate={updateCurrDate}
             direction={isPortrait && "column"}
-            paddingRight={!isPortrait && 2}
-            marginRight={!isPortrait && 3}
-            paddingBottom={!isPortrait && 1}
+            labelPaddingRight={!isPortrait && 2}
+            sliderMarginRight={!isPortrait && 4}
+            sliderMarginTop={!isPortrait && 2}
           />
-          <SwitchComponent
-            language={language}
-            onChange={() => {
-              updateDisplay(dispatch)
-              isBelowPosition && setCardClicked(true)
-            }}
-            isChecked={display === "gender"}
-            text={TEXT.displayTest[language]}
-            justify={isPortrait ? "center" : "flex-end"}
-            marginRight={!isPortrait && 3}
-            containerPaddingTop={!isPortrait && 2}
-          />
+          {!isBelowPosition && (
+            <SwitchComponent
+              language={language}
+              onChange={() => {
+                updateDisplay(dispatch)
+                isBelowPosition && setCardClicked(true)
+              }}
+              isChecked={display === "gender"}
+              text={TEXT.displayTest[language]}
+              justify={isPortrait ? "center" : "flex-end"}
+              marginRight={!isPortrait && 3}
+              containerPaddingTop={!isPortrait && 2}
+            />
+          )}
         </FilterContainer>
         {trail.map((trans, i) => {
           const area = charts[i].gridArea

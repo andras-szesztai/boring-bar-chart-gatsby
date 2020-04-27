@@ -21,7 +21,7 @@ export const DSlider = withStyles({
     },
   },
   markLabel: {
-    top: space[3],
+    top: space[4],
     transform: "translateX(5%)",
     color: colors.grayDarkest,
     fontSize: "1.5rem",
@@ -38,6 +38,7 @@ export function StyledDateSlider({
   dates,
   language,
   dispatch,
+  sliderMarginTop,
 }) {
   const marks = [
     {
@@ -48,7 +49,7 @@ export function StyledDateSlider({
     },
   ]
   return (
-    <Container width="100%" marginTop={4}>
+    <Container width="100%" marginTop={sliderMarginTop}>
       <DSlider
         defaultValue={0}
         step={1}
@@ -75,29 +76,29 @@ export function DateSlider({
   dates,
   updateCurrDate,
   dispatch,
-  marginRight,
-  paddingRight,
-  paddingBottom,
+  sliderMarginRight,
+  labelPaddingRight,
   direction,
+  sliderMarginTop,
 }) {
   const isColumn = direction === "column"
   return (
     <GridContainer
       justify="flex-start"
-      whiteSpace="nowrap"
+      noWrap
       rows={isColumn ? "min-content 1fr" : "1fr"}
-      columns={!isColumn ? "min-content 1fr" : "1fr"}
+      columns={!isColumn ? "min-content minmax(150px,600px)" : "1fr"}
       direction={direction}
     >
-      <FlexContainer
-        paddingRight={paddingRight}
-        paddingBottom={paddingBottom}
-        fontSize={2}
-        whiteSpace="nowrap"
-      >
+      <FlexContainer paddingRight={labelPaddingRight} fontSize={2} noWrap>
         {TEXT.dateSlider[language]}:
       </FlexContainer>
-      <FlexContainer fullSize pos="relative" marginRight={marginRight}>
+      <FlexContainer
+        fullSize
+        pos="relative"
+        marginRight={sliderMarginRight}
+        marginTop={sliderMarginTop}
+      >
         {dates.max && (
           <StyledDateSlider
             dates={dates}
