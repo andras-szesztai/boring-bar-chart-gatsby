@@ -41,7 +41,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   })
 
   const isBelowPosition =
-    !loading && containerPosition && containerPosition.top < scrollPosition
+    containerPosition && containerPosition.top < scrollPosition
 
   const {
     setFormattedData,
@@ -111,7 +111,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           onRequestClose={() => setIsModal(undefined)}
           contentLabel="Example Modal"
         >
-          <FlexContainer maxWidth="200px" fontSize={2} textAlign="left" >
+          <FlexContainer maxWidth="200px" fontSize={2} textAlign="left">
             {TEXT.calcExplain[isModal][state.language]}
           </FlexContainer>
         </Modal>

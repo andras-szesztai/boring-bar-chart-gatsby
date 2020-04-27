@@ -152,6 +152,7 @@ export default function BrowserDashboard({
             marginRight={3}
             paddingRight={3}
             paddingBottom={1}
+            sliderMarginTop={21}
           />
           <SwitchComponent
             language={language}

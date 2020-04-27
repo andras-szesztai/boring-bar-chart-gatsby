@@ -1,13 +1,11 @@
-import React, { useRef, useState, useEffect } from "react"
+import React from "react"
 import { withStyles } from "@material-ui/core/styles"
 import Slider from "@material-ui/core/Slider"
 import { format, subDays } from "date-fns"
 
-import { FlexContainer, GridContainer, Container } from "../../../../atoms"
+import { FlexContainer, Container, GridContainer } from "../../../../atoms"
 import { TEXT } from "../../../../../constants/visualizations/coronavirusHungary"
-import { colors } from "../../../../../themes/theme"
-import { useScrollPosition, useWindowDimensions } from "../../../../../hooks"
-import CurrDateContainer from "../CurrDateContainer/CurrDateContainer"
+import { colors, space } from "../../../../../themes/theme"
 
 export const DSlider = withStyles({
   root: {
@@ -22,6 +20,14 @@ export const DSlider = withStyles({
       },
     },
   },
+  markLabel: {
+    top: space[3],
+    transform: "translateX(5%)",
+    color: colors.grayDarkest,
+    fontSize: "1.5rem",
+    fontWeight: 300,
+    fontFamily: "inherit",
+  },
   valueLabel: {
     fontSize: 8,
   },
@@ -33,21 +39,34 @@ export function StyledDateSlider({
   language,
   dispatch,
 }) {
+  const marks = [
+    {
+      value: dates.diff,
+    },
+    {
+      value: dates.diff + 12,
+    },
+  ]
   return (
-    <DSlider
-      defaultValue={0}
-      step={1}
-      marks
-      valueLabelDisplay="auto"
-      onChangeCommitted={(e, val) =>
-        updateCurrDate(dispatch, subDays(dates.max, -val))
-      }
-      valueLabelFormat={val =>
-        format(subDays(dates.max, -val), TEXT.dateFormatShort[language])
-      }
-      min={dates.diff}
-      max={0}
-    />
+    <Container width="100%" marginTop={4}>
+      <DSlider
+        defaultValue={0}
+        step={1}
+        valueLabelDisplay="auto"
+        onChangeCommitted={(e, val) =>
+          updateCurrDate(dispatch, subDays(dates.max, -val))
+        }
+        valueLabelFormat={val =>
+          format(subDays(dates.max, -val), TEXT.dateFormatShort[language])
+        }
+        min={dates.diff}
+        max={0}
+        marks={marks.map((el, i) => ({
+          ...el,
+          label: TEXT.sliderLabels[language][i],
+        }))}
+      />
+    </Container>
   )
 }
 
@@ -59,128 +78,35 @@ export function DateSlider({
   marginRight,
   paddingRight,
   paddingBottom,
-  direction
+  direction,
 }) {
+  const isColumn = direction === "column"
   return (
-    <FlexContainer
+    <GridContainer
       justify="flex-start"
       whiteSpace="nowrap"
-      paddingTop={1}
-      marginRight={marginRight}
+      rows={isColumn ? "min-content 1fr" : "1fr"}
+      columns={!isColumn ? "min-content 1fr" : "1fr"}
       direction={direction}
     >
-      <Container
+      <FlexContainer
         paddingRight={paddingRight}
         paddingBottom={paddingBottom}
         fontSize={2}
         whiteSpace="nowrap"
       >
         {TEXT.dateSlider[language]}:
-      </Container>
-      {dates.max && (
-        <StyledDateSlider
-          dates={dates}
-          language={language}
-          updateCurrDate={updateCurrDate}
-          dispatch={dispatch}
-        />
-      )}
-    </FlexContainer>
-  )
-}
-
-export function DateSliderMobile({
-  language,
-  dates,
-  setDates,
-  extraPadding,
-  extraPaddingRight,
-  fontSize,
-  isSticky,
-  loading,
-  dateFontSize,
-  fontWeight,
-  currDate,
-  isLandscape,
-}) {
-  const containerRef = useRef()
-  const scrollPosition = useScrollPosition()
-  const { windowWidth } = useWindowDimensions()
-  const [containerPosition, setContainerPosition] = useState(undefined)
-  useEffect(() => {
-    if (!containerPosition && containerRef.current) {
-      setContainerPosition(containerRef.current.getBoundingClientRect())
-    }
-  }, [containerPosition])
-  const isBelowPosition =
-    !loading &&
-    isSticky &&
-    containerPosition &&
-    containerPosition.top < scrollPosition
-  const isBelowAndLandscape = isLandscape && isBelowPosition
-
-  return (
-    <GridContainer
-      ref={containerRef}
-      marginTop={2}
-      paddingTop={isBelowPosition && !isBelowAndLandscape ? 2 : 0}
-      gridArea={!isBelowPosition && "slider"}
-      borderRadius={1}
-      height={isBelowAndLandscape ? "55px" : "auto"}
-      fixedPos={
-        isBelowPosition && {
-          top: 0,
-          left: 0,
-          width: `${windowWidth * (isLandscape ? 0.97 : 0.92)}px`,
-          marginLeft: isLandscape ? `${containerPosition.x / 2}px` : "4%",
-        }
-      }
-      bgColor="#FFFFFF"
-      withDropShadow={isBelowPosition}
-      paddingRight={isBelowAndLandscape ? 3 : extraPaddingRight || extraPadding}
-      paddingLeft={isBelowPosition ? 3 : extraPadding}
-      zIndex={isBelowPosition && "overlay"}
-      alignContent="center"
-      rows={isBelowAndLandscape ? "1fr" : "repeat(2, 1fr)"}
-      columns={isBelowAndLandscape ? "min-content 1fr" : "1fr"}
-    >
-      <FlexContainer
-        fontSize={dateFontSize || fontSize}
-        fontWeight={fontWeight}
-        justify={isLandscape ? "flex-start" : "center"}
-        whiteSpace="nowrap"
-      >
-        {currDate && format(currDate, TEXT.dateFormatLong[language])}
       </FlexContainer>
-      <GridContainer
-        rowGap={0}
-        columnGap={2}
-        columns={isBelowAndLandscape ? "min-content 1fr" : "1fr"}
-        rows="repeat(2, min-content)"
-        paddingLeft={isBelowAndLandscape ? 3 : 0}
-        paddingRight={isBelowAndLandscape ? 2 : 0}
-        paddingTop={isBelowAndLandscape ? 2 : 0}
-      >
-        <FlexContainer
-          justify={isLandscape ? "flex-start" : "center"}
-          whiteSpace="nowrap"
-          fontSize={fontSize}
-        >
-          {TEXT.dateSlider[language]}:
-        </FlexContainer>
-        <FlexContainer
-          fullSize
-          paddingTop={isBelowAndLandscape || isLandscape ? 1 : 0}
-        >
-          {dates.max && (
-            <StyledDateSlider
-              dates={dates}
-              language={language}
-              setDates={setDates}
-            />
-          )}
-        </FlexContainer>
-      </GridContainer>
+      <FlexContainer fullSize pos="relative" marginRight={marginRight}>
+        {dates.max && (
+          <StyledDateSlider
+            dates={dates}
+            language={language}
+            updateCurrDate={updateCurrDate}
+            dispatch={dispatch}
+          />
+        )}
+      </FlexContainer>
     </GridContainer>
   )
 }

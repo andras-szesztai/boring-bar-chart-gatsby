@@ -259,4 +259,8 @@ export const TEXT = {
       en: "Gender distribution",
     },
   },
+  sliderLabels: {
+    en: ["March", "April"],
+    hu: ["Március", "Április"],
+  },
 }

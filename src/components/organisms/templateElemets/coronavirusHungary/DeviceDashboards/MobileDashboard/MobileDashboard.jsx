@@ -113,6 +113,7 @@ function MobileDashboard({
     transform: isGender ? 180 : 0,
   })
 
+  const filterCardProps = isBelowPosition ? CARD_STYLE_PROPS : {}
   return (
     <FlexContainer bgColor={chartColors.bgColor}>
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
@@ -149,7 +150,7 @@ function MobileDashboard({
           />
         </GridContainer>
         <FilterContainer
-          {...CARD_STYLE_PROPS}
+          {...filterCardProps}
           ref={filterContainerRef}
           isPortrait={isPortrait}
           style={filterTransitionProps}
