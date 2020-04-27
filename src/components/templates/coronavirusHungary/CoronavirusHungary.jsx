@@ -20,23 +20,8 @@ import {
   coronavirusDashboardInitialState,
   actions,
 } from "../../../reducers/coronavirusDashboard/coronavirusDashboardReducer"
-import { z } from "../../../themes/theme"
+import { modalStyle } from "../../../themes/theme"
 import { FlexContainer } from "../../atoms"
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-  overlay: {
-    zIndex: z.modal,
-    cursor: "pointer",
-  },
-}
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [state, dispatch] = useReducer(
@@ -122,11 +107,13 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       {isModal && (
         <Modal
           isOpen={isModal}
-          style={customStyles}
+          style={modalStyle}
           onRequestClose={() => setIsModal(undefined)}
           contentLabel="Example Modal"
         >
-          <FlexContainer>{isModal}</FlexContainer>
+          <FlexContainer maxWidth="200px" fontSize={2} textAlign="left" >
+            {TEXT.calcExplain[isModal][state.language]}
+          </FlexContainer>
         </Modal>
       )}
       {(isBrowser || isTablet) && (

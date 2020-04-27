@@ -90,6 +90,7 @@ export default function BrowserDashboard({
     transform: isGender ? 180 : 0,
   })
 
+  const filterCardProps = isBelowPosition ? CARD_STYLE_PROPS : {}
   return (
     <FlexContainer bgColor={chartColors.bgColor}>
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
@@ -121,7 +122,7 @@ export default function BrowserDashboard({
           />
         </GridContainer>
         <FilterContainer
-          {...CARD_STYLE_PROPS}
+          {...filterCardProps}
           ref={filterContainerRef}
           gridArea={!isBelowPosition && "control"}
           zIndex={isBelowPosition && "overlay"}

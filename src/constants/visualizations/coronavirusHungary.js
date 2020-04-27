@@ -237,4 +237,26 @@ export const TEXT = {
       },
     },
   },
+  calcExplain: {
+    cumulative: {
+      en:
+        "The cumulative number of deaths caused by COVID-19 is calculated by accumulating all deaths over time since the first deceased.",
+      hu:
+        "Az elhunytak számának alakulása az elsõ esettõl kezdve akkumuláltan (tehát az összes elhunyt száma az adott napig bezárólag).",
+    },
+    daily: {
+      en:
+        "The 7 day (selectedday and 6 previous days) moving average of daily deaths. Calculated: (1+2+3+4+5+6+7)/7 = 4 daily deaths on average over the last week ",
+      hu:
+        "A napi halálesetek alakulása 7 napos mozgóátlag (adott nap és az azt megelõzõ 6 nap) alapján. Számítása: (1+2+3+4+5+6+7)/7 = 4 átlag haláleset naponta az elmúlt egy héten.",
+    },
+    age: {
+      hu: "Elhunytak átlagéletkora",
+      en: "Average age of the deceased over time",
+    },
+    ratio: {
+      hu: "Nemek százalékos megoszlása",
+      en: "Gender distribution",
+    },
+  },
 }

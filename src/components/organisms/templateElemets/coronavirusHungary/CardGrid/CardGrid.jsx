@@ -59,13 +59,12 @@ export default function CardGrid({
             : "35px 1fr 30px"
           : isMobile && isPortrait
           ? "min-content 1fr 80px 30px"
-          : "40px 1fr 80px 30px"
+          : "45px 1fr 80px 30px"
       }
     >
       <FlexContainer
         justify="flex-start"
         align="flex-start"
-        fontSize={2}
         onClick={e => {
           if (!onlyChart) {
             setIsModal(area)
@@ -73,7 +72,7 @@ export default function CardGrid({
           }
         }}
       >
-        <Container textAlign="left">
+        <Container textAlign="left" fontSize={2}>
           {title}{" "}
           {!onlyChart && (
             <div

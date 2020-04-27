@@ -1,4 +1,3 @@
-
 export const space = [0, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96]
 
 export const colors = {
@@ -22,7 +21,7 @@ export const colors = {
   tealBlue: "#8bbabb",
   tealBlueDark: "#7AA5A5",
   tealBlueDarker: "#678C8C",
-  tealBlueDarkest: "#547272 "
+  tealBlueDarkest: "#547272 ",
 }
 
 export const ease = {
@@ -59,28 +58,43 @@ export const fontSize = [
 ]
 
 export const fontWeight = {
-  ultraLight: 200, 
-  light: 300, 
-  book: 400, 
-  medium: 500, 
-  semiBold: 600, 
-  bold: 700, 
-  heavy: 800
+  ultraLight: 200,
+  light: 300,
+  book: 400,
+  medium: 500,
+  semiBold: 600,
+  bold: 700,
+  heavy: 800,
 }
 
 export const z = {
-  hoverOverlay: 10, 
+  hoverOverlay: 10,
   tooltip: 50,
   dropdown: 60,
   loader: 100,
   overlay: 120,
   modal: 130,
-  super: 9999
+  super: 9999,
 }
 
 export const dropShadow = {
   primary: "0 1px 3px rgba(51,51,51,0.12)",
-  secondary: "0 1px 2px rgba(51,51,51,0.24)"
+  secondary: "0 1px 2px rgba(51,51,51,0.24)",
+}
+
+export const modalStyle = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+  overlay: {
+    zIndex: z.modal,
+    cursor: "pointer",
+  },
 }
 
 const theme = {
