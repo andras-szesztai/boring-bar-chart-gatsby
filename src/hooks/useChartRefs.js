@@ -7,7 +7,8 @@ export default function() {
   const xAxisRef = useRef(null)
   const xGridRef = useRef(null)
   const yAxisRef = useRef(null)
+  const yGridRef = useRef(null)
   const titleRef = useRef(null)
 
-  return { wrapperRef, svgRef, areaRef, xAxisRef, yAxisRef, titleRef, xGridRef }
+  return { wrapperRef, svgRef, areaRef, xAxisRef, yAxisRef, titleRef, xGridRef,yGridRef }
 }

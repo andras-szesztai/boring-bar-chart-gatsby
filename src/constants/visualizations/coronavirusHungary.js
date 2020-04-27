@@ -7,9 +7,10 @@ export const DATA_URL_EN =
   "https://boring-barchart-gatsby.firebaseio.com/coronavirus-hungary-en.json"
 
 export const chartColors = {
-  female: "#D56F3E",
-  male: "#2d6e7e",
-  total: colors.grayDarkest,
+  female: "#DC8744",
+  male: "#4f345a",
+  total: "#619293",
+  bgColor: colors.white,
 }
 
 export const CIRCLE_RADIUS = 5

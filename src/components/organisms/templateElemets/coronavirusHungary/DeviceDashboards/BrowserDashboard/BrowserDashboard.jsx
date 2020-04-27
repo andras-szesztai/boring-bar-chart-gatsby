@@ -4,7 +4,7 @@ import { useTrail, useSpring } from "react-spring"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
 import { space } from "../../../../../../themes/theme"
-import { TEXT } from "../../../../../../constants/visualizations/coronavirusHungary"
+import { TEXT, chartColors } from "../../../../../../constants/visualizations/coronavirusHungary"
 
 import SourceLink from "../../SourceLink/SourceLink"
 import { DateSlider } from "../../DateSlider/DateSlider"
@@ -87,9 +87,9 @@ export default function BrowserDashboard({
   })
 
   return (
-    <FlexContainer bgColor="#f2f2f2">
+    <FlexContainer bgColor={chartColors.bgColor} >
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
-      <BrowserMainGrid>
+      <BrowserMainGrid >
         <FlexContainer
           gridArea="title"
           fontSize={5}
@@ -103,7 +103,6 @@ export default function BrowserDashboard({
         </FlexContainer>
         <GridContainer
           gridArea="source"
-          bgColor="#f2f2f2"
           rowGap={2}
           paddingRight={2}
         >

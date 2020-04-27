@@ -19,7 +19,7 @@ import { transition } from "../../../../../themes/theme"
 import { axisLeft } from "d3-axis"
 import { format } from "d3-format"
 
-const axisPadding = space[2]
+const axisPadding = space[1]
 export default function LineChart({
   data,
   currDate,
@@ -27,7 +27,7 @@ export default function LineChart({
   isPercentage,
   noTransition,
 }) {
-  const { svgRef, wrapperRef, yAxisRef, xAxisRef } = useChartRefs()
+  const { svgRef, wrapperRef, yAxisRef, xAxisRef, yGridRef } = useChartRefs()
   const dims = useDimensions({
     ref: wrapperRef,
     margin,
@@ -200,6 +200,11 @@ export default function LineChart({
             y2={dims.chartHeight}
           />
         </ChartArea>
+        <ChartArea
+          marginLeft={margin.left}
+          marginTop={margin.top}
+          areaRef={yGridRef}
+        />
         <ChartArea
           marginLeft={margin.left}
           marginTop={margin.top + dims.chartHeight}

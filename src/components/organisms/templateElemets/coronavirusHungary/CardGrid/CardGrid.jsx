@@ -167,7 +167,7 @@ export default function CardGrid({
                   </FlexContainer>
                   <FlexContainer
                     fontSize={3}
-                    fontWeight="ultraLight"
+                    fontWeight="light"
                     fontColor={chartColors[key]}
                   >
                     <Number

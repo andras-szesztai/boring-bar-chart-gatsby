@@ -5,7 +5,10 @@ import { withOrientationChange } from "react-device-detect"
 
 import { GridContainer, FlexContainer } from "../../../../../atoms"
 import { space } from "../../../../../../themes/theme"
-import { TEXT } from "../../../../../../constants/visualizations/coronavirusHungary"
+import {
+  TEXT,
+  chartColors,
+} from "../../../../../../constants/visualizations/coronavirusHungary"
 
 import SourceLink from "../../SourceLink/SourceLink"
 import { DateSlider } from "../../DateSlider/DateSlider"
@@ -110,7 +113,7 @@ function MobileDashboard({
   })
 
   return (
-    <FlexContainer bgColor="#f2f2f2">
+    <FlexContainer bgColor={chartColors.bgColor}>
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
       <MobileMainGrid
         rowGap={isPortrait ? 4 : 3}
