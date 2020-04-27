@@ -16,8 +16,9 @@ import {
 import { space, colors } from "../../../../../themes/theme"
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { transition } from "../../../../../themes/theme"
-import { axisLeft } from "d3-axis"
+import { axisLeft, axisRight } from "d3-axis"
 import { format } from "d3-format"
+import { makeGridStyle } from "../../../../../utils/svgElementHelpers"
 
 const axisPadding = space[1]
 export default function LineChart({
@@ -157,6 +158,8 @@ export default function LineChart({
           axisLeft(yScale)
             .ticks(4)
             .tickFormat(format(isPercentage ? ".0%" : ".0f"))
+            .tickSizeOuter(0)
+            .tickSizeInner(space[1])
         )
         .call(g => {
           g.select(".domain").remove()
@@ -164,6 +167,15 @@ export default function LineChart({
             .attr("stroke", colors.grayDarkest)
             .attr("stroke-width", 0.5)
         })
+      select(yGridRef.current)
+        .call(
+          axisRight(yScale)
+            .ticks(4)
+            .tickFormat(format(isPercentage ? ".0%" : ".0f"))
+            .tickSizeOuter(0)
+            .tickSizeInner(dims.chartWidth)
+        )
+        .call(makeGridStyle)
       setInit(true)
     }
     if (init && prevCurrDate.toString() !== currDate.toString()) {
@@ -172,18 +184,7 @@ export default function LineChart({
     if (init && !_.isEqual(prevDims, dims)) {
       updateDims()
     }
-  }, [
-    init,
-    data,
-    dims,
-    svgRef,
-    yAxisRef,
-    prevCurrDate,
-    currDate,
-    isPercentage,
-    prevDims,
-    noTransition,
-  ])
+  }, [init, data, dims, svgRef, yAxisRef, prevCurrDate, currDate, isPercentage, prevDims, noTransition, yGridRef])
 
   return (
     <ChartWrapper areaRef={wrapperRef}>
@@ -223,5 +224,5 @@ export default function LineChart({
 }
 
 LineChart.defaultProps = {
-  margin: { top: 15, right: 10, bottom: 10, left: 30 },
+  margin: { top: 15, right: 10, bottom: 10, left: 27 },
 }

@@ -131,7 +131,6 @@ function MobileDashboard({
         </FlexContainer>
         <GridContainer
           gridArea="source"
-          bgColor="#f2f2f2"
           paddingLeft={isPortrait && 1}
           columns={isPortrait && "repeat(2, 1fr)"}
         >

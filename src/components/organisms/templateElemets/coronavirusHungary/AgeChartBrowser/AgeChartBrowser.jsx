@@ -27,6 +27,7 @@ import {
 import { makeTransition } from "../../../../../utils/chartHelpers"
 import { transition, space, colors } from "../../../../../themes/theme"
 import ChartTooltip from "../ChartTooltip/ChartTooltip"
+import { makeGridStyle } from "../../../../../utils/svgElementHelpers"
 
 export default function AgeChartBrowser({
   data,
@@ -156,14 +157,7 @@ export default function AgeChartBrowser({
             .tickSizeOuter(0)
             .tickSizeInner(dims.chartHeight)
         )
-        .call(g => {
-          g.select(".domain").remove()
-          g.selectAll(".tick text").remove()
-          g.selectAll(".tick line")
-            .attr("stroke", colors.grayDarkest)
-            .attr("stroke-opacity", 0.25)
-            .attr("stroke-width", 0.5)
-        })
+        .call(makeGridStyle)
     }
 
     function updateDims() {

@@ -48,11 +48,11 @@ export default function CardGrid({
       textAlign="left"
       rows={
         onlyChart
-          ? mobilePortrait
+          ? isMobile && isPortrait
             ? "min-content 1fr 30px"
             : "35px 1fr 30px"
-          : mobilePortrait
-          ? "50px 1fr 75px 30px"
+          : isMobile && isPortrait
+          ? "min-content 1fr 80px 30px"
           : "50px 1fr 100px 30px"
       }
     >
@@ -147,7 +147,7 @@ export default function CardGrid({
             </GridContainer>
           )
         ) : (
-          <FlexContainer fontSize={2}>
+          <FlexContainer fontSize={2} paddingLeft={3} paddingRight={3} >
             {TEXT.ratioFront[deviceAccessor][language]}
           </FlexContainer>
         )}

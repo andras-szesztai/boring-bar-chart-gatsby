@@ -2,7 +2,17 @@ import { Delaunay } from "d3-delaunay"
 import { axisTop, axisRight, axisBottom, axisLeft } from "d3-axis"
 
 import { getClassName, changedFormat } from "./chartHelpers"
-import { space } from "../themes/theme"
+import { space, colors } from "../themes/theme"
+
+
+export const makeGridStyle = g => {
+    g.select(".domain").remove()
+    g.selectAll(".tick text").remove()
+    g.selectAll(".tick line")
+      .attr("stroke", colors.grayDarkest)
+      .attr("stroke-opacity", 0.25)
+      .attr("stroke-width", 0.5)
+  }
 
 export function createUpdateDelaunayCircles({
   data,
