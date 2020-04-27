@@ -62,7 +62,7 @@ const FilterContainer = styled(GridContainer)`
         `
       : css`
           grid-column-gap: 2rem;
-          grid-template-columns: min-content 1fr min-content;
+          grid-template-columns: 150px 1fr min-content;
         `}
 `
 
@@ -114,7 +114,7 @@ function MobileDashboard({
 
   return (
     <FlexContainer bgColor={chartColors.bgColor}>
-      <ScrollHint size={40} opacity={.75}/>
+      {/* <ScrollHint size={40} opacity={.75}/> */}
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
       <MobileMainGrid
         rowGap={isPortrait ? 4 : 3}

@@ -1,6 +1,6 @@
 import React from "react"
-import { GridContainer, FlexContainer } from "../../../../atoms"
-import { space } from "../../../../../themes/theme"
+import { GridContainer, FlexContainer, Container } from "../../../../atoms"
+import { space, colors } from "../../../../../themes/theme"
 import LineChart from "../LineChart/LineChart"
 import Number from "../Number/Number"
 import {
@@ -10,6 +10,7 @@ import {
 import AgeChartBrowser from "../AgeChartBrowser/AgeChartBrowser"
 import AreaChart from "../AreaChart/AreaChart"
 import VerticalDoubleAreaChart from "../DoubleAreaChart/VerticalDoubleAreaChart/VerticalDoubleAreaChart"
+import { IoMdInformationCircle } from "react-icons/io"
 
 export default function CardGrid({
   onlyChart,
@@ -57,7 +58,15 @@ export default function CardGrid({
       }
     >
       <FlexContainer justify="flex-start" align="flex-start" fontSize={2}>
-        {title}
+        <Container textAlign="left">
+          {title}{" "}
+          <div style={{ display: "inline-block", transform: "translateY(4px)" }}>
+            <IoMdInformationCircle
+              size={16}
+              color={colors.grayDarkest}
+            />
+          </div>
+        </Container>
       </FlexContainer>
       <FlexContainer
         marginTop={mobilePortrait && 4}
@@ -147,7 +156,7 @@ export default function CardGrid({
             </GridContainer>
           )
         ) : (
-          <FlexContainer fontSize={2} paddingLeft={3} paddingRight={3} >
+          <FlexContainer fontSize={2} paddingLeft={3} paddingRight={3}>
             {TEXT.ratioFront[deviceAccessor][language]}
           </FlexContainer>
         )}
@@ -155,7 +164,10 @@ export default function CardGrid({
       {!onlyChart && (
         <GridContainer
           rows={
-            currNumbers && (currNumbers.length > 1 ? "repeat(2, 1fr)" : "1fr")
+            currNumbers &&
+            (currNumbers.length > 1 && !isRunningLessThanMinDate
+              ? "repeat(2, 1fr)"
+              : "1fr")
           }
         >
           {currNumbers &&

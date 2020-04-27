@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react"
 import { useSpring, animated as a } from "react-spring"
+import _ from "lodash"
 import styled from "styled-components"
 import useResizeAware from "react-resize-aware"
 

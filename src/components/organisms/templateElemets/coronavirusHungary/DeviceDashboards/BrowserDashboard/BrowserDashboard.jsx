@@ -41,7 +41,7 @@ const BrowserMainGrid = styled(GridContainer)`
 `
 
 const FilterContainer = styled(GridContainer)`
-  grid-template-columns: min-content 1fr min-content;
+  grid-template-columns: 150px 1fr min-content;
   grid-column-gap: 2rem;
 `
 
@@ -89,11 +89,11 @@ export default function BrowserDashboard({
   return (
     <FlexContainer bgColor={chartColors.bgColor} >
       <FullScreenLoader loader="clip" loading={loading} loaderSize={60} />
-      <ScrollHint size={40} opacity={.75}/>
+      {/* <ScrollHint size={40} opacity={.75}/> */}
       <BrowserMainGrid >
         <FlexContainer
           gridArea="title"
-          fontSize={5}
+          fontSize={device === "desktop" ?  6 : 5}
           fontWeight="ultraLight"
           lineHeight={1.2}
           paddingBottom={2}
