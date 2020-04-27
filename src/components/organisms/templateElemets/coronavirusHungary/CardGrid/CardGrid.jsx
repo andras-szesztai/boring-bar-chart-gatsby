@@ -63,7 +63,7 @@ export default function CardGrid({
           : "45px 1fr 80px 30px"
       }
     >
-      {!onlyChart && (
+      {(isDesktop || !onlyChart) && (
         <FlexContainer
           justify="flex-start"
           align="flex-start"
@@ -76,14 +76,16 @@ export default function CardGrid({
         >
           <Container textAlign="left" fontSize={2}>
             {title}{" "}
-            <div
-              style={{
-                display: "inline-block",
-                transform: "translate(2px, 4px)",
-              }}
-            >
-              <IoMdInformationCircle size={16} color={colors.grayDarkest} />
-            </div>
+            {!onlyChart && (
+              <div
+                style={{
+                  display: "inline-block",
+                  transform: "translate(2px, 4px)",
+                }}
+              >
+                <IoMdInformationCircle size={16} color={colors.grayDarkest} />
+              </div>
+            )}
           </Container>
         </FlexContainer>
       )}
