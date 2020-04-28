@@ -80,7 +80,7 @@ export default function CardGrid({
               <div
                 style={{
                   display: "inline-block",
-                  transform: "translate(2px, 4px)",
+                  transform: "translate(2px, 3px)",
                 }}
               >
                 <IoMdInformationCircle size={16} color={colors.grayDarkest} />
