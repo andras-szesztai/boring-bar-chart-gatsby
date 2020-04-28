@@ -151,7 +151,7 @@ export default function BrowserDashboard({
             labelPaddingRight={2}
             sliderMarginTop={2}
           />
-          {!isBelowPosition && (
+          {(!isBelowPosition || device === "desktop") && (
             <SwitchComponent
               language={language}
               onChange={() => {
