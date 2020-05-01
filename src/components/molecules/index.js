@@ -17,7 +17,7 @@ import {
 import {
   FlippingCard
 } from "./cards"
-import { HorizontalMultiSelect } from "./controlElements"
+import { HorizontalMultiSelect, HierarchicalMultiSelect } from "./controlElements"
 import { CountUpSpan } from "./textElemets"
 import { FullScreenLoader } from "./loaders"
 import { ScrollHint } from "./miscComponents"
@@ -39,5 +39,6 @@ export {
   IconChart,
   PortfolioItem,
   ScrollHint,
-  FlippingCard
+  FlippingCard,
+  HierarchicalMultiSelect
 }
