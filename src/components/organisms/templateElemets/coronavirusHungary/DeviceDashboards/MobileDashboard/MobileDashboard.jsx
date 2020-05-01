@@ -12,8 +12,7 @@ import {
 
 import SourceLink from "../../SourceLink/SourceLink"
 import { DateSlider } from "../../DateSlider/DateSlider"
-import { FullScreenLoader } from "../../../../../molecules"
-import FlippingCard from "../../FlippingCard/FlippingCard"
+import { FullScreenLoader, FlippingCard } from "../../../../../molecules"
 import { SwitchComponent } from "../../../../../molecules/controlElements"
 import CurrDateContainer from "../../CurrDateContainer/CurrDateContainer"
 import CardGrid from "../../CardGrid/CardGrid"

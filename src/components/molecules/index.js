@@ -14,6 +14,9 @@ import {
   CreditsContainer,
   PortfolioItem,
 } from "./containers"
+import {
+  FlippingCard
+} from "./cards"
 import { HorizontalMultiSelect } from "./controlElements"
 import { CountUpSpan } from "./textElemets"
 import { FullScreenLoader } from "./loaders"
@@ -35,5 +38,6 @@ export {
   ChartStarter,
   IconChart,
   PortfolioItem,
-  ScrollHint
+  ScrollHint,
+  FlippingCard
 }

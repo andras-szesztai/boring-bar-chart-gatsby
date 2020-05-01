@@ -1,0 +1,1 @@
+export { default as FlippingCard } from './FlippingCard/FlippingCard'

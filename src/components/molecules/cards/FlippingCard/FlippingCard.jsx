@@ -4,9 +4,9 @@ import _ from "lodash"
 import styled from "styled-components"
 import useResizeAware from "react-resize-aware"
 
-import { dropShadow, space } from "../../../../../themes/theme"
-import { FlexContainer } from "../../../../atoms"
-import { usePrevious } from "../../../../../hooks"
+import { space, dropShadow } from "../../../../themes/theme"
+import { FlexContainer } from "../../../atoms"
+import { usePrevious } from "../../../../hooks"
 
 const Card = styled(a.div)`
   position: absolute;
