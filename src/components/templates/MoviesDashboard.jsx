@@ -8,17 +8,22 @@ import { useDebouncedSearch } from "../../hooks"
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
-  const [response, setResponse] = React.useState(undefined)
-  const fetchNames = text =>
-    axios
-      .get(
-        `https://api.themoviedb.org/3/search/person?api_key=${process.env.MDB_API_KEY}&language=en-US&query=${text}&page=1&include_adult=false`
-      )
-      .then(function(response) {
-        setResponse(response)
-      })
+  const [response, setResponse] = React.useState([])
+  const fetchNames = text => {
+    if (text) {
+      return axios
+        .get(
+          `https://api.themoviedb.org/3/search/person?api_key=${process.env.MDB_API_KEY}&language=en-US&query=${text}&page=1&include_adult=false`
+        )
+        .then(function(response) {
+          setResponse(response)
+        })
+    }
+    return setResponse([])
+  }
   const { inputText, setInputText } = useDebouncedSearch(fetchNames, 1000)
 
+  console.log(response)
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -35,6 +40,7 @@ export default function MoviesDashboard() {
             }}
             value={inputText}
           />
+          {}
         </FlexContainer>
       )}
     </>
