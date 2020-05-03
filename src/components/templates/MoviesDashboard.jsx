@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet"
 import axios from "axios"
 import styled from "styled-components"
 import { IoIosSearch, IoIosClose } from "react-icons/io"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 
 import { useDeviceType, usePrevious } from "../../hooks"
@@ -19,7 +19,6 @@ const searchColor = "#6a8caf"
 
 const SearchBarMainContainer = styled(motion.div)`
   position: fixed;
-  top: ${space[2]}px;
   left: ${space[2]}px;
 `
 
@@ -32,16 +31,32 @@ const SearchIconContainer = styled(motion.div)`
   position: absolute;
   top: ${space[2]}px;
   left: ${space[2]}px;
-  z-index: ${themifyZIndex("hoverOverlay")};
+  z-index: ${themifyZIndex("tooltip")};
 `
 
 const CloseIconContainer = styled(motion.div)`
   position: absolute;
   left: 270px;
-  z-index: ${themifyZIndex("hoverOverlay")};
+  z-index: ${themifyZIndex("tooltip")};
+`
+
+const ResultContainer = styled(motion.div)`
+  display: flex;
+`
+
+const ResultsContainer = styled(motion.div)`
+  position: absolute;
+  z-index: -1;
+  padding-top: 30px;
+  top: 10px;
+  width: 100%;
+  border-radius: ${space[1]}px;
+  background-color: ${chroma(searchColor).brighten(3)};
+  border: 1px solid ${chroma(searchColor).darken()};
 `
 
 const SearchBar = styled(motion.input)`
+  z-index: ${themifyZIndex("hoverOverlay")};
   width: 300px;
   height: 40px;
   border-radius: ${space[1]}px;
@@ -49,11 +64,12 @@ const SearchBar = styled(motion.input)`
   border: none;
   background: ${searchColor};
   color: ${chroma(searchColor).brighten(3)};
+  border: 1px solid ${chroma(searchColor).darken()};
   font-family: ${fontFamily};
   font-size: ${themifyFontSize(2)};
   font-weight: 300;
 
-  padding-bottom: ${space[1]}px;
+  padding-bottom: 2px;
 
   &::placeholder {
     font-weight: 200;
@@ -105,6 +121,30 @@ export default function MoviesDashboard() {
     }
   })
 
+  const searchContainerVariants = {
+    enter: {
+      height: 0,
+      opacity: 0,
+    },
+    animate: {
+      height: "auto",
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 1,
+      },
+    },
+    exit: {
+      height: 0,
+      opacity: 0,
+    },
+  }
+
+  const searchResultVariants = {
+    enter: { opacity: 0 },
+    animate: { opacity: 1 },
+  }
+
   return (
     <div>
       <Helmet title="Dashboard under construction" />
@@ -119,12 +159,12 @@ export default function MoviesDashboard() {
             <SearchBarSubContainer>
               <SearchIconContainer
                 animate={{
-                  transform: searchIsFocused
-                    ? "rotateY(90deg)"
-                    : "rotateY(0deg)",
+                  y: searchIsFocused ? 40 : 0,
+                  opacity: searchIsFocused ? 0 : 1,
                 }}
                 transition={{
-                  delay: !searchIsFocused ? 0.1 : 0,
+                  type: "spring",
+                  damping: 12,
                 }}
               >
                 <IoIosSearch
@@ -134,18 +174,26 @@ export default function MoviesDashboard() {
               </SearchIconContainer>
               <CloseIconContainer
                 animate={{
-                  y: inputText.length ? 8 : -20,
+                  y: inputText.length ? 9 : -20,
                   opacity: inputText.length ? 1 : 0,
                 }}
+                whileHover={{ scale: 1.3 }}
+                transition={{ type: "spring", damping: 12 }}
+                onClick={() => {
+                  setInputText("")
+                  setNameSearchResults([])
+                }}
+                role="button"
               >
                 <IoIosClose size={25} color={chroma(searchColor).brighten(3)} />
               </CloseIconContainer>
               <SearchBar
                 animate={{
-                  paddingLeft: searchIsFocused ? 8 : 36,
+                  paddingLeft: searchIsFocused ? 10 : 40,
                 }}
                 transition={{
-                  delay: searchIsFocused ? 0.1 : 0,
+                  type: "spring",
+                  damping: 12,
                 }}
                 type="text"
                 id="search"
@@ -181,39 +229,58 @@ export default function MoviesDashboard() {
                 }}
                 value={inputText}
               />
+              <AnimatePresence>
+                {nameSearchResults.length && (
+                  <ResultsContainer
+                    initial="enter"
+                    animate="animate"
+                    exit="exit"
+                    variants={searchContainerVariants}
+                    transition={{
+                      type: "spring",
+                      damping: 12,
+                    }}
+                  >
+                    {nameSearchResults.map(({ name, profile_path }, i) => (
+                      <ResultContainer
+                        key={name}
+                        variants={searchResultVariants}
+                        initial="enter"
+                        animate="animate"
+                        onMouseOver={() => setActiveSearchResult(i)}
+                        onClick={() => {
+                          setActiveNameID(
+                            nameSearchResults[activeSearchResult].id
+                          )
+                          setNameSearchResults([])
+                          setSearchIsFocused(false)
+                          setInputText("")
+                          setActiveSearchResult(0)
+                        }}
+                      >
+                        {profile_path ? (
+                          <img
+                            style={{ height: 50 }}
+                            src={`${imageRoot}${profile_path}`}
+                            alt={name}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              height: 50,
+                              width: 33.3,
+                              backgroundColor: "#333",
+                            }}
+                          />
+                        )}
+                        {name}
+                      </ResultContainer>
+                    ))}
+                  </ResultsContainer>
+                )}
+              </AnimatePresence>
             </SearchBarSubContainer>
           </SearchBarMainContainer>
-          {nameSearchResults.map(({ name, profile_path }, i) => (
-            <FlexContainer
-              cursor="pointer"
-              onMouseOver={() => setActiveSearchResult(i)}
-              onClick={() => {
-                setActiveNameID(nameSearchResults[activeSearchResult].id)
-                setNameSearchResults([])
-                setSearchIsFocused(false)
-                setInputText("")
-                setActiveSearchResult(0)
-              }}
-              withBorder={activeSearchResult === i}
-            >
-              {profile_path ? (
-                <img
-                  style={{ height: 50 }}
-                  src={`${imageRoot}${profile_path}`}
-                  alt={name}
-                />
-              ) : (
-                <div
-                  style={{
-                    height: 50,
-                    width: 33.3,
-                    backgroundColor: "#333",
-                  }}
-                />
-              )}
-              {name}
-            </FlexContainer>
-          ))}
           {personDetails && (
             <FlexContainer direction="column" marginTop={5} withBorder>
               <div>{personDetails.name}</div>
