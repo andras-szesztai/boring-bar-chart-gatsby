@@ -1,13 +1,42 @@
 import React, { useState, useEffect } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
+import styled from "styled-components"
 
 import { useDeviceType, usePrevious } from "../../hooks"
 import { FlexContainer } from "../atoms"
 import { useDebouncedSearch } from "../../hooks"
+import { space, fontFamily } from "../../themes/theme"
+import { themifyFontSize } from "../../themes/mixins"
 
 const imageRoot = "https://image.tmdb.org/t/p/w500/"
 const apiRoot = "https://api.themoviedb.org/3"
+
+const SearchBar = styled.input`
+  position: fixed;
+  top: ${space[2]}px;
+  left: ${space[2]}px;
+  width: 500px;
+  height: 40px;
+  border-radius: ${space[1]}px;
+  outline: none;
+  border: none;
+  background: #6a8caf;
+  color: #fff;
+  font-family: ${fontFamily};
+  font-size: ${themifyFontSize(2)};
+  font-weight: 300;
+
+  padding-left: ${space[5]}px;
+  padding-bottom: ${space[1]}px;
+
+  &::placeholder {
+    opacity: 0.8;
+    font-weight: 200;
+    color: inherit;
+    font-family: inherit;
+  }
+`
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
@@ -45,8 +74,8 @@ export default function MoviesDashboard() {
         ])
         .then(
           axios.spread((details, credits) => {
-            setPersonDetails(details)
-            setCombinedCredits(credits)
+            setPersonDetails(details.data)
+            setCombinedCredits(credits.data)
           })
         )
     }
@@ -62,10 +91,11 @@ export default function MoviesDashboard() {
           direction="column"
           justify="flex-start"
         >
-          <input
+          <SearchBar
             type="text"
             id="search"
             name="name search"
+            placeholder="Search a name ( e.g. George Clooney, Wes Andersen ... )"
             size="50"
             onChange={(e, v) => {
               setNameSearchResults([])
