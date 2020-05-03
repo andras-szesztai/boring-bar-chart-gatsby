@@ -44,6 +44,13 @@ const ResultContainer = styled(motion.div)`
   display: flex;
 `
 
+const TestContainer = styled(motion.div)`
+  width: 200px;
+  height: 30px;
+  background-color: #333;
+  margin: 5px 0;
+`
+
 const ResultsContainer = styled(motion.div)`
   position: absolute;
   z-index: -1;
@@ -130,19 +137,34 @@ export default function MoviesDashboard() {
       height: "auto",
       opacity: 1,
       transition: {
-        when: "beforeChildren",
-        staggerChildren: 1,
+        staggerChildren: 0.1,
       },
     },
     exit: {
       height: 0,
       opacity: 0,
+      transition: {
+        when: "afterChildren",
+        staggerChildren: 0.1,
+        staggerDirection: -1,
+      },
     },
   }
 
   const searchResultVariants = {
-    enter: { opacity: 0 },
-    animate: { opacity: 1 },
+    enter: { y: "-100%", opacity: 0 },
+    animate: {
+      y: "0%",
+      opacity: 1,
+      transition: {
+        type: "spring",
+        damping: 12,
+      },
+    },
+    exit: {
+      y: "-100%",
+      opacity: 0,
+    },
   }
 
   return (
@@ -241,12 +263,19 @@ export default function MoviesDashboard() {
                       damping: 12,
                     }}
                   >
-                    {nameSearchResults.map(({ name, profile_path }, i) => (
+                    <TestContainer variants={searchResultVariants} />
+                    <TestContainer variants={searchResultVariants} />
+                    <TestContainer variants={searchResultVariants} />
+                    <TestContainer variants={searchResultVariants} />
+                    <TestContainer variants={searchResultVariants} />
+                    {/* {nameSearchResults.map(({ name, profile_path }, i) => (
                       <ResultContainer
                         key={name}
                         variants={searchResultVariants}
+                        custom={i}
                         initial="enter"
                         animate="animate"
+                        exit="exit"
                         onMouseOver={() => setActiveSearchResult(i)}
                         onClick={() => {
                           setActiveNameID(
@@ -275,7 +304,7 @@ export default function MoviesDashboard() {
                         )}
                         {name}
                       </ResultContainer>
-                    ))}
+                    ))} */}
                   </ResultsContainer>
                 )}
               </AnimatePresence>
