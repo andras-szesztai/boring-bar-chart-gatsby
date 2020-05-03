@@ -40,26 +40,30 @@ const CloseIconContainer = styled(motion.div)`
   z-index: ${themifyZIndex("tooltip")};
 `
 
-const ResultContainer = styled(motion.div)`
-  display: flex;
-`
-
-const TestContainer = styled(motion.div)`
-  width: 200px;
-  height: 30px;
-  background-color: #333;
-  margin: 5px 0;
-`
-
 const ResultsContainer = styled(motion.div)`
   position: absolute;
   z-index: -1;
   padding-top: 30px;
   top: 10px;
   width: 100%;
-  border-radius: ${space[1]}px;
-  background-color: ${chroma(searchColor).brighten(3)};
-  border: 1px solid ${chroma(searchColor).darken()};
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`
+
+const ResultContainer = styled(motion.div)`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  align-self: flex-start;
+
+  align-self: start;
+  width: calc(100% - 10px);
+  height: 30px;
+  background-color: #f0f0f0;
+  margin: 5px;
+  padding-left: 5px;
 `
 
 const SearchBar = styled(motion.input)`
@@ -129,23 +133,14 @@ export default function MoviesDashboard() {
   })
 
   const searchContainerVariants = {
-    enter: {
-      height: 0,
-      opacity: 0,
-    },
     animate: {
-      height: "auto",
-      opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.25,
       },
     },
     exit: {
-      height: 0,
-      opacity: 0,
       transition: {
-        when: "afterChildren",
-        staggerChildren: 0.1,
+        staggerChildren: 0.15,
         staggerDirection: -1,
       },
     },
@@ -163,8 +158,21 @@ export default function MoviesDashboard() {
     },
     exit: {
       y: "-100%",
-      opacity: 0,
+      opacity: -1,
     },
+  }
+
+  const getSearchResultProps = id => {
+    return {
+      variants: searchResultVariants,
+      onClick: () => {
+        setActiveNameID(id)
+        setNameSearchResults([])
+        setInputText("")
+        setSearchIsFocused(false)
+        setActiveSearchResult(0)
+      },
+    }
   }
 
   return (
@@ -181,7 +189,7 @@ export default function MoviesDashboard() {
             <SearchBarSubContainer>
               <SearchIconContainer
                 animate={{
-                  y: searchIsFocused ? 40 : 0,
+                  y: searchIsFocused ? -40 : 0,
                   opacity: searchIsFocused ? 0 : 1,
                 }}
                 transition={{
@@ -199,6 +207,10 @@ export default function MoviesDashboard() {
                   y: inputText.length ? 9 : -20,
                   opacity: inputText.length ? 1 : 0,
                 }}
+                initial={{
+                  y: -20,
+                  opacity: 0,
+                }}
                 whileHover={{ scale: 1.3 }}
                 transition={{ type: "spring", damping: 12 }}
                 onClick={() => {
@@ -212,6 +224,9 @@ export default function MoviesDashboard() {
               <SearchBar
                 animate={{
                   paddingLeft: searchIsFocused ? 10 : 40,
+                }}
+                initial={{
+                  paddingLeft: 40,
                 }}
                 transition={{
                   type: "spring",
@@ -258,53 +273,31 @@ export default function MoviesDashboard() {
                     animate="animate"
                     exit="exit"
                     variants={searchContainerVariants}
-                    transition={{
-                      type: "spring",
-                      damping: 12,
-                    }}
                   >
-                    <TestContainer variants={searchResultVariants} />
-                    <TestContainer variants={searchResultVariants} />
-                    <TestContainer variants={searchResultVariants} />
-                    <TestContainer variants={searchResultVariants} />
-                    <TestContainer variants={searchResultVariants} />
-                    {/* {nameSearchResults.map(({ name, profile_path }, i) => (
+                    {nameSearchResults[0] && (
                       <ResultContainer
-                        key={name}
-                        variants={searchResultVariants}
-                        custom={i}
-                        initial="enter"
-                        animate="animate"
-                        exit="exit"
-                        onMouseOver={() => setActiveSearchResult(i)}
-                        onClick={() => {
-                          setActiveNameID(
-                            nameSearchResults[activeSearchResult].id
-                          )
-                          setNameSearchResults([])
-                          setSearchIsFocused(false)
-                          setInputText("")
-                          setActiveSearchResult(0)
-                        }}
+                        {...getSearchResultProps(nameSearchResults[0].id)}
+                        style={{ zIndex: 4 }}
                       >
-                        {profile_path ? (
-                          <img
-                            style={{ height: 50 }}
-                            src={`${imageRoot}${profile_path}`}
-                            alt={name}
-                          />
-                        ) : (
-                          <div
-                            style={{
-                              height: 50,
-                              width: 33.3,
-                              backgroundColor: "#333",
-                            }}
-                          />
-                        )}
-                        {name}
+                        {nameSearchResults[0].name}
                       </ResultContainer>
-                    ))} */}
+                    )}
+                    {nameSearchResults[1] && (
+                      <ResultContainer
+                        {...getSearchResultProps(nameSearchResults[1].id)}
+                        style={{ zIndex: 3 }}
+                      >
+                        {nameSearchResults[1].name}
+                      </ResultContainer>
+                    )}
+                    {nameSearchResults[2] && (
+                      <ResultContainer
+                        {...getSearchResultProps(nameSearchResults[2].id)}
+                        style={{ zIndex: 2 }}
+                      >
+                        {nameSearchResults[2].name}
+                      </ResultContainer>
+                    )}
                   </ResultsContainer>
                 )}
               </AnimatePresence>
