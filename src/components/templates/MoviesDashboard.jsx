@@ -9,7 +9,7 @@ import chroma from "chroma-js"
 import { useDeviceType, usePrevious } from "../../hooks"
 import { FlexContainer } from "../atoms"
 import { useDebouncedSearch } from "../../hooks"
-import { space, fontFamily } from "../../themes/theme"
+import { space, fontFamily, dropShadow } from "../../themes/theme"
 import { themifyFontSize, themifyZIndex } from "../../themes/mixins"
 
 const imageRoot = "https://image.tmdb.org/t/p/w500/"
@@ -40,10 +40,22 @@ const CloseIconContainer = styled(motion.div)`
   z-index: ${themifyZIndex("tooltip")};
 `
 
+const SearchItemHover = styled(motion.div)`
+  position: absolute;
+  z-index: ${themifyZIndex("tooltip")};
+
+  height: 70px;
+  width: 100%;
+  background-color: ${searchColor};
+  border: 1px solid ${chroma(searchColor).darken(2)};
+  border-radius: ${space[1]}px;
+  pointer-events: none;
+`
+
 const ResultsContainer = styled(motion.div)`
   position: absolute;
   z-index: -1;
-  padding-top: 30px;
+  padding-top: 35px;
   top: 10px;
   width: 100%;
 
@@ -53,17 +65,47 @@ const ResultsContainer = styled(motion.div)`
 `
 
 const ResultContainer = styled(motion.div)`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  align-self: flex-start;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-areas:
+    "photo name"
+    "photo job";
+  grid-column-gap: 1rem;
 
   align-self: start;
   width: calc(100% - 10px);
-  height: 30px;
-  background-color: #f0f0f0;
+  height: 60px;
+  border-radius: ${space[1]}px;
+  background-color: #fff;
+  filter: drop-shadow(${dropShadow.primary});
   margin: 5px;
-  padding-left: 5px;
+  padding: 4px 6px;
+`
+
+const ImageContainer = styled.img`
+  height: 100%;
+  grid-area: photo;
+  border-radius: 2px;
+`
+
+const NameContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: ${themifyFontSize(2)};
+  font-weight: 500;
+  color: ${searchColor};
+  grid-area: name;
+`
+
+const JobContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: ${themifyFontSize(1)};
+  font-weight: 200;
+  grid-area: job;
 `
 
 const SearchBar = styled(motion.input)`
@@ -71,14 +113,13 @@ const SearchBar = styled(motion.input)`
   width: 300px;
   height: 40px;
   border-radius: ${space[1]}px;
-  outline: none;
-  border: none;
   background: ${searchColor};
   color: ${chroma(searchColor).brighten(3)};
   border: 1px solid ${chroma(searchColor).darken()};
   font-family: ${fontFamily};
   font-size: ${themifyFontSize(2)};
   font-weight: 300;
+  outline: none;
 
   padding-bottom: 2px;
 
@@ -159,22 +200,56 @@ export default function MoviesDashboard() {
     exit: {
       y: "-100%",
       opacity: -1,
+      transition: {
+        type: "spring",
+        damping: 12,
+      },
     },
   }
 
-  const getSearchResultProps = id => {
+  const getSearchResultProps = index => {
     return {
       variants: searchResultVariants,
       onClick: () => {
-        setActiveNameID(id)
+        setActiveNameID(nameSearchResults[index].id)
         setNameSearchResults([])
         setInputText("")
         setSearchIsFocused(false)
         setActiveSearchResult(0)
       },
+      onMouseOver: () => {
+        setActiveSearchResult(index)
+      },
     }
   }
 
+  const ResultContainerContent = props => (
+    <>
+      {nameSearchResults[props.index].profile_path ? (
+        <ImageContainer
+          src={`${imageRoot}${nameSearchResults[props.index].profile_path}`}
+          alt={nameSearchResults[props.index].name}
+        />
+      ) : (
+        <div
+          style={{
+            gridArea: "photo",
+            background: "#f2f2f2",
+            // placeSelf: "stretch",
+            width: 35,
+            height: 52,
+            borderRadius: 2
+          }}
+        />
+      )}
+      <NameContainer>{nameSearchResults[props.index].name}</NameContainer>
+      <JobContainer>
+        Known for: {nameSearchResults[props.index].known_for_department}
+      </JobContainer>
+    </>
+  )
+
+  console.log(nameSearchResults)
   return (
     <div>
       <Helmet title="Dashboard under construction" />
@@ -187,6 +262,19 @@ export default function MoviesDashboard() {
         >
           <SearchBarMainContainer>
             <SearchBarSubContainer>
+              <AnimatePresence>
+                {nameSearchResults.length && (
+                  <SearchItemHover
+                    animate={{ y: 45 + activeSearchResult * 70, opacity: 0.15 }}
+                    initial={{ opacity: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      type: "spring",
+                      damping: 12,
+                    }}
+                  />
+                )}
+              </AnimatePresence>
               <SearchIconContainer
                 animate={{
                   y: searchIsFocused ? -40 : 0,
@@ -276,26 +364,42 @@ export default function MoviesDashboard() {
                   >
                     {nameSearchResults[0] && (
                       <ResultContainer
-                        {...getSearchResultProps(nameSearchResults[0].id)}
+                        {...getSearchResultProps(0)}
                         style={{ zIndex: 4 }}
                       >
-                        {nameSearchResults[0].name}
+                        <ResultContainerContent index={0} />
                       </ResultContainer>
                     )}
                     {nameSearchResults[1] && (
                       <ResultContainer
-                        {...getSearchResultProps(nameSearchResults[1].id)}
+                        {...getSearchResultProps(1)}
                         style={{ zIndex: 3 }}
                       >
-                        {nameSearchResults[1].name}
+                        <ResultContainerContent index={1} />
                       </ResultContainer>
                     )}
                     {nameSearchResults[2] && (
                       <ResultContainer
-                        {...getSearchResultProps(nameSearchResults[2].id)}
+                        {...getSearchResultProps(2)}
                         style={{ zIndex: 2 }}
                       >
-                        {nameSearchResults[2].name}
+                        <ResultContainerContent index={2} />
+                      </ResultContainer>
+                    )}
+                    {nameSearchResults[3] && (
+                      <ResultContainer
+                        {...getSearchResultProps(3)}
+                        style={{ zIndex: 1 }}
+                      >
+                        <ResultContainerContent index={3} />
+                      </ResultContainer>
+                    )}
+                    {nameSearchResults[4] && (
+                      <ResultContainer
+                        {...getSearchResultProps(4)}
+                        style={{ zIndex: 0 }}
+                      >
+                        <ResultContainerContent index={4} />
                       </ResultContainer>
                     )}
                   </ResultsContainer>
