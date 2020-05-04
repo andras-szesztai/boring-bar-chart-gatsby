@@ -249,7 +249,6 @@ export default function MoviesDashboard() {
     </>
   )
 
-  console.log(nameSearchResults)
   return (
     <div>
       <Helmet title="Dashboard under construction" />
