@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
 import styled from "styled-components"
@@ -8,15 +8,22 @@ import {
   IoIosArrowUp,
   IoIosUnlock,
   IoIosLock,
+  IoIosStar,
+  IoIosStarOutline
 } from "react-icons/io"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
+import Reward from "react-rewards"
 
 import { useDeviceType, usePrevious } from "../../hooks"
 import { FlexContainer } from "../atoms"
 import { useDebouncedSearch } from "../../hooks"
 import { space, fontFamily, dropShadow } from "../../themes/theme"
-import { themifyFontSize, themifyZIndex } from "../../themes/mixins"
+import {
+  themifyFontSize,
+  themifyZIndex,
+  themifyColor,
+} from "../../themes/mixins"
 import { API_ROOT, IMAGE_ROOT, COLORS } from "../../constants/moviesDashboard"
 import { SearchBar, Image } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
@@ -100,7 +107,6 @@ const ClosedNameContainer = styled(motion.div)`
   font-size: ${themifyFontSize(3)};
   font-weight: 200;
   color: #fff;
-  cursor: pointer;
   border-radius: ${space[1]}px;
   padding: 1px 12px;
   background-color: ${chroma(COLORS.primary)};
@@ -111,15 +117,37 @@ const CardGrid = styled(motion.div)`
   display: flex;
   justify-content: space-between;
 
-  padding: ${space[3]}px;
+  padding: ${space[2]}px;
 
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT - 40}px;
 `
 
-const CardText = styled(motion.div)`
+const CardTextGrid = styled(motion.div)`
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: min-content 1fr;
+  padding-right: ${space[2]}px;
+
+  .name {
+    display: flex;
+    font-size: ${themifyFontSize(3)};
+    font-weight: 500;
+    color: ${COLORS.primary};
+    cursor: pointer;
+  }
+
+  .bio {
+    margin-top: ${space[1]}px;
+    padding: ${space[1]}px ${space[2]}px;
+    font-size: ${themifyFontSize(1)};
+    justify-self: stretch;
+    width: 250px;
+    border-radius: 2px;
+    font-weight: 200;
+    color: ${themifyColor("grayDarkest")};
+    overflow-y: auto;
+    box-shadow: inset 1px 1px 5px #d9d9d9, inset -1px -1px 10px #ffffff;
+  }
 `
 
 let animateCard
@@ -127,6 +155,7 @@ let animateCard
 export default function MoviesDashboard() {
   const device = useDeviceType()
 
+  const rewardRef = useRef()
   const { state, prevState, actions } = moviesDashboardReducer()
   const { dataSets } = state
 
@@ -134,9 +163,9 @@ export default function MoviesDashboard() {
   const [isLocked, setIsLocked] = useState(false)
 
   // birthday: "1963-12-18"
+  // "place_of_birth"
   // deathday:
   // known_for_department: "Acting"
-  // name
   // profile_path: "/tJiSUYst4ddIaz1zge2LqCtu9tw.jpg"
   // biography
 
@@ -199,7 +228,10 @@ export default function MoviesDashboard() {
                       bottom: space[1],
                     }}
                     role="button"
-                    onClick={() => setIsClosed(prev => !prev)}
+                    onClick={() => {
+                      setIsClosed(prev => !prev)
+                      isLocked && setIsLocked(false)
+                    }}
                     animate={{
                       rotate: isClosed ? 180 : 0,
                     }}
@@ -225,15 +257,35 @@ export default function MoviesDashboard() {
                         variants={opacityVariant}
                         {...animateProps}
                       >
-                        <CardText>
-                          <div>
-                            Lorem ipsum, dolor sit amet consectetur adipisicing
-                            elit. Adipisci, debitis.
+                        <CardTextGrid>
+                          <div
+                            className="name"
+                            onClick={() => rewardRef.current.rewardMe()}
+                          >
+                            {dataSets.personDetails.name}
+                            <motion.div style={{ marginLeft: 8 }}>
+                              <Reward
+                                ref={rewardRef}
+                                type="confetti"
+                                config={{
+                                  lifetime: 90,
+                                  angle: 90,
+                                  decay: 0.9,
+                                  spread: 150,
+                                  startVelocity: 8,
+                                  elementCountelementCount: 65,
+                                  elementSize: 5,
+                                  springAnimation: false,
+                                }}
+                              >
+                                <IoIosStarOutline size={20} color={COLORS.favorite} />
+                              </Reward>
+                            </motion.div>
                           </div>
-                          <div>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, temporibus.
+                          <div className="bio">
+                            {dataSets.personDetails.biography}
                           </div>
-                        </CardText>
+                        </CardTextGrid>
                         <Image
                           url={dataSets.personDetails.profile_path}
                           height={168}
