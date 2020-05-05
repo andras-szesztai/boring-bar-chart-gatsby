@@ -14,6 +14,7 @@ import ResultContainerContent from "../ResultContainerContent/ResultContainerCon
 const SearchBarMainContainer = styled(motion.div)`
   position: fixed;
   left: ${space[2]}px;
+  top: ${space[2]}px;
 `
 
 const SearchBarSubContainer = styled(motion.div)`
