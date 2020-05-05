@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
 import styled from "styled-components"
-import { IoIosSearch, IoIosClose, IoIosArrowUp } from "react-icons/io"
+import {
+  IoIosSearch,
+  IoIosClose,
+  IoIosArrowUp,
+  IoIosUnlock,
+  IoIosLock,
+} from "react-icons/io"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 
@@ -12,7 +18,7 @@ import { useDebouncedSearch } from "../../hooks"
 import { space, fontFamily, dropShadow } from "../../themes/theme"
 import { themifyFontSize, themifyZIndex } from "../../themes/mixins"
 import { API_ROOT, IMAGE_ROOT, COLORS } from "../../constants/moviesDashboard"
-import { SearchBar } from "../organisms/templateElemets/moviesDashboard"
+import { SearchBar, Image } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 
 const CARD_WIDTH = 400
@@ -46,7 +52,7 @@ const variants = {
   },
 }
 
-const nameVariant = {
+const opacityVariant = {
   initial: {
     opacity: 0,
   },
@@ -69,39 +75,47 @@ const PersonDetailsCard = styled(motion.div)`
   right: ${space[2]}px;
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT}px;
-
 `
 
 const DetailCardContent = styled.div`
   position: relative;
+
+  display: flex;
+  justify-content: center;
+
+
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT}px;
 `
 
 const IconContainer = styled(motion.div)`
   position: absolute;
-  bottom: ${space[1]}px;
   left: ${space[2]}px;
   cursor: pointer;
 `
 
 const ClosedNameContainer = styled(motion.div)`
   position: absolute;
-  bottom: ${space[2]}px;
+  bottom: 12px;
   right: ${space[2]}px;
   font-size: ${themifyFontSize(3)};
-  font-weight: 200; 
+  font-weight: 200;
   color: #fff;
   cursor: pointer;
   border-radius: ${space[1]}px;
   padding: 1px 12px;
   background-color: ${chroma(COLORS.primary)};
+  border: 1px solid ${chroma(COLORS.primary).darken()};
 `
 
 const CardGrid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas: "text text photo"
+  border: 1px solid black;
+  grid-template-columns: 1fr min-content;
+  grid-template-areas: "text photo";
+
+  width: ${CARD_WIDTH - 18}px;
+  height: ${CARD_HEIGHT - 50}px;
 `
 
 let animateCard
@@ -113,6 +127,7 @@ export default function MoviesDashboard() {
   const { dataSets } = state
 
   const [isClosed, setIsClosed] = useState(false)
+  const [isLocked, setIsLocked] = useState(false)
 
   // birthday: "1963-12-18"
   // deathday:
@@ -126,17 +141,26 @@ export default function MoviesDashboard() {
 
   if (
     prevState &&
-    !prevState.dataSets.personDetails &&
-    dataSets.personDetails
+    prevState.dataSets.personDetails &&
+    prevState.dataSets.personDetails.name !== dataSets.personDetails.name
   ) {
     animateCard = "animateFirst"
+    isClosed && setIsClosed(false)
   }
+
+  const animateProps = {
+    initial: "initial",
+    animate: "animate",
+    exit: "exit",
+  }
+
+  const LockIcon = isLocked ? IoIosLock : IoIosUnlock
 
   return (
     <>
       <Helmet title="Dashboard under construction" />
       {device === "desktop" && (
-        <>
+        <div style={{ userSelect: "none" }}>
           <SearchBar setActiveNameID={actions.setActiveNameID} />
           <AnimatePresence>
             {dataSets.personDetails && (
@@ -147,7 +171,27 @@ export default function MoviesDashboard() {
                 variants={variants}
               >
                 <DetailCardContent>
+                  <AnimatePresence>
+                    {isClosed && (
+                      <IconContainer
+                        key="lock"
+                        variants={opacityVariant}
+                        {...animateProps}
+                        whileHover={{ scale: 1.3 }}
+                        onClick={() => setIsLocked(prev => !prev)}
+                        style={{
+                          bottom: space[4],
+                        }}
+                      >
+                        <LockIcon size="24" color={COLORS.primary} />
+                      </IconContainer>
+                    )}
+                  </AnimatePresence>
                   <IconContainer
+                    key="arrow"
+                    style={{
+                      bottom: space[1],
+                    }}
                     role="button"
                     onClick={() => setIsClosed(prev => !prev)}
                     animate={{
@@ -157,30 +201,24 @@ export default function MoviesDashboard() {
                   >
                     <IoIosArrowUp size="24" color={COLORS.primary} />
                   </IconContainer>
-                  {isClosed ? (
-                    <ClosedNameContainer
-                      variants={nameVariant}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                    >
-                      {dataSets.personDetails.name}
-                    </ClosedNameContainer>
-                  ) : (
-                    <CardGrid
-                      variants={nameVariant}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                    >
-                      
+                  <AnimatePresence>
+                    {isClosed && (
+                      <ClosedNameContainer
+                        variants={opacityVariant}
+                        {...animateProps}
+                      >
+                        {dataSets.personDetails.name}
+                      </ClosedNameContainer>
+                    )}
+                    <CardGrid>
+
                     </CardGrid>
-                  )}
+                  </AnimatePresence>
                 </DetailCardContent>
               </PersonDetailsCard>
             )}
           </AnimatePresence>
-        </>
+        </div>
       )}
     </>
   )
