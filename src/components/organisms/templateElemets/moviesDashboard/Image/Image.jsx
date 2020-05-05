@@ -22,7 +22,7 @@ export default function Image({
       style={{
         gridArea: "photo",
         background: "#f2f2f2",
-        width: height * 0.66,
+        minWidth: height * 0.66,
         height,
         borderRadius,
       }}

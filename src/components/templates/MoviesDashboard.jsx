@@ -83,7 +83,6 @@ const DetailCardContent = styled.div`
   display: flex;
   justify-content: center;
 
-
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT}px;
 `
@@ -109,13 +108,18 @@ const ClosedNameContainer = styled(motion.div)`
 `
 
 const CardGrid = styled(motion.div)`
-  display: grid;
-  border: 1px solid black;
-  grid-template-columns: 1fr min-content;
-  grid-template-areas: "text photo";
+  display: flex;
+  justify-content: space-between;
 
-  width: ${CARD_WIDTH - 18}px;
-  height: ${CARD_HEIGHT - 50}px;
+  padding: ${space[3]}px;
+
+  width: ${CARD_WIDTH}px;
+  height: ${CARD_HEIGHT - 40}px;
+`
+
+const CardText = styled(motion.div)`
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
 `
 
 let animateCard
@@ -144,8 +148,10 @@ export default function MoviesDashboard() {
     prevState.dataSets.personDetails &&
     prevState.dataSets.personDetails.name !== dataSets.personDetails.name
   ) {
-    animateCard = "animateFirst"
-    isClosed && setIsClosed(false)
+    if (!isLocked) {
+      animateCard = "animateFirst"
+      isClosed && setIsClosed(false)
+    }
   }
 
   const animateProps = {
@@ -204,15 +210,37 @@ export default function MoviesDashboard() {
                   <AnimatePresence>
                     {isClosed && (
                       <ClosedNameContainer
+                        key="close-name"
                         variants={opacityVariant}
                         {...animateProps}
                       >
                         {dataSets.personDetails.name}
                       </ClosedNameContainer>
                     )}
-                    <CardGrid>
-
-                    </CardGrid>
+                  </AnimatePresence>
+                  <AnimatePresence>
+                    {!isClosed && (
+                      <CardGrid
+                        key="content"
+                        variants={opacityVariant}
+                        {...animateProps}
+                      >
+                        <CardText>
+                          <div>
+                            Lorem ipsum, dolor sit amet consectetur adipisicing
+                            elit. Adipisci, debitis.
+                          </div>
+                          <div>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, temporibus.
+                          </div>
+                        </CardText>
+                        <Image
+                          url={dataSets.personDetails.profile_path}
+                          height={168}
+                          alt={dataSets.personDetails.name}
+                        />
+                      </CardGrid>
+                    )}
                   </AnimatePresence>
                 </DetailCardContent>
               </PersonDetailsCard>
