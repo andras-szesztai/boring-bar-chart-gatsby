@@ -9,13 +9,13 @@ import {
   IoIosUnlock,
   IoIosLock,
   IoIosStar,
-  IoIosStarOutline
+  IoIosStarOutline,
 } from "react-icons/io"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import Reward from "react-rewards"
 
-import { useDeviceType, usePrevious } from "../../hooks"
+import { useDeviceType, usePrevious, useLocalStorage } from "../../hooks"
 import { FlexContainer } from "../atoms"
 import { useDebouncedSearch } from "../../hooks"
 import { space, fontFamily, dropShadow } from "../../themes/theme"
@@ -111,6 +111,9 @@ const ClosedNameContainer = styled(motion.div)`
   padding: 1px 12px;
   background-color: ${chroma(COLORS.primary)};
   border: 1px solid ${chroma(COLORS.primary).darken()};
+
+  display: flex;
+  cursor: pointer;
 `
 
 const CardGrid = styled(motion.div)`
@@ -126,11 +129,10 @@ const CardGrid = styled(motion.div)`
 const CardTextGrid = styled(motion.div)`
   display: grid;
   grid-template-rows: min-content 1fr;
-  padding-right: ${space[2]}px;
 
   .name {
     display: flex;
-    font-size: ${themifyFontSize(3)};
+    font-size: ${themifyFontSize(2)};
     font-weight: 500;
     color: ${COLORS.primary};
     cursor: pointer;
@@ -144,7 +146,8 @@ const CardTextGrid = styled(motion.div)`
     width: 250px;
     border-radius: 2px;
     font-weight: 200;
-    color: ${themifyColor("grayDarkest")};
+    color: ${themifyColor("grayDarker")};
+    font-weight: 300;
     overflow-y: auto;
     box-shadow: inset 1px 1px 5px #d9d9d9, inset -1px -1px 10px #ffffff;
   }
@@ -161,6 +164,9 @@ export default function MoviesDashboard() {
 
   const [isClosed, setIsClosed] = useState(false)
   const [isLocked, setIsLocked] = useState(false)
+
+  const [favorites, setFavorites] = useLocalStorage("favorites", [])
+  console.log("MoviesDashboard -> favorites", favorites)
 
   // birthday: "1963-12-18"
   // "place_of_birth"
@@ -190,6 +196,11 @@ export default function MoviesDashboard() {
   }
 
   const LockIcon = isLocked ? IoIosLock : IoIosUnlock
+  const isFavorited =
+    favorites &&
+    dataSets.personDetails &&
+    favorites.includes(dataSets.personDetails.id)
+  const FavoriteIcon = isFavorited ? IoIosStar : IoIosStarOutline
 
   return (
     <>
@@ -244,9 +255,48 @@ export default function MoviesDashboard() {
                       <ClosedNameContainer
                         key="close-name"
                         variants={opacityVariant}
+                        onClick={() => {
+                          !isFavorited && rewardRef.current.rewardMe()
+                          if (isFavorited) {
+                            setFavorites(
+                              favorites.filter(
+                                id => +id !== +dataSets.personDetails.id
+                              )
+                            )
+                          } else {
+                            setFavorites([
+                              ...favorites,
+                              dataSets.personDetails.id,
+                            ])
+                          }
+                        }}
                         {...animateProps}
                       >
                         {dataSets.personDetails.name}
+                        <div
+                          style={{
+                            marginLeft: 6,
+                            transform: "translateY(2px)",
+                          }}
+                        >
+                          <Reward
+                            ref={rewardRef}
+                            type="confetti"
+                            config={{
+                              lifetime: 90,
+                              angle: 90,
+                              decay: 0.9,
+                              spread: 150,
+                              startVelocity: 8,
+                              elementCountelementCount: 65,
+                              elementSize: 5,
+                              springAnimation: false,
+                              colors: Object.values(COLORS),
+                            }}
+                          >
+                            <FavoriteIcon size={18} color={COLORS.favorite} />
+                          </Reward>
+                        </div>
                       </ClosedNameContainer>
                     )}
                   </AnimatePresence>
@@ -260,10 +310,29 @@ export default function MoviesDashboard() {
                         <CardTextGrid>
                           <div
                             className="name"
-                            onClick={() => rewardRef.current.rewardMe()}
+                            onClick={() => {
+                              !isFavorited && rewardRef.current.rewardMe()
+                              if (isFavorited) {
+                                setFavorites(
+                                  favorites.filter(
+                                    id => +id !== +dataSets.personDetails.id
+                                  )
+                                )
+                              } else {
+                                setFavorites([
+                                  ...favorites,
+                                  dataSets.personDetails.id,
+                                ])
+                              }
+                            }}
                           >
                             {dataSets.personDetails.name}
-                            <motion.div style={{ marginLeft: 8 }}>
+                            <div
+                              style={{
+                                marginLeft: 6,
+                                transform: "translateY(2px)",
+                              }}
+                            >
                               <Reward
                                 ref={rewardRef}
                                 type="confetti"
@@ -276,11 +345,15 @@ export default function MoviesDashboard() {
                                   elementCountelementCount: 65,
                                   elementSize: 5,
                                   springAnimation: false,
+                                  colors: Object.values(COLORS),
                                 }}
                               >
-                                <IoIosStarOutline size={20} color={COLORS.favorite} />
+                                <FavoriteIcon
+                                  size={18}
+                                  color={COLORS.favorite}
+                                />
                               </Reward>
-                            </motion.div>
+                            </div>
                           </div>
                           <div className="bio">
                             {dataSets.personDetails.biography}
