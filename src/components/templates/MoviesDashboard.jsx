@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
 import styled from "styled-components"
-import { IoIosSearch, IoIosClose, IoIosArrowForward } from "react-icons/io"
+import { IoIosSearch, IoIosClose, IoIosArrowUp } from "react-icons/io"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 
@@ -16,6 +16,7 @@ import { SearchBar } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 
 const CARD_WIDTH = 400
+const CARD_HEIGHT = 200
 
 const transition = {
   primary: {
@@ -29,15 +30,15 @@ const variants = {
     y: "-100%",
   },
   animateFirst: {
-    y: 10,
+    y: space[2],
     transition: transition.primary,
   },
   animateOpen: {
-    x: 0,
+    y: space[2],
     transition: transition.primary,
   },
   animateClose: {
-    x: CARD_WIDTH * .9,
+    y: -(CARD_HEIGHT * 0.8),
     transition: transition.primary,
   },
   exit: {
@@ -55,17 +56,19 @@ const PersonDetailsCard = styled(motion.div)`
 
   right: ${space[2]}px;
   width: ${CARD_WIDTH}px;
-  height: 250px;
+  height: ${CARD_HEIGHT}px;
 `
 
 const DetailCardContent = styled.div`
   position: relative;
+  width: ${CARD_WIDTH}px;
+  height: ${CARD_HEIGHT}px;
 `
 
 const IconContainer = styled(motion.div)`
   position: absolute;
-  top: ${space[2]}px;
-  left: ${space[1]}px;
+  bottom: ${space[1]}px;
+  left: ${space[2]}px;
   cursor: pointer;
 `
 
@@ -86,8 +89,8 @@ export default function MoviesDashboard() {
   // profile_path: "/tJiSUYst4ddIaz1zge2LqCtu9tw.jpg"
   // biography
 
-  if(!isClosed) animateCard = "animateOpen"
-  if(isClosed) animateCard = "animateClose"
+  if (!isClosed) animateCard = "animateOpen"
+  if (isClosed) animateCard = "animateClose"
 
   if (
     prevState &&
@@ -118,8 +121,9 @@ export default function MoviesDashboard() {
                     animate={{
                       rotate: isClosed ? 180 : 0,
                     }}
+                    whileHover={{ scale: 1.3 }}
                   >
-                    <IoIosArrowForward size="24" color={COLORS.primary} />
+                    <IoIosArrowUp size="24" color={COLORS.primary} />
                   </IconContainer>
                 </DetailCardContent>
               </PersonDetailsCard>

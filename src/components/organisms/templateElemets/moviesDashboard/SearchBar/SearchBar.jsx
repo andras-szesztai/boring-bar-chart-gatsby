@@ -24,7 +24,7 @@ const SearchBarSubContainer = styled(motion.div)`
 
 const StyleldSearchBar = styled(motion.input)`
   z-index: ${themifyZIndex("hoverOverlay")};
-  width: 300px;
+  width: 400px;
   height: 40px;
   border-radius: ${space[1]}px;
   background: ${COLORS.primary};
