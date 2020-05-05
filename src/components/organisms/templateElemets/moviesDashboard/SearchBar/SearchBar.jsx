@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react"
-import { Helmet } from "react-helmet"
+import React, { useState } from "react"
 import axios from "axios"
 import styled from "styled-components"
 import { IoIosSearch, IoIosClose } from "react-icons/io"
@@ -7,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 
 import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
-import { space, fontFamily, dropShadow } from "../../../../../themes/theme"
+import { space, fontFamily } from "../../../../../themes/theme"
 import { COLORS, API_ROOT } from "../../../../../constants/moviesDashboard"
 import { useDebouncedSearch } from "../../../../../hooks"
 import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
@@ -96,25 +95,6 @@ const searchContainerVariants = {
   },
 }
 
-const ResultContainer = styled(motion.div)`
-  display: grid;
-  grid-template-columns: min-content 1fr;
-  grid-template-rows: repeat(2, 1fr);
-  grid-template-areas:
-    "photo name"
-    "photo job";
-  grid-column-gap: 1rem;
-
-  align-self: start;
-  width: calc(100% - 10px);
-  height: 60px;
-  border-radius: ${space[1]}px;
-  background-color: #fff;
-  filter: drop-shadow(${dropShadow.primary});
-  margin: 5px;
-  padding: 4px 6px;
-`
-
 export default function SearchBar({ setActiveNameID }) {
   const [nameSearchResults, setNameSearchResults] = React.useState([])
   const fetchNames = text => {
@@ -133,29 +113,8 @@ export default function SearchBar({ setActiveNameID }) {
   const [activeSearchResult, setActiveSearchResult] = useState(0)
   const [searchIsFocused, setSearchIsFocused] = useState(false)
 
-  const searchResultVariants = {
-    enter: { y: "-100%", opacity: 0 },
-    animate: {
-      y: "0%",
-      opacity: 1,
-      transition: {
-        type: "spring",
-        damping: 12,
-      },
-    },
-    exit: {
-      y: "-100%",
-      opacity: -1,
-      transition: {
-        type: "spring",
-        damping: 12,
-      },
-    },
-  }
-
   const getSearchResultProps = index => {
     return {
-      variants: searchResultVariants,
       onClick: () => {
         setActiveNameID(nameSearchResults[index].id)
         setNameSearchResults([])
@@ -268,59 +227,44 @@ export default function SearchBar({ setActiveNameID }) {
               variants={searchContainerVariants}
             >
               {nameSearchResults[0] && (
-                <ResultContainer
-                  {...getSearchResultProps(0)}
-                  style={{ zIndex: 4 }}
-                >
-                  <ResultContainerContent
-                    index={0}
-                    nameSearchResults={nameSearchResults}
-                  />
-                </ResultContainer>
+                <ResultContainerContent
+                  index={0}
+                  containerProps={getSearchResultProps(0)}
+                  zIndex={4}
+                  nameSearchResults={nameSearchResults}
+                />
               )}
               {nameSearchResults[1] && (
-                <ResultContainer
-                  {...getSearchResultProps(1)}
-                  style={{ zIndex: 3 }}
-                >
-                  <ResultContainerContent
-                    index={1}
-                    nameSearchResults={nameSearchResults}
-                  />
-                </ResultContainer>
+                <ResultContainerContent
+                  index={1}
+                  containerProps={getSearchResultProps(1)}
+                  zIndex={3}
+                  nameSearchResults={nameSearchResults}
+                />
               )}
               {nameSearchResults[2] && (
-                <ResultContainer
-                  {...getSearchResultProps(2)}
-                  style={{ zIndex: 2 }}
-                >
-                  <ResultContainerContent
-                    index={2}
-                    nameSearchResults={nameSearchResults}
-                  />
-                </ResultContainer>
+                <ResultContainerContent
+                  index={2}
+                  containerProps={getSearchResultProps(2)}
+                  zIndex={2}
+                  nameSearchResults={nameSearchResults}
+                />
               )}
               {nameSearchResults[3] && (
-                <ResultContainer
-                  {...getSearchResultProps(3)}
-                  style={{ zIndex: 1 }}
-                >
-                  <ResultContainerContent
-                    index={3}
-                    nameSearchResults={nameSearchResults}
-                  />
-                </ResultContainer>
+                <ResultContainerContent
+                  index={3}
+                  containerProps={getSearchResultProps(3)}
+                  zIndex={1}
+                  nameSearchResults={nameSearchResults}
+                />
               )}
               {nameSearchResults[4] && (
-                <ResultContainer
-                  {...getSearchResultProps(4)}
-                  style={{ zIndex: 0 }}
-                >
-                  <ResultContainerContent
-                    index={4}
-                    nameSearchResults={nameSearchResults}
-                  />
-                </ResultContainer>
+                <ResultContainerContent
+                  index={4}
+                  containerProps={getSearchResultProps(4)}
+                  zIndex={0}
+                  nameSearchResults={nameSearchResults}
+                />
               )}
             </ResultsContainer>
           )}
