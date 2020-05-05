@@ -50,32 +50,32 @@ const JobContainer = styled.div`
   grid-area: job;
 `
 
+const variants = {
+  enter: { y: "-100%", opacity: 0 },
+  animate: {
+    y: "0%",
+    opacity: 1,
+    transition: {
+      type: "spring",
+      damping: 12,
+    },
+  },
+  exit: {
+    y: "-100%",
+    opacity: -1,
+    transition: {
+      type: "spring",
+      damping: 12,
+    },
+  },
+}
+
 export default function ResultContainerContent({
   nameSearchResults,
   index,
   zIndex,
-  containerProps
+  containerProps,
 }) {
-  const variants = {
-    enter: { y: "-100%", opacity: 0 },
-    animate: {
-      y: "0%",
-      opacity: 1,
-      transition: {
-        type: "spring",
-        damping: 12,
-      },
-    },
-    exit: {
-      y: "-100%",
-      opacity: -1,
-      transition: {
-        type: "spring",
-        damping: 12,
-      },
-    },
-  }
-
   return (
     <ResultContainer style={{ zIndex }} variants={variants} {...containerProps}>
       {nameSearchResults[index].profile_path ? (

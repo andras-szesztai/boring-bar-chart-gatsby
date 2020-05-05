@@ -1,0 +1,1 @@
+export { default as moviesDashboardReducer } from './moviesDashboard/moviesDashboardReducer'

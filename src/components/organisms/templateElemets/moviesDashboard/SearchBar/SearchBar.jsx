@@ -81,7 +81,7 @@ const ResultsContainer = styled(motion.div)`
   align-items: flex-start;
 `
 
-const searchContainerVariants = {
+const variants = {
   animate: {
     transition: {
       staggerChildren: 0.25,
@@ -105,6 +105,9 @@ export default function SearchBar({ setActiveNameID }) {
         )
         .then(function(response) {
           setNameSearchResults(response.data.results.filter((el, i) => i < 5))
+        })
+        .catch(function(error) {
+          console.log(error)
         })
     }
     return setNameSearchResults([])
@@ -224,7 +227,7 @@ export default function SearchBar({ setActiveNameID }) {
               initial="enter"
               animate="animate"
               exit="exit"
-              variants={searchContainerVariants}
+              variants={variants}
             >
               {nameSearchResults[0] && (
                 <ResultContainerContent
