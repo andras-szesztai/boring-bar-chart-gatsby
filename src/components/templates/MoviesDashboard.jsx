@@ -32,6 +32,7 @@ const SearchIconContainer = styled(motion.div)`
 
 const CloseIconContainer = styled(motion.div)`
   position: absolute;
+  top: ${space[2]}px;
   left: 270px;
   z-index: ${themifyZIndex("tooltip")};
 `
@@ -121,7 +122,7 @@ const SearchBar = styled(motion.input)`
 
   &::placeholder {
     font-weight: 200;
-    color: ${chroma(COLORS.primary).brighten(2)};
+    color: ${chroma(COLORS.primary).brighten(3)};
     font-family: inherit;
   }
 `
@@ -231,7 +232,6 @@ export default function MoviesDashboard() {
           style={{
             gridArea: "photo",
             background: "#f2f2f2",
-            // placeSelf: "stretch",
             width: 35,
             height: 52,
             borderRadius: 2,
@@ -260,8 +260,8 @@ export default function MoviesDashboard() {
               <AnimatePresence>
                 {nameSearchResults.length && (
                   <SearchItemHover
-                    animate={{ y: 45 + activeSearchResult * 70, opacity: 0.15 }}
                     initial={{ opacity: 0 }}
+                    animate={{ y: 45 + activeSearchResult * 70, opacity: 0.15 }}
                     exit={{ opacity: 0 }}
                     transition={{
                       type: "spring",
@@ -272,7 +272,8 @@ export default function MoviesDashboard() {
               </AnimatePresence>
               <SearchIconContainer
                 animate={{
-                  y: searchIsFocused ? -40 : 0,
+                  rotateY: searchIsFocused ? -80 : 0,
+                  x: searchIsFocused ? -10 : 0,
                   opacity: searchIsFocused ? 0 : 1,
                 }}
                 transition={{
@@ -286,13 +287,13 @@ export default function MoviesDashboard() {
                 />
               </SearchIconContainer>
               <CloseIconContainer
-                animate={{
-                  y: inputText.length ? 9 : -20,
-                  opacity: inputText.length ? 1 : 0,
-                }}
                 initial={{
-                  y: -20,
                   opacity: 0,
+                }}
+                animate={{
+                  rotateY: inputText.length ? 0 : 80,
+                  x: inputText.length ? 0 :  10,
+                  opacity: inputText.length ? 1 : 0,
                 }}
                 whileHover={{ scale: 1.3 }}
                 transition={{ type: "spring", damping: 12 }}
