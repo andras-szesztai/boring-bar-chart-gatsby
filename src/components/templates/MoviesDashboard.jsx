@@ -90,6 +90,7 @@ const ClosedNameContainer = styled(motion.div)`
   bottom: ${space[2]}px;
   right: ${space[2]}px;
   font-size: ${themifyFontSize(3)};
+  font-weight: 200; 
   color: #fff;
   cursor: pointer;
   border-radius: ${space[1]}px;
@@ -99,6 +100,8 @@ const ClosedNameContainer = styled(motion.div)`
 
 const CardGrid = styled(motion.div)`
   display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "text text photo"
 `
 
 let animateCard
@@ -170,7 +173,7 @@ export default function MoviesDashboard() {
                       animate="animate"
                       exit="exit"
                     >
-                      Hello{" "}
+                      
                     </CardGrid>
                   )}
                 </DetailCardContent>

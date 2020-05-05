@@ -3,8 +3,9 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 
 import { themifyFontSize } from "../../../../../themes/mixins"
-import { COLORS, IMAGE_ROOT } from "../../../../../constants/moviesDashboard"
+import { COLORS } from "../../../../../constants/moviesDashboard"
 import { space, dropShadow } from "../../../../../themes/theme"
+import Image from "../Image/Image"
 
 const ResultContainer = styled(motion.div)`
   display: grid;
@@ -23,12 +24,6 @@ const ResultContainer = styled(motion.div)`
   filter: drop-shadow(${dropShadow.primary});
   margin: 5px;
   padding: 4px 6px;
-`
-
-const ImageContainer = styled.img`
-  height: 100%;
-  grid-area: photo;
-  border-radius: 2px;
 `
 
 const NameContainer = styled.div`
@@ -78,22 +73,11 @@ export default function ResultContainerContent({
 }) {
   return (
     <ResultContainer style={{ zIndex }} variants={variants} {...containerProps}>
-      {nameSearchResults[index].profile_path ? (
-        <ImageContainer
-          src={`${IMAGE_ROOT}/${nameSearchResults[index].profile_path}`}
-          alt={nameSearchResults[index].name}
-        />
-      ) : (
-        <div
-          style={{
-            gridArea: "photo",
-            background: "#f2f2f2",
-            width: 35,
-            height: 52,
-            borderRadius: 2,
-          }}
-        />
-      )}
+      <Image
+        height={52}
+        url={nameSearchResults[index].profile_path}
+        alt={nameSearchResults[index].name}
+      />
       <NameContainer>{nameSearchResults[index].name}</NameContainer>
       <JobContainer>
         Known for: {nameSearchResults[index].known_for_department}
