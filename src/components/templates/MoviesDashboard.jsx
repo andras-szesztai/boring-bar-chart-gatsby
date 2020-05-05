@@ -11,11 +11,7 @@ import { FlexContainer } from "../atoms"
 import { useDebouncedSearch } from "../../hooks"
 import { space, fontFamily, dropShadow } from "../../themes/theme"
 import { themifyFontSize, themifyZIndex } from "../../themes/mixins"
-
-const imageRoot = "https://image.tmdb.org/t/p/w500/"
-const apiRoot = "https://api.themoviedb.org/3"
-
-const searchColor = "#6a8caf"
+import { API_ROOT, IMAGE_ROOT, COLORS } from "../../constants/moviesDashboard"
 
 const SearchBarMainContainer = styled(motion.div)`
   position: fixed;
@@ -46,8 +42,8 @@ const SearchItemHover = styled(motion.div)`
 
   height: 70px;
   width: 100%;
-  background-color: ${searchColor};
-  border: 1px solid ${chroma(searchColor).darken(2)};
+  background-color: ${COLORS.primary};
+  border: 1px solid ${chroma(COLORS.primary).darken(2)};
   border-radius: ${space[1]}px;
   pointer-events: none;
 `
@@ -95,7 +91,7 @@ const NameContainer = styled.div`
   align-items: center;
   font-size: ${themifyFontSize(2)};
   font-weight: 500;
-  color: ${searchColor};
+  color: ${COLORS.primary};
   grid-area: name;
 `
 
@@ -113,9 +109,9 @@ const SearchBar = styled(motion.input)`
   width: 300px;
   height: 40px;
   border-radius: ${space[1]}px;
-  background: ${searchColor};
-  color: ${chroma(searchColor).brighten(3)};
-  border: 1px solid ${chroma(searchColor).darken()};
+  background: ${COLORS.primary};
+  color: ${chroma(COLORS.primary).brighten(3)};
+  border: 1px solid ${chroma(COLORS.primary).darken()};
   font-family: ${fontFamily};
   font-size: ${themifyFontSize(2)};
   font-weight: 300;
@@ -125,7 +121,7 @@ const SearchBar = styled(motion.input)`
 
   &::placeholder {
     font-weight: 200;
-    color: ${chroma(searchColor).brighten(2)};
+    color: ${chroma(COLORS.primary).brighten(2)};
     font-family: inherit;
   }
 `
@@ -137,7 +133,7 @@ export default function MoviesDashboard() {
     if (text) {
       return axios
         .get(
-          `${apiRoot}/search/person?api_key=${process.env.MDB_API_KEY}&language=en-US&query=${text}&page=1&include_adult=false`
+          `${API_ROOT}/search/person?api_key=${process.env.MDB_API_KEY}&language=en-US&query=${text}&page=1&include_adult=false`
         )
         .then(function(response) {
           setNameSearchResults(response.data.results.filter((el, i) => i < 5))
@@ -158,10 +154,10 @@ export default function MoviesDashboard() {
       axios
         .all([
           axios.get(
-            `${apiRoot}/person/${activeNameID}?api_key=${process.env.MDB_API_KEY}&language=en-US`
+            `${API_ROOT}/person/${activeNameID}?api_key=${process.env.MDB_API_KEY}&language=en-US`
           ),
           axios.get(
-            `${apiRoot}/person/${activeNameID}/combined_credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
+            `${API_ROOT}/person/${activeNameID}/combined_credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
           ),
         ])
         .then(
@@ -227,7 +223,7 @@ export default function MoviesDashboard() {
     <>
       {nameSearchResults[props.index].profile_path ? (
         <ImageContainer
-          src={`${imageRoot}${nameSearchResults[props.index].profile_path}`}
+          src={`${IMAGE_ROOT}/${nameSearchResults[props.index].profile_path}`}
           alt={nameSearchResults[props.index].name}
         />
       ) : (
@@ -238,7 +234,7 @@ export default function MoviesDashboard() {
             // placeSelf: "stretch",
             width: 35,
             height: 52,
-            borderRadius: 2
+            borderRadius: 2,
           }}
         />
       )}
@@ -286,7 +282,7 @@ export default function MoviesDashboard() {
               >
                 <IoIosSearch
                   size={25}
-                  color={chroma(searchColor).brighten(3)}
+                  color={chroma(COLORS.primary).brighten(3)}
                 />
               </SearchIconContainer>
               <CloseIconContainer
@@ -306,7 +302,7 @@ export default function MoviesDashboard() {
                 }}
                 role="button"
               >
-                <IoIosClose size={25} color={chroma(searchColor).brighten(3)} />
+                <IoIosClose size={25} color={chroma(COLORS.primary).brighten(3)} />
               </CloseIconContainer>
               <SearchBar
                 animate={{
@@ -413,7 +409,7 @@ export default function MoviesDashboard() {
               {personDetails.profile_path ? (
                 <img
                   style={{ height: 100 }}
-                  src={`${imageRoot}${personDetails.profile_path}`}
+                  src={`${IMAGE_ROOT}/${personDetails.profile_path}`}
                   alt={personDetails.name}
                 />
               ) : (
