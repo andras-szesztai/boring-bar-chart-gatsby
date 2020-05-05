@@ -16,7 +16,7 @@ import { SearchBar } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 
 const CARD_WIDTH = 400
-const CARD_HEIGHT = 200
+const CARD_HEIGHT = 240
 
 const transition = {
   primary: {
@@ -69,6 +69,7 @@ const PersonDetailsCard = styled(motion.div)`
   right: ${space[2]}px;
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT}px;
+
 `
 
 const DetailCardContent = styled.div`
@@ -92,8 +93,12 @@ const ClosedNameContainer = styled(motion.div)`
   color: #fff;
   cursor: pointer;
   border-radius: ${space[1]}px;
-  padding: 1px 10px;
-  background-color:${chroma(COLORS.primary)};
+  padding: 1px 12px;
+  background-color: ${chroma(COLORS.primary)};
+`
+
+const CardGrid = styled(motion.div)`
+  display: grid;
 `
 
 let animateCard
@@ -107,9 +112,9 @@ export default function MoviesDashboard() {
   const [isClosed, setIsClosed] = useState(false)
 
   // birthday: "1963-12-18"
-  // deathday: null
+  // deathday:
   // known_for_department: "Acting"
-  // name: "Brad Pitt"
+  // name
   // profile_path: "/tJiSUYst4ddIaz1zge2LqCtu9tw.jpg"
   // biography
 
@@ -149,17 +154,26 @@ export default function MoviesDashboard() {
                   >
                     <IoIosArrowUp size="24" color={COLORS.primary} />
                   </IconContainer>
+                  {isClosed ? (
+                    <ClosedNameContainer
+                      variants={nameVariant}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                    >
+                      {dataSets.personDetails.name}
+                    </ClosedNameContainer>
+                  ) : (
+                    <CardGrid
+                      variants={nameVariant}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                    >
+                      Hello{" "}
+                    </CardGrid>
+                  )}
                 </DetailCardContent>
-                {isClosed && (
-                  <ClosedNameContainer
-                    variants={nameVariant}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                  >
-                    {dataSets.personDetails.name}
-                  </ClosedNameContainer>
-                )}
               </PersonDetailsCard>
             )}
           </AnimatePresence>
