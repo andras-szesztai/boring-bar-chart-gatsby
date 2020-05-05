@@ -38,11 +38,23 @@ const variants = {
     transition: transition.primary,
   },
   animateClose: {
-    y: -(CARD_HEIGHT * 0.8),
+    y: -(CARD_HEIGHT * 0.75),
     transition: transition.primary,
   },
   exit: {
     y: "-100%",
+  },
+}
+
+const nameVariant = {
+  initial: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+  },
+  exit: {
+    opacity: 0,
   },
 }
 
@@ -70,6 +82,18 @@ const IconContainer = styled(motion.div)`
   bottom: ${space[1]}px;
   left: ${space[2]}px;
   cursor: pointer;
+`
+
+const ClosedNameContainer = styled(motion.div)`
+  position: absolute;
+  bottom: ${space[2]}px;
+  right: ${space[2]}px;
+  font-size: ${themifyFontSize(3)};
+  color: #fff;
+  cursor: pointer;
+  border-radius: ${space[1]}px;
+  padding: 1px 10px;
+  background-color:${chroma(COLORS.primary)};
 `
 
 let animateCard
@@ -126,6 +150,16 @@ export default function MoviesDashboard() {
                     <IoIosArrowUp size="24" color={COLORS.primary} />
                   </IconContainer>
                 </DetailCardContent>
+                {isClosed && (
+                  <ClosedNameContainer
+                    variants={nameVariant}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    {dataSets.personDetails.name}
+                  </ClosedNameContainer>
+                )}
               </PersonDetailsCard>
             )}
           </AnimatePresence>
