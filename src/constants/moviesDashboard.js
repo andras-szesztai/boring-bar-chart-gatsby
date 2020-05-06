@@ -5,3 +5,11 @@ export const COLORS = {
   primary: "#6a8caf",
   favorite: "#ffbc65",
 }
+
+
+export const TRANSITION = {
+  primary: {
+    type: "spring",
+    damping: 12,
+  },
+}

@@ -275,7 +275,7 @@ export default function MoviesDashboard() {
                         {dataSets.personDetails.name}
                         <div
                           style={{
-                            marginLeft: 6,
+                            marginLeft: 10,
                             transform: "translateY(2px)",
                           }}
                         >
@@ -294,7 +294,7 @@ export default function MoviesDashboard() {
                               colors: Object.values(COLORS),
                             }}
                           >
-                            <FavoriteIcon size={18} color={COLORS.favorite} />
+                            <FavoriteIcon size={22} color={COLORS.favorite} />
                           </Reward>
                         </div>
                       </ClosedNameContainer>
