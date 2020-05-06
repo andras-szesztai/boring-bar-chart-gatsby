@@ -47,6 +47,9 @@ export function StyledDateSlider({
     {
       value: dates.diff + 12,
     },
+    {
+      value: dates.diff + 42,
+    },
   ]
   return (
     <Container width="100%" marginTop={sliderMarginTop}>

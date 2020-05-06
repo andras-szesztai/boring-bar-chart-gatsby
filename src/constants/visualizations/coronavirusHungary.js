@@ -264,7 +264,7 @@ export const TEXT = {
     },
   },
   sliderLabels: {
-    en: ["March", "April"],
-    hu: ["Március", "Április"],
+    en: ["March", "April", "May"],
+    hu: ["Március", "Április", "Május"],
   },
 }
