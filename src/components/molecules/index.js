@@ -20,7 +20,7 @@ import {
 import { HorizontalMultiSelect, HierarchicalMultiSelect } from "./controlElements"
 import { CountUpSpan } from "./textElemets"
 import { FullScreenLoader } from "./loaders"
-import { ScrollHint } from "./miscComponents"
+import { ScrollHint, SiteHelmet } from "./miscComponents"
 
 export {
   VerticalDropChart,
@@ -40,5 +40,6 @@ export {
   PortfolioItem,
   ScrollHint,
   FlippingCard,
-  HierarchicalMultiSelect
+  HierarchicalMultiSelect,
+  SiteHelmet
 }

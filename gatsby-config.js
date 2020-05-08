@@ -1,8 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Boring Bar Chart`,
-    description: `A Data Visualisation Site`,
-    author: `@AndSzesztai`,
+    title: "Boring Bar Chart",
+    description:
+      "A data visualization and blog site that provides a collection of interactive dashboards and charts built by using mainly d3.js and React.",
+    keywords:
+      "Data Visualization, React, D3.js, Interactive, Dashboard, Blog, Gatsby, Javascript, Animation",
+    author: "András Szesztai",
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -30,9 +33,8 @@ module.exports = {
       resolve: `gatsby-source-contentful`,
       options: {
         spaceId: `w36cqgpg2pdu`,
-        accessToken: 'ih7LJB9xSp9alB5BlKkaxBKmCdtDhG2Rknw_xe5PDdY',
+        accessToken: "ih7LJB9xSp9alB5BlKkaxBKmCdtDhG2Rknw_xe5PDdY",
       },
     },
   ],
 }
-  
