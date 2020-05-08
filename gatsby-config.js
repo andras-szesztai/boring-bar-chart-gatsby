@@ -8,39 +8,40 @@ module.exports = {
     author: "András Szesztai",
   },
   plugins: [
-    `gatsby-plugin-react-helmet`,
+    "gatsby-plugin-react-helmet",
+    "gatsby-plugin-mdx",
     {
-      resolve: `gatsby-mdx`,
-      // options: {  TODO: set it up when have a layout for pages
-      //   defaultLayouts: {
-      //     default: require.resolve("./src")
-      //   }
-      // }
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: `images`,
+        name: "images",
         path: `${__dirname}/src/images`,
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
-    `gatsby-plugin-styled-components`,
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
-        start_url: `/`,
-        display: `minimal-ui`,
-        icon: `src/images/logo.png`, // This path is relative to the root of the site.
+        name: "posts",
+        path: `${__dirname}/posts`,
+      },
+    },
+    "gatsby-transformer-sharp",
+    "gatsby-plugin-sharp",
+    "gatsby-plugin-styled-components",
+    "gatsby-plugin-emotion",
+    {
+      resolve: "gatsby-plugin-manifest",
+      options: {
+        name: "gatsby-starter-default",
+        short_name: "starter",
+        start_url: "/",
+        display: "minimal-ui",
+        icon: "src/images/logo.png", // This path is relative to the root of the site.
       },
     },
     {
-      resolve: `gatsby-source-contentful`,
+      resolve: "gatsby-source-contentful",
       options: {
-        spaceId: `w36cqgpg2pdu`,
+        spaceId: "w36cqgpg2pdu",
         accessToken: "ih7LJB9xSp9alB5BlKkaxBKmCdtDhG2Rknw_xe5PDdY",
       },
     },
