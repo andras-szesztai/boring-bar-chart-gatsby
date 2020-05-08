@@ -1,7 +1,7 @@
-import { graphql, staticQuery } from "gatsby"
+import { graphql, useStaticQuery } from "gatsby"
 
 export default function usePosts() {
-  const data = staticQuery(graphql`
+  const data = useStaticQuery(graphql`
     {
       allMdx(filter: { frontmatter: { title: { ne: "" } } }) {
         nodes {
@@ -19,7 +19,7 @@ export default function usePosts() {
   return data.allMdx.nodes.map(post => ({
     author: post.frontmatter.author,
     slug: post.frontmatter.slug,
-    title:  post.frontmatter.title,
-    excerpt: post.excerpt
+    title: post.frontmatter.title,
+    excerpt: post.excerpt,
   }))
 }
