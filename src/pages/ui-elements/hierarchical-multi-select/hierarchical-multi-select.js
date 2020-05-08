@@ -1,6 +1,6 @@
 import React from "react"
-import { Helmet } from "react-helmet"
-import { HierarchicalMultiSelect } from "../../../components/molecules"
+
+import { HierarchicalMultiSelect, SiteHelmet } from "../../../components/molecules"
 
 const data = [
   {
@@ -42,7 +42,7 @@ const data = [
 export default function() {
   return (
     <>
-      <Helmet title="Hierarchical Multi Select" />
+      <SiteHelmet pageTitle="Hierarchical Multi Select" />
       <HierarchicalMultiSelect data={data} />
     </>
   )

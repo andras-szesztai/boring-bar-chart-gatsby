@@ -4,13 +4,13 @@ import _ from "lodash"
 import { useFetchData } from "../../../hooks"
 import { FavoriteSpecSportChart } from "../../../components/templates"
 import { Helmet } from "react-helmet"
+import { SiteHelmet } from "../../../components/molecules"
 
 const url = "https://boring-barchart-gatsby.firebaseio.com/mm2020w1.json"
 
 export default function Dashboard() {
-
   const { response: rawData } = useFetchData(url)
-  
+
   const [dataObject, setDataObject] = useState({
     array: undefined,
     grouppedData: undefined,
@@ -42,15 +42,14 @@ export default function Dashboard() {
 
   return (
     <>
-      <Helmet title="Top Spectator Sports in the United States" />
-      {
-        rawData &&
+      <SiteHelmet pageTitle="Top Spectator Sports in the United States" />
+      {rawData && (
         <FavoriteSpecSportChart
           rawData={rawData}
           data={dataObject.grouppedData}
           valueArray={dataObject.array}
         />
-      }
+      )}
     </>
   )
 }
