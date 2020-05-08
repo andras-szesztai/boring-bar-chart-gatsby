@@ -10,6 +10,14 @@ module.exports = {
   plugins: [
     `gatsby-plugin-react-helmet`,
     {
+      resolve: `gatsby-mdx`,
+      // options: {  TODO: set it up when have a layout for pages
+      //   defaultLayouts: {
+      //     default: require.resolve("./src")
+      //   }
+      // }
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,

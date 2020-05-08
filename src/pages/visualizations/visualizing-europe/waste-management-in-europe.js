@@ -26,5 +26,5 @@ export default function Dashboard() {
         loading={isLoading}
       />
     </>
-  )
+)
 }
