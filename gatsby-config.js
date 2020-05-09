@@ -10,9 +10,7 @@ module.exports = {
   plugins: [
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-mdx",
-    {
-      resolve: "gatsby-plugin-theme-ui",
-    },
+    "gatsby-plugin-theme-ui",
     {
       resolve: "gatsby-source-filesystem",
       options: {

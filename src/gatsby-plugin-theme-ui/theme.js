@@ -8,17 +8,20 @@ export default {
   },
   fonts: {
     body: "gill-sans-nova, sans-serif",
-    heading: "gill-sans-nova, sans-serif",
   },
   fontWeights: {
     body: 400,
     heading: 700,
   },
   styles: {
+    body: {
+      fontFamily: 'body',
+      fontWeight: 'body',
+    },
     h1: {
       fontSize: 20,
-      fontFamily: "heading",
-      fontWeight: "heading",
+      fontFamily: "body",
+      fontWeight: "body",
       color: "primary",
       mt: 4,
       mb: 2,

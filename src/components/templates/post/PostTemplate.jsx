@@ -1,8 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import { jsx, ThemeProvider } from "theme-ui"
-import { css } from "@emotion/core"
+import { ThemeProvider } from "theme-ui"
 
 import theme from "../../../gatsby-plugin-theme-ui/theme"
 import components from "../../../gatsby-plugin-theme-ui/components"

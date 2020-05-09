@@ -1,16 +1,11 @@
 import React from "react"
 import { Link } from "gatsby"
-import { css } from "@emotion/core"
 
 import { usePosts } from "../../hooks"
 
 const PostPreview = ({ post }) => {
   return (
-    <article
-      css={css`
-        border-bottom: 1px solid #ddd;
-      `}
-    >
+    <article>
       <h3>
         {" "}
         <Link to={post.slug}>{post.title}</Link>
@@ -26,7 +21,7 @@ export default function() {
   return (
     <div>
       {posts.map(post => (
-        <PostPreview key={post.slug} post={post}/>
+        <PostPreview key={post.slug} post={post} />
       ))}
     </div>
   )
