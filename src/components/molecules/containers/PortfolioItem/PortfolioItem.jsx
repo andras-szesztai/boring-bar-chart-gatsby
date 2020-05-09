@@ -131,7 +131,7 @@ function PortfolioItem({
             >
               {devices.map(device => {
                 const { icon: Icon, size } = DEVICE_ICONS[device]
-                return <Icon size={size} />
+                return <Icon key={device} size={size} />
               })}
             </SingleText>
           )}
