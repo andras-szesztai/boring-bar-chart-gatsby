@@ -1,6 +1,5 @@
-import React, { useRef, useState } from "react"
+import React from "react"
 import { graphql } from "gatsby"
-import { useTransition } from "react-spring"
 import PageTransition from "gatsby-plugin-page-transitions"
 
 import { Layout, DataVisualizationGrid } from "../components/templates"

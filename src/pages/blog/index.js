@@ -1,12 +1,10 @@
 import React from "react"
-import { Link } from "gatsby"
 import styled from "styled-components"
 import { useTransition, animated } from "react-spring"
 import PageTransition from "gatsby-plugin-page-transitions"
 
 import { usePosts } from "../../hooks"
 import { SiteHelmet } from "../../components/molecules"
-import { Layout } from "../../components/templates"
 import { GridContainer } from "../../components/atoms"
 
 const MainGrid = styled(GridContainer)`
@@ -38,7 +36,6 @@ const TestDiv = styled(animated.div)`
 
 export default function() {
   const posts = usePosts()
-  console.log(posts)
   const transitions = useTransition(posts, item => item.slug, {
     from: { opacity: 0, transform: "scale(0)" },
     enter: { opacity: 1, transform: "scale(1)" },
