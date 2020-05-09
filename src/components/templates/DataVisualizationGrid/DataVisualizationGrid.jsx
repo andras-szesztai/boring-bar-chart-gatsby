@@ -64,7 +64,6 @@ function DataVisualizationGrid({ list, isDataViz }) {
       leave: { opacity: 0, transform: "scale(0)" },
     }
   )
-  console.log(transitions)
   return (
     <MainGrid>
       {transitions.map(({ item, key, props }) => (
@@ -75,7 +74,3 @@ function DataVisualizationGrid({ list, isDataViz }) {
 }
 
 export default DataVisualizationGrid
-
-{
-  /* <PortfolioItem key={key} data={item} style={{ ...props }} /> */
-}
