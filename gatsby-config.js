@@ -12,6 +12,12 @@ module.exports = {
     "gatsby-plugin-mdx",
     "gatsby-plugin-theme-ui",
     {
+      resolve: "gatsby-plugin-page-transitions",
+      options: {
+        transitionTime: 500,
+      },
+    },
+    {
       resolve: `gatsby-plugin-layout`,
       options: {
         component: require.resolve(

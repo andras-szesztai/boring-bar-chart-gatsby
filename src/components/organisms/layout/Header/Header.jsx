@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import styled from "styled-components"
 import { isMobileOnly } from "react-device-detect"
 import { Link } from "gatsby"
+import PageTransition from "gatsby-plugin-page-transitions"
 
 import { FlexContainer, Container } from "../../../atoms"
 import { IconChart } from "../../../molecules"
@@ -77,39 +78,42 @@ const LinkContainer = styled.div`
   }
 `
 
-export default function Header({ children, pageContext }) {
-  console.log(pageContext)
+export default function Header({ children, pageContext, location }) {
+  const isVisualization = pageContext.layout === "visualizations"
+  console.log(location)
   return (
     <>
-      <HeaderContainer>
-        <LinksContainer>
-          <IconContainer style={{ cursor: "pointer" }}>
-            <IconChart dims={40} />
-          </IconContainer>
-          <LinkContainer isActive={true}>
-            <Link to="/">Home</Link>
-          </LinkContainer>
-          <LinkContainer isActive={true}>
-            <Link to="/blog/posts">Blog</Link>
-          </LinkContainer>
-        </LinksContainer>
-        <FlexContainer cursor="pointer">
-          {SOCIAL_LINKS.map(
-            ({ link, component: Component, componentProps }) => (
-              <Container
-                key={link}
-                marginLeft={isMobileOnly ? 3 : 4}
-                paddingTop={1}
-              >
-                <a href={`${link}`} target="_blank" rel="noopener noreferrer">
-                  <Component {...componentProps} />
-                </a>
-              </Container>
-            )
-          )}
-        </FlexContainer>
-      </HeaderContainer>
-      {children}
+      {!isVisualization && (
+        <HeaderContainer>
+          <LinksContainer>
+            <IconContainer style={{ cursor: "pointer" }}>
+              <IconChart dims={40} />
+            </IconContainer>
+            <LinkContainer isActive={true}>
+              <Link to="/">Portfolio</Link>
+            </LinkContainer>
+            <LinkContainer isActive={true}>
+              <Link to="/blog">Blog</Link>
+            </LinkContainer>
+          </LinksContainer>
+          <FlexContainer cursor="pointer">
+            {SOCIAL_LINKS.map(
+              ({ link, component: Component, componentProps }) => (
+                <Container
+                  key={link}
+                  marginLeft={isMobileOnly ? 3 : 4}
+                  paddingTop={1}
+                >
+                  <a href={`${link}`} target="_blank" rel="noopener noreferrer">
+                    <Component {...componentProps} />
+                  </a>
+                </Container>
+              )
+            )}
+          </FlexContainer>
+        </HeaderContainer>
+      )}
+      <PageTransition>{children}</PageTransition>
     </>
   )
 }

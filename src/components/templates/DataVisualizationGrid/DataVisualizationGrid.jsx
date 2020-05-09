@@ -1,11 +1,10 @@
 import React, { useRef } from "react"
 import styled from "styled-components"
 import numToWords from "num-to-words"
+import { useTransition, animated } from "react-spring"
 
 import { GridContainer } from "../../atoms"
 import { PortfolioItem } from "../../molecules"
-import { useTransition } from "react-spring"
-import { animated } from "react-spring"
 
 const MainGrid = styled(GridContainer)`
   padding: 4rem;
@@ -19,7 +18,7 @@ const MainGrid = styled(GridContainer)`
     grid-row-gap: 0rem;
     grid-template-rows: repeat(5, 10rem);
     grid-template-areas:
-      "zero 1"
+      "zero two"
       "2 3"
       "4 5"
       "6 7"
@@ -51,13 +50,13 @@ const TestDiv = styled(animated.div)`
   grid-area: ${({ gridArea }) => gridArea};
 `
 
-function DataVisualizationGrid({ list, isDataViz }) {
+function DataVisualizationGrid({ list }) {
   const indexedList= list.map((node, i)  => ({ ...node, index: i }))
   const transitions = useTransition(
-    isDataViz ? indexedList : [],
+    indexedList,
     item => item.node.title,
     {
-      trail: 1000 / list.length,
+      trail: 800 / list.length,
       from: { opacity: 0, transform: "scale(0)" },
       enter: { opacity: 1, transform: "scale(1)" },
       leave: { opacity: 0, transform: "scale(0)" },
