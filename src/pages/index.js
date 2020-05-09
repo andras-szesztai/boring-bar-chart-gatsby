@@ -1,20 +1,25 @@
-import React from "react"
+import React, { useRef, useState } from "react"
 import { graphql } from "gatsby"
 
 import { Layout, DataVisualizationGrid } from "../components/templates"
 import { SiteHelmet } from "../components/molecules"
+import { useTransition } from "react-spring"
 
 function IndexPage({ data }) {
   const {
     allContentfulVisualizationsLink: { edges: list },
   } = data
 
+  const [isDataViz, setIsDataViz] = useState(true)
+
+  console.log(list)
   return (
     <>
-      <SiteHelmet/>
+      <SiteHelmet />
       <Layout>
         <div style={{ height: 75 }} />
-        <DataVisualizationGrid list={list} />
+        <button onClick={() => setIsDataViz(prev => !prev)}>Toogle</button>
+        <DataVisualizationGrid list={list} isDataViz={isDataViz} />
       </Layout>
     </>
   )

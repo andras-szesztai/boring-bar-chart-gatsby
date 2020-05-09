@@ -12,6 +12,7 @@ import {
   themifySpace,
   themifyColor,
 } from "../../../../themes/mixins"
+import { animated } from "react-spring"
 
 const DEVICE_ICONS = {
   desktop: { icon: FaDesktop, size: 20 },
@@ -19,10 +20,12 @@ const DEVICE_ICONS = {
   mobile: { icon: FaMobileAlt, size: 19 },
 }
 
-const ItemContainer = styled(FlexContainer)`
+const ItemContainer = styled(animated.div)`
   overflow: hidden;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   margin-bottom: 2rem;
+
+  will-change: transform, opacity;
 `
 
 const TextContainer = styled(GridContainer)`
@@ -89,7 +92,7 @@ function PortfolioItem({
       height={isSmallScreen ? "160px" : "180px"}
       borderRadius={1}
     >
-      {subWeeks(new Date(), 1) < new Date(updated ? updated : date) && (
+      {/* {subWeeks(new Date(), 1) < new Date(updated ? updated : date) && (
         <Ribbon
           text={updated ? "UPDATED" : "NEW"}
           width={isMobileOnly ? 100 : undefined}
@@ -145,7 +148,7 @@ function PortfolioItem({
             )}
           </LinkContainer>
         </SingleText>
-      </TextContainer>
+      </TextContainer> */}
     </ItemContainer>
   )
 }

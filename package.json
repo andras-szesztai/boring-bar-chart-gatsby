@@ -48,6 +48,7 @@
     "gatsby-transformer-sharp": "^2.4.1",
     "gsap": "^3.2.6",
     "lodash": "^4.17.15",
+    "num-to-words": "^0.2.1",
     "numeral": "^2.0.6",
     "prop-types": "^15.7.2",
     "rc-slider": "^8.7.1",
@@ -71,8 +72,8 @@
     "react-tooltip": "^4.1.2",
     "react-tooltip-lite": "^1.11.2",
     "styled-components": "^5.1.0",
-    "use-constant": "^1.0.0",
-    "theme-ui": "^0.3.1"
+    "theme-ui": "^0.3.1",
+    "use-constant": "^1.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.24.0",
