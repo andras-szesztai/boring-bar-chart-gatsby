@@ -16,7 +16,7 @@ const MainGrid = styled(GridContainer)`
     padding: 6rem;
     grid-column-gap: 0rem;
     grid-row-gap: 0rem;
-    grid-template-rows: repeat(5, 10rem);
+    grid-template-rows: repeat(5, 20rem);
     grid-template-areas:
       "zero two"
       "2 3"
@@ -33,7 +33,7 @@ const MainGrid = styled(GridContainer)`
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 6rem;
     grid-row-gap: 3rem;
-    grid-template-rows: repeat(5, 10rem);
+    grid-template-rows: repeat(5, 20rem);
     grid-template-areas:
       "zero one two"
       "three four five"

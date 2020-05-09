@@ -4,12 +4,12 @@ import { isMobileOnly } from "react-device-detect"
 import { Link } from "gatsby"
 import PageTransition from "gatsby-plugin-page-transitions"
 import { motion, AnimatePresence } from "framer-motion"
-import { BsFillTriangleFill } from "react-icons/bs"
+import { GoTriangleDown } from "react-icons/go"
 
 import { FlexContainer, Container } from "../../../atoms"
 import { IconChart } from "../../../molecules"
 import SOCIAL_LINKS from "../../../../constants/social-links"
-import { space, dropShadow } from "../../../../themes/theme"
+import { space, dropShadow, z } from "../../../../themes/theme"
 import {
   themifyColor,
   themifyFontSize,
@@ -38,16 +38,21 @@ const HeaderContainer = styled(FlexContainer)`
   @media (min-width: 1400px) {
     padding: 3rem 6rem;
   }
+
+  a {
+    text-decoration: none;
+  }
 `
 
 const IconContainer = styled.div`
   display: flex;
   align-items: center;
+  filter: drop-shadow(${dropShadow.primary});
 `
 
 const LinkContainer = styled(motion.div)`
   margin-left: ${space[4]}px;
-
+  text-decoration: none;
   display: flex;
   align-items: center;
 
@@ -66,7 +71,14 @@ const LinkContainer = styled(motion.div)`
 
 const HoverTriangleContainer = styled(motion.div)`
   position: fixed;
-  top: 55px;
+  top: 51px;
+  z-index: ${z["subSuper"]};
+`
+
+const SelectedTriangleContainer = styled(motion.div)`
+  position: fixed;
+  top: 51px;
+  z-index: ${z["super"]};
 `
 
 const LINKS = [
@@ -76,26 +88,53 @@ const LINKS = [
 
 export default function Header({ children, pageContext, location }) {
   const isVisualization = pageContext.layout === "visualizations"
-  const [hoveredObject, setHoveredObject] = useState(undefined)
-
-  console.log(hoveredObject)
+  const [hoveredObject, setHoveredObject] = useState({
+    bottom: 50,
+    height: 40,
+    left: 112,
+    right: 209.21875,
+    top: 10,
+    width: 97.21875,
+    x: 112,
+    y: 10,
+  })
+  const [activeObject, setActiveObject] = useState({
+    bottom: 50,
+    height: 40,
+    left: 112,
+    right: 209.21875,
+    top: 10,
+    width: 97.21875,
+    x: 112,
+    y: 10,
+  })
 
   return (
     <>
       {!isVisualization && (
         <>
-          <AnimatePresence>
-            <HoverTriangleContainer
-              initial={{ rotate: 180 }}
-              animate={{
-                x: hoveredObject
-                  ? hoveredObject.x + hoveredObject.width / 2 - 15
-                  : 0,
-              }}
-            >
-              <BsFillTriangleFill size={30} color="#333" />
-            </HoverTriangleContainer>
-          </AnimatePresence>
+          <SelectedTriangleContainer
+            initial={{
+              x: activeObject.x + activeObject.width / 2 - 15,
+            }}
+            animate={{
+              x: activeObject.x + activeObject.width / 2 - 15,
+            }}
+          >
+            <GoTriangleDown size={30} color="#333" />
+          </SelectedTriangleContainer>
+          <HoverTriangleContainer
+            initial={{
+              opacity: 0,
+              x: hoveredObject.x + hoveredObject.width / 2 - 15,
+            }}
+            animate={{
+              x: hoveredObject.x + hoveredObject.width / 2 - 15,
+              opacity: 0.25,
+            }}
+          >
+            <GoTriangleDown size={30} color="#333" />
+          </HoverTriangleContainer>
           <HeaderContainer>
             <LinksContainer>
               <IconContainer style={{ cursor: "pointer" }}>
@@ -103,15 +142,18 @@ export default function Header({ children, pageContext, location }) {
               </IconContainer>
 
               {LINKS.map(link => (
-                <LinkContainer
-                  onHoverStart={event => {
-                    const currHovered = event.path[0].getBoundingClientRect()
-                    if (hoveredObject !== currHovered)
-                      setHoveredObject(currHovered)
-                  }}
-                >
-                  <Link to={link.path}>{link.text}</Link>
-                </LinkContainer>
+                <Link to={link.path}>
+                  <LinkContainer
+                    onHoverStart={event => {
+                      const currHovered = event.path[0].getBoundingClientRect()
+                      if (hoveredObject !== currHovered)
+                        setHoveredObject(currHovered)
+                    }}
+                    onClick={() => setActiveObject(hoveredObject)}
+                  >
+                    <Link to={link.path}>{link.text}</Link>
+                  </LinkContainer>
+                </Link>
               ))}
             </LinksContainer>
             <FlexContainer cursor="pointer">
