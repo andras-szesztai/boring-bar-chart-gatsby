@@ -8,6 +8,7 @@ import {
   useGrouppedData,
 } from "../../../hooks"
 import WasteManagemetDashboard from "../../../components/templates/visualizing-europe/WasteManagement"
+import { SiteHelmet } from "../../../components/molecules"
 const { DATA_URL } = WASTE_MANAGEMENT_CONSTANTS
 
 export default function Dashboard() {
@@ -18,12 +19,12 @@ export default function Dashboard() {
 
   return (
     <>
-      <Helmet title="Waste Management in Europe" />
+      <SiteHelmet pageTitle="Waste Management in Europe" />
       <WasteManagemetDashboard
         countryList={countryList}
         data={grouppedData}
         loading={isLoading}
       />
     </>
-  )
+)
 }

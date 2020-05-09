@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer, useRef, useState } from "react"
-import Helmet from "react-helmet"
 import _ from "lodash"
 import Modal from "react-modal"
 import { useSpring } from "react-spring"
@@ -22,6 +21,7 @@ import {
 } from "../../../reducers/coronavirusDashboard/coronavirusDashboardReducer"
 import { modalStyle } from "../../../themes/theme"
 import { FlexContainer } from "../../atoms"
+import { SiteHelmet } from "../../molecules"
 
 function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [state, dispatch] = useReducer(
@@ -97,7 +97,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
 
   return (
     <>
-      <Helmet title={TEXT.helmet[state.language]} />
+      <SiteHelmet pageTitle={TEXT.helmet[state.language]} />
       {isModal && (
         <Modal
           isOpen={isModal}

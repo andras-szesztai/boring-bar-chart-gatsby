@@ -27,7 +27,7 @@ function DataVisualizationGrid({ list }) {
   return (
     <MainGrid>
       {list.map(({ node }) => (
-        <PortfolioItem data={node} />
+        <PortfolioItem key={node.id} data={node} />
       ))}
     </MainGrid>
   )

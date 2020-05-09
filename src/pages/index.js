@@ -1,8 +1,8 @@
 import React from "react"
-import { Helmet } from "react-helmet"
 import { graphql } from "gatsby"
 
 import { Layout, DataVisualizationGrid } from "../components/templates"
+import { SiteHelmet } from "../components/molecules"
 
 function IndexPage({ data }) {
   const {
@@ -11,9 +11,7 @@ function IndexPage({ data }) {
 
   return (
     <>
-      <Helmet title="Boring Bar Chart">
-        <html lang="en" />
-      </Helmet>
+      <SiteHelmet/>
       <Layout>
         <div style={{ height: 75 }} />
         <DataVisualizationGrid list={list} />

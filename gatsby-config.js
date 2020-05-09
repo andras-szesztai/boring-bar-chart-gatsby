@@ -1,38 +1,57 @@
 module.exports = {
   siteMetadata: {
-    title: `Boring Bar Chart`,
-    description: `A Data Visualisation Site`,
-    author: `@AndSzesztai`,
+    title: "Boring Bar Chart",
+    description:
+      "A data visualization and blog site that provides a collection of interactive dashboards and charts built by using mainly d3.js and React.",
+    keywords:
+      "Data Visualization, React, D3.js, Interactive, Dashboard, Blog, Gatsby, Javascript, Animation",
+    author: "András Szesztai",
   },
   plugins: [
-    `gatsby-plugin-react-helmet`,
+    "gatsby-plugin-react-helmet",
+    "gatsby-plugin-mdx",
+    "gatsby-plugin-theme-ui",
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: `images`,
+        name: "images",
         path: `${__dirname}/src/images`,
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
-    `gatsby-plugin-styled-components`,
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
-        start_url: `/`,
-        display: `minimal-ui`,
-        icon: `src/images/logo.png`, // This path is relative to the root of the site.
+        name: "posts",
+        path: `${__dirname}/posts`,
+      },
+    },
+    "gatsby-transformer-sharp",
+    "gatsby-plugin-sharp",
+    "gatsby-plugin-styled-components",
+    "gatsby-plugin-emotion",
+    {
+      resolve: "gatsby-plugin-manifest",
+      options: {
+        name: "gatsby-starter-default",
+        short_name: "starter",
+        start_url: "/",
+        display: "minimal-ui",
+        icon: "src/images/logo.png", // This path is relative to the root of the site.
       },
     },
     {
-      resolve: `gatsby-source-contentful`,
+      resolve: "gatsby-source-contentful",
       options: {
-        spaceId: `w36cqgpg2pdu`,
-        accessToken: 'ih7LJB9xSp9alB5BlKkaxBKmCdtDhG2Rknw_xe5PDdY',
+        spaceId: "w36cqgpg2pdu",
+        accessToken: "ih7LJB9xSp9alB5BlKkaxBKmCdtDhG2Rknw_xe5PDdY",
       },
     },
+    // {
+    //   resolve: `gatsby-plugin-page-creator`,
+    //   options: {
+    //     path: `${__dirname}/posts`,
+    //   },
+    // },
   ],
 }
 
