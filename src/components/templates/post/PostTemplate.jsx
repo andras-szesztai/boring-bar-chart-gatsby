@@ -1,14 +1,15 @@
 import React from "react"
 import { graphql } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
+import Post from "../../../../posts/00-first-post/first-post.mdx"
 
 import { css } from "@emotion/core"
 
 export const query = graphql`
-  query($slug: String!){
+  query MdxBlogPost($slug: String!) {
     mdx(frontmatter: { slug: { eq: $slug } }) {
       frontmatter {
-        title,
+        title
         author
       }
       body
@@ -16,13 +17,13 @@ export const query = graphql`
   }
 `
 
-const PostTemplate = ({data}) => {
-  console.log(data)
+const PostTemplate = ({ data: { mdx: post } }) => {
+  const { frontmatter, body } = post
   return (
     <>
-      <h1>Post title</h1>
-      <p>Posted by: author</p>
-      <p>Post body goes here</p>
+      <h1>{frontmatter.title}</h1>
+      <p>Posted by: {frontmatter.author}</p>
+      <MDXRenderer>{body}</MDXRenderer>
     </>
   )
 }
