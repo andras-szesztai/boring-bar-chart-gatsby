@@ -11,6 +11,13 @@ module.exports = {
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-mdx",
     {
+      resolve: "gatsby-plugin-theme-ui",
+      options: {
+        prismPreset: "shades-of-purple",
+        // preset: "@theme-ui/preset-funk",
+      },
+    },
+    {
       resolve: "gatsby-source-filesystem",
       options: {
         name: "images",
