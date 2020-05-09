@@ -52,7 +52,6 @@ const TestDiv = styled(animated.div)`
 `
 
 function DataVisualizationGrid({ list, isDataViz }) {
-  const transRef = useRef()
   const indexedList= list.map((node, i)  => ({ ...node, index: i }))
   const transitions = useTransition(
     isDataViz ? indexedList : [],

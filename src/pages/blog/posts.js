@@ -20,6 +20,7 @@ const PostPreview = ({ post }) => {
 
 export default function() {
   const posts = usePosts()
+  console.log(posts)
   return (
     <>
       <SiteHelmet/>

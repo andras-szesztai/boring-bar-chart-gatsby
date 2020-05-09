@@ -12,6 +12,14 @@ module.exports = {
     "gatsby-plugin-mdx",
     "gatsby-plugin-theme-ui",
     {
+      resolve: `gatsby-plugin-layout`,
+      options: {
+        component: require.resolve(
+          `./src/components/organisms/layout/Header/Header.jsx`
+        ),
+      },
+    },
+    {
       resolve: "gatsby-source-filesystem",
       options: {
         name: "images",
@@ -58,4 +66,3 @@ module.exports = {
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
-  

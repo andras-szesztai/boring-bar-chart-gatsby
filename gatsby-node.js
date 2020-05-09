@@ -37,3 +37,12 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     })
   })
 }
+
+exports.onCreatePage = ({ page, actions }) => {
+  const { createPage } = actions
+
+  if (page.path.match(/visualizations/)) {
+    page.context.layout = "visualizations"
+    createPage(page)
+  }
+}

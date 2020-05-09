@@ -2,7 +2,6 @@ import React from "react"
 import styled from "styled-components"
 
 import { GridContainer } from "../../atoms"
-import { Header } from "../../organisms"
 
 const LayoutContainer = styled(GridContainer)`
   grid-row-gap: 0;
@@ -14,7 +13,6 @@ const LayoutContainer = styled(GridContainer)`
 function Layout({ children }) {
   return (
     <LayoutContainer>
-      <Header />
       {children}
     </LayoutContainer>
   )

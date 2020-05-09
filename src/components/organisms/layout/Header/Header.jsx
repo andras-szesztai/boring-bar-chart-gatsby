@@ -77,33 +77,39 @@ const LinkContainer = styled.div`
   }
 `
 
-export default function Header() {
+export default function Header({ children, pageContext }) {
+  console.log(pageContext)
   return (
-    <HeaderContainer>
-      <LinksContainer>
-        <IconContainer style={{ cursor: "pointer" }}>
-          <IconChart dims={40} />
-        </IconContainer>
-        {/* <LinkContainer isActive={true}>
-          <Link to="/blog/posts">Home</Link>
-        </LinkContainer>
-        <LinkContainer isActive={true}>
-          <Link to="/blog/posts">Blog</Link>
-        </LinkContainer> */}
-      </LinksContainer>
-      <FlexContainer cursor="pointer">
-        {SOCIAL_LINKS.map(({ link, component: Component, componentProps }) => (
-          <Container
-            key={link}
-            marginLeft={isMobileOnly ? 3 : 4}
-            paddingTop={1}
-          >
-            <a href={`${link}`} target="_blank" rel="noopener noreferrer">
-              <Component {...componentProps} />
-            </a>
-          </Container>
-        ))}
-      </FlexContainer>
-    </HeaderContainer>
+    <>
+      <HeaderContainer>
+        <LinksContainer>
+          <IconContainer style={{ cursor: "pointer" }}>
+            <IconChart dims={40} />
+          </IconContainer>
+          <LinkContainer isActive={true}>
+            <Link to="/">Home</Link>
+          </LinkContainer>
+          <LinkContainer isActive={true}>
+            <Link to="/blog/posts">Blog</Link>
+          </LinkContainer>
+        </LinksContainer>
+        <FlexContainer cursor="pointer">
+          {SOCIAL_LINKS.map(
+            ({ link, component: Component, componentProps }) => (
+              <Container
+                key={link}
+                marginLeft={isMobileOnly ? 3 : 4}
+                paddingTop={1}
+              >
+                <a href={`${link}`} target="_blank" rel="noopener noreferrer">
+                  <Component {...componentProps} />
+                </a>
+              </Container>
+            )
+          )}
+        </FlexContainer>
+      </HeaderContainer>
+      {children}
+    </>
   )
 }
