@@ -2,6 +2,8 @@ import React from "react"
 import { Link } from "gatsby"
 
 import { usePosts } from "../../hooks"
+import { SiteHelmet } from "../../components/molecules"
+import { Layout } from "../../components/templates"
 
 const PostPreview = ({ post }) => {
   return (
@@ -19,10 +21,9 @@ const PostPreview = ({ post }) => {
 export default function() {
   const posts = usePosts()
   return (
-    <div>
-      {posts.map(post => (
-        <PostPreview key={post.slug} post={post} />
-      ))}
-    </div>
+    <>
+      <SiteHelmet/>
+      <Layout/>
+    </>
   )
 }
