@@ -2,28 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { useTransition, animated } from "react-spring"
 
-import { GridContainer } from "../../atoms"
 import { PortfolioItem } from "../../molecules"
-
-const MainGrid = styled(GridContainer)`
-  padding: 4rem;
-  overflow-y: auto;
-  grid-row-gap: 1rem;
-
-  @media (min-width: 700px) {
-    grid-template-columns: repeat(2, 2fr);
-    padding: 6rem;
-    grid-column-gap: 0rem;
-    grid-row-gap: 0rem;
-  }
-
-  @media (min-width: 1300px) {
-    padding: 8rem;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 6rem;
-    grid-row-gap: 3rem;
-  }
-`
 
 const ItemContainer = styled(animated.div)`
   overflow: hidden;
@@ -44,15 +23,11 @@ function DataVisualizationGrid({ list }) {
     leave: { opacity: 0, transform: "scale(0)" },
   })
 
-  return (
-    <MainGrid>
-      {transitions.map(({ item, key, props }) => (
-        <ItemContainer key={key} style={props}>
-          <PortfolioItem data={item.node} />
-        </ItemContainer>
-      ))}
-    </MainGrid>
-  )
+  return transitions.map(({ item, key, props }) => (
+    <ItemContainer key={key} style={props}>
+      <PortfolioItem data={item.node} />
+    </ItemContainer>
+  ))
 }
 
 export default DataVisualizationGrid

@@ -11,18 +11,11 @@ module.exports = {
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-mdx",
     "gatsby-plugin-theme-ui",
+    "gatsby-plugin-layout",
     {
       resolve: "gatsby-plugin-page-transitions",
       options: {
         transitionTime: 500,
-      },
-    },
-    {
-      resolve: `gatsby-plugin-layout`,
-      options: {
-        component: require.resolve(
-          `./src/components/organisms/layout/Header/Header.jsx`
-        ),
       },
     },
     {

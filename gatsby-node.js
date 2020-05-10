@@ -45,4 +45,8 @@ exports.onCreatePage = ({ page, actions }) => {
     page.context.layout = "visualizations"
     createPage(page)
   }
+  if (page.path.match(/post/)) {
+    page.context.layout = "blogPost"
+    createPage(page)
+  }
 }

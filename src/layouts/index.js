@@ -3,18 +3,14 @@ import styled from "styled-components"
 import { isMobileOnly } from "react-device-detect"
 import { Link } from "gatsby"
 import PageTransition from "gatsby-plugin-page-transitions"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { GoTriangleDown } from "react-icons/go"
 
-import { FlexContainer, Container } from "../../../atoms"
-import { IconChart } from "../../../molecules"
-import SOCIAL_LINKS from "../../../../constants/social-links"
-import { space, dropShadow, z } from "../../../../themes/theme"
-import {
-  themifyColor,
-  themifyFontSize,
-  themifyFontWeight,
-} from "../../../../themes/mixins"
+import { FlexContainer, GridContainer, Container } from "../components/atoms"
+import { dropShadow, space, z } from "../themes/theme"
+import { themifyColor, themifyFontSize, themifyFontWeight } from "../themes/mixins"
+import { IconChart } from "../components/molecules"
+import SOCIAL_LINKS from "../constants/social-links"
 
 const LinksContainer = styled.div`
   display: flex;
@@ -44,6 +40,28 @@ const HeaderContainer = styled(FlexContainer)`
   }
 `
 
+const MainGridOverview = styled(GridContainer)`
+  padding: 4rem;
+  overflow-y: auto;
+  grid-row-gap: 1rem;
+
+  @media (min-width: 700px) {
+    grid-template-columns: repeat(2, 2fr);
+    padding: 6rem;
+    grid-column-gap: 0rem;
+    grid-row-gap: 0rem;
+  }
+
+  @media (min-width: 1300px) {
+    padding: 8rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 6rem;
+    grid-row-gap: 3rem;
+  }
+`
+
+const BlogPostLayout = styled(motion.div)``
+
 const IconContainer = styled.div`
   display: flex;
   align-items: center;
@@ -66,6 +84,7 @@ const LinkContainer = styled(motion.div)`
     color: #333;
     border-radius: 2px;
     line-height: 1.25;
+    margin-top: 3px;
   }
 `
 
@@ -86,8 +105,9 @@ const LINKS = [
   { text: "Blog", path: "/blog" },
 ]
 
-export default function Header({ children, pageContext, location }) {
+export default function Layout({ children, pageContext, location }) {
   const isVisualization = pageContext.layout === "visualizations"
+  const isBlogPost = pageContext.layout === "blogPost"
   const [hoveredObject, setHoveredObject] = useState({
     bottom: 50,
     height: 40,
@@ -140,7 +160,6 @@ export default function Header({ children, pageContext, location }) {
               <IconContainer style={{ cursor: "pointer" }}>
                 <IconChart dims={40} />
               </IconContainer>
-
               {LINKS.map(link => (
                 <Link to={link.path}>
                   <LinkContainer
@@ -178,7 +197,13 @@ export default function Header({ children, pageContext, location }) {
           </HeaderContainer>
         </>
       )}
-      <PageTransition>{children}</PageTransition>
+      <PageTransition>
+        {isBlogPost ? (
+          <BlogPostLayout>{children}</BlogPostLayout>
+        ) : (
+          <MainGridOverview>{children}</MainGridOverview>
+        )}
+      </PageTransition>
     </>
   )
 }
