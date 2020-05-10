@@ -1,11 +1,12 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { isMobileOnly } from "react-device-detect"
 import { Link } from "gatsby"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { GoTriangleDown } from "react-icons/go"
+import _ from "lodash"
 
-import { FlexContainer, Container } from "../components/atoms"
+import { FlexContainer } from "../components/atoms"
 import { dropShadow, space, z } from "../themes/theme"
 import {
   themifyColor,
@@ -14,6 +15,7 @@ import {
 } from "../themes/mixins"
 import { IconChart } from "../components/molecules"
 import SOCIAL_LINKS from "../constants/social-links"
+import { useArrayRefs } from "../hooks"
 
 const LinksContainer = styled.div`
   display: flex;
@@ -86,83 +88,95 @@ const LINKS = [
   { text: "Blog", path: "/blog" },
 ]
 
-export default function Layout({ children, pageContext }) {
+export default function Layout({ children, pageContext, location }) {
   const isVisualization = pageContext.layout === "visualizations"
-  const [hoveredObject, setHoveredObject] = useState({
-    bottom: 50,
-    height: 40,
-    left: 112,
-    right: 209.21875,
-    top: 10,
-    width: 97.21875,
-    x: 112,
-    y: 10,
-  })
-  const [activeObject, setActiveObject] = useState({
-    bottom: 50,
-    height: 40,
-    left: 112,
-    right: 209.21875,
-    top: 10,
-    width: 97.21875,
-    x: 112,
-    y: 10,
-  })
+  const [activeObject, setActiveObject] = useState(undefined)
+  const [hoveredObject, setHoveredObject] = useState(undefined)
+
+  const linkNavRefs = useArrayRefs(LINKS.length)
+
+  useEffect(() => {
+    if (!activeObject && location) {
+      const currentActive = LINKS.findIndex(
+        ({ path }) => location.pathname === path
+      )
+      const currObjectBound = linkNavRefs.current[
+        currentActive
+      ].current.getBoundingClientRect()
+      setActiveObject(currObjectBound)
+      setHoveredObject(currObjectBound)
+    }
+  }, [activeObject, location, linkNavRefs])
 
   return (
     <>
       {!isVisualization && (
         <>
-          <SelectedTriangleContainer
-            initial={{
-              x: activeObject.x + activeObject.width / 2 - 15,
-              opacity: 1,
-            }}
-            animate={{
-              x: activeObject.x + activeObject.width / 2 - 15,
-            }}
-          >
-            <GoTriangleDown size={30} color="#333" />
-          </SelectedTriangleContainer>
-          <HoverTriangleContainer
-            initial={{
-              opacity: 0,
-              x: hoveredObject.x + hoveredObject.width / 2 - 15,
-            }}
-            animate={{
-              x: hoveredObject.x + hoveredObject.width / 2 - 15,
-              opacity: 0.25,
-            }}
-          >
-            <GoTriangleDown size={30} color="#333" />
-          </HoverTriangleContainer>
+          <AnimatePresence>
+            {activeObject && (
+              <SelectedTriangleContainer
+                initial={{
+                  x: activeObject.x + activeObject.width / 2 - 15,
+                  opacity: 0,
+                }}
+                animate={{
+                  x: activeObject.x + activeObject.width / 2 - 15,
+                  opacity: 1,
+                }}
+              >
+                <GoTriangleDown size={30} color="#333" />
+              </SelectedTriangleContainer>
+            )}
+          </AnimatePresence>
+          {hoveredObject && (
+            <HoverTriangleContainer
+              initial={{
+                x: hoveredObject.x + hoveredObject.width / 2 - 15,
+                opacity: 0,
+              }}
+              animate={{
+                x: hoveredObject.x + hoveredObject.width / 2 - 15,
+                opacity: 0.25,
+              }}
+            >
+              <GoTriangleDown size={30} color="#333" />
+            </HoverTriangleContainer>
+          )}
           <HeaderContainer>
             <LinksContainer>
               <IconContainer style={{ cursor: "pointer" }}>
                 <IconChart dims={40} />
               </IconContainer>
-              {LINKS.map(link => (
+              {LINKS.map((link, i) => (
                 <Link to={link.path}>
                   <LinkContainer
+                    ref={linkNavRefs.current[i]}
                     onHoverStart={event => {
                       const currHovered = event.path[0].getBoundingClientRect()
-                      if (hoveredObject !== currHovered)
+                      if (!_.isEqual(hoveredObject, currHovered))
                         setHoveredObject(currHovered)
                     }}
-                    onClick={() => setActiveObject(hoveredObject)}
+                    onTap={() => {
+                      if (!_.isEqual(activeObject, hoveredObject))
+                        setActiveObject(hoveredObject)
+                    }}
                   >
                     <Link to={link.path}>{link.text}</Link>
                   </LinkContainer>
                 </Link>
               ))}
             </LinksContainer>
-            <FlexContainer cursor="pointer">
+            <FlexContainer>
               {SOCIAL_LINKS.map(
                 ({ link, component: Component, componentProps }) => (
-                  <Container
+                  <motion.div
                     key={link}
-                    marginLeft={isMobileOnly ? 3 : 4}
-                    paddingTop={1}
+                    whileHover={{ scale: 1.3 }}
+                    style={{
+                      marginLeft: isMobileOnly ? space[3] : space[4],
+                      paddingTop: space[1],
+                      cursor: "pointer",
+                    }}
                   >
                     <a
                       href={`${link}`}
@@ -171,7 +185,7 @@ export default function Layout({ children, pageContext }) {
                     >
                       <Component {...componentProps} />
                     </a>
-                  </Container>
+                  </motion.div>
                 )
               )}
             </FlexContainer>
