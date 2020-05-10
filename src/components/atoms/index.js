@@ -5,7 +5,8 @@ import {
   GridContainer,
   SortableItem,
   CloseIconContainer,
-  Container
+  Container,
+  MainGridContainer
 } from "./containers"
 import { Title, ColoredSpan, LinkAnchor, Ribbon} from "./textElements"
 import { NeumorphButton } from "./buttons"
@@ -30,5 +31,6 @@ export {
   Container,
   LinkAnchor, 
   AxisLine,
-  Ribbon
+  Ribbon,
+  MainGridContainer
 }
