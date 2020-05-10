@@ -85,7 +85,7 @@ function PortfolioItem({
           padding={isMobileOnly ? 5 : undefined}
         />
       )}
-      <FlexContainer pos="relative" fullSize align="flex-start">
+      <FlexContainer  pos="absolute" fullSize align="flex-start" pointerEvents="none">
         <Image style={{ minWidth: "100%" }} fluid={image.fluid} />
       </FlexContainer>
       <TextContainer

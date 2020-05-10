@@ -1,6 +1,5 @@
 import React from "react"
 import styled from "styled-components"
-import numToWords from "num-to-words"
 import { useTransition, animated } from "react-spring"
 
 import { GridContainer } from "../../atoms"
@@ -10,7 +9,6 @@ const MainGrid = styled(GridContainer)`
   padding: 4rem;
   overflow-y: auto;
   grid-row-gap: 1rem;
-  grid-template-rows: repeat(5, 25rem);
 
   @media (min-width: 700px) {
     grid-template-columns: repeat(2, 2fr);
@@ -32,6 +30,8 @@ const ItemContainer = styled(animated.div)`
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   margin-bottom: 2rem;
 
+  height: 25rem;
+
   will-change: transform, opacity;
 `
 
@@ -43,6 +43,7 @@ function DataVisualizationGrid({ list }) {
     enter: { opacity: 1, transform: "scale(1)" },
     leave: { opacity: 0, transform: "scale(0)" },
   })
+
   return (
     <MainGrid>
       {transitions.map(({ item, key, props }) => (
