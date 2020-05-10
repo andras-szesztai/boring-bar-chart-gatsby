@@ -5,7 +5,7 @@ import { Link } from "gatsby"
 import { motion } from "framer-motion"
 import { GoTriangleDown } from "react-icons/go"
 
-import { FlexContainer, GridContainer, Container } from "../components/atoms"
+import { FlexContainer, Container } from "../components/atoms"
 import { dropShadow, space, z } from "../themes/theme"
 import {
   themifyColor,

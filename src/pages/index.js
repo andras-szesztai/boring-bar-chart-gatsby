@@ -4,8 +4,7 @@ import PageTransition from "gatsby-plugin-page-transitions"
 import { useTransition, animated } from "react-spring"
 import styled from "styled-components"
 
-import { Layout, DataVisualizationGrid } from "../components/templates"
-import { SiteHelmet, PortfolioItem } from "../components/molecules"
+import { PortfolioItem, SiteHelmet } from "../components/molecules"
 import { MainGridContainer } from "../components/atoms"
 
 const ItemContainer = styled(animated.div)`
@@ -32,15 +31,18 @@ function IndexPage({ data }) {
   })
 
   return (
-    <PageTransition>
-      <MainGridContainer>
-        {transitions.map(({ item, key, props }) => (
-          <ItemContainer key={key} style={props}>
-            <PortfolioItem data={item.node} />
-          </ItemContainer>
-        ))}
-      </MainGridContainer>
-    </PageTransition>
+    <>
+      <SiteHelmet pageTitle="Boring Bar Chart - Portfolio" />
+      <PageTransition>
+        <MainGridContainer>
+          {transitions.map(({ item, key, props }) => (
+            <ItemContainer key={key} style={props}>
+              <PortfolioItem data={item.node} />
+            </ItemContainer>
+          ))}
+        </MainGridContainer>
+      </PageTransition>
+    </>
   )
 }
 
