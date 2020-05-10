@@ -147,8 +147,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
       if (
         activeNav &&
         location.pathname !== prevLocation.pathname &&
-        currNavElement &&
-        isMobilePortrait
+        currNavElement
       ) {
         const currObjectBound = currNavElement.getBoundingClientRect()
         setActiveNav(currObjectBound)

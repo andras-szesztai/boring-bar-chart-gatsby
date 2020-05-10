@@ -39,7 +39,7 @@ export default function NavigationLinks({
   anchorColor,
   isBottom,
 }) {
-  // TODO: check i anchor is working
+  // TODO: check if anchor is working
   return links.map((link, i) => (
     <LinkContainer
       key={link.path}
@@ -59,8 +59,7 @@ export default function NavigationLinks({
       anchorColor={anchorColor}
       isBottom={isBottom}
       style={{
-        marginLeft:
-          typeof isBottom == "boolean" && !isBottom && link.marginLeft,
+        marginLeft: !isBottom && link.marginLeft,
       }}
     >
       <Link to={link.path}>{link.text}</Link>

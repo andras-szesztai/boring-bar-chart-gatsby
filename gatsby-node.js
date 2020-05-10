@@ -29,7 +29,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     actions.createPage({
       path: post.frontmatter.slug,
       component: require.resolve(
-        "./src/components/templates/post/PostTemplate.jsx"
+        "./src/layouts"
       ),
       context: {
         slug: post.frontmatter.slug,
