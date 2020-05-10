@@ -85,64 +85,71 @@ const SelectedTriangleContainer = styled(motion.div)`
   z-index: ${z["super"]};
 `
 
-const LINKS = [
+const NAV_LINKS = [
   { text: "Portfolio", path: "/", marginLeft: space[3] },
   { text: "Blog", path: "/blog", marginLeft: space[2] },
 ]
 
 export default function Layout({ children, pageContext, location }) {
   const isVisualization = pageContext.layout === "visualizations"
-
-  const [activeObject, setActiveObject] = useState(undefined)
-  const [headerIsHovered, setHeaderIsHovered] = useState(false)
-  const [isIconChartHovered, setIsIconChartHovered] = useState(false)
-  const [isLinkHovered, setIsLinkHovered] = useState(false)
-  const [hoverX, setHoverX] = useState(undefined)
   const prevLocation = usePrevious(location)
 
-  const linkNavRefs = useArrayRefs(LINKS.length)
+  const [activeNav, setActiveNav] = useState(undefined)
+  const [hoveredNav, setHoveredNav] = useState(undefined)
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
+  const [isIconChartHovered, setIsIconChartHovered] = useState(false)
+  const [isLinkHovered, setIsLinkHovered] = useState(false)
+
+  const linkNavRefs = useArrayRefs(NAV_LINKS.length)
 
   useEffect(() => {
-    if (!activeObject && location) {
-      const currentActive = LINKS.findIndex(
+    if (!activeNav && location) {
+      const currentActive = NAV_LINKS.findIndex(
         ({ path }) => location.pathname === path
       )
       const currObjectBound = linkNavRefs.current[
         currentActive
       ].current.getBoundingClientRect()
-      setActiveObject(currObjectBound)
-      setHoverX(currObjectBound.x + currObjectBound.width / 2 - 5)
+      setActiveNav(currObjectBound)
+      setHoveredNav(currObjectBound.x + currObjectBound.width / 2 - 5)
     }
     if (location !== prevLocation) {
-      const currentActive = LINKS.findIndex(
+      const currentActive = NAV_LINKS.findIndex(
         ({ path }) => location.pathname === path
       )
       const currObjectBound = linkNavRefs.current[
         currentActive
       ].current.getBoundingClientRect()
-      if (!_.isEqual(currObjectBound, activeObject))
-        setActiveObject(currObjectBound)
-      setHoverX(currObjectBound.x + currObjectBound.width / 2 - 5)
+      if (!_.isEqual(currObjectBound, activeNav)) setActiveNav(currObjectBound)
+      setHoveredNav(currObjectBound.x + currObjectBound.width / 2 - 5)
     }
-  }, [activeObject, location, linkNavRefs, prevLocation])
+  }, [activeNav, location, linkNavRefs, prevLocation])
 
   const bind = useMove(({ xy }) => {
-    !isIconChartHovered && !isLinkHovered && headerIsHovered && setHoverX(xy[0])
+    !isIconChartHovered &&
+      !isLinkHovered &&
+      isHeaderHovered &&
+      setHoveredNav(xy[0])
   })
+
+  const setActiveHover = event => {
+    const currHovered = event.path[0].getBoundingClientRect()
+    setHoveredNav(currHovered.x + currHovered.width / 2 - 5)
+  }
 
   return (
     <>
       {!isVisualization && (
         <>
           <AnimatePresence>
-            {activeObject && (
+            {activeNav && (
               <SelectedTriangleContainer
                 initial={{
-                  x: activeObject.x + activeObject.width / 2 - 15,
+                  x: activeNav.x + activeNav.width / 2 - 15,
                   opacity: 0,
                 }}
                 animate={{
-                  x: activeObject.x + activeObject.width / 2 - 15,
+                  x: activeNav.x + activeNav.width / 2 - 15,
                   opacity: 1,
                 }}
               >
@@ -151,15 +158,15 @@ export default function Layout({ children, pageContext, location }) {
             )}
           </AnimatePresence>
           <AnimatePresence>
-            {!!hoverX && !isIconChartHovered && (
+            {!!hoveredNav && !isIconChartHovered && (
               <HoverTriangleContainer
                 initial={{
-                  x: hoverX - 10,
+                  x: hoveredNav - 10,
                   opacity: 0,
                   color: "#333",
                 }}
                 animate={{
-                  x: hoverX - 10,
+                  x: hoveredNav - 10,
                   opacity: isLinkHovered ? 0.7 : 0.2,
                 }}
                 exit={{
@@ -173,36 +180,35 @@ export default function Layout({ children, pageContext, location }) {
           <HeaderContainer
             {...bind()}
             onMouseEnter={() => {
-              setHeaderIsHovered(true)
+              setIsHeaderHovered(true)
             }}
             onMouseLeave={() => {
-              setHeaderIsHovered(false)
-              setHoverX(activeObject.x + activeObject.width / 2 - 5)
+              setIsHeaderHovered(false)
+              setHoveredNav(activeNav.x + activeNav.width / 2 - 5)
             }}
           >
             <LinksContainer>
               <IconContainer
                 onHoverStart={event => {
-                  const currHovered = event.path[0].getBoundingClientRect()
-                  setHoverX(currHovered.x + currHovered.width / 2 - 5)
+                  setActiveHover(event)
                   setIsIconChartHovered(true)
                 }}
                 onMouseLeave={() => {
                   setIsIconChartHovered(false)
                 }}
-                style={{ cursor: "pointer" }}
               >
                 <IconChart dims={40} />
               </IconContainer>
-              {LINKS.map((link, i) => (
+              {NAV_LINKS.map((link, i) => (
                 <Link to={link.path} style={{ cursor: "auto" }}>
                   <LinkContainer
                     ref={linkNavRefs.current[i]}
                     role="button"
                     onHoverStart={event => {
-                      const currHovered = event.path[0].getBoundingClientRect()
+                      setActiveHover(event)
+                    }}
+                    onMouseEnter={() => {
                       setIsLinkHovered(true)
-                      setHoverX(currHovered.x + currHovered.width / 2 - 5)
                     }}
                     onMouseLeave={() => {
                       setIsLinkHovered(false)
@@ -229,8 +235,8 @@ export default function Layout({ children, pageContext, location }) {
                     }}
                     onHoverStart={event => {
                       const currHovered = event.path[0].getBoundingClientRect()
+                      setHoveredNav(currHovered.x + currHovered.width / 2 - 5)
                       setIsLinkHovered(true)
-                      setHoverX(currHovered.x + currHovered.width / 2 - 5)
                     }}
                     onMouseLeave={() => {
                       setIsLinkHovered(false)
