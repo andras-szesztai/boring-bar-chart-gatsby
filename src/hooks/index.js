@@ -16,3 +16,4 @@ export { default as useScrollPosition } from "./useScrollPosition/useScrollPosit
 export { default as useDebouncedSearch } from "./useDebouncedSearch/useDebouncedSearch"
 export { default as useLocalStorage } from "./useLocalStorage/useLocalStorage"
 export { default as usePosts } from "./usePosts/usePosts"
+export { default as useDeviceOrientation } from "./useDeviceOrientation/useDeviceOrientation"

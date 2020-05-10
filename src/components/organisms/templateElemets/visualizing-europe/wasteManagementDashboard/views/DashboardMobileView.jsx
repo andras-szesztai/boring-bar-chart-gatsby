@@ -8,7 +8,6 @@ import DashboardExplainer from "../DashboardExplainer/DashboardExplainer"
 import SwitchContainer from "../SwitchContainer/SwitchContainer"
 import BigChartsContainer from "../BigChartsContainer/BigChartsContainer"
 
-
 const MainGridLandScape = styled(GridContainer)`
   width: 96%;
   height: 98%;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
+import { withOrientationChange } from "react-device-detect"
 import { isMobileOnly } from "react-device-detect"
 import { Link } from "gatsby"
 import { motion, AnimatePresence } from "framer-motion"
@@ -16,7 +17,7 @@ import {
 } from "../themes/mixins"
 import { IconChart } from "../components/molecules"
 import SOCIAL_LINKS from "../constants/social-links"
-import { useArrayRefs, usePrevious } from "../hooks"
+import { useArrayRefs, usePrevious, useDeviceType, useDeviceOrientation } from "../hooks"
 
 const LinksContainer = styled.div`
   display: flex;
@@ -87,12 +88,17 @@ const SelectedTriangleContainer = styled(motion.div)`
 
 const NAV_LINKS = [
   { text: "Portfolio", path: "/", marginLeft: space[3] },
-  { text: "Blog", path: "/blog", marginLeft: space[2] },
+  { text: "Blog", path: "/blog", marginLeft: space[2] }
 ]
 
-export default function Layout({ children, pageContext, location }) {
+function Layout({ children, pageContext, location, isPortrait }) {
   const isVisualization = pageContext.layout === "visualizations"
   const prevLocation = usePrevious(location)
+
+  const device = useDeviceType()
+  const orientation  = useDeviceOrientation(isPortrait)
+  
+  console.log(orientation)
 
   const [activeNav, setActiveNav] = useState(undefined)
   const [hoveredNav, setHoveredNav] = useState(undefined)
@@ -103,29 +109,33 @@ export default function Layout({ children, pageContext, location }) {
 
   const linkNavRefs = useArrayRefs(NAV_LINKS.length)
 
+  // TODO: fix when resized
   useEffect(() => {
-    if (!activeNav && location) {
-      const currentActive = NAV_LINKS.findIndex(
-        ({ path }) => location.pathname === path
-      )
-      const currObjectBound = linkNavRefs.current[
-        currentActive
-      ].current.getBoundingClientRect()
-      setActiveNav(currObjectBound)
-      setHoveredNav(currObjectBound.x + currObjectBound.width / 2 - 5)
+    if (!isVisualization) {
+      if (!activeNav && location) {
+        const currentActive = NAV_LINKS.findIndex(
+          ({ path }) => location.pathname === path
+        )
+        const currObjectBound =
+          linkNavRefs.current[currentActive].current &&
+          linkNavRefs.current[currentActive].current.getBoundingClientRect()
+        setActiveNav(currObjectBound)
+        setHoveredNav(currObjectBound.x + currObjectBound.width / 2 - 5)
+      }
+      if (location !== prevLocation) {
+        const currentActive = NAV_LINKS.findIndex(
+          ({ path }) => location.pathname === path
+        )
+        const currObjectBound = linkNavRefs.current[
+          currentActive
+        ].current.getBoundingClientRect()
+        if (!_.isEqual(currObjectBound, activeNav))
+          setActiveNav(currObjectBound)
+        setHoveredNav(currObjectBound.x + currObjectBound.width / 2 - 5)
+        setIsInactiveLinkHovered(false)
+      }
     }
-    if (location !== prevLocation) {
-      const currentActive = NAV_LINKS.findIndex(
-        ({ path }) => location.pathname === path
-      )
-      const currObjectBound = linkNavRefs.current[
-        currentActive
-      ].current.getBoundingClientRect()
-      if (!_.isEqual(currObjectBound, activeNav)) setActiveNav(currObjectBound)
-      setHoveredNav(currObjectBound.x + currObjectBound.width / 2 - 5)
-      setIsInactiveLinkHovered(false)
-    }
-  }, [activeNav, location, linkNavRefs, prevLocation])
+  }, [activeNav, location, linkNavRefs, prevLocation, isVisualization])
 
   const bind = useMove(({ xy }) => {
     !isIconChartHovered &&
@@ -171,7 +181,7 @@ export default function Layout({ children, pageContext, location }) {
                   x: hoveredNav - 10,
                   opacity: isLinkHovered ? 0.7 : 0.2,
                   scale: isInactiveLinkHovered ? 1.3 : 1,
-                  y: isInactiveLinkHovered ? 2 : 0
+                  y: isInactiveLinkHovered ? 2 : 0,
                 }}
                 exit={{
                   opacity: 0,
@@ -265,3 +275,5 @@ export default function Layout({ children, pageContext, location }) {
     </>
   )
 }
+
+export default withOrientationChange(Layout)
