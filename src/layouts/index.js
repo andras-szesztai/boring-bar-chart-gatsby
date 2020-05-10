@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { isMobileOnly } from "react-device-detect"
 import { Link } from "gatsby"
@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import { GoTriangleDown } from "react-icons/go"
 import _ from "lodash"
 import { useMove } from "react-use-gesture"
-import Reward from "react-rewards"
 
 import { FlexContainer } from "../components/atoms"
 import { dropShadow, space, z } from "../themes/theme"
@@ -151,24 +150,26 @@ export default function Layout({ children, pageContext, location }) {
               </SelectedTriangleContainer>
             )}
           </AnimatePresence>
-          {!!hoverX && !isIconChartHovered && (
-            <HoverTriangleContainer
-              initial={{
-                x: hoverX - 10,
-                opacity: 0,
-                color: "#333",
-              }}
-              animate={{
-                x: hoverX - 10,
-                opacity: isLinkHovered ? 0.7 : 0.2,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-            >
-              <GoTriangleDown size={30} />
-            </HoverTriangleContainer>
-          )}
+          <AnimatePresence>
+            {!!hoverX && !isIconChartHovered && (
+              <HoverTriangleContainer
+                initial={{
+                  x: hoverX - 10,
+                  opacity: 0,
+                  color: "#333",
+                }}
+                animate={{
+                  x: hoverX - 10,
+                  opacity: isLinkHovered ? 0.7 : 0.2,
+                }}
+                exit={{
+                  opacity: 0,
+                }}
+              >
+                <GoTriangleDown size={30} />
+              </HoverTriangleContainer>
+            )}
+          </AnimatePresence>
           <HeaderContainer
             {...bind()}
             onMouseEnter={() => {
@@ -183,8 +184,8 @@ export default function Layout({ children, pageContext, location }) {
               <IconContainer
                 onHoverStart={event => {
                   const currHovered = event.path[0].getBoundingClientRect()
-                  setIsIconChartHovered(true)
                   setHoverX(currHovered.x + currHovered.width / 2 - 5)
+                  setIsIconChartHovered(true)
                 }}
                 onMouseLeave={() => {
                   setIsIconChartHovered(false)
