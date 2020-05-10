@@ -39,30 +39,31 @@ export default function NavigationLinks({
   anchorColor,
   isBottom,
 }) {
+  // TODO: check i anchor is working
   return links.map((link, i) => (
-    <Link to={link.path} style={{ cursor: "auto" }}>
-      <LinkContainer
-        ref={linkNavRefs.current[i]}
-        role="button"
-        onHoverStart={event => {
-          setActiveHover(event)
-        }}
-        onMouseEnter={() => {
-          setIsLinkHovered(true)
-          setIsInactiveLinkHovered(link.path !== location.pathname)
-        }}
-        onMouseLeave={() => {
-          setIsLinkHovered(false)
-          setIsInactiveLinkHovered(false)
-        }}
-        anchorColor={anchorColor}
-        isBottom={isBottom}
-        style={{
-          marginLeft: !isBottom && link.marginLeft,
-        }}
-      >
-        <Link to={link.path}>{link.text}</Link>
-      </LinkContainer>
-    </Link>
+    <LinkContainer
+      key={link.path}
+      ref={linkNavRefs.current[i]}
+      role="button"
+      onHoverStart={event => {
+        setActiveHover(event)
+      }}
+      onMouseEnter={() => {
+        setIsLinkHovered(true)
+        setIsInactiveLinkHovered(link.path !== location.pathname)
+      }}
+      onMouseLeave={() => {
+        setIsLinkHovered(false)
+        setIsInactiveLinkHovered(false)
+      }}
+      anchorColor={anchorColor}
+      isBottom={isBottom}
+      style={{
+        marginLeft:
+          typeof isBottom == "boolean" && !isBottom && link.marginLeft,
+      }}
+    >
+      <Link to={link.path}>{link.text}</Link>
+    </LinkContainer>
   ))
 }

@@ -132,12 +132,24 @@ function Layout({ children, pageContext, location, isPortrait }) {
         ({ path }) => location.pathname === path
       )
       const currNavElement = linkNavRefs.current[currentActive].current
-      if (!activeNav && location && currNavElement) {
-        const currObjectBound = currNavElement.getBoundingClientRect()
+      if (
+        !activeNav &&
+        location &&
+        currNavElement &&
+        (isMobilePortrait || isNotMobilePortrait)
+      ) {
+        const currObjectBound = linkNavRefs.current[
+          currentActive
+        ].current.getBoundingClientRect()
         setActiveNav(currObjectBound)
         !isMobilePortrait && callSetHoveredNav(currObjectBound)
       }
-      if (location !== prevLocation && currNavElement) {
+      if (
+        activeNav &&
+        location.pathname !== prevLocation.pathname &&
+        currNavElement &&
+        isMobilePortrait
+      ) {
         const currObjectBound = currNavElement.getBoundingClientRect()
         setActiveNav(currObjectBound)
         if (!isMobilePortrait) {
@@ -292,7 +304,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
           />
         </FooterContainer>
       )}
-      {isMobilePortrait && (
+      {isMobilePortrait && activeNav && (
         <SelectedBottomTiangleContainer
           initial={{
             x: activeNav.x + activeNav.width / 2 - 15,
