@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { withOrientationChange } from "react-device-detect"
 import { isMobileOnly } from "react-device-detect"
-import { Link } from "gatsby"
 import { motion, AnimatePresence } from "framer-motion"
-import { GoTriangleDown } from "react-icons/go"
-import _ from "lodash"
+import { GoTriangleDown, GoTriangleUp } from "react-icons/go"
 import { useMove } from "react-use-gesture"
 
 import { FlexContainer } from "../components/atoms"
-import { dropShadow, space, z } from "../themes/theme"
-import {
-  themifyColor,
-  themifyFontSize,
-  themifyFontWeight,
-} from "../themes/mixins"
+import { dropShadow, space, z, colors } from "../themes/theme"
 import { IconChart } from "../components/molecules"
 import SOCIAL_LINKS from "../constants/social-links"
-import { useArrayRefs, usePrevious, useDeviceType, useDeviceOrientation } from "../hooks"
+import {
+  useArrayRefs,
+  usePrevious,
+  useDeviceType,
+  useDeviceOrientation,
+} from "../hooks"
+import NavigationLinks from "./NavigationLinks/NavigationLinks"
+import { themifyColor } from "../themes/mixins"
 
 const LinksContainer = styled.div`
   display: flex;
@@ -47,31 +47,36 @@ const HeaderContainer = styled(FlexContainer)`
   }
 `
 
+const FooterContainer = styled(FlexContainer)`
+  position: fixed;
+  width: 100vw;
+  height: 60px;
+  bottom: 0px;
+  right: 0px;
+  background-color: ${themifyColor("grayDarkest")};
+  z-index: 1000;
+  padding: 3rem 3rem;
+
+  justify-content: space-evenly;
+  align-items: center;
+
+  @media (min-width: 700px) {
+    padding: 3rem 4rem;
+  }
+  @media (min-width: 1400px) {
+    padding: 3rem 6rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+`
+
 const IconContainer = styled(motion.div)`
   display: flex;
   align-items: center;
   filter: drop-shadow(${dropShadow.primary});
   cursor: pointer;
-`
-
-const LinkContainer = styled(motion.div)`
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-
-  position: relative;
-  padding: 0 10px;
-
-  a {
-    color: ${themifyColor("grayDarkest")};
-    text-decoration: none;
-    font-size: ${themifyFontSize(3)};
-    font-weight: ${themifyFontWeight(0)};
-    color: #333;
-    border-radius: 2px;
-    line-height: 1.25;
-    margin-top: 2px;
-  }
 `
 
 const HoverTriangleContainer = styled(motion.div)`
@@ -86,19 +91,30 @@ const SelectedTriangleContainer = styled(motion.div)`
   z-index: ${z["super"]};
 `
 
+const SelectedBottomTiangleContainer = styled(motion.div)`
+  position: fixed;
+  bottom: 48px;
+`
+
 const NAV_LINKS = [
   { text: "Portfolio", path: "/", marginLeft: space[3] },
-  { text: "Blog", path: "/blog", marginLeft: space[2] }
+  { text: "Blog", path: "/blog", marginLeft: space[2] },
 ]
 
 function Layout({ children, pageContext, location, isPortrait }) {
   const isVisualization = pageContext.layout === "visualizations"
   const prevLocation = usePrevious(location)
 
+  const callSetHoveredNav = currHovered =>
+    setHoveredNav(currHovered.x + currHovered.width / 2 - 5)
+
   const device = useDeviceType()
-  const orientation  = useDeviceOrientation(isPortrait)
-  
-  console.log(orientation)
+  const orientation = useDeviceOrientation(isPortrait)
+
+  const isMobilePortrait = device === "mobile" && orientation === "portrait"
+  const isNotMobilePortrait =
+    orientation === "landscape" ||
+    (orientation === "portrait" && device !== "mobile")
 
   const [activeNav, setActiveNav] = useState(undefined)
   const [hoveredNav, setHoveredNav] = useState(undefined)
@@ -112,30 +128,33 @@ function Layout({ children, pageContext, location, isPortrait }) {
   // TODO: fix when resized
   useEffect(() => {
     if (!isVisualization) {
-      if (!activeNav && location) {
-        const currentActive = NAV_LINKS.findIndex(
-          ({ path }) => location.pathname === path
-        )
-        const currObjectBound =
-          linkNavRefs.current[currentActive].current &&
-          linkNavRefs.current[currentActive].current.getBoundingClientRect()
+      const currentActive = NAV_LINKS.findIndex(
+        ({ path }) => location.pathname === path
+      )
+      const currNavElement = linkNavRefs.current[currentActive].current
+      if (!activeNav && location && currNavElement) {
+        const currObjectBound = currNavElement.getBoundingClientRect()
         setActiveNav(currObjectBound)
-        setHoveredNav(currObjectBound.x + currObjectBound.width / 2 - 5)
+        !isMobilePortrait && callSetHoveredNav(currObjectBound)
       }
-      if (location !== prevLocation) {
-        const currentActive = NAV_LINKS.findIndex(
-          ({ path }) => location.pathname === path
-        )
-        const currObjectBound = linkNavRefs.current[
-          currentActive
-        ].current.getBoundingClientRect()
-        if (!_.isEqual(currObjectBound, activeNav))
-          setActiveNav(currObjectBound)
-        setHoveredNav(currObjectBound.x + currObjectBound.width / 2 - 5)
-        setIsInactiveLinkHovered(false)
+      if (location !== prevLocation && currNavElement) {
+        const currObjectBound = currNavElement.getBoundingClientRect()
+        setActiveNav(currObjectBound)
+        if (!isMobilePortrait) {
+          callSetHoveredNav(currObjectBound)
+          setIsInactiveLinkHovered(false)
+        }
       }
     }
-  }, [activeNav, location, linkNavRefs, prevLocation, isVisualization])
+  }, [
+    activeNav,
+    location,
+    linkNavRefs,
+    prevLocation,
+    isVisualization,
+    isNotMobilePortrait,
+    isMobilePortrait,
+  ])
 
   const bind = useMove(({ xy }) => {
     !isIconChartHovered &&
@@ -146,51 +165,64 @@ function Layout({ children, pageContext, location, isPortrait }) {
 
   const setActiveHover = event => {
     const currHovered = event.path[0].getBoundingClientRect()
-    setHoveredNav(currHovered.x + currHovered.width / 2 - 5)
+    callSetHoveredNav(currHovered)
+  }
+
+  const navigationLinksProps = {
+    linkNavRefs,
+    links: NAV_LINKS,
+    setActiveHover,
+    setIsLinkHovered,
+    setIsInactiveLinkHovered,
+    location,
   }
 
   return (
     <>
       {!isVisualization && (
         <>
-          <AnimatePresence>
-            {activeNav && (
-              <SelectedTriangleContainer
-                initial={{
-                  x: activeNav.x + activeNav.width / 2 - 15,
-                  opacity: 0,
-                }}
-                animate={{
-                  x: activeNav.x + activeNav.width / 2 - 15,
-                  opacity: 1,
-                }}
-              >
-                <GoTriangleDown size={30} color="#333" />
-              </SelectedTriangleContainer>
-            )}
-          </AnimatePresence>
-          <AnimatePresence>
-            {!!hoveredNav && !isIconChartHovered && (
-              <HoverTriangleContainer
-                initial={{
-                  x: hoveredNav - 10,
-                  opacity: 0,
-                  color: "#333",
-                }}
-                animate={{
-                  x: hoveredNav - 10,
-                  opacity: isLinkHovered ? 0.7 : 0.2,
-                  scale: isInactiveLinkHovered ? 1.3 : 1,
-                  y: isInactiveLinkHovered ? 2 : 0,
-                }}
-                exit={{
-                  opacity: 0,
-                }}
-              >
-                <GoTriangleDown size={30} />
-              </HoverTriangleContainer>
-            )}
-          </AnimatePresence>
+          {isNotMobilePortrait && (
+            <>
+              <AnimatePresence>
+                {activeNav && (
+                  <SelectedTriangleContainer
+                    initial={{
+                      x: activeNav.x + activeNav.width / 2 - 15,
+                      opacity: 0,
+                    }}
+                    animate={{
+                      x: activeNav.x + activeNav.width / 2 - 15,
+                      opacity: 1,
+                    }}
+                  >
+                    <GoTriangleDown size={30} color={colors.grayDarkest} />
+                  </SelectedTriangleContainer>
+                )}
+              </AnimatePresence>
+              <AnimatePresence>
+                {!!hoveredNav && !isIconChartHovered && (
+                  <HoverTriangleContainer
+                    initial={{
+                      x: hoveredNav - 10,
+                      opacity: 0,
+                      color: colors.grayDarkest,
+                    }}
+                    animate={{
+                      x: hoveredNav - 10,
+                      opacity: isLinkHovered ? 0.7 : 0.2,
+                      scale: isInactiveLinkHovered ? 1.3 : 1,
+                      y: isInactiveLinkHovered ? 2 : 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                  >
+                    <GoTriangleDown size={30} />
+                  </HoverTriangleContainer>
+                )}
+              </AnimatePresence>
+            </>
+          )}
           <HeaderContainer
             {...bind()}
             onMouseEnter={() => {
@@ -213,30 +245,9 @@ function Layout({ children, pageContext, location, isPortrait }) {
               >
                 <IconChart dims={40} />
               </IconContainer>
-              {NAV_LINKS.map((link, i) => (
-                <Link to={link.path} style={{ cursor: "auto" }}>
-                  <LinkContainer
-                    ref={linkNavRefs.current[i]}
-                    role="button"
-                    onHoverStart={event => {
-                      setActiveHover(event)
-                    }}
-                    onMouseEnter={() => {
-                      setIsLinkHovered(true)
-                      setIsInactiveLinkHovered(link.path !== location.pathname)
-                    }}
-                    onMouseLeave={() => {
-                      setIsLinkHovered(false)
-                      setIsInactiveLinkHovered(false)
-                    }}
-                    style={{
-                      marginLeft: link.marginLeft,
-                    }}
-                  >
-                    <Link to={link.path}>{link.text}</Link>
-                  </LinkContainer>
-                </Link>
-              ))}
+              {isNotMobilePortrait && (
+                <NavigationLinks {...navigationLinksProps} />
+              )}
             </LinksContainer>
             <FlexContainer>
               {SOCIAL_LINKS.map(
@@ -272,6 +283,27 @@ function Layout({ children, pageContext, location, isPortrait }) {
         </>
       )}
       {children}
+      {isMobilePortrait && (
+        <FooterContainer>
+          <NavigationLinks
+            {...navigationLinksProps}
+            anchorColor="#fff"
+            isBottom
+          />
+        </FooterContainer>
+      )}
+      {isMobilePortrait && (
+        <SelectedBottomTiangleContainer
+          initial={{
+            x: activeNav.x + activeNav.width / 2 - 15,
+          }}
+          animate={{
+            x: activeNav.x + activeNav.width / 2 - 15,
+          }}
+        >
+          <GoTriangleUp size={30} color={colors.grayDarkest} />
+        </SelectedBottomTiangleContainer>
+      )}
     </>
   )
 }
