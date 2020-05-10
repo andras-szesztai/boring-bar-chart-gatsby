@@ -73,6 +73,7 @@
     "react-switch": "^5.0.1",
     "react-tooltip": "^4.1.2",
     "react-tooltip-lite": "^1.11.2",
+    "react-use-gesture": "^7.0.15",
     "styled-components": "^5.1.0",
     "theme-ui": "^0.3.1",
     "use-constant": "^1.0.0"

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { isMobileOnly } from "react-device-detect"
 import { Link } from "gatsby"
 import { motion, AnimatePresence } from "framer-motion"
 import { GoTriangleDown } from "react-icons/go"
 import _ from "lodash"
+import { useMove } from "react-use-gesture"
+import Reward from "react-rewards"
 
 import { FlexContainer } from "../components/atoms"
 import { dropShadow, space, z } from "../themes/theme"
@@ -15,7 +17,7 @@ import {
 } from "../themes/mixins"
 import { IconChart } from "../components/molecules"
 import SOCIAL_LINKS from "../constants/social-links"
-import { useArrayRefs } from "../hooks"
+import { useArrayRefs, usePrevious } from "../hooks"
 
 const LinksContainer = styled.div`
   display: flex;
@@ -45,18 +47,19 @@ const HeaderContainer = styled(FlexContainer)`
   }
 `
 
-const IconContainer = styled.div`
+const IconContainer = styled(motion.div)`
   display: flex;
   align-items: center;
   filter: drop-shadow(${dropShadow.primary});
+  cursor: pointer;
 `
 
 const LinkContainer = styled(motion.div)`
-  margin-left: ${space[4]}px;
   text-decoration: none;
   display: flex;
   align-items: center;
 
+  position: relative;
   padding: 0 10px;
 
   a {
@@ -84,16 +87,22 @@ const SelectedTriangleContainer = styled(motion.div)`
 `
 
 const LINKS = [
-  { text: "Portfolio", path: "/" },
-  { text: "Blog", path: "/blog" },
+  { text: "Portfolio", path: "/", marginLeft: space[3] },
+  { text: "Blog", path: "/blog", marginLeft: space[2] },
 ]
 
 export default function Layout({ children, pageContext, location }) {
   const isVisualization = pageContext.layout === "visualizations"
+
   const [activeObject, setActiveObject] = useState(undefined)
-  const [hoveredObject, setHoveredObject] = useState(undefined)
+  const [headerIsHovered, setHeaderIsHovered] = useState(false)
+  const [isLinkHovered, setIsLinkHovered] = useState(false)
+  const [hoverX, setHoverX] = useState(undefined)
+  const prevLocation = usePrevious(location)
 
   const linkNavRefs = useArrayRefs(LINKS.length)
+
+  const rewardRef = useRef()
 
   useEffect(() => {
     if (!activeObject && location) {
@@ -104,10 +113,27 @@ export default function Layout({ children, pageContext, location }) {
         currentActive
       ].current.getBoundingClientRect()
       setActiveObject(currObjectBound)
-      setHoveredObject(currObjectBound)
+      setHoverX(currObjectBound.x + currObjectBound.width / 2 - 5)
     }
-  }, [activeObject, location, linkNavRefs])
+    if (location !== prevLocation) {
+      const currentActive = LINKS.findIndex(
+        ({ path }) => location.pathname === path
+      )
+      const currObjectBound = linkNavRefs.current[
+        currentActive
+      ].current.getBoundingClientRect()
+      if (!_.isEqual(currObjectBound, activeObject))
+        setActiveObject(currObjectBound)
+      setHoverX(currObjectBound.x + currObjectBound.width / 2 - 5)
+    }
+  }, [activeObject, location, linkNavRefs, prevLocation])
 
+  const bind = useMove(({ xy }) => {
+    !isLinkHovered && headerIsHovered && setHoverX(xy[0])
+  })
+  
+  
+  console.log("bind -> isLinkHovered", isLinkHovered)
   return (
     <>
       {!isVisualization && (
@@ -128,37 +154,76 @@ export default function Layout({ children, pageContext, location }) {
               </SelectedTriangleContainer>
             )}
           </AnimatePresence>
-          {hoveredObject && (
+          {hoverX && (
             <HoverTriangleContainer
               initial={{
-                x: hoveredObject.x + hoveredObject.width / 2 - 15,
+                x: hoverX - 10,
                 opacity: 0,
               }}
               animate={{
-                x: hoveredObject.x + hoveredObject.width / 2 - 15,
-                opacity: 0.25,
+                x: hoverX - 10,
+                opacity: isLinkHovered ? 0.7 : 0.2,
               }}
             >
-              <GoTriangleDown size={30} color="#333" />
+              <Reward
+                ref={rewardRef}
+                type="confetti"
+                config={{
+                  lifetime: 90,
+                  angle: 325,
+                  decay: 0.91,
+                  spread: 160,
+                  startVelocity: 25,
+                  elementCountelementCount: 256,
+                  elementSize: 12,
+                  springAnimation: false,
+                  // colors: Object.values(COLORS),
+                }}
+              >
+                <GoTriangleDown size={30} color="#333" />
+              </Reward>
             </HoverTriangleContainer>
           )}
-          <HeaderContainer>
+          <HeaderContainer
+            {...bind()}
+            onMouseEnter={() => {
+              setHeaderIsHovered(true)
+            }}
+            onMouseLeave={() => {
+              setHeaderIsHovered(false)
+              setHoverX(activeObject.x + activeObject.width / 2 - 5)
+            }}
+          >
             <LinksContainer>
-              <IconContainer style={{ cursor: "pointer" }}>
+              <IconContainer
+                onClick={() => rewardRef.current.rewardMe()}
+                onHoverStart={event => {
+                  const currHovered = event.path[0].getBoundingClientRect()
+                  setIsLinkHovered(true)
+                  setHoverX(currHovered.x + currHovered.width / 2 - 5)
+                }}
+                // onMouseLeave={() => {
+                //   setIsLinkHovered(false)
+                // }}
+                style={{ cursor: "pointer" }}
+              >
                 <IconChart dims={40} />
               </IconContainer>
               {LINKS.map((link, i) => (
-                <Link to={link.path}>
+                <Link to={link.path} style={{ cursor: "auto" }}>
                   <LinkContainer
                     ref={linkNavRefs.current[i]}
+                    role="button"
                     onHoverStart={event => {
                       const currHovered = event.path[0].getBoundingClientRect()
-                      if (!_.isEqual(hoveredObject, currHovered))
-                        setHoveredObject(currHovered)
+                      setIsLinkHovered(true)
+                      setHoverX(currHovered.x + currHovered.width / 2 - 5)
                     }}
-                    onTap={() => {
-                      if (!_.isEqual(activeObject, hoveredObject))
-                        setActiveObject(hoveredObject)
+                    onMouseLeave={() => {
+                      setIsLinkHovered(false)
+                    }}
+                    style={{
+                      marginLeft: link.marginLeft,
                     }}
                   >
                     <Link to={link.path}>{link.text}</Link>
@@ -176,6 +241,14 @@ export default function Layout({ children, pageContext, location }) {
                       marginLeft: isMobileOnly ? space[3] : space[4],
                       paddingTop: space[1],
                       cursor: "pointer",
+                    }}
+                    onHoverStart={event => {
+                      const currHovered = event.path[0].getBoundingClientRect()
+                      setIsLinkHovered(true)
+                      setHoverX(currHovered.x + currHovered.width / 2 - 5)
+                    }}
+                    onMouseLeave={() => {
+                      setIsLinkHovered(false)
                     }}
                   >
                     <a

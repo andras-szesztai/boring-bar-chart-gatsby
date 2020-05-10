@@ -166,7 +166,6 @@ export default function MoviesDashboard() {
   const [isLocked, setIsLocked] = useState(false)
 
   const [favorites, setFavorites] = useLocalStorage("favorites", [])
-  console.log("MoviesDashboard -> favorites", favorites)
 
   // birthday: "1963-12-18"
   // "place_of_birth"
