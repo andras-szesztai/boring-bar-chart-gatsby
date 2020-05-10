@@ -6,11 +6,13 @@ import PageTransition from "gatsby-plugin-page-transitions"
 import { usePosts } from "../../hooks"
 import { SiteHelmet } from "../../components/molecules"
 import { MainGridContainer } from "../../components/atoms"
+import { space } from "../../themes/theme"
 
-const TestDiv = styled(animated.div)`
+const BlogPreview = styled(animated.div)`
   overflow: hidden;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   margin-bottom: 2rem;
+  border-radius: ${space[1]}px;
 
   height: 25rem;
 
@@ -30,7 +32,7 @@ export default function() {
       <PageTransition>
         <MainGridContainer>
           {transitions.map(({ item, key, props }) => (
-            <TestDiv key={key} style={props} />
+            <BlogPreview key={key} style={props} />
           ))}
         </MainGridContainer>
       </PageTransition>

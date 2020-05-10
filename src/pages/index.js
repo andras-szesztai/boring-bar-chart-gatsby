@@ -6,11 +6,13 @@ import styled from "styled-components"
 
 import { PortfolioItem, SiteHelmet } from "../components/molecules"
 import { MainGridContainer } from "../components/atoms"
+import { space } from "../themes/theme"
 
 const ItemContainer = styled(animated.div)`
   overflow: hidden;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   margin-bottom: 2rem;
+  border-radius: ${space[1]}px;
 
   height: 25rem;
 
