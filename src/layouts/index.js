@@ -96,13 +96,12 @@ export default function Layout({ children, pageContext, location }) {
 
   const [activeObject, setActiveObject] = useState(undefined)
   const [headerIsHovered, setHeaderIsHovered] = useState(false)
+  const [isIconChartHovered, setIsIconChartHovered] = useState(false)
   const [isLinkHovered, setIsLinkHovered] = useState(false)
   const [hoverX, setHoverX] = useState(undefined)
   const prevLocation = usePrevious(location)
 
   const linkNavRefs = useArrayRefs(LINKS.length)
-
-  const rewardRef = useRef()
 
   useEffect(() => {
     if (!activeObject && location) {
@@ -129,11 +128,9 @@ export default function Layout({ children, pageContext, location }) {
   }, [activeObject, location, linkNavRefs, prevLocation])
 
   const bind = useMove(({ xy }) => {
-    !isLinkHovered && headerIsHovered && setHoverX(xy[0])
+    !isIconChartHovered && !isLinkHovered && headerIsHovered && setHoverX(xy[0])
   })
-  
-  
-  console.log("bind -> isLinkHovered", isLinkHovered)
+
   return (
     <>
       {!isVisualization && (
@@ -154,34 +151,22 @@ export default function Layout({ children, pageContext, location }) {
               </SelectedTriangleContainer>
             )}
           </AnimatePresence>
-          {hoverX && (
+          {!!hoverX && !isIconChartHovered && (
             <HoverTriangleContainer
               initial={{
                 x: hoverX - 10,
                 opacity: 0,
+                color: "#333",
               }}
               animate={{
                 x: hoverX - 10,
                 opacity: isLinkHovered ? 0.7 : 0.2,
               }}
+              exit={{
+                opacity: 0,
+              }}
             >
-              <Reward
-                ref={rewardRef}
-                type="confetti"
-                config={{
-                  lifetime: 90,
-                  angle: 325,
-                  decay: 0.91,
-                  spread: 160,
-                  startVelocity: 25,
-                  elementCountelementCount: 256,
-                  elementSize: 12,
-                  springAnimation: false,
-                  // colors: Object.values(COLORS),
-                }}
-              >
-                <GoTriangleDown size={30} color="#333" />
-              </Reward>
+              <GoTriangleDown size={30} />
             </HoverTriangleContainer>
           )}
           <HeaderContainer
@@ -196,15 +181,14 @@ export default function Layout({ children, pageContext, location }) {
           >
             <LinksContainer>
               <IconContainer
-                onClick={() => rewardRef.current.rewardMe()}
                 onHoverStart={event => {
                   const currHovered = event.path[0].getBoundingClientRect()
-                  setIsLinkHovered(true)
+                  setIsIconChartHovered(true)
                   setHoverX(currHovered.x + currHovered.width / 2 - 5)
                 }}
-                // onMouseLeave={() => {
-                //   setIsLinkHovered(false)
-                // }}
+                onMouseLeave={() => {
+                  setIsIconChartHovered(false)
+                }}
                 style={{ cursor: "pointer" }}
               >
                 <IconChart dims={40} />
