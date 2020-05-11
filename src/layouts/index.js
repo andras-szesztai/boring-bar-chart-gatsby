@@ -131,9 +131,9 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
       const currentActive = NAV_LINKS.findIndex(
         ({ path }) => location.pathname === path
       )
-
       const currNavElement =
         linkNavRefs.current &&
+        linkNavRefs.current[currentActive] &&
         linkNavRefs.current[currentActive].current
       if (!activeNav && location && currNavElement) {
         const currObjectBound = linkNavRefs.current[
