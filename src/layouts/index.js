@@ -93,7 +93,7 @@ const SelectedTriangleContainer = styled(motion.div)`
 
 const SelectedBottomTiangleContainer = styled(motion.div)`
   position: fixed;
-  bottom: 48px;
+  bottom: 47px;
 `
 
 const NAV_LINKS = [
@@ -101,27 +101,27 @@ const NAV_LINKS = [
   { text: "Blog", path: "/blog", marginLeft: space[2] },
 ]
 
-function Layout({ children, pageContext, location, isPortrait }) {
+function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
   const isVisualization = pageContext.layout === "visualizations"
   const prevLocation = usePrevious(location)
-
+  
   const callSetHoveredNav = currHovered =>
-    setHoveredNav(currHovered.x + currHovered.width / 2 - 5)
-
+  setHoveredNav(currHovered.x + currHovered.width / 2 - 5)
+  
   const device = useDeviceType()
-  const orientation = useDeviceOrientation(isPortrait)
-
+  const orientation = useDeviceOrientation(isPortrait, isLandscape)
+  
   const isMobilePortrait = device === "mobile" && orientation === "portrait"
   const isNotMobilePortrait =
-    orientation === "landscape" ||
-    (orientation === "portrait" && device !== "mobile")
-
+  orientation === "landscape" ||
+  (orientation === "portrait" && device !== "mobile")
+  
   const [activeNav, setActiveNav] = useState(undefined)
   const [hoveredNav, setHoveredNav] = useState(undefined)
   const [isHeaderHovered, setIsHeaderHovered] = useState(false)
   const [isIconChartHovered, setIsIconChartHovered] = useState(false)
   const [isLinkHovered, setIsLinkHovered] = useState(false)
-
+  
   const linkNavRefs = useArrayRefs(NAV_LINKS.length)
 
   // TODO: fix when resized
@@ -150,15 +150,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
         }
       }
     }
-  }, [
-    activeNav,
-    location,
-    linkNavRefs,
-    prevLocation,
-    isVisualization,
-    isNotMobilePortrait,
-    isMobilePortrait,
-  ])
+  }, [activeNav, location, linkNavRefs, prevLocation, isVisualization, isNotMobilePortrait, isMobilePortrait, orientation, device])
 
   const bind = useMove(({ xy }) => {
     !isIconChartHovered &&
@@ -176,7 +168,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
     linkNavRefs,
     links: NAV_LINKS,
     setActiveHover,
-    setIsLinkHovered
+    setIsLinkHovered,
   }
 
   return (
@@ -211,7 +203,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
                     }}
                     animate={{
                       x: hoveredNav - 10,
-                      opacity: isLinkHovered ? 0.7 : 0.2
+                      opacity: isLinkHovered ? 0.7 : 0.2,
                     }}
                     exit={{
                       opacity: 0,
