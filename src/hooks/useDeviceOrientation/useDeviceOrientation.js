@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import usePrevious from "../usePrevious"
 
-export default function(isPortrait, isLandscape) {
+export default function useDeviceOrientation( isPortrait, isLandscape) {
   const [orientation, setOrientation] = useState(undefined)
   const prevIsPortrait = usePrevious(isPortrait)
   const getOrientation = portrait => (portrait ? "portrait" : "landscape")

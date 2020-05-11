@@ -37,6 +37,7 @@ export default function NavigationLinks({
   anchorColor,
   isBottom,
 }) {
+  console.log("links", links)
   return links.map((link, i) => (
     <LinkContainer
       key={link.path}

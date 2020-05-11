@@ -104,24 +104,25 @@ const NAV_LINKS = [
 function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
   const isVisualization = pageContext.layout === "visualizations"
   const prevLocation = usePrevious(location)
-  
+
   const callSetHoveredNav = currHovered =>
-  setHoveredNav(currHovered.x + currHovered.width / 2 - 5)
-  
+    setHoveredNav(currHovered.x + currHovered.width / 2 - 5)
+
   const device = useDeviceType()
   const orientation = useDeviceOrientation(isPortrait, isLandscape)
-  
+
   const isMobilePortrait = device === "mobile" && orientation === "portrait"
   const isNotMobilePortrait =
-  orientation === "landscape" ||
-  (orientation === "portrait" && device !== "mobile")
+  orientation === "landscape" || (!device && device !== "mobile")
   
+  console.log("Layout -> isMobilePortrait", isMobilePortrait)
+  console.log("Layout -> isNotMobilePortrait", isNotMobilePortrait)
   const [activeNav, setActiveNav] = useState(undefined)
   const [hoveredNav, setHoveredNav] = useState(undefined)
   const [isHeaderHovered, setIsHeaderHovered] = useState(false)
   const [isIconChartHovered, setIsIconChartHovered] = useState(false)
   const [isLinkHovered, setIsLinkHovered] = useState(false)
-  
+
   const linkNavRefs = useArrayRefs(NAV_LINKS.length)
 
   // TODO: fix when resized
@@ -150,7 +151,17 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
         }
       }
     }
-  }, [activeNav, location, linkNavRefs, prevLocation, isVisualization, isNotMobilePortrait, isMobilePortrait, orientation, device])
+  }, [
+    activeNav,
+    location,
+    linkNavRefs,
+    prevLocation,
+    isVisualization,
+    isNotMobilePortrait,
+    isMobilePortrait,
+    orientation,
+    device,
+  ])
 
   const bind = useMove(({ xy }) => {
     !isIconChartHovered &&
@@ -171,6 +182,8 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
     setIsLinkHovered,
   }
 
+  console.log(activeNav)
+  console.log("isNotMobilePortrait", isNotMobilePortrait)
   return (
     <>
       {!isVisualization && (
