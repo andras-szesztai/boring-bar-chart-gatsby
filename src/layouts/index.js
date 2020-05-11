@@ -113,10 +113,8 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
 
   const isMobilePortrait = device === "mobile" && orientation === "portrait"
   const isNotMobilePortrait =
-  orientation === "landscape" || (!device && device !== "mobile")
-  
-  console.log("Layout -> isMobilePortrait", isMobilePortrait)
-  console.log("Layout -> isNotMobilePortrait", isNotMobilePortrait)
+    orientation === "landscape" || (!!device && device !== "mobile")
+
   const [activeNav, setActiveNav] = useState(undefined)
   const [hoveredNav, setHoveredNav] = useState(undefined)
   const [isHeaderHovered, setIsHeaderHovered] = useState(false)
@@ -131,7 +129,7 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
       const currentActive = NAV_LINKS.findIndex(
         ({ path }) => location.pathname === path
       )
-      const currNavElement = linkNavRefs.current[currentActive].current
+      const currNavElement = linkNavRefs && linkNavRefs.current[currentActive].current
       if (!activeNav && location && currNavElement) {
         const currObjectBound = linkNavRefs.current[
           currentActive
@@ -182,8 +180,6 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
     setIsLinkHovered,
   }
 
-  console.log(activeNav)
-  console.log("isNotMobilePortrait", isNotMobilePortrait)
   return (
     <>
       {!isVisualization && (
