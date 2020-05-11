@@ -21,7 +21,7 @@ const LinkContainer = styled(motion.div)`
     color: ${themifyColor("grayDarkest")};
     text-decoration: none;
     font-size: ${themifyFontSize(3)};
-    font-weight: ${themifyFontWeight(0)};
+    font-weight: ${({ fontWeight }) => themifyFontWeight(fontWeight || 0)};
     color: ${({ anchorColor }) => anchorColor || "#333"};
     border-radius: 2px;
     line-height: 1.25;
@@ -34,8 +34,8 @@ export default function NavigationLinks({
   links,
   setActiveHover,
   setIsLinkHovered,
-  anchorColor,
   isBottom,
+  ...restProps
 }) {
   return links.map((link, i) => (
     <LinkContainer
@@ -51,7 +51,7 @@ export default function NavigationLinks({
       onMouseLeave={() => {
         setIsLinkHovered(false)
       }}
-      anchorColor={anchorColor}
+      {...restProps}
       isBottom={isBottom}
       style={{
         marginLeft: !isBottom && link.marginLeft,

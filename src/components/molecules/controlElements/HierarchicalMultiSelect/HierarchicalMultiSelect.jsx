@@ -5,7 +5,6 @@ import React from "react"
 const HierarchicalMultiSelect = ({
   data
 }) => {
-  console.log(data)
   return <div>HierarchicalMultiSelect</div>
 }
 

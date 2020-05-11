@@ -131,11 +131,9 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
       const currentActive = NAV_LINKS.findIndex(
         ({ path }) => location.pathname === path
       )
-      console.log("Layout -> currentActive", currentActive)
+
       const currNavElement =
-        linkNavRefs &&
         linkNavRefs.current &&
-        linkNavRefs.current[currentActive] &&
         linkNavRefs.current[currentActive].current
       if (!activeNav && location && currNavElement) {
         const currObjectBound = linkNavRefs.current[
@@ -299,6 +297,7 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
           <NavigationLinks
             {...navigationLinksProps}
             anchorColor="#fff"
+            fontWeight={1}
             isBottom
           />
         </FooterContainer>
