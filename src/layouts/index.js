@@ -5,6 +5,7 @@ import { isMobileOnly } from "react-device-detect"
 import { motion, AnimatePresence } from "framer-motion"
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go"
 import { useMove } from "react-use-gesture"
+import useResizeAware from "react-resize-aware"
 
 import { FlexContainer } from "../components/atoms"
 import { dropShadow, space, z, colors } from "../themes/theme"
@@ -104,6 +105,8 @@ const NAV_LINKS = [
 function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
   const isVisualization = pageContext.layout === "visualizations"
   const prevLocation = usePrevious(location)
+  const [resizeListener, sizes] = useResizeAware()
+  const prevSizes = usePrevious(sizes)
 
   const callSetHoveredNav = currHovered =>
     setHoveredNav(currHovered.x + currHovered.width / 2 - 5)
@@ -123,13 +126,16 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
 
   const linkNavRefs = useArrayRefs(NAV_LINKS.length)
 
-  // TODO: fix when resized
   useEffect(() => {
     if (!isVisualization) {
       const currentActive = NAV_LINKS.findIndex(
         ({ path }) => location.pathname === path
       )
-      const currNavElement = linkNavRefs && linkNavRefs.current[currentActive].current
+      const currNavElement =
+        linkNavRefs &&
+        linkNavRefs.current &&
+        linkNavRefs.current[currentActive] &&
+        linkNavRefs.current[currentActive].current
       if (!activeNav && location && currNavElement) {
         const currObjectBound = linkNavRefs.current[
           currentActive
@@ -139,8 +145,8 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
       }
       if (
         activeNav &&
-        location.pathname !== prevLocation.pathname &&
-        currNavElement
+        (location.pathname !== prevLocation.pathname ||
+          sizes.width !== prevSizes.width)
       ) {
         const currObjectBound = currNavElement.getBoundingClientRect()
         setActiveNav(currObjectBound)
@@ -159,6 +165,8 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
     isMobilePortrait,
     orientation,
     device,
+    sizes,
+    prevSizes,
   ])
 
   const bind = useMove(({ xy }) => {
@@ -234,6 +242,8 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
               setHoveredNav(activeNav.x + activeNav.width / 2 - 5)
             }}
           >
+            {" "}
+            {resizeListener}
             <LinksContainer>
               <IconContainer
                 onHoverStart={event => {
