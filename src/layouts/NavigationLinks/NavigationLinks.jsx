@@ -34,12 +34,9 @@ export default function NavigationLinks({
   links,
   setActiveHover,
   setIsLinkHovered,
-  setIsInactiveLinkHovered,
-  location,
   anchorColor,
   isBottom,
 }) {
-  // TODO: check if anchor is working
   return links.map((link, i) => (
     <LinkContainer
       key={link.path}
@@ -50,11 +47,9 @@ export default function NavigationLinks({
       }}
       onMouseEnter={() => {
         setIsLinkHovered(true)
-        setIsInactiveLinkHovered(link.path !== location.pathname)
       }}
       onMouseLeave={() => {
         setIsLinkHovered(false)
-        setIsInactiveLinkHovered(false)
       }}
       anchorColor={anchorColor}
       isBottom={isBottom}

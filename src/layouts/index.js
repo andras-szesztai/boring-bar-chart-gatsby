@@ -121,7 +121,6 @@ function Layout({ children, pageContext, location, isPortrait }) {
   const [isHeaderHovered, setIsHeaderHovered] = useState(false)
   const [isIconChartHovered, setIsIconChartHovered] = useState(false)
   const [isLinkHovered, setIsLinkHovered] = useState(false)
-  const [isInactiveLinkHovered, setIsInactiveLinkHovered] = useState(false)
 
   const linkNavRefs = useArrayRefs(NAV_LINKS.length)
 
@@ -132,12 +131,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
         ({ path }) => location.pathname === path
       )
       const currNavElement = linkNavRefs.current[currentActive].current
-      if (
-        !activeNav &&
-        location &&
-        currNavElement &&
-        (isMobilePortrait || isNotMobilePortrait)
-      ) {
+      if (!activeNav && location && currNavElement) {
         const currObjectBound = linkNavRefs.current[
           currentActive
         ].current.getBoundingClientRect()
@@ -153,7 +147,6 @@ function Layout({ children, pageContext, location, isPortrait }) {
         setActiveNav(currObjectBound)
         if (!isMobilePortrait) {
           callSetHoveredNav(currObjectBound)
-          setIsInactiveLinkHovered(false)
         }
       }
     }
@@ -183,9 +176,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
     linkNavRefs,
     links: NAV_LINKS,
     setActiveHover,
-    setIsLinkHovered,
-    setIsInactiveLinkHovered,
-    location,
+    setIsLinkHovered
   }
 
   return (
@@ -220,9 +211,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
                     }}
                     animate={{
                       x: hoveredNav - 10,
-                      opacity: isLinkHovered ? 0.7 : 0.2,
-                      scale: isInactiveLinkHovered ? 1.3 : 1,
-                      y: isInactiveLinkHovered ? 2 : 0,
+                      opacity: isLinkHovered ? 0.7 : 0.2
                     }}
                     exit={{
                       opacity: 0,
@@ -294,7 +283,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
         </>
       )}
       {children}
-      {isMobilePortrait && (
+      {!isVisualization && isMobilePortrait && (
         <FooterContainer>
           <NavigationLinks
             {...navigationLinksProps}
@@ -303,7 +292,7 @@ function Layout({ children, pageContext, location, isPortrait }) {
           />
         </FooterContainer>
       )}
-      {isMobilePortrait && activeNav && (
+      {!isVisualization && isMobilePortrait && activeNav && (
         <SelectedBottomTiangleContainer
           initial={{
             x: activeNav.x + activeNav.width / 2 - 15,
