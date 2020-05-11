@@ -131,6 +131,7 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
       const currentActive = NAV_LINKS.findIndex(
         ({ path }) => location.pathname === path
       )
+      console.log("Layout -> currentActive", currentActive)
       const currNavElement =
         linkNavRefs &&
         linkNavRefs.current &&
@@ -242,7 +243,6 @@ function Layout({ children, pageContext, location, isPortrait, isLandscape }) {
               setHoveredNav(activeNav.x + activeNav.width / 2 - 5)
             }}
           >
-            {" "}
             {resizeListener}
             <LinksContainer>
               <IconContainer

@@ -12,6 +12,7 @@ import {
   themifySpace,
   themifyColor,
 } from "../../../../themes/mixins"
+import { space } from "../../../../themes/theme"
 
 const DEVICE_ICONS = {
   desktop: { icon: FaDesktop, size: 20 },
@@ -19,13 +20,41 @@ const DEVICE_ICONS = {
   mobile: { icon: FaMobileAlt, size: 19 },
 }
 
+const ImageContainer = styled(FlexContainer)`
+  position: absolute;
+  align-items: flex-start;
+  pointer-events: none;
+  border-radius: ${space[1]}px;
+  height: 20rem;
+  overflow: hidden;
+
+  @media (min-width: 700px) {
+    height: 22rem;
+  }
+
+  @media (min-width: 1300px) {
+    height: 25rem;
+  }
+`
+
 const TextContainer = styled(GridContainer)`
   transition: all ${themifyTransition("sm")};
   background-color: transparent;
   color: transparent;
+  border-radius: ${space[1]}px;
+  height: 20rem;
+  overflow: hidden;
   :hover {
     background-color: rgba(51, 51, 51, 0.95);
     color: #fff;
+  }
+
+  @media (min-width: 700px) {
+    height: 22rem;
+  }
+
+  @media (min-width: 1300px) {
+    height: 25rem;
   }
 `
 
@@ -85,9 +114,12 @@ function PortfolioItem({
           padding={isMobileOnly ? 5 : undefined}
         />
       )}
-      <FlexContainer  pos="absolute" fullSize align="flex-start" pointerEvents="none">
-        <Image style={{ minWidth: "100%" }} fluid={image.fluid} />
-      </FlexContainer>
+      <ImageContainer fullSize>
+        <Image
+          style={{ minWidth: "100%", overflow: "hidden" }}
+          fluid={image.fluid}
+        />
+      </ImageContainer>
       <TextContainer
         absPos
         fullSize
