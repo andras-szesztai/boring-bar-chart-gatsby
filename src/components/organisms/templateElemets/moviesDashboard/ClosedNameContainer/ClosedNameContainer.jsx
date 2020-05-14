@@ -1,18 +1,18 @@
 import React, { useRef } from "react"
 import { motion } from "framer-motion"
 import styled from "styled-components"
-import { space } from "../../../../../themes/theme"
-import { themifyFontSize } from "../../../../../themes/mixins"
 import chroma from "chroma-js"
 import Reward from "react-rewards"
 import { IoIosStar, IoIosStarOutline } from "react-icons/io"
 
+// Styles
+import { space } from "../../../../../themes/theme"
+import { themifyFontSize } from "../../../../../themes/mixins"
 import {
   COLORS,
   OPACITY_VARIANT,
   ANIMATE_PROPS,
 } from "../../../../../constants/moviesDashboard"
-import { useLocalStorage } from "../../../../../hooks"
 
 const Container = styled(motion.div)`
   position: absolute;
@@ -30,13 +30,13 @@ const Container = styled(motion.div)`
   cursor: pointer;
 `
 
-export default function ClosedNameContainer({ dataSets }) {
+export default function ClosedNameContainer({
+  dataSets,
+  favorites,
+  setFavorites,
+  isFavorited,
+}) {
   const rewardRef = useRef()
-  const [favorites, setFavorites] = useLocalStorage("favorites", [])
-  const isFavorited =
-    favorites &&
-    dataSets.personDetails &&
-    favorites.includes(dataSets.personDetails.id)
   const FavoriteIcon = isFavorited ? IoIosStar : IoIosStarOutline
 
   return (
