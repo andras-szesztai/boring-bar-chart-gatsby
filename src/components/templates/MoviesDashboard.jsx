@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import Lottie from "react-lottie"
 
+
 import {
   useDeviceType,
   useLocalStorage,
@@ -39,10 +40,6 @@ export default function MoviesDashboard() {
     []
   )
 
-  const { response } = useFetchData(
-    "http://assets.ctfassets.net/w36cqgpg2pdu/52FMj0fox03PfBqI6xNaE7/3019b0f81ff724418d716a3fd03f172c/bookmark.json"
-  )
-
   // Frame 60 when it ends
 
   const [isBMarked, setIsBMarked] = useState(false)
@@ -57,13 +54,13 @@ export default function MoviesDashboard() {
     }
   }, [prevIsBMarked, isBMarked, isPaused])
 
-  const defaultOptions = {
-    loop: false,
-    animationData: response,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  }
+  // const defaultOptions = {
+  //   loop: false,
+  //   animationData: animationData,
+  //   rendererSettings: {
+  //     preserveAspectRatio: "xMidYMid slice",
+  //   },
+  // }
 
   return (
     <>
@@ -77,12 +74,12 @@ export default function MoviesDashboard() {
             actions={actions}
           />
           <LottieTest onClick={() => setIsBMarked(prev => !prev)}>
-            <Lottie
-              options={defaultOptions}
+            {/* <Lottie
+              // options={defaultOptions}
               // isPaused={isPaused}
-              direction={-1}
-              isClickToPauseDisabled={true}
-              segments={[64, 65]}
+              // direction={-1}
+              // isClickToPauseDisabled={true}
+              // segments={[64, 65]}
               // eventListeners={[
               //   {
               //     eventName: "enterFrame",
@@ -96,7 +93,7 @@ export default function MoviesDashboard() {
               //     },
               //   },
               // ]}
-            />
+            /> */}
           </LottieTest>
         </div>
       )}
