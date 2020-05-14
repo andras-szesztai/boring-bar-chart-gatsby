@@ -22,6 +22,7 @@ import {
 import ClosedNameContainer from "../ClosedNameContainer/ClosedNameContainer"
 import Image from "../Image/Image"
 import { TextContainer, TitleContainer } from "../styles/styles"
+import FavoriteStar from "../Icons/FavoriteStar"
 
 const CARD_WIDTH = 400
 const CARD_HEIGHT = 240
@@ -202,7 +203,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                     <TitleContainer
                       className="name"
                       onClick={() => {
-                        !isFavorited && rewardRef.current.rewardMe()
+                        // !isFavorited && rewardRef.current.rewardMe()
                         setFavoritePersons(
                           isFavorited ? filterOut() : filterIn()
                         )
@@ -212,10 +213,10 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       <div
                         style={{
                           marginLeft: 10,
-                          transform: "translateY(2px)",
+                          // transform: "translateY(2px)",
                         }}
                       >
-                        <Reward
+                        {/* <Reward
                           ref={rewardRef}
                           type="confetti"
                           config={{
@@ -229,9 +230,10 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                             springAnimation: false,
                             colors: Object.values(COLORS),
                           }}
-                        >
-                          <FavoriteIcon size={22} color={COLORS.favorite} />
-                        </Reward>
+                        > */}
+                          <FavoriteStar />
+                          {/* <FavoriteIcon size={22} color={COLORS.favorite} /> */}
+                        {/* </Reward> */}
                       </div>
                     </TitleContainer>
                     <TextContainer>

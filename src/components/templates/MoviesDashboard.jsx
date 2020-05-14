@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import Lottie from "react-lottie"
 
-
 import {
   useDeviceType,
   useLocalStorage,
