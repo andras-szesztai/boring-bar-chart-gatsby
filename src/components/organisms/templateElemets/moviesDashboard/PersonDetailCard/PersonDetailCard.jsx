@@ -92,24 +92,26 @@ const CardTextGrid = styled(motion.div)`
 
 let animateCard
 
-export default function PersonDetailCard({ dataSets, prevDataSets }) {
+export default function PersonDetailCard({ state, prevState, actions }) {
+  const { dataSets, personDetailsCard: { isOpen } } = state
+  const { openPersonDetails, closePersonDetails } = actions
   const rewardRef = useRef()
 
-  const [isClosed, setIsClosed] = useState(false)
   const [isLocked, setIsLocked] = useState(false)
 
   const [favorites, setFavorites] = useLocalStorage("favorites", [])
 
-  if (!isClosed) animateCard = "animateOpen"
-  if (isClosed) animateCard = "animateClose"
+  if (isOpen) animateCard = "animateOpen"
+  if (!isOpen) animateCard = "animateClose"
 
   if (
-    prevDataSets.personDetails &&
-    prevDataSets.personDetails.name !== dataSets.personDetails.name
+    prevState &&
+    prevState.dataSets.personDetails &&
+    prevState.dataSets.personDetails.name !== dataSets.personDetails.name
   ) {
     if (!isLocked) {
       animateCard = "animateFirst"
-      isClosed && setIsClosed(false)
+      !isOpen && openPersonDetails()
     }
   }
 
@@ -132,7 +134,7 @@ export default function PersonDetailCard({ dataSets, prevDataSets }) {
         >
           <DetailCardContent>
             <AnimatePresence>
-              {isClosed && (
+              {!isOpen && (
                 <IconContainer
                   key="lock"
                   variants={OPACITY_VARIANT}
@@ -154,18 +156,18 @@ export default function PersonDetailCard({ dataSets, prevDataSets }) {
               }}
               role="button"
               onClick={() => {
-                setIsClosed(prev => !prev)
+                isOpen ? closePersonDetails() : openPersonDetails()
                 isLocked && setIsLocked(false)
               }}
               animate={{
-                rotate: isClosed ? 180 : 0,
+                rotate: !isOpen ? 180 : 0,
               }}
               whileHover={{ scale: 1.3 }}
             >
               <IoIosArrowUp size="24" color={COLORS.primary} />
             </IconContainer>
             <AnimatePresence>
-              {isClosed && (
+              {!isOpen && (
                 <ClosedNameContainer
                   dataSets={dataSets}
                   favorites={favorites}
@@ -175,7 +177,7 @@ export default function PersonDetailCard({ dataSets, prevDataSets }) {
               )}
             </AnimatePresence>
             <AnimatePresence>
-              {!isClosed && (
+              {isOpen && (
                 <CardGrid
                   key="content"
                   variants={OPACITY_VARIANT}

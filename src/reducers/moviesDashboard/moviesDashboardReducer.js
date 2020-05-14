@@ -10,10 +10,15 @@ const initialState = {
     personDetails: undefined,
     personCredits: undefined,
   },
+  personDetailsCard: {
+    isOpen: true,
+  },
 }
 
 const SET_ACTIVE_ID = "SET_ACTIVE_ID"
 const FETCH_INFO_BY_ID = "FETCH_INFO_BY_ID"
+const OPEN_PERSON_DETAILS_CARD = "OPEN_PERSON_DETAILS_CARD"
+const CLOSE_PERSON_DETAILS_CARD = "CLOSE_PERSON_DETAILS_CARD"
 
 function moviesDashboardReducer(state, { type, payload }) {
   const types = {
@@ -28,6 +33,20 @@ function moviesDashboardReducer(state, { type, payload }) {
         personCredits: payload.credits,
       },
     }),
+    OPEN_PERSON_DETAILS_CARD: () => ({
+      ...state,
+      personDetailsCard: {
+        ...state.personDetailsCard,
+        isOpen: true,
+      },
+    }),
+    CLOSE_PERSON_DETAILS_CARD: () => ({
+      ...state,
+      personDetailsCard: {
+        ...state.personDetailsCard,
+        isOpen: false,
+      },
+    }),
   }
   return types[type] ? types[type]() : state
 }
@@ -38,6 +57,8 @@ export default function useMoviesDashboardReducer() {
 
   const actions = {
     setActiveNameID: payload => dispatch({ type: SET_ACTIVE_ID, payload }),
+    openPersonDetails: () => dispatch({ type: OPEN_PERSON_DETAILS_CARD }),
+    closePersonDetails: () => dispatch({ type: CLOSE_PERSON_DETAILS_CARD }),
   }
 
   useEffect(() => {

@@ -17,7 +17,6 @@ export default function MoviesDashboard() {
   const device = useDeviceType()
 
   const { state, prevState, actions } = moviesDashboardReducer()
-  const { dataSets } = state
 
   return (
     <>
@@ -26,8 +25,9 @@ export default function MoviesDashboard() {
         <div style={{ userSelect: "none" }}>
           <SearchBar setActiveNameID={actions.setActiveNameID} />
           <PersonDetailCard
-            dataSets={dataSets}
-            prevDataSets={prevState.dataSets}
+            state={state}
+            prevState={prevState}
+            actions={actions}
           />
         </div>
       )}
