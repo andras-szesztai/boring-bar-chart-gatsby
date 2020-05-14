@@ -126,7 +126,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
   const isFavorited =
     favoritePersons &&
     dataSets.personDetails &&
-    favoritePersons.find(fav => fav && fav.id === dataSets.personDetails.id)
+    !!favoritePersons.find(fav => fav && fav.id === dataSets.personDetails.id)
 
   const LockIcon = isLocked ? IoIosLock : IoIosUnlock
 
@@ -208,13 +208,15 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       }}
                     >
                       {dataSets.personDetails.name}
-                      <div
+                      <motion.div
                         style={{
                           marginLeft: 10,
+                          marginTop: 1
                         }}
+                        whileHover={{ scale: 1.3 }}
                       >
                         <FavoriteStar isFavorited={isFavorited} />
-                      </div>
+                      </motion.div>
                     </TitleContainer>
                     <TextContainer>
                       {dataSets.personDetails.biography}

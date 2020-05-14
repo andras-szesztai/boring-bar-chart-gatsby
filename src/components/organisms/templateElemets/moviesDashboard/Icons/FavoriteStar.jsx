@@ -2,17 +2,13 @@ import React, { useState, useEffect, useRef } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
 import styled from "styled-components"
-import { AnimatePresence, motion } from "framer-motion"
-import chroma from "chroma-js"
 import Lottie from "react-lottie"
 
-import { FavoriteStar as FavoriteStarIcon } from "../../../../../assets/icons/"
-import { COLORS } from "../../../../../constants/moviesDashboard"
 import animationData from "../../../../../assets/animatedIcons/favoriteStar.json"
 import { usePrevious } from "../../../../../hooks"
 
-export default function FavoriteStar({ isFavorited: parentFavorited }) {
-  const prevParentFavorited = usePrevious(parentFavorited)
+export default function FavoriteStar({ isFavorited }) {
+  const prevIsFavorited = usePrevious(isFavorited)
   const defaultOptions = {
     loop: false,
     autoplay: false,
@@ -22,32 +18,48 @@ export default function FavoriteStar({ isFavorited: parentFavorited }) {
     },
   }
 
-  const [isFavorited, setIsFavorited] = useState(parentFavorited)
+  const [isPaused, setIsPaused] = useState(true)
+  const prevIsPaused = usePrevious(isPaused)
   useEffect(() => {
-    if (!parentFavorited && prevParentFavorited) {
-      setIsFavorited(false)
+    if (typeof prevIsFavorited == "boolean") {
+      if (!isFavorited && prevIsFavorited) {
+        setIsPaused(false)
+      }
+      if (isFavorited && !prevIsFavorited) {
+        setIsPaused(false)
+      }
+    } else {
+      setIsPaused(false)
     }
-  }, [parentFavorited, prevParentFavorited])
-  const [isClicked, setIsClicked] = useState(false)
+  }, [isFavorited, prevIsFavorited])
+  const [firstRender, setFirstRender] = useState(true)
+  
+  useEffect(() => {
+    if (
+      typeof prevIsPaused == "boolean" &&
+      firstRender &&
+      !prevIsPaused &&
+      isPaused
+    ) {
+      setFirstRender(false)
+    }
+  }, [firstRender, prevIsPaused, isPaused])
 
-  return isFavorited ? (
-    <FavoriteStarIcon width={20} height={20} fill={COLORS.favorite} />
-  ) : (
-    <div
-      style={{ transform: "translate(-5px, 2.6px)" }}
-      onClick={() => setIsClicked(true)}
-    >
+  return (
+    <div>
       <Lottie
         options={defaultOptions}
-        isPaused={isClicked}
-        width={30}
-        height={30}
+        isPaused={isPaused}
+        width={32}
+        height={32}
+        speed={firstRender ? 1000 : .9}
+        direction={isFavorited ? 1 : -1}
         isClickToPauseDisabled={true}
         eventListeners={[
           {
             eventName: "complete",
             callback: () => {
-              setIsFavorited(true)
+              setIsPaused(true)
             },
           },
         ]}
