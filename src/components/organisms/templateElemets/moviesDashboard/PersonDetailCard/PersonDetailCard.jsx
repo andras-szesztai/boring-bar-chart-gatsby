@@ -1,14 +1,11 @@
-import React, { useRef, useState } from "react"
+import React, { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import styled from "styled-components"
 import {
   IoIosArrowUp,
   IoIosUnlock,
   IoIosLock,
-  IoIosStar,
-  IoIosStarOutline,
 } from "react-icons/io"
-import Reward from "react-rewards"
 
 import { dropShadow, space } from "../../../../../themes/theme"
 import { useLocalStorage } from "../../../../../hooks"
@@ -100,7 +97,6 @@ export default function PersonDetailCard({ state, prevState, actions }) {
     personDetailsCard: { isOpen },
   } = state
   const { openPersonDetails, closePersonDetails } = actions
-  const rewardRef = useRef()
 
   const [isLocked, setIsLocked] = useState(false)
 
@@ -210,7 +206,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       {dataSets.personDetails.name}
                       <motion.div
                         style={{
-                          marginLeft: 10,
+                          marginLeft: 8,
                           marginTop: 1
                         }}
                         whileHover={{ scale: 1.3 }}

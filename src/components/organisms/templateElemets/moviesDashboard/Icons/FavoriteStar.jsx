@@ -1,7 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
-import { Helmet } from "react-helmet"
-import axios from "axios"
-import styled from "styled-components"
+import React, { useState, useEffect } from "react"
 import Lottie from "react-lottie"
 
 import animationData from "../../../../../assets/animatedIcons/favoriteStar.json"
@@ -22,10 +19,7 @@ export default function FavoriteStar({ isFavorited }) {
   const prevIsPaused = usePrevious(isPaused)
   useEffect(() => {
     if (typeof prevIsFavorited == "boolean") {
-      if (!isFavorited && prevIsFavorited) {
-        setIsPaused(false)
-      }
-      if (isFavorited && !prevIsFavorited) {
+      if (isFavorited !== prevIsFavorited) {
         setIsPaused(false)
       }
     } else {
@@ -52,7 +46,7 @@ export default function FavoriteStar({ isFavorited }) {
         isPaused={isPaused}
         width={32}
         height={32}
-        speed={firstRender ? 1000 : .9}
+        speed={firstRender ? 100 : 1.1}
         direction={isFavorited ? 1 : -1}
         isClickToPauseDisabled={true}
         eventListeners={[

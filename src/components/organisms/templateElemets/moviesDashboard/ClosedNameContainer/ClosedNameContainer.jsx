@@ -1,9 +1,7 @@
-import React, { useRef } from "react"
+import React from "react"
 import { motion } from "framer-motion"
 import styled from "styled-components"
 import chroma from "chroma-js"
-import Reward from "react-rewards"
-import { IoIosStar, IoIosStarOutline } from "react-icons/io"
 
 // Styles
 import { space } from "../../../../../themes/theme"
@@ -13,6 +11,7 @@ import {
   OPACITY_VARIANT,
   ANIMATE_PROPS,
 } from "../../../../../constants/moviesDashboard"
+import FavoriteStar from "../Icons/FavoriteStar"
 
 const Container = styled(motion.div)`
   position: absolute;
@@ -35,44 +34,24 @@ export default function ClosedNameContainer({
   setFavorites,
   isFavorited,
 }) {
-  const rewardRef = useRef()
-  const FavoriteIcon = isFavorited ? IoIosStar : IoIosStarOutline
 
   return (
     <Container
       key="close-name"
       variants={OPACITY_VARIANT}
-      onClick={() => {
-        !isFavorited && rewardRef.current.rewardMe()
-        setFavorites()
-      }}
+      onClick={setFavorites}
       {...ANIMATE_PROPS}
     >
       {dataSets.personDetails.name}
-      <div
+      <motion.div
         style={{
-          marginLeft: 10,
-          transform: "translateY(2px)",
+          marginLeft: 8,
+          marginTop: 1,
         }}
+        whileHover={{ scale: 1.3 }}
       >
-        <Reward
-          ref={rewardRef}
-          type="confetti"
-          config={{
-            lifetime: 90,
-            angle: 90,
-            decay: 0.9,
-            spread: 150,
-            startVelocity: 8,
-            elementCount: 65,
-            elementSize: 5,
-            springAnimation: false,
-            colors: Object.values(COLORS),
-          }}
-        >
-          <FavoriteIcon size={22} color={COLORS.favorite} />
-        </Reward>
-      </div>
+        <FavoriteStar isFavorited={isFavorited} />
+      </motion.div>
     </Container>
   )
 }
