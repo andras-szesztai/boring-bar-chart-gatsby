@@ -6,7 +6,12 @@ import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import Lottie from "react-lottie"
 
-import { useDeviceType, useLocalStorage, useFetchData } from "../../hooks"
+import {
+  useDeviceType,
+  useLocalStorage,
+  useFetchData,
+  usePrevious,
+} from "../../hooks"
 import {
   SearchBar,
   PersonDetailCard,
@@ -38,18 +43,28 @@ export default function MoviesDashboard() {
     "http://assets.ctfassets.net/w36cqgpg2pdu/52FMj0fox03PfBqI6xNaE7/3019b0f81ff724418d716a3fd03f172c/bookmark.json"
   )
 
+  // Frame 60 when it ends
+
+  const [isBMarked, setIsBMarked] = useState(false)
+  const prevIsBMarked = usePrevious(isBMarked)
+  const [isPaused, setIsPaused] = useState(true)
+  useEffect(() => {
+    if (!prevIsBMarked && isBMarked && isPaused) {
+      setIsPaused(false)
+    }
+    if (prevIsBMarked && !isBMarked && isPaused) {
+      setIsPaused(false)
+    }
+  }, [prevIsBMarked, isBMarked, isPaused])
+
   const defaultOptions = {
     loop: false,
-    autoplay: false,
     animationData: response,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
   }
 
-
-  // Frame 60 when it ends
-  
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -61,17 +76,26 @@ export default function MoviesDashboard() {
             prevState={prevState}
             actions={actions}
           />
-          <LottieTest>
+          <LottieTest onClick={() => setIsBMarked(prev => !prev)}>
             <Lottie
               options={defaultOptions}
-              eventListeners={[
-                {
-                  eventName: "enterFrame",
-                  callback: () => console.log("enterFrame"),
-                },
-              ]}
-              // isStopped={this.state.isStopped}
-              // isPaused={this.state.isPaused}
+              // isPaused={isPaused}
+              direction={-1}
+              isClickToPauseDisabled={true}
+              segments={[64, 65]}
+              // eventListeners={[
+              //   {
+              //     eventName: "enterFrame",
+              //     callback: ({ currentTime, direction }) => {
+              //       if (direction && currentTime >= 65) {
+              //         setIsPaused(true)
+              //       }
+              //       if (!direction && currentTime <= 0) {
+              //         setIsPaused(true)
+              //       }
+              //     },
+              //   },
+              // ]}
             />
           </LottieTest>
         </div>

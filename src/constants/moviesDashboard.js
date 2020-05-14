@@ -3,7 +3,7 @@ export const API_ROOT = "https://api.themoviedb.org/3"
 
 export const COLORS = {
   primary: "#6a8caf",
-  favorite: "#ffbc65",
+  favorite: "#FFA016",
 }
 
 export const TRANSITION = {
