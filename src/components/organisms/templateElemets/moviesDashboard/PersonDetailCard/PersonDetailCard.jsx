@@ -202,7 +202,6 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                     <TitleContainer
                       className="name"
                       onClick={() => {
-                        // !isFavorited && rewardRef.current.rewardMe()
                         setFavoritePersons(
                           isFavorited ? filterOut() : filterIn()
                         )
@@ -212,27 +211,9 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       <div
                         style={{
                           marginLeft: 10,
-                          // transform: "translateY(2px)",
                         }}
                       >
-                        {/* <Reward
-                          ref={rewardRef}
-                          type="confetti"
-                          config={{
-                            lifetime: 90,
-                            angle: 90,
-                            decay: 0.9,
-                            spread: 150,
-                            startVelocity: 8,
-                            elementCount: 65,
-                            elementSize: 5,
-                            springAnimation: false,
-                            colors: Object.values(COLORS),
-                          }}
-                        > */}
-                          <FavoriteStar isFavorited={isFavorited}/>
-                          {/* <FavoriteIcon size={22} color={COLORS.favorite} /> */}
-                        {/* </Reward> */}
+                        <FavoriteStar isFavorited={isFavorited} />
                       </div>
                     </TitleContainer>
                     <TextContainer>
