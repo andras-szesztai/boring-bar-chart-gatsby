@@ -9,7 +9,6 @@ import Lottie from "react-lottie"
 import {
   useDeviceType,
   useLocalStorage,
-  useFetchData,
   usePrevious,
 } from "../../hooks"
 import {

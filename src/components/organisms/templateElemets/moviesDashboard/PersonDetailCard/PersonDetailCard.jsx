@@ -129,7 +129,6 @@ export default function PersonDetailCard({ state, prevState, actions }) {
     favoritePersons.find(fav => fav && fav.id === dataSets.personDetails.id)
 
   const LockIcon = isLocked ? IoIosLock : IoIosUnlock
-  const FavoriteIcon = isFavorited ? IoIosStar : IoIosStarOutline
 
   const filterOut = () =>
     favoritePersons.filter(({ id }) => +id !== +dataSets.personDetails.id)
@@ -231,7 +230,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                             colors: Object.values(COLORS),
                           }}
                         > */}
-                          <FavoriteStar />
+                          <FavoriteStar isFavorited={isFavorited}/>
                           {/* <FavoriteIcon size={22} color={COLORS.favorite} /> */}
                         {/* </Reward> */}
                       </div>
