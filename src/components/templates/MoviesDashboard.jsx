@@ -4,15 +4,24 @@ import axios from "axios"
 import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
-import Reward from "react-rewards"
+import Lottie from "react-lottie"
 
-import { useDeviceType, useLocalStorage } from "../../hooks"
+import { useDeviceType, useLocalStorage, useFetchData } from "../../hooks"
 import {
   SearchBar,
   PersonDetailCard,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 import { LOCAL_STORE_ACCESSORS } from "../../constants/moviesDashboard"
+
+const LottieTest = styled.div`
+  width: 200px;
+  height: 200px;
+  position: fixed;
+  left: 50vw;
+  top: 50vh;
+  border: 1px solid #000;
+`
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
@@ -24,7 +33,18 @@ export default function MoviesDashboard() {
     []
   )
 
-  console.log(favoritePersons)
+  const {response} = useFetchData(
+    "http://assets.ctfassets.net/w36cqgpg2pdu/52FMj0fox03PfBqI6xNaE7/3019b0f81ff724418d716a3fd03f172c/bookmark.json"
+  )
+
+  console.log(response)
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: response,
+  }
+
 
   return (
     <>
@@ -37,6 +57,13 @@ export default function MoviesDashboard() {
             prevState={prevState}
             actions={actions}
           />
+          <LottieTest>
+            <Lottie
+              options={defaultOptions}
+              // height={100}
+              // width={100}
+            />
+          </LottieTest>
         </div>
       )}
     </>

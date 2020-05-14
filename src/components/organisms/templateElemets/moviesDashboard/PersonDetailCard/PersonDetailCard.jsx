@@ -125,7 +125,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
   const isFavorited =
     favoritePersons &&
     dataSets.personDetails &&
-    favoritePersons.includes(dataSets.personDetails.id)
+    favoritePersons.find(fav => fav && fav.id === dataSets.personDetails.id)
 
   const LockIcon = isLocked ? IoIosLock : IoIosUnlock
   const FavoriteIcon = isFavorited ? IoIosStar : IoIosStarOutline
@@ -136,6 +136,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
     ...favoritePersons,
     { id: dataSets.personDetails.id, name: dataSets.personDetails.name },
   ]
+  console.log("PesrsonDetailCard -> favoritePersons", favoritePersons)
 
   return (
     <AnimatePresence>
@@ -224,7 +225,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                             decay: 0.9,
                             spread: 150,
                             startVelocity: 8,
-                            elementCountelementCount: 65,
+                            elementCount: 65,
                             elementSize: 5,
                             springAnimation: false,
                             colors: Object.values(COLORS),

@@ -64,7 +64,7 @@ export default function ClosedNameContainer({
             decay: 0.9,
             spread: 150,
             startVelocity: 8,
-            elementCountelementCount: 65,
+            elementCount: 65,
             elementSize: 5,
             springAnimation: false,
             colors: Object.values(COLORS),
