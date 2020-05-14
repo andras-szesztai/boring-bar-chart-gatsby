@@ -31,6 +31,7 @@ import {
   ClosedNameContainer,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
+import { TextContainer } from "../organisms/templateElemets/moviesDashboard/styles/styles"
 
 const CARD_WIDTH = 400
 const CARD_HEIGHT = 240
@@ -120,7 +121,7 @@ const CardTextGrid = styled(motion.div)`
 
   .name {
     display: flex;
-    font-size: ${themifyFontSize(2)};
+    font-size: ${themifyFontSize(3)};
     font-weight: 500;
     color: ${COLORS.primary};
     cursor: pointer;
@@ -230,7 +231,6 @@ export default function MoviesDashboard() {
                   >
                     <IoIosArrowUp size="24" color={COLORS.primary} />
                   </IconContainer>
-
                   <AnimatePresence>
                     {isClosed && <ClosedNameContainer dataSets={dataSets} />}
                   </AnimatePresence>
@@ -263,7 +263,7 @@ export default function MoviesDashboard() {
                             {dataSets.personDetails.name}
                             <div
                               style={{
-                                marginLeft: 6,
+                                marginLeft: 10,
                                 transform: "translateY(2px)",
                               }}
                             >
@@ -283,15 +283,15 @@ export default function MoviesDashboard() {
                                 }}
                               >
                                 <FavoriteIcon
-                                  size={18}
+                                  size={22}
                                   color={COLORS.favorite}
                                 />
                               </Reward>
                             </div>
                           </div>
-                          <div className="bio">
+                          <TextContainer>
                             {dataSets.personDetails.biography}
-                          </div>
+                          </TextContainer>
                         </CardTextGrid>
                         <Image
                           url={dataSets.personDetails.profile_path}
