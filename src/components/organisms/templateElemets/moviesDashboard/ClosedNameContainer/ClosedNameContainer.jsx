@@ -18,8 +18,8 @@ const Container = styled(motion.div)`
   bottom: 12px;
   right: ${space[2]}px;
   font-size: ${themifyFontSize(3)};
-  font-weight: 200;
-  color: #fff;
+  font-weight: 300;
+  color: ${COLORS.primaryLight};
   border-radius: ${space[1]}px;
   padding: 1px 12px;
   background-color: ${chroma(COLORS.primary)};
