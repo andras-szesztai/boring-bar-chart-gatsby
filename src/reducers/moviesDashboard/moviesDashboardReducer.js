@@ -16,7 +16,7 @@ const initialState = {
   isIconsFetched: false,
   iconsAnimationObjects: {
     favoriteStar: undefined,
-  }
+  },
 }
 
 const SET_ACTIVE_ID = "SET_ACTIVE_ID"
@@ -55,8 +55,8 @@ function moviesDashboardReducer(state, { type, payload }) {
     }),
     FETCHING_ICONS: () => ({
       ...state,
-      isIconsFetched: true
-    })
+      isIconsFetched: true,
+    }),
   }
   return types[type] ? types[type]() : state
 }
@@ -74,8 +74,31 @@ export default function useMoviesDashboardReducer() {
   }
 
   useEffect(() => {
-    if(state.isIconsFetched){
+    if (state.isIconsFetched) {
       actions.fetchingIcons()
+      axios
+        .all([
+          axios.get(
+            `${API_ROOT}/person/${state.activeNameID}?api_key=${process.env.MDB_API_KEY}&language=en-US`
+          ),
+          axios.get(
+            `${API_ROOT}/person/${state.activeNameID}/combined_credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
+          ),
+        ])
+        .then(
+          axios.spread((details, credits) => {
+            dispatch({
+              type: FETCH_INFO_BY_ID,
+              payload: {
+                details: details.data,
+                credits: credits.data,
+              },
+            })
+          })
+        )
+        .catch(function(error) {
+          console.log(error)
+        })
     }
   })
 

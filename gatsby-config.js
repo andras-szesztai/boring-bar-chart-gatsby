@@ -32,6 +32,13 @@ module.exports = {
         path: `${__dirname}/posts`,
       },
     },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "animated-icons",
+        path: `${__dirname}/src/icons/animatedIcons`,
+      },
+    },
     "gatsby-transformer-sharp",
     "gatsby-plugin-sharp",
     "gatsby-plugin-styled-components",
