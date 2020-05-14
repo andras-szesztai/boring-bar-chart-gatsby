@@ -21,6 +21,7 @@ const LottieTest = styled.div`
   left: 50vw;
   top: 50vh;
   border: 1px solid #000;
+  cursor: pointer;
 `
 
 export default function MoviesDashboard() {
@@ -33,19 +34,22 @@ export default function MoviesDashboard() {
     []
   )
 
-  const {response} = useFetchData(
+  const { response } = useFetchData(
     "http://assets.ctfassets.net/w36cqgpg2pdu/52FMj0fox03PfBqI6xNaE7/3019b0f81ff724418d716a3fd03f172c/bookmark.json"
   )
 
-  console.log(response)
-
   const defaultOptions = {
-    loop: true,
-    autoplay: true,
+    loop: false,
+    autoplay: false,
     animationData: response,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   }
 
 
+  // Frame 60 when it ends
+  
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -60,8 +64,14 @@ export default function MoviesDashboard() {
           <LottieTest>
             <Lottie
               options={defaultOptions}
-              // height={100}
-              // width={100}
+              eventListeners={[
+                {
+                  eventName: "enterFrame",
+                  callback: () => console.log("enterFrame"),
+                },
+              ]}
+              // isStopped={this.state.isStopped}
+              // isPaused={this.state.isPaused}
             />
           </LottieTest>
         </div>

@@ -136,7 +136,6 @@ export default function PersonDetailCard({ state, prevState, actions }) {
     ...favoritePersons,
     { id: dataSets.personDetails.id, name: dataSets.personDetails.name },
   ]
-  console.log("PesrsonDetailCard -> favoritePersons", favoritePersons)
 
   return (
     <AnimatePresence>
