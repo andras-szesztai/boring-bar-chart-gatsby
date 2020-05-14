@@ -6,17 +6,25 @@ import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import Reward from "react-rewards"
 
-import { useDeviceType } from "../../hooks"
+import { useDeviceType, useLocalStorage } from "../../hooks"
 import {
   SearchBar,
   PersonDetailCard,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
+import { LOCAL_STORE_ACCESSORS } from "../../constants/moviesDashboard"
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
 
   const { state, prevState, actions } = moviesDashboardReducer()
+
+  const [favoritePersons, setFavoritePerson] = useLocalStorage(
+    LOCAL_STORE_ACCESSORS.favoritePersons,
+    []
+  )
+
+  console.log(favoritePersons)
 
   return (
     <>

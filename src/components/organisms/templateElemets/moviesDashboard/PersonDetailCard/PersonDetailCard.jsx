@@ -17,6 +17,7 @@ import {
   ANIMATE_PROPS,
   COLORS,
   TRANSITION,
+  LOCAL_STORE_ACCESSORS,
 } from "../../../../../constants/moviesDashboard"
 import ClosedNameContainer from "../ClosedNameContainer/ClosedNameContainer"
 import Image from "../Image/Image"
@@ -93,13 +94,19 @@ const CardTextGrid = styled(motion.div)`
 let animateCard
 
 export default function PersonDetailCard({ state, prevState, actions }) {
-  const { dataSets, personDetailsCard: { isOpen } } = state
+  const {
+    dataSets,
+    personDetailsCard: { isOpen },
+  } = state
   const { openPersonDetails, closePersonDetails } = actions
   const rewardRef = useRef()
 
   const [isLocked, setIsLocked] = useState(false)
 
-  const [favorites, setFavorites] = useLocalStorage("favorites", [])
+  const [favoritePersons, setFavoritePersons] = useLocalStorage(
+    LOCAL_STORE_ACCESSORS.favoritePersons,
+    []
+  )
 
   if (isOpen) animateCard = "animateOpen"
   if (!isOpen) animateCard = "animateClose"
@@ -116,12 +123,19 @@ export default function PersonDetailCard({ state, prevState, actions }) {
   }
 
   const isFavorited =
-    favorites &&
+    favoritePersons &&
     dataSets.personDetails &&
-    favorites.includes(dataSets.personDetails.id)
+    favoritePersons.includes(dataSets.personDetails.id)
 
   const LockIcon = isLocked ? IoIosLock : IoIosUnlock
   const FavoriteIcon = isFavorited ? IoIosStar : IoIosStarOutline
+
+  const filterOut = () =>
+    favoritePersons.filter(({ id }) => +id !== +dataSets.personDetails.id)
+  const filterIn = () => [
+    ...favoritePersons,
+    { id: dataSets.personDetails.id, name: dataSets.personDetails.name },
+  ]
 
   return (
     <AnimatePresence>
@@ -170,8 +184,9 @@ export default function PersonDetailCard({ state, prevState, actions }) {
               {!isOpen && (
                 <ClosedNameContainer
                   dataSets={dataSets}
-                  favorites={favorites}
-                  setFavorites={setFavorites}
+                  setFavorites={() =>
+                    setFavoritePersons(isFavorited ? filterOut() : filterIn())
+                  }
                   isFavorited={isFavorited}
                 />
               )}
@@ -188,18 +203,9 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       className="name"
                       onClick={() => {
                         !isFavorited && rewardRef.current.rewardMe()
-                        if (isFavorited) {
-                          setFavorites(
-                            favorites.filter(
-                              id => +id !== +dataSets.personDetails.id
-                            )
-                          )
-                        } else {
-                          setFavorites([
-                            ...favorites,
-                            dataSets.personDetails.id,
-                          ])
-                        }
+                        setFavoritePersons(
+                          isFavorited ? filterOut() : filterIn()
+                        )
                       }}
                     >
                       {dataSets.personDetails.name}

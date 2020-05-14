@@ -32,3 +32,7 @@ export const ANIMATE_PROPS = {
 }
 
 
+export const LOCAL_STORE_ACCESSORS = {
+  favoritePersons: "favoritePersons"
+}
+

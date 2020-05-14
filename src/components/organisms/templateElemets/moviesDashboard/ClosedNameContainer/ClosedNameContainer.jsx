@@ -32,7 +32,6 @@ const Container = styled(motion.div)`
 
 export default function ClosedNameContainer({
   dataSets,
-  favorites,
   setFavorites,
   isFavorited,
 }) {
@@ -44,15 +43,8 @@ export default function ClosedNameContainer({
       key="close-name"
       variants={OPACITY_VARIANT}
       onClick={() => {
-        if (isFavorited) {
-          rewardRef.current.punishMe()
-          setFavorites(
-            favorites.filter(id => +id !== +dataSets.personDetails.id)
-          )
-        } else {
-          rewardRef.current.rewardMe()
-          setFavorites([...favorites, dataSets.personDetails.id])
-        }
+        !isFavorited && rewardRef.current.rewardMe()
+        setFavorites()
       }}
       {...ANIMATE_PROPS}
     >
