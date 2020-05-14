@@ -25,7 +25,11 @@ import {
   themifyColor,
 } from "../../themes/mixins"
 import { API_ROOT, IMAGE_ROOT, COLORS } from "../../constants/moviesDashboard"
-import { SearchBar, Image } from "../organisms/templateElemets/moviesDashboard"
+import {
+  SearchBar,
+  Image,
+  ClosedNameContainer,
+} from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 
 const CARD_WIDTH = 400
@@ -100,22 +104,6 @@ const IconContainer = styled(motion.div)`
   cursor: pointer;
 `
 
-const ClosedNameContainer = styled(motion.div)`
-  position: absolute;
-  bottom: 12px;
-  right: ${space[2]}px;
-  font-size: ${themifyFontSize(3)};
-  font-weight: 200;
-  color: #fff;
-  border-radius: ${space[1]}px;
-  padding: 1px 12px;
-  background-color: ${chroma(COLORS.primary)};
-  border: 1px solid ${chroma(COLORS.primary).darken()};
-
-  display: flex;
-  cursor: pointer;
-`
-
 const CardGrid = styled(motion.div)`
   display: flex;
   justify-content: space-between;
@@ -166,13 +154,6 @@ export default function MoviesDashboard() {
   const [isLocked, setIsLocked] = useState(false)
 
   const [favorites, setFavorites] = useLocalStorage("favorites", [])
-
-  // birthday: "1963-12-18"
-  // "place_of_birth"
-  // deathday:
-  // known_for_department: "Acting"
-  // profile_path: "/tJiSUYst4ddIaz1zge2LqCtu9tw.jpg"
-  // biography
 
   if (!isClosed) animateCard = "animateOpen"
   if (isClosed) animateCard = "animateClose"
@@ -249,55 +230,9 @@ export default function MoviesDashboard() {
                   >
                     <IoIosArrowUp size="24" color={COLORS.primary} />
                   </IconContainer>
+
                   <AnimatePresence>
-                    {isClosed && (
-                      <ClosedNameContainer
-                        key="close-name"
-                        variants={opacityVariant}
-                        onClick={() => {
-                          !isFavorited && rewardRef.current.rewardMe()
-                          if (isFavorited) {
-                            setFavorites(
-                              favorites.filter(
-                                id => +id !== +dataSets.personDetails.id
-                              )
-                            )
-                          } else {
-                            setFavorites([
-                              ...favorites,
-                              dataSets.personDetails.id,
-                            ])
-                          }
-                        }}
-                        {...animateProps}
-                      >
-                        {dataSets.personDetails.name}
-                        <div
-                          style={{
-                            marginLeft: 10,
-                            transform: "translateY(2px)",
-                          }}
-                        >
-                          <Reward
-                            ref={rewardRef}
-                            type="confetti"
-                            config={{
-                              lifetime: 90,
-                              angle: 90,
-                              decay: 0.9,
-                              spread: 150,
-                              startVelocity: 8,
-                              elementCountelementCount: 65,
-                              elementSize: 5,
-                              springAnimation: false,
-                              colors: Object.values(COLORS),
-                            }}
-                          >
-                            <FavoriteIcon size={22} color={COLORS.favorite} />
-                          </Reward>
-                        </div>
-                      </ClosedNameContainer>
-                    )}
+                    {isClosed && <ClosedNameContainer dataSets={dataSets} />}
                   </AnimatePresence>
                   <AnimatePresence>
                     {!isClosed && (
