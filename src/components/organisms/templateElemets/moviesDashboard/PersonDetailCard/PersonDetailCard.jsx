@@ -1,11 +1,7 @@
 import React, { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import styled from "styled-components"
-import {
-  IoIosArrowUp,
-  IoIosUnlock,
-  IoIosLock,
-} from "react-icons/io"
+import { IoIosArrowUp, IoIosUnlock, IoIosLock } from "react-icons/io"
 
 import { dropShadow, space } from "../../../../../themes/theme"
 import { useLocalStorage } from "../../../../../hooks"
@@ -207,9 +203,14 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       <motion.div
                         style={{
                           marginLeft: 8,
-                          marginTop: 1
+                          marginTop: 1,
                         }}
-                        whileHover={{ scale: 1.3 }}
+                        whileHover={{
+                          scale: 1.3,
+                          // transition: {
+                          //   flip: Infinity
+                          // },
+                        }}
                       >
                         <FavoriteStar isFavorited={isFavorited} />
                       </motion.div>
