@@ -29,19 +29,19 @@ export default function FavoriteStar({ isFavorited }) {
   const [firstRender, setFirstRender] = useState(true)
 
   useEffect(() => {
-    if (
-      typeof prevIsPaused == "boolean" &&
-      firstRender &&
-      !prevIsPaused &&
-      isPaused
-    ) {
-      setFirstRender(false)
-    }
+    // if (
+    //   typeof prevIsPaused == "boolean" &&
+    //   firstRender &&
+    //   !prevIsPaused &&
+    //   isPaused
+    // ) {
+    //   setFirstRender(false)
+    // }
   }, [firstRender, prevIsPaused, isPaused])
 
   return (
     <div>
-      <Lottie
+      {/* <Lottie
         options={defaultOptions}
         isPaused={isPaused}
         width={32}
@@ -57,7 +57,28 @@ export default function FavoriteStar({ isFavorited }) {
             },
           },
         ]}
-      />
+      /> */}
+
+      <svg
+        x="0px"
+        y="0px"
+        width="20px"
+        // height="274.6px"
+        viewBox="0 0 313.6 274.6"
+      >
+        <path
+          className="top"
+          fill="#ffbd69"
+          d="M288.9,26.9c-33.6-34.7-89.7-35.9-124.4-3.4l-7.8,9l-7.8-7.8C112.9-8.9,58-7.8,24.4,26.9s-32.5,90.8,3.4,124.4
+	l130,123.3l130-123.3C321.4,117.7,322.5,62.8,288.9,26.9z"
+        />
+        <path
+          fill="#ff6363"
+          className="background"
+          d="M288.9,26.9c-33.6-34.7-89.7-35.9-124.4-3.4l-7.8,9l-7.8-7.8C112.9-8.9,58-7.8,24.4,26.9s-32.5,90.8,3.4,124.4
+	l130,123.3l130-123.3C321.4,117.7,322.5,62.8,288.9,26.9z"
+        />
+      </svg>
     </div>
   )
 }
