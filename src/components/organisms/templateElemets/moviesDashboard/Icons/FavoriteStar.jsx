@@ -27,7 +27,7 @@ export default function FavoriteStar({ isFavorited }) {
     }
   }, [isFavorited, prevIsFavorited])
   const [firstRender, setFirstRender] = useState(true)
-  
+
   useEffect(() => {
     if (
       typeof prevIsPaused == "boolean" &&
