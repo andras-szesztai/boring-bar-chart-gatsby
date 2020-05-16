@@ -206,7 +206,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                           marginTop: 1,
                         }}
                         whileHover={{
-                          scale: 1.3,
+                          scale: 1.2,
                           // transition: {
                           //   flip: Infinity
                           // },
