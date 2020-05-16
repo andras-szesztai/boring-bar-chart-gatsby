@@ -95,6 +95,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
   const { openPersonDetails, closePersonDetails } = actions
 
   const [isLocked, setIsLocked] = useState(false)
+  const [isTitleHovered, setIsTitleHovered] = useState(false)
 
   const [favoritePersons, setFavoritePersons] = useLocalStorage(
     LOCAL_STORE_ACCESSORS.favoritePersons,
@@ -197,16 +198,19 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                           isFavorited ? filterOut() : filterIn()
                         )
                       }}
+                      onMouseEnter={() => setIsTitleHovered(true)}
+                      onMouseLeave={() => setIsTitleHovered(false)}
                     >
                       {dataSets.personDetails.name}
                       <motion.div
                         style={{
                           marginLeft: 8,
-                          position: 'absolute'
-
+                          position: 'absolute',
+                          right: -2,
+                          top: 2,
                         }}
-                        whileHover={{
-                          scale: 1.3
+                        animate={{
+                          scale: isTitleHovered ? 1.3 : 1
                         }}
                       >
                         <FavoriteStar isFavorited={isFavorited} />

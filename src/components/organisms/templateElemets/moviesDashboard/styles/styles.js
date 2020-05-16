@@ -20,9 +20,10 @@ export const TextContainer = styled(motion.div)`
 `
 
 export const TitleContainer = styled(motion.div)`
-    display: flex;
-    font-size: ${themifyFontSize(3)};
-    font-weight: 500;
-    color: ${COLORS.primary};
-    cursor: pointer;
+  position: relative;
+  display: flex;
+  font-size: ${themifyFontSize(3)};
+  font-weight: 500;
+  color: ${COLORS.primary};
+  cursor: pointer;
 `
