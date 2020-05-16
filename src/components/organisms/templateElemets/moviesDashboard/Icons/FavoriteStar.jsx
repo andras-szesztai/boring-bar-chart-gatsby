@@ -8,14 +8,7 @@ import { motion } from "framer-motion"
 
 export default function FavoriteStar({ isFavorited }) {
   const prevIsFavorited = usePrevious(isFavorited)
-  const defaultOptions = {
-    loop: false,
-    autoplay: false,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  }
+
   const topRef = useRef(null)
   const bgRef = useRef(null)
 
@@ -44,10 +37,24 @@ export default function FavoriteStar({ isFavorited }) {
       .to(
         ".main-one",
         {
-          y: isFavorited ? 30 : 0,
-          duration: 0.2,
+          y: isFavorited ? 60 : 0,
+          x: isFavorited ? 45 : 0,
+          duration: 0.5,
+          transformOrigin: "50% 50%",
+          ease: isFavorited ? "back.out(8)" : "back.in(6)",
         },
-        "-=.3"
+        isFavorited ? "-=0.4" : "-=0.5"
+      )
+      .to(
+        ".main-two",
+        {
+          y: isFavorited ? -30 : 0,
+          x: isFavorited ? 70 : 0,
+          duration: 0.5,
+          transformOrigin: "50% 50%",
+          ease: isFavorited ? "back.out(8)" : "back.in(6)",
+        },
+        "<"
       )
     if (typeof prevIsPaused == "boolean") {
       if (isFavorited !== prevIsFavorited) {
@@ -78,9 +85,21 @@ export default function FavoriteStar({ isFavorited }) {
 	l-16.5,95.8c-0.8,4.5,1.1,9.2,4.9,11.9c3.7,2.7,8.7,3.1,12.8,0.9l86.1-45.3l86.1,45.3c1.8,1,3.7,1.4,5.7,1.4c2.5,0,5-0.8,7.1-2.4
 	c3.7-2.8,5.6-7.3,4.9-11.9L380.6,338.8z"
       />
-      <circle className="main-one" fill="red" cx="299.2" cy="468.5" r="8" />
-      {/* <circle fill="red" cx="388.7" cy="442.1" r="8" />
-      <circle fill="red" cx="447.1" cy="259.9" r="8" />
+      <circle
+        className="main-one"
+        fill="#ffbd69"
+        cx="388.7"
+        cy="442.1"
+        r={12}
+      />
+      <circle
+        className="main-two"
+        fill="#ffbd69"
+        cx="447.1"
+        cy="259.9"
+        r={12}
+      />
+      {/* 
       <circle fill="red" cx="139.6" cy="259.9" r="8" />
       <circle fill="red" cx="293.3" cy="150.8" r="8" /> */}
       {/*

@@ -204,13 +204,12 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       {dataSets.personDetails.name}
                       <motion.div
                         style={{
-                          marginLeft: 8,
-                          position: 'absolute',
+                          position: "absolute",
                           right: 0,
-                          top: 0
+                          top: 0,
                         }}
                         animate={{
-                          scale: isTitleHovered ? 1.3 : 1
+                          scale: isTitleHovered ? 1.25 : 1,
                         }}
                       >
                         <FavoriteStar isFavorited={isFavorited} />
