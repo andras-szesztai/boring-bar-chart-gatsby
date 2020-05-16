@@ -203,14 +203,13 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       <motion.div
                         style={{
                           marginLeft: 8,
-                          marginTop: 1,
                         }}
-                        whileHover={{
-                          scale: 1.2,
-                          // transition: {
-                          //   flip: Infinity
-                          // },
-                        }}
+                        // whileHover={{
+                        //   scale: 1.3,
+                        //   // transition: {
+                        //   //   flip: Infinity
+                        //   // },
+                        // }}
                       >
                         <FavoriteStar isFavorited={isFavorited} />
                       </motion.div>
