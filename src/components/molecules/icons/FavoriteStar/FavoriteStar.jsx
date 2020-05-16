@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react"
 import gsap from "gsap"
-
 import { motion } from "framer-motion"
 
 export default function FavoriteStar({ isFavorited, isHovered }) {
@@ -79,7 +78,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
   }, [isHovered])
 
   return (
-    <motion.svg width="35px" viewBox="0 0 591.2 591.2">
+    <motion.svg width="32px" viewBox="0 0 591.2 591.2">
       <path
         ref={topRef}
         fill="#ffbd69"

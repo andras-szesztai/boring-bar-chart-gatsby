@@ -15,7 +15,7 @@ import {
 import ClosedNameContainer from "../ClosedNameContainer/ClosedNameContainer"
 import Image from "../Image/Image"
 import { TextContainer, TitleContainer } from "../styles/styles"
-import FavoriteStar from "../Icons/FavoriteStar"
+import { FavoriteStar } from "../../../../molecules"
 
 const CARD_WIDTH = 400
 const CARD_HEIGHT = 240
@@ -205,14 +205,17 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       <motion.div
                         style={{
                           position: "absolute",
-                          right: 0,
-                          top: 0,
+                          right: -3,
+                          top: 2,
                         }}
                         animate={{
                           scale: isTitleHovered ? 1.25 : 1,
                         }}
                       >
-                        <FavoriteStar isFavorited={isFavorited} />
+                        <FavoriteStar
+                          isFavorited={isFavorited}
+                          isHovered={isTitleHovered}
+                        />
                       </motion.div>
                     </TitleContainer>
                     <TextContainer>
