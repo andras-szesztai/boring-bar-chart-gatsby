@@ -206,10 +206,10 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                         style={{
                           position: "absolute",
                           right: -3,
-                          top: 2,
+                          top: 1,
                         }}
                         animate={{
-                          scale: isTitleHovered ? 1.25 : 1,
+                          scale: isTitleHovered ? 1.2 : 1,
                         }}
                       >
                         <FavoriteStar

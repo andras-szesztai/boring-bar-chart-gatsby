@@ -51,10 +51,10 @@ export default function ClosedNameContainer({
         style={{
           position: "absolute",
           right: 5,
-          top: 3,
+          top: 1,
         }}
         animate={{
-          scale: isTitleHovered ? 1.25 : 1,
+          scale: isTitleHovered ? 1.2 : 1,
         }}
       >
         <FavoriteStar isFavorited={isFavorited} isHovered={isTitleHovered} />

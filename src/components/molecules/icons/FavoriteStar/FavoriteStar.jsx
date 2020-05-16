@@ -78,7 +78,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
   }, [isHovered])
 
   return (
-    <motion.svg width="32px" viewBox="0 0 591.2 591.2">
+    <motion.svg width="35px" viewBox="0 0 591.2 591.2">
       <path
         ref={topRef}
         fill="#ffbd69"
@@ -90,7 +90,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
       <path
         fill="none"
         stroke="#ffbd69"
-        strokeWidth={20}
+        strokeWidth={25}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeMiterlimit={10}
@@ -105,6 +105,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         cx="388.7"
         cy="442.1"
         r={16}
+        opacity={0}
       />
       <circle
         className="main-two circle"
@@ -112,6 +113,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         cx="447.1"
         cy="259.9"
         r={16}
+        opacity={0}
       />
       <circle
         className="main-three circle"
@@ -119,6 +121,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         cx="293.3"
         cy="150.8"
         r={16}
+        opacity={0}
       />
       <circle
         className="main-four circle"
@@ -126,6 +129,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         cx="139.6"
         cy="259.9"
         r={16}
+        opacity={0}
       />
       <circle
         fill="#ffbd69"
@@ -133,6 +137,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         cx="195.6"
         cy="442.1"
         r={16}
+        opacity={0}
       />
     </motion.svg>
   )
