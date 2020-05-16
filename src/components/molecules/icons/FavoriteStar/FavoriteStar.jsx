@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { motion } from "framer-motion"
+import { usePrevious } from "../../../../hooks"
 
 export default function FavoriteStar({ isFavorited, isHovered }) {
+  const prevIsFavorited = usePrevious(isFavorited)
   const topRef = useRef(null)
 
   useEffect(() => {
@@ -68,16 +70,49 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
       .to(
         ".sub-one",
         {
-          y: isFavorited ? 15 : 0,
-          x: isFavorited ? 75 : 0,
+          y: isFavorited ? 45 : 0,
+          x: isFavorited ? 115 : 0,
+          opacity: isFavorited ? 1 : 0,
+          ease: isFavorited ? "back.out(4)" : "back.in(2)",
         },
         isFavorited ? "-=0.5" : "-=0.4"
       )
       .to(
         ".sub-two",
         {
-          y: isFavorited ? -40 : 0,
-          x: isFavorited ? 40 : 0,
+          y: isFavorited ? -120 : 0,
+          x: isFavorited ? 95 : 0,
+          opacity: isFavorited ? 1 : 0,
+          ease: isFavorited ? "back.out(4)" : "back.in(2)",
+        },
+        "<"
+      )
+      .to(
+        ".sub-three",
+        {
+          y: isFavorited ? -120 : 0,
+          x: isFavorited ? -95 : 0,
+          opacity: isFavorited ? 1 : 0,
+          ease: isFavorited ? "back.out(4)" : "back.in(2)",
+        },
+        "<"
+      )
+      .to(
+        ".sub-four",
+        {
+          y: isFavorited ? 45 : 0,
+          x: isFavorited ? -115 : 0,
+          opacity: isFavorited ? 1 : 0,
+          ease: isFavorited ? "back.out(4)" : "back.in(2)",
+        },
+        "<"
+      )
+      .to(
+        ".sub-five",
+        {
+          y: isFavorited ? 115 : 0,
+          opacity: isFavorited ? 1 : 0,
+          ease: isFavorited ? "back.out(4)" : "back.in(2)",
         },
         "<"
       )
@@ -86,7 +121,9 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
   useEffect(() => {
     gsap.to(".circle", {
       opacity: isHovered ? 1 : 0,
-      stagger: 0.1,
+      stagger: {
+        amount: 0.5,
+      },
     })
   }, [isHovered])
 
@@ -149,9 +186,21 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         {...sharedCircleAttrs}
       />
       <circle
+        className="sub-three circle"
+        cx="240.4"
+        cy="238.2"
+        {...sharedCircleAttrs}
+      />
+      <circle
         className="main-four circle"
         cx="139.6"
         cy="259.9"
+        {...sharedCircleAttrs}
+      />
+      <circle
+        className="sub-four circle"
+        cx="209.3"
+        cy="338.1"
         {...sharedCircleAttrs}
       />
       <circle
@@ -160,9 +209,12 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         cy="442.1"
         {...sharedCircleAttrs}
       />
-      <circle cx="293.3" cy="398.2" r={12} />
-      <circle cx="240.4" cy="238.2" r={16} />
-      <circle cx="209.3" cy="338.1" r={16} />
+      <circle
+        className="sub-five circle"
+        cx="293.3"
+        cy="398.2"
+        {...sharedCircleAttrs}
+      />
     </motion.svg>
   )
 }
