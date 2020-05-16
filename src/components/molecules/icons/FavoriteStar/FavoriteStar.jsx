@@ -15,11 +15,15 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
 
   useEffect(() => {
     gsap
-      .timeline()
+      .timeline({
+        defaults: {
+          duration: 0.5,
+          transformOrigin: "50% 50%",
+          ease: isFavorited ? "back.out(8)" : "back.in(6)",
+        },
+      })
       .to(topRef.current, {
         scale: isFavorited ? 1 : 0,
-        duration: 0.5,
-        transformOrigin: "50% 50%",
         ease: isFavorited ? "back.out(5)" : "back.in(4)",
       })
       .to(
@@ -27,9 +31,6 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         {
           y: isFavorited ? 60 : 0,
           x: isFavorited ? 45 : 0,
-          duration: 0.5,
-          transformOrigin: "50% 50%",
-          ease: isFavorited ? "back.out(8)" : "back.in(6)",
         },
         isFavorited ? "-=0.4" : "-=0.5"
       )
@@ -38,9 +39,6 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         {
           y: isFavorited ? -30 : 0,
           x: isFavorited ? 70 : 0,
-          duration: 0.5,
-          transformOrigin: "50% 50%",
-          ease: isFavorited ? "back.out(8)" : "back.in(6)",
         },
         "<"
       )
@@ -48,9 +46,6 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         ".main-three",
         {
           y: isFavorited ? -75 : 0,
-          duration: 0.5,
-          transformOrigin: "50% 50%",
-          ease: isFavorited ? "back.out(8)" : "back.in(6)",
         },
         "<"
       )
@@ -59,9 +54,6 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         {
           y: isFavorited ? -20 : 0,
           x: isFavorited ? -70 : 0,
-          duration: 0.5,
-          transformOrigin: "50% 50%",
-          ease: isFavorited ? "back.out(8)" : "back.in(6)",
         },
         "<"
       )
@@ -70,9 +62,22 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         {
           y: isFavorited ? 50 : 0,
           x: isFavorited ? -45 : 0,
-          duration: 0.5,
-          transformOrigin: "50% 50%",
-          ease: isFavorited ? "back.out(8)" : "back.in(6)",
+        },
+        "<"
+      )
+      .to(
+        ".sub-one",
+        {
+          y: isFavorited ? 15 : 0,
+          x: isFavorited ? 75 : 0,
+        },
+        isFavorited ? "-=0.5" : "-=0.4"
+      )
+      .to(
+        ".sub-two",
+        {
+          y: isFavorited ? -40 : 0,
+          x: isFavorited ? 40 : 0,
         },
         "<"
       )
@@ -120,9 +125,21 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         {...sharedCircleAttrs}
       />
       <circle
+        className="sub-one circle"
+        cx="377.9"
+        cy="338.1"
+        {...sharedCircleAttrs}
+      />
+      <circle
         className="main-two circle"
         cx="447.1"
         cy="259.9"
+        {...sharedCircleAttrs}
+      />
+      <circle
+        className="sub-two circle"
+        cx="345.8"
+        cy="238.2"
         {...sharedCircleAttrs}
       />
       <circle
@@ -143,16 +160,8 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         cy="442.1"
         {...sharedCircleAttrs}
       />
-      <circle
-        className="sub-one"
-        cx="345.8"
-        cy="238.2"
-        r={16}
-
-      />
-      <circle cx="240.4" cy="238.2" r={16}         fill="red" />
-      <circle cx="293.3" cy="398.2" r={16} />
-      <circle cx="377.9" cy="338.1" r={16} />
+      <circle cx="293.3" cy="398.2" r={12} />
+      <circle cx="240.4" cy="238.2" r={16} />
       <circle cx="209.3" cy="338.1" r={16} />
     </motion.svg>
   )
