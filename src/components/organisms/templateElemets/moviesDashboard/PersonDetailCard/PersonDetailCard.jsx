@@ -206,8 +206,8 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                         style={{
                           marginLeft: 8,
                           position: 'absolute',
-                          right: -2,
-                          top: 2,
+                          right: 0,
+                          top: 0
                         }}
                         animate={{
                           scale: isTitleHovered ? 1.3 : 1
