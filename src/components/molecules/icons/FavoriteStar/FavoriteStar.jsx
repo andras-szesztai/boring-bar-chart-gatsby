@@ -6,6 +6,14 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
   const topRef = useRef(null)
 
   useEffect(() => {
+    gsap.set(topRef.current, {
+      transformOrigin: "50% 50%",
+      scale: isFavorited ? 1 : 0,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     gsap
       .timeline()
       .to(topRef.current, {
@@ -77,6 +85,12 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
     })
   }, [isHovered])
 
+  const sharedCircleAttrs = {
+    fill: "#ffbd69",
+    r: 16,
+    opacity: 0,
+  }
+
   return (
     <motion.svg width="35px" viewBox="0 0 591.2 591.2">
       <path
@@ -101,44 +115,45 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
       />
       <circle
         className="main-one circle"
-        fill="#ffbd69"
         cx="388.7"
         cy="442.1"
-        r={16}
-        opacity={0}
+        {...sharedCircleAttrs}
       />
       <circle
         className="main-two circle"
-        fill="#ffbd69"
         cx="447.1"
         cy="259.9"
-        r={16}
-        opacity={0}
+        {...sharedCircleAttrs}
       />
       <circle
         className="main-three circle"
-        fill="#ffbd69"
         cx="293.3"
         cy="150.8"
-        r={16}
-        opacity={0}
+        {...sharedCircleAttrs}
       />
       <circle
         className="main-four circle"
-        fill="#ffbd69"
         cx="139.6"
         cy="259.9"
-        r={16}
-        opacity={0}
+        {...sharedCircleAttrs}
       />
       <circle
-        fill="#ffbd69"
         className="main-five circle"
         cx="195.6"
         cy="442.1"
-        r={16}
-        opacity={0}
+        {...sharedCircleAttrs}
       />
+      <circle
+        className="sub-one"
+        cx="345.8"
+        cy="238.2"
+        r={16}
+
+      />
+      <circle cx="240.4" cy="238.2" r={16}         fill="red" />
+      <circle cx="293.3" cy="398.2" r={16} />
+      <circle cx="377.9" cy="338.1" r={16} />
+      <circle cx="209.3" cy="338.1" r={16} />
     </motion.svg>
   )
 }
