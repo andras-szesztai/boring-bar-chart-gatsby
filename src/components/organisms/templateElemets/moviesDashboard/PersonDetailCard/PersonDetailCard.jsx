@@ -192,7 +192,6 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                 >
                   <CardTextGrid>
                     <TitleContainer
-                      className="name"
                       onClick={() => {
                         setFavoritePersons(
                           isFavorited ? filterOut() : filterIn()
@@ -203,6 +202,8 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       <motion.div
                         style={{
                           marginLeft: 8,
+                          position: 'absolute'
+
                         }}
                         whileHover={{
                           scale: 1.3

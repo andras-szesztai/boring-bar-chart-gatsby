@@ -5,6 +5,7 @@ import { themifyFontSize, themifyColor } from "../../../../../themes/mixins"
 import { COLORS } from "../../../../../constants/moviesDashboard"
 
 export const TextContainer = styled(motion.div)`
+  position: relative;
   margin-top: ${space[1]}px;
   padding: ${space[1]}px ${space[2]}px;
   font-size: ${themifyFontSize(1)};
