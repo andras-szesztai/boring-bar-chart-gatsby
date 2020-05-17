@@ -38,7 +38,7 @@ const StyleldSearchBar = styled(motion.input)`
   padding-bottom: 2px;
 
   &::placeholder {
-    font-weight: 200;
+    font-weight: 300;
     color: ${chroma(COLORS.primary).brighten(3)};
     font-family: inherit;
   }

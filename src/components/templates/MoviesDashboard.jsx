@@ -24,6 +24,9 @@ export default function MoviesDashboard() {
     []
   )
 
+  console.log(state);
+  
+
   return (
     <>
       <Helmet title="Dashboard under construction" />
