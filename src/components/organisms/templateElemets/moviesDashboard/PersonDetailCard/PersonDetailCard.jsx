@@ -8,7 +8,7 @@ import Image from "../Image/Image"
 import { FavoriteStar } from "../../../../molecules"
 import ContentLoader from "./ContentLoader"
 
-import { dropShadow, space } from "../../../../../themes/theme"ƒ
+import { dropShadow, space } from "../../../../../themes/theme"
 import { usePrevious, useLocalStorage } from "../../../../../hooks"
 import {
   OPACITY_VARIANT,
@@ -167,8 +167,6 @@ export default function PersonDetailCard({
     ...favoritePersons,
     { id: dataSets.personDetails.id, name: dataSets.personDetails.name },
   ]
-
-  // {/* <ContentLoader isOpen={isOpen} /> */}
 
   return (
     <AnimatePresence>

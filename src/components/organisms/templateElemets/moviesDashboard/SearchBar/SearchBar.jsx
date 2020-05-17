@@ -22,9 +22,9 @@ const SearchBarSubContainer = styled(motion.div)`
   cursor: pointer;
 `
 
-const StyleldSearchBar = styled(motion.input)`
+const StyledSearchBar = styled(motion.input)`
   z-index: ${themifyZIndex("hoverOverlay")};
-  width: 400px;
+  width: 20px;
   height: 40px;
   border-radius: ${space[1]}px;
   background: ${COLORS.primary};
@@ -133,7 +133,14 @@ export default function SearchBar({ setActiveNameID }) {
   }
 
   return (
-    <SearchBarMainContainer>
+    <SearchBarMainContainer
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+    >
       <SearchBarSubContainer>
         <AnimatePresence>
           {nameSearchResults.length && (
@@ -180,16 +187,18 @@ export default function SearchBar({ setActiveNameID }) {
         >
           <IoIosClose size={25} color={chroma(COLORS.primary).brighten(3)} />
         </CloseIconContainer>
-        <StyleldSearchBar
+        <StyledSearchBar
           animate={{
             paddingLeft: searchIsFocused ? 10 : 40,
+            width: 400,
           }}
           initial={{
             paddingLeft: 40,
+            width: 20,
           }}
           transition={{
             type: "spring",
-            damping: 12,
+            damping: 12
           }}
           type="text"
           id="search"
