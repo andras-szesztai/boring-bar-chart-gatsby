@@ -9,8 +9,8 @@ import Image from "../Image/Image"
 
 const ResultContainer = styled(motion.div)`
   display: grid;
-  grid-template-columns: min-content 1fr;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: 35px 1fr;
+  grid-template-rows: repeat(2, 50%);
   grid-template-areas:
     "photo name"
     "photo job";

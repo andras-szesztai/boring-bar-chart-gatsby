@@ -62,15 +62,15 @@ export default function MoviesDashboard() {
               justifyContent: "center",
               top: "50%",
               left: "50%",
-              border: "1px solid #333",
-              width: 200,
-              height: 200,
+              width: 100,
+              height: 100,
               transform: "translate(-50%, -50%)",
               cursor: "pointer",
             }}
           >
             <FavoriteHeart isFavorited={isFavorited} isHovered={isTitleHovered} />
           </motion.div>
+          <FavoritesList/>
         </div>
       )}
     </>
