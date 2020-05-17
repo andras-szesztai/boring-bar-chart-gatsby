@@ -10,6 +10,7 @@ import { useDeviceType, usePrevious } from "../../hooks"
 import {
   SearchBar,
   PersonDetailCard,
+  FavoritesList,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 import { FavoriteHeart } from "../molecules/icons"

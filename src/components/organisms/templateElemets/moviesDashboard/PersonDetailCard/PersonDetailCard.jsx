@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import styled from "styled-components"
 import { IoIosArrowUp, IoIosUnlock, IoIosLock } from "react-icons/io"
+import _ from "lodash"
 
 import ClosedNameContainer from "../ClosedNameContainer/ClosedNameContainer"
 import Image from "../Image/Image"
@@ -165,7 +166,16 @@ export default function PersonDetailCard({
     favoritePersons.filter(({ id }) => +id !== +dataSets.personDetails.id)
   const filterIn = () => [
     ...favoritePersons,
-    { id: dataSets.personDetails.id, name: dataSets.personDetails.name },
+    {
+      id: dataSets.personDetails.id,
+      name: dataSets.personDetails.name,
+      date: new Date(),
+      credits: _.uniq(
+        [dataSets.personCredits.cast, dataSets.personCredits.crew]
+          .flat()
+          .map(credit => credit && credit.id)
+      ),
+    },
   ]
 
   return (
@@ -220,11 +230,11 @@ export default function PersonDetailCard({
                   {!isOpen && (
                     <ClosedNameContainer
                       dataSets={dataSets}
-                      setFavorites={() =>
+                      setFavorites={() => {
                         setFavoritePersons(
                           isFavorited ? filterOut() : filterIn()
                         )
-                      }
+                      }}
                       isFavorited={isFavorited}
                     />
                   )}
