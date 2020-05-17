@@ -51,7 +51,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
       })
       .to(topRef.current, {
         scale: isFavorited ? 1 : 0,
-        ease: isFavorited ? "back.out(5)" : "back.in(4)",
+        ease: isFavorited ? "back.out(6)" : "back.in(4)",
       })
       .to(
         ".main-one",

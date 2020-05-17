@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import styled from "styled-components"
 import { IoIosArrowUp, IoIosUnlock, IoIosLock } from "react-icons/io"
-import ContentLoader from "react-content-loader"
 
-import { dropShadow, space } from "../../../../../themes/theme"
+import ClosedNameContainer from "../ClosedNameContainer/ClosedNameContainer"
+import Image from "../Image/Image"
+import { FavoriteStar } from "../../../../molecules"
+import ContentLoader from "./ContentLoader"
+
+import { dropShadow, space } from "../../../../../themes/theme"ƒ
 import { usePrevious, useLocalStorage } from "../../../../../hooks"
 import {
   OPACITY_VARIANT,
@@ -13,13 +17,32 @@ import {
   TRANSITION,
   LOCAL_STORE_ACCESSORS,
 } from "../../../../../constants/moviesDashboard"
-import ClosedNameContainer from "../ClosedNameContainer/ClosedNameContainer"
-import Image from "../Image/Image"
 import { TextContainer, TitleContainer } from "../styles/styles"
-import { FavoriteStar } from "../../../../molecules"
+import { themifyZIndex } from "../../../../../themes/mixins"
 
 const CARD_WIDTH = 400
 const CARD_HEIGHT = 240
+
+const variants = {
+  initial: {
+    y: "-100%",
+  },
+  animateFirst: {
+    y: space[2],
+    transition: TRANSITION.primary,
+  },
+  animateOpen: {
+    y: space[2],
+    transition: TRANSITION.primary,
+  },
+  animateClose: {
+    y: -(CARD_HEIGHT * 0.75),
+    transition: TRANSITION.primary,
+  },
+  exit: {
+    y: "-100%",
+  },
+}
 
 const PersonDetailsCard = styled(motion.div)`
   position: fixed;
@@ -48,6 +71,7 @@ const IconContainer = styled(motion.div)`
   position: absolute;
   left: ${space[2]}px;
   cursor: pointer;
+  z-index: ${themifyZIndex("hoverOverlay")};
 `
 
 const CardGrid = styled(motion.div)`
@@ -144,26 +168,7 @@ export default function PersonDetailCard({
     { id: dataSets.personDetails.id, name: dataSets.personDetails.name },
   ]
 
-  const variants = {
-    initial: {
-      y: "-100%",
-    },
-    animateFirst: {
-      y: space[2],
-      transition: TRANSITION.primary,
-    },
-    animateOpen: {
-      y: space[2],
-      transition: TRANSITION.primary,
-    },
-    animateClose: {
-      y: -(CARD_HEIGHT * 0.75),
-      transition: TRANSITION.primary,
-    },
-    exit: {
-      y: "-100%",
-    },
-  }
+  // {/* <ContentLoader isOpen={isOpen} /> */}
 
   return (
     <AnimatePresence>
@@ -175,84 +180,47 @@ export default function PersonDetailCard({
           variants={variants}
         >
           <AnimatePresence>
+            {!isOpen && (
+              <IconContainer
+                key="lock"
+                variants={OPACITY_VARIANT}
+                {...ANIMATE_PROPS}
+                whileHover={{ scale: 1.3 }}
+                onClick={() => {
+                  console.log("running")
+                  setIsLocked(prev => !prev)
+                }}
+                style={{
+                  bottom: space[4],
+                }}
+              >
+                <LockIcon size="24" color={COLORS.primary} />
+              </IconContainer>
+            )}
+          </AnimatePresence>
+          <IconContainer
+            key="arrow"
+            style={{
+              bottom: space[1],
+            }}
+            role="button"
+            onClick={() => {
+              isOpen ? closePersonDetails() : openPersonDetails()
+              isLocked && setIsLocked(false)
+            }}
+            initial={{ rotate: !isOpen ? 180 : 0 }}
+            animate={{
+              rotate: !isOpen ? 180 : 0,
+            }}
+            whileHover={{ scale: 1.3 }}
+          >
+            <IoIosArrowUp size="24" color={COLORS.primary} />
+          </IconContainer>
+          <AnimatePresence>
             {loading || !isInitialized ? (
-              <motion.div variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
-                {isOpen ? (
-                  <ContentLoader
-                    speed={2}
-                    width={400}
-                    height={200}
-                    viewBox="0 0 400 200"
-                    backgroundColor="#f3f3f3"
-                    foregroundColor="#c0c0c0"
-                    style={{
-                      position: "absolute",
-                    }}
-                  >
-                    <rect x="5" y="6" rx="3" ry="3" width="255" height="36" />
-                    <rect x="5" y="45" rx="3" ry="3" width="255" height="150" />
-                    <rect
-                      x="264"
-                      y="6"
-                      rx="3"
-                      ry="3"
-                      width="132"
-                      height="189"
-                    />
-                  </ContentLoader>
-                ) : (
-                  <ContentLoader
-                    speed={2}
-                    width={400}
-                    height={50}
-                    viewBox="0 0 400 45"
-                    backgroundColor="#f3f3f3"
-                    foregroundColor="#c0c0c0"
-                    style={{
-                      position: "absolute",
-                      bottom: 4,
-                    }}
-                  >
-                    <rect x="190" y="0" rx="3" ry="3" width="205" height="42" />
-                  </ContentLoader>
-                )}
-              </motion.div>
+              <ContentLoader isOpen={isOpen} />
             ) : (
               <DetailCardContent variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
-                <AnimatePresence>
-                  {!isOpen && (
-                    <IconContainer
-                      key="lock"
-                      variants={OPACITY_VARIANT}
-                      {...ANIMATE_PROPS}
-                      whileHover={{ scale: 1.3 }}
-                      onClick={() => setIsLocked(prev => !prev)}
-                      style={{
-                        bottom: space[4],
-                      }}
-                    >
-                      <LockIcon size="24" color={COLORS.primary} />
-                    </IconContainer>
-                  )}
-                </AnimatePresence>
-                <IconContainer
-                  key="arrow"
-                  style={{
-                    bottom: space[1],
-                  }}
-                  role="button"
-                  onClick={() => {
-                    isOpen ? closePersonDetails() : openPersonDetails()
-                    isLocked && setIsLocked(false)
-                  }}
-                  initial={{ rotate: !isOpen ? 180 : 0 }}
-                  animate={{
-                    rotate: !isOpen ? 180 : 0,
-                  }}
-                  whileHover={{ scale: 1.3 }}
-                >
-                  <IoIosArrowUp size="24" color={COLORS.primary} />
-                </IconContainer>
                 <AnimatePresence>
                   {!isOpen && (
                     <ClosedNameContainer
