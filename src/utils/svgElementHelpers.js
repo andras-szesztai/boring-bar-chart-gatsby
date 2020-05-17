@@ -161,3 +161,14 @@ export function createUpdateAxis({
     // }
   }
 }
+
+
+export const makeIconColorTransitionProps = (attr, color) => ({
+  initial: { [attr]: color },
+  animate: {
+    [attr]: color,
+  },
+  transition: {
+    duration: 0.3,
+  },
+})
