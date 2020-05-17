@@ -96,16 +96,23 @@ export default function PersonDetailCard({
   )
   useEffect(() => {
     if (!isInitialized && typeof isLocked == "undefined") {
-      setIsLocked(
-        typeof isLockedInLocalStorage == "boolean"
-          ? isLockedInLocalStorage
-          : false
-      )
+      const isLocalSet = typeof isLockedInLocalStorage == "boolean"
+      setIsLocked(isLocalSet ? isLockedInLocalStorage : false)
+      isLocalSet && isLockedInLocalStorage
+        ? closePersonDetails()
+        : openPersonDetails()
     }
     if (typeof isLocked != "undefined" && isLocked !== isLockedInLocalStorage) {
       setLockedInLocalStorage(isLocked)
     }
-  }, [isInitialized, isLockedInLocalStorage, isLocked, setLockedInLocalStorage])
+  }, [
+    isInitialized,
+    isLockedInLocalStorage,
+    isLocked,
+    setLockedInLocalStorage,
+    closePersonDetails,
+    openPersonDetails,
+  ])
 
   const [isTitleHovered, setIsTitleHovered] = useState(false)
 
@@ -142,7 +149,7 @@ export default function PersonDetailCard({
       y: "-100%",
     },
     animateFirst: {
-      y: isLocked ? -(CARD_HEIGHT * 0.75) : space[2],
+      y: space[2],
       transition: TRANSITION.primary,
     },
     animateOpen: {
@@ -214,6 +221,7 @@ export default function PersonDetailCard({
                     isOpen ? closePersonDetails() : openPersonDetails()
                     isLocked && setIsLocked(false)
                   }}
+                  initial={{ rotate: !isOpen ? 180 : 0 }}
                   animate={{
                     rotate: !isOpen ? 180 : 0,
                   }}

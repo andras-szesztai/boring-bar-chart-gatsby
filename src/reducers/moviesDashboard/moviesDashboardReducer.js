@@ -18,7 +18,7 @@ const initialState = {
     personCredits: false,
   },
   personDetailsCard: {
-    isOpen: true,
+    isOpen: undefined,
   },
 }
 
