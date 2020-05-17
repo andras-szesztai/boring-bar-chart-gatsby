@@ -5,20 +5,39 @@ import { motion } from "framer-motion"
 import { colors } from "../../../../themes/theme"
 import { makeIconColorTransitionProps } from "../../../../utils/svgElementHelpers"
 
+const circlesData = [
+  {
+    className: "one",
+    cx: 122.6,
+    cy: 188.6,
+  },
+  {
+    className: "two",
+    cx: 231.5,
+    cy: 200,
+  },
+  {
+    className: "three",
+    cx: 341.9,
+    cy: 188.6,
+  },
+]
+
 export default function FavoriteStar({
   isFavorited,
   isHovered,
   color,
   isActive,
   inactiveColor,
+  size,
 }) {
   const topRef = useRef(null)
 
   useEffect(() => {
-    // gsap.set(topRef.current, {
-    //   transformOrigin: "50% 50%",
-    //   scale: isFavorited ? 1 : 0,
-    // })
+    gsap.set(topRef.current, {
+      transformOrigin: "50% 50%",
+      scale: isFavorited ? 1 : 0,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -28,33 +47,55 @@ export default function FavoriteStar({
         defaults: {
           duration: 0.5,
           transformOrigin: "50% 50%",
-          ease: isFavorited ? "back.out(8)" : "back.in(6)",
+          ease: isFavorited ? "back.out(6)" : "back.in(4)",
         },
       })
       .to(topRef.current, {
         scale: isFavorited ? 1 : 0,
-        ease: isFavorited ? "back.out(6)" : "back.in(4)",
       })
+      .to(
+        ".main-heart-one",
+        {
+          y: isFavorited ? -70 : 0,
+          x: isFavorited ? -50 : 0,
+        },
+        isFavorited ? "-=0.4" : "-=0.5"
+      )
+      .to(
+        ".main-heart-two",
+        {
+          y: isFavorited ? -115 : 0,
+        },
+        "<"
+      )
+      .to(
+        ".main-heart-three",
+        {
+          y: isFavorited ? -70 : 0,
+          x: isFavorited ? 50 : 0,
+        },
+        "<"
+      )
   }, [isFavorited])
 
   useEffect(() => {
-    // gsap.to(".circle", {
-    //   opacity: isHovered ? 1 : 0,
-    //   stagger: {
-    //     amount: 0.4,
-    //   },
-    // })
+    gsap.to(".heart-circle", {
+      opacity: isHovered ? 1 : 0,
+      stagger: {
+        amount: 0.2,
+      },
+    })
   }, [isHovered])
 
   const sharedCircleAttrs = {
     fill: color,
-    r: 16,
+    r: 14,
     opacity: 0,
   }
 
   const fill = isActive ? color : inactiveColor
   return (
-    <motion.svg width="200px" viewBox="0 0 463 495.1">
+    <motion.svg width={size} viewBox="0 0 463 495.1">
       <motion.path
         {...makeIconColorTransitionProps("fill", fill)}
         ref={topRef}
@@ -73,9 +114,14 @@ export default function FavoriteStar({
 	c-30.5,31.7-29.5,82.1,2.2,112.6c0,0,0,0,0,0c0.3,0.3,0.6,0.6,0.9,0.9l104.4,99c8,7.6,20.5,7.6,28.4,0l104.4-99
 	C382,279,382.4,228.7,352,196.9z"
       />
-      <circle fill="#00AEEF" cx="231.5" cy="201.6" r="7" />
-      <circle fill="#00AEEF" cx="341.9" cy="188.6" r="7" />
-      <circle fill="#00AEEF" cx="122.6" cy="188.6" r="7" />
+      {circlesData.map(({ className, ...otherProps }) => (
+        <circle
+          key={className}
+          className={`main-heart-${className} heart-circle`}
+          {...otherProps}
+          {...sharedCircleAttrs}
+        />
+      ))}
     </motion.svg>
   )
 }
@@ -84,4 +130,5 @@ FavoriteStar.defaultProps = {
   color: "#ffbd69",
   inactiveColor: colors.grayLightest,
   isActive: true,
+  size: 40,
 }

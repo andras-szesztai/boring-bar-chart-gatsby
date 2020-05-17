@@ -6,13 +6,12 @@ import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
 
-import { useDeviceType, useLocalStorage, usePrevious } from "../../hooks"
+import { useDeviceType, usePrevious } from "../../hooks"
 import {
   SearchBar,
   PersonDetailCard,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
-import { LOCAL_STORE_ACCESSORS } from "../../constants/moviesDashboard"
 import { FavoriteHeart } from "../molecules/icons"
 
 export default function MoviesDashboard() {
@@ -35,6 +34,8 @@ export default function MoviesDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const [isTitleHovered, setIsTitleHovered] = useState(false)
+
   const [isFavorited, setIsFavorited] = useState(false)
   return (
     <>
@@ -52,6 +53,8 @@ export default function MoviesDashboard() {
           />
           <div
             onClick={() => setIsFavorited(prev => !prev)}
+            onMouseEnter={() => setIsTitleHovered(true)}
+            onMouseLeave={() => setIsTitleHovered(false)}
             style={{
               position: "fixed",
               display: "flex",
@@ -66,7 +69,7 @@ export default function MoviesDashboard() {
               cursor: "pointer",
             }}
           >
-            <FavoriteHeart isFavorited={isFavorited} />
+            <FavoriteHeart isFavorited={isFavorited} isHovered={isTitleHovered} />
           </div>
         </div>
       )}

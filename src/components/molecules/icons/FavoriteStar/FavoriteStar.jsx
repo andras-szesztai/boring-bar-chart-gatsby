@@ -64,7 +64,7 @@ export default function FavoriteStar({
         ease: isFavorited ? "back.out(6)" : "back.in(4)",
       })
       .to(
-        ".main-one",
+        ".main-star-one",
         {
           y: isFavorited ? 60 : 0,
           x: isFavorited ? 45 : 0,
@@ -72,7 +72,7 @@ export default function FavoriteStar({
         isFavorited ? "-=0.4" : "-=0.5"
       )
       .to(
-        ".main-two",
+        ".main-star-two",
         {
           y: isFavorited ? -30 : 0,
           x: isFavorited ? 70 : 0,
@@ -80,14 +80,14 @@ export default function FavoriteStar({
         "<"
       )
       .to(
-        ".main-three",
+        ".main-star-three",
         {
           y: isFavorited ? -75 : 0,
         },
         "<"
       )
       .to(
-        ".main-four",
+        ".main-star-four",
         {
           y: isFavorited ? -20 : 0,
           x: isFavorited ? -70 : 0,
@@ -95,7 +95,7 @@ export default function FavoriteStar({
         "<"
       )
       .to(
-        ".main-five",
+        ".main-star-five",
         {
           y: isFavorited ? 50 : 0,
           x: isFavorited ? -45 : 0,
@@ -105,7 +105,7 @@ export default function FavoriteStar({
   }, [isFavorited])
 
   useEffect(() => {
-    gsap.to(".circle", {
+    gsap.to(".star-circle", {
       opacity: isHovered ? 1 : 0,
       stagger: {
         amount: 0.4,
@@ -115,7 +115,7 @@ export default function FavoriteStar({
 
   const sharedCircleAttrs = {
     fill: color,
-    r: 16,
+    r: 14,
     opacity: 0,
   }
 
@@ -145,7 +145,7 @@ export default function FavoriteStar({
       {circlesData.map(({ className, ...otherProps }) => (
         <circle
           key={className}
-          className={`main-${className} circle`}
+          className={`main-star-${className} star-circle`}
           {...otherProps}
           {...sharedCircleAttrs}
         />
