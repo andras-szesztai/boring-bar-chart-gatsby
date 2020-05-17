@@ -23,6 +23,7 @@ export const TitleContainer = styled(motion.div)`
   position: relative;
   display: flex;
   font-size: ${themifyFontSize(3)};
+  padding-left: 2px;
   font-weight: 500;
   color: ${COLORS.primary};
   cursor: pointer;

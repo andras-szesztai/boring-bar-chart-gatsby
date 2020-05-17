@@ -184,10 +184,7 @@ export default function PersonDetailCard({
                 variants={OPACITY_VARIANT}
                 {...ANIMATE_PROPS}
                 whileHover={{ scale: 1.3 }}
-                onClick={() => {
-                  console.log("running")
-                  setIsLocked(prev => !prev)
-                }}
+                onClick={() => setIsLocked(prev => !prev)}
                 style={{
                   bottom: space[4],
                 }}

@@ -51,7 +51,7 @@ export default function MoviesDashboard() {
             favoritePersons={favoritePersons}
             setFavoritePersons={setFavoritePersons}
           />
-          <div
+          <motion.div
             onClick={() => setIsFavorited(prev => !prev)}
             onMouseEnter={() => setIsTitleHovered(true)}
             onMouseLeave={() => setIsTitleHovered(false)}
@@ -70,7 +70,7 @@ export default function MoviesDashboard() {
             }}
           >
             <FavoriteHeart isFavorited={isFavorited} isHovered={isTitleHovered} />
-          </div>
+          </motion.div>
         </div>
       )}
     </>
