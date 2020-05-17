@@ -133,6 +133,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
       />
       {circlesData.map(({ className, ...otherProps }) => (
         <circle
+          key={className}
           className={`main-${className} circle`}
           {...otherProps}
           {...sharedCircleAttrs}

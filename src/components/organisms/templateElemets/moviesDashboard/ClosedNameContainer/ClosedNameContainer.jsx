@@ -51,7 +51,6 @@ export default function ClosedNameContainer({
         style={{
           position: "absolute",
           right: 5,
-          top: 1,
         }}
         animate={{
           scale: isTitleHovered ? 1.2 : 1,

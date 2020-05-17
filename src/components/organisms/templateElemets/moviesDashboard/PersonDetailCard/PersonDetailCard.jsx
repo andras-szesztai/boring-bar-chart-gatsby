@@ -205,8 +205,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       <motion.div
                         style={{
                           position: "absolute",
-                          right: -3,
-                          top: 1,
+                          right: -3
                         }}
                         animate={{
                           scale: isTitleHovered ? 1.2 : 1,

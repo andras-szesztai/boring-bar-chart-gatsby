@@ -4,7 +4,7 @@ import axios from "axios"
 import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
-import Lottie from "react-lottie"
+import _ from "lodash"
 
 import { useDeviceType, useLocalStorage, usePrevious } from "../../hooks"
 import {
@@ -24,8 +24,10 @@ export default function MoviesDashboard() {
     []
   )
 
-  console.log(state);
-  
+  useEffect(() => {
+    favoritePersons && actions.setActiveNameID(_.last(favoritePersons).id)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

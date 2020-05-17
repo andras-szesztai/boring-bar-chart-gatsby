@@ -12,8 +12,10 @@ const initialState = {
   },
   personDetailsCard: {
     isOpen: true,
-  }
+  },
 }
+
+// export const fetch
 
 const SET_ACTIVE_ID = "SET_ACTIVE_ID"
 const FETCH_INFO_BY_ID = "FETCH_INFO_BY_ID"
