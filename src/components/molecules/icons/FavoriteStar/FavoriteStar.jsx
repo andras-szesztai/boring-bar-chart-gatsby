@@ -1,10 +1,35 @@
 import React, { useEffect, useRef } from "react"
 import gsap from "gsap"
-import { motion } from "framer-motion"
-import { usePrevious } from "../../../../hooks"
+
+const circlesData = [
+  {
+    className: "one",
+    cx: 388.7,
+    cy: 442.1,
+  },
+  {
+    className: "two",
+    cx: 447.1,
+    cy: 259.9,
+  },
+  {
+    className: "three",
+    cx: 293.3,
+    cy: 150.8,
+  },
+  {
+    className: "four",
+    cx: 139.6,
+    cy: 259.9,
+  },
+  {
+    className: "five",
+    cx: 195.6,
+    cy: 442.1,
+  },
+]
 
 export default function FavoriteStar({ isFavorited, isHovered }) {
-  const prevIsFavorited = usePrevious(isFavorited)
   const topRef = useRef(null)
 
   useEffect(() => {
@@ -67,55 +92,6 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
         },
         "<"
       )
-      .to(
-        ".sub-one",
-        {
-          y: isFavorited ? 45 : 0,
-          x: isFavorited ? 115 : 0,
-          opacity: isFavorited ? 1 : 0,
-          ease: isFavorited ? "back.out(4)" : "back.in(2)",
-        },
-        isFavorited ? "-=0.5" : "-=0.4"
-      )
-      .to(
-        ".sub-two",
-        {
-          y: isFavorited ? -120 : 0,
-          x: isFavorited ? 95 : 0,
-          opacity: isFavorited ? 1 : 0,
-          ease: isFavorited ? "back.out(4)" : "back.in(2)",
-        },
-        "<"
-      )
-      .to(
-        ".sub-three",
-        {
-          y: isFavorited ? -120 : 0,
-          x: isFavorited ? -95 : 0,
-          opacity: isFavorited ? 1 : 0,
-          ease: isFavorited ? "back.out(4)" : "back.in(2)",
-        },
-        "<"
-      )
-      .to(
-        ".sub-four",
-        {
-          y: isFavorited ? 45 : 0,
-          x: isFavorited ? -115 : 0,
-          opacity: isFavorited ? 1 : 0,
-          ease: isFavorited ? "back.out(4)" : "back.in(2)",
-        },
-        "<"
-      )
-      .to(
-        ".sub-five",
-        {
-          y: isFavorited ? 115 : 0,
-          opacity: isFavorited ? 1 : 0,
-          ease: isFavorited ? "back.out(4)" : "back.in(2)",
-        },
-        "<"
-      )
   }, [isFavorited])
 
   useEffect(() => {
@@ -134,7 +110,7 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
   }
 
   return (
-    <motion.svg width="35px" viewBox="0 0 591.2 591.2">
+    <svg width="35px" viewBox="0 0 591.2 591.2">
       <path
         ref={topRef}
         fill="#ffbd69"
@@ -155,66 +131,13 @@ export default function FavoriteStar({ isFavorited, isHovered }) {
 	l-16.5,95.8c-0.8,4.5,1.1,9.2,4.9,11.9c3.7,2.7,8.7,3.1,12.8,0.9l86.1-45.3l86.1,45.3c1.8,1,3.7,1.4,5.7,1.4c2.5,0,5-0.8,7.1-2.4
 	c3.7-2.8,5.6-7.3,4.9-11.9L380.6,338.8z"
       />
-      <circle
-        className="main-one circle"
-        cx="388.7"
-        cy="442.1"
-        {...sharedCircleAttrs}
-      />
-      <circle
-        className="sub-one circle"
-        cx="377.9"
-        cy="338.1"
-        {...sharedCircleAttrs}
-      />
-      <circle
-        className="main-two circle"
-        cx="447.1"
-        cy="259.9"
-        {...sharedCircleAttrs}
-      />
-      <circle
-        className="sub-two circle"
-        cx="345.8"
-        cy="238.2"
-        {...sharedCircleAttrs}
-      />
-      <circle
-        className="main-three circle"
-        cx="293.3"
-        cy="150.8"
-        {...sharedCircleAttrs}
-      />
-      <circle
-        className="sub-three circle"
-        cx="240.4"
-        cy="238.2"
-        {...sharedCircleAttrs}
-      />
-      <circle
-        className="main-four circle"
-        cx="139.6"
-        cy="259.9"
-        {...sharedCircleAttrs}
-      />
-      <circle
-        className="sub-four circle"
-        cx="209.3"
-        cy="338.1"
-        {...sharedCircleAttrs}
-      />
-      <circle
-        className="main-five circle"
-        cx="195.6"
-        cy="442.1"
-        {...sharedCircleAttrs}
-      />
-      <circle
-        className="sub-five circle"
-        cx="293.3"
-        cy="398.2"
-        {...sharedCircleAttrs}
-      />
-    </motion.svg>
+      {circlesData.map(({ className, ...otherProps }) => (
+        <circle
+          className={`main-${className} circle`}
+          {...otherProps}
+          {...sharedCircleAttrs}
+        />
+      ))}
+    </svg>
   )
 }
