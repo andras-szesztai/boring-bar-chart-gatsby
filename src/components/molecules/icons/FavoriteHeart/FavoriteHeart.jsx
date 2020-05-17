@@ -4,20 +4,18 @@ import { motion } from "framer-motion"
 
 import { colors } from "../../../../themes/theme"
 import { makeIconColorTransitionProps } from "../../../../utils/svgElementHelpers"
+import { useArrayRefs } from "../../../../hooks"
 
 const circlesData = [
   {
-    className: "one",
     cx: 122.6,
     cy: 188.6,
   },
   {
-    className: "two",
     cx: 231.5,
     cy: 200,
   },
   {
-    className: "three",
     cx: 341.9,
     cy: 188.6,
   },
@@ -32,6 +30,7 @@ export default function FavoriteStar({
   size,
 }) {
   const topRef = useRef(null)
+  const circleRef = useArrayRefs(3)
 
   useEffect(() => {
     gsap.set(topRef.current, {
@@ -54,7 +53,7 @@ export default function FavoriteStar({
         scale: isFavorited ? 1 : 0,
       })
       .to(
-        ".main-heart-one",
+        circleRef.current[0].current,
         {
           y: isFavorited ? -70 : 0,
           x: isFavorited ? -50 : 0,
@@ -62,30 +61,32 @@ export default function FavoriteStar({
         isFavorited ? "-=0.4" : "-=0.5"
       )
       .to(
-        ".main-heart-two",
+        circleRef.current[1].current,
         {
           y: isFavorited ? -115 : 0,
         },
         "<"
       )
       .to(
-        ".main-heart-three",
+        circleRef.current[2].current,
         {
           y: isFavorited ? -70 : 0,
           x: isFavorited ? 50 : 0,
         },
         "<"
       )
-  }, [isFavorited])
+  }, [circleRef, isFavorited])
 
   useEffect(() => {
-    gsap.to(".heart-circle", {
-      opacity: isHovered ? 1 : 0,
-      stagger: {
-        amount: 0.2,
-      },
-    })
-  }, [isHovered])
+    circleRef.current.forEach(circle =>
+      gsap.to(circle.current, {
+        opacity: isHovered ? 1 : 0,
+        stagger: {
+          amount: 0.2,
+        },
+      })
+    )
+  }, [circleRef, isHovered])
 
   const sharedCircleAttrs = {
     fill: color,
@@ -114,11 +115,11 @@ export default function FavoriteStar({
 	c-30.5,31.7-29.5,82.1,2.2,112.6c0,0,0,0,0,0c0.3,0.3,0.6,0.6,0.9,0.9l104.4,99c8,7.6,20.5,7.6,28.4,0l104.4-99
 	C382,279,382.4,228.7,352,196.9z"
       />
-      {circlesData.map(({ className, ...otherProps }) => (
+      {circlesData.map((coors, i) => (
         <circle
-          key={className}
-          className={`main-heart-${className} heart-circle`}
-          {...otherProps}
+          key={i}
+          ref={circleRef.current[i]}
+          {...coors}
           {...sharedCircleAttrs}
         />
       ))}

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
 import styled from "styled-components"
@@ -7,24 +7,33 @@ import chroma from "chroma-js"
 import _ from "lodash"
 
 import { space, dropShadow, colors } from "../../../../../themes/theme"
-import { COLORS } from "../../../../../constants/moviesDashboard"
-import { themifyFontSize } from "../../../../../themes/mixins"
+import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
+import { themifyFontSize, themifyZIndex } from "../../../../../themes/mixins"
 import { IoMdInformationCircle } from "react-icons/io"
 import { FavoriteStar, FavoriteHeart } from "../../../../molecules"
 
 const Container = styled(motion.div)`
   position: fixed;
+  display: flex;
 
   background-color: #fff;
   filter: drop-shadow(${dropShadow.primary})
     drop-shadow(${dropShadow.secondary});
   border-radius: ${space[1]}px;
 
-  width: 200px;
+  width: auto;
   height: 80px;
 
   bottom: ${space[2]}px;
   left: ${space[2]}px;
+`
+
+const RecentListContainer = styled(motion.div)`
+  width: 200px;
+  height: 70px;
+
+  background-color: red;
+  border-radius: ${space[1]}px;
 `
 
 const TextContainer = styled(motion.div)`
@@ -50,8 +59,21 @@ const Flex = styled.div`
 `
 
 export default function FavoritesList() {
+  const [isPersonsActive, setIsPersonsActive] = useState(true)
+  const [isMoviesActive, setIsMoviesActive] = useState(true)
+
   return (
-    <Container>
+    <Container
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+      transition={{
+        ...TRANSITION.primary,
+      }}
+    >
       <ControlCollapsed>
         <TextContainer style={{ alignSelf: "center" }}>
           Your recent favorites{" "}
@@ -76,19 +98,30 @@ export default function FavoritesList() {
             <motion.div
               whileHover={{ scale: 1.3 }}
               style={{ cursor: "pointer" }}
+              onClick={() => setIsPersonsActive(prev => !prev)}
             >
-              <FavoriteStar isFavorited={true} isHovered={false} />
+              <FavoriteStar
+                isFavorited={true}
+                isHovered={false}
+                isActive={isPersonsActive}
+              />
             </motion.div>
             <motion.div
               whileHover={{ scale: 1.3 }}
               initial={{ y: -3 }}
               style={{ cursor: "pointer" }}
+              onClick={() => setIsMoviesActive(prev => !prev)}
             >
-              <FavoriteHeart isFavorited={true} isHovered={false} />
+              <FavoriteHeart
+                isFavorited={true}
+                isHovered={false}
+                isActive={isMoviesActive}
+              />
             </motion.div>
           </Flex>
         </Flex>
       </ControlCollapsed>
+      <RecentListContainer>List</RecentListContainer>
     </Container>
   )
 }

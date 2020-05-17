@@ -7,7 +7,7 @@ import chroma from "chroma-js"
 
 import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
 import { space, fontFamily } from "../../../../../themes/theme"
-import { COLORS, API_ROOT } from "../../../../../constants/moviesDashboard"
+import { COLORS, API_ROOT, TRANSITION } from "../../../../../constants/moviesDashboard"
 import { useDebouncedSearch } from "../../../../../hooks"
 import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
 
@@ -148,10 +148,7 @@ export default function SearchBar({ setActiveNameID }) {
               initial={{ opacity: 0 }}
               animate={{ y: 45 + activeSearchResult * 70, opacity: 0.15 }}
               exit={{ opacity: 0 }}
-              transition={{
-                type: "spring",
-                damping: 12,
-              }}
+              transition={TRANSITION.primary}
             />
           )}
         </AnimatePresence>
