@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import styled from "styled-components"
 import { IoIosArrowUp, IoIosUnlock, IoIosLock } from "react-icons/io"
+import ContentLoader from "react-content-loader" 
 
 import { dropShadow, space } from "../../../../../themes/theme"
 import { useLocalStorage } from "../../../../../hooks"
@@ -132,6 +133,22 @@ export default function PersonDetailCard({ state, prevState, actions }) {
 
   return (
     <AnimatePresence>
+      <ContentLoader
+        speed={2}
+        width={400}
+        height={200}
+        viewBox="0 0 400 200"
+        backgroundColor="#f3f3f3"
+        foregroundColor="#d6d6d6"
+      >
+        <circle cx="250" cy="232" r="20" />
+        <rect x="235" y="3" rx="0" ry="0" width="154" height="184" />
+        <rect x="193" y="119" rx="0" ry="0" width="55" height="0" />
+        <rect x="188" y="108" rx="0" ry="0" width="62" height="0" />
+        <rect x="10" y="10" rx="0" ry="0" width="210" height="37" />
+        <rect x="162" y="18" rx="0" ry="0" width="1" height="11" />
+        <rect x="4" y="63" rx="0" ry="0" width="215" height="127" />
+      </ContentLoader>
       {dataSets.personDetails && (
         <PersonDetailsCard
           initial="initial"
@@ -205,7 +222,7 @@ export default function PersonDetailCard({ state, prevState, actions }) {
                       <motion.div
                         style={{
                           position: "absolute",
-                          right: -3
+                          right: -3,
                         }}
                         animate={{
                           scale: isTitleHovered ? 1.2 : 1,

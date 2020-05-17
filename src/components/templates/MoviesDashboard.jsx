@@ -26,8 +26,9 @@ export default function MoviesDashboard() {
 
   useEffect(() => {
     favoritePersons && actions.setActiveNameID(_.last(favoritePersons).id)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  console.log("MoviesDashboard -> state", state)
 
   return (
     <>

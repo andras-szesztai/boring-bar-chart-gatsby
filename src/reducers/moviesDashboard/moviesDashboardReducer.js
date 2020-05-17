@@ -10,15 +10,19 @@ const initialState = {
     personDetails: undefined,
     personCredits: undefined,
   },
+  loading: {
+    personDetails: false,
+    personCredits: false,
+  },
   personDetailsCard: {
     isOpen: true,
   },
 }
 
-// export const fetch
-
 const SET_ACTIVE_ID = "SET_ACTIVE_ID"
 const FETCH_INFO_BY_ID = "FETCH_INFO_BY_ID"
+const FETCH_INFO_BY_ID_SUCCESS = "FETCH_INFO_BY_ID_SUCCESS"
+const FETCH_INFO_BY_ID_FAIL = "FETCH_INFO_BY_ID_FAIL"
 const OPEN_PERSON_DETAILS_CARD = "OPEN_PERSON_DETAILS_CARD"
 const CLOSE_PERSON_DETAILS_CARD = "CLOSE_PERSON_DETAILS_CARD"
 
@@ -30,7 +34,33 @@ function moviesDashboardReducer(state, { type, payload }) {
     }),
     FETCH_INFO_BY_ID: () => ({
       ...state,
+      loading: {
+        personDetails: true,
+        personCredits: true,
+      },
+    }),
+    FETCH_INFO_BY_ID_SUCCESS: () => ({
+      ...state,
+      loading: {
+        personDetails: false,
+        personCredits: false,
+      },
       dataSets: {
+        personDetails: payload.details,
+        personCredits: payload.credits,
+      },
+    }),
+    FETCH_INFO_BY_ID_FAIL: () => ({
+      ...state,
+      loading: {
+        personDetails: false,
+        personCredits: false,
+      },
+      dataSets: {
+        personDetails: undefined,
+        personCredits: undefined,
+      },
+      error: {
         personDetails: payload.details,
         personCredits: payload.credits,
       },
@@ -65,6 +95,7 @@ export default function useMoviesDashboardReducer() {
 
   useEffect(() => {
     if (state.activeNameID && state.activeNameID !== prevState.activeNameID) {
+      dispatch({ type: FETCH_INFO_BY_ID })
       axios
         .all([
           axios.get(
@@ -77,7 +108,7 @@ export default function useMoviesDashboardReducer() {
         .then(
           axios.spread((details, credits) => {
             dispatch({
-              type: FETCH_INFO_BY_ID,
+              type: FETCH_INFO_BY_ID_SUCCESS,
               payload: {
                 details: details.data,
                 credits: credits.data,
@@ -86,7 +117,13 @@ export default function useMoviesDashboardReducer() {
           })
         )
         .catch(function(error) {
-          console.log(error)
+          dispatch({
+            type: FETCH_INFO_BY_ID_FAIL,
+            payload: {
+              details: error,
+              credits: error,
+            },
+          })
         })
     }
   })
