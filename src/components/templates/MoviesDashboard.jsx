@@ -73,10 +73,11 @@ export default function MoviesDashboard() {
               isFavorited={isFavorited}
               isHovered={isTitleHovered}
             />
-        </motion.div>
+          </motion.div>
           <FavoritesList
-            values={localStorageValues}
-            setters={localStorageSetters}
+            state={state}
+            localStorageValues={localStorageValues}
+            localStorageSetters={localStorageSetters}
           />
         </div>
       )}
