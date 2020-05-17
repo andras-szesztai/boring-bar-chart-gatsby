@@ -5,7 +5,7 @@ import { IoIosArrowUp, IoIosUnlock, IoIosLock } from "react-icons/io"
 import ContentLoader from "react-content-loader"
 
 import { dropShadow, space } from "../../../../../themes/theme"
-import { useLocalStorage, usePrevious } from "../../../../../hooks"
+import { usePrevious, useLocalStorage } from "../../../../../hooks"
 import {
   OPACITY_VARIANT,
   ANIMATE_PROPS,
@@ -20,27 +20,6 @@ import { FavoriteStar } from "../../../../molecules"
 
 const CARD_WIDTH = 400
 const CARD_HEIGHT = 240
-
-const variants = {
-  initial: {
-    y: "-100%",
-  },
-  animateFirst: {
-    y: space[2],
-    transition: TRANSITION.primary,
-  },
-  animateOpen: {
-    y: space[2],
-    transition: TRANSITION.primary,
-  },
-  animateClose: {
-    y: -(CARD_HEIGHT * 0.75),
-    transition: TRANSITION.primary,
-  },
-  exit: {
-    y: "-100%",
-  },
-}
 
 const PersonDetailsCard = styled(motion.div)`
   position: fixed;
@@ -93,6 +72,8 @@ export default function PersonDetailCard({
   prevState,
   actions,
   loading,
+  favoritePersons,
+  setFavoritePersons,
 }) {
   const prevLoading = usePrevious(loading)
   const {
@@ -108,14 +89,25 @@ export default function PersonDetailCard({
     }
   }, [isInitialized, prevLoading, loading])
 
-  // console.log(loading)
-  const [isLocked, setIsLocked] = useState(false)
-  const [isTitleHovered, setIsTitleHovered] = useState(false)
-
-  const [favoritePersons, setFavoritePersons] = useLocalStorage(
-    LOCAL_STORE_ACCESSORS.favoritePersons,
+  const [isLocked, setIsLocked] = useState(undefined)
+  const [isLockedInLocalStorage, setLockedInLocalStorage] = useLocalStorage(
+    LOCAL_STORE_ACCESSORS.lockedPersonDetailCard,
     []
   )
+  useEffect(() => {
+    if (!isInitialized && typeof isLocked == "undefined") {
+      setIsLocked(
+        typeof isLockedInLocalStorage == "boolean"
+          ? isLockedInLocalStorage
+          : false
+      )
+    }
+    if (typeof isLocked != "undefined" && isLocked !== isLockedInLocalStorage) {
+      setLockedInLocalStorage(isLocked)
+    }
+  }, [isInitialized, isLockedInLocalStorage, isLocked, setLockedInLocalStorage])
+
+  const [isTitleHovered, setIsTitleHovered] = useState(false)
 
   if (isOpen) animateCard = "animateOpen"
   if (!isOpen) animateCard = "animateClose"
@@ -144,6 +136,27 @@ export default function PersonDetailCard({
     ...favoritePersons,
     { id: dataSets.personDetails.id, name: dataSets.personDetails.name },
   ]
+
+  const variants = {
+    initial: {
+      y: "-100%",
+    },
+    animateFirst: {
+      y: isLocked ? -(CARD_HEIGHT * 0.75) : space[2],
+      transition: TRANSITION.primary,
+    },
+    animateOpen: {
+      y: space[2],
+      transition: TRANSITION.primary,
+    },
+    animateClose: {
+      y: -(CARD_HEIGHT * 0.75),
+      transition: TRANSITION.primary,
+    },
+    exit: {
+      y: "-100%",
+    },
+  }
 
   return (
     <AnimatePresence>

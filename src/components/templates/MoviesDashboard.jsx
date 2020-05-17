@@ -17,12 +17,15 @@ import { LOCAL_STORE_ACCESSORS } from "../../constants/moviesDashboard"
 export default function MoviesDashboard() {
   const device = useDeviceType()
 
-  const { state, prevState, actions } = moviesDashboardReducer()
-
-  const [favoritePersons, setFavoritePerson] = useLocalStorage(
-    LOCAL_STORE_ACCESSORS.favoritePersons,
-    []
-  )
+  const {
+    state,
+    prevState,
+    actions,
+    localStorageValues,
+    localStorageSetters,
+  } = moviesDashboardReducer()
+  const { favoritePersons } = localStorageValues
+  const { setFavoritePersons } = localStorageSetters
 
   useEffect(() => {
     favoritePersons && actions.setActiveNameID(_.last(favoritePersons).id)
@@ -40,6 +43,8 @@ export default function MoviesDashboard() {
             prevState={prevState}
             actions={actions}
             loading={state.loading.personDetails}
+            favoritePersons={favoritePersons}
+            setFavoritePersons={setFavoritePersons}
           />
         </div>
       )}

@@ -1,8 +1,11 @@
 import { useReducer, useEffect } from "react"
 import axios from "axios"
 
-import { usePrevious } from "../../hooks"
-import { API_ROOT } from "../../constants/moviesDashboard"
+import { usePrevious, useLocalStorage } from "../../hooks"
+import {
+  API_ROOT,
+  LOCAL_STORE_ACCESSORS,
+} from "../../constants/moviesDashboard"
 
 const initialState = {
   activeNameID: undefined,
@@ -87,6 +90,19 @@ export default function useMoviesDashboardReducer() {
   const [state, dispatch] = useReducer(moviesDashboardReducer, initialState)
   const prevState = usePrevious(state)
 
+  const [favoritePersons, setFavoritePersons] = useLocalStorage(
+    LOCAL_STORE_ACCESSORS.favoritePersons,
+    []
+  )
+
+  const localStorageValues = {
+    favoritePersons,
+  }
+
+  const localStorageSetters = {
+    setFavoritePersons,
+  }
+
   const actions = {
     setActiveNameID: payload => dispatch({ type: SET_ACTIVE_ID, payload }),
     openPersonDetails: () => dispatch({ type: OPEN_PERSON_DETAILS_CARD }),
@@ -128,5 +144,5 @@ export default function useMoviesDashboardReducer() {
     }
   })
 
-  return { state, prevState, actions }
+  return { state, prevState, actions, localStorageValues, localStorageSetters }
 }
