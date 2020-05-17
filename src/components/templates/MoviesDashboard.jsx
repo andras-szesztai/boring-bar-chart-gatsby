@@ -13,6 +13,7 @@ import {
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 import { LOCAL_STORE_ACCESSORS } from "../../constants/moviesDashboard"
+import { FavoriteHeart } from "../molecules/icons"
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
@@ -34,6 +35,7 @@ export default function MoviesDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const [isFavorited, setIsFavorited] = useState(false)
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -48,6 +50,24 @@ export default function MoviesDashboard() {
             favoritePersons={favoritePersons}
             setFavoritePersons={setFavoritePersons}
           />
+          <div
+            onClick={() => setIsFavorited(prev => !prev)}
+            style={{
+              position: "fixed",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              top: "50%",
+              left: "50%",
+              border: "1px solid #333",
+              width: 200,
+              height: 200,
+              transform: "translate(-50%, -50%)",
+              cursor: "pointer",
+            }}
+          >
+            <FavoriteHeart isFavorited={isFavorited} />
+          </div>
         </div>
       )}
     </>

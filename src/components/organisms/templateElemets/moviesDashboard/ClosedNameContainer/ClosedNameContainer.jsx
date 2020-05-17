@@ -3,7 +3,6 @@ import { motion } from "framer-motion"
 import styled from "styled-components"
 import chroma from "chroma-js"
 
-// Styles
 import { space } from "../../../../../themes/theme"
 import { themifyFontSize } from "../../../../../themes/mixins"
 import {

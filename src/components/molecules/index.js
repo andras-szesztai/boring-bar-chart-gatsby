@@ -22,7 +22,7 @@ import {
 import { CountUpSpan } from "./textElemets"
 import { FullScreenLoader } from "./loaders"
 import { ScrollHint, SiteHelmet } from "./miscComponents"
-import { FavoriteStar } from "./icons"
+import { FavoriteStar, FavoriteHeart } from "./icons"
 
 export {
   VerticalDropChart,
@@ -45,4 +45,5 @@ export {
   HierarchicalMultiSelect,
   SiteHelmet,
   FavoriteStar,
+  FavoriteHeart,
 }
