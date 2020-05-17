@@ -10,6 +10,7 @@ import { space, dropShadow, colors } from "../../../../../themes/theme"
 import { COLORS } from "../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../themes/mixins"
 import { IoMdInformationCircle } from "react-icons/io"
+import { FavoriteStar, FavoriteHeart } from "../../../../molecules"
 
 const Container = styled(motion.div)`
   position: fixed;
@@ -67,11 +68,24 @@ export default function FavoritesList() {
         </TextContainer>
         <Flex>
           <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
-            Show
+            Show:
           </TextContainer>
-          <Flex style={{ justifyContent: "space-evenly", alignItems: "center" }}>
-            <span>Hello</span>
-            <span>World</span>
+          <Flex
+            style={{ justifyContent: "space-evenly", alignItems: "center" }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.3 }}
+              style={{ cursor: "pointer" }}
+            >
+              <FavoriteStar isFavorited={true} isHovered={false} />
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.3 }}
+              initial={{ y: -3 }}
+              style={{ cursor: "pointer" }}
+            >
+              <FavoriteHeart isFavorited={true} isHovered={false} />
+            </motion.div>
           </Flex>
         </Flex>
       </ControlCollapsed>

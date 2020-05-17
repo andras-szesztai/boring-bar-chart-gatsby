@@ -130,5 +130,5 @@ FavoriteStar.defaultProps = {
   color: "#ffbd69",
   inactiveColor: colors.grayLightest,
   isActive: true,
-  size: 40,
+  size: 35,
 }

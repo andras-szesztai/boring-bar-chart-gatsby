@@ -4,30 +4,26 @@ import { motion } from "framer-motion"
 
 import { colors } from "../../../../themes/theme"
 import { makeIconColorTransitionProps } from "../../../../utils/svgElementHelpers"
+import { useArrayRefs } from "../../../../hooks"
 
 const circlesData = [
   {
-    className: "one",
     cx: 388.7,
     cy: 442.1,
   },
   {
-    className: "two",
     cx: 447.1,
     cy: 259.9,
   },
   {
-    className: "three",
     cx: 293.3,
     cy: 150.8,
   },
   {
-    className: "four",
     cx: 139.6,
     cy: 259.9,
   },
   {
-    className: "five",
     cx: 195.6,
     cy: 442.1,
   },
@@ -41,6 +37,7 @@ export default function FavoriteStar({
   inactiveColor,
 }) {
   const topRef = useRef(null)
+  const circleRef = useArrayRefs(5)
 
   useEffect(() => {
     gsap.set(topRef.current, {
@@ -64,7 +61,7 @@ export default function FavoriteStar({
         ease: isFavorited ? "back.out(6)" : "back.in(4)",
       })
       .to(
-        ".main-star-one",
+        circleRef.current[0].current,
         {
           y: isFavorited ? 60 : 0,
           x: isFavorited ? 45 : 0,
@@ -72,7 +69,7 @@ export default function FavoriteStar({
         isFavorited ? "-=0.4" : "-=0.5"
       )
       .to(
-        ".main-star-two",
+        circleRef.current[1].current,
         {
           y: isFavorited ? -30 : 0,
           x: isFavorited ? 70 : 0,
@@ -80,14 +77,14 @@ export default function FavoriteStar({
         "<"
       )
       .to(
-        ".main-star-three",
+        circleRef.current[2].current,
         {
           y: isFavorited ? -75 : 0,
         },
         "<"
       )
       .to(
-        ".main-star-four",
+        circleRef.current[3].current,
         {
           y: isFavorited ? -20 : 0,
           x: isFavorited ? -70 : 0,
@@ -95,23 +92,25 @@ export default function FavoriteStar({
         "<"
       )
       .to(
-        ".main-star-five",
+        circleRef.current[4].current,
         {
           y: isFavorited ? 50 : 0,
           x: isFavorited ? -45 : 0,
         },
         "<"
       )
-  }, [isFavorited])
+  }, [circleRef, isFavorited])
 
   useEffect(() => {
-    gsap.to(".star-circle", {
-      opacity: isHovered ? 1 : 0,
-      stagger: {
-        amount: 0.4,
-      },
-    })
-  }, [isHovered])
+    circleRef.current.forEach(circle =>
+      gsap.to(circle.current, {
+        opacity: isHovered ? 1 : 0,
+        stagger: {
+          amount: 0.4,
+        },
+      })
+    )
+  }, [circleRef, isHovered])
 
   const sharedCircleAttrs = {
     fill: color,
@@ -142,11 +141,11 @@ export default function FavoriteStar({
 	l-16.5,95.8c-0.8,4.5,1.1,9.2,4.9,11.9c3.7,2.7,8.7,3.1,12.8,0.9l86.1-45.3l86.1,45.3c1.8,1,3.7,1.4,5.7,1.4c2.5,0,5-0.8,7.1-2.4
 	c3.7-2.8,5.6-7.3,4.9-11.9L380.6,338.8z"
       />
-      {circlesData.map(({ className, ...otherProps }) => (
+      {circlesData.map((coors, i) => (
         <circle
-          key={className}
-          className={`main-star-${className} star-circle`}
-          {...otherProps}
+          key={i}
+          ref={circleRef.current[i]}
+          {...coors}
           {...sharedCircleAttrs}
         />
       ))}
