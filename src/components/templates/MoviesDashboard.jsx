@@ -28,7 +28,6 @@ export default function MoviesDashboard() {
     favoritePersons && actions.setActiveNameID(_.last(favoritePersons).id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log("MoviesDashboard -> state", state)
 
   return (
     <>
@@ -40,6 +39,7 @@ export default function MoviesDashboard() {
             state={state}
             prevState={prevState}
             actions={actions}
+            loading={state.loading.personDetails}
           />
         </div>
       )}
