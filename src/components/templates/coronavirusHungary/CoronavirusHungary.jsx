@@ -27,51 +27,54 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   const [state, dispatch] = useReducer(
     coronavirusDashboardReducer,
     coronavirusDashboardInitialState
-  )
-  const prevState = usePrevious(state)
-  const filterContainerRef = useRef(null)
-  const scrollPosition = useScrollPosition()
-  const { windowWidth } = useWindowDimensions()
-  const [containerPosition, setContainerPosition] = useState(undefined)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (!containerPosition && filterContainerRef.current) {
-      setContainerPosition(filterContainerRef.current.getBoundingClientRect())
-    }
-  })
-
-  const isBelowPosition =
+    )
+    const prevState = usePrevious(state)
+    const filterContainerRef = useRef(null)
+    const scrollPosition = useScrollPosition()
+    const { windowWidth } = useWindowDimensions()
+    const [containerPosition, setContainerPosition] = useState(undefined)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+      if (!containerPosition && filterContainerRef.current) {
+        setContainerPosition(filterContainerRef.current.getBoundingClientRect())
+      }
+    })
+    
+    const isBelowPosition =
     containerPosition && containerPosition.top < scrollPosition
+    
+    const {
+      setFormattedData,
+      setLanguage,
+      setInitialDates,
+      setFilteredData,
+      setFullListDomain,
+      updateCurrDate,
+      updateDisplay,
+      setDataSets,
+    } = actions
 
-  const {
-    setFormattedData,
-    setLanguage,
-    setInitialDates,
-    setFilteredData,
-    setFullListDomain,
-    updateCurrDate,
-    updateDisplay,
-    setDataSets,
-  } = actions
-
+  console.log(state);
+  
   useEffect(() => {
     if (data && !state.dataSets.formattedData) {
+      console.log("first");
       setFormattedData(dispatch, { data: data })
       setInitialDates(dispatch)
       setFilteredData(dispatch)
-      setDataSets(dispatch)
+      // setDataSets(dispatch)
       setFullListDomain(dispatch)
     }
-    if (prevState) {
-      if (prevState.language !== state.language) {
-        const currData = state.language === "en" ? enData : data
-        setFormattedData(dispatch, { data: currData })
-        setFilteredData(dispatch)
-      }
-      if (!_.isEqual(state.dates.currDate, prevState.dates.currDate)) {
-        setFilteredData(dispatch)
-      }
-    }
+    // if (prevState) {
+    //   if (prevState.language !== state.language) {
+    //     const currData = state.language === "en" ? enData : data
+    //     setFormattedData(dispatch, { data: currData })
+    //     setFilteredData(dispatch)
+    //   }
+    //   if (!_.isEqual(state.dates.currDate, prevState.dates.currDate)) {
+    //     setFilteredData(dispatch)
+    //   }
+    // }
   })
 
   const device = useDeviceType()
@@ -98,7 +101,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   return (
     <>
       <SiteHelmet pageTitle={TEXT.helmet[state.language]} />
-      {isModal && (
+      {/* {isModal && (
         <Modal
           isOpen={isModal}
           style={modalStyle}
@@ -144,7 +147,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           setCardClicked={setCardClicked}
           filterTransitionProps={props}
         />
-      )}
+      )} */}
     </>
   )
 }

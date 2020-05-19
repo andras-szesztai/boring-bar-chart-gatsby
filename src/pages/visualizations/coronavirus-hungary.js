@@ -5,12 +5,11 @@ import {
   DATA_URL_HU,
   DATA_URL_EN,
 } from "../../constants/visualizations/coronavirusHungary"
-import { useFetchData } from "../../hooks"
 import { CoronaVirusHungaryDashboard } from "../../components/templates/"
 
 export default function() {
   const [loading, setLoading] = useState(false)
-  const [data, setData] = useState({
+  const [dataSets, setDataSets] = useState({
     hun: undefined,
     eng: undefined,
   })
@@ -21,8 +20,8 @@ export default function() {
       .all([axios.get(`${DATA_URL_HU}`), axios.get(`${DATA_URL_EN}`)])
       .then(
         axios.spread((hun, eng) => {
+          setDataSets({ hun: hun.data, eng: eng.data })
           setLoading(false)
-          setData({ hun: hun.data, eng: eng.data })
         })
       )
       .catch(function(error) {
@@ -30,13 +29,12 @@ export default function() {
       })
   }, [])
 
-  console.log(data)
   return (
     <>
       <CoronaVirusHungaryDashboard
         loading={loading}
-        data={data.hun}
-        enData={data.eng}
+        data={dataSets.hun}
+        enData={dataSets.eng}
       />
     </>
   )

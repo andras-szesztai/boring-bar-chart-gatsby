@@ -93,7 +93,7 @@ export default function CardGrid({
         marginTop={mobilePortrait && 6}
         marginBottom={mobilePortrait && 4}
       >
-        {console.log(title, data)}
+        {/* {console.log(title, data)} */}
         {!isRatioFront ? (
           !onlyChart ? (
             <LineChart

@@ -232,56 +232,56 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
         ),
       },
     }),
-    SET_DATA_SETS: () => {
-      const dateSortedData = formattedData.sort((a, b) => a.date - b.date)
-      const fullMaleData = filterGender({
-        accessor: "accessorM",
-        language,
-        data: dateSortedData,
-      })
-      const fullFemaleData = filterGender({
-        accessor: "accessorF",
-        language,
-        data: dateSortedData,
-      })
-      const groupedFull = _.groupBy(dateSortedData, "date")
-      const groupedFemale = _.groupBy(fullMaleData, "date")
-      const groupedMale = _.groupBy(fullFemaleData, "date")
-      const runningTotal = makeRunningTotal(groupedFull, "total")
-      return {
-        ...state,
-        dataSets: {
-          ...state.dataSets,
-          cumulative: {
-            total: runningTotal,
-            gender: [
-              ...makeRunningTotal(groupedMale, "female"),
-              ...makeRunningTotal(groupedFemale, "male"),
-            ],
-          },
-          daily: {
-            total: makeRunningAvg(groupedFull, "total"),
-            gender: [
-              ...makeRunningAvg(groupedMale, "female"),
-              ...makeRunningAvg(groupedFemale, "male"),
-            ],
-          },
-          age: {
-            total: makeAvgAge(groupedFull, "total"),
-            gender: [
-              ...makeAvgAge(groupedMale, "female"),
-              ...makeAvgAge(groupedFemale, "male"),
-            ],
-          },
-          ratio: {
-            gender: [
-              ...makeRatio(groupedMale, "female", runningTotal),
-              ...makeRatio(groupedFemale, "male", runningTotal),
-            ],
-          },
-        },
-      }
-    },
+    // SET_DATA_SETS: () => {
+    //   const dateSortedData = formattedData.sort((a, b) => a.date - b.date)
+    //   const fullMaleData = filterGender({
+    //     accessor: "accessorM",
+    //     language,
+    //     data: dateSortedData,
+    //   })
+    //   const fullFemaleData = filterGender({
+    //     accessor: "accessorF",
+    //     language,
+    //     data: dateSortedData,
+    //   })
+    //   const groupedFull = _.groupBy(dateSortedData, "date")
+    //   const groupedFemale = _.groupBy(fullMaleData, "date")
+    //   const groupedMale = _.groupBy(fullFemaleData, "date")
+    //   const runningTotal = makeRunningTotal(groupedFull, "total")
+    //   return {
+    //     ...state,
+    //     dataSets: {
+    //       ...state.dataSets,
+    //       cumulative: {
+    //         total: runningTotal,
+    //         gender: [
+    //           ...makeRunningTotal(groupedMale, "female"),
+    //           ...makeRunningTotal(groupedFemale, "male"),
+    //         ],
+    //       },
+    //       daily: {
+    //         total: makeRunningAvg(groupedFull, "total"),
+    //         gender: [
+    //           ...makeRunningAvg(groupedMale, "female"),
+    //           ...makeRunningAvg(groupedFemale, "male"),
+    //         ],
+    //       },
+    //       age: {
+    //         total: makeAvgAge(groupedFull, "total"),
+    //         gender: [
+    //           ...makeAvgAge(groupedMale, "female"),
+    //           ...makeAvgAge(groupedFemale, "male"),
+    //         ],
+    //       },
+    //       ratio: {
+    //         gender: [
+    //           ...makeRatio(groupedMale, "female", runningTotal),
+    //           ...makeRatio(groupedFemale, "male", runningTotal),
+    //         ],
+    //       },
+    //     },
+    //   }
+    // },
     UPDATE_DISPLAY: () => ({
       ...state,
       display: state.display === "total" ? "gender" : "total",
