@@ -62,16 +62,16 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       setDataSets(dispatch)
       setFullListDomain(dispatch)
     }
-    // if (prevState) {
-    //   if (prevState.language !== state.language) {
-    //     const currData = state.language === "en" ? enData : data
-    //     setFormattedData(dispatch, { data: currData })
-    //     setFilteredData(dispatch)
-    //   }
-    //   if (!_.isEqual(state.dates.currDate, prevState.dates.currDate)) {
-    //     setFilteredData(dispatch)
-    //   }
-    // }
+    if (prevState) {
+      if (prevState.language !== state.language) {
+        const currData = state.language === "en" ? enData : data
+        setFormattedData(dispatch, { data: currData })
+        setFilteredData(dispatch)
+      }
+      if (!_.isEqual(state.dates.currDate, prevState.dates.currDate)) {
+        setFilteredData(dispatch)
+      }
+    }
   })
 
   const device = useDeviceType()
@@ -98,7 +98,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
   return (
     <>
       <SiteHelmet pageTitle={TEXT.helmet[state.language]} />
-      {/* {isModal && (
+      {isModal && (
         <Modal
           isOpen={isModal}
           style={modalStyle}
@@ -144,7 +144,7 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
           setCardClicked={setCardClicked}
           filterTransitionProps={props}
         />
-      )} */}
+      )}
     </>
   )
 }

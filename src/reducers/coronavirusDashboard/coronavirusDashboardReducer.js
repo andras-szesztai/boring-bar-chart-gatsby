@@ -1,6 +1,7 @@
 import { min, max } from "d3-array"
 import { differenceInDays } from "date-fns"
 import _ from "lodash"
+import moment from "moment"
 
 import { TEXT } from "../../constants/visualizations/coronavirusHungary"
 import { makeAreaData } from "../../components/organisms/templateElemets/coronavirusHungary/utils/dataHelpers"
@@ -13,14 +14,14 @@ function makeFormattedData({ data, isHu }) {
     return data.map(el => ({
       ...el,
       age: +el.kor,
-      date: new Date(el.datum),
+      date: new Date(moment.utc(el.datum).format()),
       number: +el.sorszam,
       gender: el.nem,
     }))
   }
   return data.map(el => ({
     ...el,
-    date: new Date(el.date),
+    date: new Date(moment.utc(el.date).format()),
     age: +el.age,
     number: +el.number,
   }))
@@ -28,18 +29,17 @@ function makeFormattedData({ data, isHu }) {
 
 function makeRunningTotal(dateGrouped, key) {
   const allDates = Object.keys(dateGrouped)
-  console.log(allDates)
-  // const enrichedAllDates = getDaysArray(
-  //   allDates[0],
-  //   allDates[allDates.length - 1]
-  // )
-  // let accumulator = 0
-  // return enrichedAllDates.map(date => {
-  //   const currAcc = accumulator
-  //   const currVal = dateGrouped[date] ? dateGrouped[date].length : 0
-  //   accumulator += currVal
-  //   return { key, date, value: currAcc + currVal }
-  // })
+  const enrichedAllDates = getDaysArray(
+    allDates[0],
+    allDates[allDates.length - 1]
+  )
+  let accumulator = 0
+  return enrichedAllDates.map(date => {
+    const currAcc = accumulator
+    const currVal = dateGrouped[date] ? dateGrouped[date].length : 0
+    accumulator += currVal
+    return { key, date, value: currAcc + currVal }
+  })
 }
 
 function getDaysArray(start, end) {
@@ -249,40 +249,39 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
       const groupedFemale = _.groupBy(fullMaleData, "date")
       const groupedMale = _.groupBy(fullFemaleData, "date")
       const runningTotal = makeRunningTotal(groupedFull, "total")
-      // console.log("runningTotal", runningTotal)
-      // return {
-      //   ...state,
-      //   dataSets: {
-      //     ...state.dataSets,
-      //     cumulative: {
-      //       total: runningTotal,
-      //       gender: [
-      //         ...makeRunningTotal(groupedMale, "female"),
-      //         ...makeRunningTotal(groupedFemale, "male"),
-      //       ],
-      //     },
-      //     daily: {
-      //       total: makeRunningAvg(groupedFull, "total"),
-      //       gender: [
-      //         ...makeRunningAvg(groupedMale, "female"),
-      //         ...makeRunningAvg(groupedFemale, "male"),
-      //       ],
-      //     },
-      //     age: {
-      //       total: makeAvgAge(groupedFull, "total"),
-      //       gender: [
-      //         ...makeAvgAge(groupedMale, "female"),
-      //         ...makeAvgAge(groupedFemale, "male"),
-      //       ],
-      //     },
-      //     ratio: {
-      //       gender: [
-      //         ...makeRatio(groupedMale, "female", runningTotal),
-      //         ...makeRatio(groupedFemale, "male", runningTotal),
-      //       ],
-      //     },
-      //   },
-      // }
+      return {
+        ...state,
+        dataSets: {
+          ...state.dataSets,
+          cumulative: {
+            total: runningTotal,
+            gender: [
+              ...makeRunningTotal(groupedMale, "female"),
+              ...makeRunningTotal(groupedFemale, "male"),
+            ],
+          },
+          daily: {
+            total: makeRunningAvg(groupedFull, "total"),
+            gender: [
+              ...makeRunningAvg(groupedMale, "female"),
+              ...makeRunningAvg(groupedFemale, "male"),
+            ],
+          },
+          age: {
+            total: makeAvgAge(groupedFull, "total"),
+            gender: [
+              ...makeAvgAge(groupedMale, "female"),
+              ...makeAvgAge(groupedFemale, "male"),
+            ],
+          },
+          ratio: {
+            gender: [
+              ...makeRatio(groupedMale, "female", runningTotal),
+              ...makeRatio(groupedFemale, "male", runningTotal),
+            ],
+          },
+        },
+      }
     },
     UPDATE_DISPLAY: () => ({
       ...state,
