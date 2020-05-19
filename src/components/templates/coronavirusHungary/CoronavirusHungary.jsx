@@ -53,16 +53,13 @@ function CoronaVirusHungaryDashboard({ data, enData, loading }) {
       updateDisplay,
       setDataSets,
     } = actions
-
-  console.log(state);
   
   useEffect(() => {
     if (data && !state.dataSets.formattedData) {
-      console.log("first");
       setFormattedData(dispatch, { data: data })
       setInitialDates(dispatch)
       setFilteredData(dispatch)
-      // setDataSets(dispatch)
+      setDataSets(dispatch)
       setFullListDomain(dispatch)
     }
     // if (prevState) {
