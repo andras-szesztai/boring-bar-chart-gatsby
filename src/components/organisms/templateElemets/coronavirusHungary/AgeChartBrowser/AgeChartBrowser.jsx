@@ -238,7 +238,7 @@ export default function AgeChartBrowser({
   })
 
   useEffect(() => {
-    if (init && prevData[0].gender !== data[0].gender) {
+    if (init && prevData[0] && data[0] && prevData[0].gender !== data[0].gender) {
       const { yScale } = storedValues.current
       yScale.domain([TEXT.accessorF[language], TEXT.genderM[language]])
       storedValues.current = {
