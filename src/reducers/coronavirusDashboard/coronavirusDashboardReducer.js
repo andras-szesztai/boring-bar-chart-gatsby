@@ -8,6 +8,12 @@ import { makeAreaData } from "../../components/organisms/templateElemets/coronav
 
 const filterGender = ({ accessor, data, language }) =>
   data.filter(({ gender }) => gender === TEXT[accessor][language])
+// TODO: fix to UTC
+// var currentHelsinkiHoursOffset = 2; // sometimes it is 3
+// var date = new Date(1270544790922);
+// var helsenkiOffset = currentHelsinkiHoursOffset*60*60000;
+// var userOffset = _date.getTimezoneOffset()*60000; // [min*60000 = ms]
+// var helsenkiTime = new Date(date.getTime()+ helsenkiOffset + userOffset);
 
 function makeFormattedData({ data, isHu }) {
   if (isHu) {

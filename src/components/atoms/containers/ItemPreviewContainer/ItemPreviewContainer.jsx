@@ -2,8 +2,15 @@ import { animated } from "react-spring"
 import styled from "styled-components"
 
 import { space } from "../../../../themes/theme"
+import { themifyFontSize } from "../../../../themes/mixins"
 
 const ItemPreviewContainer = styled(animated.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: ${themifyFontSize(2)};
+
   overflow: hidden;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   border-radius: ${space[1]}px;

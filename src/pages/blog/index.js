@@ -19,7 +19,9 @@ export default function() {
       <PageTransition>
         <MainGridContainer>
           {transitions.map(({ item, key, props }) => (
-            <ItemPreviewContainer key={key} style={props} />
+            <ItemPreviewContainer key={key} style={props} >
+              Coming soon
+            </ItemPreviewContainer>
           ))}
         </MainGridContainer>
       </PageTransition>
