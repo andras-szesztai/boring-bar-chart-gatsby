@@ -14,13 +14,15 @@ import {
   CreditsContainer,
   PortfolioItem,
 } from "./containers"
+import { FlippingCard } from "./cards"
 import {
-  FlippingCard
-} from "./cards"
-import { HorizontalMultiSelect, HierarchicalMultiSelect } from "./controlElements"
+  HorizontalMultiSelect,
+  HierarchicalMultiSelect,
+} from "./controlElements"
 import { CountUpSpan } from "./textElemets"
 import { FullScreenLoader } from "./loaders"
 import { ScrollHint, SiteHelmet } from "./miscComponents"
+import { FavoriteStar, FavoriteHeart } from "./icons"
 
 export {
   VerticalDropChart,
@@ -41,5 +43,7 @@ export {
   ScrollHint,
   FlippingCard,
   HierarchicalMultiSelect,
-  SiteHelmet
+  SiteHelmet,
+  FavoriteStar,
+  FavoriteHeart,
 }

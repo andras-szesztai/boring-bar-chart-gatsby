@@ -1,14 +1,16 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import styled from "styled-components"
-import {
-  IoIosArrowUp,
-  IoIosUnlock,
-  IoIosLock,
-} from "react-icons/io"
+import { IoIosArrowUp, IoIosUnlock, IoIosLock } from "react-icons/io"
+import _ from "lodash"
+
+import ClosedNameContainer from "../ClosedNameContainer/ClosedNameContainer"
+import Image from "../Image/Image"
+import { FavoriteStar } from "../../../../molecules"
+import ContentLoader from "./ContentLoader"
 
 import { dropShadow, space } from "../../../../../themes/theme"
-import { useLocalStorage } from "../../../../../hooks"
+import { usePrevious, useLocalStorage } from "../../../../../hooks"
 import {
   OPACITY_VARIANT,
   ANIMATE_PROPS,
@@ -16,10 +18,8 @@ import {
   TRANSITION,
   LOCAL_STORE_ACCESSORS,
 } from "../../../../../constants/moviesDashboard"
-import ClosedNameContainer from "../ClosedNameContainer/ClosedNameContainer"
-import Image from "../Image/Image"
 import { TextContainer, TitleContainer } from "../styles/styles"
-import FavoriteStar from "../Icons/FavoriteStar"
+import { themifyZIndex } from "../../../../../themes/mixins"
 
 const CARD_WIDTH = 400
 const CARD_HEIGHT = 240
@@ -58,7 +58,7 @@ const PersonDetailsCard = styled(motion.div)`
   height: ${CARD_HEIGHT}px;
 `
 
-const DetailCardContent = styled.div`
+const DetailCardContent = styled(motion.div)`
   position: relative;
 
   display: flex;
@@ -72,6 +72,7 @@ const IconContainer = styled(motion.div)`
   position: absolute;
   left: ${space[2]}px;
   cursor: pointer;
+  z-index: ${themifyZIndex("hoverOverlay")};
 `
 
 const CardGrid = styled(motion.div)`
@@ -91,19 +92,54 @@ const CardTextGrid = styled(motion.div)`
 
 let animateCard
 
-export default function PersonDetailCard({ state, prevState, actions }) {
+export default function PersonDetailCard({
+  state,
+  prevState,
+  actions,
+  loading,
+  favoritePersons,
+  setFavoritePersons,
+}) {
+  const prevLoading = usePrevious(loading)
   const {
     dataSets,
     personDetailsCard: { isOpen },
   } = state
   const { openPersonDetails, closePersonDetails } = actions
 
-  const [isLocked, setIsLocked] = useState(false)
+  const [isInitialized, setIsInitialized] = useState(false)
+  useEffect(() => {
+    if (!isInitialized && prevLoading && !loading) {
+      setIsInitialized(true)
+    }
+  }, [isInitialized, prevLoading, loading])
 
-  const [favoritePersons, setFavoritePersons] = useLocalStorage(
-    LOCAL_STORE_ACCESSORS.favoritePersons,
+  const [isLocked, setIsLocked] = useState(undefined)
+  const [isLockedInLocalStorage, setLockedInLocalStorage] = useLocalStorage(
+    LOCAL_STORE_ACCESSORS.lockedPersonDetailCard,
     []
   )
+  useEffect(() => {
+    if (!isInitialized && typeof isLocked == "undefined") {
+      const isLocalSet = typeof isLockedInLocalStorage == "boolean"
+      setIsLocked(isLocalSet ? isLockedInLocalStorage : false)
+      isLocalSet && isLockedInLocalStorage
+        ? closePersonDetails()
+        : openPersonDetails()
+    }
+    if (typeof isLocked != "undefined" && isLocked !== isLockedInLocalStorage) {
+      setLockedInLocalStorage(isLocked)
+    }
+  }, [
+    isInitialized,
+    isLockedInLocalStorage,
+    isLocked,
+    setLockedInLocalStorage,
+    closePersonDetails,
+    openPersonDetails,
+  ])
+
+  const [isTitleHovered, setIsTitleHovered] = useState(false)
 
   if (isOpen) animateCard = "animateOpen"
   if (!isOpen) animateCard = "animateClose"
@@ -130,7 +166,16 @@ export default function PersonDetailCard({ state, prevState, actions }) {
     favoritePersons.filter(({ id }) => +id !== +dataSets.personDetails.id)
   const filterIn = () => [
     ...favoritePersons,
-    { id: dataSets.personDetails.id, name: dataSets.personDetails.name },
+    {
+      id: dataSets.personDetails.id,
+      name: dataSets.personDetails.name,
+      date: new Date(),
+      credits: _.uniq(
+        [dataSets.personCredits.cast, dataSets.personCredits.crew]
+          .flat()
+          .map(credit => credit && credit.id)
+      ),
+    },
   ]
 
   return (
@@ -142,91 +187,106 @@ export default function PersonDetailCard({ state, prevState, actions }) {
           exit="exit"
           variants={variants}
         >
-          <DetailCardContent>
-            <AnimatePresence>
-              {!isOpen && (
-                <IconContainer
-                  key="lock"
-                  variants={OPACITY_VARIANT}
-                  {...ANIMATE_PROPS}
-                  whileHover={{ scale: 1.3 }}
-                  onClick={() => setIsLocked(prev => !prev)}
-                  style={{
-                    bottom: space[4],
-                  }}
-                >
-                  <LockIcon size="24" color={COLORS.primary} />
-                </IconContainer>
-              )}
-            </AnimatePresence>
-            <IconContainer
-              key="arrow"
-              style={{
-                bottom: space[1],
-              }}
-              role="button"
-              onClick={() => {
-                isOpen ? closePersonDetails() : openPersonDetails()
-                isLocked && setIsLocked(false)
-              }}
-              animate={{
-                rotate: !isOpen ? 180 : 0,
-              }}
-              whileHover={{ scale: 1.3 }}
-            >
-              <IoIosArrowUp size="24" color={COLORS.primary} />
-            </IconContainer>
-            <AnimatePresence>
-              {!isOpen && (
-                <ClosedNameContainer
-                  dataSets={dataSets}
-                  setFavorites={() =>
-                    setFavoritePersons(isFavorited ? filterOut() : filterIn())
-                  }
-                  isFavorited={isFavorited}
-                />
-              )}
-            </AnimatePresence>
-            <AnimatePresence>
-              {isOpen && (
-                <CardGrid
-                  key="content"
-                  variants={OPACITY_VARIANT}
-                  {...ANIMATE_PROPS}
-                >
-                  <CardTextGrid>
-                    <TitleContainer
-                      className="name"
-                      onClick={() => {
+          <AnimatePresence>
+            {!isOpen && (
+              <IconContainer
+                key="lock"
+                variants={OPACITY_VARIANT}
+                {...ANIMATE_PROPS}
+                whileHover={{ scale: 1.3 }}
+                onClick={() => setIsLocked(prev => !prev)}
+                style={{
+                  bottom: space[4],
+                }}
+              >
+                <LockIcon size="24" color={COLORS.primary} />
+              </IconContainer>
+            )}
+          </AnimatePresence>
+          <IconContainer
+            key="arrow"
+            style={{
+              bottom: space[1],
+            }}
+            role="button"
+            onClick={() => {
+              isOpen ? closePersonDetails() : openPersonDetails()
+              isLocked && setIsLocked(false)
+            }}
+            initial={{ rotate: !isOpen ? 180 : 0 }}
+            animate={{
+              rotate: !isOpen ? 180 : 0,
+            }}
+            whileHover={{ scale: 1.3 }}
+          >
+            <IoIosArrowUp size="24" color={COLORS.primary} />
+          </IconContainer>
+          <AnimatePresence>
+            {loading || !isInitialized ? (
+              <ContentLoader isOpen={isOpen} />
+            ) : (
+              <DetailCardContent variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
+                <AnimatePresence>
+                  {!isOpen && (
+                    <ClosedNameContainer
+                      dataSets={dataSets}
+                      setFavorites={() => {
                         setFavoritePersons(
                           isFavorited ? filterOut() : filterIn()
                         )
                       }}
+                      isFavorited={isFavorited}
+                    />
+                  )}
+                </AnimatePresence>
+                <AnimatePresence>
+                  {isOpen && (
+                    <CardGrid
+                      key="content"
+                      variants={OPACITY_VARIANT}
+                      {...ANIMATE_PROPS}
                     >
-                      {dataSets.personDetails.name}
-                      <motion.div
-                        style={{
-                          marginLeft: 8,
-                          marginTop: 1
-                        }}
-                        whileHover={{ scale: 1.3 }}
-                      >
-                        <FavoriteStar isFavorited={isFavorited} />
-                      </motion.div>
-                    </TitleContainer>
-                    <TextContainer>
-                      {dataSets.personDetails.biography}
-                    </TextContainer>
-                  </CardTextGrid>
-                  <Image
-                    url={dataSets.personDetails.profile_path}
-                    height={168}
-                    alt={dataSets.personDetails.name}
-                  />
-                </CardGrid>
-              )}
-            </AnimatePresence>
-          </DetailCardContent>
+                      <CardTextGrid>
+                        <TitleContainer
+                          onClick={() => {
+                            setFavoritePersons(
+                              isFavorited ? filterOut() : filterIn()
+                            )
+                          }}
+                          onMouseEnter={() => setIsTitleHovered(true)}
+                          onMouseLeave={() => setIsTitleHovered(false)}
+                        >
+                          {dataSets.personDetails.name}
+                          <motion.div
+                            style={{
+                              position: "absolute",
+                              right: -3,
+                            }}
+                            animate={{
+                              scale: isTitleHovered ? 1.2 : 1,
+                            }}
+                          >
+                            <FavoriteStar
+                              isFavorited={isFavorited}
+                              isHovered={isTitleHovered}
+                            />
+                          </motion.div>
+                        </TitleContainer>
+                        <TextContainer>
+                          {dataSets.personDetails.biography}
+                        </TextContainer>
+                      </CardTextGrid>
+                      <Image
+                        url={dataSets.personDetails.profile_path}
+                        height={168}
+                        alt={dataSets.personDetails.name}
+                      />
+                    </CardGrid>
+                  )}
+                </AnimatePresence>
+              </DetailCardContent>
+            )}
+          </AnimatePresence>
         </PersonDetailsCard>
       )}
     </AnimatePresence>

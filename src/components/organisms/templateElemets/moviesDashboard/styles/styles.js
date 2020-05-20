@@ -5,6 +5,7 @@ import { themifyFontSize, themifyColor } from "../../../../../themes/mixins"
 import { COLORS } from "../../../../../constants/moviesDashboard"
 
 export const TextContainer = styled(motion.div)`
+  position: relative;
   margin-top: ${space[1]}px;
   padding: ${space[1]}px ${space[2]}px;
   font-size: ${themifyFontSize(1)};
@@ -19,9 +20,11 @@ export const TextContainer = styled(motion.div)`
 `
 
 export const TitleContainer = styled(motion.div)`
-    display: flex;
-    font-size: ${themifyFontSize(3)};
-    font-weight: 500;
-    color: ${COLORS.primary};
-    cursor: pointer;
+  position: relative;
+  display: flex;
+  font-size: ${themifyFontSize(3)};
+  padding-left: 2px;
+  font-weight: 500;
+  color: ${COLORS.primary};
+  cursor: pointer;
 `

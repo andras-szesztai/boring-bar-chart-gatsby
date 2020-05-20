@@ -1,3 +1,5 @@
+import { colors } from "../themes/theme"
+
 export const IMAGE_ROOT = "https://image.tmdb.org/t/p/w500"
 export const API_ROOT = "https://api.themoviedb.org/3"
 
@@ -5,6 +7,7 @@ export const COLORS = {
   primary: "#6a8caf",
   primaryLight: "#d6f4f7",
   favorite: "#ffa71e",
+  textColor: colors.grayDarker
 }
 
 // #FFA016
@@ -36,6 +39,7 @@ export const ANIMATE_PROPS = {
 
 
 export const LOCAL_STORE_ACCESSORS = {
+  lockedPersonDetailCard: "lockedPersonDetailCard",
   favoritePersons: "favoritePersons"
 }
 

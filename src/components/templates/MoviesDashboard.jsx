@@ -4,26 +4,40 @@ import axios from "axios"
 import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
-import Lottie from "react-lottie"
+import _ from "lodash"
 
-import { useDeviceType, useLocalStorage, usePrevious } from "../../hooks"
+import { useDeviceType, usePrevious } from "../../hooks"
 import {
   SearchBar,
   PersonDetailCard,
+  FavoritesList,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
-import { LOCAL_STORE_ACCESSORS } from "../../constants/moviesDashboard"
+import { FavoriteHeart } from "../molecules/icons"
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
 
-  const { state, prevState, actions } = moviesDashboardReducer()
+  const {
+    state,
+    prevState,
+    actions,
+    localStorageValues,
+    localStorageSetters,
+  } = moviesDashboardReducer()
+  const { favoritePersons } = localStorageValues
+  const { setFavoritePersons } = localStorageSetters
 
-  const [favoritePersons, setFavoritePerson] = useLocalStorage(
-    LOCAL_STORE_ACCESSORS.favoritePersons,
-    []
-  )
+  useEffect(() => {
+    favoritePersons &&
+      favoritePersons.length &&
+      actions.setActiveNameID(_.last(favoritePersons).id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
+  const [isTitleHovered, setIsTitleHovered] = useState(false)
+
+  const [isFavorited, setIsFavorited] = useState(false)
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -34,6 +48,36 @@ export default function MoviesDashboard() {
             state={state}
             prevState={prevState}
             actions={actions}
+            loading={state.loading.personDetails}
+            favoritePersons={favoritePersons}
+            setFavoritePersons={setFavoritePersons}
+          />
+          <motion.div
+            onClick={() => setIsFavorited(prev => !prev)}
+            onMouseEnter={() => setIsTitleHovered(true)}
+            onMouseLeave={() => setIsTitleHovered(false)}
+            style={{
+              position: "fixed",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              top: "50%",
+              left: "50%",
+              width: 100,
+              height: 100,
+              transform: "translate(-50%, -50%)",
+              cursor: "pointer",
+            }}
+          >
+            <FavoriteHeart
+              isFavorited={isFavorited}
+              isHovered={isTitleHovered}
+            />
+          </motion.div>
+          <FavoritesList
+            state={state}
+            localStorageValues={localStorageValues}
+            localStorageSetters={localStorageSetters}
           />
         </div>
       )}

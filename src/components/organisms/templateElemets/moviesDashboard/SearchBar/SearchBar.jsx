@@ -7,7 +7,7 @@ import chroma from "chroma-js"
 
 import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
 import { space, fontFamily } from "../../../../../themes/theme"
-import { COLORS, API_ROOT } from "../../../../../constants/moviesDashboard"
+import { COLORS, API_ROOT, TRANSITION } from "../../../../../constants/moviesDashboard"
 import { useDebouncedSearch } from "../../../../../hooks"
 import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
 
@@ -22,9 +22,9 @@ const SearchBarSubContainer = styled(motion.div)`
   cursor: pointer;
 `
 
-const StyleldSearchBar = styled(motion.input)`
+const StyledSearchBar = styled(motion.input)`
   z-index: ${themifyZIndex("hoverOverlay")};
-  width: 400px;
+  width: 300px;
   height: 40px;
   border-radius: ${space[1]}px;
   background: ${COLORS.primary};
@@ -38,7 +38,7 @@ const StyleldSearchBar = styled(motion.input)`
   padding-bottom: 2px;
 
   &::placeholder {
-    font-weight: 200;
+    font-weight: 300;
     color: ${chroma(COLORS.primary).brighten(3)};
     font-family: inherit;
   }
@@ -133,7 +133,14 @@ export default function SearchBar({ setActiveNameID }) {
   }
 
   return (
-    <SearchBarMainContainer>
+    <SearchBarMainContainer
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+    >
       <SearchBarSubContainer>
         <AnimatePresence>
           {nameSearchResults.length && (
@@ -141,10 +148,7 @@ export default function SearchBar({ setActiveNameID }) {
               initial={{ opacity: 0 }}
               animate={{ y: 45 + activeSearchResult * 70, opacity: 0.15 }}
               exit={{ opacity: 0 }}
-              transition={{
-                type: "spring",
-                damping: 12,
-              }}
+              transition={TRANSITION.primary}
             />
           )}
         </AnimatePresence>
@@ -180,16 +184,18 @@ export default function SearchBar({ setActiveNameID }) {
         >
           <IoIosClose size={25} color={chroma(COLORS.primary).brighten(3)} />
         </CloseIconContainer>
-        <StyleldSearchBar
+        <StyledSearchBar
           animate={{
             paddingLeft: searchIsFocused ? 10 : 40,
+            width: 300,
           }}
           initial={{
             paddingLeft: 40,
+            width: 20,
           }}
           transition={{
             type: "spring",
-            damping: 12,
+            damping: 12
           }}
           type="text"
           id="search"

@@ -1,9 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import { motion } from "framer-motion"
 import styled from "styled-components"
 import chroma from "chroma-js"
 
-// Styles
 import { space } from "../../../../../themes/theme"
 import { themifyFontSize } from "../../../../../themes/mixins"
 import {
@@ -11,7 +10,7 @@ import {
   OPACITY_VARIANT,
   ANIMATE_PROPS,
 } from "../../../../../constants/moviesDashboard"
-import FavoriteStar from "../Icons/FavoriteStar"
+import { FavoriteStar } from "../../../../molecules"
 
 const Container = styled(motion.div)`
   position: absolute;
@@ -19,7 +18,7 @@ const Container = styled(motion.div)`
   right: ${space[2]}px;
   font-size: ${themifyFontSize(3)};
   font-weight: 300;
-  color: ${COLORS.primaryLight};
+  color: #fff;
   border-radius: ${space[1]}px;
   padding: 1px 12px;
   background-color: ${chroma(COLORS.primary)};
@@ -27,6 +26,7 @@ const Container = styled(motion.div)`
 
   display: flex;
   cursor: pointer;
+  padding-right: 45px;
 `
 
 export default function ClosedNameContainer({
@@ -34,23 +34,28 @@ export default function ClosedNameContainer({
   setFavorites,
   isFavorited,
 }) {
+  const [isTitleHovered, setIsTitleHovered] = useState(false)
 
   return (
     <Container
       key="close-name"
       variants={OPACITY_VARIANT}
       onClick={setFavorites}
+      onMouseEnter={() => setIsTitleHovered(true)}
+      onMouseLeave={() => setIsTitleHovered(false)}
       {...ANIMATE_PROPS}
     >
       {dataSets.personDetails.name}
       <motion.div
         style={{
-          marginLeft: 8,
-          marginTop: 1,
+          position: "absolute",
+          right: 5,
         }}
-        whileHover={{ scale: 1.3 }}
+        animate={{
+          scale: isTitleHovered ? 1.2 : 1,
+        }}
       >
-        <FavoriteStar isFavorited={isFavorited} />
+        <FavoriteStar isFavorited={isFavorited} isHovered={isTitleHovered} />
       </motion.div>
     </Container>
   )
