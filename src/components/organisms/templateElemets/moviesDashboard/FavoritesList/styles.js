@@ -4,15 +4,15 @@ import { space, colors } from "../../../../../themes/theme"
 
 export const ControlCollapsed = styled(motion.div)`
   width: 200px;
-  padding: ${space[2]}px ${space[3]}px;
+  max-height: 90px;
   box-shadow: 1px 0px 4px 0px rgba(51, 51, 51, 0.24);
-
-  display: grid;
-  grid-template-rows: repeat(2, 1fr);
   z-index: 10;
+
+  display: flex;
+  align-items: center;
 `
 
-export const EndIconsContainer = styled.div`
+export const EndIconsContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -26,7 +26,6 @@ export const EndIconsContainer = styled.div`
 export const RecentListContainer = styled(motion.div)`
   display: flex;
   justify-content: flex-start;
-  padding-right: ${space[6]}px;
   background: ${colors.whiteDark};
 
   z-index: 1;

@@ -8,26 +8,32 @@ import _ from "lodash"
 import useMeasure from "react-use-measure"
 import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
+import useResizeAware from "react-resize-aware"
 
 import { space, dropShadow, colors } from "../../../../../themes/theme"
 import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
 import { themifyFontSize, themifyZIndex } from "../../../../../themes/mixins"
 import { FavoriteStar, FavoriteHeart } from "../../../../molecules"
 import { usePrevious } from "../../../../../hooks"
-import { EndIconsContainer, RecentListContainer, ControlCollapsed } from "./styles"
+import {
+  EndIconsContainer,
+  RecentListContainer,
+  ControlCollapsed,
+} from "./styles"
 
 const Container = styled(motion.div)`
   position: fixed;
   display: grid;
-  grid-template-columns: min-content 1fr 30px;
+  grid-template-columns: min-content min-content 35px;
   grid-template-rows: 1fr;
 
   background-color: #fff;
-  filter: drop-shadow(${dropShadow.primary})
-    drop-shadow(${dropShadow.secondary});
+  filter: drop-shadow(${dropShadow.primary});
+  border: 1px solid ${colors.whiteDark};
   border-radius: ${space[1]}px;
 
   width: calc(100vw - ${space[3]}px);
+  height: 90px;
 
   bottom: ${space[2]}px;
   left: ${space[2]}px;
@@ -76,6 +82,7 @@ export default function FavoritesList({ state, localStorageValues }) {
   const prevLocalStorageValues = usePrevious(localStorageValues)
   const [isPersonsActive, setIsPersonsActive] = useState(true)
   const [isMoviesActive, setIsMoviesActive] = useState(true)
+  const [resizeListener, sizes] = useResizeAware()
 
   const [favoritesCombined, setFavoriteCombined] = useState(undefined)
   useEffect(() => {
@@ -94,36 +101,32 @@ export default function FavoritesList({ state, localStorageValues }) {
     }
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
+  const [isOpen, setIsOpen] = useState(true)
+
+  //TODO: add measure to
+
+  console.log(sizes)
   return (
-    <Container
-      initial={{
-        opacity: 0,
-      }}
-      animate={{
-        opacity: 1,
-      }}
-      transition={{
-        ...TRANSITION.primary,
-      }}
-    >
-      <ControlCollapsed>
-        <TextContainer style={{ alignSelf: "center" }}>
-          Your recent favorites{" "}
-          {/* <motion.div
-            style={{ display: "inline-block" }}
-            whileHover={{ scale: 1.3 }}
-          >
-            <IoMdInformationCircle
-              size={18}
-              color={COLORS.textColor}
-              style={{ transform: "translate(1px, 3px)" }}
-            />
-          </motion.div> */}
-        </TextContainer>
-        <Flex>
-          <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
-            Show:
-          </TextContainer>
+    <>
+      <Container
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+          width: sizes.width + 240,
+        }}
+        transition={{
+          duration: 1,
+          type: "tween",
+          ease: [0.65, 0, 0.35, 1],
+        }}
+      >
+        <ControlCollapsed
+          animate={{
+            boxShadow: "none",
+          }}
+        >
           <Flex
             style={{ justifyContent: "space-evenly", alignItems: "center" }}
           >
@@ -153,9 +156,56 @@ export default function FavoritesList({ state, localStorageValues }) {
               />
             </motion.div>
           </Flex>
-        </Flex>
-      </ControlCollapsed>
-      <RecentListContainer>
+        </ControlCollapsed>
+        <RecentListContainer>
+          {favoritesCombined &&
+            (!favoritesCombined.length ? (
+              <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
+                Mark a movie/series or person as a favorite to display them
+                here!
+              </TextContainer>
+            ) : (
+              favoritesCombined
+                .filter((d, i) => i < 10)
+                .map(favorite => (
+                  <ListItemContainer key={favorite.id}>
+                    {favorite.name}
+                  </ListItemContainer>
+                ))
+            ))}
+        </RecentListContainer>
+        <EndIconsContainer
+          animate={{
+            boxShadow: "none",
+          }}
+        >
+          <IconContainer whileHover={{ scale: 1.3 }}>
+            <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
+          </IconContainer>
+          <IconContainer
+            onClick={() => setIsOpen(prev => !prev)}
+            whileHover={{
+              scale: 1.3,
+              transition: {
+                delay: 0,
+              },
+            }}
+            initial={{ rotate: isOpen ? 180 : 0 }}
+            animate={{
+              rotate: isOpen ? 180 : 0,
+              transition: {
+                delay: 1,
+              },
+            }}
+          >
+            <IoIosArrowForward size={24} color={COLORS.textColor} />
+          </IconContainer>
+        </EndIconsContainer>
+      </Container>
+      <RecentListContainer
+        style={{ position: "fixed", opacity: 0, pointerEvents: "none" }}
+      >
+        {resizeListener}
         {favoritesCombined &&
           (!favoritesCombined.length ? (
             <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
@@ -171,20 +221,6 @@ export default function FavoritesList({ state, localStorageValues }) {
               ))
           ))}
       </RecentListContainer>
-      <EndIconsContainer>
-        <IconContainer whileHover={{ scale: 1.3 }}>
-          <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
-        </IconContainer>
-        <IconContainer
-          whileHover={{ scale: 1.3 }}
-          initial={{ rotate: 0 }}
-          animate={{
-            rotate: 180,
-          }}
-        >
-          <IoIosArrowForward size={24} color={COLORS.textColor} />
-        </IconContainer>
-      </EndIconsContainer>
-    </Container>
+    </>
   )
 }
