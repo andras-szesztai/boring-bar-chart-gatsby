@@ -6,14 +6,15 @@ import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
 import useMeasure from "react-use-measure"
-import { Frame, Stack } from "framer"
+import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
+import { FaExpandArrowsAlt } from "react-icons/fa"
 
 import { space, dropShadow, colors } from "../../../../../themes/theme"
 import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
 import { themifyFontSize, themifyZIndex } from "../../../../../themes/mixins"
-import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FavoriteStar, FavoriteHeart } from "../../../../molecules"
 import { usePrevious } from "../../../../../hooks"
+import { EndIconsContainer } from "./styles"
 
 const Container = styled(motion.div)`
   position: fixed;
@@ -61,7 +62,6 @@ const Flex = styled.div`
 `
 
 const IconContainer = styled(motion.div)`
-  position: absolute;
   right: ${space[1]}px;
   cursor: pointer;
   z-index: ${themifyZIndex("hoverOverlay")};
@@ -180,38 +180,20 @@ export default function FavoritesList({ state, localStorageValues }) {
               </ListItemContainer>
             ))
           ))}
-        {/* <IconContainer
-          style={{
-            position: "absolute",
-            top: 6,
-          }}
-          whileHover={{ scale: 1.3 }}
-          initial={{ rotate: 0 }}
-          animate={{
-            rotate: 180,
-          }}
-        >
-          <IoIosArrowForward size={24} color={COLORS.textColor} />
-        </IconContainer> */}
-        <Stack
-          right={1}
-          height="100%"
-          // background="#fff"
-          gap={1}
-          width={30}
-          distribution="space-evenly"
-        >
-          <motion.div
+        <EndIconsContainer>
+          <IconContainer whileHover={{ scale: 1.3 }}>
+            <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
+          </IconContainer>
+          <IconContainer
             whileHover={{ scale: 1.3 }}
-            // initial={{ rotate: 0 }}
-            // animate={{
-            //   rotate: 180,
-            // }}
+            initial={{ rotate: 0 }}
+            animate={{
+              rotate: 180,
+            }}
           >
             <IoIosArrowForward size={24} color={COLORS.textColor} />
-          </motion.div>
-          <IoIosArrowForward size={24} color={COLORS.textColor} />
-        </Stack>
+          </IconContainer>
+        </EndIconsContainer>
       </RecentListContainer>
     </Container>
   )
