@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
 import useMeasure from "react-use-measure"
+import { Frame, Stack } from "framer"
 
 import { space, dropShadow, colors } from "../../../../../themes/theme"
 import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
@@ -105,8 +106,6 @@ export default function FavoritesList({ state, localStorageValues }) {
     }
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
-  console.log(favoritesCombined)
-
   return (
     <Container
       initial={{
@@ -148,6 +147,7 @@ export default function FavoritesList({ state, localStorageValues }) {
               <FavoriteStar
                 isFavorited={true}
                 isHovered={false}
+                color={COLORS.primary}
                 isActive={isPersonsActive}
               />
             </motion.div>
@@ -160,6 +160,7 @@ export default function FavoritesList({ state, localStorageValues }) {
               <FavoriteHeart
                 isFavorited={true}
                 isHovered={false}
+                color={COLORS.secondary}
                 isActive={isMoviesActive}
               />
             </motion.div>
@@ -179,7 +180,7 @@ export default function FavoritesList({ state, localStorageValues }) {
               </ListItemContainer>
             ))
           ))}
-        <IconContainer
+        {/* <IconContainer
           style={{
             position: "absolute",
             top: 6,
@@ -191,7 +192,26 @@ export default function FavoritesList({ state, localStorageValues }) {
           }}
         >
           <IoIosArrowForward size={24} color={COLORS.textColor} />
-        </IconContainer>
+        </IconContainer> */}
+        <Stack
+          right={1}
+          height="100%"
+          // background="#fff"
+          gap={1}
+          width={30}
+          distribution="space-evenly"
+        >
+          <motion.div
+            whileHover={{ scale: 1.3 }}
+            // initial={{ rotate: 0 }}
+            // animate={{
+            //   rotate: 180,
+            // }}
+          >
+            <IoIosArrowForward size={24} color={COLORS.textColor} />
+          </motion.div>
+          <IoIosArrowForward size={24} color={COLORS.textColor} />
+        </Stack>
       </RecentListContainer>
     </Container>
   )

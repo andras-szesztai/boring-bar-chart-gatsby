@@ -7,8 +7,8 @@ import { space } from "../../../../../themes/theme"
 import { themifyFontSize } from "../../../../../themes/mixins"
 import {
   COLORS,
-  OPACITY_VARIANT,
   ANIMATE_PROPS,
+  makeOpacityVariant,
 } from "../../../../../constants/moviesDashboard"
 import { FavoriteStar } from "../../../../molecules"
 
@@ -39,7 +39,7 @@ export default function ClosedNameContainer({
   return (
     <Container
       key="close-name"
-      variants={OPACITY_VARIANT}
+      variants={makeOpacityVariant({ startDelay: 0.5 })}
       onClick={setFavorites}
       onMouseEnter={() => setIsTitleHovered(true)}
       onMouseLeave={() => setIsTitleHovered(false)}

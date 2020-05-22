@@ -225,7 +225,10 @@ export default function PersonDetailCard({
             {loading || !isInitialized ? (
               <ContentLoader isOpen={isOpen} />
             ) : (
-              <DetailCardContent variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
+              <DetailCardContent
+                variants={OPACITY_VARIANT}
+                {...ANIMATE_PROPS}
+              >
                 <AnimatePresence>
                   {!isOpen && (
                     <ClosedNameContainer
@@ -269,6 +272,7 @@ export default function PersonDetailCard({
                             <FavoriteStar
                               isFavorited={isFavorited}
                               isHovered={isTitleHovered}
+                              color={COLORS.primary}
                             />
                           </motion.div>
                         </TitleContainer>
