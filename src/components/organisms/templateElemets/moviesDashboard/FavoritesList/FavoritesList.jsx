@@ -14,11 +14,13 @@ import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
 import { themifyFontSize, themifyZIndex } from "../../../../../themes/mixins"
 import { FavoriteStar, FavoriteHeart } from "../../../../molecules"
 import { usePrevious } from "../../../../../hooks"
-import { EndIconsContainer } from "./styles"
+import { EndIconsContainer, RecentListContainer, ControlCollapsed } from "./styles"
 
 const Container = styled(motion.div)`
   position: fixed;
-  display: flex;
+  display: grid;
+  grid-template-columns: min-content 1fr 30px;
+  grid-template-rows: 1fr;
 
   background-color: #fff;
   filter: drop-shadow(${dropShadow.primary})
@@ -26,17 +28,10 @@ const Container = styled(motion.div)`
   border-radius: ${space[1]}px;
 
   width: calc(100vw - ${space[3]}px);
-  height: 80px;
 
   bottom: ${space[2]}px;
   left: ${space[2]}px;
   overflow: hidden;
-`
-
-const RecentListContainer = styled(motion.div)`
-  display: flex;
-  justify-content: space-evenly;
-  padding-right: ${space[6]}px;
 `
 
 const TextContainer = styled(motion.div)`
@@ -44,15 +39,6 @@ const TextContainer = styled(motion.div)`
   font-size: ${themifyFontSize(2)};
   color: ${COLORS.textColor};
   font-family: inherit;
-`
-
-const ControlCollapsed = styled(motion.div)`
-  height: 100%;
-  width: 200px;
-  padding: ${space[2]}px ${space[3]}px;
-
-  display: grid;
-  grid-template-rows: repeat(2, 1fr);
 `
 
 const Flex = styled.div`
@@ -81,6 +67,8 @@ const ListItemContainer = styled(motion.div)`
   align-self: center;
   cursor: pointer;
   margin-left: ${space[2]}px;
+
+  white-space: nowrap;
 `
 
 export default function FavoritesList({ state, localStorageValues }) {
@@ -174,27 +162,29 @@ export default function FavoritesList({ state, localStorageValues }) {
               Mark a movie/series or person as a favorite to display them here!
             </TextContainer>
           ) : (
-            favoritesCombined.map(favorite => (
-              <ListItemContainer key={favorite.id}>
-                {favorite.name}
-              </ListItemContainer>
-            ))
+            favoritesCombined
+              .filter((d, i) => i < 10)
+              .map(favorite => (
+                <ListItemContainer key={favorite.id}>
+                  {favorite.name}
+                </ListItemContainer>
+              ))
           ))}
-        <EndIconsContainer>
-          <IconContainer whileHover={{ scale: 1.3 }}>
-            <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
-          </IconContainer>
-          <IconContainer
-            whileHover={{ scale: 1.3 }}
-            initial={{ rotate: 0 }}
-            animate={{
-              rotate: 180,
-            }}
-          >
-            <IoIosArrowForward size={24} color={COLORS.textColor} />
-          </IconContainer>
-        </EndIconsContainer>
       </RecentListContainer>
+      <EndIconsContainer>
+        <IconContainer whileHover={{ scale: 1.3 }}>
+          <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
+        </IconContainer>
+        <IconContainer
+          whileHover={{ scale: 1.3 }}
+          initial={{ rotate: 0 }}
+          animate={{
+            rotate: 180,
+          }}
+        >
+          <IoIosArrowForward size={24} color={COLORS.textColor} />
+        </IconContainer>
+      </EndIconsContainer>
     </Container>
   )
 }

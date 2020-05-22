@@ -23,6 +23,7 @@ const Container = styled(motion.div)`
   padding: 1px 12px;
   background-color: ${chroma(COLORS.primary)};
   border: 1px solid ${chroma(COLORS.primary).darken()};
+  white-space: nowrap; 
 
   display: flex;
   cursor: pointer;

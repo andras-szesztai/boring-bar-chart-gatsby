@@ -54,7 +54,7 @@ const SearchIconContainer = styled(motion.div)`
 const CloseIconContainer = styled(motion.div)`
   position: absolute;
   top: ${space[2]}px;
-  left: 370px;
+  right: 5px;
   z-index: ${themifyZIndex("tooltip")};
 `
 
