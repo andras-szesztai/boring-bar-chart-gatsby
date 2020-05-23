@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
 import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
-import { useMeasure, useUpdateEffect } from "react-use"
+import {
+  useMeasure,
+  useUpdateEffect,
+  useEffectOnce,
+  useUnmount,
+} from "react-use"
 import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
 import useResizeAware from "react-resize-aware"
@@ -61,7 +66,7 @@ const IconContainer = styled(motion.div)`
 
 const ListItemContainer = styled(motion.div)`
   bottom: 12px;
-  right: ${space[2]}px;
+  /* right: ${space[2]}px; */
   font-size: ${themifyFontSize(3)};
   font-weight: 300;
   color: #fff;
@@ -80,27 +85,30 @@ const ListItemContainer = styled(motion.div)`
 
 const CONTROL_WIDTH = 200
 
-const ListItem = ({ key, name, setDims }) => {
-  const [ref, dims] = useMeasure()
-  const prevDims = usePrevious(dims)
-  useEffect(() => {
-    if(prevDims && !_.isEqual(dims,prevDims)){
-      console.log(name, dims)
-      // setDims(prev => ({ ...prev, { } }))
-    }
+const ListItem = ({ name, setElementDims, elementDims }) => {
+  // const [ref, dims] = useMeasure()
+  //const prevDims = usePrevious(dims)
+  const prevElementDims = usePrevious(elementDims)
+  const ref = useRef(null)
+  useEffectOnce(() => {
+    setElementDims(prev => [
+      ...prev,
+      { name, x: ref.current.getBoundingClientRect().x },
+    ])
   })
-  return (
-    <AnimatePresence key={key || name}>
-      <ListItemContainer
-        ref={ref}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { delay: 0.5 } }}
-        leave={{ opacity: 0, transition: { delay: 0 } }}
-      >
-        {name}
-      </ListItemContainer>
-    </AnimatePresence>
-  )
+
+  useEffect(() => {
+    if (prevElementDims && elementDims.length !== prevElementDims.length) {
+      setElementDims(prev => [
+        ...prev.filter(el => el.name !== name),
+        { name, x: ref.current.getBoundingClientRect().x },
+      ])
+    }
+  }, [elementDims, name, prevElementDims, setElementDims])
+
+  useUnmount(() => setElementDims(prev => prev.filter(el => el.name !== name)))
+
+  return <ListItemContainer ref={ref}>{name}</ListItemContainer>
 }
 
 export default function FavoritesList({ state, localStorageValues }) {
@@ -132,6 +140,11 @@ export default function FavoritesList({ state, localStorageValues }) {
 
   // const itemRefs = useArrayRefs(10)
 
+  const [elementDims, setElementDims] = useState([])
+  // useEffect(() => {
+
+  // })
+
   return (
     <>
       <HiddenRecentListContainer ref={listRef}>
@@ -144,7 +157,12 @@ export default function FavoritesList({ state, localStorageValues }) {
             favoritesCombined
               .filter((d, i) => i < 10)
               .map((favorite, i) => (
-                <ListItem key={favorite.id} name={favorite.name} />
+                <ListItem
+                  elementDims={elementDims}
+                  setElementDims={setElementDims}
+                  key={favorite.id}
+                  name={favorite.name}
+                />
               ))
           ))}
       </HiddenRecentListContainer>
@@ -153,28 +171,34 @@ export default function FavoritesList({ state, localStorageValues }) {
         animate={{ width: dims.width + 10 }}
         transition={TRANSITION.primary}
       >
-        {favoritesCombined &&
-          (!favoritesCombined.length ? (
-            <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
-              Mark a movie/series or person as a favorite to display them here!
-            </TextContainer>
-          ) : (
-            favoritesCombined
-              .filter((d, i) => i < 10)
-              .map((favorite, i) => {
+        <div style={{ position: "relative" }}>
+          {favoritesCombined &&
+            (!favoritesCombined.length ? (
+              <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
+                Mark a movie/series or person as a favorite to display them
+                here!
+              </TextContainer>
+            ) : (
+              elementDims.map((el, i) => {
                 return (
-                  <AnimatePresence key={favorite.name}>
+                  <AnimatePresence key={el.name}>
                     <ListItemContainer
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1, transition: { delay: 0.5 } }}
+                      style={{ position: "absolute" }}
+                      initial={{ opacity: 0, x: 0 }}
+                      animate={{
+                        opacity: 1,
+                        x: el.x - 210,
+                        transition: { delay: 0.5 },
+                      }}
                       leave={{ opacity: 0, transition: { delay: 0 } }}
                     >
-                      {favorite.name}
+                      {el.name}
                     </ListItemContainer>
                   </AnimatePresence>
                 )
               })
-          ))}
+            ))}
+        </div>
       </DisplayRecentListContainer>
 
       <ControlCollapsed>
