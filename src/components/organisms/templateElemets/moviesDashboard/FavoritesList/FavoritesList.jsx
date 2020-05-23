@@ -5,7 +5,7 @@ import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
-import useMeasure from "react-use-measure"
+import { useMeasure } from "react-use"
 import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
 import useResizeAware from "react-resize-aware"
@@ -20,6 +20,7 @@ import {
   RecentListContainer,
   ControlCollapsed,
 } from "./styles"
+import { useSpring } from "react-spring"
 
 const Container = styled(motion.div)`
   position: fixed;
@@ -102,10 +103,13 @@ export default function FavoritesList({ state, localStorageValues }) {
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
   const [isOpen, setIsOpen] = useState(true)
+  const [listRef, dims] = useMeasure()
 
-  //TODO: add measure to
-
-  console.log(sizes)
+  // const expand = useSpring({
+  //   config: { friction: 10 },
+  //   height: open ? `${contentHeight}px` : defaultHeight
+  // });
+  console.log(dims)
   return (
     <>
       <Container
@@ -114,7 +118,7 @@ export default function FavoritesList({ state, localStorageValues }) {
         }}
         animate={{
           opacity: 1,
-          width: sizes.width + 240,
+          width: dims.width + 235
         }}
         transition={{
           duration: 1,
@@ -157,7 +161,7 @@ export default function FavoritesList({ state, localStorageValues }) {
             </motion.div>
           </Flex>
         </ControlCollapsed>
-        <RecentListContainer>
+        <RecentListContainer ref={listRef}>
           {favoritesCombined &&
             (!favoritesCombined.length ? (
               <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
@@ -202,25 +206,6 @@ export default function FavoritesList({ state, localStorageValues }) {
           </IconContainer>
         </EndIconsContainer>
       </Container>
-      <RecentListContainer
-        style={{ position: "fixed", opacity: 0, pointerEvents: "none" }}
-      >
-        {resizeListener}
-        {favoritesCombined &&
-          (!favoritesCombined.length ? (
-            <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
-              Mark a movie/series or person as a favorite to display them here!
-            </TextContainer>
-          ) : (
-            favoritesCombined
-              .filter((d, i) => i < 10)
-              .map(favorite => (
-                <ListItemContainer key={favorite.id}>
-                  {favorite.name}
-                </ListItemContainer>
-              ))
-          ))}
-      </RecentListContainer>
     </>
   )
 }
