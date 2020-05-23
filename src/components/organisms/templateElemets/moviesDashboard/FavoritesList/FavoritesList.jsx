@@ -9,6 +9,7 @@ import { useMeasure } from "react-use"
 import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
 import useResizeAware from "react-resize-aware"
+import { useSpring } from "react-spring"
 
 import { space, dropShadow, colors } from "../../../../../themes/theme"
 import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
@@ -20,14 +21,11 @@ import {
   RecentListContainer,
   ControlCollapsed,
   HiddenRecentListContainer,
+  DisplayRecentListContainer,
 } from "./styles"
-import { useSpring } from "react-spring"
 
 const Container = styled(motion.div)`
   position: fixed;
-  display: grid;
-  grid-template-columns: min-content 1fr 35px;
-  grid-template-rows: 1fr;
 
   background-color: #fff;
   filter: drop-shadow(${dropShadow.primary});
@@ -121,71 +119,66 @@ export default function FavoritesList({ state, localStorageValues }) {
             favoritesCombined
               .filter((d, i) => i < 10)
               .map(favorite => (
+                <ListItemContainer key={favorite.id}>
+                  {favorite.name}
+                </ListItemContainer>
+              ))
+          ))}
+      </HiddenRecentListContainer>
+
+      <DisplayRecentListContainer animate={{ width: dims.width }}>
+        {favoritesCombined &&
+          (!favoritesCombined.length ? (
+            <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
+              Mark a movie/series or person as a favorite to display them here!
+            </TextContainer>
+          ) : (
+            favoritesCombined
+              .filter((d, i) => i < 10)
+              .map(favorite => (
                 <AnimatePresence key={favorite.name}>
                   <ListItemContainer
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, transition: { delay: 1 } }}
-                    // leave={{ opacity: 0, transition: { delay: 1 } }}
-                    key={favorite.id}
+                    leave={{ opacity: 0, transition: { delay: 0 } }}
                   >
                     {favorite.name}
                   </ListItemContainer>
                 </AnimatePresence>
               ))
           ))}
-      </HiddenRecentListContainer>
+      </DisplayRecentListContainer>
 
-      <Container
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-          width: dims.width + 245,
-        }}
-        transition={{
-          duration: 1,
-          type: "tween",
-          ease: [0.65, 0, 0.35, 1],
-        }}
-      >
-        <ControlCollapsed
-          animate={{
-            boxShadow: "none",
-          }}
-        >
-          <Flex
-            style={{ justifyContent: "space-evenly", alignItems: "center" }}
+      <ControlCollapsed>
+        <Flex style={{ justifyContent: "space-evenly", alignItems: "center" }}>
+          <motion.div
+            whileHover={{ scale: 1.3 }}
+            style={{ cursor: "pointer" }}
+            onClick={() => setIsPersonsActive(prev => !prev)}
           >
-            <motion.div
-              whileHover={{ scale: 1.3 }}
-              style={{ cursor: "pointer" }}
-              onClick={() => setIsPersonsActive(prev => !prev)}
-            >
-              <FavoriteStar
-                isFavorited={true}
-                isHovered={false}
-                color={COLORS.primary}
-                isActive={isPersonsActive}
-              />
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.3 }}
-              initial={{ y: -3 }}
-              style={{ cursor: "pointer" }}
-              onClick={() => setIsMoviesActive(prev => !prev)}
-            >
-              <FavoriteHeart
-                isFavorited={true}
-                isHovered={false}
-                color={COLORS.secondary}
-                isActive={isMoviesActive}
-              />
-            </motion.div>
-          </Flex>
-        </ControlCollapsed>
-
-        {/* <RecentListContainer ref={listRef}>
+            <FavoriteStar
+              isFavorited={true}
+              isHovered={false}
+              color={COLORS.primary}
+              isActive={isPersonsActive}
+            />
+          </motion.div>
+          <motion.div
+            whileHover={{ scale: 1.3 }}
+            initial={{ y: -3 }}
+            style={{ cursor: "pointer" }}
+            onClick={() => setIsMoviesActive(prev => !prev)}
+          >
+            <FavoriteHeart
+              isFavorited={true}
+              isHovered={false}
+              color={COLORS.secondary}
+              isActive={isMoviesActive}
+            />
+          </motion.div>
+        </Flex>
+      </ControlCollapsed>
+      {/* <RecentListContainer ref={listRef}>
           {favoritesCombined &&
             (!favoritesCombined.length ? (
               <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
@@ -209,35 +202,29 @@ export default function FavoritesList({ state, localStorageValues }) {
                 ))
             ))}
         </RecentListContainer> */}
-
-        <EndIconsContainer
+      <EndIconsContainer>
+        <IconContainer whileHover={{ scale: 1.3 }}>
+          <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
+        </IconContainer>
+        <IconContainer
+          onClick={() => setIsOpen(prev => !prev)}
+          whileHover={{
+            scale: 1.3,
+            transition: {
+              delay: 0,
+            },
+          }}
+          initial={{ rotate: isOpen ? 180 : 0 }}
           animate={{
-            boxShadow: "none",
+            rotate: isOpen ? 180 : 0,
+            transition: {
+              delay: 1,
+            },
           }}
         >
-          <IconContainer whileHover={{ scale: 1.3 }}>
-            <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
-          </IconContainer>
-          <IconContainer
-            onClick={() => setIsOpen(prev => !prev)}
-            whileHover={{
-              scale: 1.3,
-              transition: {
-                delay: 0,
-              },
-            }}
-            initial={{ rotate: isOpen ? 180 : 0 }}
-            animate={{
-              rotate: isOpen ? 180 : 0,
-              transition: {
-                delay: 1,
-              },
-            }}
-          >
-            <IoIosArrowForward size={24} color={COLORS.textColor} />
-          </IconContainer>
-        </EndIconsContainer>
-      </Container>
+          <IoIosArrowForward size={24} color={COLORS.textColor} />
+        </IconContainer>
+      </EndIconsContainer>
     </>
   )
 }
