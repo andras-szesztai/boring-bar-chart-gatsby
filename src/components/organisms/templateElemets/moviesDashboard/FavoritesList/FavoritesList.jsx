@@ -157,18 +157,19 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [elementDims, setElementDims] = useState([])
 
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
+  const prevHoveredFavorite = usePrevious(hoveredFavorite)
 
   const transitions = useTransition(elementDims, item => item.name, {
-    from: { opacity: 0, transform: "translate3d(-200px, -2px, 0)" },
+    from: { opacity: 0, transform: "translate3d(-200px, 2px, 0)" },
     enter: item => ({
       opacity: 1,
       transform: `translate3d(${elementDims.find(el => el.name === item.name)
-        .x - 212}px, -2px, 0)`,
+        .x - 212}px, 2px, 0)`,
     }),
     update: item => {
       const curreItem = elementDims.find(el => el.name === item.name)
       return {
-        transform: `translate3d(${curreItem.x - 212}px, -2px, 0)`,
+        transform: `translate3d(${curreItem.x - 212}px, 2px, 0)`,
         width: `${curreItem.width}px`,
       }
     },
@@ -185,14 +186,20 @@ export default function FavoritesList({ state, localStorageValues }) {
     }px`,
     boxShadow: `-1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
     delay:
-      !prevDims || prevDims.width < dims.width || isOpen !== prevIsOpen
+      !prevDims ||
+      prevDims.width < dims.width ||
+      isOpen !== prevIsOpen ||
+      prevDims.width - dims.width === 120
         ? 0
         : 650,
   })
   const recentListAnim = useSpring({
     width: `${isOpen ? dims.width + 5 : 0}px`,
     delay:
-      !prevDims || prevDims.width < dims.width || isOpen !== prevIsOpen
+      !prevDims ||
+      prevDims.width < dims.width ||
+      isOpen !== prevIsOpen ||
+      prevDims.width - dims.width === 120
         ? 0
         : 650,
   })
@@ -239,7 +246,10 @@ export default function FavoritesList({ state, localStorageValues }) {
           ))}
       </HiddenRecentListContainer>
 
-      <DisplayRecentListContainer style={recentListAnim}>
+      <DisplayRecentListContainer
+        style={recentListAnim}
+        onMouseLeave={() => setHoveredFavorite(undefined)}
+      >
         <div style={{ position: "relative" }}>
           {favoritesCombined &&
             (!favoritesCombined.length ? (
@@ -253,7 +263,6 @@ export default function FavoritesList({ state, localStorageValues }) {
                   key={key}
                   style={{ ...props, position: "absolute" }}
                   onMouseEnter={() => setHoveredFavorite(item)}
-                  onMouseLeave={() => setHoveredFavorite(undefined)}
                 >
                   {item.name}
                 </ListItemContainer>
@@ -268,9 +277,11 @@ export default function FavoritesList({ state, localStorageValues }) {
         </div>
       </DisplayRecentListContainer>
 
+      {/* // TODO: make it flip on hover to show icons */}
       <ControlCollapsed style={ControlCollapsedAnim}>
         <Flex style={{ justifyContent: "space-evenly", alignItems: "center" }}>
-          <motion.div
+          Your recent favorites:
+          {/* <motion.div
             whileHover={{ scale: 1.3 }}
             style={{ cursor: "pointer" }}
             onClick={() => setIsPersonsActive(prev => !prev)}
@@ -293,13 +304,13 @@ export default function FavoritesList({ state, localStorageValues }) {
               color={COLORS.secondary}
               isActive={isMoviesActive}
             />
-          </motion.div>
+          </motion.div> */}
         </Flex>
       </ControlCollapsed>
 
       <EndIconsContainer style={endContainerAnim}>
         <IconContainer whileHover={{ scale: 1.3 }}>
-          <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
+          {/* <FaExpandArrowsAlt size={14} color={COLORS.textColor} /> */}
         </IconContainer>
         <IconContainer
           onClick={() => setIsOpen(prev => !prev)}
@@ -317,7 +328,7 @@ export default function FavoritesList({ state, localStorageValues }) {
             },
           }}
         >
-          <IoIosArrowForward size={24} color={COLORS.textColor} />
+          <IoIosArrowForward size={20} color={COLORS.textColor} />
         </IconContainer>
       </EndIconsContainer>
     </>

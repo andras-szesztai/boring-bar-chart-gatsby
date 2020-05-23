@@ -8,8 +8,11 @@ import { COLORS } from "../../../../../constants/moviesDashboard"
 
 export const ControlCollapsed = styled(animated.div)`
   width: 200px;
-  height: 80px;
+  height: 60px;
   z-index: 10;
+
+  font-size: ${themifyFontSize(2)};
+  /* font-weight: 300; */
 
   display: flex;
   align-items: center;
@@ -31,7 +34,7 @@ export const EndIconsContainer = styled(animated.div)`
   align-items: center;
 
   z-index: 10;
-  height: 80px;
+  height: 60px;
   width: 35px;
 
   position: fixed;
@@ -67,7 +70,7 @@ export const HiddenRecentListContainer = styled(RecentListContainer)`
 
 export const DisplayRecentListContainer = styled(RecentListContainer)`
   z-index: 1;
-  height: 70px;
+  height: 50px;
   bottom: ${space[2] + 5}px;
   max-width: calc(100vw - 2 * ${space[2]}px - 200px - 35px);
 
@@ -79,7 +82,7 @@ export const DisplayRecentListContainer = styled(RecentListContainer)`
 
 export const ListItemContainer = styled(animated.div)`
   bottom: 12px;
-  font-size: ${themifyFontSize(3)};
+  font-size: ${themifyFontSize(2)};
   font-weight: 300;
   color: #fff;
   border-radius: ${space[1]}px;
