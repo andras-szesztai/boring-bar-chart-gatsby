@@ -159,12 +159,16 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
 
   const transitions = useTransition(elementDims, item => item.name, {
-    from: { transform: "translate3d(-200px, -2px, 0)" },
-    enter: { transform: "translate3d(0px, -2px, 0)" },
+    from: { opacity: 0, transform: "translate3d(-200px, -2px, 0)" },
+    enter: item => ({
+      opacity: 1,
+      transform: `translate3d(${elementDims.find(el => el.name === item.name)
+        .x - 212}px, -2px, 0)`,
+    }),
     update: item => {
       const curreItem = elementDims.find(el => el.name === item.name)
       return {
-        left: `${curreItem.x - 212}px`,
+        transform: `translate3d(${curreItem.x - 212}px, -2px, 0)`,
         width: `${curreItem.width}px`,
       }
     },
@@ -256,9 +260,11 @@ export default function FavoritesList({ state, localStorageValues }) {
               ))
             ))}
 
-          <ListItemContainer
-            style={{ ...placholderAnim, position: "absolute", opacity: 0 }}
-          />
+          {dims.width > maxWidth && (
+            <ListItemContainer
+              style={{ ...placholderAnim, position: "absolute", opacity: 0 }}
+            />
+          )}
         </div>
       </DisplayRecentListContainer>
 

@@ -83,9 +83,9 @@ export const ListItemContainer = styled(animated.div)`
   font-weight: 300;
   color: #fff;
   border-radius: ${space[1]}px;
-  padding: 2px 12px;
+  padding: 2px 16px;
   background-color: ${chroma(COLORS.primary)};
-  /* border: 1px solid ${chroma(COLORS.primary).darken()}; */
+  border: 1px solid ${chroma(COLORS.primary).darken()};
 
   align-self: center;
   margin-left: ${space[2]}px;
