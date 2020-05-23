@@ -1,6 +1,5 @@
 import chroma from "chroma-js"
 import styled from "styled-components"
-import { motion } from "framer-motion"
 import { animated } from "react-spring"
 
 import { space, colors, dropShadow } from "../../../../../themes/theme"
@@ -49,7 +48,6 @@ export const RecentListContainer = styled(animated.div)`
   justify-content: flex-start;
   background: ${colors.whiteDark};
 
-
   overflow-x: auto;
 
   position: fixed;
@@ -59,17 +57,28 @@ export const RecentListContainer = styled(animated.div)`
 
 export const HiddenRecentListContainer = styled(RecentListContainer)`
   opacity: 0;
-  pointer-events: none;
-  max-width: calc(100vw - 2 * ${space[2]}px - 200px - 35px);
+  /* pointer-events: none; */
+
   z-index: 0;
+
+  overflow-x: scroll;
+/* 
+  opacity: 1;
+  top: 10px;
+  height: 80px; */
 `
 
 export const DisplayRecentListContainer = styled(RecentListContainer)`
   z-index: 1;
   height: 70px;
   bottom: ${space[2] + 5}px;
-`
+  max-width: calc(100vw - 2 * ${space[2]}px - 200px - 35px);
 
+  ::-webkit-scrollbar {
+    display: none;
+    -ms-overflow-style: none;
+  }
+`
 
 export const ListItemContainer = styled(animated.div)`
   bottom: 12px;

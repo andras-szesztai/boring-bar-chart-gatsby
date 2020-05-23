@@ -11,6 +11,7 @@ import {
   useEffectOnce,
   useUnmount,
   useSize,
+  useWindowSize,
 } from "react-use"
 import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
@@ -29,7 +30,6 @@ import {
   DisplayRecentListContainer,
   ListItemContainer,
 } from "./styles"
-
 
 const TextContainer = styled(motion.div)`
   font-weight: 500;
@@ -157,36 +157,38 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [elementDims, setElementDims] = useState([])
 
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
+
   const transitions = useTransition(elementDims, item => item.name, {
     from: { transform: "translate3d(-200px, -2px, 0)" },
     enter: { transform: "translate3d(0px, -2px, 0)" },
-    update: item => ({
-      left: `${elementDims.find(el => el.name === item.name).x - 212}px`,
-      width: `${elementDims.find(el => el.name === item.name).width}px`,
-    }),
+    update: item => {
+      const curreItem = elementDims.find(el => el.name === item.name)
+      return {
+        left: `${curreItem.x - 212}px`,
+        width: `${curreItem.width}px`,
+      }
+    },
     leave: { transform: "translate3d(0px, 100px, 0)" },
     onDestroyed: () => setRunReCalc(true),
   })
 
-  prevDims && console.log(prevDims.width, dims.width)
+  const { width } = useWindowSize()
+  const maxWidth = width - 2 * space[2] - 200 - 40
+
   const endContainerAnim = useSpring({
-    left: `${isOpen ? 215 + dims.width : 208}px`,
+    left: `${
+      isOpen ? 210 + (dims.width <= maxWidth ? dims.width : maxWidth) : 208
+    }px`,
     boxShadow: `-1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
     delay:
-      !prevDims ||
-      prevDims.width < dims.width ||
-      isOpen !== prevIsOpen ||
-      (prevDims && prevDims.width - dims.width === 60)
+      !prevDims || prevDims.width < dims.width || isOpen !== prevIsOpen
         ? 0
         : 650,
   })
   const recentListAnim = useSpring({
-    width: `${isOpen ? dims.width + 10 : 0}px`,
+    width: `${isOpen ? dims.width + 5 : 0}px`,
     delay:
-      !prevDims ||
-      prevDims.width < dims.width ||
-      isOpen !== prevIsOpen ||
-      (prevDims && prevDims.width - dims.width === 60)
+      !prevDims || prevDims.width < dims.width || isOpen !== prevIsOpen
         ? 0
         : 650,
   })
