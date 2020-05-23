@@ -44,7 +44,7 @@ export const RecentListContainer = styled(motion.div)`
   display: flex;
   justify-content: flex-start;
   background: ${colors.whiteDark};
-  max-width: calc(100vw - 2 * ${space[2]}px - 200px - 45px);
+
 
   overflow-x: auto;
 
@@ -56,6 +56,7 @@ export const RecentListContainer = styled(motion.div)`
 export const HiddenRecentListContainer = styled(RecentListContainer)`
   opacity: 0;
   pointer-events: none;
+  max-width: calc(100vw - 2 * ${space[2]}px - 200px - 45px);
   z-index: 0;
 `
 

@@ -5,7 +5,7 @@ import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
-import { useMeasure } from "react-use"
+import { useMeasure, useUpdateEffect } from "react-use"
 import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
 import useResizeAware from "react-resize-aware"
@@ -15,7 +15,7 @@ import { space, dropShadow, colors } from "../../../../../themes/theme"
 import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
 import { themifyFontSize, themifyZIndex } from "../../../../../themes/mixins"
 import { FavoriteStar, FavoriteHeart } from "../../../../molecules"
-import { usePrevious } from "../../../../../hooks"
+import { usePrevious, useArrayRefs } from "../../../../../hooks"
 import {
   EndIconsContainer,
   RecentListContainer,
@@ -73,11 +73,35 @@ const ListItemContainer = styled(motion.div)`
   align-self: center;
   cursor: pointer;
   margin-left: ${space[2]}px;
+  margin-right: ${space[2]}px;
 
   white-space: nowrap;
 `
 
 const CONTROL_WIDTH = 200
+
+const ListItem = ({ key, name, setDims }) => {
+  const [ref, dims] = useMeasure()
+  const prevDims = usePrevious(dims)
+  useEffect(() => {
+    if(prevDims && !_.isEqual(dims,prevDims)){
+      console.log(name, dims)
+      // setDims(prev => ({ ...prev, { } }))
+    }
+  })
+  return (
+    <AnimatePresence key={key || name}>
+      <ListItemContainer
+        ref={ref}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { delay: 0.5 } }}
+        leave={{ opacity: 0, transition: { delay: 0 } }}
+      >
+        {name}
+      </ListItemContainer>
+    </AnimatePresence>
+  )
+}
 
 export default function FavoritesList({ state, localStorageValues }) {
   const { favoritePersons } = localStorageValues
@@ -106,7 +130,8 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [isOpen, setIsOpen] = useState(true)
   const [listRef, dims] = useMeasure()
 
-  console.log(dims)
+  // const itemRefs = useArrayRefs(10)
+
   return (
     <>
       <HiddenRecentListContainer ref={listRef}>
@@ -118,16 +143,14 @@ export default function FavoritesList({ state, localStorageValues }) {
           ) : (
             favoritesCombined
               .filter((d, i) => i < 10)
-              .map(favorite => (
-                <ListItemContainer key={favorite.id}>
-                  {favorite.name}
-                </ListItemContainer>
+              .map((favorite, i) => (
+                <ListItem key={favorite.id} name={favorite.name} />
               ))
           ))}
       </HiddenRecentListContainer>
 
       <DisplayRecentListContainer
-        animate={{ width: dims.width }}
+        animate={{ width: dims.width + 10 }}
         transition={TRANSITION.primary}
       >
         {favoritesCombined &&
@@ -138,17 +161,19 @@ export default function FavoritesList({ state, localStorageValues }) {
           ) : (
             favoritesCombined
               .filter((d, i) => i < 10)
-              .map(favorite => (
-                <AnimatePresence key={favorite.name}>
-                  <ListItemContainer
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1, transition: { delay: 1 } }}
-                    leave={{ opacity: 0, transition: { delay: 0 } }}
-                  >
-                    {favorite.name}
-                  </ListItemContainer>
-                </AnimatePresence>
-              ))
+              .map((favorite, i) => {
+                return (
+                  <AnimatePresence key={favorite.name}>
+                    <ListItemContainer
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1, transition: { delay: 0.5 } }}
+                      leave={{ opacity: 0, transition: { delay: 0 } }}
+                    >
+                      {favorite.name}
+                    </ListItemContainer>
+                  </AnimatePresence>
+                )
+              })
           ))}
       </DisplayRecentListContainer>
 
@@ -182,6 +207,7 @@ export default function FavoritesList({ state, localStorageValues }) {
       </ControlCollapsed>
 
       <EndIconsContainer
+        initial={{ x: 215 + dims.width }}
         animate={{ x: 215 + dims.width }}
         transition={TRANSITION.primary}
       >
