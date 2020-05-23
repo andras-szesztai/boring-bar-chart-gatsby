@@ -19,13 +19,14 @@ import {
   EndIconsContainer,
   RecentListContainer,
   ControlCollapsed,
+  HiddenRecentListContainer,
 } from "./styles"
 import { useSpring } from "react-spring"
 
 const Container = styled(motion.div)`
   position: fixed;
   display: grid;
-  grid-template-columns: min-content min-content 35px;
+  grid-template-columns: min-content 1fr 35px;
   grid-template-rows: 1fr;
 
   background-color: #fff;
@@ -78,6 +79,8 @@ const ListItemContainer = styled(motion.div)`
   white-space: nowrap;
 `
 
+const CONTROL_WIDTH = 200
+
 export default function FavoritesList({ state, localStorageValues }) {
   const { favoritePersons } = localStorageValues
   const prevLocalStorageValues = usePrevious(localStorageValues)
@@ -105,20 +108,40 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [isOpen, setIsOpen] = useState(true)
   const [listRef, dims] = useMeasure()
 
-  // const expand = useSpring({
-  //   config: { friction: 10 },
-  //   height: open ? `${contentHeight}px` : defaultHeight
-  // });
   console.log(dims)
   return (
     <>
+      <HiddenRecentListContainer ref={listRef}>
+        {favoritesCombined &&
+          (!favoritesCombined.length ? (
+            <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
+              Mark a movie/series or person as a favorite to display them here!
+            </TextContainer>
+          ) : (
+            favoritesCombined
+              .filter((d, i) => i < 10)
+              .map(favorite => (
+                <AnimatePresence key={favorite.name}>
+                  <ListItemContainer
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1, transition: { delay: 1 } }}
+                    // leave={{ opacity: 0, transition: { delay: 1 } }}
+                    key={favorite.id}
+                  >
+                    {favorite.name}
+                  </ListItemContainer>
+                </AnimatePresence>
+              ))
+          ))}
+      </HiddenRecentListContainer>
+
       <Container
         initial={{
           opacity: 0,
         }}
         animate={{
           opacity: 1,
-          width: dims.width + 235
+          width: dims.width + 245,
         }}
         transition={{
           duration: 1,
@@ -161,7 +184,8 @@ export default function FavoritesList({ state, localStorageValues }) {
             </motion.div>
           </Flex>
         </ControlCollapsed>
-        <RecentListContainer ref={listRef}>
+
+        {/* <RecentListContainer ref={listRef}>
           {favoritesCombined &&
             (!favoritesCombined.length ? (
               <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
@@ -172,12 +196,20 @@ export default function FavoritesList({ state, localStorageValues }) {
               favoritesCombined
                 .filter((d, i) => i < 10)
                 .map(favorite => (
-                  <ListItemContainer key={favorite.id}>
-                    {favorite.name}
-                  </ListItemContainer>
+                  <AnimatePresence key={favorite.name}>
+                    <ListItemContainer
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1, transition: { delay: 1 } }}
+                      // leave={{ opacity: 0, transition: { delay: 1 } }}
+                      key={favorite.id}
+                    >
+                      {favorite.name}
+                    </ListItemContainer>
+                  </AnimatePresence>
                 ))
             ))}
-        </RecentListContainer>
+        </RecentListContainer> */}
+
         <EndIconsContainer
           animate={{
             boxShadow: "none",

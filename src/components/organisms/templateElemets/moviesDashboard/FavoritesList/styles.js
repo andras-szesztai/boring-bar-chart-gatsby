@@ -27,7 +27,19 @@ export const RecentListContainer = styled(motion.div)`
   display: flex;
   justify-content: flex-start;
   background: ${colors.whiteDark};
+  padding-right: ${space[2]}px;
 
   z-index: 1;
   overflow-x: auto;
+
+  position: fixed;
+  left: calc(${space[2]}px + 200px);
 `
+
+export const HiddenRecentListContainer = styled(RecentListContainer)`
+  opacity: 1;
+  pointer-events: none;
+
+`
+
+
