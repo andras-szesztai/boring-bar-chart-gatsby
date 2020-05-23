@@ -148,7 +148,7 @@ export default function FavoritesList({ state, localStorageValues }) {
     }
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
-  // TODO: Setup isOpen in local storage
+  // TODO: Setup isOpen in local store
   const [isOpen, setIsOpen] = useState(true)
   const prevIsOpen = usePrevious(isOpen)
   const [listRef, dims] = useMeasure()
@@ -196,6 +196,17 @@ export default function FavoritesList({ state, localStorageValues }) {
     boxShadow: `1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
   })
 
+  const placholderAnim = useSpring({
+    left: `${
+      _.last(elementDims)
+        ? _.last(elementDims).x -
+          (hoveredFavorite && hoveredFavorite.name === _.last(elementDims).name
+            ? -5
+            : 115)
+        : 10
+    }px`,
+  })
+
   return (
     <>
       <HiddenRecentListContainer ref={listRef}>
@@ -233,7 +244,7 @@ export default function FavoritesList({ state, localStorageValues }) {
                 here!
               </TextContainer>
             ) : (
-              transitions.map(({ item, props, key }) => (
+              transitions.map(({ item, props, key }, i) => (
                 <ListItemContainer
                   key={key}
                   style={{ ...props, position: "absolute" }}
@@ -244,6 +255,10 @@ export default function FavoritesList({ state, localStorageValues }) {
                 </ListItemContainer>
               ))
             ))}
+
+          <ListItemContainer
+            style={{ ...placholderAnim, position: "absolute", opacity: 0 }}
+          />
         </div>
       </DisplayRecentListContainer>
 

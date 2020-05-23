@@ -60,8 +60,7 @@ export const HiddenRecentListContainer = styled(RecentListContainer)`
   pointer-events: none;
   z-index: 0;
 
-/* 
-  opacity: 1;
+  /* opacity: 1;
   top: 10px;
   height: 80px; */
 `
