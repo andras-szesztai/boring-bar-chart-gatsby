@@ -144,13 +144,16 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [elementDims, setElementDims] = useState([])
 
   const transitions = useTransition(elementDims, item => item.name, {
-    from: { transform: "translateY(-100px)" },
-    enter: { transform: "translateY(0px)" },
+    from: { transform: "translate3d(-200px, 0px, 0)" },
+    enter: { transform: "translate3d(0px, 0px, 0)" },
     update: item => ({
       left: `${elementDims.find(el => el.name === item.name).x - 212}px`,
     }),
-    leave: { transform: "translateY(100px)" },
+    leave: { transform: "translate3d(0px, 100px, 0)" },
   })
+
+  const endContainerAnim = useSpring({ left: `${215 + dims.width}px` })
+  const recentListAnim = useSpring({ width: `${dims.width + 10}px` })
 
   return (
     <>
@@ -174,10 +177,7 @@ export default function FavoritesList({ state, localStorageValues }) {
           ))}
       </HiddenRecentListContainer>
 
-      <DisplayRecentListContainer
-        animate={{ width: dims.width + 10 }}
-        transition={TRANSITION.primary}
-      >
+      <DisplayRecentListContainer style={recentListAnim}>
         <div style={{ position: "relative" }}>
           {favoritesCombined &&
             (!favoritesCombined.length ? (
@@ -227,11 +227,7 @@ export default function FavoritesList({ state, localStorageValues }) {
         </Flex>
       </ControlCollapsed>
 
-      <EndIconsContainer
-        initial={{ x: 215 + dims.width }}
-        animate={{ x: 215 + dims.width }}
-        transition={TRANSITION.primary}
-      >
+      <EndIconsContainer style={endContainerAnim}>
         <IconContainer whileHover={{ scale: 1.3 }}>
           <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
         </IconContainer>

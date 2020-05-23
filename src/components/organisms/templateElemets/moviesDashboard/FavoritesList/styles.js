@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { space, colors, dropShadow } from "../../../../../themes/theme"
+import { animated } from "react-spring"
 
 export const ControlCollapsed = styled(motion.div)`
   width: 200px;
@@ -20,7 +21,7 @@ export const ControlCollapsed = styled(motion.div)`
   border: 1px solid ${colors.whiteDark};
 `
 
-export const EndIconsContainer = styled(motion.div)`
+export const EndIconsContainer = styled(animated.div)`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -40,7 +41,7 @@ export const EndIconsContainer = styled(motion.div)`
   border-radius: 0 ${space[1]}px ${space[1]}px 0;
 `
 
-export const RecentListContainer = styled(motion.div)`
+export const RecentListContainer = styled(animated.div)`
   display: flex;
   justify-content: flex-start;
   background: ${colors.whiteDark};
