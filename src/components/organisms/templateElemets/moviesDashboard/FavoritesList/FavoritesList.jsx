@@ -80,9 +80,10 @@ const ListItem = ({
   runReCalc,
   setRunReCalc,
   expand,
+  hoveredFavorite,
 }) => {
   const prevElementDims = usePrevious(elementDims)
-  const prevExpand = usePrevious(expand)
+  const prevHoveredFavorite = usePrevious(hoveredFavorite)
   const ref = useRef(null)
   const initialWidth = useRef(null)
   useEffectOnce(() => {
@@ -92,19 +93,18 @@ const ListItem = ({
   })
 
   const [shouldReCalc, setShouldReCalc] = useState(false)
-  // useEffect(() => {
-  //   if (expand && !prevExpand) {
-  //     setShouldReCalc(true)
-  //   }
-  // }, [expand, prevExpand])
+  useEffect(() => {
+    if (!_.isEqual(hoveredFavorite, prevHoveredFavorite)) {
+      setShouldReCalc(true)
+    }
+  }, [hoveredFavorite, prevHoveredFavorite])
 
-  // console.log("shouldReCalc", shouldReCalc)
   useEffect(() => {
     if (runReCalc || shouldReCalc) {
       const dims = ref.current.getBoundingClientRect()
       setElementDims(prev => [
         ...prev.filter(el => el.name !== name),
-        { name, x: dims.x, width: dims.width },
+        { name, x: dims.x, width: expand ? dims.width + 48 : dims.width },
       ])
       runReCalc && setRunReCalc(false)
       shouldReCalc && setShouldReCalc(false)
@@ -122,14 +122,20 @@ const ListItem = ({
 
   useUnmount(() => setElementDims(prev => prev.filter(el => el.name !== name)))
 
-  const listAnim = useSpring({
-    paddingRight: `${expand ? 48 : 12}px`
-  })
-
   return (
-    <ListItemContainer style={listAnim} ref={ref}>
-      {name}
-    </ListItemContainer>
+    <div>
+      <ListItemContainer
+        ref={ref}
+        style={{
+          width:
+            expand && initialWidth.current
+              ? initialWidth.current + 48
+              : initialWidth.current,
+        }}
+      >
+        {name}
+      </ListItemContainer>
+    </div>
   )
 }
 
@@ -171,31 +177,39 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [elementDims, setElementDims] = useState([])
 
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
+  const prevHoveredFavorite = usePrevious(hoveredFavorite)
   const transitions = useTransition(elementDims, item => item.name, {
     from: { transform: "translate3d(-200px, -2px, 0)" },
     enter: { transform: "translate3d(0px, -2px, 0)" },
     update: item => ({
       left: `${elementDims.find(el => el.name === item.name).x - 212}px`,
-      paddingRight: `${
-        hoveredFavorite && hoveredFavorite.name === item.name ? 48 : 12
-      }px`,
+      width: `${elementDims.find(el => el.name === item.name).width}px`,
     }),
     leave: { transform: "translate3d(0px, 100px, 0)" },
     onDestroyed: () => setRunReCalc(true),
   })
 
+  console.log(prevHoveredFavorite && !hoveredFavorite)
+
+  prevDims && console.log(prevDims.width, dims.width)
   const endContainerAnim = useSpring({
     left: `${isOpen ? 215 + dims.width : 208}px`,
     boxShadow: `-1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
     delay:
-      !prevDims || prevDims.width < dims.width || isOpen !== prevIsOpen
+      !prevDims ||
+      prevDims.width < dims.width ||
+      isOpen !== prevIsOpen ||
+      (prevDims && prevDims.width - dims.width === 48)
         ? 0
         : 650,
   })
   const recentListAnim = useSpring({
     width: `${isOpen ? dims.width + 10 : 0}px`,
     delay:
-      !prevDims || prevDims.width < dims.width || isOpen !== prevIsOpen
+      !prevDims ||
+      prevDims.width < dims.width ||
+      isOpen !== prevIsOpen ||
+      (prevDims && prevDims.width - dims.width === 48)
         ? 0
         : 650,
   })
@@ -219,8 +233,9 @@ export default function FavoritesList({ state, localStorageValues }) {
                   elementDims={elementDims}
                   setElementDims={setElementDims}
                   expand={
-                    !!hoveredFavorite && favorite.name === hoveredFavorite.name
+                    hoveredFavorite && favorite.name === hoveredFavorite.name
                   }
+                  hoveredFavorite={hoveredFavorite}
                   key={favorite.id}
                   name={favorite.name}
                   runReCalc={runReCalc}

@@ -57,7 +57,9 @@ export const RecentListContainer = styled(animated.div)`
 `
 
 export const HiddenRecentListContainer = styled(RecentListContainer)`
-  opacity: 0;
+  opacity: 1;
+  top: ${space[2]}px;
+  height: 90px;
   pointer-events: none;
   max-width: calc(100vw - 2 * ${space[2]}px - 200px - 35px);
   z-index: 0;
