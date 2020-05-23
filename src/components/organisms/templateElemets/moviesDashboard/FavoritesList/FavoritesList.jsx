@@ -71,7 +71,6 @@ const IconContainer = styled(motion.div)`
 
 const ListItemContainer = styled(animated.div)`
   bottom: 12px;
-  /* right: ${space[2]}px; */
   font-size: ${themifyFontSize(3)};
   font-weight: 300;
   color: #fff;
@@ -81,7 +80,6 @@ const ListItemContainer = styled(animated.div)`
   border: 1px solid ${chroma(COLORS.primary).darken()};
 
   align-self: center;
-  cursor: pointer;
   margin-left: ${space[2]}px;
   margin-right: ${space[2]}px;
 
@@ -90,7 +88,13 @@ const ListItemContainer = styled(animated.div)`
 
 const CONTROL_WIDTH = 200
 
-const ListItem = ({ name, setElementDims, elementDims }) => {
+const ListItem = ({
+  name,
+  setElementDims,
+  elementDims,
+  runReCalc,
+  setRunReCalc,
+}) => {
   const prevElementDims = usePrevious(elementDims)
   const ref = useRef(null)
   useEffectOnce(() => {
@@ -101,13 +105,21 @@ const ListItem = ({ name, setElementDims, elementDims }) => {
   })
 
   useEffect(() => {
-    if (prevElementDims && elementDims.length !== prevElementDims.length) {
+    if (runReCalc) {
       setElementDims(prev => [
         ...prev.filter(el => el.name !== name),
         { name, x: ref.current.getBoundingClientRect().x },
       ])
+      setRunReCalc(false)
     }
-  }, [elementDims, name, prevElementDims, setElementDims])
+  }, [
+    elementDims,
+    name,
+    prevElementDims,
+    runReCalc,
+    setElementDims,
+    setRunReCalc,
+  ])
 
   useUnmount(() => setElementDims(prev => prev.filter(el => el.name !== name)))
 
@@ -119,8 +131,8 @@ export default function FavoritesList({ state, localStorageValues }) {
   const prevLocalStorageValues = usePrevious(localStorageValues)
   const [isPersonsActive, setIsPersonsActive] = useState(true)
   const [isMoviesActive, setIsMoviesActive] = useState(true)
-  const [resizeListener, sizes] = useResizeAware()
 
+  const [runReCalc, setRunReCalc] = useState(false)
   const [favoritesCombined, setFavoriteCombined] = useState(undefined)
   useEffect(() => {
     if (!favoritesCombined) {
@@ -135,11 +147,18 @@ export default function FavoritesList({ state, localStorageValues }) {
       setFavoriteCombined(
         [...favoritePersons].sort((a, b) => new Date(b.date) - new Date(a.date))
       )
+      if (
+        favoritePersons.length > prevLocalStorageValues.favoritePersons.length
+      ) {
+        setRunReCalc(true)
+      }
     }
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
   const [isOpen, setIsOpen] = useState(true)
+  const prevIsOpen = usePrevious(isOpen)
   const [listRef, dims] = useMeasure()
+  const prevDims = usePrevious(dims)
 
   const [elementDims, setElementDims] = useState([])
 
@@ -150,10 +169,27 @@ export default function FavoritesList({ state, localStorageValues }) {
       left: `${elementDims.find(el => el.name === item.name).x - 212}px`,
     }),
     leave: { transform: "translate3d(0px, 100px, 0)" },
+    onDestroyed: () => setRunReCalc(true),
   })
 
-  const endContainerAnim = useSpring({ left: `${215 + dims.width}px` })
-  const recentListAnim = useSpring({ width: `${dims.width + 10}px` })
+  const endContainerAnim = useSpring({
+    left: `${isOpen ? 215 + dims.width : 208}px`,
+    boxShadow: `-1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
+    delay:
+      !prevDims || prevDims.width < dims.width || isOpen !== prevIsOpen
+        ? 0
+        : 650,
+  })
+  const recentListAnim = useSpring({
+    width: `${isOpen ? dims.width + 10 : 0}px`,
+    delay:
+      !prevDims || prevDims.width < dims.width || isOpen !== prevIsOpen
+        ? 0
+        : 650,
+  })
+  const ControlCollapsedAnim = useSpring({
+    boxShadow: `1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
+  })
 
   return (
     <>
@@ -172,6 +208,8 @@ export default function FavoritesList({ state, localStorageValues }) {
                   setElementDims={setElementDims}
                   key={favorite.id}
                   name={favorite.name}
+                  runReCalc={runReCalc}
+                  setRunReCalc={setRunReCalc}
                 />
               ))
           ))}
@@ -198,7 +236,7 @@ export default function FavoritesList({ state, localStorageValues }) {
         </div>
       </DisplayRecentListContainer>
 
-      <ControlCollapsed>
+      <ControlCollapsed style={ControlCollapsedAnim}>
         <Flex style={{ justifyContent: "space-evenly", alignItems: "center" }}>
           <motion.div
             whileHover={{ scale: 1.3 }}

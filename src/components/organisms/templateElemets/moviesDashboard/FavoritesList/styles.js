@@ -3,7 +3,7 @@ import { motion } from "framer-motion"
 import { space, colors, dropShadow } from "../../../../../themes/theme"
 import { animated } from "react-spring"
 
-export const ControlCollapsed = styled(motion.div)`
+export const ControlCollapsed = styled(animated.div)`
   width: 200px;
   height: 80px;
   z-index: 10;
@@ -17,7 +17,6 @@ export const ControlCollapsed = styled(motion.div)`
 
   border-radius: ${space[1]}px 0 0 ${space[1]}px;
   filter: drop-shadow(${dropShadow.primary});
-  box-shadow: 1px 0px 3px 0 rgba(51,51,51,0.12);
   border: 1px solid ${colors.whiteDark};
 `
 
@@ -36,7 +35,6 @@ export const EndIconsContainer = styled(animated.div)`
   background-color: #fff;
 
   filter: drop-shadow(${dropShadow.primary});
-  box-shadow: -1px 0px 3px 0 rgba(51,51,51,0.12);
   border: 1px solid ${colors.whiteDark};
   border-radius: 0 ${space[1]}px ${space[1]}px 0;
 `
