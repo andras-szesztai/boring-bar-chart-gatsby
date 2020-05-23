@@ -127,7 +127,7 @@ export default function FavoritesList({ state, localStorageValues }) {
       </HiddenRecentListContainer>
 
       <DisplayRecentListContainer
-        animate={{ width: dims.width + 10 }}
+        animate={{ width: dims.width }}
         transition={TRANSITION.primary}
       >
         {favoritesCombined &&
@@ -168,11 +168,10 @@ export default function FavoritesList({ state, localStorageValues }) {
           </motion.div>
           <motion.div
             whileHover={{ scale: 1.3 }}
-            initial={{ y: -3 }}
             style={{ cursor: "pointer" }}
             onClick={() => setIsMoviesActive(prev => !prev)}
           >
-            <FavoriteHeart
+            <FavoriteStar
               isFavorited={true}
               isHovered={false}
               color={COLORS.secondary}

@@ -272,7 +272,6 @@ export default function PersonDetailCard({
                             <FavoriteStar
                               isFavorited={isFavorited}
                               isHovered={isTitleHovered}
-                              color={COLORS.primary}
                             />
                           </motion.div>
                         </TitleContainer>

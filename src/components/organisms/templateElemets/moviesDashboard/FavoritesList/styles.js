@@ -16,6 +16,7 @@ export const ControlCollapsed = styled(motion.div)`
 
   border-radius: ${space[1]}px 0 0 ${space[1]}px;
   filter: drop-shadow(${dropShadow.primary});
+  box-shadow: 1px 0px 3px 0 rgba(51,51,51,0.12);
   border: 1px solid ${colors.whiteDark};
 `
 
@@ -34,6 +35,7 @@ export const EndIconsContainer = styled(motion.div)`
   background-color: #fff;
 
   filter: drop-shadow(${dropShadow.primary});
+  box-shadow: -1px 0px 3px 0 rgba(51,51,51,0.12);
   border: 1px solid ${colors.whiteDark};
   border-radius: 0 ${space[1]}px ${space[1]}px 0;
 `
@@ -42,7 +44,7 @@ export const RecentListContainer = styled(motion.div)`
   display: flex;
   justify-content: flex-start;
   background: ${colors.whiteDark};
-  max-width: calc(100vw - 2 * ${space[2]}px - 200px - 35px);
+  max-width: calc(100vw - 2 * ${space[2]}px - 200px - 45px);
 
   overflow-x: auto;
 
