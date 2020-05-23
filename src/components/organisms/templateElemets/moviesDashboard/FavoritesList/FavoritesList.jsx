@@ -126,7 +126,10 @@ export default function FavoritesList({ state, localStorageValues }) {
           ))}
       </HiddenRecentListContainer>
 
-      <DisplayRecentListContainer animate={{ width: dims.width }}>
+      <DisplayRecentListContainer
+        animate={{ width: dims.width + 10 }}
+        transition={TRANSITION.primary}
+      >
         {favoritesCombined &&
           (!favoritesCombined.length ? (
             <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
@@ -178,31 +181,11 @@ export default function FavoritesList({ state, localStorageValues }) {
           </motion.div>
         </Flex>
       </ControlCollapsed>
-      {/* <RecentListContainer ref={listRef}>
-          {favoritesCombined &&
-            (!favoritesCombined.length ? (
-              <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
-                Mark a movie/series or person as a favorite to display them
-                here!
-              </TextContainer>
-            ) : (
-              favoritesCombined
-                .filter((d, i) => i < 10)
-                .map(favorite => (
-                  <AnimatePresence key={favorite.name}>
-                    <ListItemContainer
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1, transition: { delay: 1 } }}
-                      // leave={{ opacity: 0, transition: { delay: 1 } }}
-                      key={favorite.id}
-                    >
-                      {favorite.name}
-                    </ListItemContainer>
-                  </AnimatePresence>
-                ))
-            ))}
-        </RecentListContainer> */}
-      <EndIconsContainer>
+
+      <EndIconsContainer
+        animate={{ x: 215 + dims.width }}
+        transition={TRANSITION.primary}
+      >
         <IconContainer whileHover={{ scale: 1.3 }}>
           <FaExpandArrowsAlt size={16} color={COLORS.textColor} />
         </IconContainer>

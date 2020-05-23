@@ -30,8 +30,8 @@ export const EndIconsContainer = styled(motion.div)`
   width: 35px;
 
   position: fixed;
-  right: ${space[2]}px;
   bottom: ${space[2]}px;
+  background-color: #fff;
 
   filter: drop-shadow(${dropShadow.primary});
   border: 1px solid ${colors.whiteDark};
@@ -42,7 +42,6 @@ export const RecentListContainer = styled(motion.div)`
   display: flex;
   justify-content: flex-start;
   background: ${colors.whiteDark};
-  padding-right: ${space[2]}px;
   max-width: calc(100vw - 2 * ${space[2]}px - 200px - 35px);
 
   overflow-x: auto;
@@ -60,5 +59,6 @@ export const HiddenRecentListContainer = styled(RecentListContainer)`
 
 export const DisplayRecentListContainer = styled(RecentListContainer)`
   z-index: 1;
-  height: 80px;
+  height: 70px;
+  bottom: ${space[2] + 5}px;
 `
