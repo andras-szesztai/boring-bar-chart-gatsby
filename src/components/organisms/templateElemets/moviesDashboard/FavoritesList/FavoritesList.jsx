@@ -14,7 +14,7 @@ import {
 import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
 import useResizeAware from "react-resize-aware"
-import { useSpring } from "react-spring"
+import { useSpring, useTransition, animated } from "react-spring"
 
 import { space, dropShadow, colors } from "../../../../../themes/theme"
 import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
@@ -50,6 +50,11 @@ const TextContainer = styled(motion.div)`
   font-size: ${themifyFontSize(2)};
   color: ${COLORS.textColor};
   font-family: inherit;
+
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: ${space[2]}px;
 `
 
 const Flex = styled.div`
@@ -64,7 +69,7 @@ const IconContainer = styled(motion.div)`
   z-index: ${themifyZIndex("hoverOverlay")};
 `
 
-const ListItemContainer = styled(motion.div)`
+const ListItemContainer = styled(animated.div)`
   bottom: 12px;
   /* right: ${space[2]}px; */
   font-size: ${themifyFontSize(3)};
@@ -86,8 +91,6 @@ const ListItemContainer = styled(motion.div)`
 const CONTROL_WIDTH = 200
 
 const ListItem = ({ name, setElementDims, elementDims }) => {
-  // const [ref, dims] = useMeasure()
-  //const prevDims = usePrevious(dims)
   const prevElementDims = usePrevious(elementDims)
   const ref = useRef(null)
   useEffectOnce(() => {
@@ -138,12 +141,16 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [isOpen, setIsOpen] = useState(true)
   const [listRef, dims] = useMeasure()
 
-  // const itemRefs = useArrayRefs(10)
-
   const [elementDims, setElementDims] = useState([])
-  // useEffect(() => {
 
-  // })
+  const transitions = useTransition(elementDims, item => item.name, {
+    from: { transform: "translateY(-100px)" },
+    enter: { transform: "translateY(0px)" },
+    update: item => ({
+      left: `${elementDims.find(el => el.name === item.name).x - 212}px`,
+    }),
+    leave: { transform: "translateY(100px)" },
+  })
 
   return (
     <>
@@ -179,24 +186,14 @@ export default function FavoritesList({ state, localStorageValues }) {
                 here!
               </TextContainer>
             ) : (
-              elementDims.map((el, i) => {
-                return (
-                  <AnimatePresence key={el.name}>
-                    <ListItemContainer
-                      style={{ position: "absolute" }}
-                      initial={{ opacity: 0, x: 0 }}
-                      animate={{
-                        opacity: 1,
-                        x: el.x - 210,
-                        transition: { delay: 0.5 },
-                      }}
-                      leave={{ opacity: 0, transition: { delay: 0 } }}
-                    >
-                      {el.name}
-                    </ListItemContainer>
-                  </AnimatePresence>
-                )
-              })
+              transitions.map(({ item, props, key }) => (
+                <ListItemContainer
+                  key={key}
+                  style={{ ...props, position: "absolute" }}
+                >
+                  {item.name}
+                </ListItemContainer>
+              ))
             ))}
         </div>
       </DisplayRecentListContainer>
