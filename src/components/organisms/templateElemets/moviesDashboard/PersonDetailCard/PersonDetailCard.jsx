@@ -216,6 +216,9 @@ export default function PersonDetailCard({
             initial={{ rotate: !isOpen ? 180 : 0 }}
             animate={{
               rotate: !isOpen ? 180 : 0,
+              transition: {
+                delay: 1,
+              },
             }}
             whileHover={{ scale: 1.3 }}
           >
@@ -225,10 +228,7 @@ export default function PersonDetailCard({
             {loading || !isInitialized ? (
               <ContentLoader isOpen={isOpen} />
             ) : (
-              <DetailCardContent
-                variants={OPACITY_VARIANT}
-                {...ANIMATE_PROPS}
-              >
+              <DetailCardContent variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
                 <AnimatePresence>
                   {!isOpen && (
                     <ClosedNameContainer

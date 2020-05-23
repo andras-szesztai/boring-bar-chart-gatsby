@@ -1,7 +1,11 @@
+import chroma from "chroma-js"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { space, colors, dropShadow } from "../../../../../themes/theme"
 import { animated } from "react-spring"
+
+import { space, colors, dropShadow } from "../../../../../themes/theme"
+import { themifyFontSize } from "../../../../../themes/mixins"
+import { COLORS } from "../../../../../constants/moviesDashboard"
 
 export const ControlCollapsed = styled(animated.div)`
   width: 200px;
@@ -63,4 +67,22 @@ export const DisplayRecentListContainer = styled(RecentListContainer)`
   z-index: 1;
   height: 70px;
   bottom: ${space[2] + 5}px;
+`
+
+
+export const ListItemContainer = styled(animated.div)`
+  bottom: 12px;
+  font-size: ${themifyFontSize(3)};
+  font-weight: 300;
+  color: #fff;
+  border-radius: ${space[1]}px;
+  padding: 1px 12px;
+  background-color: ${chroma(COLORS.primary)};
+  border: 1px solid ${chroma(COLORS.primary).darken()};
+
+  align-self: center;
+  margin-left: ${space[2]}px;
+  margin-right: ${space[2]}px;
+
+  white-space: nowrap;
 `

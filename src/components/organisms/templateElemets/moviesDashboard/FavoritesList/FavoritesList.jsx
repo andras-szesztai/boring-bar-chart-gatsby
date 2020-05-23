@@ -27,6 +27,7 @@ import {
   ControlCollapsed,
   HiddenRecentListContainer,
   DisplayRecentListContainer,
+  ListItemContainer,
 } from "./styles"
 
 const Container = styled(motion.div)`
@@ -69,22 +70,7 @@ const IconContainer = styled(motion.div)`
   z-index: ${themifyZIndex("hoverOverlay")};
 `
 
-const ListItemContainer = styled(animated.div)`
-  bottom: 12px;
-  font-size: ${themifyFontSize(3)};
-  font-weight: 300;
-  color: #fff;
-  border-radius: ${space[1]}px;
-  padding: 1px 12px;
-  background-color: ${chroma(COLORS.primary)};
-  border: 1px solid ${chroma(COLORS.primary).darken()};
 
-  align-self: center;
-  margin-left: ${space[2]}px;
-  margin-right: ${space[2]}px;
-
-  white-space: nowrap;
-`
 
 const CONTROL_WIDTH = 200
 
