@@ -21,6 +21,7 @@ export const ControlCollapsed = styled(animated.div)`
 
   border-radius: ${space[1]}px 0 0 ${space[1]}px;
   filter: drop-shadow(${dropShadow.primary});
+  background-color: #fff;
   border: 1px solid ${colors.whiteDark};
 `
 
@@ -57,9 +58,7 @@ export const RecentListContainer = styled(animated.div)`
 `
 
 export const HiddenRecentListContainer = styled(RecentListContainer)`
-  opacity: 1;
-  top: ${space[2]}px;
-  height: 90px;
+  opacity: 0;
   pointer-events: none;
   max-width: calc(100vw - 2 * ${space[2]}px - 200px - 35px);
   z-index: 0;

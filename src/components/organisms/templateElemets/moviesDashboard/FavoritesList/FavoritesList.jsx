@@ -24,28 +24,12 @@ import { FavoriteStar, FavoriteHeart } from "../../../../molecules"
 import { usePrevious, useArrayRefs } from "../../../../../hooks"
 import {
   EndIconsContainer,
-  RecentListContainer,
   ControlCollapsed,
   HiddenRecentListContainer,
   DisplayRecentListContainer,
   ListItemContainer,
 } from "./styles"
 
-const Container = styled(motion.div)`
-  position: fixed;
-
-  background-color: #fff;
-  filter: drop-shadow(${dropShadow.primary});
-  border: 1px solid ${colors.whiteDark};
-  border-radius: ${space[1]}px;
-
-  width: calc(100vw - ${space[3]}px);
-  height: 90px;
-
-  bottom: ${space[2]}px;
-  left: ${space[2]}px;
-  overflow: hidden;
-`
 
 const TextContainer = styled(motion.div)`
   font-weight: 500;
@@ -70,8 +54,6 @@ const IconContainer = styled(motion.div)`
   cursor: pointer;
   z-index: ${themifyZIndex("hoverOverlay")};
 `
-
-const CONTROL_WIDTH = 200
 
 const ListItem = ({
   name,
@@ -104,7 +86,7 @@ const ListItem = ({
       const dims = ref.current.getBoundingClientRect()
       setElementDims(prev => [
         ...prev.filter(el => el.name !== name),
-        { name, x: dims.x, width: expand ? dims.width + 48 : dims.width },
+        { name, x: dims.x, width: dims.width },
       ])
       runReCalc && setRunReCalc(false)
       shouldReCalc && setShouldReCalc(false)
@@ -123,19 +105,17 @@ const ListItem = ({
   useUnmount(() => setElementDims(prev => prev.filter(el => el.name !== name)))
 
   return (
-    <div>
-      <ListItemContainer
-        ref={ref}
-        style={{
-          width:
-            expand && initialWidth.current
-              ? initialWidth.current + 48
-              : initialWidth.current,
-        }}
-      >
-        {name}
-      </ListItemContainer>
-    </div>
+    <ListItemContainer
+      ref={ref}
+      style={{
+        width:
+          expand && initialWidth.current
+            ? initialWidth.current + 60
+            : initialWidth.current,
+      }}
+    >
+      {name}
+    </ListItemContainer>
   )
 }
 
@@ -177,7 +157,6 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [elementDims, setElementDims] = useState([])
 
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
-  const prevHoveredFavorite = usePrevious(hoveredFavorite)
   const transitions = useTransition(elementDims, item => item.name, {
     from: { transform: "translate3d(-200px, -2px, 0)" },
     enter: { transform: "translate3d(0px, -2px, 0)" },
@@ -189,8 +168,6 @@ export default function FavoritesList({ state, localStorageValues }) {
     onDestroyed: () => setRunReCalc(true),
   })
 
-  console.log(prevHoveredFavorite && !hoveredFavorite)
-
   prevDims && console.log(prevDims.width, dims.width)
   const endContainerAnim = useSpring({
     left: `${isOpen ? 215 + dims.width : 208}px`,
@@ -199,7 +176,7 @@ export default function FavoritesList({ state, localStorageValues }) {
       !prevDims ||
       prevDims.width < dims.width ||
       isOpen !== prevIsOpen ||
-      (prevDims && prevDims.width - dims.width === 48)
+      (prevDims && prevDims.width - dims.width === 60)
         ? 0
         : 650,
   })
@@ -209,7 +186,7 @@ export default function FavoritesList({ state, localStorageValues }) {
       !prevDims ||
       prevDims.width < dims.width ||
       isOpen !== prevIsOpen ||
-      (prevDims && prevDims.width - dims.width === 48)
+      (prevDims && prevDims.width - dims.width === 60)
         ? 0
         : 650,
   })
