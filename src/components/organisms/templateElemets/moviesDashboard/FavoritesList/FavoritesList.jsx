@@ -10,6 +10,7 @@ import {
   useUpdateEffect,
   useEffectOnce,
   useUnmount,
+  useSize,
 } from "react-use"
 import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
@@ -70,8 +71,6 @@ const IconContainer = styled(motion.div)`
   z-index: ${themifyZIndex("hoverOverlay")};
 `
 
-
-
 const CONTROL_WIDTH = 200
 
 const ListItem = ({
@@ -80,36 +79,58 @@ const ListItem = ({
   elementDims,
   runReCalc,
   setRunReCalc,
+  expand,
 }) => {
   const prevElementDims = usePrevious(elementDims)
+  const prevExpand = usePrevious(expand)
   const ref = useRef(null)
+  const initialWidth = useRef(null)
   useEffectOnce(() => {
-    setElementDims(prev => [
-      ...prev,
-      { name, x: ref.current.getBoundingClientRect().x },
-    ])
+    const dims = ref.current.getBoundingClientRect()
+    setElementDims(prev => [...prev, { name, x: dims.x, width: dims.width }])
+    initialWidth.current = dims.width
   })
 
+  const [shouldReCalc, setShouldReCalc] = useState(false)
+  // useEffect(() => {
+  //   if (expand && !prevExpand) {
+  //     setShouldReCalc(true)
+  //   }
+  // }, [expand, prevExpand])
+
+  // console.log("shouldReCalc", shouldReCalc)
   useEffect(() => {
-    if (runReCalc) {
+    if (runReCalc || shouldReCalc) {
+      const dims = ref.current.getBoundingClientRect()
       setElementDims(prev => [
         ...prev.filter(el => el.name !== name),
-        { name, x: ref.current.getBoundingClientRect().x },
+        { name, x: dims.x, width: dims.width },
       ])
-      setRunReCalc(false)
+      runReCalc && setRunReCalc(false)
+      shouldReCalc && setShouldReCalc(false)
     }
   }, [
     elementDims,
+    expand,
     name,
     prevElementDims,
     runReCalc,
     setElementDims,
     setRunReCalc,
+    shouldReCalc,
   ])
 
   useUnmount(() => setElementDims(prev => prev.filter(el => el.name !== name)))
 
-  return <ListItemContainer ref={ref}>{name}</ListItemContainer>
+  const listAnim = useSpring({
+    paddingRight: `${expand ? 48 : 12}px`
+  })
+
+  return (
+    <ListItemContainer style={listAnim} ref={ref}>
+      {name}
+    </ListItemContainer>
+  )
 }
 
 export default function FavoritesList({ state, localStorageValues }) {
@@ -141,6 +162,7 @@ export default function FavoritesList({ state, localStorageValues }) {
     }
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
+  // TODO: Setup isOpen in local storage
   const [isOpen, setIsOpen] = useState(true)
   const prevIsOpen = usePrevious(isOpen)
   const [listRef, dims] = useMeasure()
@@ -148,11 +170,15 @@ export default function FavoritesList({ state, localStorageValues }) {
 
   const [elementDims, setElementDims] = useState([])
 
+  const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
   const transitions = useTransition(elementDims, item => item.name, {
-    from: { transform: "translate3d(-200px, 0px, 0)" },
-    enter: { transform: "translate3d(0px, 0px, 0)" },
+    from: { transform: "translate3d(-200px, -2px, 0)" },
+    enter: { transform: "translate3d(0px, -2px, 0)" },
     update: item => ({
       left: `${elementDims.find(el => el.name === item.name).x - 212}px`,
+      paddingRight: `${
+        hoveredFavorite && hoveredFavorite.name === item.name ? 48 : 12
+      }px`,
     }),
     leave: { transform: "translate3d(0px, 100px, 0)" },
     onDestroyed: () => setRunReCalc(true),
@@ -192,6 +218,9 @@ export default function FavoritesList({ state, localStorageValues }) {
                 <ListItem
                   elementDims={elementDims}
                   setElementDims={setElementDims}
+                  expand={
+                    !!hoveredFavorite && favorite.name === hoveredFavorite.name
+                  }
                   key={favorite.id}
                   name={favorite.name}
                   runReCalc={runReCalc}
@@ -214,6 +243,8 @@ export default function FavoritesList({ state, localStorageValues }) {
                 <ListItemContainer
                   key={key}
                   style={{ ...props, position: "absolute" }}
+                  onMouseEnter={() => setHoveredFavorite(item)}
+                  onMouseLeave={() => setHoveredFavorite(undefined)}
                 >
                   {item.name}
                 </ListItemContainer>
