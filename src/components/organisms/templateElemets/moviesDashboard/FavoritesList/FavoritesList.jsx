@@ -110,7 +110,7 @@ const ListItem = ({
       style={{
         width:
           expand && initialWidth.current
-            ? initialWidth.current + 60
+            ? initialWidth.current + 120
             : initialWidth.current,
       }}
     >

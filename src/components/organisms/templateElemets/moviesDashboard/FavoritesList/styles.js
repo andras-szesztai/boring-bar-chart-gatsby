@@ -57,11 +57,9 @@ export const RecentListContainer = styled(animated.div)`
 
 export const HiddenRecentListContainer = styled(RecentListContainer)`
   opacity: 0;
-  /* pointer-events: none; */
-
+  pointer-events: none;
   z-index: 0;
 
-  overflow-x: scroll;
 /* 
   opacity: 1;
   top: 10px;
@@ -86,9 +84,9 @@ export const ListItemContainer = styled(animated.div)`
   font-weight: 300;
   color: #fff;
   border-radius: ${space[1]}px;
-  padding: 1px 12px;
+  padding: 2px 12px;
   background-color: ${chroma(COLORS.primary)};
-  border: 1px solid ${chroma(COLORS.primary).darken()};
+  /* border: 1px solid ${chroma(COLORS.primary).darken()}; */
 
   align-self: center;
   margin-left: ${space[2]}px;
