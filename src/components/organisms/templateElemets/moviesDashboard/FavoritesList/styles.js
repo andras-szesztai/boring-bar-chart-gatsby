@@ -59,16 +59,6 @@ export const RecentListContainer = styled(animated.div)`
   bottom: ${space[2]}px;
 `
 
-export const HiddenRecentListContainer = styled(RecentListContainer)`
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-
-  /* opacity: 1;
-  top: 10px;
-  height: 80px; */
-`
-
 export const DisplayRecentListContainer = styled(RecentListContainer)`
   z-index: 1;
   height: 50px;
@@ -136,4 +126,16 @@ export const PopConfirm = styled(motion.div)`
 
   background-color: ${chroma(COLORS.primary)};
 
+`
+
+export const TextContainer = styled(motion.div)`
+font-weight: 500;
+font-size: ${themifyFontSize(2)};
+color: ${COLORS.textColor};
+font-family: inherit;
+
+display: flex;
+align-items: center;
+height: 100%;
+padding: ${space[2]}px;
 `

@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useRef } from "react"
-import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import _ from "lodash"
-import { useMeasure, useEffectOnce, useUnmount, useWindowSize } from "react-use"
+import { useMeasure, useWindowSize } from "react-use"
 import { IoIosSearch, IoIosClose } from "react-icons/io"
 import { useSpring, useTransition } from "react-spring"
 
 import { space } from "../../../../../themes/theme"
-import { COLORS } from "../../../../../constants/moviesDashboard"
-import { themifyFontSize } from "../../../../../themes/mixins"
 import { usePrevious } from "../../../../../hooks"
 import {
-  HiddenRecentListContainer,
+  TextContainer,
   DisplayRecentListContainer,
   ListItemContainer,
   HoveredControlsContainer,
@@ -20,90 +17,7 @@ import {
 } from "./styles"
 import ControlCollapsed from "./ControlCollapsed/ControlCollapsed"
 import EndIconsContainer from "./EndIconsContainer/EndIconsContainer"
-
-const TextContainer = styled(motion.div)`
-  font-weight: 500;
-  font-size: ${themifyFontSize(2)};
-  color: ${COLORS.textColor};
-  font-family: inherit;
-
-  display: flex;
-  align-items: center;
-  height: 100%;
-  padding: ${space[2]}px;
-`
-
-
-const ListItem = ({
-  name,
-  id,
-  setElementDims,
-  elementDims,
-  runReCalc,
-  setRunReCalc,
-  expand,
-  hoveredFavorite,
-  extraMargin,
-}) => {
-  const prevElementDims = usePrevious(elementDims)
-  const prevHoveredFavorite = usePrevious(hoveredFavorite)
-  const ref = useRef(null)
-  const initialWidth = useRef(null)
-  useEffectOnce(() => {
-    const dims = ref.current.getBoundingClientRect()
-    setElementDims(prev => [
-      ...prev,
-      { name, id, x: dims.x, width: dims.width },
-    ])
-    initialWidth.current = dims.width
-  })
-
-  const [shouldReCalc, setShouldReCalc] = useState(false)
-  useEffect(() => {
-    if (!_.isEqual(hoveredFavorite, prevHoveredFavorite)) {
-      setShouldReCalc(true)
-    }
-  }, [hoveredFavorite, prevHoveredFavorite])
-
-  useEffect(() => {
-    if (runReCalc || shouldReCalc) {
-      const dims = ref.current.getBoundingClientRect()
-      setElementDims(prev => [
-        ...prev.filter(el => el.name !== name),
-        { name, id, x: dims.x, width: dims.width },
-      ])
-      runReCalc && setRunReCalc(false)
-      shouldReCalc && setShouldReCalc(false)
-    }
-  }, [
-    elementDims,
-    expand,
-    id,
-    name,
-    prevElementDims,
-    runReCalc,
-    setElementDims,
-    setRunReCalc,
-    shouldReCalc,
-  ])
-
-  useUnmount(() => setElementDims(prev => prev.filter(el => el.name !== name)))
-
-  return (
-    <ListItemContainer
-      ref={ref}
-      style={{
-        width:
-          expand && initialWidth.current
-            ? initialWidth.current + 180
-            : initialWidth.current,
-      }}
-      extramargin={extraMargin ? 1 : 0}
-    >
-      {name}
-    </ListItemContainer>
-  )
-}
+import ShadowRecentList from "./ShadowRecentList/ShadowRecentList"
 
 export default function FavoritesList({
   actions,
@@ -114,7 +28,6 @@ export default function FavoritesList({
   const { favoritePersons } = localStorageValues
   const { setFavoritePersons } = localStorageSetters
   const prevLocalStorageValues = usePrevious(localStorageValues)
-
   const { setActiveNameID } = actions
 
   const [runReCalc, setRunReCalc] = useState(false)
@@ -223,33 +136,15 @@ export default function FavoritesList({
 
   return (
     <>
-      <HiddenRecentListContainer ref={listRef}>
-        {favoritesCombined &&
-          (!favoritesCombined.length ? (
-            <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
-              Mark a movie/series or person as a favorite to display them here!
-            </TextContainer>
-          ) : (
-            favoritesCombined
-              .filter((d, i) => i < 10)
-              .map((favorite, i) => (
-                <ListItem
-                  elementDims={elementDims}
-                  setElementDims={setElementDims}
-                  expand={
-                    hoveredFavorite && favorite.name === hoveredFavorite.name
-                  }
-                  hoveredFavorite={hoveredFavorite}
-                  key={favorite.id}
-                  name={favorite.name}
-                  id={favorite.id}
-                  runReCalc={runReCalc}
-                  setRunReCalc={setRunReCalc}
-                  extraMargin={i === favoritesCombined.length - 1}
-                />
-              ))
-          ))}
-      </HiddenRecentListContainer>
+      <ShadowRecentList
+        listRef={listRef}
+        favoritesCombined={favoritesCombined}
+        elementDims={elementDims}
+        setElementDims={setElementDims}
+        hoveredFavorite={hoveredFavorite}
+        runReCalc={runReCalc}
+        setRunReCalc={setRunReCalc}
+      />
 
       <DisplayRecentListContainer
         style={recentListAnim}
