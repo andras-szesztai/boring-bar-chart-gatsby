@@ -116,3 +116,24 @@ export const HoverControlIconContainer = styled(motion.div)`
 
   cursor: pointer;
 `
+
+export const MouseDownAnimation = styled(motion.div)`
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  height: 100%;
+
+  background-color: #fff;
+  opacity: .2;
+  border-radius: ${space[1]}px;
+
+  cursor: pointer;
+`
+
+export const PopConfirm = styled(motion.div)`
+  position: absolute;
+
+  background-color: ${chroma(COLORS.primary)};
+
+`

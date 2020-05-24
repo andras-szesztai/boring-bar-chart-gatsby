@@ -34,6 +34,8 @@ import {
   ListItemContainer,
   HoveredControlsContainer,
   HoverControlIconContainer,
+  PopConfirm,
+  MouseDownAnimation,
 } from "./styles"
 
 const TextContainer = styled(motion.div)`
@@ -131,8 +133,14 @@ const ListItem = ({
   )
 }
 
-export default function FavoritesList({ actions, state, localStorageValues }) {
+export default function FavoritesList({
+  actions,
+  state,
+  localStorageValues,
+  localStorageSetters,
+}) {
   const { favoritePersons } = localStorageValues
+  const { setFavoritePersons } = localStorageSetters
   const prevLocalStorageValues = usePrevious(localStorageValues)
   const [isPersonsActive, setIsPersonsActive] = useState(true)
   const [isMoviesActive, setIsMoviesActive] = useState(true)
@@ -240,6 +248,10 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
 
   const [clickedRemove, setClickedRemove] = useState(undefined)
 
+  const timeOut = useRef(null)
+
+  // const { x } = useSpring({ from: { width: "0%" }, to: { width: clickedRemove ? "100%" : } })
+
   return (
     <>
       <HiddenRecentListContainer ref={listRef}>
@@ -321,9 +333,40 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
                         </HoverControlIconContainer>
                         <HoverControlIconContainer
                           onMouseEnter={() => setIsRemoveHovered(true)}
-                          onMouseLeave={() => setIsRemoveHovered(false)}
-                          onClick={() => setClickedRemove(item.id)}
+                          onMouseLeave={() => {
+                            clearTimeout(timeOut.current)
+                            setClickedRemove(undefined)
+                            setIsRemoveHovered(false)
+                          }}
+                          onMouseDown={() => {
+                            setClickedRemove(item.id)
+                            timeOut.current = setTimeout(
+                              () =>
+                                setFavoritePersons(prev =>
+                                  prev.filter(d => d.id !== item.id)
+                                ),
+                              1000
+                            )
+                          }}
+                          onMouseUp={() => {
+                            clearTimeout(timeOut.current)
+                            setClickedRemove(undefined)
+                          }}
                         >
+                          <MouseDownAnimation
+                            initial={{ width: "0%", x: -5 }}
+                            animate={{
+                              width:
+                                clickedRemove && clickedRemove === item.id
+                                  ? "120%"
+                                  : "0%",
+                            }}
+                            transition={{
+                              duration: 1,
+                              type: "tween",
+                              ease: [0.65, 0, 0.35, 1],
+                            }}
+                          />
                           <motion.div
                             style={{ marginRight: 2 }}
                             initial={{ y: 2 }}
@@ -333,19 +376,6 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
                           </motion.div>
                           Remove
                         </HoverControlIconContainer>
-                        <AnimatePresence>
-                          {clickedRemove && clickedRemove === item.id && (
-                            <motion.div
-                              style={{
-                                position: "absolute",
-                                top: -0,
-                                color: "#333",
-                              }}
-                            >
-                              Pop confirm
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
                       </HoveredControlsContainer>
                     )}
                   </AnimatePresence>
