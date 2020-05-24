@@ -40,7 +40,6 @@ export default function EndIconsContainer({
   dims,
   delay,
 }) {
-  
   const endContainerXPos = isOpen
     ? FIXED_DIMS.controlCollapsedWidth +
       10 +
