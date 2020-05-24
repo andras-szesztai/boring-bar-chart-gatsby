@@ -5,6 +5,7 @@ import { animated } from "react-spring"
 import { space, colors, dropShadow } from "../../../../../themes/theme"
 import { themifyFontSize } from "../../../../../themes/mixins"
 import { COLORS } from "../../../../../constants/moviesDashboard"
+import { motion } from "framer-motion"
 
 export const ControlCollapsed = styled(animated.div)`
   width: 200px;
@@ -92,7 +93,25 @@ export const ListItemContainer = styled(animated.div)`
 
   align-self: center;
   margin-left: ${space[2]}px;
-  margin-right: ${({extramargin}) => extramargin ? 12 : space[2]}px;
+  margin-right: ${({ extramargin }) => (extramargin ? 12 : space[2])}px;
 
   white-space: nowrap;
+
+  display: flex;
+  justify-content: space-between;
+`
+
+export const HoveredControlsContainer = styled(motion.div)`
+  display: flex;
+  justify-content: space-evenly;
+
+  width: 166px;
+  margin-left: 14px;
+  border-left: 1px solid #fff;
+`
+
+export const HoverControlIconContainer = styled(motion.div)`
+  display: flex;
+
+  cursor: pointer;
 `

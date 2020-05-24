@@ -13,7 +13,12 @@ import {
   useSize,
   useWindowSize,
 } from "react-use"
-import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
+import {
+  IoMdInformationCircle,
+  IoIosArrowForward,
+  IoIosSearch,
+  IoIosClose,
+} from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
 import { useSpring, useTransition, animated } from "react-spring"
 
@@ -27,6 +32,8 @@ import {
   HiddenRecentListContainer,
   DisplayRecentListContainer,
   ListItemContainer,
+  HoveredControlsContainer,
+  HoverControlIconContainer,
 } from "./styles"
 
 const TextContainer = styled(motion.div)`
@@ -109,7 +116,7 @@ const ListItem = ({
       style={{
         width:
           expand && initialWidth.current
-            ? initialWidth.current + 120
+            ? initialWidth.current + 180
             : initialWidth.current,
       }}
       extramargin={extraMargin ? 1 : 0}
@@ -149,7 +156,7 @@ export default function FavoritesList({ state, localStorageValues }) {
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
   // TODO: Setup isOpen in local store
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
   const prevIsOpen = usePrevious(isOpen)
   const [listRef, dims] = useMeasure()
   const prevDims = usePrevious(dims)
@@ -192,7 +199,7 @@ export default function FavoritesList({ state, localStorageValues }) {
       !prevDims ||
       prevDims.width < dims.width ||
       isOpen !== prevIsOpen ||
-      prevDims.width - dims.width === 120
+      prevDims.width - dims.width === 180
         ? 0
         : 650,
   })
@@ -202,7 +209,7 @@ export default function FavoritesList({ state, localStorageValues }) {
       !prevDims ||
       prevDims.width < dims.width ||
       isOpen !== prevIsOpen ||
-      prevDims.width - dims.width === 120
+      prevDims.width - dims.width === 180
         ? 0
         : 650,
   })
@@ -222,6 +229,8 @@ export default function FavoritesList({ state, localStorageValues }) {
         : 10
     }px`,
   })
+
+  const [ isRemoveHovered, setIsRemoveHovered ] = useState()
 
   return (
     <>
@@ -274,6 +283,40 @@ export default function FavoritesList({ state, localStorageValues }) {
                   onMouseEnter={() => setHoveredFavorite(item)}
                 >
                   {item.name}
+                  <AnimatePresence>
+                    {hoveredFavorite && hoveredFavorite.name === item.name && (
+                      <HoveredControlsContainer
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, transition: { delay: 0.6 } }}
+                        exit={{ opacity: 0 }}
+                      >
+                        <HoverControlIconContainer>
+                          <motion.div
+                            style={{ marginRight: 5 }}
+                            initial={{ y: 2 }}
+                            whileHover={{
+                              scale: 1.3,
+                            }}
+                          >
+                            <IoIosSearch size={16} />
+                          </motion.div>
+                          Search
+                        </HoverControlIconContainer>
+                        <HoverControlIconContainer>
+                          <motion.div
+                            style={{ marginRight: 1 }}
+                            initial={{ y: 4 }}
+                            whileHover={{
+                              scale: 1.4,
+                            }}
+                          >
+                            <IoIosClose size={18} />
+                          </motion.div>
+                          Remove
+                        </HoverControlIconContainer>
+                      </HoveredControlsContainer>
+                    )}
+                  </AnimatePresence>
                 </ListItemContainer>
               ))
             ))}
@@ -319,7 +362,7 @@ export default function FavoritesList({ state, localStorageValues }) {
 
       <EndIconsContainer style={endContainerAnim}>
         <IconContainer
-          style={{ transform: "translateY(4px)" }}
+          style={{ transform: "translateY(5px)" }}
           onClick={() => setIsOpen(prev => !prev)}
           whileHover={{
             scale: 1.3,
