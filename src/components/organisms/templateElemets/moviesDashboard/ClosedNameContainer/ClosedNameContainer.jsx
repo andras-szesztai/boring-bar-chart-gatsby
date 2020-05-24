@@ -7,8 +7,8 @@ import { space } from "../../../../../themes/theme"
 import { themifyFontSize } from "../../../../../themes/mixins"
 import {
   COLORS,
-  OPACITY_VARIANT,
   ANIMATE_PROPS,
+  makeOpacityVariant,
 } from "../../../../../constants/moviesDashboard"
 import { FavoriteStar } from "../../../../molecules"
 
@@ -20,9 +20,10 @@ const Container = styled(motion.div)`
   font-weight: 300;
   color: #fff;
   border-radius: ${space[1]}px;
-  padding: 1px 12px;
+  padding: 2px 16px;
   background-color: ${chroma(COLORS.primary)};
   border: 1px solid ${chroma(COLORS.primary).darken()};
+  white-space: nowrap; 
 
   display: flex;
   cursor: pointer;
@@ -39,7 +40,7 @@ export default function ClosedNameContainer({
   return (
     <Container
       key="close-name"
-      variants={OPACITY_VARIANT}
+      variants={makeOpacityVariant({ startDelay: 0.5 })}
       onClick={setFavorites}
       onMouseEnter={() => setIsTitleHovered(true)}
       onMouseLeave={() => setIsTitleHovered(false)}

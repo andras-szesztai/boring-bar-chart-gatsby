@@ -99,7 +99,7 @@ export default function useMoviesDashboardReducer() {
     favoritePersons,
   }
 
-  const localStorageSetters = {
+const localStorageSetters = {
     setFavoritePersons,
   }
 
