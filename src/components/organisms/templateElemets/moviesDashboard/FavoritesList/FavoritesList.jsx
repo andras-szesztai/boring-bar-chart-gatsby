@@ -15,14 +15,12 @@ import {
 } from "react-use"
 import { IoMdInformationCircle, IoIosArrowForward } from "react-icons/io"
 import { FaExpandArrowsAlt } from "react-icons/fa"
-import useResizeAware from "react-resize-aware"
 import { useSpring, useTransition, animated } from "react-spring"
 
-import { space, dropShadow, colors } from "../../../../../themes/theme"
+import { space } from "../../../../../themes/theme"
 import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
 import { themifyFontSize, themifyZIndex } from "../../../../../themes/mixins"
-import { FavoriteStar, FavoriteHeart } from "../../../../molecules"
-import { usePrevious, useArrayRefs } from "../../../../../hooks"
+import { usePrevious } from "../../../../../hooks"
 import {
   EndIconsContainer,
   ControlCollapsed,
@@ -63,6 +61,7 @@ const ListItem = ({
   setRunReCalc,
   expand,
   hoveredFavorite,
+  extraMargin,
 }) => {
   const prevElementDims = usePrevious(elementDims)
   const prevHoveredFavorite = usePrevious(hoveredFavorite)
@@ -113,6 +112,7 @@ const ListItem = ({
             ? initialWidth.current + 120
             : initialWidth.current,
       }}
+      extraMargin={extraMargin}
     >
       {name}
     </ListItemContainer>
@@ -149,7 +149,7 @@ export default function FavoritesList({ state, localStorageValues }) {
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
   // TODO: Setup isOpen in local store
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const prevIsOpen = usePrevious(isOpen)
   const [listRef, dims] = useMeasure()
   const prevDims = usePrevious(dims)
@@ -157,7 +157,6 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [elementDims, setElementDims] = useState([])
 
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
-
 
   const transitions = useTransition(elementDims, item => item.name, {
     from: { opacity: 0, transform: "translate3d(-200px, 2px, 0)" },
@@ -241,6 +240,7 @@ export default function FavoritesList({ state, localStorageValues }) {
                   name={favorite.name}
                   runReCalc={runReCalc}
                   setRunReCalc={setRunReCalc}
+                  extraMargin={i === favoritesCombined.length - 1}
                 />
               ))
           ))}
@@ -261,7 +261,10 @@ export default function FavoritesList({ state, localStorageValues }) {
               transitions.map(({ item, props, key }, i) => (
                 <ListItemContainer
                   key={key}
-                  style={{ ...props, position: "absolute" }}
+                  style={{
+                    ...props,
+                    position: "absolute",
+                  }}
                   onMouseEnter={() => setHoveredFavorite(item)}
                 >
                   {item.name}

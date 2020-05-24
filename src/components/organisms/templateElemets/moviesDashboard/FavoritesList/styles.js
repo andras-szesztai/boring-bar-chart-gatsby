@@ -92,7 +92,7 @@ export const ListItemContainer = styled(animated.div)`
 
   align-self: center;
   margin-left: ${space[2]}px;
-  margin-right: ${space[2]}px;
+  margin-right: ${({extraMargin}) => extraMargin ? 12 : space[2]}px;
 
   white-space: nowrap;
 `
