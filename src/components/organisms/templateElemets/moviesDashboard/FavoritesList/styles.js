@@ -30,7 +30,7 @@ export const ControlCollapsed = styled(animated.div)`
 export const EndIconsContainer = styled(animated.div)`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
 
   z-index: 10;

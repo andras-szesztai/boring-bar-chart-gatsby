@@ -172,17 +172,21 @@ export default function FavoritesList({ state, localStorageValues }) {
         width: `${curreItem.width}px`,
       }
     },
-    leave: { transform: "translate3d(0px, 100px, 0)" },
+    leave: { transform: "translate3d(0px, 2, 0)" },
     onDestroyed: () => setRunReCalc(true),
   })
 
   const { width } = useWindowSize()
   const maxWidth = width - 2 * space[2] - 200 - 40
 
+  const endContainerXPos = isOpen
+    ? 210 + (dims.width <= maxWidth ? dims.width : maxWidth)
+    : 208
   const endContainerAnim = useSpring({
-    left: `${
-      isOpen ? 210 + (dims.width <= maxWidth ? dims.width : maxWidth) : 208
-    }px`,
+    from: {
+      transform: `translate(${endContainerXPos}px, 100px)`,
+    },
+    transform: `translate(${endContainerXPos}px, 0px)`,
     boxShadow: `-1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
     delay:
       !prevDims ||
@@ -203,6 +207,8 @@ export default function FavoritesList({ state, localStorageValues }) {
         : 650,
   })
   const ControlCollapsedAnim = useSpring({
+    from: { transform: "translateX(-200px)" },
+    transform: "translateX(0px)",
     boxShadow: `1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
   })
 
@@ -312,10 +318,8 @@ export default function FavoritesList({ state, localStorageValues }) {
       </ControlCollapsed>
 
       <EndIconsContainer style={endContainerAnim}>
-        <IconContainer whileHover={{ scale: 1.3 }}>
-          {/* <FaExpandArrowsAlt size={14} color={COLORS.textColor} /> */}
-        </IconContainer>
         <IconContainer
+          style={{ transform: "translateY(3px)" }}
           onClick={() => setIsOpen(prev => !prev)}
           whileHover={{
             scale: 1.3,
@@ -331,7 +335,7 @@ export default function FavoritesList({ state, localStorageValues }) {
             },
           }}
         >
-          <IoIosArrowForward size={20} color={COLORS.textColor} />
+          <IoIosArrowForward size={24} color={COLORS.textColor} />
         </IconContainer>
       </EndIconsContainer>
     </>
