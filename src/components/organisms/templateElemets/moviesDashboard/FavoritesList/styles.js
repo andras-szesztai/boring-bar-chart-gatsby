@@ -7,7 +7,7 @@ import { themifyFontSize } from "../../../../../themes/mixins"
 import { COLORS } from "../../../../../constants/moviesDashboard"
 import { motion } from "framer-motion"
 
-export const ControlCollapsed = styled(animated.div)`
+export const ControlCollapsedContainer = styled(animated.div)`
   width: 200px;
   height: 60px;
   z-index: 10;

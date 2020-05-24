@@ -28,7 +28,6 @@ import { themifyFontSize, themifyZIndex } from "../../../../../themes/mixins"
 import { usePrevious } from "../../../../../hooks"
 import {
   EndIconsContainer,
-  ControlCollapsed,
   HiddenRecentListContainer,
   DisplayRecentListContainer,
   ListItemContainer,
@@ -37,6 +36,7 @@ import {
   PopConfirm,
   MouseDownAnimation,
 } from "./styles"
+import ControlCollapsed from "./ControlCollapsed/ControlCollapsed"
 
 const TextContainer = styled(motion.div)`
   font-weight: 500;
@@ -48,12 +48,6 @@ const TextContainer = styled(motion.div)`
   align-items: center;
   height: 100%;
   padding: ${space[2]}px;
-`
-
-const Flex = styled.div`
-  display: flex;
-  flex-grow: 1;
-  align-self: "center";
 `
 
 const IconContainer = styled(motion.div)`
@@ -142,8 +136,7 @@ export default function FavoritesList({
   const { favoritePersons } = localStorageValues
   const { setFavoritePersons } = localStorageSetters
   const prevLocalStorageValues = usePrevious(localStorageValues)
-  const [isPersonsActive, setIsPersonsActive] = useState(true)
-  const [isMoviesActive, setIsMoviesActive] = useState(true)
+
   const { setActiveNameID } = actions
 
   const [runReCalc, setRunReCalc] = useState(false)
@@ -230,11 +223,6 @@ export default function FavoritesList({
       prevDims.width - dims.width === 180
         ? 0
         : 650,
-  })
-  const ControlCollapsedAnim = useSpring({
-    from: { transform: "translateX(-200px)" },
-    transform: "translateX(0px)",
-    boxShadow: `1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
   })
 
   const placholderAnim = useSpring({
@@ -454,36 +442,7 @@ export default function FavoritesList({
         </div>
       </DisplayRecentListContainer>
 
-      {/* // TODO: make it flip on hover to show icons */}
-      <ControlCollapsed style={ControlCollapsedAnim}>
-        <Flex style={{ justifyContent: "space-evenly", alignItems: "center" }}>
-          Your recent favorites:
-          {/* <motion.div
-            whileHover={{ scale: 1.3 }}
-            style={{ cursor: "pointer" }}
-            onClick={() => setIsPersonsActive(prev => !prev)}
-          >
-            <FavoriteStar
-              isFavorited={true}
-              isHovered={false}
-              color={COLORS.primary}
-              isActive={isPersonsActive}
-            />
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.3 }}
-            style={{ cursor: "pointer" }}
-            onClick={() => setIsMoviesActive(prev => !prev)}
-          >
-            <FavoriteStar
-              isFavorited={true}
-              isHovered={false}
-              color={COLORS.secondary}
-              isActive={isMoviesActive}
-            />
-          </motion.div> */}
-        </Flex>
-      </ControlCollapsed>
+      <ControlCollapsed isOpen={isOpen} />
 
       <EndIconsContainer style={endContainerAnim}>
         <IconContainer
