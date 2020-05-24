@@ -321,40 +321,73 @@ export default function FavoritesList({
                       <HoveredControlsContainer
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1, transition: { delay: 0.6 } }}
-                        exit={{ opacity: 0 }}
+                        exit={{
+                          opacity: 0,
+                          transition: {
+                            duration: 0,
+                            type: "tween",
+                          },
+                        }}
                       >
                         <HoverControlIconContainer
-                          onMouseEnter={() => setIsSearchHovered(true)}
-                          onMouseLeave={() => setIsSearchHovered(false)}
+                          style={{
+                            color:
+                              state.activeNameID === item.id &&
+                              "rgba(255, 255, 255, .25)",
+                          }}
+                          onMouseEnter={() => {
+                            if (state.activeNameID !== item.id) {
+                              setIsSearchHovered(true)
+                            }
+                          }}
+                          onMouseLeave={() => {
+                            clearTimeout(timeOut.current)
+                            setClickedSearch(undefined)
+                            setIsSearchHovered(false)
+                          }}
                           onMouseDown={() => {
-                            setClickedSearch(item.id)
-                            timeOut.current = setTimeout(
-                              () => setActiveNameID(item.id),
-                              1000
-                            )
+                            if (state.activeNameID !== item.id) {
+                              setClickedSearch(item.id)
+                              timeOut.current = setTimeout(
+                                () => setActiveNameID(item.id),
+                                1000
+                              )
+                            }
                           }}
                           onMouseUp={() => {
                             clearTimeout(timeOut.current)
                             setClickedSearch(undefined)
                           }}
+                          whileTap={
+                            state.activeNameID === item.id && {
+                              x: 3,
+                              transition: {
+                                flip: Infinity,
+                                duration: 0.2,
+                                ease: [0.65, 0, 0.35, 1],
+                              },
+                            }
+                          }
                         >
-                          <MouseDownAnimation
-                            initial={{ width: "0%", x: -5 }}
-                            animate={{
-                              width:
-                                clickedSearch && clickedSearch === item.id
-                                  ? "120%"
-                                  : "0%",
-                            }}
-                            transition={{
-                              duration: 1,
-                              type: "tween",
-                              ease: [0.65, 0, 0.35, 1],
-                            }}
-                          />
+                          {state.activeNameID !== item.id && (
+                            <MouseDownAnimation
+                              initial={{ width: "0%", x: -5 }}
+                              animate={{
+                                width:
+                                  clickedSearch && clickedSearch === item.id
+                                    ? "120%"
+                                    : "0%",
+                              }}
+                              transition={{
+                                duration: 1,
+                                type: "tween",
+                                ease: [0.65, 0, 0.35, 1],
+                              }}
+                            />
+                          )}
                           <motion.div
                             style={{ marginRight: 4 }}
-                            initial={{ y: 1 }}
+                            initial={{ y: 2 }}
                             animate={{ scale: isSearchHovered ? 1.4 : 1 }}
                           >
                             <IoIosSearch size={14} />
