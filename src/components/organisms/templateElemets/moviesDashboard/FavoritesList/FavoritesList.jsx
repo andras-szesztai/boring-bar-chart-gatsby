@@ -1,23 +1,14 @@
-import React, { useState, useEffect, useRef } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import React, { useState, useEffect } from "react"
 import _ from "lodash"
 import { useMeasure, useWindowSize } from "react-use"
-import { IoIosSearch, IoIosClose } from "react-icons/io"
 import { useSpring, useTransition } from "react-spring"
 
 import { space } from "../../../../../themes/theme"
 import { usePrevious } from "../../../../../hooks"
-import {
-  TextContainer,
-  DisplayRecentListContainer,
-  ListItemContainer,
-  HoveredControlsContainer,
-  HoverControlIconContainer,
-  MouseDownAnimation,
-} from "./styles"
 import ControlCollapsed from "./ControlCollapsed/ControlCollapsed"
 import EndIconsContainer from "./EndIconsContainer/EndIconsContainer"
 import ShadowRecentList from "./ShadowRecentList/ShadowRecentList"
+import RecentList from "./RecentList/RecentList"
 
 export default function FavoritesList({
   actions,
@@ -114,8 +105,7 @@ export default function FavoritesList({
         ? 0
         : 650,
   })
-
-  const placholderAnim = useSpring({
+  const placeholderAnim = useSpring({
     left: `${
       _.last(elementDims)
         ? _.last(elementDims).x -
@@ -125,14 +115,6 @@ export default function FavoritesList({
         : 10
     }px`,
   })
-
-  const [isRemoveHovered, setIsRemoveHovered] = useState(false)
-  const [isSearchHovered, setIsSearchHovered] = useState(false)
-
-  const [clickedRemove, setClickedRemove] = useState(undefined)
-  const [clickedSearch, setClickedSearch] = useState(undefined)
-
-  const timeOut = useRef(null)
 
   return (
     <>
@@ -145,175 +127,20 @@ export default function FavoritesList({
         runReCalc={runReCalc}
         setRunReCalc={setRunReCalc}
       />
-
-      <DisplayRecentListContainer
-        style={recentListAnim}
-        onMouseLeave={() => {
-          setHoveredFavorite(undefined)
-          setClickedRemove(undefined)
-        }}
-      >
-        <div style={{ position: "relative" }}>
-          {favoritesCombined &&
-            (!favoritesCombined.length ? (
-              <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
-                Mark a movie/series or person as a favorite to display them
-                here!
-              </TextContainer>
-            ) : (
-              transitions.map(({ item, props, key }, i) => (
-                <ListItemContainer
-                  key={key}
-                  style={{
-                    ...props,
-                    position: "absolute",
-                  }}
-                  onMouseEnter={() => {
-                    setHoveredFavorite(item)
-                    setClickedRemove(undefined)
-                  }}
-                >
-                  {item.name}
-                  <AnimatePresence>
-                    {hoveredFavorite && hoveredFavorite.name === item.name && (
-                      <HoveredControlsContainer
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1, transition: { delay: 0.6 } }}
-                        exit={{
-                          opacity: 0,
-                          transition: {
-                            duration: 0,
-                            type: "tween",
-                          },
-                        }}
-                      >
-                        <HoverControlIconContainer
-                          style={{
-                            color:
-                              state.activeNameID === item.id &&
-                              "rgba(255, 255, 255, .25)",
-                          }}
-                          onMouseEnter={() => {
-                            if (state.activeNameID !== item.id) {
-                              setIsSearchHovered(true)
-                            }
-                          }}
-                          onMouseLeave={() => {
-                            clearTimeout(timeOut.current)
-                            setClickedSearch(undefined)
-                            setIsSearchHovered(false)
-                          }}
-                          onMouseDown={() => {
-                            if (state.activeNameID !== item.id) {
-                              setClickedSearch(item.id)
-                              timeOut.current = setTimeout(
-                                () => setActiveNameID(item.id),
-                                1000
-                              )
-                            }
-                          }}
-                          onMouseUp={() => {
-                            clearTimeout(timeOut.current)
-                            setClickedSearch(undefined)
-                          }}
-                          whileTap={
-                            state.activeNameID === item.id && {
-                              x: 3,
-                              transition: {
-                                flip: Infinity,
-                                duration: 0.2,
-                                ease: [0.65, 0, 0.35, 1],
-                              },
-                            }
-                          }
-                        >
-                          {state.activeNameID !== item.id && (
-                            <MouseDownAnimation
-                              initial={{ width: "0%", x: -5 }}
-                              animate={{
-                                width:
-                                  clickedSearch && clickedSearch === item.id
-                                    ? "120%"
-                                    : "0%",
-                              }}
-                              transition={{
-                                duration: 1,
-                                type: "tween",
-                                ease: [0.65, 0, 0.35, 1],
-                              }}
-                            />
-                          )}
-                          <motion.div
-                            style={{ marginRight: 4 }}
-                            initial={{ y: 2 }}
-                            animate={{ scale: isSearchHovered ? 1.4 : 1 }}
-                          >
-                            <IoIosSearch size={14} />
-                          </motion.div>
-                          Search
-                        </HoverControlIconContainer>
-                        <HoverControlIconContainer
-                          onMouseEnter={() => setIsRemoveHovered(true)}
-                          onMouseLeave={() => {
-                            clearTimeout(timeOut.current)
-                            setClickedRemove(undefined)
-                            setIsRemoveHovered(false)
-                          }}
-                          onMouseDown={() => {
-                            setClickedRemove(item.id)
-                            timeOut.current = setTimeout(
-                              () =>
-                                setFavoritePersons(prev =>
-                                  prev.filter(d => d.id !== item.id)
-                                ),
-                              1000
-                            )
-                          }}
-                          onMouseUp={() => {
-                            clearTimeout(timeOut.current)
-                            setClickedRemove(undefined)
-                          }}
-                        >
-                          <MouseDownAnimation
-                            initial={{ width: "0%", x: -5 }}
-                            animate={{
-                              width:
-                                clickedRemove && clickedRemove === item.id
-                                  ? "120%"
-                                  : "0%",
-                            }}
-                            transition={{
-                              duration: 1,
-                              type: "tween",
-                              ease: [0.65, 0, 0.35, 1],
-                            }}
-                          />
-                          <motion.div
-                            style={{ marginRight: 2 }}
-                            initial={{ y: 2 }}
-                            animate={{ scale: isRemoveHovered ? 1.6 : 1 }}
-                          >
-                            <IoIosClose size={14} />
-                          </motion.div>
-                          Remove
-                        </HoverControlIconContainer>
-                      </HoveredControlsContainer>
-                    )}
-                  </AnimatePresence>
-                </ListItemContainer>
-              ))
-            ))}
-
-          {dims.width > maxWidth && (
-            <ListItemContainer
-              style={{ ...placholderAnim, position: "absolute", opacity: 0 }}
-            />
-          )}
-        </div>
-      </DisplayRecentListContainer>
-
+      <RecentList
+        recentListAnim={recentListAnim}
+        setHoveredFavorite={setHoveredFavorite}
+        hoveredFavorite={hoveredFavorite}
+        favoritesCombined={favoritesCombined}
+        placeholderAnim={placeholderAnim}
+        transitions={transitions}
+        activeNameID={state.activeNameID}
+        setActiveNameID={setActiveNameID}
+        dims={dims}
+        maxWidth={maxWidth}
+        setFavoritePersons={setFavoritePersons}
+      />
       <ControlCollapsed isOpen={isOpen} />
-
       <EndIconsContainer
         isOpen={isOpen}
         setIsOpen={setIsOpen}

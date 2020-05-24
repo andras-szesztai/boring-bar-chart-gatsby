@@ -91,43 +91,6 @@ export const ListItemContainer = styled(animated.div)`
   justify-content: space-between;
 `
 
-export const HoveredControlsContainer = styled(motion.div)`
-  display: flex;
-  justify-content: space-evenly;
-
-  width: 166px;
-  margin-left: 14px;
-  border-left: 1px solid #fff;
-`
-
-export const HoverControlIconContainer = styled(motion.div)`
-  position: relative;
-  display: flex;
-
-  cursor: pointer;
-`
-
-export const MouseDownAnimation = styled(motion.div)`
-  position: absolute;
-
-  top: 0;
-  left: 0;
-  height: 100%;
-
-  background-color: #fff;
-  opacity: .25;
-  border-radius: ${space[1]}px;
-
-  cursor: pointer;
-`
-
-export const PopConfirm = styled(motion.div)`
-  position: absolute;
-
-  background-color: ${chroma(COLORS.primary)};
-
-`
-
 export const TextContainer = styled(motion.div)`
 font-weight: 500;
 font-size: ${themifyFontSize(2)};
