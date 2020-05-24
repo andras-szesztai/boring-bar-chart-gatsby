@@ -62,6 +62,7 @@ const IconContainer = styled(motion.div)`
 
 const ListItem = ({
   name,
+  id,
   setElementDims,
   elementDims,
   runReCalc,
@@ -76,7 +77,10 @@ const ListItem = ({
   const initialWidth = useRef(null)
   useEffectOnce(() => {
     const dims = ref.current.getBoundingClientRect()
-    setElementDims(prev => [...prev, { name, x: dims.x, width: dims.width }])
+    setElementDims(prev => [
+      ...prev,
+      { name, id, x: dims.x, width: dims.width },
+    ])
     initialWidth.current = dims.width
   })
 
@@ -92,7 +96,7 @@ const ListItem = ({
       const dims = ref.current.getBoundingClientRect()
       setElementDims(prev => [
         ...prev.filter(el => el.name !== name),
-        { name, x: dims.x, width: dims.width },
+        { name, id, x: dims.x, width: dims.width },
       ])
       runReCalc && setRunReCalc(false)
       shouldReCalc && setShouldReCalc(false)
@@ -100,6 +104,7 @@ const ListItem = ({
   }, [
     elementDims,
     expand,
+    id,
     name,
     prevElementDims,
     runReCalc,
@@ -126,11 +131,12 @@ const ListItem = ({
   )
 }
 
-export default function FavoritesList({ state, localStorageValues }) {
+export default function FavoritesList({ actions, state, localStorageValues }) {
   const { favoritePersons } = localStorageValues
   const prevLocalStorageValues = usePrevious(localStorageValues)
   const [isPersonsActive, setIsPersonsActive] = useState(true)
   const [isMoviesActive, setIsMoviesActive] = useState(true)
+  const { setActiveNameID } = actions
 
   const [runReCalc, setRunReCalc] = useState(false)
   const [favoritesCombined, setFavoriteCombined] = useState(undefined)
@@ -162,7 +168,6 @@ export default function FavoritesList({ state, localStorageValues }) {
   const prevDims = usePrevious(dims)
 
   const [elementDims, setElementDims] = useState([])
-
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
 
   const transitions = useTransition(elementDims, item => item.name, {
@@ -230,7 +235,8 @@ export default function FavoritesList({ state, localStorageValues }) {
     }px`,
   })
 
-  const [ isRemoveHovered, setIsRemoveHovered ] = useState()
+  const [isRemoveHovered, setIsRemoveHovered] = useState(false)
+  const [isSearchHovered, setIsSearchHovered] = useState(false)
 
   return (
     <>
@@ -253,6 +259,7 @@ export default function FavoritesList({ state, localStorageValues }) {
                   hoveredFavorite={hoveredFavorite}
                   key={favorite.id}
                   name={favorite.name}
+                  id={favorite.id}
                   runReCalc={runReCalc}
                   setRunReCalc={setRunReCalc}
                   extraMargin={i === favoritesCombined.length - 1}
@@ -290,27 +297,30 @@ export default function FavoritesList({ state, localStorageValues }) {
                         animate={{ opacity: 1, transition: { delay: 0.6 } }}
                         exit={{ opacity: 0 }}
                       >
-                        <HoverControlIconContainer>
+                        <HoverControlIconContainer
+                          onMouseEnter={() => setIsSearchHovered(true)}
+                          onMouseLeave={() => setIsSearchHovered(false)}
+                          onClick={() => setActiveNameID(item.id)}
+                        >
                           <motion.div
-                            style={{ marginRight: 5 }}
-                            initial={{ y: 2 }}
-                            whileHover={{
-                              scale: 1.3,
-                            }}
+                            style={{ marginRight: 4 }}
+                            initial={{ y: 1 }}
+                            animate={{ scale: isSearchHovered ? 1.4 : 1 }}
                           >
-                            <IoIosSearch size={16} />
+                            <IoIosSearch size={14} />
                           </motion.div>
                           Search
                         </HoverControlIconContainer>
-                        <HoverControlIconContainer>
+                        <HoverControlIconContainer
+                          onMouseEnter={() => setIsRemoveHovered(true)}
+                          onMouseLeave={() => setIsRemoveHovered(false)}
+                        >
                           <motion.div
-                            style={{ marginRight: 1 }}
-                            initial={{ y: 4 }}
-                            whileHover={{
-                              scale: 1.4,
-                            }}
+                            style={{ marginRight: 2 }}
+                            initial={{ y: 2 }}
+                            animate={{ scale: isRemoveHovered ? 1.6 : 1 }}
                           >
-                            <IoIosClose size={18} />
+                            <IoIosClose size={14} />
                           </motion.div>
                           Remove
                         </HoverControlIconContainer>

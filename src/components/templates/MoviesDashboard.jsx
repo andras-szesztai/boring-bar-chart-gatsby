@@ -36,8 +36,8 @@ export default function MoviesDashboard() {
   }, [])
 
   const [isTitleHovered, setIsTitleHovered] = useState(false)
-
   const [isFavorited, setIsFavorited] = useState(false)
+
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -76,6 +76,7 @@ export default function MoviesDashboard() {
           </motion.div>
           <FavoritesList
             state={state}
+            actions={actions}
             localStorageValues={localStorageValues}
             localStorageSetters={localStorageSetters}
           />
