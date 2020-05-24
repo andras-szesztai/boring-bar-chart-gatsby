@@ -112,7 +112,7 @@ const ListItem = ({
             ? initialWidth.current + 120
             : initialWidth.current,
       }}
-      extraMargin={extraMargin}
+      extramargin={extraMargin ? 1 : 0}
     >
       {name}
     </ListItemContainer>
@@ -319,7 +319,7 @@ export default function FavoritesList({ state, localStorageValues }) {
 
       <EndIconsContainer style={endContainerAnim}>
         <IconContainer
-          style={{ transform: "translateY(3px)" }}
+          style={{ transform: "translateY(4px)" }}
           onClick={() => setIsOpen(prev => !prev)}
           whileHover={{
             scale: 1.3,

@@ -281,7 +281,7 @@ export default function PersonDetailCard({
                       </CardTextGrid>
                       <Image
                         url={dataSets.personDetails.profile_path}
-                        height={168}
+                        height={184}
                         alt={dataSets.personDetails.name}
                       />
                     </CardGrid>
