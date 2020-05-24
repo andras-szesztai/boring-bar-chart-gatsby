@@ -60,3 +60,9 @@ export const LOCAL_STORE_ACCESSORS = {
   favoritePersons: "favoritePersons"
 }
 
+
+export const FIXED_DIMS = {
+  listItemGrowth:  180,
+  controlCollapsedWidth: 200
+}
+

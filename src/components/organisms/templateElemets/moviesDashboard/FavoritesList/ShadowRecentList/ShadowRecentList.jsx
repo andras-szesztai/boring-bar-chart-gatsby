@@ -9,6 +9,7 @@ import {
   TextContainer,
 } from "../styles"
 import { usePrevious } from "../../../../../../hooks"
+import { FIXED_DIMS } from "../../../../../../constants/moviesDashboard"
 
 export const HiddenRecentListContainer = styled(RecentListContainer)`
   opacity: 0;
@@ -81,7 +82,7 @@ const ListItem = ({
       style={{
         width:
           expand && initialWidth.current
-            ? initialWidth.current + 180
+            ? initialWidth.current + FIXED_DIMS.listItemGrowth
             : initialWidth.current,
       }}
       extramargin={extraMargin ? 1 : 0}

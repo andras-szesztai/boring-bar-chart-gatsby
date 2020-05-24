@@ -9,6 +9,7 @@ import ControlCollapsed from "./ControlCollapsed/ControlCollapsed"
 import EndIconsContainer from "./EndIconsContainer/EndIconsContainer"
 import ShadowRecentList from "./ShadowRecentList/ShadowRecentList"
 import RecentList from "./RecentList/RecentList"
+import { FIXED_DIMS } from "../../../../../constants/moviesDashboard"
 
 export default function FavoritesList({
   actions,
@@ -53,57 +54,56 @@ export default function FavoritesList({
   const prevElementDims = usePrevious(elementDims)
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
 
+  const xPosAdjust = FIXED_DIMS.controlCollapsedWidth + 12
   const transitions = useTransition(elementDims, item => item.name, {
     from: { opacity: 0, transform: "translate3d(-200px, 2px, 0)" },
     enter: item => ({
       opacity: 1,
       transform: `translate3d(${elementDims.find(el => el.name === item.name)
-        .x - 212}px, 2px, 0)`,
+        .x - xPosAdjust}px, 2px, 0)`,
     }),
     update: item => {
       const curreItem = elementDims.find(el => el.name === item.name)
       return {
-        transform: `translate3d(${curreItem.x - 212}px, 2px, 0)`,
+        transform: `translate3d(${curreItem.x - xPosAdjust}px, 2px, 0)`,
         width: `${curreItem.width}px`,
       }
     },
     leave: item => ({
       transform: `translate3d(${prevElementDims.find(
         el => el.name === item.name
-      ).x - 212}px, 100px, 0)`,
+      ).x - xPosAdjust}px, 100px, 0)`,
     }),
     onDestroyed: () => setRunReCalc(true),
   })
 
   const { width } = useWindowSize()
-  const maxWidth = width - 2 * space[2] - 200 - 40
+  const maxWidth = width - 2 * space[2] - FIXED_DIMS.controlCollapsedWidth - 40
 
   const endContainerXPos = isOpen
-    ? 210 + (dims.width <= maxWidth ? dims.width : maxWidth)
-    : 208
+    ? FIXED_DIMS.controlCollapsedWidth +
+      10 +
+      (dims.width <= maxWidth ? dims.width : maxWidth)
+    : FIXED_DIMS.controlCollapsedWidth + 8
+
+  const delay =
+    !prevDims ||
+    prevDims.width < dims.width ||
+    isOpen !== prevIsOpen ||
+    prevDims.width - dims.width === FIXED_DIMS.listItemGrowth
+      ? 0
+      : 650
   const endContainerAnim = useSpring({
     from: {
       transform: `translate(${endContainerXPos}px, 100px)`,
     },
     transform: `translate(${endContainerXPos}px, 0px)`,
     boxShadow: `-1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
-    delay:
-      !prevDims ||
-      prevDims.width < dims.width ||
-      isOpen !== prevIsOpen ||
-      prevDims.width - dims.width === 180
-        ? 0
-        : 650,
+    delay,
   })
   const recentListAnim = useSpring({
     width: `${isOpen ? dims.width + 5 : 0}px`,
-    delay:
-      !prevDims ||
-      prevDims.width < dims.width ||
-      isOpen !== prevIsOpen ||
-      prevDims.width - dims.width === 180
-        ? 0
-        : 650,
+    delay,
   })
   const placeholderAnim = useSpring({
     left: `${
