@@ -157,7 +157,7 @@ export default function FavoritesList({ state, localStorageValues }) {
   const [elementDims, setElementDims] = useState([])
 
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
-  const prevHoveredFavorite = usePrevious(hoveredFavorite)
+
 
   const transitions = useTransition(elementDims, item => item.name, {
     from: { opacity: 0, transform: "translate3d(-200px, 2px, 0)" },
@@ -212,8 +212,8 @@ export default function FavoritesList({ state, localStorageValues }) {
       _.last(elementDims)
         ? _.last(elementDims).x -
           (hoveredFavorite && hoveredFavorite.name === _.last(elementDims).name
-            ? -5
-            : 115)
+            ? 20
+            : 140)
         : 10
     }px`,
   })
