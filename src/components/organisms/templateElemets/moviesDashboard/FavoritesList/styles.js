@@ -125,7 +125,7 @@ export const MouseDownAnimation = styled(motion.div)`
   height: 100%;
 
   background-color: #fff;
-  opacity: .2;
+  opacity: .25;
   border-radius: ${space[1]}px;
 
   cursor: pointer;

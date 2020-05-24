@@ -176,6 +176,7 @@ export default function FavoritesList({
   const prevDims = usePrevious(dims)
 
   const [elementDims, setElementDims] = useState([])
+  const prevElementDims = usePrevious(elementDims)
   const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
 
   const transitions = useTransition(elementDims, item => item.name, {
@@ -192,7 +193,11 @@ export default function FavoritesList({
         width: `${curreItem.width}px`,
       }
     },
-    leave: { transform: "translate3d(0px, 2, 0)" },
+    leave: item => ({
+      transform: `translate3d(${prevElementDims.find(
+        el => el.name === item.name
+      ).x - 212}px, 100px, 0)`,
+    }),
     onDestroyed: () => setRunReCalc(true),
   })
 
@@ -247,6 +252,7 @@ export default function FavoritesList({
   const [isSearchHovered, setIsSearchHovered] = useState(false)
 
   const [clickedRemove, setClickedRemove] = useState(undefined)
+  const [clickedSearch, setClickedSearch] = useState(undefined)
 
   const timeOut = useRef(null)
 
@@ -320,8 +326,32 @@ export default function FavoritesList({
                         <HoverControlIconContainer
                           onMouseEnter={() => setIsSearchHovered(true)}
                           onMouseLeave={() => setIsSearchHovered(false)}
-                          onClick={() => setActiveNameID(item.id)}
+                          onMouseDown={() => {
+                            setClickedSearch(item.id)
+                            timeOut.current = setTimeout(
+                              () => setActiveNameID(item.id),
+                              1000
+                            )
+                          }}
+                          onMouseUp={() => {
+                            clearTimeout(timeOut.current)
+                            setClickedSearch(undefined)
+                          }}
                         >
+                          <MouseDownAnimation
+                            initial={{ width: "0%", x: -5 }}
+                            animate={{
+                              width:
+                                clickedSearch && clickedSearch === item.id
+                                  ? "120%"
+                                  : "0%",
+                            }}
+                            transition={{
+                              duration: 1,
+                              type: "tween",
+                              ease: [0.65, 0, 0.35, 1],
+                            }}
+                          />
                           <motion.div
                             style={{ marginRight: 4 }}
                             initial={{ y: 1 }}
