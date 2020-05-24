@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import _ from "lodash"
 import { useMeasure, useWindowSize } from "react-use"
-import { useSpring, useTransition } from "react-spring"
 
 import { space } from "../../../../../themes/theme"
 import { usePrevious } from "../../../../../hooks"
@@ -17,10 +16,9 @@ export default function FavoritesList({
   localStorageValues,
   localStorageSetters,
 }) {
+
   const { favoritePersons } = localStorageValues
-  const { setFavoritePersons } = localStorageSetters
   const prevLocalStorageValues = usePrevious(localStorageValues)
-  const { setActiveNameID } = actions
 
   const [runReCalc, setRunReCalc] = useState(false)
   const [favoritesCombined, setFavoriteCombined] = useState(undefined)
@@ -51,40 +49,11 @@ export default function FavoritesList({
   const prevDims = usePrevious(dims)
 
   const [elementDims, setElementDims] = useState([])
-  const prevElementDims = usePrevious(elementDims)
-  const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
 
-  const xPosAdjust = FIXED_DIMS.controlCollapsedWidth + 12
-  const transitions = useTransition(elementDims, item => item.name, {
-    from: { opacity: 0, transform: "translate3d(-200px, 2px, 0)" },
-    enter: item => ({
-      opacity: 1,
-      transform: `translate3d(${elementDims.find(el => el.name === item.name)
-        .x - xPosAdjust}px, 2px, 0)`,
-    }),
-    update: item => {
-      const curreItem = elementDims.find(el => el.name === item.name)
-      return {
-        transform: `translate3d(${curreItem.x - xPosAdjust}px, 2px, 0)`,
-        width: `${curreItem.width}px`,
-      }
-    },
-    leave: item => ({
-      transform: `translate3d(${prevElementDims.find(
-        el => el.name === item.name
-      ).x - xPosAdjust}px, 100px, 0)`,
-    }),
-    onDestroyed: () => setRunReCalc(true),
-  })
+  const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
 
   const { width } = useWindowSize()
   const maxWidth = width - 2 * space[2] - FIXED_DIMS.controlCollapsedWidth - 40
-
-  const endContainerXPos = isOpen
-    ? FIXED_DIMS.controlCollapsedWidth +
-      10 +
-      (dims.width <= maxWidth ? dims.width : maxWidth)
-    : FIXED_DIMS.controlCollapsedWidth + 8
 
   const delay =
     !prevDims ||
@@ -93,28 +62,6 @@ export default function FavoritesList({
     prevDims.width - dims.width === FIXED_DIMS.listItemGrowth
       ? 0
       : 650
-  const endContainerAnim = useSpring({
-    from: {
-      transform: `translate(${endContainerXPos}px, 100px)`,
-    },
-    transform: `translate(${endContainerXPos}px, 0px)`,
-    boxShadow: `-1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
-    delay,
-  })
-  const recentListAnim = useSpring({
-    width: `${isOpen ? dims.width + 5 : 0}px`,
-    delay,
-  })
-  const placeholderAnim = useSpring({
-    left: `${
-      _.last(elementDims)
-        ? _.last(elementDims).x -
-          (hoveredFavorite && hoveredFavorite.name === _.last(elementDims).name
-            ? 20
-            : 140)
-        : 10
-    }px`,
-  })
 
   return (
     <>
@@ -128,23 +75,26 @@ export default function FavoritesList({
         setRunReCalc={setRunReCalc}
       />
       <RecentList
-        recentListAnim={recentListAnim}
         setHoveredFavorite={setHoveredFavorite}
         hoveredFavorite={hoveredFavorite}
         favoritesCombined={favoritesCombined}
-        placeholderAnim={placeholderAnim}
-        transitions={transitions}
         activeNameID={state.activeNameID}
-        setActiveNameID={setActiveNameID}
+        setActiveNameID={actions.setActiveNameID}
         dims={dims}
         maxWidth={maxWidth}
-        setFavoritePersons={setFavoritePersons}
+        setFavoritePersons={localStorageSetters.setFavoritePersons}
+        isOpen={isOpen}
+        delay={delay}
+        elementDims={elementDims}
+        setRunReCalc={setRunReCalc}
       />
       <ControlCollapsed isOpen={isOpen} />
       <EndIconsContainer
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        endContainerAnim={endContainerAnim}
+        maxWidth={maxWidth}
+        dims={dims}
+        delay={delay}
       />
     </>
   )

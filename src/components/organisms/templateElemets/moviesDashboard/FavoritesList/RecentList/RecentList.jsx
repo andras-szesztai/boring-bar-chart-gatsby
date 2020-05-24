@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import styled from "styled-components"
 import { IoIosSearch, IoIosClose } from "react-icons/io"
+import _ from "lodash"
+import { useSpring, useTransition } from "react-spring"
 
 import { space } from "../../../../../../themes/theme"
 import {
@@ -9,6 +11,8 @@ import {
   TextContainer,
   ListItemContainer,
 } from "../styles"
+import { usePrevious } from "../../../../../../hooks"
+import { FIXED_DIMS } from "../../../../../../constants/moviesDashboard"
 
 export const DisplayRecentListContainer = styled(RecentListContainer)`
   z-index: 1;
@@ -53,25 +57,67 @@ export const MouseDownAnimation = styled(motion.div)`
 `
 
 export default function RecentList({
-  recentListAnim,
   setHoveredFavorite,
   hoveredFavorite,
   favoritesCombined,
-  placeholderAnim,
-  transitions,
   activeNameID,
   setActiveNameID,
   dims,
   maxWidth,
-  setFavoritePersons
+  setFavoritePersons,
+  isOpen,
+  delay,
+  elementDims,
+  setRunReCalc
 }) {
+  const prevElementDims = usePrevious(elementDims)
+
   const [clickedRemove, setClickedRemove] = useState(undefined)
   const [clickedSearch, setClickedSearch] = useState(undefined)
+  
+  const [isRemoveHovered, setIsRemoveHovered] = useState(false)
+  const [isSearchHovered, setIsSearchHovered] = useState(false)
 
   const timeOut = useRef(null)
 
-  const [isRemoveHovered, setIsRemoveHovered] = useState(false)
-  const [isSearchHovered, setIsSearchHovered] = useState(false)
+  const recentListAnim = useSpring({
+    width: `${isOpen ? dims.width + 5 : 0}px`,
+    delay,
+  })
+
+  const xPosAdjust = FIXED_DIMS.controlCollapsedWidth + 12
+  const transitions = useTransition(elementDims, item => item.name, {
+    from: { opacity: 0, transform: "translate3d(-200px, 2px, 0)" },
+    enter: item => ({
+      opacity: 1,
+      transform: `translate3d(${elementDims.find(el => el.name === item.name)
+        .x - xPosAdjust}px, 2px, 0)`,
+    }),
+    update: item => {
+      const curreItem = elementDims.find(el => el.name === item.name)
+      return {
+        transform: `translate3d(${curreItem.x - xPosAdjust}px, 2px, 0)`,
+        width: `${curreItem.width}px`,
+      }
+    },
+    leave: item => ({
+      transform: `translate3d(${prevElementDims.find(
+        el => el.name === item.name
+      ).x - xPosAdjust}px, 100px, 0)`,
+    }),
+    onDestroyed: () => setRunReCalc(true),
+  })
+
+  const placeholderAnim = useSpring({
+    left: `${
+      _.last(elementDims)
+        ? _.last(elementDims).x -
+          (hoveredFavorite && hoveredFavorite.name === _.last(elementDims).name
+            ? 20
+            : 140)
+        : 10
+    }px`,
+  })
 
   return (
     <DisplayRecentListContainer

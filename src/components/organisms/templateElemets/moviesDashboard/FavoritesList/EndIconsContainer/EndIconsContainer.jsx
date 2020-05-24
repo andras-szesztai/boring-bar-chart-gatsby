@@ -2,13 +2,13 @@ import React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { IoIosArrowForward } from "react-icons/io"
-import { animated } from "react-spring"
+import { animated, useSpring } from "react-spring"
 
 import { space, dropShadow, colors } from "../../../../../../themes/theme"
 import { themifyZIndex } from "../../../../../../themes/mixins"
-import { COLORS } from "../../../../../../constants/moviesDashboard"
+import { COLORS, FIXED_DIMS } from "../../../../../../constants/moviesDashboard"
 
-export const Conntainer = styled(animated.div)`
+export const Container = styled(animated.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,10 +36,28 @@ const IconContainer = styled(motion.div)`
 export default function EndIconsContainer({
   isOpen,
   setIsOpen,
-  endContainerAnim,
+  maxWidth,
+  dims,
+  delay,
 }) {
+  
+  const endContainerXPos = isOpen
+    ? FIXED_DIMS.controlCollapsedWidth +
+      10 +
+      (dims.width <= maxWidth ? dims.width : maxWidth)
+    : FIXED_DIMS.controlCollapsedWidth + 8
+
+  const endContainerAnim = useSpring({
+    from: {
+      transform: `translate(${endContainerXPos}px, 100px)`,
+    },
+    transform: `translate(${endContainerXPos}px, 0px)`,
+    boxShadow: `-1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
+    delay,
+  })
+
   return (
-    <Conntainer style={endContainerAnim}>
+    <Container style={endContainerAnim}>
       <IconContainer
         style={{ transform: "translateY(5px)" }}
         onClick={() => setIsOpen(prev => !prev)}
@@ -59,6 +77,6 @@ export default function EndIconsContainer({
       >
         <IoIosArrowForward size={24} color={COLORS.textColor} />
       </IconContainer>
-    </Conntainer>
+    </Container>
   )
 }
