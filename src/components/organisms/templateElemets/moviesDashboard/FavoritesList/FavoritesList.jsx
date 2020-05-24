@@ -238,6 +238,8 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
   const [isRemoveHovered, setIsRemoveHovered] = useState(false)
   const [isSearchHovered, setIsSearchHovered] = useState(false)
 
+  const [clickedRemove, setClickedRemove] = useState(undefined)
+
   return (
     <>
       <HiddenRecentListContainer ref={listRef}>
@@ -270,7 +272,10 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
 
       <DisplayRecentListContainer
         style={recentListAnim}
-        onMouseLeave={() => setHoveredFavorite(undefined)}
+        onMouseLeave={() => {
+          setHoveredFavorite(undefined)
+          setClickedRemove(undefined)
+        }}
       >
         <div style={{ position: "relative" }}>
           {favoritesCombined &&
@@ -287,7 +292,10 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
                     ...props,
                     position: "absolute",
                   }}
-                  onMouseEnter={() => setHoveredFavorite(item)}
+                  onMouseEnter={() => {
+                    setHoveredFavorite(item)
+                    setClickedRemove(undefined)
+                  }}
                 >
                   {item.name}
                   <AnimatePresence>
@@ -314,6 +322,7 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
                         <HoverControlIconContainer
                           onMouseEnter={() => setIsRemoveHovered(true)}
                           onMouseLeave={() => setIsRemoveHovered(false)}
+                          onClick={() => setClickedRemove(item.id)}
                         >
                           <motion.div
                             style={{ marginRight: 2 }}
@@ -324,6 +333,19 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
                           </motion.div>
                           Remove
                         </HoverControlIconContainer>
+                        <AnimatePresence>
+                          {clickedRemove && clickedRemove === item.id && (
+                            <motion.div
+                              style={{
+                                position: "absolute",
+                                top: -0,
+                                color: "#333",
+                              }}
+                            >
+                              Pop confirm
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </HoveredControlsContainer>
                     )}
                   </AnimatePresence>

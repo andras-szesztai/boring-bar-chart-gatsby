@@ -111,6 +111,7 @@ export const HoveredControlsContainer = styled(motion.div)`
 `
 
 export const HoverControlIconContainer = styled(motion.div)`
+  position: relative;
   display: flex;
 
   cursor: pointer;
