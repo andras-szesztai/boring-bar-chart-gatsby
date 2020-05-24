@@ -1,42 +1,25 @@
 import React, { useState, useEffect, useRef } from "react"
-import { Helmet } from "react-helmet"
-import axios from "axios"
 import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
-import chroma from "chroma-js"
 import _ from "lodash"
-import {
-  useMeasure,
-  useUpdateEffect,
-  useEffectOnce,
-  useUnmount,
-  useSize,
-  useWindowSize,
-} from "react-use"
-import {
-  IoMdInformationCircle,
-  IoIosArrowForward,
-  IoIosSearch,
-  IoIosClose,
-} from "react-icons/io"
-import { FaExpandArrowsAlt } from "react-icons/fa"
-import { useSpring, useTransition, animated } from "react-spring"
+import { useMeasure, useEffectOnce, useUnmount, useWindowSize } from "react-use"
+import { IoIosSearch, IoIosClose } from "react-icons/io"
+import { useSpring, useTransition } from "react-spring"
 
 import { space } from "../../../../../themes/theme"
-import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
-import { themifyFontSize, themifyZIndex } from "../../../../../themes/mixins"
+import { COLORS } from "../../../../../constants/moviesDashboard"
+import { themifyFontSize } from "../../../../../themes/mixins"
 import { usePrevious } from "../../../../../hooks"
 import {
-  EndIconsContainer,
   HiddenRecentListContainer,
   DisplayRecentListContainer,
   ListItemContainer,
   HoveredControlsContainer,
   HoverControlIconContainer,
-  PopConfirm,
   MouseDownAnimation,
 } from "./styles"
 import ControlCollapsed from "./ControlCollapsed/ControlCollapsed"
+import EndIconsContainer from "./EndIconsContainer/EndIconsContainer"
 
 const TextContainer = styled(motion.div)`
   font-weight: 500;
@@ -50,11 +33,6 @@ const TextContainer = styled(motion.div)`
   padding: ${space[2]}px;
 `
 
-const IconContainer = styled(motion.div)`
-  right: ${space[1]}px;
-  cursor: pointer;
-  z-index: ${themifyZIndex("hoverOverlay")};
-`
 
 const ListItem = ({
   name,
@@ -162,8 +140,7 @@ export default function FavoritesList({
     }
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
-  // TODO: Setup isOpen in local store
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const prevIsOpen = usePrevious(isOpen)
   const [listRef, dims] = useMeasure()
   const prevDims = usePrevious(dims)
@@ -243,8 +220,6 @@ export default function FavoritesList({
   const [clickedSearch, setClickedSearch] = useState(undefined)
 
   const timeOut = useRef(null)
-
-  // const { x } = useSpring({ from: { width: "0%" }, to: { width: clickedRemove ? "100%" : } })
 
   return (
     <>
@@ -444,27 +419,11 @@ export default function FavoritesList({
 
       <ControlCollapsed isOpen={isOpen} />
 
-      <EndIconsContainer style={endContainerAnim}>
-        <IconContainer
-          style={{ transform: "translateY(5px)" }}
-          onClick={() => setIsOpen(prev => !prev)}
-          whileHover={{
-            scale: 1.3,
-            transition: {
-              delay: 0,
-            },
-          }}
-          initial={{ rotate: isOpen ? 180 : 0 }}
-          animate={{
-            rotate: isOpen ? 180 : 0,
-            transition: {
-              delay: 1,
-            },
-          }}
-        >
-          <IoIosArrowForward size={24} color={COLORS.textColor} />
-        </IconContainer>
-      </EndIconsContainer>
+      <EndIconsContainer
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        endContainerAnim={endContainerAnim}
+      />
     </>
   )
 }
