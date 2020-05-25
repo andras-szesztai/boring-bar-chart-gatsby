@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react'
-import { motion } from 'framer-motion'
-import { IoIosSearch } from 'react-icons/io'
+import React, { useState, useRef } from "react"
+import { motion } from "framer-motion"
+import { IoIosSearch } from "react-icons/io"
 
-import { HoverControlIconContainer, MouseDownAnimation } from '../RecentList'
+import { HoverControlIconContainer, MouseDownAnimation } from "../RecentList"
+import { COLORS } from "../../../../../../../constants/moviesDashboard"
 
 const SearchControl = ({
   activeNameID,
@@ -52,9 +53,18 @@ const SearchControl = ({
     >
       {activeNameID !== id && (
         <MouseDownAnimation
-          initial={{ width: "0%", x: -5 }}
+          initial={{
+            width: "0%",
+            x: -5,
+            backgroundColor: "#fff",
+            zIndex: 1,
+            opacity: 0.25,
+          }}
           animate={{
             width: clickedSearch && clickedSearch === id ? "120%" : "0%",
+            backgroundColor:
+              clickedSearch && clickedSearch === id ? COLORS.favorite : "#fff",
+            opacity: clickedSearch && clickedSearch === id ? 1 : 0.25,
           }}
           transition={{
             duration: 1,
@@ -63,14 +73,16 @@ const SearchControl = ({
           }}
         />
       )}
-      <motion.div
-        style={{ marginRight: 4 }}
-        initial={{ y: 2 }}
-        animate={{ scale: isSearchHovered ? 1.4 : 1 }}
-      >
-        <IoIosSearch size={14} />
-      </motion.div>
-      Search
+      <div style={{ display: "flex", zIndex: 2 }}>
+        <motion.div
+          style={{ marginRight: 4 }}
+          initial={{ y: 2 }}
+          animate={{ scale: isSearchHovered ? 1.4 : 1 }}
+        >
+          <IoIosSearch size={14} />
+        </motion.div>
+        Search
+      </div>
     </HoverControlIconContainer>
   )
 }
