@@ -1,7 +1,6 @@
 import { min, max } from "d3-array"
 import { differenceInDays } from "date-fns"
 import _ from "lodash"
-import moment from "moment"
 
 import { TEXT } from "../../constants/visualizations/coronavirusHungary"
 import { makeAreaData } from "../../components/organisms/templateElemets/coronavirusHungary/utils/dataHelpers"
@@ -20,14 +19,14 @@ function makeFormattedData({ data, isHu }) {
     return data.map(el => ({
       ...el,
       age: +el.kor,
-      date: new Date(moment.utc(el.datum).format()),
+      date: new Date(el.datum),
       number: +el.sorszam,
       gender: el.nem,
     }))
   }
   return data.map(el => ({
     ...el,
-    date: new Date(moment.utc(el.date).format()),
+    date: new Date(el.date),
     age: +el.age,
     number: +el.number,
   }))
