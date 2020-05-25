@@ -122,16 +122,25 @@ export default function RecentList({
       }}
     >
       <div style={{ position: "relative", width: "100%" }}>
-        {favoritesCombined && !favoritesCombined.length && (
-          <AnimatePresence>
-            <TextContainer style={{ fontWeight: 300, alignSelf: "stretch" }}>
+        <AnimatePresence>
+          {!!favoritesCombined && !favoritesCombined.length && !!isOpen && (
+            <TextContainer
+              initial={{ opacity: 0, transform: "translateX(-100px)" }}
+              animate={{
+                opacity: 1,
+                transform: "translateX(0px)",
+                transition: { delay: 0.5 },
+              }}
+              exit={{ opacity: 0, transition: { duration: 0, delay: 0 } }}
+              style={{ fontWeight: 300, alignSelf: "stretch" }}
+            >
               {/* TODO: Mark a movie/series or person as a favorite to display them here! */}
               Mark a person as your favorite to start the list!
             </TextContainer>
-          </AnimatePresence>
-        )}
-        {favoritesCombined &&
-          favoritesCombined.length &&
+          )}
+        </AnimatePresence>
+        {!!favoritesCombined &&
+          !!favoritesCombined.length &&
           transitions.map(({ item, props, key }, i) => (
             <ListItemContainer
               key={key}
