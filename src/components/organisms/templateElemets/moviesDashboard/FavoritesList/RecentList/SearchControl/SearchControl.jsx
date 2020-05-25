@@ -62,9 +62,7 @@ const SearchControl = ({
           }}
           animate={{
             width: clickedSearch && clickedSearch === id ? "120%" : "0%",
-            backgroundColor:
-              clickedSearch && clickedSearch === id ? COLORS.favorite : "#fff",
-            opacity: clickedSearch && clickedSearch === id ? 1 : 0.25,
+            opacity: clickedSearch && clickedSearch === id ? .5 : 0.25,
           }}
           transition={{
             duration: 1,

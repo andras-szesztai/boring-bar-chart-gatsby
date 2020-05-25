@@ -8,8 +8,8 @@ export const COLORS = {
   primaryLight: "#d6f4f7",
   primaryDark: "#3b5f80",
   secondary: "#79dc96",
-  favorite: "#ffa71e",
   delete: "#fc5050",
+  favorite: "#ffa71e",
   textColor: colors.grayDarker
 }
 
