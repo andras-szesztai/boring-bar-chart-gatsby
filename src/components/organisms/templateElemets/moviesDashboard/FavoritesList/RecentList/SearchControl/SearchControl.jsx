@@ -3,7 +3,6 @@ import { motion } from "framer-motion"
 import { IoIosSearch } from "react-icons/io"
 
 import { HoverControlIconContainer, MouseDownAnimation } from "../RecentList"
-import { COLORS } from "../../../../../../../constants/moviesDashboard"
 
 const SearchControl = ({
   activeNameID,

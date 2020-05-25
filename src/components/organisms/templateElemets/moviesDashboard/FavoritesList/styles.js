@@ -99,6 +99,8 @@ font-family: inherit;
 
 display: flex;
 align-items: center;
+justify-content: center;
 height: 100%;
+width: 100%;
 padding: ${space[2]}px;
 `

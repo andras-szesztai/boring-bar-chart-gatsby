@@ -38,7 +38,6 @@ export default function EndIconsContainer({
   setIsOpen,
   maxWidth,
   dims,
-  delay,
 }) {
   const endContainerXPos = isOpen
     ? FIXED_DIMS.controlCollapsedWidth +
@@ -52,7 +51,6 @@ export default function EndIconsContainer({
     },
     transform: `translate(${endContainerXPos}px, 0px)`,
     boxShadow: `-1px 0px 3px 0 rgba(51,51,51,${isOpen ? 0.12 : 0})`,
-    delay,
   })
 
   return (
