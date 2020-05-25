@@ -7,7 +7,6 @@ import { makeAreaData } from "../../components/organisms/templateElemets/coronav
 
 const filterGender = ({ accessor, data, language }) =>
   data.filter(({ gender }) => gender === TEXT[accessor][language])
-// TODO: fix to UTC
 // var currentHelsinkiHoursOffset = 2; // sometimes it is 3
 // var date = new Date(1270544790922);
 // var helsenkiOffset = currentHelsinkiHoursOffset*60*60000;
