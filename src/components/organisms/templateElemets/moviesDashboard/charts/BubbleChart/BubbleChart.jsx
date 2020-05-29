@@ -12,7 +12,6 @@ import { select } from "d3-selection"
 import { useMeasure } from "react-use"
 import gsap from "gsap"
 
-
 import { usePrevious } from "../../../../../../hooks"
 import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
@@ -118,10 +117,11 @@ export default function BubbleChart(props) {
       // chartArea
       //   .selectAll(".main-circle")
       //   .each((d, i, n) => console.log(select(n[i]).datum()))
-      gsap.to(".main-circle", {cy: (i, el) => {
-        const object  = select(el).datum()
-        return yScale(object.vote_average)
-      }},);
+      gsap.to(".main-circle", {
+        y: (i, el) => yScale(select(el).data()[0].vote_average),
+        ease: "elastic",
+        duration: 2,
+      })
       storedValues.current = {
         ...storedValues.current,
         yScale,
