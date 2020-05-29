@@ -13,7 +13,31 @@ import {
   FavoritesList,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
-import { FavoriteHeart } from "../molecules/icons"
+
+const MainContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  user-select: none;
+`
+
+const ChartContainer = styled.div`
+  display: grid;
+  width: 95%;
+  height: 80%;
+  border: 1px solid black;
+
+  grid-template-rows: 
+`
+
+const PlaceHolderDiv = styled.div`
+
+`
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
@@ -52,34 +76,15 @@ export default function MoviesDashboard() {
             favoritePersons={favoritePersons}
             setFavoritePersons={setFavoritePersons}
           />
-          <motion.div
-            onClick={() => setIsFavorited(prev => !prev)}
-            onMouseEnter={() => setIsTitleHovered(true)}
-            onMouseLeave={() => setIsTitleHovered(false)}
-            style={{
-              position: "fixed",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              top: "50%",
-              left: "50%",
-              width: 100,
-              height: 100,
-              transform: "translate(-50%, -50%)",
-              cursor: "pointer",
-            }}
-          >
-            <FavoriteHeart
-              isFavorited={isFavorited}
-              isHovered={isTitleHovered}
-            />
-          </motion.div>
           <FavoritesList
             state={state}
             actions={actions}
             localStorageValues={localStorageValues}
             localStorageSetters={localStorageSetters}
           />
+          <MainContainer>
+            <ChartContainer>Heello</ChartContainer>
+          </MainContainer>
         </div>
       )}
     </>
