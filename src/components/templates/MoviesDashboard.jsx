@@ -75,7 +75,7 @@ export default function MoviesDashboard() {
   }, [])
 
 
-  // xScale, sizeScale
+  // TODO: move it together with charts
   const [currState, setCurrState] = useState({
     id: undefined,
     mainType: undefined,
@@ -111,6 +111,9 @@ export default function MoviesDashboard() {
     }
   }, [dataSets, currState])
 
+
+  const [ yDomainSynced, setYDomainSynced ] = useState(true)
+
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -138,13 +141,18 @@ export default function MoviesDashboard() {
               transition={{ duration: 1 }}
             >
               <SubContainer>
-                <PlaceHolderDiv>Controls</PlaceHolderDiv>
+                <PlaceHolderDiv>
+                  <div onClick={() => setYDomainSynced(prev => !prev) }>
+                    Y-domain
+                  </div>
+                </PlaceHolderDiv>
                 {typeof currState.isBoth == "boolean" && (
                   <ChartContainer twoCharts={currState.isBoth}>
                     <BubbleChart
                       type={currState.mainType}
                       data={dataSets.personCredits[currState.mainType]}
                       {...currState}
+                      yDomainSynced={yDomainSynced}
                     />
                     <PlaceHolderDiv>Time scale</PlaceHolderDiv>
                     {currState.isBoth && (
@@ -152,6 +160,7 @@ export default function MoviesDashboard() {
                         type={currState.subType}
                         data={dataSets.personCredits[currState.subType]}
                         {...currState}
+                        yDomainSynced={yDomainSynced}
                       />
                     )}
                   </ChartContainer>

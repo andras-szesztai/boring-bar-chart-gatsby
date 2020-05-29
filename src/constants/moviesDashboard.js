@@ -6,8 +6,8 @@ export const API_ROOT = "https://api.themoviedb.org/3"
 export const COLORS = {
   primaryLight: "#d6f4f7",
   primary: "#6a8caf",
-  primaryDark: "#3b5f80",
-  secondary: "#79dc96",
+  primaryDark: "#7ebdb4",
+  secondary: "#9ae17b",
   delete: "#fc5050",
   favorite: "#ffa71e",
   textColor: colors.grayDarker

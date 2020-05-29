@@ -10,6 +10,9 @@ import { extent } from "d3-array"
 import useResizeAware from "react-resize-aware"
 import { select } from "d3-selection"
 import { useMeasure } from "react-use"
+import gsap from "gsap"
+
+
 import { usePrevious } from "../../../../../../hooks"
 import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
@@ -30,16 +33,16 @@ const ChartSvg = styled.svg`
 
 const TypeContainer = styled(motion.div)`
   position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: ${themifyFontSize(3)};
+  font-size: ${themifyFontSize(4)};
   font-weight: 200;
   text-transform: uppercase;
   color: ${colors.grayDarker};
   z-index: 0;
 `
 
-export default function BubbleChart({ data, margin, type, xScale, sizeScale }) {
+export default function BubbleChart(props) {
+  const prevProps = usePrevious(props)
+  const { data, margin, type, xScale, sizeScale, yDomainSynced } = props
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
   const [ref, dims] = useMeasure()
@@ -60,8 +63,9 @@ export default function BubbleChart({ data, margin, type, xScale, sizeScale }) {
         dims.width - margin.left - margin.right,
       ])
       const yScale = scaleLinear()
-        .domain([0, 10]) // TODO: add it as optional
-        // .domain(extent(filteredData, d => d.vote_average))// TODO: add it as optional
+        .domain(
+          yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
+        )
         .range([dims.height - margin.top - margin.bottom, 0])
       const currSizeScale = sizeScale.range([2, 20])
       const chartArea = select(chartAreaRef.current)
@@ -100,6 +104,30 @@ export default function BubbleChart({ data, margin, type, xScale, sizeScale }) {
           .attr("stroke", chroma(COLORS.secondary).darken())
       )
   }
+
+  // useYDomainSyncUpdate
+  useEffect(() => {
+    if (
+      storedValues.current.isInit &&
+      props.yDomainSynced !== prevProps.yDomainSynced
+    ) {
+      const { yScale, filteredData, chartArea } = storedValues.current
+      yScale.domain(
+        yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
+      )
+      // chartArea
+      //   .selectAll(".main-circle")
+      //   .each((d, i, n) => console.log(select(n[i]).datum()))
+      gsap.to(".main-circle", {cy: (i, el) => {
+        const object  = select(el).datum()
+        return yScale(object.vote_average)
+      }},);
+      storedValues.current = {
+        ...storedValues.current,
+        yScale,
+      }
+    }
+  }, [prevProps, props, yDomainSynced])
 
   return (
     <Wrapper ref={ref}>
