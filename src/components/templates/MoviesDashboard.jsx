@@ -5,6 +5,8 @@ import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
+import { useUpdateEffect } from "react-use"
+import isEqual from "lodash/isEqual"
 
 import { useDeviceType, usePrevious } from "../../hooks"
 import {
@@ -14,7 +16,6 @@ import {
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 import { BubbleChart } from "../organisms/templateElemets/moviesDashboard/charts"
-import { useUpdateEffect } from "react-use"
 
 const MainContainer = styled.div`
   width: 100vw;
@@ -115,8 +116,8 @@ export default function MoviesDashboard() {
             localStorageValues={localStorageValues}
             localStorageSetters={localStorageSetters}
           />
-          {activeNameID && (
-            <MainContainer key={activeNameID}>
+          {activeNameID && !state.loading.personCredits && (
+            <MainContainer>
               <SubContainer>
                 <PlaceHolderDiv>Controls</PlaceHolderDiv>
                 {typeof personType.isBoth == "boolean" && (
@@ -129,11 +130,13 @@ export default function MoviesDashboard() {
                       }
                     />
                     <PlaceHolderDiv>Time scale</PlaceHolderDiv>
-                    {personType.isBoth && (
-                      <PlaceHolderDiv>
-                        {personType.isActor ? "Producing" : "Acting"}
-                      </PlaceHolderDiv>
-                    )}
+                    {personType.isBoth &&   <BubbleChart
+                      data={
+                        personType.isActor
+                          ? dataSets.personCredits.crew
+                          : dataSets.personCredits.cast
+                      }
+                    />}
                   </ChartContainer>
                 )}
               </SubContainer>
@@ -144,3 +147,11 @@ export default function MoviesDashboard() {
     </>
   )
 }
+
+// {/* <BubbleChart
+//                       data={
+//                         personType.isActor
+//                           ? dataSets.personCredits.crew
+//                           : dataSets.personCredits.cast
+//                       }
+//                     /> */}
