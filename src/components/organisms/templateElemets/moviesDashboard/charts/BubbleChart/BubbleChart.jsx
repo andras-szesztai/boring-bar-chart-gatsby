@@ -25,6 +25,7 @@ const ChartSvg = styled.svg`
   position: absolute;
   height: 100%;
   width: 100%;
+  z-index: 1;
 `
 
 const TypeContainer = styled(motion.div)`
@@ -35,6 +36,7 @@ const TypeContainer = styled(motion.div)`
   font-weight: 200;
   text-transform: uppercase;
   color: ${colors.grayDarker};
+  z-index: 0;
 `
 
 export default function BubbleChart({ data, margin, isActor }) {
@@ -42,7 +44,7 @@ export default function BubbleChart({ data, margin, isActor }) {
   const chartAreaRef = useRef(null)
   const [ref, dims] = useMeasure()
   const prevDims = usePrevious(dims)
-  
+
   useEffect(() => {
     if (
       !storedValues.current.isInit &&
@@ -101,7 +103,11 @@ export default function BubbleChart({ data, margin, isActor }) {
 
   return (
     <Wrapper ref={ref}>
-      <TypeContainer >
+      <TypeContainer
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 2 }}
+      >
         {isActor ? "Cast" : "Crew"}
       </TypeContainer>
       <ChartSvg>

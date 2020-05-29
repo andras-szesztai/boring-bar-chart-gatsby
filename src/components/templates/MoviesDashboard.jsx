@@ -17,7 +17,7 @@ import {
 import { moviesDashboardReducer } from "../../reducers"
 import { BubbleChart } from "../organisms/templateElemets/moviesDashboard/charts"
 
-const MainContainer = styled.div`
+const MainContainer = styled(motion.div)`
   width: 100vw;
   height: 100vh;
   position: absolute;
@@ -120,7 +120,11 @@ export default function MoviesDashboard() {
             localStorageSetters={localStorageSetters}
           />
           {activeNameID && !state.loading.personCredits && (
-            <MainContainer>
+            <MainContainer
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
               <SubContainer>
                 <PlaceHolderDiv>Controls</PlaceHolderDiv>
                 {typeof personType.isBoth == "boolean" && (
