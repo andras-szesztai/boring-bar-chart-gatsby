@@ -99,7 +99,6 @@ export default function MoviesDashboard() {
       )
       const sizeScale = scaleSqrt()
         .domain(extent(data, d => d.vote_count)) // TODO: add it as optional
-        .range([4, 20])
       const isActor = dataSets.personDetails.known_for_department === "Acting"
       setCurrState({
         id: dataSets.personCredits.id,

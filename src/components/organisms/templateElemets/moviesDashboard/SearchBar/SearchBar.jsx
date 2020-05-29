@@ -15,7 +15,7 @@ const SearchBarMainContainer = styled(motion.div)`
   position: fixed;
   left: ${space[2]}px;
   top: ${space[2]}px;
-  z-index: 1;
+  z-index: 2;
 `
 
 const SearchBarSubContainer = styled(motion.div)`

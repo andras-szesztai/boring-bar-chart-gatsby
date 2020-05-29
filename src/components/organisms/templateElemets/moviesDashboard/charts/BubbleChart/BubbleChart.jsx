@@ -61,8 +61,9 @@ export default function BubbleChart({ data, margin, type, xScale, sizeScale }) {
       ])
       const yScale = scaleLinear()
         .domain([0, 10]) // TODO: add it as optional
+        // .domain(extent(filteredData, d => d.vote_average))// TODO: add it as optional
         .range([dims.height - margin.top - margin.bottom, 0])
-      const currSizeScale = sizeScale.range([4, 16])
+      const currSizeScale = sizeScale.range([2, 20])
       const chartArea = select(chartAreaRef.current)
       storedValues.current = {
         isInit: true,
