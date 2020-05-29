@@ -16,6 +16,8 @@ import {
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 import { BubbleChart } from "../organisms/templateElemets/moviesDashboard/charts"
+import { scaleTime, scaleSqrt } from "d3-scale"
+import { extent } from "d3-array"
 
 const MainContainer = styled(motion.div)`
   width: 100vw;
@@ -54,10 +56,6 @@ const PlaceHolderDiv = styled.div`
 export default function MoviesDashboard() {
   const device = useDeviceType()
 
-  const [personType, setPersonType] = useState({
-    isBoth: undefined,
-    isActor: undefined,
-  })
   const {
     state,
     prevState,
@@ -76,28 +74,43 @@ export default function MoviesDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useUpdateEffect(() => {
-    if (dataSets.personCredits) {
-      const newIsBoth =
-        !!dataSets.personCredits.cast.length &&
-        !!dataSets.personCredits.crew.length
-      const newIsActor =
-        dataSets.personDetails.known_for_department === "Acting"
-      if (
-        typeof personType.isBoth == "undefined" ||
-        personType.isBoth !== newIsBoth ||
-        personType.isActor !== newIsActor
-      ) {
-        setPersonType({
-          isBoth: newIsBoth,
-          isActor: newIsActor,
-        })
-      }
-    }
-  })
 
-  const [isTitleHovered, setIsTitleHovered] = useState(false)
-  const [isFavorited, setIsFavorited] = useState(false)
+  // xScale, sizeScale
+  const [currState, setCurrState] = useState({
+    id: undefined,
+    mainType: undefined,
+    isBoth: undefined,
+    xScale: undefined,
+    yScale: undefined,
+  })
+  useEffect(() => {
+    if (
+      dataSets.personCredits &&
+      (!currState.id || currState.id !== dataSets.personCredits.id)
+    ) {
+      const isBoth =
+        !!dataSets.personCredits.cast.length && !!dataSets.personCredits.crew.length
+      const data = [
+        ...dataSets.personCredits.crew,
+        ...dataSets.personCredits.cast,
+      ].filter(d => !!d.release_date && !!d.vote_count)
+      const xScale = scaleTime().domain(
+        extent(data, d => new Date(d.release_date))
+      )
+      const sizeScale = scaleSqrt()
+        .domain(extent(data, d => d.vote_count)) // TODO: add it as optional
+        .range([4, 20])
+      const isActor = dataSets.personDetails.known_for_department === "Acting"
+      setCurrState({
+        id: dataSets.personCredits.id,
+        mainType: isActor ? "cast" : "crew",
+        subType: isBoth && isActor ? "crew" : "cast",
+        isBoth,
+        xScale,
+        sizeScale,
+      })
+    }
+  }, [dataSets, currState])
 
   return (
     <>
@@ -127,25 +140,19 @@ export default function MoviesDashboard() {
             >
               <SubContainer>
                 <PlaceHolderDiv>Controls</PlaceHolderDiv>
-                {typeof personType.isBoth == "boolean" && (
-                  <ChartContainer twoCharts={personType.isBoth}>
+                {typeof currState.isBoth == "boolean" && (
+                  <ChartContainer twoCharts={currState.isBoth}>
                     <BubbleChart
-                      isActor={personType.isActor}
-                      data={
-                        personType.isActor
-                          ? dataSets.personCredits.cast
-                          : dataSets.personCredits.crew
-                      }
+                      type={currState.mainType}
+                      data={dataSets.personCredits[currState.mainType]}
+                      {...currState}
                     />
                     <PlaceHolderDiv>Time scale</PlaceHolderDiv>
-                    {personType.isBoth && (
+                    {currState.isBoth && (
                       <BubbleChart
-                        isActor={!personType.isActor}
-                        data={
-                          personType.isActor
-                            ? dataSets.personCredits.crew
-                            : dataSets.personCredits.cast
-                        }
+                        type={currState.subType}
+                        data={dataSets.personCredits[currState.subType]}
+                        {...currState}
                       />
                     )}
                   </ChartContainer>
