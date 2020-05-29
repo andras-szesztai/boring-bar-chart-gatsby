@@ -13,6 +13,7 @@ import {
   FavoritesList,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
+import { BubbleChart } from "../organisms/templateElemets/moviesDashboard/charts"
 
 const MainContainer = styled.div`
   width: 100vw;
@@ -30,13 +31,15 @@ const ChartContainer = styled.div`
   display: grid;
   width: 95%;
   height: 80%;
-  border: 1px solid black;
 
   grid-template-rows: 
 `
-
+//grid-template-rows:${({ twoCharts }) => twoCharts ? ""}
 const PlaceHolderDiv = styled.div`
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
 `
 
 export default function MoviesDashboard() {
@@ -62,6 +65,7 @@ export default function MoviesDashboard() {
   const [isTitleHovered, setIsTitleHovered] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
 
+  console.log("MoviesDashboard -> state", state)
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -83,7 +87,16 @@ export default function MoviesDashboard() {
             localStorageSetters={localStorageSetters}
           />
           <MainContainer>
-            <ChartContainer>Heello</ChartContainer>
+            <ChartContainer>
+              <PlaceHolderDiv>Controls</PlaceHolderDiv>
+              {state.dataSets.personCredits && (
+                <>
+                  <BubbleChart />
+                  <PlaceHolderDiv>Time scale</PlaceHolderDiv>
+                  <PlaceHolderDiv>Chart</PlaceHolderDiv>
+                </>
+              )}
+            </ChartContainer>
           </MainContainer>
         </div>
       )}
