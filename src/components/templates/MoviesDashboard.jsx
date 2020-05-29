@@ -27,14 +27,21 @@ const MainContainer = styled.div`
   user-select: none;
 `
 
-const ChartContainer = styled.div`
+const SubContainer = styled.div`
   display: grid;
   width: 95%;
   height: 80%;
 
-  grid-template-rows: 
+  grid-template-rows: 75px auto;
 `
-//grid-template-rows:${({ twoCharts }) => twoCharts ? ""}
+
+const ChartContainer = styled.div`
+  display: grid;
+
+  grid-template-rows: ${({ twoCharts }) =>
+    twoCharts ? "auto 50px auto" : "auto 50px"};
+`
+
 const PlaceHolderDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -45,6 +52,7 @@ const PlaceHolderDiv = styled.div`
 export default function MoviesDashboard() {
   const device = useDeviceType()
 
+  const [ isBoth , setIsBoth ] = useState(false)
   const {
     state,
     prevState,
@@ -54,6 +62,7 @@ export default function MoviesDashboard() {
   } = moviesDashboardReducer()
   const { favoritePersons } = localStorageValues
   const { setFavoritePersons } = localStorageSetters
+  const { dataSets } = state
 
   useEffect(() => {
     favoritePersons &&
@@ -61,6 +70,12 @@ export default function MoviesDashboard() {
       actions.setActiveNameID(_.last(favoritePersons).id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if(prevState && state.setActiveNameID !== prevState.activeNameID){
+
+    }
+  }, [prevState, state])
 
   const [isTitleHovered, setIsTitleHovered] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
@@ -87,16 +102,24 @@ export default function MoviesDashboard() {
             localStorageSetters={localStorageSetters}
           />
           <MainContainer>
-            <ChartContainer>
+            <SubContainer>
               <PlaceHolderDiv>Controls</PlaceHolderDiv>
-              {state.dataSets.personCredits && (
-                <>
-                  <BubbleChart />
-                  <PlaceHolderDiv>Time scale</PlaceHolderDiv>
+              {dataSets.personCredits && (
+                <ChartContainer
+                  twoCharts={
+                    !!dataSets.personCredits.cast.length &&
+                    !!dataSets.personCredits.crew.length
+                  }
+                >
                   <PlaceHolderDiv>Chart</PlaceHolderDiv>
-                </>
+                  <PlaceHolderDiv>Time scale</PlaceHolderDiv>
+                  {!!dataSets.personCredits.cast.length &&
+                    !!dataSets.personCredits.crew.length && (
+                      <PlaceHolderDiv>Chart</PlaceHolderDiv>
+                    )}
+                </ChartContainer>
               )}
-            </ChartContainer>
+            </SubContainer>
           </MainContainer>
         </div>
       )}
