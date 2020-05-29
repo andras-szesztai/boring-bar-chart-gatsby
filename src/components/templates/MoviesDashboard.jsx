@@ -14,6 +14,7 @@ import {
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 import { BubbleChart } from "../organisms/templateElemets/moviesDashboard/charts"
+import { useUpdateEffect } from "react-use"
 
 const MainContainer = styled.div`
   width: 100vw;
@@ -39,7 +40,7 @@ const ChartContainer = styled.div`
   display: grid;
 
   grid-template-rows: ${({ twoCharts }) =>
-    twoCharts ? "auto 50px auto" : "auto 50px"};
+    twoCharts ? "1fr 50px 1fr" : "1fr 50px"};
 `
 
 const PlaceHolderDiv = styled.div`
@@ -52,7 +53,10 @@ const PlaceHolderDiv = styled.div`
 export default function MoviesDashboard() {
   const device = useDeviceType()
 
-  const [ isBoth , setIsBoth ] = useState(false)
+  const [personType, setPersonType] = useState({
+    isBoth: undefined,
+    isActor: undefined,
+  })
   const {
     state,
     prevState,
@@ -62,7 +66,7 @@ export default function MoviesDashboard() {
   } = moviesDashboardReducer()
   const { favoritePersons } = localStorageValues
   const { setFavoritePersons } = localStorageSetters
-  const { dataSets } = state
+  const { dataSets, activeNameID } = state
 
   useEffect(() => {
     favoritePersons &&
@@ -71,16 +75,26 @@ export default function MoviesDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    if(prevState && state.setActiveNameID !== prevState.activeNameID){
-
+  useUpdateEffect(() => {
+    if (dataSets.personCredits) {
+      const newIsBoth =
+        !!dataSets.personCredits.cast.length &&
+        !!dataSets.personCredits.crew.length
+      if (
+        typeof personType.isBoth == "undefined" ||
+        personType.isBoth !== newIsBoth
+      ) {
+        setPersonType({
+          isBoth: newIsBoth,
+          isActor: dataSets.personDetails.known_for_department === "Acting",
+        })
+      }
     }
-  }, [prevState, state])
+  })
 
   const [isTitleHovered, setIsTitleHovered] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
 
-  console.log("MoviesDashboard -> state", state)
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -101,26 +115,30 @@ export default function MoviesDashboard() {
             localStorageValues={localStorageValues}
             localStorageSetters={localStorageSetters}
           />
-          <MainContainer>
-            <SubContainer>
-              <PlaceHolderDiv>Controls</PlaceHolderDiv>
-              {dataSets.personCredits && (
-                <ChartContainer
-                  twoCharts={
-                    !!dataSets.personCredits.cast.length &&
-                    !!dataSets.personCredits.crew.length
-                  }
-                >
-                  <PlaceHolderDiv>Chart</PlaceHolderDiv>
-                  <PlaceHolderDiv>Time scale</PlaceHolderDiv>
-                  {!!dataSets.personCredits.cast.length &&
-                    !!dataSets.personCredits.crew.length && (
-                      <PlaceHolderDiv>Chart</PlaceHolderDiv>
+          {activeNameID && (
+            <MainContainer key={activeNameID}>
+              <SubContainer>
+                <PlaceHolderDiv>Controls</PlaceHolderDiv>
+                {typeof personType.isBoth == "boolean" && (
+                  <ChartContainer twoCharts={personType.isBoth}>
+                    <BubbleChart
+                      data={
+                        personType.isActor
+                          ? dataSets.personCredits.cast
+                          : dataSets.personCredits.crew
+                      }
+                    />
+                    <PlaceHolderDiv>Time scale</PlaceHolderDiv>
+                    {personType.isBoth && (
+                      <PlaceHolderDiv>
+                        {personType.isActor ? "Producing" : "Acting"}
+                      </PlaceHolderDiv>
                     )}
-                </ChartContainer>
-              )}
-            </SubContainer>
-          </MainContainer>
+                  </ChartContainer>
+                )}
+              </SubContainer>
+            </MainContainer>
+          )}
         </div>
       )}
     </>
