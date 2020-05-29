@@ -81,13 +81,16 @@ export default function MoviesDashboard() {
       const newIsBoth =
         !!dataSets.personCredits.cast.length &&
         !!dataSets.personCredits.crew.length
+      const newIsActor =
+        dataSets.personDetails.known_for_department === "Acting"
       if (
         typeof personType.isBoth == "undefined" ||
-        personType.isBoth !== newIsBoth
+        personType.isBoth !== newIsBoth ||
+        personType.isActor !== newIsActor
       ) {
         setPersonType({
           isBoth: newIsBoth,
-          isActor: dataSets.personDetails.known_for_department === "Acting",
+          isActor: newIsActor,
         })
       }
     }
@@ -123,6 +126,7 @@ export default function MoviesDashboard() {
                 {typeof personType.isBoth == "boolean" && (
                   <ChartContainer twoCharts={personType.isBoth}>
                     <BubbleChart
+                      isActor={personType.isActor}
                       data={
                         personType.isActor
                           ? dataSets.personCredits.cast
@@ -130,13 +134,16 @@ export default function MoviesDashboard() {
                       }
                     />
                     <PlaceHolderDiv>Time scale</PlaceHolderDiv>
-                    {personType.isBoth &&   <BubbleChart
-                      data={
-                        personType.isActor
-                          ? dataSets.personCredits.crew
-                          : dataSets.personCredits.cast
-                      }
-                    />}
+                    {personType.isBoth && (
+                      <BubbleChart
+                        isActor={!personType.isActor}
+                        data={
+                          personType.isActor
+                            ? dataSets.personCredits.crew
+                            : dataSets.personCredits.cast
+                        }
+                      />
+                    )}
                   </ChartContainer>
                 )}
               </SubContainer>
