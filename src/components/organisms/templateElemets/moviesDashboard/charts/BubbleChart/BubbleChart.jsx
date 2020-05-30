@@ -16,6 +16,7 @@ import { usePrevious } from "../../../../../../hooks"
 import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize, space } from "../../../../../../themes/theme"
+import { useYDomainSyncUpdate } from "./hooks"
 
 const Wrapper = styled.div`
   position: relative;
@@ -147,36 +148,7 @@ export default function BubbleChart(props) {
       .text(d => d)
   }
 
-  // useYDomainSyncUpdate
-  useEffect(() => {
-    if (
-      storedValues.current.isInit &&
-      props.yDomainSynced !== prevProps.yDomainSynced
-    ) {
-      const { yScale, filteredData } = storedValues.current
-      yScale.domain(
-        yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
-      )
-      const sharedProps = {ease: "power2.inOut"}
-      gsap.to(`.main-circle-${props.chart}`, {
-        y: (i, el) =>
-          yScale(select(el).datum().vote_average) - select(el).attr("cy"),
-        ...sharedProps
-      })
-      gsap.to(`.grid-line-${props.chart}`, {
-        y: (i, el) => yScale(select(el).datum()) - select(el).attr("y1"),
-        ...sharedProps
-      })
-      gsap.to(`.grid-text-${props.chart}`, {
-        y: (i, el) => yScale(select(el).datum()) - select(el).attr("y"),
-        ...sharedProps
-      })
-      storedValues.current = {
-        ...storedValues.current,
-        yScale,
-      }
-    }
-  }, [prevProps, props, yDomainSynced])
+  useYDomainSyncUpdate({storedValues, props, prevProps})
 
   return (
     <Wrapper ref={ref}>
