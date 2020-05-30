@@ -70,7 +70,6 @@ export default function MoviesDashboard() {
   const { setFavoritePersons } = localStorageSetters
   const { dataSets, activeNameID, activeMovieID } = state
   const { setActiveMovieId  } = actions
-  console.log("MoviesDashboard -> state", state)
 
   useEffect(() => {
     favoritePersons &&

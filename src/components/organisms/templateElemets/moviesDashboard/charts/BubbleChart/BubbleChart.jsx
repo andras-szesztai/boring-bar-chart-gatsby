@@ -155,11 +155,11 @@ export default function BubbleChart(props) {
       .enter()
       .append("g")
       .attr("class", `main-circle-${props.chart}`)
-      .call(g => console.log(g.each(d => console.log(d))))
 
     chartArea
       .selectAll(`.main-circle-${props.chart}`)
       .append("circle")
+      .attr("class", "circle")
       .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
       .attr("cy", ({ vote_average }) => yScale(vote_average))
       .attr("r", ({ vote_count }) =>
@@ -167,8 +167,10 @@ export default function BubbleChart(props) {
           ? currSizeScale(vote_count)
           : mean(props.sizeRange) / 2
       )
+      .attr("shape-rendering", "geometricPrecision")
       .attr("fill", COLORS.secondary)
       .attr("stroke", chroma(COLORS.secondary).darken())
+      .attr("stroke-width", 0.5)
   }
 
   function createGrid() {
@@ -253,20 +255,28 @@ export default function BubbleChart(props) {
       chartArea.selectAll(".selected-circle").remove()
       const selectedData = filteredData.find(d => d.id === props.activeMovieID)
       if (selectedData) {
-        // chartArea
-        //   .append("circle")
-        //   .attr("class", "selected-circle")
-        //   .attr("cx", currXScale(new Date(selectedData.release_date)))
-        //   .attr("cy", yScale(selectedData.vote_average))
-        //   .attr(
-        //     "r",
-        //     props.isSizeDynamic
-        //       ? currSizeScale(selectedData.vote_count) + 4
-        //       : mean(props.sizeRange) / 2 + 4
-        //   )
-        //   .attr("fill", "transparent")
-        //   .attr("stroke", chroma(COLORS.secondary).darken())
-        // chartArea.selectAll(`.main-circle-${props.chart}`).raise()
+        chartArea.selectAll(`.main-circle-${props.chart}`).each((d, i, n) => {
+          if (d.id === props.activeMovieID) {
+            select(n[i])
+              .append("circle")
+              .datum(selectedData)
+              .attr("class", "selected-circle")
+              .attr("r", 0)
+              .lower()
+            select(".selected-circle")
+              .attr("cx", currXScale(new Date(selectedData.release_date)))
+              .attr("cy", yScale(selectedData.vote_average))
+              .attr("fill", "transparent")
+              .attr("stroke", chroma(COLORS.secondary).darken())
+              .transition()
+              .attr(
+                "r",
+                props.isSizeDynamic
+                  ? currSizeScale(selectedData.vote_count) + 4
+                  : mean(props.sizeRange) / 2 + 4
+              )
+          }
+        })
       }
     }
   })
@@ -290,10 +300,7 @@ export default function BubbleChart(props) {
           ref={chartAreaRef}
           style={{ transform: `translate(${margin.left}px,${margin.top}px)` }}
         />
-        <g
-          ref={voronoiRef}
-          style={{ transform: `translate(${margin.left}px,${margin.top}px)` }}
-        />
+        <g ref={voronoiRef} />
       </ChartSvg>
     </Wrapper>
   )
