@@ -261,7 +261,7 @@ export default function BubbleChart(props) {
         currSizeScale,
       } = storedValues.current
       chartArea.selectAll(".selected-circle").remove()
-      chartArea.selectAll(".selected-line").remove()
+      chartArea.selectAll(`.selected-line-${props.chart}`).remove()
       const selectedData = filteredData.find(d => d.id === props.activeMovieID)
       if (selectedData) {
         chartArea.selectAll(`.main-circle-${props.chart}`).each((d, i, n) => {
@@ -282,7 +282,7 @@ export default function BubbleChart(props) {
             selection
               .append("line")
               .datum(selectedData)
-              .attr("class", "selected-line")
+              .attr("class", `selected-line-${props.chart}`)
               .attr("x1", d => currXScale(new Date(d.release_date)))
               .attr("x2", d => currXScale(new Date(d.release_date)))
               .attr("y1", d =>

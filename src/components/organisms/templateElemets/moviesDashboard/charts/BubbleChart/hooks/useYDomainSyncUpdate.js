@@ -1,21 +1,22 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { extent } from "d3-array"
 import gsap from "gsap"
 import { select } from "d3-selection"
-import { setRadius } from "../utils"
+import { getSelectedLineYPos } from "../utils"
 
 export default function useYDomainSyncUpdate({
   storedValues,
-  props: { yDomainSynced, chart, isSizeDynamic },
+  props,
   prevProps,
   createUpdateVoronoi,
 }) {
+  const { yDomainSynced, chart, isSizeDynamic } = props
   useEffect(() => {
     if (
       storedValues.current.isInit &&
       yDomainSynced !== prevProps.yDomainSynced
     ) {
-      const { yScale, filteredData, chartArea, currSizeScale } = storedValues.current
+      const { yScale, filteredData, currSizeScale } = storedValues.current
       yScale.domain(
         yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
       )
@@ -23,6 +24,15 @@ export default function useYDomainSyncUpdate({
       gsap.to(`.main-circle-${chart} circle`, {
         y: (i, el) =>
           yScale(select(el).datum().vote_average) - select(el).attr("cy"),
+        ...sharedProps,
+      })
+      gsap.to(`.selected-line-${chart}`, {
+        y: (i, el) =>
+          getSelectedLineYPos({
+            data: select(el).datum(),
+            scales: { yScale, currSizeScale },
+            props: { isSizeDynamic, chart },
+          }) - select(el).attr("y1"),
         ...sharedProps,
       })
       gsap.to(`.grid-line-${chart}`, {
@@ -33,16 +43,6 @@ export default function useYDomainSyncUpdate({
         y: (i, el) => yScale(select(el).datum()) - select(el).attr("y"),
         ...sharedProps,
       })
-      chartArea
-        .selectAll(".selected-line")
-        .transition()
-        .attr("y1", d =>
-          chart === "main"
-            ? yScale(d.vote_average) +
-              setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
-            : yScale(d.vote_average) -
-              setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
-        )
       createUpdateVoronoi()
       storedValues.current = {
         ...storedValues.current,
@@ -54,6 +54,7 @@ export default function useYDomainSyncUpdate({
     createUpdateVoronoi,
     isSizeDynamic,
     prevProps,
+    props,
     storedValues,
     yDomainSynced,
   ])
