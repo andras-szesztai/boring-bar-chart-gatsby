@@ -99,8 +99,6 @@ export default function BubbleChart(props) {
 
   const [number, setNumber] = useState(undefined)
 
-  console.log(props.activeMovieID)
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
@@ -236,6 +234,32 @@ export default function BubbleChart(props) {
 
   useYDomainSyncUpdate({ storedValues, props, prevProps, createUpdateVoronoi })
   useRadiusUpdate({ storedValues, props, prevProps })
+
+  // useActiveMovieIDUpdate
+  useEffect(() => {
+    if (
+      storedValues.current.isInit &&
+      props.activeMovieID !== prevProps.activeMovieID
+    ) {
+      const { chartArea, filteredData, currXScale, yScale, currSizeScale } = storedValues.current
+      chartArea.selectAll(".selected-circle").remove()
+      const selectedData = filteredData.find(d => d.id === props.activeMovieID)
+      if (selectedData) {
+        chartArea
+          .append("circle")
+          .attr("class", "selected-circle")
+          .attr("cx", currXScale(new Date(selectedData.release_date)))
+          .attr("cy", yScale(selectedData.vote_average))
+          .attr("r", 
+            props.isSizeDynamic
+              ? currSizeScale(selectedData.vote_count) + 2
+              : mean(props.sizeRange) / 2 + 2
+          )
+          .attr("fill", "transparent")
+          .attr("stroke", chroma(COLORS.secondary).darken())
+      }
+    }
+  })
 
   return (
     <Wrapper ref={ref}>

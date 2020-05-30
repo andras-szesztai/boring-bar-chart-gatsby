@@ -14,7 +14,7 @@ export default function useYDomainSyncUpdate({
       storedValues.current.isInit &&
       props.yDomainSynced !== prevProps.yDomainSynced
     ) {
-      const { yScale, filteredData, svgArea } = storedValues.current
+      const { yScale, filteredData } = storedValues.current
       yScale.domain(
         props.yDomainSynced
           ? [0, 10]
