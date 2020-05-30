@@ -15,7 +15,10 @@ import {
   FavoritesList,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
-import { BubbleChart } from "../organisms/templateElemets/moviesDashboard/charts"
+import {
+  BubbleChart,
+  DateAxis,
+} from "../organisms/templateElemets/moviesDashboard/charts"
 import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
 
@@ -141,7 +144,7 @@ export default function MoviesDashboard() {
                     Y-domain
                   </div>
                   <div onClick={() => setIsSizeDynamic(prev => !prev)}>
-                    Size 
+                    Size
                   </div>
                 </PlaceHolderDiv>
                 {typeof currState.isBoth == "boolean" && (
@@ -154,7 +157,13 @@ export default function MoviesDashboard() {
                       yDomainSynced={yDomainSynced}
                       isSizeDynamic={isSizeDynamic}
                     />
-                    <PlaceHolderDiv>Time scale</PlaceHolderDiv>
+                    <DateAxis
+                      data={[
+                        ...dataSets.personCredits.crew,
+                        ...dataSets.personCredits.cast,
+                      ]}
+                      {...currState}
+                    />
                     {currState.isBoth && (
                       <BubbleChart
                         chart="sub"

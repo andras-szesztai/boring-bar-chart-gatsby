@@ -12,6 +12,7 @@ import { select } from "d3-selection"
 import { useMeasure } from "react-use"
 import gsap from "gsap"
 import "d3-transition"
+import { axisBottom } from "d3-axis"
 
 const Wrapper = styled.div`
   position: relative;
@@ -48,15 +49,24 @@ export default function DateAxis(props) {
         currXScale,
         filteredData,
         chartArea,
-        svgArea
+        svgArea,
       }
       createDateAxis()
     }
   })
 
   function createDateAxis() {
-    const { currXScale, gridArea } = storedValues.current
-    
+    const { currXScale, chartArea } = storedValues.current
+    chartArea
+      .call(
+        axisBottom(currXScale)
+          .ticks(dims.width / 80)
+          .tickSize(0)
+      )
+      .call(g => {
+        g.select(".domain").remove()
+        g.selectAll("text").attr("dy", 0)
+      })
   }
 
   return (
@@ -64,9 +74,20 @@ export default function DateAxis(props) {
       <ChartSvg ref={svgAreaRef}>
         <g
           ref={chartAreaRef}
-          style={{ transform: `translate(${margin.left}px,${margin.top}px)` }}
+          style={{
+            transform: `translate(${margin.left}px,${dims.height / 2}px)`,
+          }}
         />
       </ChartSvg>
     </Wrapper>
   )
+}
+
+DateAxis.defaultProps = {
+  margin: {
+    top: 20,
+    left: 10,
+    bottom: 20,
+    right: 20,
+  },
 }
