@@ -15,7 +15,7 @@ import gsap from "gsap"
 import { usePrevious } from "../../../../../../hooks"
 import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
-import { colors } from "../../../../../../themes/theme"
+import { colors, fontSize, space } from "../../../../../../themes/theme"
 
 const Wrapper = styled.div`
   position: relative;
@@ -38,8 +38,7 @@ const ChartTitle = styled(motion.text)`
   color: ${colors.grayDark};
   opacity: 0.1;
   position: absolute;
-  top: 0px;
-  left: 20px;
+  left: 5px;
 `
 
 const gridData = [0, 2, 4, 6, 8, 10]
@@ -123,31 +122,29 @@ export default function BubbleChart(props) {
       .enter()
       .append("line")
       .attr("class", `grid-line-${props.chart}`)
-      .attr("x1", 0)
-      .attr("x2", dims.width - margin.left - margin.right)
+      .attr("x1", -margin.left)
+      .attr("x2", dims.width)
       .attr("y1", d => yScale(d))
       .attr("y2", d => yScale(d))
       .attr("stroke", COLORS.gridColor)
-      .attr("stroke-width", 0.5)
+      .attr("stroke-width", 0.25)
   }
 
   function createGridText() {
     const { yScale, gridArea } = storedValues.current
-    const array = ["left", "right"]
-    array.forEach(el => {
-      const isLeft = el === "left"
-      gridArea
-        .selectAll(`.grid-text-${el}-${props.chart}`)
-        .data(gridData, d => d)
-        .enter()
-        .append("text")
-        .attr("class", `grid-text-${el}-${props.chart} grid-text`)
-        .attr("x", isLeft ? -4 : dims.width - margin.left - margin.right + 4)
-        .attr("y", d => yScale(d))
-        .attr("dy", 2)
-        .attr("text-anchor", isLeft ? "end" : "start")
-        .text(d => d)
-    })
+    gridArea
+      .selectAll(`.grid-text-${props.chart}`)
+      .data(gridData, d => d)
+      .enter()
+      .append("text")
+      .attr("class", `grid-text-${props.chart}`)
+      .attr("x", dims.width - margin.left)
+      .attr("y", d => yScale(d))
+      .attr("dy", -4)
+      .attr("text-anchor", "end")
+      .attr("font-size", fontSize[1])
+      .attr("fill", COLORS.gridColor)
+      .text(d => d)
   }
 
   // useYDomainSyncUpdate
@@ -160,37 +157,19 @@ export default function BubbleChart(props) {
       yScale.domain(
         yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
       )
+      const sharedProps = {ease: "power2.inOut"}
       gsap.to(`.main-circle-${props.chart}`, {
-        y: (i, el) => {
-          const prevY = select(el).attr("cy")
-          const newY = yScale(select(el).datum().vote_average)
-          return newY - prevY
-        },
-        ease: "power2.inOut",
+        y: (i, el) =>
+          yScale(select(el).datum().vote_average) - select(el).attr("cy"),
+        ...sharedProps
       })
       gsap.to(`.grid-line-${props.chart}`, {
-        y: (i, el) => {
-          const prevY = select(el).attr("y1")
-          const newY = yScale(select(el).datum())
-          return newY - prevY
-        },
-        ease: "power2.inOut",
+        y: (i, el) => yScale(select(el).datum()) - select(el).attr("y1"),
+        ...sharedProps
       })
-      gsap.to(`.grid-text-left-${props.chart}`, {
-        y: (i, el) => {
-          const prevY = select(el).attr("y")
-          const newY = yScale(select(el).datum())
-          return newY - prevY
-        },
-        ease: "power2.inOut",
-      })
-      gsap.to(`.grid-text-right-${props.chart}`, {
-        y: (i, el) => {
-          const prevY = select(el).attr("y")
-          const newY = yScale(select(el).datum())
-          return newY - prevY
-        },
-        ease: "power2.inOut",
+      gsap.to(`.grid-text-${props.chart}`, {
+        y: (i, el) => yScale(select(el).datum()) - select(el).attr("y"),
+        ...sharedProps
       })
       storedValues.current = {
         ...storedValues.current,
@@ -218,9 +197,9 @@ export default function BubbleChart(props) {
 
 BubbleChart.defaultProps = {
   margin: {
-    top: 15,
-    left: 15,
-    bottom: 15,
-    right: 15,
+    top: 20,
+    left: 10,
+    bottom: 20,
+    right: 20,
   },
 }

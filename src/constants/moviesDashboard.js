@@ -11,7 +11,7 @@ export const COLORS = {
   delete: "#fc5050",
   favorite: "#ffa71e",
   textColor: colors.grayDarker,
-  gridColor: colors.grayLightest,
+  gridColor: colors.gray,
 }
 
 export const TRANSITION = {
