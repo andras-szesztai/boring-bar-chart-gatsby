@@ -21,7 +21,7 @@ export default function useYDomainSyncUpdate({
           : extent(filteredData, d => d.vote_average)
       )
       const sharedProps = { ease: "power2.inOut" }
-      gsap.to(`.main-circle-${props.chart}`, {
+      gsap.to(`.main-circle-${props.chart} circle`, {
         y: (i, el) =>
           yScale(select(el).datum().vote_average) - select(el).attr("cy"),
         ...sharedProps,

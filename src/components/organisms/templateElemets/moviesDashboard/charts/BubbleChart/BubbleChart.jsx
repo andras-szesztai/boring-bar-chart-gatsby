@@ -92,6 +92,7 @@ export default function BubbleChart(props) {
   const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
+  const voronoiRef = useRef(null)
   const svgAreaRef = useRef(null)
   const gridAreaRef = useRef(null)
   const [ref, dims] = useMeasure()
@@ -122,7 +123,6 @@ export default function BubbleChart(props) {
       const currSizeScale = sizeScale.range(props.sizeRange)
       const chartArea = select(chartAreaRef.current)
       const svgArea = select(svgAreaRef.current)
-      const gridArea = select(gridAreaRef.current)
       storedValues.current = {
         isInit: true,
         currXScale,
@@ -130,7 +130,6 @@ export default function BubbleChart(props) {
         yScale,
         chartArea,
         svgArea,
-        gridArea,
         filteredData,
       }
       createGrid()
@@ -154,8 +153,13 @@ export default function BubbleChart(props) {
       .selectAll(`.main-circle-${props.chart}`)
       .data(filteredData, d => d.id)
       .enter()
-      .append("circle")
+      .append("g")
       .attr("class", `main-circle-${props.chart}`)
+      .call(g => console.log(g.each(d => console.log(d))))
+
+    chartArea
+      .selectAll(`.main-circle-${props.chart}`)
+      .append("circle")
       .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
       .attr("cy", ({ vote_average }) => yScale(vote_average))
       .attr("r", ({ vote_count }) =>
@@ -168,8 +172,7 @@ export default function BubbleChart(props) {
   }
 
   function createGrid() {
-    const { yScale, gridArea } = storedValues.current
-    gridArea
+    select(gridAreaRef.current)
       .selectAll(`.grid-line-${props.chart}`)
       .data(gridData, d => d)
       .enter()
@@ -177,22 +180,21 @@ export default function BubbleChart(props) {
       .attr("class", `grid-line-${props.chart}`)
       .attr("x1", -margin.left)
       .attr("x2", dims.width)
-      .attr("y1", d => yScale(d))
-      .attr("y2", d => yScale(d))
+      .attr("y1", d => storedValues.current.yScale(d))
+      .attr("y2", d => storedValues.current.yScale(d))
       .attr("stroke", COLORS.gridColor)
       .attr("stroke-width", 0.25)
   }
 
   function createGridText() {
-    const { yScale, gridArea } = storedValues.current
-    gridArea
+    select(gridAreaRef.current)
       .selectAll(`.grid-text-${props.chart}`)
       .data(gridData, d => d)
       .enter()
       .append("text")
       .attr("class", `grid-text-${props.chart}`)
       .attr("x", dims.width - margin.left)
-      .attr("y", d => yScale(d))
+      .attr("y", d => storedValues.current.yScale(d))
       .attr("dy", d => (d < 5 ? -4 : 12))
       .attr("text-anchor", "end")
       .attr("font-size", fontSize[1])
@@ -201,7 +203,7 @@ export default function BubbleChart(props) {
   }
 
   function createUpdateVoronoi() {
-    const { svgArea, yScale, currXScale, filteredData } = storedValues.current
+    const { yScale, currXScale, filteredData } = storedValues.current
     const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
     const setYPos = d => yScale(d.vote_average) + margin.top
     const delaunay = Delaunay.from(filteredData, setXPos, setYPos).voronoi([
@@ -211,7 +213,7 @@ export default function BubbleChart(props) {
       dims.height,
     ])
 
-    svgArea
+    select(voronoiRef.current)
       .selectAll(".voronoi-path")
       .data(filteredData, d => d.id)
       .join(
@@ -241,22 +243,30 @@ export default function BubbleChart(props) {
       storedValues.current.isInit &&
       props.activeMovieID !== prevProps.activeMovieID
     ) {
-      const { chartArea, filteredData, currXScale, yScale, currSizeScale } = storedValues.current
+      const {
+        chartArea,
+        filteredData,
+        currXScale,
+        yScale,
+        currSizeScale,
+      } = storedValues.current
       chartArea.selectAll(".selected-circle").remove()
       const selectedData = filteredData.find(d => d.id === props.activeMovieID)
       if (selectedData) {
-        chartArea
-          .append("circle")
-          .attr("class", "selected-circle")
-          .attr("cx", currXScale(new Date(selectedData.release_date)))
-          .attr("cy", yScale(selectedData.vote_average))
-          .attr("r", 
-            props.isSizeDynamic
-              ? currSizeScale(selectedData.vote_count) + 2
-              : mean(props.sizeRange) / 2 + 2
-          )
-          .attr("fill", "transparent")
-          .attr("stroke", chroma(COLORS.secondary).darken())
+        // chartArea
+        //   .append("circle")
+        //   .attr("class", "selected-circle")
+        //   .attr("cx", currXScale(new Date(selectedData.release_date)))
+        //   .attr("cy", yScale(selectedData.vote_average))
+        //   .attr(
+        //     "r",
+        //     props.isSizeDynamic
+        //       ? currSizeScale(selectedData.vote_count) + 4
+        //       : mean(props.sizeRange) / 2 + 4
+        //   )
+        //   .attr("fill", "transparent")
+        //   .attr("stroke", chroma(COLORS.secondary).darken())
+        // chartArea.selectAll(`.main-circle-${props.chart}`).raise()
       }
     }
   })
@@ -278,6 +288,10 @@ export default function BubbleChart(props) {
         />
         <g
           ref={chartAreaRef}
+          style={{ transform: `translate(${margin.left}px,${margin.top}px)` }}
+        />
+        <g
+          ref={voronoiRef}
           style={{ transform: `translate(${margin.left}px,${margin.top}px)` }}
         />
       </ChartSvg>
