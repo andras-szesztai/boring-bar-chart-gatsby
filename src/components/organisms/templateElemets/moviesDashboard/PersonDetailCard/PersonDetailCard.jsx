@@ -56,7 +56,7 @@ const PersonDetailsCard = styled(motion.div)`
   right: ${space[2]}px;
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT}px;
-  z-index: 2;
+  z-index: 5;
 `
 
 const DetailCardContent = styled(motion.div)`

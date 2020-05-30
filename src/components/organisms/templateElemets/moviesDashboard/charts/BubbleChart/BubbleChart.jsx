@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
@@ -18,12 +18,42 @@ import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize, space } from "../../../../../../themes/theme"
 import { useYDomainSyncUpdate, useRadiusUpdate } from "./hooks"
-import { easeCubicInOut } from "d3-ease"
+import { Delaunay } from "d3-delaunay"
+
+const fadeOutEffect = css`
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 2.5rem;
+`
 
 const Wrapper = styled.div`
   position: relative;
   height: 100%;
   width: 100%;
+
+  :after {
+    ${fadeOutEffect}
+    bottom: 0;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 1) 95%
+    );
+  }
+
+  :before {
+    ${fadeOutEffect}
+    top: 0px;
+    background-image: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 1) 95%
+    );
+  }
 `
 
 const ChartSvg = styled.svg`
@@ -33,15 +63,27 @@ const ChartSvg = styled.svg`
   z-index: 1;
 `
 
-const ChartTitle = styled(motion.text)`
+const ChartTitle = styled(motion.div)`
   font-size: ${themifyFontSize(12)};
-  line-height: 1;
+  line-height: 0.8;
   font-weight: 500;
   text-transform: uppercase;
   color: ${colors.grayDark};
   opacity: 0.1;
   position: absolute;
-  left: 5px;
+  left: 0px;
+`
+
+const NumberContainer = styled(motion.div)`
+  font-size: ${themifyFontSize(6)};
+  line-height: 1;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: ${colors.grayDark};
+  opacity: 0.4;
+  position: absolute;
+  top: 35px;
+  left: 0px;
 `
 
 const gridData = [0, 2, 4, 6, 8, 10]
@@ -56,6 +98,9 @@ export default function BubbleChart(props) {
   const [ref, dims] = useMeasure()
   const prevDims = usePrevious(dims)
 
+  const [ number, setNumber ] = useState(undefined)
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
       !storedValues.current.isInit &&
@@ -92,6 +137,8 @@ export default function BubbleChart(props) {
       createGrid()
       createGridText()
       createCircles()
+      createUpdateVoronoi()
+      setNumber(filteredData.length)
     }
   })
 
@@ -145,19 +192,54 @@ export default function BubbleChart(props) {
       .attr("class", `grid-text-${props.chart}`)
       .attr("x", dims.width - margin.left)
       .attr("y", d => yScale(d))
-      .attr("dy", -4)
+      .attr("dy", d => (d < 5 ? -4 : 12))
       .attr("text-anchor", "end")
       .attr("font-size", fontSize[1])
       .attr("fill", COLORS.gridColor)
       .text(d => d)
   }
 
-  useYDomainSyncUpdate({ storedValues, props, prevProps })
+  function createUpdateVoronoi() {
+    const { svgArea, yScale, currXScale, filteredData } = storedValues.current
+    const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
+    const setYPos = d => yScale(d.vote_average) + margin.top
+    const delaunay = Delaunay.from(filteredData, setXPos, setYPos).voronoi([
+      0,
+      0,
+      dims.width,
+      dims.height,
+    ])
+
+    console.log("createUpdateVoronoi -> filteredData", filteredData)
+    svgArea
+      .selectAll(".voronoi-path")
+      .data(filteredData, d => d.id)
+      .join(
+        enter =>
+          enter
+            .append("path")
+            .attr("class", "voronoi-path")
+            .attr("fill", "transparent")
+            // .attr("stroke", "#333")
+            .attr("d", (_, i) => delaunay.renderCell(i))
+            .on("mouseover", d => console.log(d))
+            .call(enter => enter),
+        update =>
+          update.call(update =>
+            update.transition().attr("d", (_, i) => delaunay.renderCell(i))
+          )
+      )
+  }
+
+  useYDomainSyncUpdate({ storedValues, props, prevProps, createUpdateVoronoi })
   useRadiusUpdate({ storedValues, props, prevProps })
 
   return (
     <Wrapper ref={ref}>
       <ChartTitle>{type}</ChartTitle>
+      <NumberContainer>
+        {number}
+      </NumberContainer>
       <ChartSvg ref={svgAreaRef}>
         <g
           ref={gridAreaRef}
