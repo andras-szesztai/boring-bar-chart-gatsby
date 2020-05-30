@@ -18,7 +18,7 @@ import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize, space } from "../../../../../../themes/theme"
 import { useYDomainSyncUpdate, useRadiusUpdate } from "./hooks"
-import { setRadius } from "./utils"
+import { setRadius, getSelectedLineYPos } from "./utils"
 import { Delaunay } from "d3-delaunay"
 
 const fadeOutEffect = css`
@@ -100,6 +100,7 @@ export default function BubbleChart(props) {
     sizeScale,
     yDomainSynced,
     isSizeDynamic,
+    chart,
   } = props
   const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
@@ -162,14 +163,14 @@ export default function BubbleChart(props) {
     } = storedValues.current
 
     chartArea
-      .selectAll(`.main-circle-${props.chart}`)
+      .selectAll(`.main-circle-${chart}`)
       .data(filteredData, d => d.id)
       .enter()
       .append("g")
-      .attr("class", `main-circle-${props.chart}`)
+      .attr("class", `main-circle-${chart}`)
 
     chartArea
-      .selectAll(`.main-circle-${props.chart}`)
+      .selectAll(`.main-circle-${chart}`)
       .append("circle")
       .attr("class", "circle")
       .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
@@ -183,11 +184,11 @@ export default function BubbleChart(props) {
 
   function createGrid() {
     select(gridAreaRef.current)
-      .selectAll(`.grid-line-${props.chart}`)
+      .selectAll(`.grid-line-${chart}`)
       .data(gridData, d => d)
       .enter()
       .append("line")
-      .attr("class", `grid-line-${props.chart}`)
+      .attr("class", `grid-line-${chart}`)
       .attr("x1", -margin.left)
       .attr("x2", dims.width)
       .attr("y1", d => storedValues.current.yScale(d))
@@ -198,11 +199,11 @@ export default function BubbleChart(props) {
 
   function createGridText() {
     select(gridAreaRef.current)
-      .selectAll(`.grid-text-${props.chart}`)
+      .selectAll(`.grid-text-${chart}`)
       .data(gridData, d => d)
       .enter()
       .append("text")
-      .attr("class", `grid-text-${props.chart}`)
+      .attr("class", `grid-text-${chart}`)
       .attr("x", dims.width - margin.left)
       .attr("y", d => storedValues.current.yScale(d))
       .attr("dy", d => (d < 5 ? -4 : 12))
@@ -261,10 +262,11 @@ export default function BubbleChart(props) {
         currSizeScale,
       } = storedValues.current
       chartArea.selectAll(".selected-circle").remove()
-      chartArea.selectAll(`.selected-line-${props.chart}`).remove()
+      chartArea.selectAll(`.selected-line-${chart}`).remove()
       const selectedData = filteredData.find(d => d.id === props.activeMovieID)
       if (selectedData) {
-        chartArea.selectAll(`.main-circle-${props.chart}`).each((d, i, n) => {
+        console.log("running")
+        chartArea.selectAll(`.main-circle-${chart}`).each((d, i, n) => {
           if (d.id === props.activeMovieID) {
             const selection = select(n[i])
             selection
@@ -278,19 +280,19 @@ export default function BubbleChart(props) {
               .attr("r", d =>
                 setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
               )
-            const isMainChart = props.chart === "main"
+            const isMainChart = chart === "main"
             selection
               .append("line")
               .datum(selectedData)
-              .attr("class", `selected-line-${props.chart}`)
+              .attr("class", `selected-line-${chart}`)
               .attr("x1", d => currXScale(new Date(d.release_date)))
               .attr("x2", d => currXScale(new Date(d.release_date)))
               .attr("y1", d =>
-                isMainChart
-                  ? yScale(d.vote_average) +
-                    setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
-                  : yScale(d.vote_average) -
-                    setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
+                getSelectedLineYPos({
+                  data: d,
+                  scales: { yScale, currSizeScale },
+                  props: { isSizeDynamic, chart },
+                })
               )
               .attr("y2", isMainChart ? dims.height : -dims.height)
               .attr("stroke", chroma(COLORS.secondary).darken())
