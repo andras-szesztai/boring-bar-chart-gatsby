@@ -18,6 +18,7 @@ import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize, space } from "../../../../../../themes/theme"
 import { useYDomainSyncUpdate, useRadiusUpdate } from "./hooks"
+import { setRadius } from "./utils"
 import { Delaunay } from "d3-delaunay"
 
 const fadeOutEffect = css`
@@ -61,6 +62,10 @@ const ChartSvg = styled.svg`
   height: 100%;
   width: 100%;
   z-index: 1;
+
+  .voronoi-path {
+    cursor: pointer;
+  }
 `
 
 const ChartTitle = styled(motion.div)`
@@ -88,7 +93,15 @@ const NumberContainer = styled(motion.div)`
 const gridData = [0, 2, 4, 6, 8, 10]
 
 export default function BubbleChart(props) {
-  const { data, margin, type, xScale, sizeScale, yDomainSynced } = props
+  const {
+    data,
+    margin,
+    type,
+    xScale,
+    sizeScale,
+    yDomainSynced,
+    isSizeDynamic,
+  } = props
   const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
@@ -162,11 +175,7 @@ export default function BubbleChart(props) {
       .attr("class", "circle")
       .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
       .attr("cy", ({ vote_average }) => yScale(vote_average))
-      .attr("r", ({ vote_count }) =>
-        props.isSizeDynamic
-          ? currSizeScale(vote_count)
-          : mean(props.sizeRange) / 2
-      )
+      .attr("r", d => setRadius({ props, currSizeScale, isSizeDynamic })(d))
       .attr("shape-rendering", "geometricPrecision")
       .attr("fill", COLORS.secondary)
       .attr("stroke", chroma(COLORS.secondary).darken())
@@ -261,19 +270,14 @@ export default function BubbleChart(props) {
               .append("circle")
               .datum(selectedData)
               .attr("class", "selected-circle")
-              .attr("r", 0)
               .lower()
             select(".selected-circle")
               .attr("cx", currXScale(new Date(selectedData.release_date)))
               .attr("cy", yScale(selectedData.vote_average))
               .attr("fill", "transparent")
               .attr("stroke", chroma(COLORS.secondary).darken())
-              .transition()
-              .attr(
-                "r",
-                props.isSizeDynamic
-                  ? currSizeScale(selectedData.vote_count) + 4
-                  : mean(props.sizeRange) / 2 + 4
+              .attr("r", d =>
+                setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
               )
           }
         })

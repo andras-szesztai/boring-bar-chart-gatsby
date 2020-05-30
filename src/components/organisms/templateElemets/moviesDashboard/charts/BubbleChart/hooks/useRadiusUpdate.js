@@ -1,32 +1,30 @@
 import { useEffect } from "react"
 import { easeCubicInOut } from "d3-ease"
-import { mean } from "d3-array"
 
-export default function({ storedValues, props, prevProps }) {
+import { setRadius } from "../utils"
+
+export default function({
+  storedValues,
+  props: { chart, isSizeDynamic },
+  prevProps,
+}) {
   useEffect(() => {
     if (
       storedValues.current.isInit &&
-      props.isSizeDynamic !== prevProps.isSizeDynamic
+      isSizeDynamic !== prevProps.isSizeDynamic
     ) {
       const { currSizeScale, chartArea } = storedValues.current
       chartArea
-        .selectAll(`.main-circle-${props.chart} .circle`)
+        .selectAll(`.main-circle-${chart} .circle`)
         .transition()
         .ease(easeCubicInOut)
-        .attr("r", ({ vote_count }) =>
-          props.isSizeDynamic
-            ? currSizeScale(vote_count)
-            : mean(props.sizeRange) / 2
-        )
+        .attr("r", d => setRadius({ isSizeDynamic, currSizeScale })(d))
       chartArea
         .select(".selected-circle")
         .transition()
-        .attr(
-          "r", d =>
-          props.isSizeDynamic
-            ? currSizeScale(d.vote_count) + 4
-            : mean(props.sizeRange) / 2 + 4
+        .attr("r", d =>
+          setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
         )
     }
-  }, [prevProps, props, storedValues])
+  }, [chart, isSizeDynamic, prevProps, storedValues])
 }
