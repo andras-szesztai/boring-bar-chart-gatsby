@@ -74,7 +74,6 @@ export default function MoviesDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-
   // TODO: move it together with charts
   const [currState, setCurrState] = useState({
     id: undefined,
@@ -89,7 +88,8 @@ export default function MoviesDashboard() {
       (!currState.id || currState.id !== dataSets.personCredits.id)
     ) {
       const isBoth =
-        !!dataSets.personCredits.cast.length && !!dataSets.personCredits.crew.length
+        !!dataSets.personCredits.cast.length &&
+        !!dataSets.personCredits.crew.length
       const data = [
         ...dataSets.personCredits.crew,
         ...dataSets.personCredits.cast,
@@ -97,8 +97,7 @@ export default function MoviesDashboard() {
       const xScale = scaleTime().domain(
         extent(data, d => new Date(d.release_date))
       )
-      const sizeScale = scaleSqrt()
-        .domain(extent(data, d => d.vote_count)) // TODO: add it as optional
+      const sizeScale = scaleSqrt().domain(extent(data, d => d.vote_count)) // TODO: add it as optional
       const isActor = dataSets.personDetails.known_for_department === "Acting"
       setCurrState({
         id: dataSets.personCredits.id,
@@ -111,8 +110,7 @@ export default function MoviesDashboard() {
     }
   }, [dataSets, currState])
 
-
-  const [ yDomainSynced, setYDomainSynced ] = useState(true)
+  const [yDomainSynced, setYDomainSynced] = useState(true)
 
   return (
     <>
@@ -142,13 +140,14 @@ export default function MoviesDashboard() {
             >
               <SubContainer>
                 <PlaceHolderDiv>
-                  <div onClick={() => setYDomainSynced(prev => !prev) }>
+                  <div onClick={() => setYDomainSynced(prev => !prev)}>
                     Y-domain
                   </div>
                 </PlaceHolderDiv>
                 {typeof currState.isBoth == "boolean" && (
                   <ChartContainer twoCharts={currState.isBoth}>
                     <BubbleChart
+                      chart="main"
                       type={currState.mainType}
                       data={dataSets.personCredits[currState.mainType]}
                       {...currState}
@@ -157,6 +156,7 @@ export default function MoviesDashboard() {
                     <PlaceHolderDiv>Time scale</PlaceHolderDiv>
                     {currState.isBoth && (
                       <BubbleChart
+                        chart="sub"
                         type={currState.subType}
                         data={dataSets.personCredits[currState.subType]}
                         {...currState}

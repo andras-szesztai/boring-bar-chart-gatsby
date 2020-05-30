@@ -90,12 +90,12 @@ export default function BubbleChart(props) {
     } = storedValues.current
 
     chartArea
-      .selectAll(".main-circle")
+      .selectAll(`.main-circle-${props.chart}`)
       .data(filteredData, d => d.id)
       .join(enter =>
         enter
           .append("circle")
-          .attr("class", "main-circle")
+          .attr("class", `main-circle-${props.chart}`)
           .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
           .attr("cy", ({ vote_average }) => yScale(vote_average))
           .attr("r", ({ vote_count }) => currSizeScale(vote_count))
@@ -114,13 +114,13 @@ export default function BubbleChart(props) {
       yScale.domain(
         yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
       )
-      // chartArea
-      //   .selectAll(".main-circle")
-      //   .each((d, i, n) => console.log(select(n[i]).datum()))
-      gsap.to(".main-circle", {
-        y: (i, el) => yScale(select(el).data()[0].vote_average),
-        ease: "elastic",
-        duration: 2,
+      gsap.to(`.main-circle-${props.chart}`, {
+        y: (i, el) => {
+          const prevY = select(el).attr("cy")
+          const newY = yScale(select(el).datum().vote_average)
+          return newY - prevY
+        },
+        ease: "power2.inOut",
       })
       storedValues.current = {
         ...storedValues.current,
