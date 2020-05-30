@@ -6,17 +6,19 @@ import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
 import { scaleTime, scaleLinear, scaleSqrt } from "d3-scale"
-import { extent } from "d3-array"
+import { extent, mean } from "d3-array"
 import useResizeAware from "react-resize-aware"
 import { select } from "d3-selection"
 import { useMeasure } from "react-use"
 import gsap from "gsap"
+import "d3-transition"
 
 import { usePrevious } from "../../../../../../hooks"
 import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize, space } from "../../../../../../themes/theme"
-import { useYDomainSyncUpdate } from "./hooks"
+import { useYDomainSyncUpdate, useRadiusUpdate } from "./hooks"
+import { easeCubicInOut } from "d3-ease"
 
 const Wrapper = styled.div`
   position: relative;
@@ -45,8 +47,8 @@ const ChartTitle = styled(motion.text)`
 const gridData = [0, 2, 4, 6, 8, 10]
 
 export default function BubbleChart(props) {
-  const prevProps = usePrevious(props)
   const { data, margin, type, xScale, sizeScale, yDomainSynced } = props
+  const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
   const svgAreaRef = useRef(null)
@@ -73,7 +75,7 @@ export default function BubbleChart(props) {
           yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
         )
         .range([dims.height - margin.top - margin.bottom, 0])
-      const currSizeScale = sizeScale.range([2, 20])
+      const currSizeScale = sizeScale.range(props.sizeRange)
       const chartArea = select(chartAreaRef.current)
       const svgArea = select(svgAreaRef.current)
       const gridArea = select(gridAreaRef.current)
@@ -110,7 +112,9 @@ export default function BubbleChart(props) {
       .attr("class", `main-circle-${props.chart}`)
       .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
       .attr("cy", ({ vote_average }) => yScale(vote_average))
-      .attr("r", ({ vote_count }) => currSizeScale(vote_count))
+      .attr("r", ({ vote_count }) =>
+        props.isSizeDynamic ? currSizeScale(vote_count) : mean(props.sizeRange)
+      )
       .attr("fill", COLORS.secondary)
       .attr("stroke", chroma(COLORS.secondary).darken())
   }
@@ -148,7 +152,8 @@ export default function BubbleChart(props) {
       .text(d => d)
   }
 
-  useYDomainSyncUpdate({storedValues, props, prevProps})
+  useYDomainSyncUpdate({ storedValues, props, prevProps })
+  useRadiusUpdate({ storedValues, props, prevProps })
 
   return (
     <Wrapper ref={ref}>
@@ -174,4 +179,5 @@ BubbleChart.defaultProps = {
     bottom: 20,
     right: 20,
   },
+  sizeRange: [2, 20],
 }

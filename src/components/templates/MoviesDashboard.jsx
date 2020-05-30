@@ -111,6 +111,7 @@ export default function MoviesDashboard() {
   }, [dataSets, currState])
 
   const [yDomainSynced, setYDomainSynced] = useState(true)
+  const [isSizeDynamic, setIsSizeDynamic] = useState(true)
 
   return (
     <>
@@ -139,6 +140,9 @@ export default function MoviesDashboard() {
                   <div onClick={() => setYDomainSynced(prev => !prev)}>
                     Y-domain
                   </div>
+                  <div onClick={() => setIsSizeDynamic(prev => !prev)}>
+                    Size 
+                  </div>
                 </PlaceHolderDiv>
                 {typeof currState.isBoth == "boolean" && (
                   <ChartContainer twoCharts={currState.isBoth}>
@@ -148,6 +152,7 @@ export default function MoviesDashboard() {
                       data={dataSets.personCredits[currState.mainType]}
                       {...currState}
                       yDomainSynced={yDomainSynced}
+                      isSizeDynamic={isSizeDynamic}
                     />
                     <PlaceHolderDiv>Time scale</PlaceHolderDiv>
                     {currState.isBoth && (
@@ -157,6 +162,7 @@ export default function MoviesDashboard() {
                         data={dataSets.personCredits[currState.subType]}
                         {...currState}
                         yDomainSynced={yDomainSynced}
+                        isSizeDynamic={isSizeDynamic}
                       />
                     )}
                   </ChartContainer>
