@@ -30,20 +30,22 @@ const ChartSvg = styled.svg`
   z-index: 1;
 `
 
-const TypeContainer = styled(motion.div)`
-  position: absolute;
+const ChartTitle = styled(motion.text)`
   font-size: ${themifyFontSize(4)};
   font-weight: 200;
   text-transform: uppercase;
-  color: ${colors.grayDarker};
-  z-index: 0;
+  fill: ${colors.grayDarker};
 `
+
+const gridData = [0, 2, 4, 6, 8, 10]
 
 export default function BubbleChart(props) {
   const prevProps = usePrevious(props)
   const { data, margin, type, xScale, sizeScale, yDomainSynced } = props
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
+  const svgAreaRef = useRef(null)
+  const gridAreaRef = useRef(null)
   const [ref, dims] = useMeasure()
   const prevDims = usePrevious(dims)
 
@@ -68,19 +70,24 @@ export default function BubbleChart(props) {
         .range([dims.height - margin.top - margin.bottom, 0])
       const currSizeScale = sizeScale.range([2, 20])
       const chartArea = select(chartAreaRef.current)
+      const svgArea = select(svgAreaRef.current)
+      const gridArea = select(gridAreaRef.current)
       storedValues.current = {
         isInit: true,
         currXScale,
         currSizeScale,
         yScale,
         chartArea,
+        svgArea,
+        gridArea,
         filteredData,
       }
-      createUpdateCircles()
+      createGrid()
+      createCircles()
     }
   })
 
-  function createUpdateCircles() {
+  function createCircles() {
     const {
       currXScale,
       currSizeScale,
@@ -92,16 +99,30 @@ export default function BubbleChart(props) {
     chartArea
       .selectAll(`.main-circle-${props.chart}`)
       .data(filteredData, d => d.id)
-      .join(enter =>
-        enter
-          .append("circle")
-          .attr("class", `main-circle-${props.chart}`)
-          .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
-          .attr("cy", ({ vote_average }) => yScale(vote_average))
-          .attr("r", ({ vote_count }) => currSizeScale(vote_count))
-          .attr("fill", COLORS.secondary)
-          .attr("stroke", chroma(COLORS.secondary).darken())
-      )
+      .enter()
+      .append("circle")
+      .attr("class", `main-circle-${props.chart}`)
+      .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
+      .attr("cy", ({ vote_average }) => yScale(vote_average))
+      .attr("r", ({ vote_count }) => currSizeScale(vote_count))
+      .attr("fill", COLORS.secondary)
+      .attr("stroke", chroma(COLORS.secondary).darken())
+  }
+
+  function createGrid() {
+    const { yScale, gridArea } = storedValues.current
+    gridArea
+      .selectAll(`.grid-line-${props.chart}`)
+      .data(gridData, d => d)
+      .enter()
+      .append("line")
+      .attr("class", `grid-line-${props.chart}`)
+      .attr("x1", 0)
+      .attr("x2", dims.width - margin.left - margin.right)
+      .attr("y1", d => yScale(d))
+      .attr("y2", d => yScale(d))
+      .attr("stroke", COLORS.gridColor)
+      .attr("stroke-width", 0.5)
   }
 
   // useYDomainSyncUpdate
@@ -110,7 +131,7 @@ export default function BubbleChart(props) {
       storedValues.current.isInit &&
       props.yDomainSynced !== prevProps.yDomainSynced
     ) {
-      const { yScale, filteredData, chartArea } = storedValues.current
+      const { yScale, filteredData } = storedValues.current
       yScale.domain(
         yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
       )
@@ -131,18 +152,24 @@ export default function BubbleChart(props) {
 
   return (
     <Wrapper ref={ref}>
-      <TypeContainer
+      {/* <TypeContainer
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 1 }}
       >
         {type}
-      </TypeContainer>
-      <ChartSvg>
+      </TypeContainer> */}
+      <ChartSvg ref={svgAreaRef}>
+        <g
+          ref={gridAreaRef}
+          style={{ transform: `translate(${margin.left}px,${margin.top}px)` }}
+        />
         <g
           ref={chartAreaRef}
           style={{ transform: `translate(${margin.left}px,${margin.top}px)` }}
-        />
+        >
+          <ChartTitle y={10}>{type}</ChartTitle>
+        </g>
       </ChartSvg>
     </Wrapper>
   )

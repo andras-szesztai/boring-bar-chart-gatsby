@@ -10,7 +10,8 @@ export const COLORS = {
   secondary: "#9ae17b",
   delete: "#fc5050",
   favorite: "#ffa71e",
-  textColor: colors.grayDarker
+  textColor: colors.grayDarker,
+  gridColor: colors.grayLightest,
 }
 
 export const TRANSITION = {
