@@ -69,21 +69,20 @@ const ChartTitle = styled(motion.div)`
   font-weight: 500;
   text-transform: uppercase;
   color: ${colors.grayDark};
-  opacity: 0.1;
   position: absolute;
-  left: 0px;
+  top: 12px;
 `
 
 const NumberContainer = styled(motion.div)`
-  font-size: ${themifyFontSize(6)};
-  line-height: 1;
+  font-size: ${themifyFontSize(4)};
+  line-height: 0.8;
   font-weight: 500;
   text-transform: uppercase;
   color: ${colors.grayDark};
-  opacity: 0.4;
+  /* transform: rotate(-90deg); */
+  opacity: .6;
   position: absolute;
-  top: 35px;
-  left: 0px;
+  top: 8px;
 `
 
 const gridData = [0, 2, 4, 6, 8, 10]
@@ -98,7 +97,7 @@ export default function BubbleChart(props) {
   const [ref, dims] = useMeasure()
   const prevDims = usePrevious(dims)
 
-  const [ number, setNumber ] = useState(undefined)
+  const [number, setNumber] = useState(undefined)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -160,7 +159,9 @@ export default function BubbleChart(props) {
       .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
       .attr("cy", ({ vote_average }) => yScale(vote_average))
       .attr("r", ({ vote_count }) =>
-        props.isSizeDynamic ? currSizeScale(vote_count) : mean(props.sizeRange)
+        props.isSizeDynamic
+          ? currSizeScale(vote_count)
+          : mean(props.sizeRange) / 2
       )
       .attr("fill", COLORS.secondary)
       .attr("stroke", chroma(COLORS.secondary).darken())
@@ -236,10 +237,16 @@ export default function BubbleChart(props) {
 
   return (
     <Wrapper ref={ref}>
-      <ChartTitle>{type}</ChartTitle>
-      <NumberContainer>
-        {number}
-      </NumberContainer>
+      <ChartTitle>
+        <div style={{ position: 'absolute', opacity: .1 }}>
+          {type}
+        </div>
+        <div style={{ position: "relative" }}>
+          <NumberContainer>
+            {number && number.toString().padStart(3, "0")}
+          </NumberContainer>
+        </div>
+      </ChartTitle>
       <ChartSvg ref={svgAreaRef}>
         <g
           ref={gridAreaRef}
