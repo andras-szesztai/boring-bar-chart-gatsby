@@ -85,7 +85,7 @@ const NumberContainer = styled(motion.div)`
   text-transform: uppercase;
   color: ${colors.grayDark};
   /* transform: rotate(-90deg); */
-  opacity: 0.6;
+  opacity: 0.5;
   position: absolute;
   top: 8px;
 `
@@ -262,23 +262,39 @@ export default function BubbleChart(props) {
         currSizeScale,
       } = storedValues.current
       chartArea.selectAll(".selected-circle").remove()
+      chartArea.selectAll(".selected-line").remove()
       const selectedData = filteredData.find(d => d.id === props.activeMovieID)
       if (selectedData) {
         chartArea.selectAll(`.main-circle-${props.chart}`).each((d, i, n) => {
           if (d.id === props.activeMovieID) {
-            select(n[i])
+            const selection = select(n[i])
+            selection
               .append("circle")
               .datum(selectedData)
               .attr("class", "selected-circle")
-              .lower()
-            select(".selected-circle")
-              .attr("cx", currXScale(new Date(selectedData.release_date)))
-              .attr("cy", yScale(selectedData.vote_average))
+              .attr("cx", d => currXScale(new Date(d.release_date)))
+              .attr("cy", d => yScale(d.vote_average))
               .attr("fill", "transparent")
               .attr("stroke", chroma(COLORS.secondary).darken())
               .attr("r", d =>
                 setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
               )
+            const isMainChart = props.chart === "main"
+            selection
+              .append("line")
+              .datum(selectedData)
+              .attr("class", "selected-line")
+              .attr("x1", d => currXScale(new Date(d.release_date)))
+              .attr("x2", d => currXScale(new Date(d.release_date)))
+              .attr("y1", d =>
+                isMainChart
+                  ? yScale(d.vote_average) +
+                    setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
+                  : yScale(d.vote_average) -
+                    setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
+              )
+              .attr("y2", isMainChart ? dims.height : -dims.height)
+              .attr("stroke", chroma(COLORS.secondary).darken())
           }
         })
       }
