@@ -84,7 +84,6 @@ const NumberContainer = styled(motion.div)`
   font-weight: 500;
   text-transform: uppercase;
   color: ${colors.grayDark};
-  /* transform: rotate(-90deg); */
   opacity: 0.5;
   position: absolute;
   top: 8px;
