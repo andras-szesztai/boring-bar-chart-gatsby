@@ -50,7 +50,7 @@ const PlaceHolderDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 `
 
 export default function MoviesDashboard() {
@@ -133,11 +133,7 @@ export default function MoviesDashboard() {
             localStorageSetters={localStorageSetters}
           />
           {activeNameID && !state.loading.personCredits && (
-            <MainContainer
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-            >
+            <MainContainer>
               <SubContainer>
                 <PlaceHolderDiv>
                   <div onClick={() => setYDomainSynced(prev => !prev)}>

@@ -31,10 +31,15 @@ const ChartSvg = styled.svg`
 `
 
 const ChartTitle = styled(motion.text)`
-  font-size: ${themifyFontSize(4)};
-  font-weight: 200;
+  font-size: ${themifyFontSize(12)};
+  line-height: 1;
+  font-weight: 500;
   text-transform: uppercase;
-  fill: ${colors.grayDarker};
+  color: ${colors.grayDark};
+  opacity: 0.1;
+  position: absolute;
+  top: 0px;
+  left: 20px;
 `
 
 const gridData = [0, 2, 4, 6, 8, 10]
@@ -83,6 +88,7 @@ export default function BubbleChart(props) {
         filteredData,
       }
       createGrid()
+      createGridText()
       createCircles()
     }
   })
@@ -125,6 +131,25 @@ export default function BubbleChart(props) {
       .attr("stroke-width", 0.5)
   }
 
+  function createGridText() {
+    const { yScale, gridArea } = storedValues.current
+    const array = ["left", "right"]
+    array.forEach(el => {
+      const isLeft = el === "left"
+      gridArea
+        .selectAll(`.grid-text-${el}-${props.chart}`)
+        .data(gridData, d => d)
+        .enter()
+        .append("text")
+        .attr("class", `grid-text-${el}-${props.chart} grid-text`)
+        .attr("x", isLeft ? -4 : dims.width - margin.left - margin.right + 4)
+        .attr("y", d => yScale(d))
+        .attr("dy", 2)
+        .attr("text-anchor", isLeft ? "end" : "start")
+        .text(d => d)
+    })
+  }
+
   // useYDomainSyncUpdate
   useEffect(() => {
     if (
@@ -143,6 +168,30 @@ export default function BubbleChart(props) {
         },
         ease: "power2.inOut",
       })
+      gsap.to(`.grid-line-${props.chart}`, {
+        y: (i, el) => {
+          const prevY = select(el).attr("y1")
+          const newY = yScale(select(el).datum())
+          return newY - prevY
+        },
+        ease: "power2.inOut",
+      })
+      gsap.to(`.grid-text-left-${props.chart}`, {
+        y: (i, el) => {
+          const prevY = select(el).attr("y")
+          const newY = yScale(select(el).datum())
+          return newY - prevY
+        },
+        ease: "power2.inOut",
+      })
+      gsap.to(`.grid-text-right-${props.chart}`, {
+        y: (i, el) => {
+          const prevY = select(el).attr("y")
+          const newY = yScale(select(el).datum())
+          return newY - prevY
+        },
+        ease: "power2.inOut",
+      })
       storedValues.current = {
         ...storedValues.current,
         yScale,
@@ -152,13 +201,7 @@ export default function BubbleChart(props) {
 
   return (
     <Wrapper ref={ref}>
-      {/* <TypeContainer
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
-      >
-        {type}
-      </TypeContainer> */}
+      <ChartTitle>{type}</ChartTitle>
       <ChartSvg ref={svgAreaRef}>
         <g
           ref={gridAreaRef}
@@ -167,9 +210,7 @@ export default function BubbleChart(props) {
         <g
           ref={chartAreaRef}
           style={{ transform: `translate(${margin.left}px,${margin.top}px)` }}
-        >
-          <ChartTitle y={10}>{type}</ChartTitle>
-        </g>
+        />
       </ChartSvg>
     </Wrapper>
   )
@@ -177,9 +218,9 @@ export default function BubbleChart(props) {
 
 BubbleChart.defaultProps = {
   margin: {
-    top: 20,
-    left: 25,
-    bottom: 20,
-    right: 25,
+    top: 15,
+    left: 15,
+    bottom: 15,
+    right: 15,
   },
 }
