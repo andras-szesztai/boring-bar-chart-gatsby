@@ -80,7 +80,7 @@ const NumberContainer = styled(motion.div)`
   text-transform: uppercase;
   color: ${colors.grayDark};
   /* transform: rotate(-90deg); */
-  opacity: .6;
+  opacity: 0.6;
   position: absolute;
   top: 8px;
 `
@@ -98,6 +98,8 @@ export default function BubbleChart(props) {
   const prevDims = usePrevious(dims)
 
   const [number, setNumber] = useState(undefined)
+
+  console.log(props.activeMovieID)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -211,7 +213,6 @@ export default function BubbleChart(props) {
       dims.height,
     ])
 
-    console.log("createUpdateVoronoi -> filteredData", filteredData)
     svgArea
       .selectAll(".voronoi-path")
       .data(filteredData, d => d.id)
@@ -223,7 +224,8 @@ export default function BubbleChart(props) {
             .attr("fill", "transparent")
             // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
-            .on("mouseover", d => console.log(d))
+            // .on("mouseover", d => console.log(d))
+            .on("click", d => props.setActiveMovieId(d.id))
             .call(enter => enter),
         update =>
           update.call(update =>
@@ -238,9 +240,7 @@ export default function BubbleChart(props) {
   return (
     <Wrapper ref={ref}>
       <ChartTitle>
-        <div style={{ position: 'absolute', opacity: .1 }}>
-          {type}
-        </div>
+        <div style={{ position: "absolute", opacity: 0.1 }}>{type}</div>
         <div style={{ position: "relative" }}>
           <NumberContainer>
             {number && number.toString().padStart(3, "0")}

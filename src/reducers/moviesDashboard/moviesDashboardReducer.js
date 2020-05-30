@@ -9,6 +9,7 @@ import {
 
 const initialState = {
   activeNameID: undefined,
+  activeMovieID: undefined,
   dataSets: {
     personDetails: undefined,
     personCredits: undefined,
@@ -23,6 +24,7 @@ const initialState = {
 }
 
 const SET_ACTIVE_ID = "SET_ACTIVE_ID"
+const SET_ACTIVE_MOVIE_ID = "SET_ACTIVE_MOVIE_ID"
 const FETCH_INFO_BY_ID = "FETCH_INFO_BY_ID"
 const FETCH_INFO_BY_ID_SUCCESS = "FETCH_INFO_BY_ID_SUCCESS"
 const FETCH_INFO_BY_ID_FAIL = "FETCH_INFO_BY_ID_FAIL"
@@ -34,6 +36,10 @@ function moviesDashboardReducer(state, { type, payload }) {
     SET_ACTIVE_ID: () => ({
       ...state,
       activeNameID: payload,
+    }),
+    SET_ACTIVE_MOVIE_ID: () => ({
+      ...state,
+      activeMovieID: payload,
     }),
     FETCH_INFO_BY_ID: () => ({
       ...state,
@@ -105,6 +111,7 @@ const localStorageSetters = {
 
   const actions = {
     setActiveNameID: payload => dispatch({ type: SET_ACTIVE_ID, payload }),
+    setActiveMovieId: payload => dispatch({ type: SET_ACTIVE_MOVIE_ID, payload }),
     openPersonDetails: () => dispatch({ type: OPEN_PERSON_DETAILS_CARD }),
     closePersonDetails: () => dispatch({ type: CLOSE_PERSON_DETAILS_CARD }),
   }

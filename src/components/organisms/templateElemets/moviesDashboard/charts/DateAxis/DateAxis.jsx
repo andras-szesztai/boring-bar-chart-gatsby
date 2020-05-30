@@ -13,6 +13,8 @@ import { useMeasure } from "react-use"
 import gsap from "gsap"
 import "d3-transition"
 import { axisBottom } from "d3-axis"
+import { COLORS } from "../../../../../../constants/moviesDashboard"
+import { fontSize } from "../../../../../../themes/theme"
 
 const Wrapper = styled.div`
   position: relative;
@@ -65,7 +67,10 @@ export default function DateAxis(props) {
       )
       .call(g => {
         g.select(".domain").remove()
-        g.selectAll("text").attr("dy", 0)
+        g.selectAll("text")
+          .attr("dy", 0)
+          .attr("fill", COLORS.gridColor)
+          .attr("font-size", fontSize[1])
       })
   }
 

@@ -68,7 +68,9 @@ export default function MoviesDashboard() {
   } = moviesDashboardReducer()
   const { favoritePersons } = localStorageValues
   const { setFavoritePersons } = localStorageSetters
-  const { dataSets, activeNameID } = state
+  const { dataSets, activeNameID, activeMovieID } = state
+  const { setActiveMovieId  } = actions
+  console.log("MoviesDashboard -> state", state)
 
   useEffect(() => {
     favoritePersons &&
@@ -156,6 +158,8 @@ export default function MoviesDashboard() {
                       {...currState}
                       yDomainSynced={yDomainSynced}
                       isSizeDynamic={isSizeDynamic}
+                      setActiveMovieId={setActiveMovieId}
+                      activeMovieID={activeMovieID}
                     />
                     <DateAxis
                       data={[
@@ -172,6 +176,8 @@ export default function MoviesDashboard() {
                         {...currState}
                         yDomainSynced={yDomainSynced}
                         isSizeDynamic={isSizeDynamic}
+                        setActiveMovieId={setActiveMovieId}
+                        activeMovieID={activeMovieID}
                       />
                     )}
                   </ChartContainer>
