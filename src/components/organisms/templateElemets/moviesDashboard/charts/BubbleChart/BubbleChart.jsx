@@ -135,6 +135,7 @@ export default function BubbleChart(props) {
       const currSizeScale = sizeScale.range(props.sizeRange)
       const chartArea = select(chartAreaRef.current)
       const svgArea = select(svgAreaRef.current)
+      const gridArea = select(gridAreaRef.current)
       storedValues.current = {
         isInit: true,
         currXScale,
@@ -142,6 +143,7 @@ export default function BubbleChart(props) {
         yScale,
         chartArea,
         svgArea,
+        gridArea,
         filteredData,
       }
       createGrid()
@@ -162,14 +164,14 @@ export default function BubbleChart(props) {
     } = storedValues.current
 
     chartArea
-      .selectAll(`.main-circle-${chart}`)
+      .selectAll(".main-circle")
       .data(filteredData, d => d.id)
       .enter()
       .append("g")
-      .attr("class", `main-circle-${chart}`)
+      .attr("class", "main-circle")
 
     chartArea
-      .selectAll(`.main-circle-${chart}`)
+      .selectAll(".main-circle")
       .append("circle")
       .attr("class", "circle")
       .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
@@ -182,12 +184,12 @@ export default function BubbleChart(props) {
   }
 
   function createGrid() {
-    select(gridAreaRef.current)
-      .selectAll(`.grid-line-${chart}`)
+    storedValues.current.gridArea
+      .selectAll(".grid-line")
       .data(gridData, d => d)
       .enter()
       .append("line")
-      .attr("class", `grid-line-${chart}`)
+      .attr("class", "grid-line")
       .attr("x1", -margin.left)
       .attr("x2", dims.width)
       .attr("y1", d => storedValues.current.yScale(d))
@@ -197,12 +199,12 @@ export default function BubbleChart(props) {
   }
 
   function createGridText() {
-    select(gridAreaRef.current)
-      .selectAll(`.grid-text-${chart}`)
+    storedValues.current.gridArea
+      .selectAll(".grid-text")
       .data(gridData, d => d)
       .enter()
       .append("text")
-      .attr("class", `grid-text-${chart}`)
+      .attr("class", "grid-text")
       .attr("x", dims.width - margin.left)
       .attr("y", d => storedValues.current.yScale(d))
       .attr("dy", d => (d < 5 ? -4 : 12))
@@ -261,10 +263,10 @@ export default function BubbleChart(props) {
         currSizeScale,
       } = storedValues.current
       chartArea.selectAll(".selected-circle").remove()
-      chartArea.selectAll(`.selected-line-${chart}`).remove()
+      chartArea.selectAll(".selected-line").remove()
       const selectedData = filteredData.find(d => d.id === props.activeMovieID)
       if (selectedData) {
-        chartArea.selectAll(`.main-circle-${chart}`).each((d, i, n) => {
+        chartArea.selectAll(".main-circle").each((d, i, n) => {
           if (d.id === props.activeMovieID) {
             const selection = select(n[i])
             selection
@@ -282,7 +284,7 @@ export default function BubbleChart(props) {
             selection
               .append("line")
               .datum(selectedData)
-              .attr("class", `selected-line-${chart} selected-line`)
+              .attr("class", "selected-line")
               .attr("x1", d => currXScale(new Date(d.release_date)))
               .attr("x2", d => currXScale(new Date(d.release_date)))
               .attr("y1", d =>

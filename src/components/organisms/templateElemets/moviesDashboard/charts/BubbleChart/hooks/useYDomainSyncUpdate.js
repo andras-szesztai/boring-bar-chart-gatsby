@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { extent } from "d3-array"
-import gsap from "gsap"
-import { select } from "d3-selection"
 import { getSelectedLineYPos } from "../utils"
+import "d3-transition"
+
+import { makeTransition } from "../../../../../../../utils/chartHelpers"
 
 export default function useYDomainSyncUpdate({
   storedValues,
@@ -16,42 +17,48 @@ export default function useYDomainSyncUpdate({
       storedValues.current.isInit &&
       yDomainSynced !== prevProps.yDomainSynced
     ) {
-      const { yScale, filteredData, currSizeScale, chartArea } = storedValues.current
+      const { yScale, filteredData, chartArea, gridArea } = storedValues.current
       yScale.domain(
         yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
       )
-      const sharedProps = { ease: "power2.inOut" }
-      gsap.to(`.main-circle-${chart} circle`, {
-        y: (i, el) =>
-          yScale(select(el).datum().vote_average) - select(el).attr("cy"),
-        ...sharedProps,
-      })
-      gsap.to(chartArea.select(".selected-line").node(), {
-        y: (i, el) => {
-          return (
-            getSelectedLineYPos({
-              data: select(el).datum(),
-              scales: { yScale, currSizeScale },
-              props: { isSizeDynamic, chart },
-            }) - select(el).attr("y1")
-          )
-        },
-        ...sharedProps,
-      })
-
-      gsap.to(`.grid-line-${chart}`, {
-        y: (i, el) => yScale(select(el).datum()) - select(el).attr("y1"),
-        ...sharedProps,
-      })
-      gsap.to(`.grid-text-${chart}`, {
-        y: (i, el) => yScale(select(el).datum()) - select(el).attr("y"),
-        ...sharedProps,
-      })
+      const t = makeTransition(chartArea, 500, "y-update")
+      const setY = d => yScale(d)
+      chartArea
+        .selectAll(".main-circle circle")
+        .transition(t)
+        .attr("cy", ({ vote_average }) => yScale(vote_average))
+      // chartArea
+      //   .select(".selected-line")
+      //   .transition(t)
+      //   .attr("y1", d =>
+      //     getSelectedLineYPos({
+      //       data: d,
+      //       scales: { yScale, currSizeScale },
+      //       props: { isSizeDynamic, chart },
+      //     })
+      //   )
+      gridArea
+        .selectAll(".grid-line")
+        .transition(t)
+        .attr("y1", setY)
+        .attr("y2", setY)
+      gridArea
+        .selectAll(".grid-text")
+        .transition(t)
+        .attr("y", setY)
       createUpdateVoronoi()
       storedValues.current = {
         ...storedValues.current,
         yScale,
       }
     }
-  }, [chart, createUpdateVoronoi, isSizeDynamic, prevProps, props, storedValues, yDomainSynced])
+  }, [
+    chart,
+    createUpdateVoronoi,
+    isSizeDynamic,
+    prevProps,
+    props,
+    storedValues,
+    yDomainSynced,
+  ])
 }
