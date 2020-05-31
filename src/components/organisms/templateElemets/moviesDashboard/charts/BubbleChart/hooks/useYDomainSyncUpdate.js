@@ -16,7 +16,7 @@ export default function useYDomainSyncUpdate({
       storedValues.current.isInit &&
       yDomainSynced !== prevProps.yDomainSynced
     ) {
-      const { yScale, filteredData, currSizeScale } = storedValues.current
+      const { yScale, filteredData, currSizeScale, chartArea } = storedValues.current
       yScale.domain(
         yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
       )
@@ -26,15 +26,19 @@ export default function useYDomainSyncUpdate({
           yScale(select(el).datum().vote_average) - select(el).attr("cy"),
         ...sharedProps,
       })
-      gsap.to(`.selected-line-${chart}`, {
-        y: (i, el) =>
-          getSelectedLineYPos({
-            data: select(el).datum(),
-            scales: { yScale, currSizeScale },
-            props: { isSizeDynamic, chart },
-          }) - select(el).attr("y1"),
+      gsap.to(chartArea.select(".selected-line").node(), {
+        y: (i, el) => {
+          return (
+            getSelectedLineYPos({
+              data: select(el).datum(),
+              scales: { yScale, currSizeScale },
+              props: { isSizeDynamic, chart },
+            }) - select(el).attr("y1")
+          )
+        },
         ...sharedProps,
       })
+
       gsap.to(`.grid-line-${chart}`, {
         y: (i, el) => yScale(select(el).datum()) - select(el).attr("y1"),
         ...sharedProps,
@@ -49,13 +53,5 @@ export default function useYDomainSyncUpdate({
         yScale,
       }
     }
-  }, [
-    chart,
-    createUpdateVoronoi,
-    isSizeDynamic,
-    prevProps,
-    props,
-    storedValues,
-    yDomainSynced,
-  ])
+  }, [chart, createUpdateVoronoi, isSizeDynamic, prevProps, props, storedValues, yDomainSynced])
 }

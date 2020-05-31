@@ -22,14 +22,14 @@ export default function({
         .ease(easeCubicInOut)
         .attr("r", d => setRadius({ isSizeDynamic, currSizeScale })(d))
       chartArea
-        .selectAll(".selected-circle")
+        .select(".selected-circle")
         .transition()
         .ease(easeCubicInOut)
         .attr("r", d =>
           setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
         )
       chartArea
-        .selectAll(`.selected-line-${chart}`)
+        .select(`.selected-line-${chart}`)
         .transition()
         .ease(easeCubicInOut)
         .attr("y1", d =>

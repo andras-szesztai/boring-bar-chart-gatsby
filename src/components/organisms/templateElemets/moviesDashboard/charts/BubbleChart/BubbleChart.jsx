@@ -266,7 +266,6 @@ export default function BubbleChart(props) {
       if (selectedData) {
         chartArea.selectAll(`.main-circle-${chart}`).each((d, i, n) => {
           if (d.id === props.activeMovieID) {
-            console.log("running")
             const selection = select(n[i])
             selection
               .append("circle")
@@ -283,7 +282,7 @@ export default function BubbleChart(props) {
             selection
               .append("line")
               .datum(selectedData)
-              .attr("class", `selected-line-${chart}`)
+              .attr("class", `selected-line-${chart} selected-line`)
               .attr("x1", d => currXScale(new Date(d.release_date)))
               .attr("x2", d => currXScale(new Date(d.release_date)))
               .attr("y1", d =>
