@@ -20,6 +20,7 @@ import { colors, fontSize, space } from "../../../../../../themes/theme"
 import { useYDomainSyncUpdate, useRadiusUpdate } from "./hooks"
 import { setRadius, getSelectedLineYPos } from "./utils"
 import { Delaunay } from "d3-delaunay"
+import { makeUniqData } from "../../utils"
 
 const fadeOutEffect = css`
   content: "";
@@ -121,16 +122,7 @@ export default function BubbleChart(props) {
       !prevDims.width &&
       dims.width
     ) {
-      const filteredData = data
-        .filter(d => !!d.release_date && !!d.vote_count)
-        .sort((a, b) => b.vote_count - a.vote_count)
-      const jobs = filteredData.map(el => ({
-        id: el.id,
-        job: el[el.department === "cast" ? "character" : "job"],
-      }))
-      console.log("BubbleChart -> jobs", jobs)
-      console.log("BubbleChart -> filteredData", _.groupBy(filteredData, "id"))
-
+      const filteredData = makeUniqData(data, props.type)
       const currXScale = xScale.range([
         0,
         dims.width - margin.left - margin.right,
