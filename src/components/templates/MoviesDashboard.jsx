@@ -165,7 +165,7 @@ export default function MoviesDashboard() {
                         ...dataSets.personCredits.crew,
                         ...dataSets.personCredits.cast,
                       ]}
-                      {...currState}s
+                      {...currState}
                     />
                     {currState.isBoth && (
                       <BubbleChart

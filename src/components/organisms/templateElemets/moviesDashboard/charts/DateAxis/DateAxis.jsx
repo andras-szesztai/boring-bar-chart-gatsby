@@ -15,6 +15,7 @@ import "d3-transition"
 import { axisBottom } from "d3-axis"
 import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { fontSize } from "../../../../../../themes/theme"
+import { Delaunay } from "d3-delaunay"
 
 const fadeOutEffect = css`
   content: "";
@@ -64,10 +65,11 @@ export default function DateAxis(props) {
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
   const svgAreaRef = useRef(null)
+  const voronoiRef = useRef(null)
   const [ref, dims] = useMeasure()
   useEffect(() => {
     if (!storedValues.current.isInit && dims.width) {
-      const filteredData = data
+      const filteredData = _.uniqBy(data, "id")
         .filter(d => !!d.release_date && !!d.vote_count)
         .sort((a, b) => b.vote_count - a.vote_count)
       const currXScale = xScale.range([
@@ -84,6 +86,7 @@ export default function DateAxis(props) {
         svgArea,
       }
       createDateAxis()
+      createUpdateVoronoi()
     }
   })
 
@@ -104,6 +107,36 @@ export default function DateAxis(props) {
       })
   }
 
+  function createUpdateVoronoi() {
+    const { currXScale, filteredData } = storedValues.current
+    const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
+    const delaunay = Delaunay.from(
+      filteredData,
+      setXPos,
+      () => dims.height / 2
+    ).voronoi([0, 0, dims.width, dims.height])
+
+    select(voronoiRef.current)
+      .selectAll(".voronoi-path")
+      .data(filteredData, d => d.id)
+      .join(
+        enter =>
+          enter
+            .append("path")
+            .attr("class", "voronoi-path")
+            .attr("fill", "transparent")
+            .attr("stroke", "#333")
+            .attr("d", (_, i) => delaunay.renderCell(i))
+            // .on("mouseover", d => console.log(d))
+            .on("click", d => props.setActiveMovieId(d.id))
+            .call(enter => enter),
+        update =>
+          update.call(update =>
+            update.transition().attr("d", (_, i) => delaunay.renderCell(i))
+          )
+      )
+  }
+
   return (
     <Wrapper ref={ref}>
       <ChartSvg ref={svgAreaRef}>
@@ -113,6 +146,7 @@ export default function DateAxis(props) {
             transform: `translate(${margin.left}px,${dims.height / 2}px)`,
           }}
         />
+        <g ref={voronoiRef} />
       </ChartSvg>
     </Wrapper>
   )
