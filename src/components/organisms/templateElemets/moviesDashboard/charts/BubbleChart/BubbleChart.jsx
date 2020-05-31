@@ -17,7 +17,11 @@ import { usePrevious } from "../../../../../../hooks"
 import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize, space } from "../../../../../../themes/theme"
-import { useYDomainSyncUpdate, useRadiusUpdate } from "./hooks"
+import {
+  useYDomainSyncUpdate,
+  useRadiusUpdate,
+  useActiveMovieIDUpdate,
+} from "./hooks"
 import { setRadius, getSelectedLineYPos } from "./utils"
 import { Delaunay } from "d3-delaunay"
 import { makeUniqData } from "../../utils"
@@ -248,58 +252,13 @@ export default function BubbleChart(props) {
 
   useYDomainSyncUpdate({ storedValues, props, prevProps, createUpdateVoronoi })
   useRadiusUpdate({ storedValues, props, prevProps })
-
-  // useActiveMovieIDUpdate
-  useEffect(() => {
-    if (
-      storedValues.current.isInit &&
-      props.activeMovieID !== prevProps.activeMovieID
-    ) {
-      const {
-        chartArea,
-        filteredData,
-        currXScale,
-        yScale,
-        currSizeScale,
-      } = storedValues.current
-      chartArea.selectAll(".selected-circle").remove()
-      chartArea.selectAll(".selected-line").remove()
-      const selectedData = filteredData.find(d => d.id === props.activeMovieID)
-      if (selectedData) {
-        chartArea.selectAll(".main-circle").each((d, i, n) => {
-          if (d.id === props.activeMovieID) {
-            const selection = select(n[i])
-            selection
-              .append("circle")
-              .datum(selectedData)
-              .attr("class", "selected-circle")
-              .attr("cx", d => currXScale(new Date(d.release_date)))
-              .attr("cy", d => yScale(d.vote_average))
-              .attr("fill", "transparent")
-              .attr("stroke", chroma(COLORS.secondary).darken())
-              .attr("r", d =>
-                setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
-              )
-            const isMainChart = chart === "main"
-            selection
-              .append("line")
-              .datum(selectedData)
-              .attr("class", "selected-line")
-              .attr("x1", d => currXScale(new Date(d.release_date)))
-              .attr("x2", d => currXScale(new Date(d.release_date)))
-              .attr("y1", d =>
-                getSelectedLineYPos({
-                  data: d,
-                  scales: { yScale, currSizeScale },
-                  props: { isSizeDynamic, chart },
-                })
-              )
-              .attr("y2", isMainChart ? dims.height : -dims.height)
-              .attr("stroke", chroma(COLORS.secondary).darken())
-          }
-        })
-      }
-    }
+  useActiveMovieIDUpdate({
+    storedValues,
+    activeMovieID: props.activeMovieID,
+    prevActiveMovieID: prevProps && prevProps.activeMovieID,
+    isSizeDynamic,
+    chart,
+    dims,
   })
 
   return (

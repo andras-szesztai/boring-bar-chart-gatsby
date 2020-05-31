@@ -69,7 +69,7 @@ export default function MoviesDashboard() {
   const { favoritePersons } = localStorageValues
   const { setFavoritePersons } = localStorageSetters
   const { dataSets, activeNameID, activeMovieID } = state
-  const { setActiveMovieId  } = actions
+  const { setActiveMovieId } = actions
 
   useEffect(() => {
     favoritePersons &&
@@ -166,6 +166,8 @@ export default function MoviesDashboard() {
                         ...dataSets.personCredits.cast,
                       ]}
                       {...currState}
+                      setActiveMovieId={setActiveMovieId}
+                      activeMovieID={activeMovieID}
                     />
                     {currState.isBoth && (
                       <BubbleChart
