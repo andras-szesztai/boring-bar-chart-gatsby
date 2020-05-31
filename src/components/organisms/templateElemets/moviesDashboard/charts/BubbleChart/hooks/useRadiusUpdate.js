@@ -14,20 +14,22 @@ export default function({
       isSizeDynamic !== prevProps.isSizeDynamic
     ) {
       const { currSizeScale, chartArea, yScale } = storedValues.current
+
+      // TODO: fix update
       chartArea
         .selectAll(`.main-circle-${chart} .circle`)
         .transition()
         .ease(easeCubicInOut)
         .attr("r", d => setRadius({ isSizeDynamic, currSizeScale })(d))
       chartArea
-        .select(".selected-circle")
+        .selectAll(".selected-circle")
         .transition()
         .ease(easeCubicInOut)
         .attr("r", d =>
           setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
         )
       chartArea
-        .select(`.selected-line-${chart}`)
+        .selectAll(`.selected-line-${chart}`)
         .transition()
         .ease(easeCubicInOut)
         .attr("y1", d =>

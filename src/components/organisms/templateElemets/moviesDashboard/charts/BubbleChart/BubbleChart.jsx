@@ -124,6 +124,13 @@ export default function BubbleChart(props) {
       const filteredData = data
         .filter(d => !!d.release_date && !!d.vote_count)
         .sort((a, b) => b.vote_count - a.vote_count)
+      const jobs = filteredData.map(el => ({
+        id: el.id,
+        job: el[el.department === "cast" ? "character" : "job"],
+      }))
+      console.log("BubbleChart -> jobs", jobs)
+      console.log("BubbleChart -> filteredData", _.groupBy(filteredData, "id"))
+
       const currXScale = xScale.range([
         0,
         dims.width - margin.left - margin.right,
@@ -179,7 +186,7 @@ export default function BubbleChart(props) {
       .attr("shape-rendering", "geometricPrecision")
       .attr("fill", COLORS.secondary)
       .attr("stroke", chroma(COLORS.secondary).darken())
-      .attr("stroke-width", 0.5)
+      .attr("stroke-width", 1)
   }
 
   function createGrid() {
@@ -265,9 +272,9 @@ export default function BubbleChart(props) {
       chartArea.selectAll(`.selected-line-${chart}`).remove()
       const selectedData = filteredData.find(d => d.id === props.activeMovieID)
       if (selectedData) {
-        console.log("running")
         chartArea.selectAll(`.main-circle-${chart}`).each((d, i, n) => {
           if (d.id === props.activeMovieID) {
+            console.log("running")
             const selection = select(n[i])
             selection
               .append("circle")
