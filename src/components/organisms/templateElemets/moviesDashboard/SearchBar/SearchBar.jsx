@@ -25,7 +25,7 @@ const SearchBarSubContainer = styled(motion.div)`
 
 const StyledSearchBar = styled(motion.input)`
   z-index: ${themifyZIndex("hoverOverlay")};
-  width: 300px;
+  width: 350px;
   height: 40px;
   border-radius: ${space[1]}px;
   background: ${COLORS.primary};
@@ -188,7 +188,7 @@ export default function SearchBar({ setActiveNameID }) {
         <StyledSearchBar
           animate={{
             paddingLeft: searchIsFocused ? 10 : 40,
-            width: 300,
+            width: 350,
           }}
           initial={{
             paddingLeft: 40,

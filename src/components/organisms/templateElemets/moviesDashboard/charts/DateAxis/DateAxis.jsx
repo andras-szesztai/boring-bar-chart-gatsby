@@ -60,10 +60,14 @@ const ChartSvg = styled.svg`
   height: 100%;
   width: 100%;
   z-index: 1;
+
+  .voronoi-path {
+    cursor: pointer;
+  }
 `
 
 export default function DateAxis(props) {
-  const { margin, xScale, data, activeMovieID } = props
+  const { margin, xScale, crewData, castData, activeMovieID } = props
   const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
@@ -73,7 +77,7 @@ export default function DateAxis(props) {
 
   useEffect(() => {
     if (!storedValues.current.isInit && dims.width) {
-      const filteredData = _.uniqBy(data, "id")
+      const filteredData = _.uniqBy([...crewData, ...castData], "id")
         .filter(d => !!d.release_date && !!d.vote_count)
         .sort((a, b) => b.vote_count - a.vote_count)
       const currXScale = xScale.range([
@@ -98,6 +102,16 @@ export default function DateAxis(props) {
         .attr("cx", 0)
         .attr("r", SIZE_RANGE[0])
         .attr("fill", COLORS.secondary)
+        .attr("stroke", chroma(COLORS.secondary).darken())
+        .attr("stroke-width", 1)
+        .attr("opacity", 0)
+      chartArea
+        .append("circle")
+        .attr("class", "outer-selected-circle circle")
+        .attr("cy", 0)
+        .attr("cx", 0)
+        .attr("r", SIZE_RANGE[0] + 4)
+        .attr("fill", "transparent")
         .attr("stroke", chroma(COLORS.secondary).darken())
         .attr("stroke-width", 1)
         .attr("opacity", 0)
@@ -159,13 +173,18 @@ export default function DateAxis(props) {
       const { chartArea, filteredData, currXScale } = storedValues.current
       const t = makeTransition(chartArea, 500, "y-update")
       if (props.activeMovieID) {
-        const selectedData = filteredData.find(d => d.id === activeMovieID)
+        const selectedCircleData = filteredData.find(d => d.id === activeMovieID)
         chartArea
           .selectAll(".circle")
-          .datum(selectedData)
+          .datum(selectedCircleData)
           .transition(t)
           .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
           .attr("opacity", 1)
+        const isCast = props.type === "cast"
+        const mainData = props.type === "cast" ? castData : crewData
+        const subData = props.type === "cast" ? crewData : castData
+        const topLine = mainData.filter(d => d.id === activeMovieID)
+          console.log("DateAxis -> test", test)
       }
       if (!props.activeMovieID) {
         chartArea
