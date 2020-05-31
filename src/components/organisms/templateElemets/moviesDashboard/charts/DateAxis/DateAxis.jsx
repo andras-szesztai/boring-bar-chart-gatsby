@@ -13,9 +13,11 @@ import { useMeasure } from "react-use"
 import gsap from "gsap"
 import "d3-transition"
 import { axisBottom } from "d3-axis"
-import { COLORS } from "../../../../../../constants/moviesDashboard"
+import { COLORS, SIZE_RANGE } from "../../../../../../constants/moviesDashboard"
 import { fontSize } from "../../../../../../themes/theme"
 import { Delaunay } from "d3-delaunay"
+import { usePrevious } from "../../../../../../hooks"
+import { makeTransition } from "../../../../../../utils/chartHelpers"
 
 const fadeOutEffect = css`
   content: "";
@@ -61,12 +63,14 @@ const ChartSvg = styled.svg`
 `
 
 export default function DateAxis(props) {
-  const { margin, xScale, data } = props
+  const { margin, xScale, data, activeMovieID } = props
+  const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
   const svgAreaRef = useRef(null)
   const voronoiRef = useRef(null)
   const [ref, dims] = useMeasure()
+
   useEffect(() => {
     if (!storedValues.current.isInit && dims.width) {
       const filteredData = _.uniqBy(data, "id")
@@ -87,6 +91,16 @@ export default function DateAxis(props) {
       }
       createDateAxis()
       createUpdateVoronoi()
+      chartArea
+        .append("circle")
+        .attr("class", "inner-selected-circle circle")
+        .attr("cy", 0)
+        .attr("cx", 0)
+        .attr("r", SIZE_RANGE[0])
+        .attr("fill", COLORS.secondary)
+        .attr("stroke", chroma(COLORS.secondary).darken())
+        .attr("stroke-width", 1)
+        .attr("opacity", 0)
     }
   })
 
@@ -125,7 +139,7 @@ export default function DateAxis(props) {
             .append("path")
             .attr("class", "voronoi-path")
             .attr("fill", "transparent")
-            .attr("stroke", "#333")
+            // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
             // .on("mouseover", d => console.log(d))
             .on("click", d => props.setActiveMovieId(d.id))
@@ -136,6 +150,31 @@ export default function DateAxis(props) {
           )
       )
   }
+
+  React.useEffect(() => {
+    if (
+      storedValues.current.isInit &&
+      props.activeMovieID !== prevProps.activeMovieID
+    ) {
+      const { chartArea, filteredData, currXScale } = storedValues.current
+      const t = makeTransition(chartArea, 500, "y-update")
+      if (props.activeMovieID) {
+        const selectedData = filteredData.find(d => d.id === activeMovieID)
+        chartArea
+          .selectAll(".circle")
+          .datum(selectedData)
+          .transition(t)
+          .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
+          .attr("opacity", 1)
+      }
+      if (!props.activeMovieID) {
+        chartArea
+          .selectAll(".circle")
+          .transition(t)
+          .attr("opacity", 0)
+      }
+    }
+  })
 
   return (
     <Wrapper ref={ref}>

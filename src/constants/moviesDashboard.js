@@ -21,6 +21,8 @@ export const TRANSITION = {
   },
 }
 
+export const SIZE_RANGE = [2, 20]
+
 export const OPACITY_VARIANT = {
   initial: {
     opacity: 0,

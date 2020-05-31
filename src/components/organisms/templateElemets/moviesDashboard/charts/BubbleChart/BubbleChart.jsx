@@ -1,29 +1,25 @@
 import React, { useState, useEffect, useRef } from "react"
-import { Helmet } from "react-helmet"
-import axios from "axios"
 import styled, { css } from "styled-components"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
 import chroma from "chroma-js"
-import _ from "lodash"
-import { scaleTime, scaleLinear, scaleSqrt } from "d3-scale"
-import { extent, mean } from "d3-array"
-import useResizeAware from "react-resize-aware"
+import {scaleLinear } from "d3-scale"
+import { extent } from "d3-array"
 import { select } from "d3-selection"
 import { useMeasure } from "react-use"
-import gsap from "gsap"
 import "d3-transition"
+import { Delaunay } from "d3-delaunay"
 
 import { usePrevious } from "../../../../../../hooks"
-import { COLORS } from "../../../../../../constants/moviesDashboard"
+import { COLORS, SIZE_RANGE } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
-import { colors, fontSize, space } from "../../../../../../themes/theme"
+import { colors, fontSize } from "../../../../../../themes/theme"
+
 import {
   useYDomainSyncUpdate,
   useRadiusUpdate,
   useActiveMovieIDUpdate,
 } from "./hooks"
-import { setRadius, getSelectedLineYPos } from "./utils"
-import { Delaunay } from "d3-delaunay"
+import { setRadius } from "./utils"
 import { makeUniqData } from "../../utils"
 
 const fadeOutEffect = css`
@@ -181,7 +177,6 @@ export default function BubbleChart(props) {
       .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
       .attr("cy", ({ vote_average }) => yScale(vote_average))
       .attr("r", d => setRadius({ props, currSizeScale, isSizeDynamic })(d))
-      .attr("shape-rendering", "geometricPrecision")
       .attr("fill", COLORS.secondary)
       .attr("stroke", chroma(COLORS.secondary).darken())
       .attr("stroke-width", 1)
@@ -293,5 +288,5 @@ BubbleChart.defaultProps = {
     bottom: 20,
     right: 20,
   },
-  sizeRange: [2, 20],
+  sizeRange: SIZE_RANGE
 }
