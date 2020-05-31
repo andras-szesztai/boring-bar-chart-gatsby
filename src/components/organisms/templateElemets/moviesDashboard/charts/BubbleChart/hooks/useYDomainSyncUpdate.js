@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { extent } from "d3-array"
-import { getSelectedLineYPos } from "../utils"
 import "d3-transition"
 
+import { getSelectedLineYPos } from "../utils"
 import { makeTransition } from "../../../../../../../utils/chartHelpers"
 
 export default function useYDomainSyncUpdate({
@@ -17,7 +17,13 @@ export default function useYDomainSyncUpdate({
       storedValues.current.isInit &&
       yDomainSynced !== prevProps.yDomainSynced
     ) {
-      const { yScale, filteredData, chartArea, gridArea } = storedValues.current
+      const {
+        yScale,
+        filteredData,
+        chartArea,
+        gridArea,
+        currSizeScale,
+      } = storedValues.current
       yScale.domain(
         yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
       )
@@ -27,16 +33,16 @@ export default function useYDomainSyncUpdate({
         .selectAll(".main-circle circle")
         .transition(t)
         .attr("cy", ({ vote_average }) => yScale(vote_average))
-      // chartArea
-      //   .select(".selected-line")
-      //   .transition(t)
-      //   .attr("y1", d =>
-      //     getSelectedLineYPos({
-      //       data: d,
-      //       scales: { yScale, currSizeScale },
-      //       props: { isSizeDynamic, chart },
-      //     })
-      //   )
+      chartArea
+        .select(".selected-line")
+        .transition(t)
+        .attr("y1", d =>
+          getSelectedLineYPos({
+            data: d,
+            scales: { yScale, currSizeScale },
+            props: { isSizeDynamic, chart },
+          })
+        )
       gridArea
         .selectAll(".grid-line")
         .transition(t)
