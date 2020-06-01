@@ -1,28 +1,47 @@
 import { useReducer, useEffect } from "react"
 import axios from "axios"
+import _ from "lodash"
 
 import { usePrevious, useLocalStorage } from "../../hooks"
+
 import {
   API_ROOT,
   LOCAL_STORE_ACCESSORS,
 } from "../../constants/moviesDashboard"
+import { useEffectOnce } from "react-use"
 
 const initialState = {
   activeNameID: undefined,
+  activeMovie: {
+    id: undefined,
+    data: {},
+    position: undefined,
+  },
   dataSets: {
     personDetails: undefined,
     personCredits: undefined,
+    genres: undefined,
   },
   loading: {
     personDetails: false,
     personCredits: false,
+    genres: false,
+  },
+  error: {
+    personDetails: false,
+    personCredits: false,
+    genres: false,
   },
   personDetailsCard: {
     isOpen: undefined,
   },
 }
 
+const FETCH_GENRES = "FETCH_GENRES"
+const FETCH_GENRES_SUCCESS = "FETCH_GENRES_SUCCESS"
+const FETCH_GENRES_FAIL = "FETCH_GENRES_FAIL"
 const SET_ACTIVE_ID = "SET_ACTIVE_ID"
+const SET_ACTIVE_MOVIE = "SET_ACTIVE_MOVIE"
 const FETCH_INFO_BY_ID = "FETCH_INFO_BY_ID"
 const FETCH_INFO_BY_ID_SUCCESS = "FETCH_INFO_BY_ID_SUCCESS"
 const FETCH_INFO_BY_ID_FAIL = "FETCH_INFO_BY_ID_FAIL"
@@ -31,13 +50,60 @@ const CLOSE_PERSON_DETAILS_CARD = "CLOSE_PERSON_DETAILS_CARD"
 
 function moviesDashboardReducer(state, { type, payload }) {
   const types = {
+    FETCH_GENRES: () => ({
+      ...state,
+      loading: {
+        ...state.loading,
+        genres: true,
+      },
+    }),
+    FETCH_GENRES_SUCCESS: () => ({
+      ...state,
+      loading: {
+        ...state.loading,
+        genres: false,
+      },
+      dataSets: {
+        ...state.dataSets,
+        genres: payload,
+      },
+    }),
+    FETCH_GENRES_FAIL: () => ({
+      ...state,
+      loading: {
+        ...state.loading,
+        genres: false,
+      },
+      dataSets: {
+        ...state.dataSets,
+        genres: undefined,
+      },
+      error: {
+        ...state.error,
+        genres: payload,
+      },
+    }),
     SET_ACTIVE_ID: () => ({
       ...state,
       activeNameID: payload,
+      activeMovie: {
+        id: undefined,
+        data: undefined,
+        position: undefined,
+      },
+    }),
+    SET_ACTIVE_MOVIE: () => ({
+      ...state,
+      activeMovie: {
+        id: payload.id,
+        data: payload.data || {},
+        position: payload.position,
+      },
     }),
     FETCH_INFO_BY_ID: () => ({
       ...state,
       loading: {
+        ...state.loading,
         personDetails: true,
         personCredits: true,
       },
@@ -45,10 +111,12 @@ function moviesDashboardReducer(state, { type, payload }) {
     FETCH_INFO_BY_ID_SUCCESS: () => ({
       ...state,
       loading: {
+        ...state.loading,
         personDetails: false,
         personCredits: false,
       },
       dataSets: {
+        ...state.dataSets,
         personDetails: payload.details,
         personCredits: payload.credits,
       },
@@ -56,14 +124,17 @@ function moviesDashboardReducer(state, { type, payload }) {
     FETCH_INFO_BY_ID_FAIL: () => ({
       ...state,
       loading: {
+        ...state.loading,
         personDetails: false,
         personCredits: false,
       },
       dataSets: {
+        ...state.dataSets,
         personDetails: undefined,
         personCredits: undefined,
       },
       error: {
+        ...state.error,
         personDetails: payload.details,
         personCredits: payload.credits,
       },
@@ -99,15 +170,43 @@ export default function useMoviesDashboardReducer() {
     favoritePersons,
   }
 
-const localStorageSetters = {
+  const localStorageSetters = {
     setFavoritePersons,
   }
 
   const actions = {
     setActiveNameID: payload => dispatch({ type: SET_ACTIVE_ID, payload }),
+    setActiveMovie: payload => dispatch({ type: SET_ACTIVE_MOVIE, payload }),
     openPersonDetails: () => dispatch({ type: OPEN_PERSON_DETAILS_CARD }),
     closePersonDetails: () => dispatch({ type: CLOSE_PERSON_DETAILS_CARD }),
   }
+
+  useEffectOnce(() => {
+    dispatch({ type: FETCH_GENRES })
+    axios
+      .all([
+        axios.get(
+          `${API_ROOT}/genre/movie/list?api_key=${process.env.MDB_API_KEY}&language=en-US`
+        ),
+        axios.get(
+          `${API_ROOT}/genre/tv/list?api_key=${process.env.MDB_API_KEY}&language=en-US`
+        ),
+      ])
+      .then(
+        axios.spread((movie, tv) => {
+          dispatch({
+            type: FETCH_GENRES_SUCCESS,
+            payload: _.uniqBy([...movie.data.genres, ...tv.data.genres], "id"),
+          })
+        })
+      )
+      .catch(function(error) {
+        dispatch({
+          type: FETCH_GENRES_FAIL,
+          payload: error,
+        })
+      })
+  })
 
   useEffect(() => {
     if (state.activeNameID && state.activeNameID !== prevState.activeNameID) {

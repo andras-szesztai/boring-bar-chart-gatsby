@@ -1,19 +1,35 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
+import { useUpdateEffect } from "react-use"
+import isEqual from "lodash/isEqual"
+import { scaleTime, scaleSqrt } from "d3-scale"
+import { extent } from "d3-array"
+import { IoIosArrowBack, IoIosArrowForward, IoIosClose } from "react-icons/io"
 
-import { useDeviceType, usePrevious } from "../../hooks"
+import { useDeviceType, usePrevious, useStateWithPrevious } from "../../hooks"
 import {
   SearchBar,
   PersonDetailCard,
   FavoritesList,
+  MovieSelectorChart,
+  MovieDetailsCard,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
-import { FavoriteHeart } from "../molecules/icons"
+import { dropShadow, space } from "../../themes/theme"
+import {
+  CARD_WIDTH,
+  CARD_HEIGHT,
+  COLORS,
+  TRANSITION,
+  HANDLE_SIZE,
+  WHILE_HOVER,
+} from "../../constants/moviesDashboard"
+import { themifyZIndex } from "../../themes/mixins"
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
@@ -27,16 +43,15 @@ export default function MoviesDashboard() {
   } = moviesDashboardReducer()
   const { favoritePersons } = localStorageValues
   const { setFavoritePersons } = localStorageSetters
-
+  const { dataSets, activeNameID, activeMovie } = state
+  const { setActiveMovie } = actions
+  
   useEffect(() => {
     favoritePersons &&
-      favoritePersons.length &&
-      actions.setActiveNameID(_.last(favoritePersons).id)
+    favoritePersons.length &&
+    actions.setActiveNameID(_.last(favoritePersons).id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const [isTitleHovered, setIsTitleHovered] = useState(false)
-  const [isFavorited, setIsFavorited] = useState(false)
 
   return (
     <>
@@ -52,33 +67,24 @@ export default function MoviesDashboard() {
             favoritePersons={favoritePersons}
             setFavoritePersons={setFavoritePersons}
           />
-          <motion.div
-            onClick={() => setIsFavorited(prev => !prev)}
-            onMouseEnter={() => setIsTitleHovered(true)}
-            onMouseLeave={() => setIsTitleHovered(false)}
-            style={{
-              position: "fixed",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              top: "50%",
-              left: "50%",
-              width: 100,
-              height: 100,
-              transform: "translate(-50%, -50%)",
-              cursor: "pointer",
-            }}
-          >
-            <FavoriteHeart
-              isFavorited={isFavorited}
-              isHovered={isTitleHovered}
-            />
-          </motion.div>
           <FavoritesList
             state={state}
             actions={actions}
             localStorageValues={localStorageValues}
             localStorageSetters={localStorageSetters}
+          />
+          <MovieSelectorChart
+            activeNameID={activeNameID}
+            loading={state.loading}
+            dataSets={dataSets}
+            setActiveMovie={setActiveMovie}
+            activeMovie={activeMovie}
+          />
+          <MovieDetailsCard
+            activeMovie={activeMovie}
+            prevActiveMovie={prevState && prevState.activeMovie}
+            setActiveMovie={setActiveMovie}
+            genres={state.dataSets.genres}
           />
         </div>
       )}

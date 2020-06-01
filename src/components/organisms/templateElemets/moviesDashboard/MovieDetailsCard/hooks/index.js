@@ -1,0 +1,1 @@
+export { default as useAnimationAccessor } from './useAnimationAccessor'

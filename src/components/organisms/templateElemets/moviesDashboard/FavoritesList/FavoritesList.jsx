@@ -44,9 +44,7 @@ export default function FavoritesList({
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
   const [isOpen, setIsOpen] = useState(false)
-  const prevIsOpen = usePrevious(isOpen)
   const [listRef, dims] = useMeasure()
-  const prevDims = usePrevious(dims)
 
   const [elementDims, setElementDims] = useState([])
 
@@ -54,14 +52,6 @@ export default function FavoritesList({
 
   const { width } = useWindowSize()
   const maxWidth = width - 2 * space[2] - FIXED_DIMS.controlCollapsedWidth - 40
-
-  const delay =
-    !prevDims ||
-    prevDims.width < dims.width ||
-    isOpen !== prevIsOpen ||
-    prevDims.width - dims.width === FIXED_DIMS.listItemGrowth
-      ? 0
-      : 650
 
   return (
     <>
@@ -84,7 +74,6 @@ export default function FavoritesList({
         maxWidth={maxWidth}
         setFavoritePersons={localStorageSetters.setFavoritePersons}
         isOpen={isOpen}
-        delay={delay}
         elementDims={elementDims}
         setRunReCalc={setRunReCalc}
       />
@@ -94,7 +83,6 @@ export default function FavoritesList({
         setIsOpen={setIsOpen}
         maxWidth={maxWidth}
         dims={dims}
-        delay={delay}
       />
     </>
   )

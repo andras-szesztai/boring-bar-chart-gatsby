@@ -67,7 +67,6 @@ export default function RecentList({
   maxWidth,
   setFavoritePersons,
   isOpen,
-  delay,
   elementDims,
   setRunReCalc,
 }) {
@@ -78,7 +77,6 @@ export default function RecentList({
 
   const recentListAnim = useSpring({
     width: `${isOpen ? dims.width + 5 : 0}px`,
-    delay,
   })
 
   const xPosAdjust = FIXED_DIMS.controlCollapsedWidth + 12
@@ -123,58 +121,69 @@ export default function RecentList({
         setClickedRemove(undefined)
       }}
     >
-      <div style={{ position: "relative" }}>
-        {favoritesCombined &&
-          (!favoritesCombined.length ? (
-            <TextContainer style={{ fontWeight: 300, alignSelf: "center" }}>
+      <div style={{ position: "relative", width: "100%" }}>
+        <AnimatePresence>
+          {!!favoritesCombined && !favoritesCombined.length && !!isOpen && (
+            <TextContainer
+              initial={{ opacity: 0, transform: "translateX(-100px)" }}
+              animate={{
+                opacity: 1,
+                transform: "translateX(0px)",
+                transition: { delay: 0.5 },
+              }}
+              exit={{ opacity: 0, transition: { duration: 0, delay: 0 } }}
+              style={{ fontWeight: 300, alignSelf: "stretch" }}
+            >
               {/* TODO: Mark a movie/series or person as a favorite to display them here! */}
-              Mark a person as a favorite to start your list!
+              Mark a person as your favorite to start the list!
             </TextContainer>
-          ) : (
-            transitions.map(({ item, props, key }, i) => (
-              <ListItemContainer
-                key={key}
-                style={{
-                  ...props,
-                  position: "absolute",
-                }}
-                onMouseEnter={() => {
-                  setHoveredFavorite(item)
-                  setClickedRemove(undefined)
-                }}
-              >
-                {item.name}
-                <AnimatePresence>
-                  {hoveredFavorite && hoveredFavorite.name === item.name && (
-                    <HoveredControlsContainer
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1, transition: { delay: 0.6 } }}
-                      exit={{
-                        opacity: 0,
-                        transition: {
-                          duration: 0,
-                          type: "tween",
-                        },
-                      }}
-                    >
-                      <SearchControl
-                        id={item.id}
-                        clickedSearch={clickedSearch}
-                        setClickedSearch={setClickedSearch}
-                        activeNameID={activeNameID}
-                        setActiveNameID={setActiveNameID}
-                      />
-                      <RemoveControl
-                        id={item.id}
-                        clickedRemove={clickedRemove}
-                        setClickedRemove={setClickedRemove}
-                        setFavoritePersons={setFavoritePersons}
-                      />
-                    </HoveredControlsContainer>
-                  )}
-                </AnimatePresence>
-              </ListItemContainer>
-            ))
+          )}
+        </AnimatePresence>
+        {!!favoritesCombined &&
+          !!favoritesCombined.length &&
+          transitions.map(({ item, props, key }, i) => (
+            <ListItemContainer
+              key={key}
+              style={{
+                ...props,
+                position: "absolute",
+              }}
+              onMouseEnter={() => {
+                setHoveredFavorite(item)
+                setClickedRemove(undefined)
+              }}
+            >
+              {item.name}
+              <AnimatePresence>
+                {hoveredFavorite && hoveredFavorite.name === item.name && (
+                  <HoveredControlsContainer
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1, transition: { delay: 0.6 } }}
+                    exit={{
+                      opacity: 0,
+                      transition: {
+                        duration: 0,
+                        type: "tween",
+                      },
+                    }}
+                  >
+                    <SearchControl
+                      id={item.id}
+                      clickedSearch={clickedSearch}
+                      setClickedSearch={setClickedSearch}
+                      activeNameID={activeNameID}
+                      setActiveNameID={setActiveNameID}
+                    />
+                    <RemoveControl
+                      id={item.id}
+                      clickedRemove={clickedRemove}
+                      setClickedRemove={setClickedRemove}
+                      setFavoritePersons={setFavoritePersons}
+                    />
+                  </HoveredControlsContainer>
+                )}
+              </AnimatePresence>
+            </ListItemContainer>
           ))}
         {dims.width > maxWidth && (
           <ListItemContainer

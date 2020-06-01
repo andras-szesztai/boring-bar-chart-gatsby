@@ -34,9 +34,16 @@ const RemoveControl = ({
       }}
     >
       <MouseDownAnimation
-        initial={{ width: "0%", x: -5 }}
+        initial={{
+          width: "0%",
+          x: -5,
+          backgroundColor: "#fff",
+          zIndex: 1,
+          opacity: 0.25,
+        }}
         animate={{
           width: clickedRemove && clickedRemove === id ? "120%" : "0%",
+          opacity: clickedRemove && clickedRemove === id ? 0.5 : 0.25,
         }}
         transition={{
           duration: 1,
@@ -44,14 +51,16 @@ const RemoveControl = ({
           ease: [0.65, 0, 0.35, 1],
         }}
       />
-      <motion.div
-        style={{ marginRight: 2 }}
-        initial={{ y: 2 }}
-        animate={{ scale: isRemoveHovered ? 1.6 : 1 }}
-      >
-        <IoIosClose size={14} />
-      </motion.div>
-      Remove
+      <div style={{ display: "flex", zIndex: 2 }}>
+        <motion.div
+          style={{ marginRight: 2 }}
+          initial={{ y: 2 }}
+          animate={{ scale: isRemoveHovered ? 1.6 : 1 }}
+        >
+          <IoIosClose size={14} />
+        </motion.div>
+        Remove
+      </div>
     </HoverControlIconContainer>
   )
 }

@@ -17,12 +17,11 @@ import {
   COLORS,
   TRANSITION,
   LOCAL_STORE_ACCESSORS,
+  CARD_WIDTH,
+  CARD_HEIGHT,
 } from "../../../../../constants/moviesDashboard"
 import { TextContainer, TitleContainer } from "../styles/styles"
 import { themifyZIndex } from "../../../../../themes/mixins"
-
-const CARD_WIDTH = 400
-const CARD_HEIGHT = 240
 
 const variants = {
   initial: {
@@ -37,7 +36,7 @@ const variants = {
     transition: TRANSITION.primary,
   },
   animateClose: {
-    y: -(CARD_HEIGHT * 0.75),
+    y: -(CARD_HEIGHT.person * 0.75),
     transition: TRANSITION.primary,
   },
   exit: {
@@ -55,7 +54,8 @@ const PersonDetailsCard = styled(motion.div)`
 
   right: ${space[2]}px;
   width: ${CARD_WIDTH}px;
-  height: ${CARD_HEIGHT}px;
+  height: ${CARD_HEIGHT.person}px;
+  z-index: 5;
 `
 
 const DetailCardContent = styled(motion.div)`
@@ -65,7 +65,7 @@ const DetailCardContent = styled(motion.div)`
   justify-content: center;
 
   width: ${CARD_WIDTH}px;
-  height: ${CARD_HEIGHT}px;
+  height: ${CARD_HEIGHT.person}px;
 `
 
 const IconContainer = styled(motion.div)`
@@ -82,7 +82,7 @@ const CardGrid = styled(motion.div)`
   padding: ${space[2]}px;
 
   width: ${CARD_WIDTH}px;
-  height: ${CARD_HEIGHT - 40}px;
+  height: ${CARD_HEIGHT.person - 40}px;
 `
 
 const CardTextGrid = styled(motion.div)`

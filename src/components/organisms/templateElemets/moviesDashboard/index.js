@@ -1,5 +1,7 @@
-export { default as SearchBar } from './SearchBar/SearchBar'
-export { default as Image } from './Image/Image'
-export { default as ClosedNameContainer } from './ClosedNameContainer/ClosedNameContainer'
-export { default as PersonDetailCard } from './PersonDetailCard/PersonDetailCard'
-export { default as FavoritesList } from './FavoritesList/FavoritesList'
+export { default as SearchBar } from "./SearchBar/SearchBar"
+export { default as Image } from "./Image/Image"
+export { default as ClosedNameContainer } from "./ClosedNameContainer/ClosedNameContainer"
+export { default as PersonDetailCard } from "./PersonDetailCard/PersonDetailCard"
+export { default as FavoritesList } from "./FavoritesList/FavoritesList"
+export { default as MovieSelectorChart } from "./MovieSelectorChart/MovieSelectorChart"
+export { default as MovieDetailsCard } from "./MovieDetailsCard/MovieDetailsCard"
