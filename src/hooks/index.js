@@ -17,3 +17,4 @@ export { default as useDebouncedSearch } from "./useDebouncedSearch/useDebounced
 export { default as useLocalStorage } from "./useLocalStorage/useLocalStorage"
 export { default as usePosts } from "./usePosts/usePosts"
 export { default as useDeviceOrientation } from "./useDeviceOrientation/useDeviceOrientation"
+export { default as useStateWithPrevious } from "./useStateWithPrevious/useStateWithPrevious"

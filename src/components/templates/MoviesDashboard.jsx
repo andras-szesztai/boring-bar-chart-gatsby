@@ -11,7 +11,7 @@ import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 
-import { useDeviceType, usePrevious } from "../../hooks"
+import { useDeviceType, usePrevious, useStateWithPrevious } from "../../hooks"
 import {
   SearchBar,
   PersonDetailCard,
@@ -171,6 +171,32 @@ export default function MoviesDashboard() {
     },
   }
 
+  const [
+    isMovieDetailsCardOpen,
+    setIsMovieDetailsCardOpen,
+    prevIsMovieDetailsCardOpen,
+  ] = useStateWithPrevious(true)
+
+  const [accessor, setAcessor] = useState("animateFirst")
+
+  useEffect(() => {
+    if (prevState) {
+      if (isMovieDetailsCardOpen !== prevIsMovieDetailsCardOpen) {
+        setAcessor(isMovieDetailsCardOpen ? "animateOpen" : "animateClose")
+      }
+      if (activeMovie.id !== prevState.activeMovie.id) {
+        setAcessor("animateFirst")
+        setIsMovieDetailsCardOpen(true)
+      }
+    }
+  }, [
+    prevIsMovieDetailsCardOpen,
+    isMovieDetailsCardOpen,
+    prevState,
+    activeMovie,
+    setIsMovieDetailsCardOpen,
+  ])
+
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -203,21 +229,22 @@ export default function MoviesDashboard() {
             {activeMovie.position === 0 && (
               <MovieDetailsCardRight
                 initial="initial"
-                animate="animateFirst"
+                animate={accessor}
                 exit="exit"
                 variants={rightVariants}
               >
                 <IconContainerRight
                   role="button"
-                  onClick={() =>
-                    setActiveMovie({
-                      activeMovie: {
-                        id: undefined,
-                        data: {},
-                        position: undefined,
-                      },
-                    })
-                  }
+                  onClick={() => setIsMovieDetailsCardOpen(prev => !prev)}
+                  // onClick={() =>
+                  //   setActiveMovie({
+                  //     activeMovie: {
+                  //       id: undefined,
+                  //       data: {},
+                  //       position: undefined,
+                  //     },
+                  //   })
+                  // }
                   whileHover={{
                     scale: 1.3,
                     transition: {
@@ -242,12 +269,13 @@ export default function MoviesDashboard() {
             {activeMovie.position === 1 && (
               <MovieDetailsCardLeft
                 initial="initial"
-                animate="animateFirst"
+                animate={accessor}
                 exit="exit"
                 variants={leftVariants}
               >
                 <IconContainerLeft
                   role="button"
+                  onClick={() => setIsMovieDetailsCardOpen(prev => !prev)}
                   // onClick={() => setIsOpen(prev => !prev)}
                   whileHover={{
                     scale: 1.3,
