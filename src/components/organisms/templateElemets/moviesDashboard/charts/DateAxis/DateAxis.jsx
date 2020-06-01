@@ -74,6 +74,7 @@ export default function DateAxis(props) {
   const svgAreaRef = useRef(null)
   const voronoiRef = useRef(null)
   const [ref, dims] = useMeasure()
+  const radiusAdjust = SIZE_RANGE[0]
 
   useEffect(() => {
     if (!storedValues.current.isInit && dims.width) {
@@ -110,11 +111,31 @@ export default function DateAxis(props) {
         .attr("class", "outer-selected-circle circle")
         .attr("cy", 0)
         .attr("cx", 0)
-        .attr("r", SIZE_RANGE[0] + 4)
+        .attr("r", SIZE_RANGE[0] + radiusAdjust)
         .attr("fill", "transparent")
         .attr("stroke", chroma(COLORS.secondary).darken())
         .attr("stroke-width", 1)
         .attr("opacity", 0)
+      chartArea
+        .append("line")
+        .attr("class", "top-line")
+        .attr("y1", -SIZE_RANGE[0] - radiusAdjust)
+        .attr("y2", -dims.height / 2)
+        .attr("x1", 0)
+        .attr("x2", 0)
+        .attr("stroke", chroma(COLORS.secondary).darken())
+        .attr("stroke-width", 1)
+        .attr("opacity", 1)
+      chartArea
+        .append("line")
+        .attr("class", "bottom-line")
+        .attr("y1", SIZE_RANGE[0] + radiusAdjust)
+        .attr("y2", dims.height / 2)
+        .attr("x1", 0)
+        .attr("x2", 0)
+        .attr("stroke", chroma(COLORS.secondary).darken())
+        .attr("stroke-width", 1)
+        .attr("opacity", 1)
     }
   })
 
@@ -173,7 +194,9 @@ export default function DateAxis(props) {
       const { chartArea, filteredData, currXScale } = storedValues.current
       const t = makeTransition(chartArea, 500, "y-update")
       if (props.activeMovieID) {
-        const selectedCircleData = filteredData.find(d => d.id === activeMovieID)
+        const selectedCircleData = filteredData.find(
+          d => d.id === activeMovieID
+        )
         chartArea
           .selectAll(".circle")
           .datum(selectedCircleData)
@@ -181,10 +204,15 @@ export default function DateAxis(props) {
           .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
           .attr("opacity", 1)
         const isCast = props.type === "cast"
-        const mainData = props.type === "cast" ? castData : crewData
-        const subData = props.type === "cast" ? crewData : castData
-        const topLine = mainData.filter(d => d.id === activeMovieID)
-          console.log("DateAxis -> test", test)
+        const mainData = isCast ? castData : crewData
+        const subData = isCast ? crewData : castData
+        const topLineData = mainData.filter(d => d.id === activeMovieID)
+        const bottomLineData = subData.filter(d => d.id === activeMovieID)
+        if (topLineData) {
+          chartArea.selectAll(".circle")
+        }
+        console.log("DateAxis -> bottomLineData", bottomLineData)
+        console.log("DateAxis -> topLineData", topLineData)
       }
       if (!props.activeMovieID) {
         chartArea

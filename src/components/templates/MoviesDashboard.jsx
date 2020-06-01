@@ -161,10 +161,9 @@ export default function MoviesDashboard() {
                       activeMovieID={activeMovieID}
                     />
                     <DateAxis
-                      data={[
-                        ...dataSets.personCredits.crew,
-                        ...dataSets.personCredits.cast,
-                      ]}
+                      crewData={dataSets.personCredits.crew}
+                      castData={dataSets.personCredits.cast}
+                      type={currState.mainType}
                       {...currState}
                       setActiveMovieId={setActiveMovieId}
                       activeMovieID={activeMovieID}
