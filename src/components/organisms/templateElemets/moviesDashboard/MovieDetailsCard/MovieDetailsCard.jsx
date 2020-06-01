@@ -8,7 +8,6 @@ import {
   IoIosCloseCircle,
 } from "react-icons/io"
 import ClampLines from "react-clamp-lines"
-import LinesEllipsis from 'react-lines-ellipsis'
 
 import {
   CARD_WIDTH,
@@ -28,7 +27,7 @@ import {
   makeLeftVariants,
 } from "./styles"
 import Image from "../Image/Image"
-import { TitleContainer } from "../styles/styles"
+import { TitleContainer, TextContainer } from "../styles/styles"
 import { space } from "../../../../../themes/theme"
 import { FavoriteStar } from "../../../../molecules"
 
@@ -42,7 +41,7 @@ const ContentGrid = styled(motion.div)`
 
   display: grid;
   grid-template-columns: 1fr 160px;
-  grid-column-gap: ${space[3]}px;
+  grid-column-gap: ${space[2]}px;
   grid-template-rows: 240px 60px 1fr ${HANDLE_SIZE}px;
   grid-template-areas:
     "info poster"
@@ -53,9 +52,11 @@ const ContentGrid = styled(motion.div)`
 
 const MainInfoContainer = styled.div`
   display: grid;
-  grid-template-rows: min-content 1fr;
-  grid-template-columns: 1fr 40px;
+  grid-template-rows: repeat(2, min-content) 1fr;
+  /* grid-template-columns: 1fr 35px; */
+  grid-column-gap: ${space[2]}px;
   grid-area: info;
+  align-items: start;
 `
 
 const PlaceHolderDiv = styled.div`
@@ -66,12 +67,8 @@ const PlaceHolderDiv = styled.div`
 `
 
 const MovieTitle = styled(TitleContainer)`
-  /* flex */
-  .title {
-    padding-left: 2px;
-    font-weight: 500;
-    color: ${COLORS.primary};
-  }
+  color: ${COLORS.secondaryDark};
+  line-height: 1.15;
 `
 
 const ContentItem = styled.div`
@@ -153,7 +150,7 @@ export default function MovieDetailsCardComponent({
                 transition: {
                   type: "spring",
                   damping: 17,
-                  delay: 0.5, // TODO: delay only on open close
+                  delay: 0.5,
                 },
               }}
             >
@@ -167,17 +164,13 @@ export default function MovieDetailsCardComponent({
             <ContentGrid>
               <MainInfoContainer>
                 <MovieTitle>
-                  <LinesEllipsis
-                    text="long long text"
-                    maxLine="3"
-                    ellipsis="..."
-                    trimRight
-                    basedOn="letters"
-                  />
+                  {activeMovie.data.title}
+                  <div style={{ marginTop: -3 }}>
+                    <FavoriteStar isFavorited={true} isHovered={false} />
+                  </div>
                 </MovieTitle>
-                <ContentItem>
-                  <FavoriteStar isFavorited={true} isHovered={false} />
-                </ContentItem>
+                <div>subtitle</div>
+                <TextContainer>{activeMovie.data.overview}</TextContainer>
               </MainInfoContainer>
               <ContentItem style={{ gridArea: "poster" }}>
                 <Image
