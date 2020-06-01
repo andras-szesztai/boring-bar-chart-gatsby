@@ -7,6 +7,8 @@ import {
   IoIosClose,
   IoIosCloseCircle,
 } from "react-icons/io"
+import ClampLines from "react-clamp-lines"
+import LinesEllipsis from 'react-lines-ellipsis'
 
 import {
   CARD_WIDTH,
@@ -26,16 +28,21 @@ import {
   makeLeftVariants,
 } from "./styles"
 import Image from "../Image/Image"
+import { TitleContainer } from "../styles/styles"
 import { space } from "../../../../../themes/theme"
+import { FavoriteStar } from "../../../../molecules"
 
 const ContentGrid = styled(motion.div)`
   width: 100%;
   height: 100%;
-  display: grid;
+
   position: absolute;
   top: 0px;
   padding: ${space[3]}px;
+
+  display: grid;
   grid-template-columns: 1fr 160px;
+  grid-column-gap: ${space[3]}px;
   grid-template-rows: 240px 60px 1fr ${HANDLE_SIZE}px;
   grid-template-areas:
     "info poster"
@@ -44,11 +51,27 @@ const ContentGrid = styled(motion.div)`
     "link link";
 `
 
+const MainInfoContainer = styled.div`
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr 40px;
+  grid-area: info;
+`
+
 const PlaceHolderDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   /* border: 1px solid black; */
+`
+
+const MovieTitle = styled(TitleContainer)`
+  /* flex */
+  .title {
+    padding-left: 2px;
+    font-weight: 500;
+    color: ${COLORS.primary};
+  }
 `
 
 const ContentItem = styled.div`
@@ -119,6 +142,9 @@ export default function MovieDetailsCardComponent({
           <MovieDetailsCardRight {...makeCardProps(makeRightVariants(delay))}>
             <CloseIconContainerRight
               {...closeContainerProps}
+              initial={{
+                x: isMovieDetailsCardOpen ? -8 : -CARD_WIDTH + HANDLE_SIZE,
+              }}
               animate={{
                 x: isMovieDetailsCardOpen ? -8 : -CARD_WIDTH + HANDLE_SIZE,
                 background: isMovieDetailsCardOpen
@@ -139,7 +165,20 @@ export default function MovieDetailsCardComponent({
               <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
             </ArrowIconContainerRight>
             <ContentGrid>
-              <PlaceHolderDiv style={{ gridArea: "info" }}>Info</PlaceHolderDiv>
+              <MainInfoContainer>
+                <MovieTitle>
+                  <LinesEllipsis
+                    text="long long text"
+                    maxLine="3"
+                    ellipsis="..."
+                    trimRight
+                    basedOn="letters"
+                  />
+                </MovieTitle>
+                <ContentItem>
+                  <FavoriteStar isFavorited={true} isHovered={false} />
+                </ContentItem>
+              </MainInfoContainer>
               <ContentItem style={{ gridArea: "poster" }}>
                 <Image
                   url={activeMovie.data.poster_path}

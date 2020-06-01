@@ -74,6 +74,7 @@ export const ArrowIconContainerLeft = styled(IconContainer)`
 `
 
 const CloseIconContainer = styled(IconContainer)`
+  padding-top: 1px;
   top: ${space[1]}px;
   background: rgba(255, 255, 255, 1);
   border-radius: 100%;
