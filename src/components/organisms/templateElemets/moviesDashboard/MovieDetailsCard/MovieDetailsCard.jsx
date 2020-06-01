@@ -18,8 +18,30 @@ import {
   MovieDetailsCardLeft,
   ArrowIconContainerLeft,
   makeRightVariants,
-  makeLeftVariants
+  makeLeftVariants,
 } from "./styles"
+
+const ContentGrid = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+  display: grid;
+  position: absolute;
+  top: 0px;
+  grid-template-columns: 3fr 2fr;
+  grid-template-rows: 200px repeat(3, 1fr);
+  grid-template-areas:
+    "info poster"
+    "genres poster"
+    "score score"
+    "link link";
+`
+
+const PlaceHolderDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+`
 
 export default function MovieDetailsCardComponent({
   activeMovie,
@@ -27,12 +49,23 @@ export default function MovieDetailsCardComponent({
   setActiveMovie,
 }) {
   const delay = typeof prevActiveMovie.position == "number" ? 0.25 : 0
-  
+
   const {
     accessor,
     isMovieDetailsCardOpen,
     setIsMovieDetailsCardOpen,
   } = useAnimationAccessor({ prevActiveMovie, activeMovie })
+
+  // genre_ids: (3) [28, 80, 53]
+  // media_type: "movie"
+  // original_language: "en"
+  // overview: "On the day of his retirement, a veteran CIA agent learns that his former protégé has been arrested in China, is sentenced to die the next morning in Beijing, and that the CIA is considering letting that happen to avoid an international scandal."
+  // poster_path: "/6y8M1rxjKofQCRKKe6xeV91K2Fc.jpg"
+  // release_date: "2001-11-18"
+  // title: "Spy Game"
+  // original_title: "Spy Game"
+  // vote_average: 6.9
+  // vote_count: 1222
 
   const makeCardProps = variants => ({
     initial: "initial",
@@ -87,6 +120,23 @@ export default function MovieDetailsCardComponent({
             <ArrowIconContainerRight {...arrowContainerProps}>
               <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
             </ArrowIconContainerRight>
+            <ContentGrid>
+              <PlaceHolderDiv style={{ gridArea: "info" }}>
+                Info
+              </PlaceHolderDiv>
+              <PlaceHolderDiv style={{ gridArea: "poster" }}>
+                Image
+              </PlaceHolderDiv>
+              <PlaceHolderDiv style={{ gridArea: "genres" }}>
+                Genres
+              </PlaceHolderDiv>
+              <PlaceHolderDiv style={{ gridArea: "score" }}>
+                Scrore
+              </PlaceHolderDiv>
+              <PlaceHolderDiv style={{ gridArea: "link" }}>
+                Link
+              </PlaceHolderDiv>
+            </ContentGrid>
           </MovieDetailsCardRight>
         )}
       </AnimatePresence>

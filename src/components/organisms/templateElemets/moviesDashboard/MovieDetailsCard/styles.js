@@ -76,6 +76,8 @@ export const ArrowIconContainerLeft = styled(IconContainer)`
 export const CloseIconContainer = styled(IconContainer)`
   top: 0px;
   left: ${CARD_WIDTH - HANDLE_SIZE}px;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 100%;
 `
 
 export const makeRightVariants = delay => ({
