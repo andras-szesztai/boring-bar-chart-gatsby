@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
@@ -30,38 +30,53 @@ import { themifyZIndex } from "../../themes/mixins"
 
 const handleSize = space[6]
 
-const MovieDetailsCard = styled(motion.div)`
+const MovieDetailsCardStyle = css`
   position: fixed;
-
   background-color: #fff;
   filter: drop-shadow(${dropShadow.primary})
     drop-shadow(${dropShadow.secondary});
   border-radius: ${space[1]}px;
 
   top: calc(50% - ${CARD_HEIGHT.movie / 2}px);
-  right: ${space[2]}px;
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT.movie}px;
-  z-index: 4;
 
+  z-index: 4;
+`
+
+const HandleStyle = css`
+  content: "";
+  position: absolute;
+  z-index: 4;
+  bottom: 0px;
+  width: ${handleSize}px;
+  height: ${handleSize}px;
+  background-color: #fff;
+  border-radius: ${space[1]}px 0 0 ${space[1]}px;
+`
+
+const MovieDetailsCardRight = styled(motion.div)`
+  ${MovieDetailsCardStyle}
+  right: ${space[2]}px;
   :after {
-    content: "";
-    position: absolute;
-    z-index: 4;
+    ${HandleStyle}
     left: -${handleSize - 4}px;
-    bottom: 0px;
-    width: ${handleSize}px;
-    height: ${handleSize}px;
-    background-color: #fff;
-    border-radius: ${space[1]}px 0 0 ${space[1]}px;
   }
 `
 
-const IconContainer = styled(motion.div)`
+const MovieDetailsCardLeft = styled(motion.div)`
+  ${MovieDetailsCardStyle}
+  left: ${space[2]}px;
+  :after {
+    ${HandleStyle}
+    right: ${-handleSize + 4}px;
+  }
+`
+
+const IconContainerStyle = css`
   position: relative;
   cursor: pointer;
   z-index: 4;
-  left: -${handleSize - 4}px;
   top: ${CARD_HEIGHT.movie - handleSize}px;
   width: ${handleSize}px;
   height: ${handleSize}px;
@@ -70,6 +85,16 @@ const IconContainer = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+`
+
+const IconContainerRight = styled(motion.div)`
+  ${IconContainerStyle}
+  left: -${handleSize - 4}px;
+`
+
+const IconContainerLeft = styled(motion.div)`
+  ${IconContainerStyle}
+  left: ${CARD_WIDTH - 4}px;
 `
 
 export default function MoviesDashboard() {
@@ -94,9 +119,7 @@ export default function MoviesDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  console.log("MoviesDashboard -> activeMovie", activeMovie)
-
-  const variants = {
+  const rightVariants = {
     initial: {
       x: CARD_WIDTH + handleSize,
     },
@@ -114,6 +137,27 @@ export default function MoviesDashboard() {
     },
     exit: {
       x: CARD_WIDTH + handleSize,
+    },
+  }
+
+  const leftVariants = {
+    initial: {
+      x: -(CARD_WIDTH + handleSize),
+    },
+    animateFirst: {
+      x: 0,
+      transition: TRANSITION.primary,
+    },
+    animateOpen: {
+      x: 0,
+      transition: TRANSITION.primary,
+    },
+    animateClose: {
+      x: -(CARD_WIDTH + handleSize),
+      transition: TRANSITION.primary,
+    },
+    exit: {
+      x: -(CARD_WIDTH + handleSize),
     },
   }
 
@@ -146,13 +190,13 @@ export default function MoviesDashboard() {
           />
 
           <AnimatePresence>
-            <MovieDetailsCard
+            <MovieDetailsCardRight
               initial="initial"
               animate="animateFirst"
               exit="exit"
-              variants={variants}
+              variants={rightVariants}
             >
-              <IconContainer
+              <IconContainerRight
                 role="button"
                 // onClick={() => setIsOpen(prev => !prev)}
                 whileHover={{
@@ -170,8 +214,37 @@ export default function MoviesDashboard() {
                 // }}
               >
                 <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
-              </IconContainer>
-            </MovieDetailsCard>
+              </IconContainerRight>
+            </MovieDetailsCardRight>
+          </AnimatePresence>
+
+          <AnimatePresence>
+            <MovieDetailsCardLeft
+              initial="initial"
+              animate="animateFirst"
+              exit="exit"
+              variants={leftVariants}
+            >
+              <IconContainerLeft
+                role="button"
+                // onClick={() => setIsOpen(prev => !prev)}
+                whileHover={{
+                  scale: 1.3,
+                  transition: {
+                    delay: 0,
+                  },
+                }}
+                initial={{ rotate: 180 }}
+                // animate={{
+                //   rotate: isOpen ? 180 : 0,
+                //   transition: {
+                //     delay: 1,
+                //   },
+                // }}
+              >
+                <IoIosArrowForward size={24} color={COLORS.secondaryDark} />
+              </IconContainerLeft>
+            </MovieDetailsCardLeft>
           </AnimatePresence>
         </div>
       )}
