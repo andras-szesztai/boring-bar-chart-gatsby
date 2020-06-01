@@ -18,15 +18,28 @@ export default function useSelectedUpdate({
     if (storedValues.current.isInit && activeMovieID !== prevActiveMovieID) {
       const { chartArea, filteredData, currXScale } = storedValues.current
       const t = makeTransition(chartArea, 500, "y-update")
+      const setX = d => currXScale(new Date(d.release_date))
       if (activeMovieID) {
         const selectedCircleData = filteredData.find(
           d => d.id === activeMovieID
         )
+        if (!Number(chartArea.selectAll(".line").attr("opacity"))) {
+          // First time no animation for x
+          chartArea
+            .selectAll(".line")
+            .datum(selectedCircleData)
+            .attr("x1", setX)
+            .attr("x2", setX)
+          chartArea
+            .selectAll("circle")
+            .datum(selectedCircleData)
+            .attr("cx", setX)
+        }
         chartArea
           .selectAll("circle")
           .datum(selectedCircleData)
           .transition(t)
-          .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
+          .attr("cx", setX)
           .attr("opacity", 1)
         const isCast = type === "cast"
         const mainData = isCast ? data.castData : data.crewData
@@ -37,8 +50,8 @@ export default function useSelectedUpdate({
           .selectAll(".line")
           .datum(selectedCircleData)
           .transition(t)
-          .attr("x1", ({ release_date }) => currXScale(new Date(release_date)))
-          .attr("x2", ({ release_date }) => currXScale(new Date(release_date)))
+          .attr("x1", setX)
+          .attr("x2", setX)
           .attr("opacity", 1)
         if (topLineData.length) {
           chartArea

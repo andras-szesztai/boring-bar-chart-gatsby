@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import styled, { css } from "styled-components"
 import chroma from "chroma-js"
 import _ from "lodash"
@@ -16,7 +16,6 @@ import {
 } from "../../../../../../constants/moviesDashboard"
 import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
-import { makeTransition } from "../../../../../../utils/chartHelpers"
 
 import { useSelectedUpdate } from "./hooks"
 
@@ -141,7 +140,7 @@ export default function DateAxis(props) {
       .append("line")
       .attr("class", "top-line line")
       .attr("y1", -SIZE_RANGE[0] - CIRCLE_ADJUST)
-      .attr("y2", -dims.height / 2)
+      .attr("y2", -SIZE_RANGE[0] - CIRCLE_ADJUST)
       .attr("x1", 0)
       .attr("x2", 0)
       .attr("stroke", chroma(COLORS.secondary).darken())
@@ -151,7 +150,7 @@ export default function DateAxis(props) {
       .append("line")
       .attr("class", "bottom-line line")
       .attr("y1", SIZE_RANGE[0] + CIRCLE_ADJUST)
-      .attr("y2", dims.height / 2)
+      .attr("y2", SIZE_RANGE[0] + CIRCLE_ADJUST)
       .attr("x1", 0)
       .attr("x2", 0)
       .attr("stroke", chroma(COLORS.secondary).darken())
@@ -226,6 +225,6 @@ DateAxis.defaultProps = {
   margin: {
     top: 20,
     bottom: 20,
-    ...CHART_SIDE_MARGINS
+    ...CHART_SIDE_MARGINS,
   },
 }

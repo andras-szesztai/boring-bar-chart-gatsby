@@ -1,5 +1,6 @@
 import React from "react"
-import { AnimatePresence } from "framer-motion"
+import styled, { css } from "styled-components"
+import { AnimatePresence, motion } from "framer-motion"
 import { IoIosArrowBack, IoIosArrowForward, IoIosClose } from "react-icons/io"
 
 import {
@@ -15,7 +16,9 @@ import {
   CloseIconContainer,
   ArrowIconContainerRight,
   MovieDetailsCardLeft,
-  ArrowIconContainerLeft
+  ArrowIconContainerLeft,
+  makeRightVariants,
+  makeLeftVariants
 } from "./styles"
 
 export default function MovieDetailsCardComponent({
@@ -24,54 +27,7 @@ export default function MovieDetailsCardComponent({
   setActiveMovie,
 }) {
   const delay = typeof prevActiveMovie.position == "number" ? 0.25 : 0
-  const rightVariants = {
-    initial: {
-      x: CARD_WIDTH + HANDLE_SIZE,
-    },
-    animateFirst: {
-      x: 0,
-      transition: {
-        ...TRANSITION.primary,
-        delay,
-      },
-    },
-    animateOpen: {
-      x: 0,
-      transition: TRANSITION.primary,
-    },
-    animateClose: {
-      x: CARD_WIDTH - HANDLE_SIZE,
-      transition: TRANSITION.primary,
-    },
-    exit: {
-      x: CARD_WIDTH + HANDLE_SIZE,
-    },
-  }
-
-  const leftVariants = {
-    initial: {
-      x: -(CARD_WIDTH + HANDLE_SIZE),
-    },
-    animateFirst: {
-      x: 0,
-      transition: {
-        ...TRANSITION.primary,
-        delay,
-      },
-    },
-    animateOpen: {
-      x: 0,
-      transition: TRANSITION.primary,
-    },
-    animateClose: {
-      x: -CARD_WIDTH + HANDLE_SIZE,
-      transition: TRANSITION.primary,
-    },
-    exit: {
-      x: -(CARD_WIDTH + HANDLE_SIZE),
-    },
-  }
-
+  
   const {
     accessor,
     isMovieDetailsCardOpen,
@@ -114,7 +70,7 @@ export default function MovieDetailsCardComponent({
     <>
       <AnimatePresence>
         {activeMovie.position === 0 && (
-          <MovieDetailsCardRight {...makeCardProps(rightVariants)}>
+          <MovieDetailsCardRight {...makeCardProps(makeRightVariants(delay))}>
             <CloseIconContainer
               {...closeContainerProps}
               animate={{
@@ -136,7 +92,7 @@ export default function MovieDetailsCardComponent({
       </AnimatePresence>
       <AnimatePresence>
         {activeMovie.position === 1 && (
-          <MovieDetailsCardLeft {...makeCardProps(leftVariants)}>
+          <MovieDetailsCardLeft {...makeCardProps(makeLeftVariants(delay))}>
             <CloseIconContainer {...closeContainerProps}>
               <IoIosClose size={28} color={COLORS.secondaryDark} />
             </CloseIconContainer>

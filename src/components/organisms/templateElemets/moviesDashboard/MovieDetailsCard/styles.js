@@ -5,10 +5,10 @@ import { dropShadow, space } from "../../../../../themes/theme"
 import {
   CARD_HEIGHT,
   CARD_WIDTH,
-  HANDLE_SIZE
+  HANDLE_SIZE,
+  TRANSITION,
 } from "../../../../../constants/moviesDashboard"
 import { themifyZIndex } from "../../../../../themes/mixins"
-
 
 const MovieDetailsCard = styled(motion.div)`
   position: fixed;
@@ -77,3 +77,51 @@ export const CloseIconContainer = styled(IconContainer)`
   top: 0px;
   left: ${CARD_WIDTH - HANDLE_SIZE}px;
 `
+
+export const makeRightVariants = delay => ({
+  initial: {
+    x: CARD_WIDTH + HANDLE_SIZE,
+  },
+  animateFirst: {
+    x: 0,
+    transition: {
+      ...TRANSITION.primary,
+      delay,
+    },
+  },
+  animateOpen: {
+    x: 0,
+    transition: TRANSITION.primary,
+  },
+  animateClose: {
+    x: CARD_WIDTH - HANDLE_SIZE,
+    transition: TRANSITION.primary,
+  },
+  exit: {
+    x: CARD_WIDTH + HANDLE_SIZE,
+  },
+})
+
+export const makeLeftVariants = delay => ({
+  initial: {
+    x: -(CARD_WIDTH + HANDLE_SIZE),
+  },
+  animateFirst: {
+    x: 0,
+    transition: {
+      ...TRANSITION.primary,
+      delay,
+    },
+  },
+  animateOpen: {
+    x: 0,
+    transition: TRANSITION.primary,
+  },
+  animateClose: {
+    x: -CARD_WIDTH + HANDLE_SIZE,
+    transition: TRANSITION.primary,
+  },
+  exit: {
+    x: -(CARD_WIDTH + HANDLE_SIZE),
+  },
+})
