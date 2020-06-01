@@ -9,7 +9,7 @@ import { useUpdateEffect } from "react-use"
 import isEqual from "lodash/isEqual"
 import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
-import { IoIosArrowBack } from "react-icons/io"
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 
 import { useDeviceType, usePrevious } from "../../hooks"
 import {
@@ -20,7 +20,12 @@ import {
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 import { dropShadow, space } from "../../themes/theme"
-import { CARD_WIDTH, CARD_HEIGHT } from "../../constants/moviesDashboard"
+import {
+  CARD_WIDTH,
+  CARD_HEIGHT,
+  COLORS,
+  TRANSITION,
+} from "../../constants/moviesDashboard"
 import { themifyZIndex } from "../../themes/mixins"
 
 const handleSize = space[6]
@@ -44,9 +49,9 @@ const MovieDetailsCard = styled(motion.div)`
     position: absolute;
     z-index: 4;
     left: -${handleSize - 4}px;
+    bottom: 0px;
     width: ${handleSize}px;
     height: ${handleSize}px;
-    bottom: 0px;
     background-color: #fff;
     border-radius: ${space[1]}px 0 0 ${space[1]}px;
   }
@@ -54,12 +59,17 @@ const MovieDetailsCard = styled(motion.div)`
 
 const IconContainer = styled(motion.div)`
   position: relative;
-  right: ${space[1]}px;
   cursor: pointer;
+  z-index: 4;
+  left: -${handleSize - 4}px;
+  top: ${CARD_HEIGHT.movie - handleSize}px;
   width: ${handleSize}px;
   height: ${handleSize}px;
   z-index: ${themifyZIndex("hoverOverlay")};
-  background-color: red;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 export default function MoviesDashboard() {
@@ -84,7 +94,29 @@ export default function MoviesDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // console.log("MoviesDashboard -> state", state)
+  console.log("MoviesDashboard -> activeMovie", activeMovie)
+
+  const variants = {
+    initial: {
+      x: CARD_WIDTH + handleSize,
+    },
+    animateFirst: {
+      x: 0,
+      transition: TRANSITION.primary,
+    },
+    animateOpen: {
+      x: 0,
+      transition: TRANSITION.primary,
+    },
+    animateClose: {
+      x: CARD_WIDTH + handleSize,
+      transition: TRANSITION.primary,
+    },
+    exit: {
+      x: CARD_WIDTH + handleSize,
+    },
+  }
+
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -112,9 +144,35 @@ export default function MoviesDashboard() {
             setActiveMovie={setActiveMovie}
             activeMovie={activeMovie}
           />
-          <MovieDetailsCard>
-            <IconContainer>Hello</IconContainer>
-          </MovieDetailsCard>
+
+          <AnimatePresence>
+            <MovieDetailsCard
+              initial="initial"
+              animate="animateFirst"
+              exit="exit"
+              variants={variants}
+            >
+              <IconContainer
+                role="button"
+                // onClick={() => setIsOpen(prev => !prev)}
+                whileHover={{
+                  scale: 1.3,
+                  transition: {
+                    delay: 0,
+                  },
+                }}
+                initial={{ rotate: 180 }}
+                // animate={{
+                //   rotate: isOpen ? 180 : 0,
+                //   transition: {
+                //     delay: 1,
+                //   },
+                // }}
+              >
+                <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
+              </IconContainer>
+            </MovieDetailsCard>
+          </AnimatePresence>
         </div>
       )}
     </>
