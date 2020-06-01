@@ -30,6 +30,8 @@ import Image from "../Image/Image"
 import { TitleContainer, TextContainer } from "../styles/styles"
 import { space } from "../../../../../themes/theme"
 import { FavoriteStar } from "../../../../molecules"
+import { themifyFontSize } from "../../../../../themes/mixins"
+import { useMeasure } from "react-use"
 
 const ContentGrid = styled(motion.div)`
   width: 100%;
@@ -41,7 +43,7 @@ const ContentGrid = styled(motion.div)`
 
   display: grid;
   grid-template-columns: 1fr 160px;
-  grid-column-gap: ${space[2]}px;
+  grid-column-gap: ${space[3]}px;
   grid-template-rows: 240px 60px 1fr ${HANDLE_SIZE}px;
   grid-template-areas:
     "info poster"
@@ -53,10 +55,9 @@ const ContentGrid = styled(motion.div)`
 const MainInfoContainer = styled.div`
   display: grid;
   grid-template-rows: repeat(2, min-content) 1fr;
-  /* grid-template-columns: 1fr 35px; */
-  grid-column-gap: ${space[2]}px;
   grid-area: info;
   align-items: start;
+  position: relative;
 `
 
 const PlaceHolderDiv = styled.div`
@@ -69,6 +70,23 @@ const PlaceHolderDiv = styled.div`
 const MovieTitle = styled(TitleContainer)`
   color: ${COLORS.secondaryDark};
   line-height: 1.15;
+`
+
+const SubTitle = styled(TitleContainer)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: ${themifyFontSize(1)};
+  font-weight: 200;
+  color: ${COLORS.textColor};
+  cursor: pointer;
+`
+
+const Overview = styled(TextContainer)`
+  margin-top: 0px;
+  width: auto;
+  position: absolute;
+  bottom: 0px;
 `
 
 const ContentItem = styled.div`
@@ -132,6 +150,9 @@ export default function MovieDetailsCardComponent({
       }),
   }
 
+  const [overviewRef, { height }] = useMeasure()
+  console.log("height", height)
+
   return (
     <>
       <AnimatePresence>
@@ -169,8 +190,18 @@ export default function MovieDetailsCardComponent({
                     <FavoriteStar isFavorited={true} isHovered={false} />
                   </div>
                 </MovieTitle>
-                <div>subtitle</div>
-                <TextContainer>{activeMovie.data.overview}</TextContainer>
+                {activeMovie.data.title !== activeMovie.data.original_title ? (
+                  <SubTitle>{activeMovie.data.original_title}</SubTitle>
+                ) : (
+                  <div />
+                )}
+                <div
+                  ref={overviewRef}
+                  style={{ position: "relative", alignSelf: "stretch" }}
+                />
+                <Overview style={{ height: height - space[2] }}>
+                  {activeMovie.data.overview}
+                </Overview>
               </MainInfoContainer>
               <ContentItem style={{ gridArea: "poster" }}>
                 <Image

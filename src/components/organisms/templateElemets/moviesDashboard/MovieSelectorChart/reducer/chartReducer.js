@@ -2,6 +2,7 @@ import { useReducer, useEffect } from "react"
 
 import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
+import { usePrevious } from "../../../../../../hooks"
 
 const initialState = {
   nameId: undefined,
@@ -50,6 +51,7 @@ function movieSelectorChartReducer(state, { type, payload }) {
 }
 
 export default function useMovieSelectorChartReducer({ dataSets }) {
+  const prevDataSets = usePrevious(dataSets)
   const [chartState, dispatch] = useReducer(
     movieSelectorChartReducer,
     initialState
