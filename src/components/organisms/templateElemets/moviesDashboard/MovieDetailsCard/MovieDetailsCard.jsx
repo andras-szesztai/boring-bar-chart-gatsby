@@ -7,7 +7,6 @@ import {
   IoIosClose,
   IoIosCloseCircle,
 } from "react-icons/io"
-import ClampLines from "react-clamp-lines"
 
 import {
   CARD_WIDTH,
@@ -42,12 +41,13 @@ const ContentGrid = styled(motion.div)`
   padding: ${space[3]}px;
 
   display: grid;
-  grid-template-columns: 1fr 160px;
+  grid-template-columns: 1fr 120px;
   grid-column-gap: ${space[3]}px;
-  grid-template-rows: 240px 60px 1fr ${HANDLE_SIZE}px;
+  grid-template-rows: 180px 60px 120px 1fr ${HANDLE_SIZE / 2}px;
   grid-template-areas:
     "info poster"
     "genres genres"
+    "credits credits"
     "score score"
     "link link";
 `
@@ -70,6 +70,7 @@ const PlaceHolderDiv = styled.div`
 const MovieTitle = styled(TitleContainer)`
   color: ${COLORS.secondaryDark};
   line-height: 1.15;
+  font-size: ${themifyFontSize(3)};
 `
 
 const SubTitle = styled(TitleContainer)`
@@ -96,10 +97,28 @@ const ContentItem = styled.div`
   overflow: hidden;
 `
 
+// TODO: finish styling with icon FaExternalLinkSquareAlt
+const LinkContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  grid-area: link;
+`
+
+// TODO: style genre list
+const GenreList = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  grid-area: genres;
+  overflow-x: auto;
+  font-size: ${themifyFontSize(1)};
+`
+
 export default function MovieDetailsCardComponent({
   activeMovie,
   prevActiveMovie,
   setActiveMovie,
+  genres,
 }) {
   const delay = typeof prevActiveMovie.position == "number" ? 0.25 : 0
   const {
@@ -150,8 +169,11 @@ export default function MovieDetailsCardComponent({
       }),
   }
 
-  const [overviewRef, { height }] = useMeasure()
-  console.log("height", height)
+  const [rightOverviewRef, { height: rightHeight }] = useMeasure()
+  const [leftOverviewRef, { height: leftHeight }] = useMeasure()
+
+  // TODO: fetch credit (endpoint depends if movie or tv)
+  // TODO: clean up duplicate code
 
   return (
     <>
@@ -196,27 +218,41 @@ export default function MovieDetailsCardComponent({
                   <div />
                 )}
                 <div
-                  ref={overviewRef}
+                  ref={rightOverviewRef}
                   style={{ position: "relative", alignSelf: "stretch" }}
                 />
-                <Overview style={{ height: height - space[2] }}>
+                <Overview style={{ height: rightHeight - space[2] }}>
                   {activeMovie.data.overview}
                 </Overview>
               </MainInfoContainer>
               <ContentItem style={{ gridArea: "poster" }}>
                 <Image
                   url={activeMovie.data.poster_path}
-                  height={240}
+                  height={180}
                   alt={`${activeMovie.data.title}-poster`}
                 />
               </ContentItem>
-              <PlaceHolderDiv style={{ gridArea: "genres" }}>
-                Genres
+              <GenreList>
+                Genres:&nbsp;
+                {activeMovie.data.genre_ids.map(id => (
+                  <span>{genres.find(genre => genre.id === id).name},&nbsp;</span>
+                ))}
+              </GenreList>
+              <PlaceHolderDiv style={{ gridArea: "credits" }}>
+                Credits come here (top cast & crew)
               </PlaceHolderDiv>
               <PlaceHolderDiv style={{ gridArea: "score" }}>
-                Scrore
+                Score comes here
               </PlaceHolderDiv>
-              <PlaceHolderDiv style={{ gridArea: "link" }}>Link</PlaceHolderDiv>
+              <LinkContainer>
+                <a
+                  href={`https://www.themoviedb.org/${activeMovie.data.media_type}/${activeMovie.data.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Find out more on TMBD
+                </a>
+              </LinkContainer>
             </ContentGrid>
           </MovieDetailsCardRight>
         )}
@@ -233,13 +269,54 @@ export default function MovieDetailsCardComponent({
               <IoIosArrowForward size={24} color={COLORS.secondaryDark} />
             </ArrowIconContainerLeft>
             <ContentGrid>
+              <MainInfoContainer>
+                <MovieTitle>
+                  {activeMovie.data.title}
+                  <div style={{ marginTop: -3 }}>
+                    <FavoriteStar isFavorited={true} isHovered={false} />
+                  </div>
+                </MovieTitle>
+                {activeMovie.data.title !== activeMovie.data.original_title ? (
+                  <SubTitle>{activeMovie.data.original_title}</SubTitle>
+                ) : (
+                  <div />
+                )}
+                <div
+                  ref={leftOverviewRef}
+                  style={{ position: "relative", alignSelf: "stretch" }}
+                />
+                <Overview style={{ height: leftHeight - space[2] }}>
+                  {activeMovie.data.overview}
+                </Overview>
+              </MainInfoContainer>
               <ContentItem style={{ gridArea: "poster" }}>
                 <Image
                   url={activeMovie.data.poster_path}
-                  height={240}
+                  height={180}
                   alt={`${activeMovie.data.title}-poster`}
                 />
               </ContentItem>
+              <GenreList>
+                Genres:&nbsp;
+                {activeMovie.data.genre_ids.map(id => (
+                  <span>{genres.find(genre => genre.id === id).name},&nbsp;</span>
+                ))}
+              </GenreList>
+              <PlaceHolderDiv style={{ gridArea: "credits" }}>
+                Credits come here (top cast & crew)
+              </PlaceHolderDiv>
+              <PlaceHolderDiv style={{ gridArea: "score" }}>
+                Score comes here
+              </PlaceHolderDiv>
+              <LinkContainer>
+                <a
+                  href={`https://www.themoviedb.org/${activeMovie.data.media_type}/${activeMovie.data.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Find out more on TMBD
+                </a>
+              </LinkContainer>
             </ContentGrid>
           </MovieDetailsCardLeft>
         )}
