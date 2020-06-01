@@ -11,10 +11,15 @@ import "d3-transition"
 import { axisBottom } from "d3-axis"
 import { Delaunay } from "d3-delaunay"
 
-import { COLORS, SIZE_RANGE } from "../../../../../../constants/moviesDashboard"
+import {
+  COLORS,
+  SIZE_RANGE,
+  CIRCLE_ADJUST,
+} from "../../../../../../constants/moviesDashboard"
 import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
 import { makeTransition } from "../../../../../../utils/chartHelpers"
+import { useSelectedUpdate } from "./hooks"
 
 const fadeOutEffect = css`
   content: "";
@@ -71,7 +76,6 @@ export default function DateAxis(props) {
   const svgAreaRef = useRef(null)
   const voronoiRef = useRef(null)
   const [ref, dims] = useMeasure()
-  const radiusAdjust = SIZE_RANGE[0]
 
   useEffect(() => {
     if (!storedValues.current.isInit && dims.width) {
@@ -120,7 +124,7 @@ export default function DateAxis(props) {
       .append("circle")
       .attr("cy", 0)
       .attr("cx", 0)
-      .attr("r", SIZE_RANGE[0] + radiusAdjust)
+      .attr("r", SIZE_RANGE[0] + CIRCLE_ADJUST)
       .attr("fill", "#fff")
       .attr("stroke", chroma(COLORS.secondary).darken())
       .attr("stroke-width", 1)
@@ -137,7 +141,7 @@ export default function DateAxis(props) {
     chartArea
       .append("line")
       .attr("class", "top-line line")
-      .attr("y1", -SIZE_RANGE[0] - radiusAdjust)
+      .attr("y1", -SIZE_RANGE[0] - CIRCLE_ADJUST)
       .attr("y2", -dims.height / 2)
       .attr("x1", 0)
       .attr("x2", 0)
@@ -147,7 +151,7 @@ export default function DateAxis(props) {
     chartArea
       .append("line")
       .attr("class", "bottom-line line")
-      .attr("y1", SIZE_RANGE[0] + radiusAdjust)
+      .attr("y1", SIZE_RANGE[0] + CIRCLE_ADJUST)
       .attr("y2", dims.height / 2)
       .attr("x1", 0)
       .attr("x2", 0)
@@ -186,65 +190,13 @@ export default function DateAxis(props) {
       )
   }
 
-  React.useEffect(() => {
-    if (
-      storedValues.current.isInit &&
-      props.activeMovieID !== prevProps.activeMovieID
-    ) {
-      const { chartArea, filteredData, currXScale } = storedValues.current
-      const t = makeTransition(chartArea, 500, "y-update")
-      if (props.activeMovieID) {
-        const selectedCircleData = filteredData.find(
-          d => d.id === activeMovieID
-        )
-        chartArea
-          .selectAll("circle")
-          .datum(selectedCircleData)
-          .transition(t)
-          .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
-          .attr("opacity", 1)
-        const isCast = props.type === "cast"
-        const mainData = isCast ? castData : crewData
-        const subData = isCast ? crewData : castData
-        const topLineData = mainData.filter(d => d.id === activeMovieID)
-        const bottomLineData = subData.filter(d => d.id === activeMovieID)
-        chartArea
-          .selectAll(".line")
-          .datum(selectedCircleData)
-          .transition(t)
-          .attr("x1", ({ release_date }) => currXScale(new Date(release_date)))
-          .attr("x2", ({ release_date }) => currXScale(new Date(release_date)))
-          .attr("opacity", 1)
-        if (topLineData.length) {
-          chartArea
-            .selectAll(".top-line")
-            .transition(t)
-            .attr("y2", -dims.height / 2)
-        } else {
-          chartArea
-            .selectAll(".top-line")
-            .transition(t)
-            .attr("y2", -SIZE_RANGE[0] - radiusAdjust)
-        }
-        if (bottomLineData.length) {
-          chartArea
-            .selectAll(".bottom-line")
-            .transition(t)
-            .attr("y2", dims.height / 2)
-        } else {
-          chartArea
-            .selectAll(".bottom-line")
-            .transition(t)
-            .attr("y2", SIZE_RANGE[0] + radiusAdjust)
-        }
-      }
-      if (!props.activeMovieID) {
-        chartArea
-          .selectAll(".circle")
-          .transition(t)
-          .attr("opacity", 0)
-      }
-    }
+  useSelectedUpdate({
+    storedValues,
+    activeMovieID,
+    prevActiveMovieID: prevProps && prevProps.activeMovieID,
+    type: props.type,
+    data: { crewData, castData },
+    dims,
   })
 
   return (

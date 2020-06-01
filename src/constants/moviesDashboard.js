@@ -22,6 +22,7 @@ export const TRANSITION = {
 }
 
 export const SIZE_RANGE = [2, 20]
+export const CIRCLE_ADJUST = 4
 
 export const OPACITY_VARIANT = {
   initial: {
