@@ -72,3 +72,9 @@ export const FIXED_DIMS = {
   controlCollapsedWidth: 200
 }
 
+export const CARD_WIDTH = 400
+export const CARD_HEIGHT = {
+  person: 240,
+  movie: 360,
+}
+

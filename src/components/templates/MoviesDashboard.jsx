@@ -18,6 +18,22 @@ import {
   MovieSelectorChart,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
+import { dropShadow, space } from "../../themes/theme"
+import { CARD_WIDTH , CARD_HEIGHT} from "../../constants/moviesDashboard"
+
+const MovieDetailsCard = styled(motion.div)`
+  position: fixed;
+
+  background-color: #fff;
+  filter: drop-shadow(${dropShadow.primary})
+    drop-shadow(${dropShadow.secondary});
+  border-radius: ${space[1]}px;
+
+  right: ${space[2]}px;
+  width: ${CARD_WIDTH}px;
+  height: ${CARD_HEIGHT.movie}px;
+  z-index: 5;
+`
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
@@ -68,6 +84,7 @@ export default function MoviesDashboard() {
             setActiveMovie={setActiveMovie}
             activeMovie={activeMovie}
           />
+
         </div>
       )}
     </>

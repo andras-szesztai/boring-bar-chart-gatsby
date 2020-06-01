@@ -48,6 +48,18 @@ export default function MovieSelectorChart({
 }) {
   const { chartState, actions } = useMovieSelectorChartReducer({ dataSets })
 
+  const makeProps = acc => ({
+    chart: acc,
+    type: chartState.types[acc],
+    data: dataSets.personCredits[chartState.types[acc]],
+    xScale: chartState.scales.xScale,
+    sizeScale: chartState.scales.sizeScale,
+    isYDomainSynced: chartState.isYDomainSynced,
+    isSizeDynamic: chartState.isSizeDynamic,
+    setActiveMovie: setActiveMovie,
+    activeMovie: activeMovie,
+  })
+
   return (
     <>
       {activeNameID && !loading.personCredits && (
@@ -59,17 +71,7 @@ export default function MovieSelectorChart({
             </PlaceHolderDiv>
             {typeof chartState.isBoth == "boolean" && (
               <ChartContainer twoCharts={chartState.isBoth}>
-                <BubbleChart
-                  chart="main"
-                  type={chartState.types.main}
-                  data={dataSets.personCredits[chartState.types.main]}
-                  xScale={chartState.scales.xScale}
-                  sizeScale={chartState.scales.sizeScale}
-                  isYDomainSynced={chartState.isYDomainSynced}
-                  isSizeDynamic={chartState.isSizeDynamic}
-                  setActiveMovie={setActiveMovie}
-                  activeMovie={activeMovie}
-                />
+                <BubbleChart {...makeProps("main")} />
                 <DateAxis
                   crewData={dataSets.personCredits.crew}
                   castData={dataSets.personCredits.cast}
@@ -78,19 +80,7 @@ export default function MovieSelectorChart({
                   setActiveMovie={setActiveMovie}
                   activeMovie={activeMovie}
                 />
-                {chartState.isBoth && (
-                  <BubbleChart
-                    chart="sub"
-                    type={chartState.types.sub}
-                    data={dataSets.personCredits[chartState.types.sub]}
-                    xScale={chartState.scales.xScale}
-                    sizeScale={chartState.scales.sizeScale}
-                    isYDomainSynced={chartState.isYDomainSynced}
-                    isSizeDynamic={chartState.isSizeDynamic}
-                    setActiveMovie={setActiveMovie}
-                    activeMovie={activeMovie}
-                  />
-                )}
+                {chartState.isBoth && <BubbleChart {...makeProps("sub")} />}
               </ChartContainer>
             )}
           </SubContainer>
