@@ -12,6 +12,7 @@ const initialState = {
   activeNameID: undefined,
   activeMovie: {
     id: undefined,
+    data: {},
     position: undefined,
   },
   dataSets: {
@@ -45,6 +46,7 @@ function moviesDashboardReducer(state, { type, payload }) {
       ...state,
       activeMovie: {
         id: payload.id,
+        data: payload.data || {},
         position: payload.position,
       },
     }),

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import styled, { css } from "styled-components"
 import { motion } from "framer-motion"
 import chroma from "chroma-js"
-import {scaleLinear } from "d3-scale"
+import { scaleLinear } from "d3-scale"
 import { extent } from "d3-array"
 import { select } from "d3-selection"
 import { useMeasure } from "react-use"
@@ -236,11 +236,16 @@ export default function BubbleChart(props) {
             // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
             // .on("mouseover", d => console.log(d))
-            // TODO: add back
-            .on("click", d => {
-              
-              //props.setActiveMovieId({id: d.id, position: 0})
-            })
+            .on("click", d =>
+              props.setActiveMovie({
+                id: d.id,
+                data: d,
+                position: Number(
+                  currXScale(new Date(d.release_date)) + margin.left >=
+                    dims.width / 2
+                ),
+              })
+            )
             .call(enter => enter),
         update =>
           update.call(update =>
@@ -292,5 +297,5 @@ BubbleChart.defaultProps = {
     bottom: 20,
     right: 20,
   },
-  sizeRange: SIZE_RANGE
+  sizeRange: SIZE_RANGE,
 }

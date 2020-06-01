@@ -179,8 +179,16 @@ export default function DateAxis(props) {
             // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
             // .on("mouseover", d => console.log(d))
-              // TODO: add back
-            // .on("click", d => props.setActiveMovie(d.id))
+            .on("click", d =>
+              props.setActiveMovie({
+                id: d.id,
+                data: d,
+                position: Number(
+                  currXScale(new Date(d.release_date)) + margin.left >=
+                    dims.width / 2
+                ),
+              })
+            )
             .call(enter => enter),
         update =>
           update.call(update =>
