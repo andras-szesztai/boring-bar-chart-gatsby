@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 
 import { BubbleChart, DateAxis } from "../charts"
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
+import { HANDLE_SIZE } from "../../../../../constants/moviesDashboard"
 
 const MainContainer = styled(motion.div)`
   width: 100vw;
@@ -19,7 +20,7 @@ const MainContainer = styled(motion.div)`
 
 const SubContainer = styled.div`
   display: grid;
-  width: 95%;
+  width: calc(100% - (2 * ${HANDLE_SIZE}px));
   height: 80%;
 
   grid-template-rows: 75px auto;

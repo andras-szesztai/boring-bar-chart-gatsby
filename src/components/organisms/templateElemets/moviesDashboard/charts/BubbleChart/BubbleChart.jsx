@@ -10,7 +10,7 @@ import "d3-transition"
 import { Delaunay } from "d3-delaunay"
 
 import { usePrevious } from "../../../../../../hooks"
-import { COLORS, SIZE_RANGE } from "../../../../../../constants/moviesDashboard"
+import { COLORS, SIZE_RANGE, CHART_SIDE_MARGINS } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize } from "../../../../../../themes/theme"
 
@@ -305,9 +305,8 @@ export default function BubbleChart(props) {
 BubbleChart.defaultProps = {
   margin: {
     top: 20,
-    left: 10,
     bottom: 20,
-    right: 20,
+    ...CHART_SIDE_MARGINS
   },
   sizeRange: SIZE_RANGE,
 }

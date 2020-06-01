@@ -12,6 +12,7 @@ import {
   COLORS,
   SIZE_RANGE,
   CIRCLE_ADJUST,
+  CHART_SIDE_MARGINS,
 } from "../../../../../../constants/moviesDashboard"
 import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
@@ -224,8 +225,7 @@ export default function DateAxis(props) {
 DateAxis.defaultProps = {
   margin: {
     top: 20,
-    left: 10,
     bottom: 20,
-    right: 20,
+    ...CHART_SIDE_MARGINS
   },
 }

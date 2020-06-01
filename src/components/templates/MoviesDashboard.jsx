@@ -25,10 +25,9 @@ import {
   CARD_HEIGHT,
   COLORS,
   TRANSITION,
+  HANDLE_SIZE,
 } from "../../constants/moviesDashboard"
 import { themifyZIndex } from "../../themes/mixins"
-
-const handleSize = space[6]
 
 const MovieDetailsCardStyle = css`
   position: fixed;
@@ -47,8 +46,8 @@ const HandleStyle = css`
   position: absolute;
   z-index: 4;
   bottom: 0px;
-  width: ${handleSize}px;
-  height: ${handleSize}px;
+  width: ${HANDLE_SIZE}px;
+  height: ${HANDLE_SIZE}px;
   background-color: #fff;
   border-radius: ${space[1]}px 0 0 ${space[1]}px;
 `
@@ -58,7 +57,7 @@ const MovieDetailsCardRight = styled(motion.div)`
   right: ${space[2]}px;
   :after {
     ${HandleStyle}
-    left: -${handleSize - 4}px;
+    left: -${HANDLE_SIZE - 4}px;
   }
 `
 
@@ -67,7 +66,7 @@ const MovieDetailsCardLeft = styled(motion.div)`
   left: ${space[2]}px;
   :after {
     ${HandleStyle}
-    right: ${-handleSize + 4}px;
+    right: ${-HANDLE_SIZE + 4}px;
   }
 `
 
@@ -75,9 +74,9 @@ const IconContainerStyle = css`
   position: relative;
   cursor: pointer;
   z-index: 4;
-  top: ${CARD_HEIGHT.movie - handleSize}px;
-  width: ${handleSize}px;
-  height: ${handleSize}px;
+  top: ${CARD_HEIGHT.movie - HANDLE_SIZE}px;
+  width: ${HANDLE_SIZE}px;
+  height: ${HANDLE_SIZE}px;
   z-index: ${themifyZIndex("hoverOverlay")};
 
   display: flex;
@@ -87,7 +86,7 @@ const IconContainerStyle = css`
 
 const IconContainerRight = styled(motion.div)`
   ${IconContainerStyle}
-  left: -${handleSize - 4}px;
+  left: -${HANDLE_SIZE - 4}px;
 `
 
 const IconContainerLeft = styled(motion.div)`
@@ -119,7 +118,7 @@ export default function MoviesDashboard() {
 
   const rightVariants = {
     initial: {
-      x: CARD_WIDTH + handleSize,
+      x: CARD_WIDTH + HANDLE_SIZE,
     },
     animateFirst: {
       x: 0,
@@ -136,17 +135,17 @@ export default function MoviesDashboard() {
       transition: TRANSITION.primary,
     },
     animateClose: {
-      x: CARD_WIDTH + handleSize,
+      x: CARD_WIDTH - HANDLE_SIZE,
       transition: TRANSITION.primary,
     },
     exit: {
-      x: CARD_WIDTH + handleSize,
+      x: CARD_WIDTH + HANDLE_SIZE,
     },
   }
 
   const leftVariants = {
     initial: {
-      x: -(CARD_WIDTH + handleSize),
+      x: -(CARD_WIDTH + HANDLE_SIZE),
     },
     animateFirst: {
       x: 0,
@@ -163,11 +162,11 @@ export default function MoviesDashboard() {
       transition: TRANSITION.primary,
     },
     animateClose: {
-      x: -(CARD_WIDTH + handleSize),
+      x: -CARD_WIDTH + HANDLE_SIZE,
       transition: TRANSITION.primary,
     },
     exit: {
-      x: -(CARD_WIDTH + handleSize),
+      x: -(CARD_WIDTH + HANDLE_SIZE),
     },
   }
 
@@ -197,6 +196,15 @@ export default function MoviesDashboard() {
     setIsMovieDetailsCardOpen,
   ])
 
+  // onClick={() =>
+  //   setActiveMovie({
+  //     activeMovie: {
+  //       id: undefined,
+  //       data: {},
+  //       position: undefined,
+  //     },
+  //   })
+  // }
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -236,15 +244,6 @@ export default function MoviesDashboard() {
                 <IconContainerRight
                   role="button"
                   onClick={() => setIsMovieDetailsCardOpen(prev => !prev)}
-                  // onClick={() =>
-                  //   setActiveMovie({
-                  //     activeMovie: {
-                  //       id: undefined,
-                  //       data: {},
-                  //       position: undefined,
-                  //     },
-                  //   })
-                  // }
                   whileHover={{
                     scale: 1.3,
                     transition: {
@@ -252,12 +251,12 @@ export default function MoviesDashboard() {
                     },
                   }}
                   initial={{ rotate: 180 }}
-                  // animate={{
-                  //   rotate: isOpen ? 180 : 0,
-                  //   transition: {
-                  //     delay: 1,
-                  //   },
-                  // }}
+                  animate={{
+                    rotate: isMovieDetailsCardOpen ? 180 : 0,
+                    transition: {
+                      delay: 1,
+                    },
+                  }}
                 >
                   <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
                 </IconContainerRight>
@@ -276,7 +275,6 @@ export default function MoviesDashboard() {
                 <IconContainerLeft
                   role="button"
                   onClick={() => setIsMovieDetailsCardOpen(prev => !prev)}
-                  // onClick={() => setIsOpen(prev => !prev)}
                   whileHover={{
                     scale: 1.3,
                     transition: {
@@ -284,12 +282,12 @@ export default function MoviesDashboard() {
                     },
                   }}
                   initial={{ rotate: 180 }}
-                  // animate={{
-                  //   rotate: isOpen ? 180 : 0,
-                  //   transition: {
-                  //     delay: 1,
-                  //   },
-                  // }}
+                  animate={{
+                    rotate: isMovieDetailsCardOpen ? 180 : 0,
+                    transition: {
+                      delay: 1,
+                    },
+                  }}
                 >
                   <IoIosArrowForward size={24} color={COLORS.secondaryDark} />
                 </IconContainerLeft>
