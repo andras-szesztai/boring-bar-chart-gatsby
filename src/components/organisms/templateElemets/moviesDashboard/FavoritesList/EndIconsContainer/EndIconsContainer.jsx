@@ -56,6 +56,7 @@ export default function EndIconsContainer({
   return (
     <Container style={endContainerAnim}>
       <IconContainer
+        role="button"
         style={{ transform: "translateY(5px)" }}
         onClick={() => setIsOpen(prev => !prev)}
         whileHover={{

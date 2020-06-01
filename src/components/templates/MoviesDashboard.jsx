@@ -9,6 +9,7 @@ import { useUpdateEffect } from "react-use"
 import isEqual from "lodash/isEqual"
 import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
+import { IoIosArrowBack } from "react-icons/io"
 
 import { useDeviceType, usePrevious } from "../../hooks"
 import {
@@ -19,7 +20,10 @@ import {
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 import { dropShadow, space } from "../../themes/theme"
-import { CARD_WIDTH , CARD_HEIGHT} from "../../constants/moviesDashboard"
+import { CARD_WIDTH, CARD_HEIGHT } from "../../constants/moviesDashboard"
+import { themifyZIndex } from "../../themes/mixins"
+
+const handleSize = space[6]
 
 const MovieDetailsCard = styled(motion.div)`
   position: fixed;
@@ -29,10 +33,33 @@ const MovieDetailsCard = styled(motion.div)`
     drop-shadow(${dropShadow.secondary});
   border-radius: ${space[1]}px;
 
+  top: calc(50% - ${CARD_HEIGHT.movie / 2}px);
   right: ${space[2]}px;
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT.movie}px;
-  z-index: 5;
+  z-index: 4;
+
+  :after {
+    content: "";
+    position: absolute;
+    z-index: 4;
+    left: -${handleSize - 4}px;
+    width: ${handleSize}px;
+    height: ${handleSize}px;
+    bottom: 0px;
+    background-color: #fff;
+    border-radius: ${space[1]}px 0 0 ${space[1]}px;
+  }
+`
+
+const IconContainer = styled(motion.div)`
+  position: relative;
+  right: ${space[1]}px;
+  cursor: pointer;
+  width: ${handleSize}px;
+  height: ${handleSize}px;
+  z-index: ${themifyZIndex("hoverOverlay")};
+  background-color: red;
 `
 
 export default function MoviesDashboard() {
@@ -57,6 +84,7 @@ export default function MoviesDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // console.log("MoviesDashboard -> state", state)
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -84,7 +112,9 @@ export default function MoviesDashboard() {
             setActiveMovie={setActiveMovie}
             activeMovie={activeMovie}
           />
-
+          <MovieDetailsCard>
+            <IconContainer>Hello</IconContainer>
+          </MovieDetailsCard>
         </div>
       )}
     </>
