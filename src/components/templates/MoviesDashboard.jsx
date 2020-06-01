@@ -9,7 +9,7 @@ import { useUpdateEffect } from "react-use"
 import isEqual from "lodash/isEqual"
 import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
+import { IoIosArrowBack, IoIosArrowForward, IoIosClose } from "react-icons/io"
 
 import { useDeviceType, usePrevious, useStateWithPrevious } from "../../hooks"
 import {
@@ -70,7 +70,7 @@ const MovieDetailsCardLeft = styled(motion.div)`
   }
 `
 
-const IconContainerStyle = css`
+const IconContainer = styled(motion.div)`
   position: relative;
   cursor: pointer;
   z-index: 4;
@@ -84,14 +84,24 @@ const IconContainerStyle = css`
   align-items: center;
 `
 
-const IconContainerRight = styled(motion.div)`
-  ${IconContainerStyle}
+const IconContainerRight = styled(IconContainer)`
   left: -${HANDLE_SIZE - 4}px;
+  top: ${CARD_HEIGHT.movie - HANDLE_SIZE * 2}px;
 `
 
-const IconContainerLeft = styled(motion.div)`
-  ${IconContainerStyle}
+const IconContainerLeft = styled(IconContainer)`
   left: ${CARD_WIDTH - 4}px;
+  top: ${CARD_HEIGHT.movie - HANDLE_SIZE * 2}px;
+`
+
+const CloseIconContainerRight = styled(IconContainer)`
+  top: 0px;
+  left: ${CARD_WIDTH - HANDLE_SIZE}px;
+`
+
+const CloseIconContainerLeft = styled(IconContainer)`
+  top: 0px;
+  left: ${CARD_WIDTH - HANDLE_SIZE}px;
 `
 
 export default function MoviesDashboard() {
@@ -196,15 +206,6 @@ export default function MoviesDashboard() {
     setIsMovieDetailsCardOpen,
   ])
 
-  // onClick={() =>
-  //   setActiveMovie({
-  //     activeMovie: {
-  //       id: undefined,
-  //       data: {},
-  //       position: undefined,
-  //     },
-  //   })
-  // }
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -241,6 +242,22 @@ export default function MoviesDashboard() {
                 exit="exit"
                 variants={rightVariants}
               >
+                <CloseIconContainerRight
+                  whileHover={{
+                    scale: 1.3,
+                  }}
+                  onClick={() =>
+                    setActiveMovie({
+                      activeMovie: {
+                        id: undefined,
+                        data: {},
+                        position: undefined,
+                      },
+                    })
+                  }
+                >
+                  <IoIosClose size={24} color={COLORS.textColor} />
+                </CloseIconContainerRight>
                 <IconContainerRight
                   role="button"
                   onClick={() => setIsMovieDetailsCardOpen(prev => !prev)}
@@ -272,6 +289,22 @@ export default function MoviesDashboard() {
                 exit="exit"
                 variants={leftVariants}
               >
+                <CloseIconContainerLeft
+                  whileHover={{
+                    scale: 1.3,
+                  }}
+                  onClick={() =>
+                    setActiveMovie({
+                      activeMovie: {
+                        id: undefined,
+                        data: {},
+                        position: undefined,
+                      },
+                    })
+                  }
+                >
+                  <IoIosClose size={24} color={COLORS.textColor} />
+                </CloseIconContainerLeft>
                 <IconContainerLeft
                   role="button"
                   onClick={() => setIsMovieDetailsCardOpen(prev => !prev)}

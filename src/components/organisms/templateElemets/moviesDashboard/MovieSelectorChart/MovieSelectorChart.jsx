@@ -2,9 +2,10 @@ import React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
+import { HANDLE_SIZE } from "../../../../../constants/moviesDashboard"
+
 import { BubbleChart, DateAxis } from "../charts"
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
-import { HANDLE_SIZE } from "../../../../../constants/moviesDashboard"
 
 const MainContainer = styled(motion.div)`
   width: 100vw;
