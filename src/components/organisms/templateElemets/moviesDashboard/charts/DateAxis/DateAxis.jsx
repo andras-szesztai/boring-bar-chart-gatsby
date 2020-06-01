@@ -5,17 +5,14 @@ import styled, { css } from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
-import { scaleTime, scaleLinear, scaleSqrt } from "d3-scale"
-import { extent, mean } from "d3-array"
-import useResizeAware from "react-resize-aware"
 import { select } from "d3-selection"
 import { useMeasure } from "react-use"
-import gsap from "gsap"
 import "d3-transition"
 import { axisBottom } from "d3-axis"
+import { Delaunay } from "d3-delaunay"
+
 import { COLORS, SIZE_RANGE } from "../../../../../../constants/moviesDashboard"
 import { fontSize } from "../../../../../../themes/theme"
-import { Delaunay } from "d3-delaunay"
 import { usePrevious } from "../../../../../../hooks"
 import { makeTransition } from "../../../../../../utils/chartHelpers"
 
@@ -96,46 +93,7 @@ export default function DateAxis(props) {
       }
       createDateAxis()
       createUpdateVoronoi()
-      chartArea
-        .append("circle")
-        .attr("class", "inner-selected-circle circle")
-        .attr("cy", 0)
-        .attr("cx", 0)
-        .attr("r", SIZE_RANGE[0])
-        .attr("fill", COLORS.secondary)
-        .attr("stroke", chroma(COLORS.secondary).darken())
-        .attr("stroke-width", 1)
-        .attr("opacity", 0)
-      chartArea
-        .append("circle")
-        .attr("class", "outer-selected-circle circle")
-        .attr("cy", 0)
-        .attr("cx", 0)
-        .attr("r", SIZE_RANGE[0] + radiusAdjust)
-        .attr("fill", "transparent")
-        .attr("stroke", chroma(COLORS.secondary).darken())
-        .attr("stroke-width", 1)
-        .attr("opacity", 0)
-      chartArea
-        .append("line")
-        .attr("class", "top-line")
-        .attr("y1", -SIZE_RANGE[0] - radiusAdjust)
-        .attr("y2", -dims.height / 2)
-        .attr("x1", 0)
-        .attr("x2", 0)
-        .attr("stroke", chroma(COLORS.secondary).darken())
-        .attr("stroke-width", 1)
-        .attr("opacity", 1)
-      chartArea
-        .append("line")
-        .attr("class", "bottom-line")
-        .attr("y1", SIZE_RANGE[0] + radiusAdjust)
-        .attr("y2", dims.height / 2)
-        .attr("x1", 0)
-        .attr("x2", 0)
-        .attr("stroke", chroma(COLORS.secondary).darken())
-        .attr("stroke-width", 1)
-        .attr("opacity", 1)
+      createRefElements()
     }
   })
 
@@ -154,6 +112,48 @@ export default function DateAxis(props) {
           .attr("fill", COLORS.gridColor)
           .attr("font-size", fontSize[1])
       })
+  }
+
+  function createRefElements() {
+    const { chartArea } = storedValues.current
+    chartArea
+      .append("circle")
+      .attr("cy", 0)
+      .attr("cx", 0)
+      .attr("r", SIZE_RANGE[0] + radiusAdjust)
+      .attr("fill", "#fff")
+      .attr("stroke", chroma(COLORS.secondary).darken())
+      .attr("stroke-width", 1)
+      .attr("opacity", 0)
+    chartArea
+      .append("circle")
+      .attr("cy", 0)
+      .attr("cx", 0)
+      .attr("r", SIZE_RANGE[0])
+      .attr("fill", COLORS.secondary)
+      .attr("stroke", chroma(COLORS.secondary).darken())
+      .attr("stroke-width", 1)
+      .attr("opacity", 0)
+    chartArea
+      .append("line")
+      .attr("class", "top-line line")
+      .attr("y1", -SIZE_RANGE[0] - radiusAdjust)
+      .attr("y2", -dims.height / 2)
+      .attr("x1", 0)
+      .attr("x2", 0)
+      .attr("stroke", chroma(COLORS.secondary).darken())
+      .attr("stroke-width", 1)
+      .attr("opacity", 0)
+    chartArea
+      .append("line")
+      .attr("class", "bottom-line line")
+      .attr("y1", SIZE_RANGE[0] + radiusAdjust)
+      .attr("y2", dims.height / 2)
+      .attr("x1", 0)
+      .attr("x2", 0)
+      .attr("stroke", chroma(COLORS.secondary).darken())
+      .attr("stroke-width", 1)
+      .attr("opacity", 0)
   }
 
   function createUpdateVoronoi() {
@@ -198,7 +198,7 @@ export default function DateAxis(props) {
           d => d.id === activeMovieID
         )
         chartArea
-          .selectAll(".circle")
+          .selectAll("circle")
           .datum(selectedCircleData)
           .transition(t)
           .attr("cx", ({ release_date }) => currXScale(new Date(release_date)))
@@ -208,11 +208,35 @@ export default function DateAxis(props) {
         const subData = isCast ? crewData : castData
         const topLineData = mainData.filter(d => d.id === activeMovieID)
         const bottomLineData = subData.filter(d => d.id === activeMovieID)
-        if (topLineData) {
-          chartArea.selectAll(".circle")
+        chartArea
+          .selectAll(".line")
+          .datum(selectedCircleData)
+          .transition(t)
+          .attr("x1", ({ release_date }) => currXScale(new Date(release_date)))
+          .attr("x2", ({ release_date }) => currXScale(new Date(release_date)))
+          .attr("opacity", 1)
+        if (topLineData.length) {
+          chartArea
+            .selectAll(".top-line")
+            .transition(t)
+            .attr("y2", -dims.height / 2)
+        } else {
+          chartArea
+            .selectAll(".top-line")
+            .transition(t)
+            .attr("y2", -SIZE_RANGE[0] - radiusAdjust)
         }
-        console.log("DateAxis -> bottomLineData", bottomLineData)
-        console.log("DateAxis -> topLineData", topLineData)
+        if (bottomLineData.length) {
+          chartArea
+            .selectAll(".bottom-line")
+            .transition(t)
+            .attr("y2", dims.height / 2)
+        } else {
+          chartArea
+            .selectAll(".bottom-line")
+            .transition(t)
+            .attr("y2", SIZE_RANGE[0] + radiusAdjust)
+        }
       }
       if (!props.activeMovieID) {
         chartArea
