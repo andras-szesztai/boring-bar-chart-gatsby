@@ -1,25 +1,32 @@
 import React from "react"
 import styled, { css } from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
-import { IoIosArrowBack, IoIosArrowForward, IoIosClose } from "react-icons/io"
+import {
+  IoIosArrowBack,
+  IoIosArrowForward,
+  IoIosClose,
+  IoIosCloseCircle,
+} from "react-icons/io"
 
 import {
   CARD_WIDTH,
   HANDLE_SIZE,
-  TRANSITION,
   WHILE_HOVER,
   COLORS,
 } from "../../../../../constants/moviesDashboard"
 import { useAnimationAccessor } from "./hooks"
 import {
   MovieDetailsCardRight,
-  CloseIconContainer,
+  CloseIconContainerLeft,
+  CloseIconContainerRight,
   ArrowIconContainerRight,
   MovieDetailsCardLeft,
   ArrowIconContainerLeft,
   makeRightVariants,
   makeLeftVariants,
 } from "./styles"
+import Image from "../Image/Image"
+import { space } from "../../../../../themes/theme"
 
 const ContentGrid = styled(motion.div)`
   width: 100%;
@@ -27,11 +34,12 @@ const ContentGrid = styled(motion.div)`
   display: grid;
   position: absolute;
   top: 0px;
-  grid-template-columns: 3fr 2fr;
-  grid-template-rows: 200px repeat(3, 1fr);
+  padding: ${space[3]}px;
+  grid-template-columns: 1fr 160px;
+  grid-template-rows: 240px 60px 1fr ${HANDLE_SIZE}px;
   grid-template-areas:
     "info poster"
-    "genres poster"
+    "genres genres"
     "score score"
     "link link";
 `
@@ -40,7 +48,14 @@ const PlaceHolderDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+`
+
+const ContentItem = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 `
 
 export default function MovieDetailsCardComponent({
@@ -49,7 +64,6 @@ export default function MovieDetailsCardComponent({
   setActiveMovie,
 }) {
   const delay = typeof prevActiveMovie.position == "number" ? 0.25 : 0
-
   const {
     accessor,
     isMovieDetailsCardOpen,
@@ -88,7 +102,6 @@ export default function MovieDetailsCardComponent({
   }
 
   const closeContainerProps = {
-    whileHover: WHILE_HOVER,
     onClick: () =>
       setActiveMovie({
         activeMovie: {
@@ -104,38 +117,43 @@ export default function MovieDetailsCardComponent({
       <AnimatePresence>
         {activeMovie.position === 0 && (
           <MovieDetailsCardRight {...makeCardProps(makeRightVariants(delay))}>
-            <CloseIconContainer
+            <CloseIconContainerRight
               {...closeContainerProps}
               animate={{
-                x: isMovieDetailsCardOpen ? 0 : -CARD_WIDTH + HANDLE_SIZE,
+                x: isMovieDetailsCardOpen ? -8 : -CARD_WIDTH + HANDLE_SIZE,
+                background: isMovieDetailsCardOpen
+                  ? "rgba(255,255,255,1)"
+                  : "rgba(255,255,255,0)",
                 transition: {
                   type: "spring",
-                  damping: 16,
-                  delay: 0.5,
+                  damping: 17,
+                  delay: 0.5, // TODO: delay only on open close
                 },
               }}
             >
-              <IoIosClose size={30} color={COLORS.secondaryDark} />
-            </CloseIconContainer>
+              <motion.div whileHover={WHILE_HOVER}>
+                <IoIosCloseCircle size={30} color={COLORS.secondaryDark} />
+              </motion.div>
+            </CloseIconContainerRight>
             <ArrowIconContainerRight {...arrowContainerProps}>
               <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
             </ArrowIconContainerRight>
             <ContentGrid>
-              <PlaceHolderDiv style={{ gridArea: "info" }}>
-                Info
-              </PlaceHolderDiv>
-              <PlaceHolderDiv style={{ gridArea: "poster" }}>
-                Image
-              </PlaceHolderDiv>
+              <PlaceHolderDiv style={{ gridArea: "info" }}>Info</PlaceHolderDiv>
+              <ContentItem style={{ gridArea: "poster" }}>
+                <Image
+                  url={activeMovie.data.poster_path}
+                  height={240}
+                  alt={`${activeMovie.data.title}-poster`}
+                />
+              </ContentItem>
               <PlaceHolderDiv style={{ gridArea: "genres" }}>
                 Genres
               </PlaceHolderDiv>
               <PlaceHolderDiv style={{ gridArea: "score" }}>
                 Scrore
               </PlaceHolderDiv>
-              <PlaceHolderDiv style={{ gridArea: "link" }}>
-                Link
-              </PlaceHolderDiv>
+              <PlaceHolderDiv style={{ gridArea: "link" }}>Link</PlaceHolderDiv>
             </ContentGrid>
           </MovieDetailsCardRight>
         )}
@@ -143,12 +161,23 @@ export default function MovieDetailsCardComponent({
       <AnimatePresence>
         {activeMovie.position === 1 && (
           <MovieDetailsCardLeft {...makeCardProps(makeLeftVariants(delay))}>
-            <CloseIconContainer {...closeContainerProps}>
-              <IoIosClose size={28} color={COLORS.secondaryDark} />
-            </CloseIconContainer>
+            <CloseIconContainerLeft {...closeContainerProps}>
+              <motion.div whileHover={WHILE_HOVER}>
+                <IoIosCloseCircle size={30} color={COLORS.secondaryDark} />
+              </motion.div>
+            </CloseIconContainerLeft>
             <ArrowIconContainerLeft {...arrowContainerProps}>
               <IoIosArrowForward size={24} color={COLORS.secondaryDark} />
             </ArrowIconContainerLeft>
+            <ContentGrid>
+              <ContentItem style={{ gridArea: "poster" }}>
+                <Image
+                  url={activeMovie.data.poster_path}
+                  height={240}
+                  alt={`${activeMovie.data.title}-poster`}
+                />
+              </ContentItem>
+            </ContentGrid>
           </MovieDetailsCardLeft>
         )}
       </AnimatePresence>
