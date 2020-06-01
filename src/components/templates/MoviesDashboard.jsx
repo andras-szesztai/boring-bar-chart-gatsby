@@ -36,11 +36,9 @@ const MovieDetailsCardStyle = css`
   filter: drop-shadow(${dropShadow.primary})
     drop-shadow(${dropShadow.secondary});
   border-radius: ${space[1]}px;
-
   top: calc(50% - ${CARD_HEIGHT.movie / 2}px);
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT.movie}px;
-
   z-index: 4;
 `
 
@@ -125,7 +123,13 @@ export default function MoviesDashboard() {
     },
     animateFirst: {
       x: 0,
-      transition: TRANSITION.primary,
+      transition: {
+        ...TRANSITION.primary,
+        delay:
+          prevState && typeof prevState.activeMovie.position == "number"
+            ? 0.25
+            : 0,
+      },
     },
     animateOpen: {
       x: 0,
@@ -146,7 +150,13 @@ export default function MoviesDashboard() {
     },
     animateFirst: {
       x: 0,
-      transition: TRANSITION.primary,
+      transition: {
+        ...TRANSITION.primary,
+        delay:
+          prevState && typeof prevState.activeMovie.position == "number"
+            ? 0.25
+            : 0,
+      },
     },
     animateOpen: {
       x: 0,
@@ -190,61 +200,73 @@ export default function MoviesDashboard() {
           />
 
           <AnimatePresence>
-            <MovieDetailsCardRight
-              initial="initial"
-              animate="animateFirst"
-              exit="exit"
-              variants={rightVariants}
-            >
-              <IconContainerRight
-                role="button"
-                // onClick={() => setIsOpen(prev => !prev)}
-                whileHover={{
-                  scale: 1.3,
-                  transition: {
-                    delay: 0,
-                  },
-                }}
-                initial={{ rotate: 180 }}
-                // animate={{
-                //   rotate: isOpen ? 180 : 0,
-                //   transition: {
-                //     delay: 1,
-                //   },
-                // }}
+            {activeMovie.position === 0 && (
+              <MovieDetailsCardRight
+                initial="initial"
+                animate="animateFirst"
+                exit="exit"
+                variants={rightVariants}
               >
-                <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
-              </IconContainerRight>
-            </MovieDetailsCardRight>
+                <IconContainerRight
+                  role="button"
+                  onClick={() =>
+                    setActiveMovie({
+                      activeMovie: {
+                        id: undefined,
+                        data: {},
+                        position: undefined,
+                      },
+                    })
+                  }
+                  whileHover={{
+                    scale: 1.3,
+                    transition: {
+                      delay: 0,
+                    },
+                  }}
+                  initial={{ rotate: 180 }}
+                  // animate={{
+                  //   rotate: isOpen ? 180 : 0,
+                  //   transition: {
+                  //     delay: 1,
+                  //   },
+                  // }}
+                >
+                  <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
+                </IconContainerRight>
+              </MovieDetailsCardRight>
+            )}
           </AnimatePresence>
 
           <AnimatePresence>
-            <MovieDetailsCardLeft
-              initial="initial"
-              animate="animateFirst"
-              exit="exit"
-              variants={leftVariants}
-            >
-              <IconContainerLeft
-                role="button"
-                // onClick={() => setIsOpen(prev => !prev)}
-                whileHover={{
-                  scale: 1.3,
-                  transition: {
-                    delay: 0,
-                  },
-                }}
-                initial={{ rotate: 180 }}
-                // animate={{
-                //   rotate: isOpen ? 180 : 0,
-                //   transition: {
-                //     delay: 1,
-                //   },
-                // }}
+            {activeMovie.position === 1 && (
+              <MovieDetailsCardLeft
+                initial="initial"
+                animate="animateFirst"
+                exit="exit"
+                variants={leftVariants}
               >
-                <IoIosArrowForward size={24} color={COLORS.secondaryDark} />
-              </IconContainerLeft>
-            </MovieDetailsCardLeft>
+                <IconContainerLeft
+                  role="button"
+                  // onClick={() => setIsOpen(prev => !prev)}
+                  whileHover={{
+                    scale: 1.3,
+                    transition: {
+                      delay: 0,
+                    },
+                  }}
+                  initial={{ rotate: 180 }}
+                  // animate={{
+                  //   rotate: isOpen ? 180 : 0,
+                  //   transition: {
+                  //     delay: 1,
+                  //   },
+                  // }}
+                >
+                  <IoIosArrowForward size={24} color={COLORS.secondaryDark} />
+                </IconContainerLeft>
+              </MovieDetailsCardLeft>
+            )}
           </AnimatePresence>
         </div>
       )}
