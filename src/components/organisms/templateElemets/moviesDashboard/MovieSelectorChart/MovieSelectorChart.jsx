@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { scaleTime, scaleSqrt } from "d3-scale"
-import { extent } from "d3-array"
 
 import { BubbleChart, DateAxis } from "../charts"
+import useMovieSelectorChartReducer from "./reducer/chartReducer"
 
 const MainContainer = styled(motion.div)`
   width: 100vw;
@@ -47,45 +46,7 @@ export default function MovieSelectorChart({
   setActiveMovie,
   activeMovie,
 }) {
-
-  const [currState, setCurrState] = useState({
-    id: undefined,
-    mainType: undefined,
-    isBoth: undefined,
-    xScale: undefined,
-    yScale: undefined,
-  })
-
-  useEffect(() => {
-    if (
-      dataSets.personCredits &&
-      (!currState.id || currState.id !== dataSets.personCredits.id)
-    ) {
-      const isBoth =
-        !!dataSets.personCredits.cast.length &&
-        !!dataSets.personCredits.crew.length
-      const data = [
-        ...dataSets.personCredits.crew,
-        ...dataSets.personCredits.cast,
-      ].filter(d => !!d.release_date && !!d.vote_count)
-      const xScale = scaleTime().domain(
-        extent(data, d => new Date(d.release_date))
-      )
-      const sizeScale = scaleSqrt().domain(extent(data, d => d.vote_count))
-      const isActor = dataSets.personDetails.known_for_department === "Acting"
-      setCurrState({
-        id: dataSets.personCredits.id,
-        mainType: isActor ? "cast" : "crew",
-        subType: isBoth && isActor ? "crew" : "cast",
-        isBoth,
-        xScale,
-        sizeScale,
-      })
-    }
-  }, [dataSets, currState])
-
-  const [yDomainSynced, setYDomainSynced] = useState(true)
-  const [isSizeDynamic, setIsSizeDynamic] = useState(true)
+  const { chartState, actions } = useMovieSelectorChartReducer({ dataSets })
 
   return (
     <>
@@ -93,39 +54,39 @@ export default function MovieSelectorChart({
         <MainContainer>
           <SubContainer>
             <PlaceHolderDiv>
-              <div onClick={() => setYDomainSynced(prev => !prev)}>
-                Y-domain
-              </div>
-              <div onClick={() => setIsSizeDynamic(prev => !prev)}>Size</div>
+              <div onClick={actions.setIsYDomainSynced}>Y-domain</div>
+              <div onClick={actions.setIsSizeSynced}>Size</div>
             </PlaceHolderDiv>
-            {typeof currState.isBoth == "boolean" && (
-              <ChartContainer twoCharts={currState.isBoth}>
+            {typeof chartState.isBoth == "boolean" && (
+              <ChartContainer twoCharts={chartState.isBoth}>
                 <BubbleChart
                   chart="main"
-                  type={currState.mainType}
-                  data={dataSets.personCredits[currState.mainType]}
-                  {...currState}
-                  yDomainSynced={yDomainSynced}
-                  isSizeDynamic={isSizeDynamic}
+                  type={chartState.types.main}
+                  data={dataSets.personCredits[chartState.types.main]}
+                  xScale={chartState.scales.xScale}
+                  sizeScale={chartState.scales.sizeScale}
+                  isYDomainSynced={chartState.isYDomainSynced}
+                  isSizeDynamic={chartState.isSizeDynamic}
                   setActiveMovie={setActiveMovie}
                   activeMovie={activeMovie}
                 />
                 <DateAxis
                   crewData={dataSets.personCredits.crew}
                   castData={dataSets.personCredits.cast}
-                  type={currState.mainType}
-                  {...currState}
+                  type={chartState.types.main}
+                  xScale={chartState.scales.xScale}
                   setActiveMovie={setActiveMovie}
                   activeMovie={activeMovie}
                 />
-                {currState.isBoth && (
+                {chartState.isBoth && (
                   <BubbleChart
                     chart="sub"
-                    type={currState.subType}
-                    data={dataSets.personCredits[currState.subType]}
-                    {...currState}
-                    yDomainSynced={yDomainSynced}
-                    isSizeDynamic={isSizeDynamic}
+                    type={chartState.types.sub}
+                    data={dataSets.personCredits[chartState.types.sub]}
+                    xScale={chartState.scales.xScale}
+                    sizeScale={chartState.scales.sizeScale}
+                    isYDomainSynced={chartState.isYDomainSynced}
+                    isSizeDynamic={chartState.isSizeDynamic}
                     setActiveMovie={setActiveMovie}
                     activeMovie={activeMovie}
                   />

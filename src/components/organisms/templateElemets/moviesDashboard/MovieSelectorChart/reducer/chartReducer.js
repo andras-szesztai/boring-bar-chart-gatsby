@@ -1,12 +1,5 @@
 import { useReducer, useEffect } from "react"
-import axios from "axios"
 
-import { usePrevious, useLocalStorage } from "../../hooks"
-
-import {
-  API_ROOT,
-  LOCAL_STORE_ACCESSORS,
-} from "../../constants/moviesDashboard"
 import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
 
@@ -25,7 +18,9 @@ const initialState = {
   isSizeDynamic: true,
 }
 
-const SET_CHART_START_SETTINGS = "SET_CHART_SETTINGS"
+const SET_CHART_START_SETTINGS = "SET_CHART_START_SETTINGS"
+const SET_IS_Y_DOMAIN_SYNCED = "SET_IS_Y_DOMAIN_SYNCED"
+const SET_IS_SIZE_DYNAMIC = "SET_IS_SIZE_DYNAMIC"
 
 function movieSelectorChartReducer(state, { type, payload }) {
   const types = {
@@ -42,20 +37,29 @@ function movieSelectorChartReducer(state, { type, payload }) {
         sizeScale: payload.sizeScale,
       },
     }),
+    SET_IS_Y_DOMAIN_SYNCED: () => ({
+      ...state,
+      isYDomainSynced: !state.isYDomainSynced,
+    }),
+    SET_IS_SIZE_DYNAMIC: () => ({
+      ...state,
+      isSizeDynamic: !state.isSizeDynamic,
+    }),
   }
   return types[type] ? types[type]() : state
 }
 
 export default function useMovieSelectorChartReducer({ dataSets }) {
-  const [chartState, chartDispatch] = useReducer(
+  const [chartState, dispatch] = useReducer(
     movieSelectorChartReducer,
     initialState
   )
-  //const prevChartState = usePrevious(chartState)
 
   const actions = {
     setChartStartSettings: payload =>
-      chartDispatch({ type: SET_CHART_START_SETTINGS, payload }),
+      dispatch({ type: SET_CHART_START_SETTINGS, payload }),
+    setIsYDomainSynced: () => dispatch({ type: SET_IS_Y_DOMAIN_SYNCED }),
+    setIsSizeSynced: () => dispatch({ type: SET_IS_SIZE_DYNAMIC }),
   }
 
   useEffect(() => {
@@ -86,7 +90,5 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
     }
   }, [actions, chartState, dataSets])
 
-
-// const [isYDomainSynced, setYDomainSynced] = useState(true)
-// const [isSizeDynamic, setIsSizeDynamic] = useState(true)
+  return { chartState, actions }
 }

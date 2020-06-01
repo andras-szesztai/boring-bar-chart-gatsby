@@ -99,7 +99,7 @@ export default function BubbleChart(props) {
     type,
     xScale,
     sizeScale,
-    yDomainSynced,
+    isYDomainSynced,
     isSizeDynamic,
     chart,
   } = props
@@ -129,7 +129,7 @@ export default function BubbleChart(props) {
       ])
       const yScale = scaleLinear()
         .domain(
-          yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
+          isYDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
         )
         .range([dims.height - margin.top - margin.bottom, 0])
       const currSizeScale = sizeScale.range(props.sizeRange)
@@ -254,8 +254,20 @@ export default function BubbleChart(props) {
       )
   }
 
-  useYDomainSyncUpdate({ storedValues, props, prevProps, createUpdateVoronoi })
-  useRadiusUpdate({ storedValues, props, prevProps })
+  useYDomainSyncUpdate({
+    storedValues,
+    isYDomainSynced,
+    prevIsYDomainSynced: prevProps && prevProps.isYDomainSynced,
+    isSizeDynamic,
+    createUpdateVoronoi,
+    chart,
+  })
+  useRadiusUpdate({
+    storedValues,
+    chart,
+    isSizeDynamic,
+    prevIsSizeDynamic: prevProps && prevProps.isSizeDynamic,
+  })
   useActiveMovieIDUpdate({
     storedValues,
     activeMovieID: props.activeMovie.id,

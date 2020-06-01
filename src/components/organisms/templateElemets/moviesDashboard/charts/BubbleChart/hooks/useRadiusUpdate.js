@@ -5,14 +5,12 @@ import { setRadius, getSelectedLineYPos } from "../utils"
 
 export default function({
   storedValues,
-  props: { chart, isSizeDynamic },
-  prevProps,
+  chart,
+  isSizeDynamic,
+  prevIsSizeDynamic,
 }) {
   useEffect(() => {
-    if (
-      storedValues.current.isInit &&
-      isSizeDynamic !== prevProps.isSizeDynamic
-    ) {
+    if (storedValues.current.isInit && isSizeDynamic !== prevIsSizeDynamic) {
       const { currSizeScale, chartArea, yScale } = storedValues.current
       chartArea
         .selectAll(".main-circle circle")
@@ -38,5 +36,5 @@ export default function({
           })
         )
     }
-  }, [chart, isSizeDynamic, prevProps, storedValues])
+  }, [chart, isSizeDynamic, prevIsSizeDynamic, storedValues])
 }

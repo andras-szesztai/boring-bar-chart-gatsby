@@ -7,15 +7,16 @@ import { makeTransition } from "../../../../../../../utils/chartHelpers"
 
 export default function useYDomainSyncUpdate({
   storedValues,
-  props,
-  prevProps,
+  isYDomainSynced,
+  prevIsYDomainSynced,
+  isSizeDynamic,
   createUpdateVoronoi,
+  chart
 }) {
-  const { yDomainSynced, chart, isSizeDynamic } = props
   useEffect(() => {
     if (
       storedValues.current.isInit &&
-      yDomainSynced !== prevProps.yDomainSynced
+      isYDomainSynced !== prevIsYDomainSynced
     ) {
       const {
         yScale,
@@ -25,7 +26,7 @@ export default function useYDomainSyncUpdate({
         currSizeScale,
       } = storedValues.current
       yScale.domain(
-        yDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
+        isYDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
       )
       const t = makeTransition(chartArea, 500, "y-update")
       const setY = d => yScale(d)
@@ -58,13 +59,5 @@ export default function useYDomainSyncUpdate({
         yScale,
       }
     }
-  }, [
-    chart,
-    createUpdateVoronoi,
-    isSizeDynamic,
-    prevProps,
-    props,
-    storedValues,
-    yDomainSynced,
-  ])
+  }, [chart, createUpdateVoronoi, isSizeDynamic, storedValues, isYDomainSynced, prevIsYDomainSynced])
 }
