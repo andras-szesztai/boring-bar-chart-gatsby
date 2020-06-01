@@ -26,6 +26,7 @@ import {
   COLORS,
   TRANSITION,
   HANDLE_SIZE,
+  WHILE_HOVER,
 } from "../../constants/moviesDashboard"
 import { themifyZIndex } from "../../themes/mixins"
 
@@ -84,12 +85,12 @@ const IconContainer = styled(motion.div)`
   align-items: center;
 `
 
-const IconContainerRight = styled(IconContainer)`
+const ArrowIconContainerRight = styled(IconContainer)`
   left: -${HANDLE_SIZE - 4}px;
   top: ${CARD_HEIGHT.movie - HANDLE_SIZE * 2}px;
 `
 
-const IconContainerLeft = styled(IconContainer)`
+const ArrowIconContainerLeft = styled(IconContainer)`
   left: ${CARD_WIDTH - 4}px;
   top: ${CARD_HEIGHT.movie - HANDLE_SIZE * 2}px;
 `
@@ -206,6 +207,38 @@ export default function MoviesDashboard() {
     setIsMovieDetailsCardOpen,
   ])
 
+  const makeCardProps = variants => ({
+    initial: "initial",
+    animate: accessor,
+    exit: "exit",
+    variants: variants,
+  })
+
+  const arrowContainerProps = {
+    role: "button",
+    onClick: () => setIsMovieDetailsCardOpen(prev => !prev),
+    whileHover: WHILE_HOVER,
+    initial: { rotate: 180 },
+    animate: {
+      rotate: isMovieDetailsCardOpen ? 180 : 0,
+      transition: {
+        delay: 1,
+      },
+    },
+  }
+
+  const closeContainerProps = {
+    whileHover: WHILE_HOVER,
+    onClick: () =>
+      setActiveMovie({
+        activeMovie: {
+          id: undefined,
+          data: {},
+          position: undefined,
+        },
+      }),
+  }
+
   return (
     <>
       <Helmet title="Dashboard under construction" />
@@ -236,94 +269,36 @@ export default function MoviesDashboard() {
 
           <AnimatePresence>
             {activeMovie.position === 0 && (
-              <MovieDetailsCardRight
-                initial="initial"
-                animate={accessor}
-                exit="exit"
-                variants={rightVariants}
-              >
+              <MovieDetailsCardRight {...makeCardProps(rightVariants)}>
                 <CloseIconContainerRight
-                  whileHover={{
-                    scale: 1.3,
-                  }}
-                  onClick={() =>
-                    setActiveMovie({
-                      activeMovie: {
-                        id: undefined,
-                        data: {},
-                        position: undefined,
-                      },
-                    })
-                  }
-                >
-                  <IoIosClose size={24} color={COLORS.textColor} />
-                </CloseIconContainerRight>
-                <IconContainerRight
-                  role="button"
-                  onClick={() => setIsMovieDetailsCardOpen(prev => !prev)}
-                  whileHover={{
-                    scale: 1.3,
-                    transition: {
-                      delay: 0,
-                    },
-                  }}
-                  initial={{ rotate: 180 }}
+                  {...closeContainerProps}
                   animate={{
-                    rotate: isMovieDetailsCardOpen ? 180 : 0,
+                    x: isMovieDetailsCardOpen ? 0 : -CARD_WIDTH + HANDLE_SIZE,
                     transition: {
-                      delay: 1,
+                      type: "spring",
+                      damping: 16,
+                      delay: 0.5,
                     },
                   }}
                 >
+                  <IoIosClose size={30} color={COLORS.secondaryDark} />
+                </CloseIconContainerRight>
+                <ArrowIconContainerRight {...arrowContainerProps}>
                   <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
-                </IconContainerRight>
+                </ArrowIconContainerRight>
               </MovieDetailsCardRight>
             )}
           </AnimatePresence>
 
           <AnimatePresence>
             {activeMovie.position === 1 && (
-              <MovieDetailsCardLeft
-                initial="initial"
-                animate={accessor}
-                exit="exit"
-                variants={leftVariants}
-              >
-                <CloseIconContainerLeft
-                  whileHover={{
-                    scale: 1.3,
-                  }}
-                  onClick={() =>
-                    setActiveMovie({
-                      activeMovie: {
-                        id: undefined,
-                        data: {},
-                        position: undefined,
-                      },
-                    })
-                  }
-                >
-                  <IoIosClose size={24} color={COLORS.textColor} />
+              <MovieDetailsCardLeft {...makeCardProps(leftVariants)}>
+                <CloseIconContainerLeft {...closeContainerProps}>
+                  <IoIosClose size={28} color={COLORS.secondaryDark} />
                 </CloseIconContainerLeft>
-                <IconContainerLeft
-                  role="button"
-                  onClick={() => setIsMovieDetailsCardOpen(prev => !prev)}
-                  whileHover={{
-                    scale: 1.3,
-                    transition: {
-                      delay: 0,
-                    },
-                  }}
-                  initial={{ rotate: 180 }}
-                  animate={{
-                    rotate: isMovieDetailsCardOpen ? 180 : 0,
-                    transition: {
-                      delay: 1,
-                    },
-                  }}
-                >
+                <ArrowIconContainerLeft {...arrowContainerProps}>
                   <IoIosArrowForward size={24} color={COLORS.secondaryDark} />
-                </IconContainerLeft>
+                </ArrowIconContainerLeft>
               </MovieDetailsCardLeft>
             )}
           </AnimatePresence>

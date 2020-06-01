@@ -22,6 +22,10 @@ export const TRANSITION = {
   },
 }
 
+export const WHILE_HOVER = {
+  scale: 1.3,
+}
+
 export const CHART_SIDE_MARGINS = {
   left: 10,
   right: 20,
