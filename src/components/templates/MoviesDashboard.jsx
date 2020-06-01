@@ -68,8 +68,8 @@ export default function MoviesDashboard() {
   } = moviesDashboardReducer()
   const { favoritePersons } = localStorageValues
   const { setFavoritePersons } = localStorageSetters
-  const { dataSets, activeNameID, activeMovieID } = state
-  const { setActiveMovieId } = actions
+  const { dataSets, activeNameID, activeMovie } = state
+  const { setActiveMovie } = actions
 
   useEffect(() => {
     favoritePersons &&
@@ -157,16 +157,16 @@ export default function MoviesDashboard() {
                       {...currState}
                       yDomainSynced={yDomainSynced}
                       isSizeDynamic={isSizeDynamic}
-                      setActiveMovieId={setActiveMovieId}
-                      activeMovieID={activeMovieID}
+                      setActiveMovie={setActiveMovie}
+                      activeMovie={activeMovie}
                     />
                     <DateAxis
                       crewData={dataSets.personCredits.crew}
                       castData={dataSets.personCredits.cast}
                       type={currState.mainType}
                       {...currState}
-                      setActiveMovieId={setActiveMovieId}
-                      activeMovieID={activeMovieID}
+                      setActiveMovie={setActiveMovie}
+                      activeMovie={activeMovie}
                     />
                     {currState.isBoth && (
                       <BubbleChart
@@ -176,8 +176,8 @@ export default function MoviesDashboard() {
                         {...currState}
                         yDomainSynced={yDomainSynced}
                         isSizeDynamic={isSizeDynamic}
-                        setActiveMovieId={setActiveMovieId}
-                        activeMovieID={activeMovieID}
+                        setActiveMovie={setActiveMovie}
+                        activeMovie={activeMovie}
                       />
                     )}
                   </ChartContainer>

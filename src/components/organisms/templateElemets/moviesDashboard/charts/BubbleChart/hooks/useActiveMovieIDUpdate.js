@@ -2,8 +2,9 @@ import React from "react"
 import { select } from "d3-selection"
 import chroma from "chroma-js"
 
+import { COLORS, CIRCLE_ADJUST } from "../../../../../../../constants/moviesDashboard"
+
 import { setRadius, getSelectedLineYPos } from "../utils"
-import { COLORS } from "../../../../../../../constants/moviesDashboard"
 
 export default function useActiveMovieIDUpdate({
   storedValues,
@@ -22,8 +23,8 @@ export default function useActiveMovieIDUpdate({
         yScale,
         currSizeScale,
       } = storedValues.current
-      chartArea.selectAll(".selected-circle").remove()
-      chartArea.selectAll(".selected-line").remove()
+      chartArea.select(".selected-circle").remove()
+      chartArea.select(".selected-line").remove()
       const selectedData = filteredData.find(d => d.id === activeMovieID)
       if (selectedData) {
         chartArea.selectAll(".main-circle").each((d, i, n) => {
@@ -35,11 +36,12 @@ export default function useActiveMovieIDUpdate({
               .attr("class", "selected-circle")
               .attr("cx", d => currXScale(new Date(d.release_date)))
               .attr("cy", d => yScale(d.vote_average))
-              .attr("fill", "transparent")
+              .attr("fill", "#fff")
               .attr("stroke", chroma(COLORS.secondary).darken())
               .attr("r", d =>
-                setRadius({ adjust: 4, isSizeDynamic, currSizeScale })(d)
+                setRadius({ adjust: CIRCLE_ADJUST, isSizeDynamic, currSizeScale })(d)
               )
+            chartArea.select(".selected-circle").lower()
             const isMainChart = chart === "main"
             selection
               .append("line")

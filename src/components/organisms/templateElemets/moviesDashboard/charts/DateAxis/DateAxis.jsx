@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import { Helmet } from "react-helmet"
-import axios from "axios"
 import styled, { css } from "styled-components"
-import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
 import _ from "lodash"
 import { select } from "d3-selection"
@@ -19,6 +16,7 @@ import {
 import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
 import { makeTransition } from "../../../../../../utils/chartHelpers"
+
 import { useSelectedUpdate } from "./hooks"
 
 const fadeOutEffect = css`
@@ -69,7 +67,7 @@ const ChartSvg = styled.svg`
 `
 
 export default function DateAxis(props) {
-  const { margin, xScale, crewData, castData, activeMovieID } = props
+  const { margin, xScale, crewData, castData, activeMovie } = props
   const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
@@ -181,7 +179,8 @@ export default function DateAxis(props) {
             // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
             // .on("mouseover", d => console.log(d))
-            .on("click", d => props.setActiveMovieId(d.id))
+              // TODO: add back
+            // .on("click", d => props.setActiveMovie(d.id))
             .call(enter => enter),
         update =>
           update.call(update =>
@@ -192,8 +191,8 @@ export default function DateAxis(props) {
 
   useSelectedUpdate({
     storedValues,
-    activeMovieID,
-    prevActiveMovieID: prevProps && prevProps.activeMovieID,
+    activeMovieID: activeMovie.id,
+    prevActiveMovieID: prevProps && prevProps.activeMovie.id,
     type: props.type,
     data: { crewData, castData },
     dims,

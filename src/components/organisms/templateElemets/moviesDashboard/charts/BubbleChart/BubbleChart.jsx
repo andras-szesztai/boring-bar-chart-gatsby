@@ -236,7 +236,11 @@ export default function BubbleChart(props) {
             // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
             // .on("mouseover", d => console.log(d))
-            .on("click", d => props.setActiveMovieId(d.id))
+            // TODO: add back
+            .on("click", d => {
+              
+              //props.setActiveMovieId({id: d.id, position: 0})
+            })
             .call(enter => enter),
         update =>
           update.call(update =>
@@ -249,8 +253,8 @@ export default function BubbleChart(props) {
   useRadiusUpdate({ storedValues, props, prevProps })
   useActiveMovieIDUpdate({
     storedValues,
-    activeMovieID: props.activeMovieID,
-    prevActiveMovieID: prevProps && prevProps.activeMovieID,
+    activeMovieID: props.activeMovie.id,
+    prevActiveMovieID: prevProps && prevProps.activeMovie.id,
     isSizeDynamic,
     chart,
     dims,
