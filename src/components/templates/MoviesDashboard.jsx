@@ -45,11 +45,11 @@ export default function MoviesDashboard() {
   const { setFavoritePersons } = localStorageSetters
   const { dataSets, activeNameID, activeMovie } = state
   const { setActiveMovie } = actions
-
+  
   useEffect(() => {
     favoritePersons &&
-      favoritePersons.length &&
-      actions.setActiveNameID(_.last(favoritePersons).id)
+    favoritePersons.length &&
+    actions.setActiveNameID(_.last(favoritePersons).id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

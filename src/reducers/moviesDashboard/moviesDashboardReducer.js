@@ -20,17 +20,17 @@ const initialState = {
   dataSets: {
     personDetails: undefined,
     personCredits: undefined,
-    genreList: undefined,
+    genres: undefined,
   },
   loading: {
     personDetails: false,
     personCredits: false,
-    genreList: false,
+    genres: false,
   },
   error: {
     personDetails: false,
     personCredits: false,
-    genreList: false,
+    genres: false,
   },
   personDetailsCard: {
     isOpen: undefined,
@@ -38,6 +38,8 @@ const initialState = {
 }
 
 const FETCH_GENRES = "FETCH_GENRES"
+const FETCH_GENRES_SUCCESS = "FETCH_GENRES_SUCCESS"
+const FETCH_GENRES_FAIL = "FETCH_GENRES_FAIL"
 const SET_ACTIVE_ID = "SET_ACTIVE_ID"
 const SET_ACTIVE_MOVIE = "SET_ACTIVE_MOVIE"
 const FETCH_INFO_BY_ID = "FETCH_INFO_BY_ID"
@@ -50,7 +52,36 @@ function moviesDashboardReducer(state, { type, payload }) {
   const types = {
     FETCH_GENRES: () => ({
       ...state,
-      genres: payload.genres,
+      loading: {
+        ...state.loading,
+        genres: true,
+      },
+    }),
+    FETCH_GENRES_SUCCESS: () => ({
+      ...state,
+      loading: {
+        ...state.loading,
+        genres: false,
+      },
+      dataSets: {
+        ...state.dataSets,
+        genres: payload,
+      },
+    }),
+    FETCH_GENRES_FAIL: () => ({
+      ...state,
+      loading: {
+        ...state.loading,
+        genres: false,
+      },
+      dataSets: {
+        ...state.dataSets,
+        genres: undefined,
+      },
+      error: {
+        ...state.error,
+        genres: payload,
+      },
     }),
     SET_ACTIVE_ID: () => ({
       ...state,
@@ -72,6 +103,7 @@ function moviesDashboardReducer(state, { type, payload }) {
     FETCH_INFO_BY_ID: () => ({
       ...state,
       loading: {
+        ...state.loading,
         personDetails: true,
         personCredits: true,
       },
@@ -79,10 +111,12 @@ function moviesDashboardReducer(state, { type, payload }) {
     FETCH_INFO_BY_ID_SUCCESS: () => ({
       ...state,
       loading: {
+        ...state.loading,
         personDetails: false,
         personCredits: false,
       },
       dataSets: {
+        ...state.dataSets,
         personDetails: payload.details,
         personCredits: payload.credits,
       },
@@ -90,14 +124,17 @@ function moviesDashboardReducer(state, { type, payload }) {
     FETCH_INFO_BY_ID_FAIL: () => ({
       ...state,
       loading: {
+        ...state.loading,
         personDetails: false,
         personCredits: false,
       },
       dataSets: {
+        ...state.dataSets,
         personDetails: undefined,
         personCredits: undefined,
       },
       error: {
+        ...state.error,
         personDetails: payload.details,
         personCredits: payload.credits,
       },
@@ -145,6 +182,7 @@ export default function useMoviesDashboardReducer() {
   }
 
   useEffectOnce(() => {
+    dispatch({ type: FETCH_GENRES })
     axios
       .all([
         axios.get(
@@ -157,19 +195,15 @@ export default function useMoviesDashboardReducer() {
       .then(
         axios.spread((movie, tv) => {
           dispatch({
-            type: FETCH_GENRES,
-            payload: {
-              genres: _.uniqBy([...movie, ...tv], "id"),
-            },
+            type: FETCH_GENRES_SUCCESS,
+            payload: _.uniqBy([...movie.data.genres, ...tv.data.genres], "id"),
           })
         })
       )
       .catch(function(error) {
         dispatch({
-          type: FETCH_INFO_BY_ID_FAIL,
-          payload: {
-            genres: [error],
-          },
+          type: FETCH_GENRES_FAIL,
+          payload: error,
         })
       })
   })
@@ -201,8 +235,8 @@ export default function useMoviesDashboardReducer() {
           dispatch({
             type: FETCH_INFO_BY_ID_FAIL,
             payload: {
-              details: [error],
-              credits: [error],
+              details: error,
+              credits: error,
             },
           })
         })
