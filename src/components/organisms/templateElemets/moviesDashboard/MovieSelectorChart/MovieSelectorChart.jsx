@@ -40,14 +40,14 @@ const PlaceHolderDiv = styled.div`
   /* border: 1px solid black; */
 `
 
-export default function MovieSelectorDashboard({
+export default function MovieSelectorChart({
   activeNameID,
   loading,
   dataSets,
   setActiveMovie,
   activeMovie,
 }) {
-  
+
   const [currState, setCurrState] = useState({
     id: undefined,
     mainType: undefined,

@@ -15,7 +15,7 @@ import {
   SearchBar,
   PersonDetailCard,
   FavoritesList,
-  MovieSelectorDashboard,
+  MovieSelectorChart,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 
@@ -61,7 +61,7 @@ export default function MoviesDashboard() {
             localStorageValues={localStorageValues}
             localStorageSetters={localStorageSetters}
           />
-          <MovieSelectorDashboard
+          <MovieSelectorChart
             activeNameID={activeNameID}
             loading={state.loading}
             dataSets={dataSets}
