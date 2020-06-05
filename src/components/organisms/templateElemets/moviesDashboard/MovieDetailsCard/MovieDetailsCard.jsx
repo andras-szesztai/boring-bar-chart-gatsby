@@ -26,7 +26,7 @@ import {
   makeLeftVariants,
 } from "./styles"
 import Image from "../Image/Image"
-import { TitleContainer, TextContainer } from "../styles/styles"
+import { TitleContainer, TextContainer, dentedStyling } from "../styles/styles"
 import { space } from "../../../../../themes/theme"
 import { FavoriteStar } from "../../../../molecules"
 import { themifyFontSize } from "../../../../../themes/mixins"
@@ -43,11 +43,13 @@ const ContentGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr 120px;
   grid-column-gap: ${space[3]}px;
-  grid-template-rows: 180px 60px 120px 1fr ${HANDLE_SIZE / 2}px;
+  grid-template-rows: 180px repeat(3, 45px) 1fr ${HANDLE_SIZE / 2}px;
+  grid-row-gap: ${space[2]}px;
   grid-template-areas:
     "info poster"
     "genres genres"
-    "credits credits"
+    "crew crew"
+    "cast cast"
     "score score"
     "link link";
 `
@@ -64,7 +66,7 @@ const PlaceHolderDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: 1px solid black; */
+  border: 1px solid black;
 `
 
 const MovieTitle = styled(TitleContainer)`
@@ -85,7 +87,7 @@ const SubTitle = styled(TitleContainer)`
 
 const Overview = styled(TextContainer)`
   margin-top: 0px;
-  width: auto;
+  width: 100%;
   position: absolute;
   bottom: 0px;
 `
@@ -104,14 +106,29 @@ const LinkContainer = styled.div`
   grid-area: link;
 `
 
-// TODO: style genre list
-const GenreList = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+const Genres = styled.div`
+  display: grid;
+  grid-template-columns: 50px 1fr;
   grid-area: genres;
   overflow-x: auto;
   font-size: ${themifyFontSize(1)};
+`
+
+const RowTitle = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`
+
+const RowList = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  justify-self: stretch;
+  margin-top: 0px;
+  ${dentedStyling}
+  border-radius: 2px;
+  padding: ${space[1]}px ${space[2]}px;
 `
 
 export default function MovieDetailsCardComponent({
@@ -126,17 +143,6 @@ export default function MovieDetailsCardComponent({
     isMovieDetailsCardOpen,
     setIsMovieDetailsCardOpen,
   } = useAnimationAccessor({ prevActiveMovie, activeMovie })
-
-  // genre_ids: (3) [28, 80, 53]
-  // media_type: "movie"
-  // original_language: "en"
-  // overview: "On the day of his retirement, a veteran CIA agent learns that his former protégé has been arrested in China, is sentenced to die the next morning in Beijing, and that the CIA is considering letting that happen to avoid an international scandal."
-  // poster_path: "/6y8M1rxjKofQCRKKe6xeV91K2Fc.jpg"
-  // release_date: "2001-11-18"
-  // title: "Spy Game"
-  // original_title: "Spy Game"
-  // vote_average: 6.9
-  // vote_count: 1222
 
   const makeCardProps = variants => ({
     initial: "initial",
@@ -172,8 +178,9 @@ export default function MovieDetailsCardComponent({
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
   const [leftOverviewRef, { height: leftHeight }] = useMeasure()
 
-  // TODO: fetch credit (endpoint depends if movie or tv)
-  // TODO: clean up duplicate code
+  // Movies
+  // https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=<<api_key>>
+  // https://api.themoviedb.org/3/tv/{tv_id}/credits?api_key=<<api_key>>
 
   return (
     <>
@@ -232,15 +239,18 @@ export default function MovieDetailsCardComponent({
                   alt={`${activeMovie.data.title}-poster`}
                 />
               </ContentItem>
-              <GenreList>
-                Genres:&nbsp;
-                {activeMovie.data.genre_ids.map(id => (
-                  <span>{genres.find(genre => genre.id === id).name},&nbsp;</span>
-                ))}
-              </GenreList>
-              <PlaceHolderDiv style={{ gridArea: "credits" }}>
-                Credits come here (top cast & crew)
-              </PlaceHolderDiv>
+              <Genres>
+                <RowTitle>Genres:</RowTitle>
+                <RowList>
+                  {activeMovie.data.genre_ids.map(id => (
+                    <span key={id}>
+                      {genres.find(genre => genre.id === id).name},&nbsp;
+                    </span>
+                  ))}
+                </RowList>
+              </Genres>
+              <PlaceHolderDiv style={{ gridArea: "cast" }}>Cast</PlaceHolderDiv>
+              <PlaceHolderDiv style={{ gridArea: "crew" }}>Crew</PlaceHolderDiv>
               <PlaceHolderDiv style={{ gridArea: "score" }}>
                 Score comes here
               </PlaceHolderDiv>
@@ -257,7 +267,7 @@ export default function MovieDetailsCardComponent({
           </MovieDetailsCardRight>
         )}
       </AnimatePresence>
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {activeMovie.position === 1 && (
           <MovieDetailsCardLeft {...makeCardProps(makeLeftVariants(delay))}>
             <CloseIconContainerLeft {...closeContainerProps}>
@@ -320,7 +330,7 @@ export default function MovieDetailsCardComponent({
             </ContentGrid>
           </MovieDetailsCardLeft>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   )
 }

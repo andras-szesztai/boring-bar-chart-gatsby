@@ -1,8 +1,12 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { motion } from "framer-motion"
 import { space } from "../../../../../themes/theme"
 import { themifyFontSize, themifyColor } from "../../../../../themes/mixins"
 import { COLORS } from "../../../../../constants/moviesDashboard"
+
+export const dentedStyling = css`
+  box-shadow: inset 1px 1px 5px #d9d9d9, inset -1px -1px 10px #ffffff;
+`
 
 export const TextContainer = styled(motion.div)`
   position: relative;
@@ -16,7 +20,7 @@ export const TextContainer = styled(motion.div)`
   color: ${themifyColor("grayDarker")};
   font-weight: 300;
   overflow-y: auto;
-  box-shadow: inset 1px 1px 5px #d9d9d9, inset -1px -1px 10px #ffffff;
+  ${dentedStyling}
 `
 
 export const TitleContainer = styled(motion.div)`
