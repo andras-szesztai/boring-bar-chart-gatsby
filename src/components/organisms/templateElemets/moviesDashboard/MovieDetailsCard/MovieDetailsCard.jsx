@@ -33,6 +33,7 @@ import { space } from "../../../../../themes/theme"
 import { FavoriteStar } from "../../../../molecules"
 import { themifyFontSize } from "../../../../../themes/mixins"
 import { useMeasure } from "react-use"
+import HorizontalScrollList from "../HorizontalScrollList/HorizontalScrollList"
 
 const ContentGrid = styled(motion.div)`
   width: 100%;
@@ -193,8 +194,6 @@ export default function MovieDetailsCardComponent({
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
   const [leftOverviewRef, { height: leftHeight }] = useMeasure()
 
-  console.log("activeMovie", activeMovie)
-
   // Movies
   // https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=<<api_key>>
   // https://api.themoviedb.org/3/tv/{tv_id}/credits?api_key=<<api_key>>
@@ -274,7 +273,7 @@ export default function MovieDetailsCardComponent({
               </Row>
               <Row style={{ gridArea: "crew" }}>
                 <RowTitle>Cast</RowTitle>
-                <RowListContainer>
+                {/* <RowListContainer>
                   <RowList animate={{ width: itemHovered ? 2000 : 1000 }}>
                     {activeMovie.crew.map(name => (
                       <RowItem
@@ -293,23 +292,14 @@ export default function MovieDetailsCardComponent({
                       </RowItem>
                     ))}
                   </RowList>
-                </RowListContainer>
+                </RowListContainer> */}
               </Row>
               <Row style={{ gridArea: "cast" }}>
                 <RowTitle>Cast</RowTitle>
-                <RowList>
-                  {activeMovie.cast.map(name => (
-                    <RowItem
-                      key={`${name}-cast`}
-                      style={{
-                        backgroundColor: COLORS.primary,
-                        border: `1px solid ${chroma(COLORS.primary).darken()}`,
-                      }}
-                    >
-                      {name}
-                    </RowItem>
-                  ))}
-                </RowList>
+                <HorizontalScrollList
+                  array={activeMovie.cast}
+                  bgColor={COLORS.primary}
+                />
               </Row>
               <PlaceHolderDiv style={{ gridArea: "score" }}>
                 Score comes here

@@ -5,3 +5,4 @@ export { default as PersonDetailCard } from "./PersonDetailCard/PersonDetailCard
 export { default as FavoritesList } from "./FavoritesList/FavoritesList"
 export { default as MovieSelectorChart } from "./MovieSelectorChart/MovieSelectorChart"
 export { default as MovieDetailsCard } from "./MovieDetailsCard/MovieDetailsCard"
+export { default as HorizontalScrollList } from "./HorizontalScrollList/HorizontalScrollList"
