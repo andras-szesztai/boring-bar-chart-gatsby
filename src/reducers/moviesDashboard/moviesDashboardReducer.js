@@ -10,6 +10,7 @@ import {
   NO_ACTIVE_MOVIE,
 } from "../../constants/moviesDashboard"
 import { useEffectOnce } from "react-use"
+import { useActiveMovieCredits } from "./hooks"
 
 const initialState = {
   activeNameID: undefined,
@@ -34,17 +35,17 @@ const initialState = {
   },
 }
 
-const FETCH_GENRES = "FETCH_GENRES"
-const FETCH_GENRES_SUCCESS = "FETCH_GENRES_SUCCESS"
-const FETCH_GENRES_FAIL = "FETCH_GENRES_FAIL"
-const SET_ACTIVE_ID = "SET_ACTIVE_ID"
-const SET_ACTIVE_MOVIE = "SET_ACTIVE_MOVIE"
-const SET_ACTIVE_MOVIE_CREDITS = "SET_ACTIVE_MOVIE_CREDITS"
-const FETCH_INFO_BY_ID = "FETCH_INFO_BY_ID"
-const FETCH_INFO_BY_ID_SUCCESS = "FETCH_INFO_BY_ID_SUCCESS"
-const FETCH_INFO_BY_ID_FAIL = "FETCH_INFO_BY_ID_FAIL"
-const OPEN_PERSON_DETAILS_CARD = "OPEN_PERSON_DETAILS_CARD"
-const CLOSE_PERSON_DETAILS_CARD = "CLOSE_PERSON_DETAILS_CARD"
+export const FETCH_GENRES = "FETCH_GENRES"
+export const FETCH_GENRES_SUCCESS = "FETCH_GENRES_SUCCESS"
+export const FETCH_GENRES_FAIL = "FETCH_GENRES_FAIL"
+export const SET_ACTIVE_ID = "SET_ACTIVE_ID"
+export const SET_ACTIVE_MOVIE = "SET_ACTIVE_MOVIE"
+export const SET_ACTIVE_MOVIE_CREDITS = "SET_ACTIVE_MOVIE_CREDITS"
+export const FETCH_INFO_BY_ID = "FETCH_INFO_BY_ID"
+export const FETCH_INFO_BY_ID_SUCCESS = "FETCH_INFO_BY_ID_SUCCESS"
+export const FETCH_INFO_BY_ID_FAIL = "FETCH_INFO_BY_ID_FAIL"
+export const OPEN_PERSON_DETAILS_CARD = "OPEN_PERSON_DETAILS_CARD"
+export const CLOSE_PERSON_DETAILS_CARD = "CLOSE_PERSON_DETAILS_CARD"
 
 function moviesDashboardReducer(state, { type, payload }) {
   const types = {
@@ -246,27 +247,7 @@ export default function useMoviesDashboardReducer() {
     }
   })
 
-  useEffect(() => {
-    if (
-      prevState &&
-      state.activeMovie.id &&
-      !_.isEqual(state.activeMovie, prevState.activeMovie)
-    ) {
-      axios
-        .get(
-          `${API_ROOT}/${state.activeMovie.data.media_type}/${state.activeMovie.id}/credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
-        )
-        .then(response =>
-          dispatch({
-            type: SET_ACTIVE_MOVIE_CREDITS,
-            payload: {
-              cast: _.uniq(response.data.cast.map(d => d.name)).slice(0, 5),
-              crew: _.uniq(response.data.crew.map(d => d.name)).slice(0, 5),
-            },
-          })
-        )
-    }
-  }, [prevState, state])
+  useActiveMovieCredits({ prevState, state, dispatch })
 
   return { state, prevState, actions, localStorageValues, localStorageSetters }
 }
