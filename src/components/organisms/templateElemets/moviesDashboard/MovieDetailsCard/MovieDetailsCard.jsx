@@ -1,6 +1,7 @@
 import React from "react"
 import styled, { css } from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
+import chroma from "chroma-js"
 import {
   IoIosArrowBack,
   IoIosArrowForward,
@@ -128,6 +129,10 @@ const RowList = styled.div`
   border-radius: 2px;
   padding: ${space[1]}px ${space[2]}px;
   overflow-x: auto;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const RowItem = styled.span`
@@ -180,6 +185,8 @@ export default function MovieDetailsCardComponent({
 
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
   const [leftOverviewRef, { height: leftHeight }] = useMeasure()
+
+  console.log("activeMovie", activeMovie)
 
   // Movies
   // https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=<<api_key>>
@@ -255,8 +262,38 @@ export default function MovieDetailsCardComponent({
                   ))}
                 </RowList>
               </Row>
-              <PlaceHolderDiv style={{ gridArea: "cast" }}>Cast</PlaceHolderDiv>
-              <PlaceHolderDiv style={{ gridArea: "crew" }}>Crew</PlaceHolderDiv>
+              <Row style={{ gridArea: "crew" }}>
+                <RowTitle>Cast</RowTitle>
+                <RowList>
+                  {activeMovie.crew.map(name => (
+                    <RowItem
+                      key={`${name}-crew`}
+                      style={{
+                        backgroundColor: COLORS.primary,
+                        border: `1px solid ${chroma(COLORS.primary).darken()}`,
+                      }}
+                    >
+                      {name}
+                    </RowItem>
+                  ))}
+                </RowList>
+              </Row>
+              <Row style={{ gridArea: "cast" }}>
+                <RowTitle>Cast</RowTitle>
+                <RowList>
+                  {activeMovie.cast.map(name => (
+                    <RowItem
+                      key={`${name}-cast`}
+                      style={{
+                        backgroundColor: COLORS.primary,
+                        border: `1px solid ${chroma(COLORS.primary).darken()}`,
+                      }}
+                    >
+                      {name}
+                    </RowItem>
+                  ))}
+                </RowList>
+              </Row>
               <PlaceHolderDiv style={{ gridArea: "score" }}>
                 Score comes here
               </PlaceHolderDiv>

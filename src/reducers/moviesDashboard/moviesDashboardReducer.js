@@ -39,6 +39,7 @@ const FETCH_GENRES_SUCCESS = "FETCH_GENRES_SUCCESS"
 const FETCH_GENRES_FAIL = "FETCH_GENRES_FAIL"
 const SET_ACTIVE_ID = "SET_ACTIVE_ID"
 const SET_ACTIVE_MOVIE = "SET_ACTIVE_MOVIE"
+const SET_ACTIVE_MOVIE_CREDITS = "SET_ACTIVE_MOVIE_CREDITS"
 const FETCH_INFO_BY_ID = "FETCH_INFO_BY_ID"
 const FETCH_INFO_BY_ID_SUCCESS = "FETCH_INFO_BY_ID_SUCCESS"
 const FETCH_INFO_BY_ID_FAIL = "FETCH_INFO_BY_ID_FAIL"
@@ -92,6 +93,14 @@ function moviesDashboardReducer(state, { type, payload }) {
         id: payload.id,
         data: payload.data || {},
         position: payload.position,
+      },
+    }),
+    SET_ACTIVE_MOVIE_CREDITS: () => ({
+      ...state,
+      activeMovie: {
+        ...state.activeMovie,
+        cast: payload.cast || [],
+        crew: payload.crew || [],
       },
     }),
     FETCH_INFO_BY_ID: () => ({
@@ -247,7 +256,15 @@ export default function useMoviesDashboardReducer() {
         .get(
           `${API_ROOT}/${state.activeMovie.data.media_type}/${state.activeMovie.id}/credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
         )
-        .then(response => console.log(response))
+        .then(response =>
+          dispatch({
+            type: SET_ACTIVE_MOVIE_CREDITS,
+            payload: {
+              cast: _.uniq(response.data.cast.map(d => d.name)).slice(0, 5),
+              crew: _.uniq(response.data.crew.map(d => d.name)).slice(0, 5),
+            },
+          })
+        )
     }
   }, [prevState, state])
 
