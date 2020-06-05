@@ -39,22 +39,22 @@ export default function HorizontalScrollList({ array, bgColor }) {
   const [itemHovered, setItemHovered] = useState(false)
 
   const [originalListWidth, setOriginalListWidth] = useState(undefined)
-  const [listRef, dims] = useMeasure()
+  const listRef =  React.useRef(null)
   useEffect(() => {
-    if (!originalListWidth && dims.width) {
-      setOriginalListWidth(dims.width)
+    if (!originalListWidth && listRef.current) {
+      setOriginalListWidth(listRef.current.offsetWidth)
     }
-  }, [dims, originalListWidth])
+  }, [originalListWidth])
 
   return (
     <RowListContainer onMouseLeave={() => setItemHovered(false)}>
       <RowList
         animate={{
-          width: itemHovered ? originalListWidth + 100 : originalListWidth,
+          width: itemHovered ? originalListWidth + 200 : originalListWidth,
         }}
         ref={listRef}
       >
-        {array && array.map(el => (
+        {array.map(el => (
           <RowItemComponent
             key={`${el}-crew`}
             el={el}

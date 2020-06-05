@@ -272,27 +272,11 @@ export default function MovieDetailsCardComponent({
                 </RowList>
               </Row>
               <Row style={{ gridArea: "crew" }}>
-                <RowTitle>Cast</RowTitle>
-                {/* <RowListContainer>
-                  <RowList animate={{ width: itemHovered ? 2000 : 1000 }}>
-                    {activeMovie.crew.map(name => (
-                      <RowItem
-                        key={`${name}-crew`}
-                        animate={{ width: itemHovered === name ? 200 : 100 }}
-                        onMouseEnter={() => setItemHovered(name)}
-                        onMouseLeave={() => setItemHovered(false)}
-                        style={{
-                          backgroundColor: COLORS.primary,
-                          border: `1px solid ${chroma(
-                            COLORS.primary
-                          ).darken()}`,
-                        }}
-                      >
-                        {name}
-                      </RowItem>
-                    ))}
-                  </RowList>
-                </RowListContainer> */}
+                <RowTitle>Crew</RowTitle>
+                <HorizontalScrollList
+                  array={activeMovie.crew}
+                  bgColor={COLORS.primary}
+                />
               </Row>
               <Row style={{ gridArea: "cast" }}>
                 <RowTitle>Cast</RowTitle>

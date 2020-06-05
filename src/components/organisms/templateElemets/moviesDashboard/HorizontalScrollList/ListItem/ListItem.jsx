@@ -22,15 +22,16 @@ export default function RowItemComponent({
   setItemHovered,
 }) {
   const [originalWidth, setOriginalListWidth] = useState(undefined)
-  const [itemRef, dims] = useMeasure()
+  const itemRef =  React.useRef(null)
   useEffect(() => {
-    if (!originalWidth && dims.width) {
-      setOriginalListWidth(dims.width)
+    if (!originalWidth && itemRef.current) {
+      setOriginalListWidth(itemRef.current.offsetWidth)
     }
-  }, [dims, el, originalWidth])
+  }, [el, originalWidth])
   return (
     <RowItem
       ref={itemRef}
+      key={el}
       animate={{
         width: itemHovered === el ? originalWidth + 100 : originalWidth,
       }}
