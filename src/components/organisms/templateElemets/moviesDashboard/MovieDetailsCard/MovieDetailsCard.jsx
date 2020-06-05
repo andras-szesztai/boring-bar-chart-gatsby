@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import styled, { css } from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import chroma from "chroma-js"
@@ -119,10 +119,7 @@ const RowTitle = styled.div`
   align-items: center;
 `
 
-const RowList = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+const RowListContainer = styled(motion.div)`
   justify-self: stretch;
   margin-top: 0px;
   ${dentedStyling}
@@ -135,7 +132,17 @@ const RowList = styled.div`
   }
 `
 
-const RowItem = styled.span`
+const RowList = styled(motion.div)`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`
+
+const RowItem = styled(motion.span)`
   color: #fff;
   padding: ${space[0]}px ${space[2]}px 1px ${space[2]}px;
   margin-right: ${space[2]}px;
@@ -191,6 +198,8 @@ export default function MovieDetailsCardComponent({
   // Movies
   // https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=<<api_key>>
   // https://api.themoviedb.org/3/tv/{tv_id}/credits?api_key=<<api_key>>
+
+  const [itemHovered, setItemHovered] = useState(false)
 
   return (
     <>
@@ -255,6 +264,7 @@ export default function MovieDetailsCardComponent({
                   {activeMovie.data.genre_ids.map(id => (
                     <RowItem
                       key={id}
+                      whileHover={{ rotateX: 100 }}
                       style={{ backgroundColor: COLORS.textColor }}
                     >
                       {genreList.find(genre => genre.id === id).name}
@@ -264,19 +274,26 @@ export default function MovieDetailsCardComponent({
               </Row>
               <Row style={{ gridArea: "crew" }}>
                 <RowTitle>Cast</RowTitle>
-                <RowList>
-                  {activeMovie.crew.map(name => (
-                    <RowItem
-                      key={`${name}-crew`}
-                      style={{
-                        backgroundColor: COLORS.primary,
-                        border: `1px solid ${chroma(COLORS.primary).darken()}`,
-                      }}
-                    >
-                      {name}
-                    </RowItem>
-                  ))}
-                </RowList>
+                <RowListContainer>
+                  <RowList animate={{ width: itemHovered ? 2000 : 1000 }}>
+                    {activeMovie.crew.map(name => (
+                      <RowItem
+                        key={`${name}-crew`}
+                        animate={{ width: itemHovered === name ? 200 : 100 }}
+                        onMouseEnter={() => setItemHovered(name)}
+                        onMouseLeave={() => setItemHovered(false)}
+                        style={{
+                          backgroundColor: COLORS.primary,
+                          border: `1px solid ${chroma(
+                            COLORS.primary
+                          ).darken()}`,
+                        }}
+                      >
+                        {name}
+                      </RowItem>
+                    ))}
+                  </RowList>
+                </RowListContainer>
               </Row>
               <Row style={{ gridArea: "cast" }}>
                 <RowTitle>Cast</RowTitle>

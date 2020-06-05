@@ -5,7 +5,7 @@ import { themifyFontSize, themifyColor } from "../../../../../themes/mixins"
 import { COLORS } from "../../../../../constants/moviesDashboard"
 
 export const dentedStyling = css`
-  box-shadow: inset 1px 1px 5px #d9d9d9, inset -1px -1px 10px #ffffff;
+  box-shadow: inset 1px 1px 5px #C3C3C3, inset -1px -1px 5px #fff;
 `
 
 export const TextContainer = styled(motion.div)`
