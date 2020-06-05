@@ -120,37 +120,6 @@ const RowTitle = styled.div`
   align-items: center;
 `
 
-const RowListContainer = styled(motion.div)`
-  justify-self: stretch;
-  margin-top: 0px;
-  ${dentedStyling}
-  border-radius: 2px;
-  padding: ${space[1]}px ${space[2]}px;
-  overflow-x: auto;
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`
-
-const RowList = styled(motion.div)`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`
-
-const RowItem = styled(motion.span)`
-  color: #fff;
-  padding: ${space[0]}px ${space[2]}px 1px ${space[2]}px;
-  margin-right: ${space[2]}px;
-  border-radius: 2px;
-  white-space: nowrap;
-`
-
 export default function MovieDetailsCardComponent({
   activeMovie,
   prevActiveMovie,
@@ -193,12 +162,6 @@ export default function MovieDetailsCardComponent({
 
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
   const [leftOverviewRef, { height: leftHeight }] = useMeasure()
-
-  // Movies
-  // https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=<<api_key>>
-  // https://api.themoviedb.org/3/tv/{tv_id}/credits?api_key=<<api_key>>
-
-  const [itemHovered, setItemHovered] = useState(false)
 
   return (
     <>
@@ -259,21 +222,17 @@ export default function MovieDetailsCardComponent({
               </ContentItem>
               <Row style={{ gridArea: "genre" }}>
                 <RowTitle>Genres</RowTitle>
-                <RowList>
-                  {activeMovie.data.genre_ids.map(id => (
-                    <RowItem
-                      key={id}
-                      whileHover={{ rotateX: 100 }}
-                      style={{ backgroundColor: COLORS.textColor }}
-                    >
-                      {genreList.find(genre => genre.id === id).name}
-                    </RowItem>
-                  ))}
-                </RowList>
+                <HorizontalScrollList
+                  type="genre"
+                  array={activeMovie.data.genre_ids.map(
+                    id => genreList.find(genre => genre.id === id).name
+                  )}
+                />
               </Row>
               <Row style={{ gridArea: "crew" }}>
                 <RowTitle>Crew</RowTitle>
                 <HorizontalScrollList
+                  type="crew"
                   array={activeMovie.crew}
                   bgColor={COLORS.primary}
                 />
@@ -281,6 +240,7 @@ export default function MovieDetailsCardComponent({
               <Row style={{ gridArea: "cast" }}>
                 <RowTitle>Cast</RowTitle>
                 <HorizontalScrollList
+                  type="cast"
                   array={activeMovie.cast}
                   bgColor={COLORS.primary}
                 />

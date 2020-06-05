@@ -5,8 +5,6 @@ import chroma from "chroma-js"
 
 import { space } from "../../../../../../themes/theme"
 
-import { useMeasure } from "react-use"
-
 const RowItem = styled(motion.span)`
   color: #fff;
   padding: ${space[0]}px ${space[2]}px 1px ${space[2]}px;
@@ -20,9 +18,10 @@ export default function RowItemComponent({
   bgColor,
   itemHovered,
   setItemHovered,
+  growBy
 }) {
   const [originalWidth, setOriginalListWidth] = useState(undefined)
-  const itemRef =  React.useRef(null)
+  const itemRef = React.useRef(null)
   useEffect(() => {
     if (!originalWidth && itemRef.current) {
       setOriginalListWidth(itemRef.current.offsetWidth)
@@ -33,12 +32,12 @@ export default function RowItemComponent({
       ref={itemRef}
       key={el}
       animate={{
-        width: itemHovered === el ? originalWidth + 100 : originalWidth,
+        width: itemHovered === el ? originalWidth + growBy : originalWidth,
       }}
       onMouseEnter={() => setItemHovered(el)}
       style={{
         backgroundColor: bgColor,
-        border: `1px solid ${chroma(bgColor).darken()}`,
+        border: `1px solid ${bgColor && chroma(bgColor).darken()}`,
       }}
     >
       {el}
