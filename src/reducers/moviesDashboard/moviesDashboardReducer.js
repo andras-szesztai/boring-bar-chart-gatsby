@@ -7,16 +7,13 @@ import { usePrevious, useLocalStorage } from "../../hooks"
 import {
   API_ROOT,
   LOCAL_STORE_ACCESSORS,
+  NO_ACTIVE_MOVIE,
 } from "../../constants/moviesDashboard"
 import { useEffectOnce } from "react-use"
 
 const initialState = {
   activeNameID: undefined,
-  activeMovie: {
-    id: undefined,
-    data: {},
-    position: undefined,
-  },
+  activeMovie: NO_ACTIVE_MOVIE,
   dataSets: {
     personDetails: undefined,
     personCredits: undefined,
@@ -86,15 +83,12 @@ function moviesDashboardReducer(state, { type, payload }) {
     SET_ACTIVE_ID: () => ({
       ...state,
       activeNameID: payload,
-      activeMovie: {
-        id: undefined,
-        data: undefined,
-        position: undefined,
-      },
+      activeMovie: NO_ACTIVE_MOVIE,
     }),
     SET_ACTIVE_MOVIE: () => ({
       ...state,
       activeMovie: {
+        ...state.activeMovie,
         id: payload.id,
         data: payload.data || {},
         position: payload.position,
@@ -242,6 +236,20 @@ export default function useMoviesDashboardReducer() {
         })
     }
   })
+
+  useEffect(() => {
+    if (
+      prevState &&
+      state.activeMovie.id &&
+      !_.isEqual(state.activeMovie, prevState.activeMovie)
+    ) {
+      axios
+        .get(
+          `${API_ROOT}/${state.activeMovie.data.media_type}/${state.activeMovie.id}/credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
+        )
+        .then(response => console.log(response))
+    }
+  }, [prevState, state])
 
   return { state, prevState, actions, localStorageValues, localStorageSetters }
 }

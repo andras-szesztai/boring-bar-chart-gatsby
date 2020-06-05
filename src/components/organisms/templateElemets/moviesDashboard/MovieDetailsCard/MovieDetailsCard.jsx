@@ -13,6 +13,7 @@ import {
   HANDLE_SIZE,
   WHILE_HOVER,
   COLORS,
+  NO_ACTIVE_MOVIE,
 } from "../../../../../constants/moviesDashboard"
 import { useAnimationAccessor } from "./hooks"
 import {
@@ -43,11 +44,11 @@ const ContentGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr 120px;
   grid-column-gap: ${space[3]}px;
-  grid-template-rows: 180px repeat(3, 45px) 1fr ${HANDLE_SIZE / 2}px;
+  grid-template-rows: 170px repeat(4, 55px) 1fr;
   grid-row-gap: ${space[2]}px;
   grid-template-areas:
     "info poster"
-    "genres genres"
+    "genre genre"
     "crew crew"
     "cast cast"
     "score score"
@@ -99,18 +100,15 @@ const ContentItem = styled.div`
   overflow: hidden;
 `
 
-// TODO: finish styling with icon FaExternalLinkSquareAlt
 const LinkContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   grid-area: link;
 `
 
-const Genres = styled.div`
+const Row = styled.div`
   display: grid;
-  grid-template-columns: 50px 1fr;
-  grid-area: genres;
-  overflow-x: auto;
+  grid-template-rows: 25px 1fr;
   font-size: ${themifyFontSize(1)};
 `
 
@@ -129,13 +127,22 @@ const RowList = styled.div`
   ${dentedStyling}
   border-radius: 2px;
   padding: ${space[1]}px ${space[2]}px;
+  overflow-x: auto;
+`
+
+const RowItem = styled.span`
+  color: #fff;
+  padding: ${space[0]}px ${space[2]}px 1px ${space[2]}px;
+  margin-right: ${space[2]}px;
+  border-radius: 2px;
+  white-space: nowrap;
 `
 
 export default function MovieDetailsCardComponent({
   activeMovie,
   prevActiveMovie,
   setActiveMovie,
-  genres,
+  genreList,
 }) {
   const delay = typeof prevActiveMovie.position == "number" ? 0.25 : 0
   const {
@@ -167,11 +174,7 @@ export default function MovieDetailsCardComponent({
   const closeContainerProps = {
     onClick: () =>
       setActiveMovie({
-        activeMovie: {
-          id: undefined,
-          data: {},
-          position: undefined,
-        },
+        activeMovie: NO_ACTIVE_MOVIE,
       }),
   }
 
@@ -228,7 +231,7 @@ export default function MovieDetailsCardComponent({
                   ref={rightOverviewRef}
                   style={{ position: "relative", alignSelf: "stretch" }}
                 />
-                <Overview style={{ height: rightHeight - space[2] }}>
+                <Overview style={{ height: rightHeight - space[1] }}>
                   {activeMovie.data.overview}
                 </Overview>
               </MainInfoContainer>
@@ -239,16 +242,19 @@ export default function MovieDetailsCardComponent({
                   alt={`${activeMovie.data.title}-poster`}
                 />
               </ContentItem>
-              <Genres>
-                <RowTitle>Genres:</RowTitle>
+              <Row style={{ gridArea: "genre" }}>
+                <RowTitle>Genres</RowTitle>
                 <RowList>
                   {activeMovie.data.genre_ids.map(id => (
-                    <span key={id}>
-                      {genres.find(genre => genre.id === id).name},&nbsp;
-                    </span>
+                    <RowItem
+                      key={id}
+                      style={{ backgroundColor: COLORS.textColor }}
+                    >
+                      {genreList.find(genre => genre.id === id).name}
+                    </RowItem>
                   ))}
                 </RowList>
-              </Genres>
+              </Row>
               <PlaceHolderDiv style={{ gridArea: "cast" }}>Cast</PlaceHolderDiv>
               <PlaceHolderDiv style={{ gridArea: "crew" }}>Crew</PlaceHolderDiv>
               <PlaceHolderDiv style={{ gridArea: "score" }}>

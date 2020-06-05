@@ -86,3 +86,12 @@ export const CARD_HEIGHT = {
   person: 240,
   movie: 480,
 }
+
+
+export const NO_ACTIVE_MOVIE = {
+  id: undefined,
+  data: { undefined },
+  position: undefined,
+  cast: [],
+  crew: [],
+}

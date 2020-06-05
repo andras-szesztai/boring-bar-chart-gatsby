@@ -84,7 +84,7 @@ export default function MoviesDashboard() {
             activeMovie={activeMovie}
             prevActiveMovie={prevState && prevState.activeMovie}
             setActiveMovie={setActiveMovie}
-            genres={state.dataSets.genres}
+            genreList={state.dataSets.genres}
           />
         </div>
       )}
