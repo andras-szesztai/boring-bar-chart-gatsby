@@ -133,6 +133,7 @@ export default function MovieDetailsCardComponent({
   prevActiveMovie,
   setActiveMovie,
   genreList,
+  activeNameID
 }) {
   const delay = typeof prevActiveMovie.position == "number" ? 0.25 : 0
   const {
@@ -243,6 +244,7 @@ export default function MovieDetailsCardComponent({
                   hiddenContentProps={{
                     accessor: "job",
                   }}
+                  activeNameID={activeNameID}
                 />
               </Row>
               <Row style={{ gridArea: "cast" }}>

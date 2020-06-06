@@ -121,7 +121,7 @@ export default function SearchBar({ setActiveNameID }) {
   const getSearchResultProps = index => {
     return {
       onClick: () => {
-        setActiveNameID(nameSearchResults[index].id)
+        setActiveNameID({id: nameSearchResults[index].id})
         setNameSearchResults([])
         setInputText("")
         setSearchIsFocused(false)
@@ -220,7 +220,7 @@ export default function SearchBar({ setActiveNameID }) {
               setActiveSearchResult(prev => prev - 1)
             }
             if (key === "Enter" && nameSearchResults[activeSearchResult]) {
-              setActiveNameID(nameSearchResults[activeSearchResult].id)
+              setActiveNameID({id: nameSearchResults[activeSearchResult].id})
               setNameSearchResults([])
               setInputText("")
               setSearchIsFocused(false)

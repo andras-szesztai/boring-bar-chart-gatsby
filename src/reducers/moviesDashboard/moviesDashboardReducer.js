@@ -84,8 +84,10 @@ function moviesDashboardReducer(state, { type, payload }) {
     }),
     SET_ACTIVE_ID: () => ({
       ...state,
-      activeNameID: payload,
-      activeMovie: NO_ACTIVE_MOVIE,
+      activeNameID: payload.id,
+      activeMovie: payload.isActiveMovieClicked
+        ? state.activeMovie
+        : NO_ACTIVE_MOVIE,
     }),
     SET_ACTIVE_MOVIE: () => ({
       ...state,

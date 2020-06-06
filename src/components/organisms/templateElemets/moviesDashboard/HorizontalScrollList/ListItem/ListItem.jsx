@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
+import { IoIosSearch } from "react-icons/io"
 import chroma from "chroma-js"
 
 import { space } from "../../../../../../themes/theme"
 
 const Item = styled(motion.span)`
-  color: #fff;
+  position: relative;
   padding: ${space[0]}px ${space[2]}px 1px ${space[2]}px;
   margin-right: ${space[2]}px;
   border-radius: 2px;
@@ -14,6 +15,9 @@ const Item = styled(motion.span)`
 
   display: flex;
   justify-content: space-between;
+
+  color: #fff;
+  cursor: pointer;
 `
 
 const HiddenInformation = styled.div`
@@ -26,15 +30,30 @@ const HiddenInformation = styled.div`
   display: flex;
 `
 
+export const MouseDownAnimation = styled(motion.div)`
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  height: 100%;
+
+  background-color: #fff;
+  border-radius: 2px;
+
+  cursor: pointer;
+  color: red;
+  overflow: hidden;
+`
+
 export default function ListItem({
   data,
   bgColor,
   itemHovered,
   setItemHovered,
-  growBy,
   hiddenContent: HiddenContent,
   hiddenContentProps,
   handleMouseEnter,
+  activeNameID,
 }) {
   const delayedRevealProps = {
     animate: { opacity: 1, transition: { delay: 0.5 } },
@@ -67,13 +86,9 @@ export default function ListItem({
       setHiddenInformationWidth(hiddenInformationRef.current.offsetWidth)
     }
   }, [hiddenContentProps, hiddenInformationWidth])
-  itemHovered === data.id &&
-    console.log(
-      "hiddenInformationWidth",
-      data.name,
-      hiddenInformationWidth,
-      data[hiddenContentProps.accessor]
-    )
+
+  const [isClicked, setIsClicked] = useState()
+  const timeOut = React.useRef(false)
 
   return (
     <Item
@@ -89,11 +104,41 @@ export default function ListItem({
         handleMouseEnter && handleMouseEnter(hiddenInformationWidth)
         setItemHovered(data.id)
       }}
+      onMouseDown={() => {
+        if (activeNameID !== data.id) {
+          setIsClicked(true)
+          //timeOut.current = setTimeout(() => setActiveNameID({ id }), 1000)
+        }
+      }}
+      onMouseUp={() => {
+        // clearTimeout(timeOut.current)
+        setIsClicked(false)
+      }}
       style={{
         backgroundColor: bgColor,
         border: `1px solid ${bgColor && chroma(bgColor).darken()}`,
       }}
     >
+      {activeNameID !== data.id && (
+        <MouseDownAnimation
+          initial={{
+            width: 0,
+            zIndex: 1,
+          }}
+          animate={{
+            width: isClicked ? originalWidth + hiddenInformationWidth - 2 : 0,
+          }}
+          transition={{
+            duration: 1,
+            type: "tween",
+            ease: [0.65, 0, 0.35, 1],
+          }}
+        >
+          <div style={{ display: "flex", transform: "translate(5px, 2px)" }}>
+            <IoIosSearch size={16} color={bgColor} /> Search
+          </div>
+        </MouseDownAnimation>
+      )}
       <div>{data.name.trim()}</div>
       <AnimatePresence>
         {itemHovered === data.id && (

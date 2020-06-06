@@ -32,7 +32,7 @@ const SearchControl = ({
       onMouseDown={() => {
         if (activeNameID !== id) {
           setClickedSearch(id)
-          timeOut.current = setTimeout(() => setActiveNameID(id), 1000)
+          timeOut.current = setTimeout(() => setActiveNameID({id}), 1000)
         }
       }}
       onMouseUp={() => {

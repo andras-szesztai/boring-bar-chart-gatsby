@@ -49,7 +49,7 @@ export default function MoviesDashboard() {
   useEffect(() => {
     favoritePersons &&
     favoritePersons.length &&
-    actions.setActiveNameID(_.last(favoritePersons).id)
+    actions.setActiveNameID({id: _.last(favoritePersons).id})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -85,6 +85,7 @@ export default function MoviesDashboard() {
             prevActiveMovie={prevState && prevState.activeMovie}
             setActiveMovie={setActiveMovie}
             genreList={state.dataSets.genres}
+            activeNameID={activeNameID}
           />
         </div>
       )}
