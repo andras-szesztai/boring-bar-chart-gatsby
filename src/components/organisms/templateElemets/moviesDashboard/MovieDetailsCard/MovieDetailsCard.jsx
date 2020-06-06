@@ -36,6 +36,7 @@ import { FavoriteStar } from "../../../../molecules"
 import { themifyFontSize } from "../../../../../themes/mixins"
 import { useMeasure } from "react-use"
 import HorizontalScrollList from "../HorizontalScrollList/HorizontalScrollList"
+import { FaExternalLinkSquareAlt } from "react-icons/fa"
 
 const ContentGrid = styled(motion.div)`
   width: 100%;
@@ -128,8 +129,21 @@ const ContentItem = styled.div`
 
 const LinkContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+
+  align-items: center;
   grid-area: link;
+
+  font-size: ${themifyFontSize(1)};
+  color: ${COLORS.textColor};
+
+  a {
+    text-decoration: none;
+    color: inherit;
+
+    span {
+      font-weight: 500;
+    }
+  }
 `
 
 const Row = styled.div`
@@ -205,6 +219,10 @@ export default function MovieDetailsCardComponent({
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
   //const [leftOverviewRef, { height: leftHeight }] = useMeasure()
 
+  // TODO: setup link style
+  // TODO: setup left and right with reusable elements
+
+  const [isLinkHovered, setIsLinkHovered] = useState(false)
   return (
     <>
       <AnimatePresence>
@@ -237,7 +255,7 @@ export default function MovieDetailsCardComponent({
                   <FavoriteStar isFavorited={true} isHovered={false} />
                 </motion.div>
                 <motion.div whileHover={WHILE_HOVER}>
-                  <FavoriteStar isFavorited={true} isHovered={true} />
+                  <FavoriteStar isFavorited={true} isHovered={false} />
                 </motion.div>
               </IconsContainer>
               <Row style={{ gridArea: "genre" }}>
@@ -280,14 +298,22 @@ export default function MovieDetailsCardComponent({
                   setActiveNameID={setActiveNameID}
                 />
               </Row>
-              <LinkContainer>
+              <LinkContainer style={{ justifyContent: "flex-end" }}>
                 <a
                   href={`https://www.themoviedb.org/${activeMovie.data.media_type}/${activeMovie.data.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onMouseEnter={() => setIsLinkHovered(true)}
+                  onMouseLeave={() => setIsLinkHovered(false)}
                 >
-                  Find out more on TMBD
+                  Find out more on <span>TMBD</span>
                 </a>
+                <motion.div
+                  style={{ marginLeft: 8, paddingTop: 5 }}
+                  animate={{ scale: isLinkHovered ? 1.3 : 1 }}
+                >
+                  <FaExternalLinkSquareAlt size={24} />
+                </motion.div>
               </LinkContainer>
             </ContentGrid>
           </MovieDetailsCardRight>

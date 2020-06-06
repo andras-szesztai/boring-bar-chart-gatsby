@@ -2,6 +2,8 @@ import React from "react"
 import styled from "styled-components"
 
 import { IMAGE_ROOT } from "../../../../../constants/moviesDashboard"
+import { colors } from "../../../../../themes/theme"
+import { dentedStyling } from "../styles/styles"
 
 const ImageContainer = styled.img`
   height: 100%;
