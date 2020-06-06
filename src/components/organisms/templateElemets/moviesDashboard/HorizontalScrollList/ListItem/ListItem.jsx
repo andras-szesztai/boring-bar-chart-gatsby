@@ -56,7 +56,7 @@ export default function ListItem({
   setActiveNameID,
 }) {
   const delayedRevealProps = {
-    animate: { opacity: 1, transition: { delay: 0.5 } },
+    animate: { opacity: 1, transition: { delay: 0.35 } },
     exit: {
       opacity: 0,
       transition: {

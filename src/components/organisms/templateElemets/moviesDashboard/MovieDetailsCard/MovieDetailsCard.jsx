@@ -23,9 +23,7 @@ import {
   MovieDetailsCardRight,
   CloseIconContainerLeft,
   CloseIconContainerRight,
-  ArrowIconContainerRight,
   MovieDetailsCardLeft,
-  ArrowIconContainerLeft,
   makeRightVariants,
   makeLeftVariants,
 } from "./styles"
@@ -74,7 +72,7 @@ const IconsContainer = styled.div`
   align-items: center;
 
   position: absolute;
-  left: -${HANDLE_SIZE-4}px;
+
   top: 0px;
 
   border-radius: 0 0 0 2px;
@@ -85,6 +83,14 @@ const IconsContainer = styled.div`
   .icon {
     cursor: pointer;
   }
+`
+
+const IconsContainerRight = styled(IconsContainer)`
+  left: -${HANDLE_SIZE - 4}px;
+`
+
+const IconsContainerLeft = styled(IconsContainer)`
+  right: -${HANDLE_SIZE - 4}px;
 `
 
 const MovieTitle = styled(TitleContainer)`
@@ -182,6 +188,13 @@ const MouseDownContent = ({ bgColor }) => {
   )
 }
 
+export const makeCardProps = variants => ({
+  initial: "initial",
+  animate: "animate",
+  exit: "exit",
+  variants: variants,
+})
+
 export default function MovieDetailsCardComponent({
   activeMovie,
   prevActiveMovie,
@@ -190,14 +203,7 @@ export default function MovieDetailsCardComponent({
   activeNameID,
   setActiveNameID,
 }) {
-  const delay = typeof prevActiveMovie.position == "number" ? 0.25 : 0
-
-  const makeCardProps = variants => ({
-    initial: "initial",
-    animate: "animate",
-    exit: "exit",
-    variants: variants,
-  })
+  const delay = typeof prevActiveMovie.position == "number" ? 0.5 : 0
 
   const arrowContainerProps = {
     role: "button",
@@ -209,9 +215,8 @@ export default function MovieDetailsCardComponent({
   }
 
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
-  //const [leftOverviewRef, { height: leftHeight }] = useMeasure()
+  const [leftOverviewRef, { height: leftHeight }] = useMeasure()
 
-  // TODO: setup link style
   // TODO: setup left and right with reusable elements
 
   const [isLinkHovered, setIsLinkHovered] = useState(false)
@@ -220,9 +225,9 @@ export default function MovieDetailsCardComponent({
       <AnimatePresence>
         {activeMovie.position === 0 && (
           <MovieDetailsCardRight {...makeCardProps(makeRightVariants(delay))}>
-            <ArrowIconContainerRight {...arrowContainerProps}>
+            <CloseIconContainerRight {...arrowContainerProps}>
               <IoIosCloseCircle size={28} color={COLORS.secondaryDark} />
-            </ArrowIconContainerRight>
+            </CloseIconContainerRight>
             <ContentGrid>
               <MainInfoContainer>
                 <MovieTitle>{activeMovie.data.title}</MovieTitle>
@@ -242,14 +247,14 @@ export default function MovieDetailsCardComponent({
                   alt={`${activeMovie.data.title}-poster`}
                 />
               </ContentItem>
-              <IconsContainer>
+              <IconsContainerRight>
                 <motion.div whileHover={WHILE_HOVER}>
                   <FavoriteStar isFavorited={true} isHovered={false} />
                 </motion.div>
                 <motion.div whileHover={WHILE_HOVER}>
                   <FavoriteStar isFavorited={true} isHovered={false} />
                 </motion.div>
-              </IconsContainer>
+              </IconsContainerRight>
               <Row style={{ gridArea: "genre" }}>
                 <RowTitle>Genres</RowTitle>
                 <HorizontalScrollList
@@ -311,30 +316,17 @@ export default function MovieDetailsCardComponent({
           </MovieDetailsCardRight>
         )}
       </AnimatePresence>
-      {/* <AnimatePresence>
+
+      <AnimatePresence>
         {activeMovie.position === 1 && (
           <MovieDetailsCardLeft {...makeCardProps(makeLeftVariants(delay))}>
-            <CloseIconContainerLeft {...closeContainerProps}>
-              <motion.div whileHover={WHILE_HOVER}>
-                <IoIosCloseCircle size={30} color={COLORS.secondaryDark} />
-              </motion.div>
+            <CloseIconContainerLeft {...arrowContainerProps}>
+              <IoIosCloseCircle size={28} color={COLORS.secondaryDark} />
             </CloseIconContainerLeft>
-            <ArrowIconContainerLeft {...arrowContainerProps}>
-              <IoIosArrowForward size={24} color={COLORS.secondaryDark} />
-            </ArrowIconContainerLeft>
             <ContentGrid>
               <MainInfoContainer>
-                <MovieTitle>
-                  {activeMovie.data.title}
-                  <div style={{ marginTop: -3 }}>
-                    <FavoriteStar isFavorited={true} isHovered={false} />
-                  </div>
-                </MovieTitle>
-                {activeMovie.data.title !== activeMovie.data.original_title ? (
-                  <SubTitle>{activeMovie.data.original_title}</SubTitle>
-                ) : (
-                  <div />
-                )}
+                <MovieTitle>{activeMovie.data.title}</MovieTitle>
+                <SubTitle>{activeMovie.data.release_date.slice(0, 4)}</SubTitle>
                 <div
                   ref={leftOverviewRef}
                   style={{ position: "relative", alignSelf: "stretch" }}
@@ -350,31 +342,75 @@ export default function MovieDetailsCardComponent({
                   alt={`${activeMovie.data.title}-poster`}
                 />
               </ContentItem>
-              <GenreList>
-                Genres:&nbsp;
-                {activeMovie.data.genre_ids.map(id => (
-                  <span>{genres.find(genre => genre.id === id).name},&nbsp;</span>
-                ))}
-              </GenreList>
-              <PlaceHolderDiv style={{ gridArea: "credits" }}>
-                Credits come here (top cast & crew)
-              </PlaceHolderDiv>
-              <PlaceHolderDiv style={{ gridArea: "score" }}>
-                Score comes here
-              </PlaceHolderDiv>
-              <LinkContainer>
+              <IconsContainerLeft>
+                <motion.div whileHover={WHILE_HOVER}>
+                  <FavoriteStar isFavorited={true} isHovered={false} />
+                </motion.div>
+                <motion.div whileHover={WHILE_HOVER}>
+                  <FavoriteStar isFavorited={true} isHovered={false} />
+                </motion.div>
+              </IconsContainerLeft>
+              <Row style={{ gridArea: "genre" }}>
+                <RowTitle>Genres</RowTitle>
+                <HorizontalScrollList
+                  type="genre"
+                  array={genreList.filter(el =>
+                    activeMovie.data.genre_ids.includes(el.id)
+                  )}
+                  bgColor={COLORS.textColor}
+                />
+              </Row>
+              <Row style={{ gridArea: "crew" }}>
+                <RowTitle>Lead crew</RowTitle>
+                <HorizontalScrollList
+                  type="crew"
+                  array={activeMovie.crew}
+                  bgColor={COLORS.primary}
+                  hoverContent={HoverContent}
+                  hoverContentProps={{
+                    accessor: "job",
+                  }}
+                  mouseDownContent={MouseDownContent}
+                  activeNameID={activeNameID}
+                  setActiveNameID={setActiveNameID}
+                />
+              </Row>
+              <Row style={{ gridArea: "cast" }}>
+                <RowTitle>Lead cast</RowTitle>
+                <HorizontalScrollList
+                  type="cast"
+                  array={activeMovie.cast}
+                  bgColor={COLORS.primary}
+                  hoverContent={HoverContent}
+                  hoverContentProps={{
+                    accessor: "character",
+                  }}
+                  mouseDownContent={MouseDownContent}
+                  activeNameID={activeNameID}
+                  setActiveNameID={setActiveNameID}
+                />
+              </Row>
+              <LinkContainer style={{ justifyContent: "flex-start" }}>
                 <a
                   href={`https://www.themoviedb.org/${activeMovie.data.media_type}/${activeMovie.data.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onMouseEnter={() => setIsLinkHovered(true)}
+                  onMouseLeave={() => setIsLinkHovered(false)}
                 >
-                  Find out more on TMBD
+                  Find out more on <span>TMBD</span>
                 </a>
+                <motion.div
+                  style={{ marginLeft: 8, paddingTop: 5 }}
+                  animate={{ scale: isLinkHovered ? 1.3 : 1 }}
+                >
+                  <FaExternalLinkSquareAlt size={24} />
+                </motion.div>
               </LinkContainer>
             </ContentGrid>
           </MovieDetailsCardLeft>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
     </>
   )
 }

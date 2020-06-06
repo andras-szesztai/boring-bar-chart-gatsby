@@ -52,9 +52,21 @@ export const MovieDetailsCardRight = styled(MovieDetailsCard)`
 
 export const MovieDetailsCardLeft = styled(MovieDetailsCard)`
   left: ${space[2]}px;
+
   :after {
     ${HandleStyle}
+    bottom: 0px;
     right: ${-HANDLE_SIZE + 4}px;
+    height: ${HANDLE_SIZE}px;
+    border-radius: 0 ${space[1]}px ${space[1]}px 0;
+  }
+
+  :before {
+    ${HandleStyle}
+    top: 0px;
+    right: ${-HANDLE_SIZE + 4}px;
+    height: ${HANDLE_SIZE * 2}px;
+    border-radius: 0 ${space[1]}px ${space[1]}px 0;
   }
 `
 
@@ -72,28 +84,14 @@ const IconContainer = styled(motion.div)`
   align-items: center;
 `
 
-export const ArrowIconContainerRight = styled(IconContainer)`
+export const CloseIconContainerRight = styled(IconContainer)`
   left: -${HANDLE_SIZE - 4}px;
   top: ${CARD_HEIGHT.movie - HANDLE_SIZE}px;
 `
 
-export const ArrowIconContainerLeft = styled(IconContainer)`
+export const CloseIconContainerLeft = styled(IconContainer)`
   left: ${CARD_WIDTH - 4}px;
-  top: ${CARD_HEIGHT.movie - HANDLE_SIZE * 2}px;
-`
-
-const CloseIconContainer = styled(IconContainer)`
-  padding-top: 1px;
-  top: ${space[1]}px;
-  background: rgba(255, 255, 255, 1);
-  border-radius: 100%;
-`
-export const CloseIconContainerLeft = styled(CloseIconContainer)`
-  left: ${CARD_WIDTH - HANDLE_SIZE - 5}px;
-`
-
-export const CloseIconContainerRight = styled(CloseIconContainer)`
-  left: ${CARD_WIDTH - HANDLE_SIZE + 5}px;
+  top: ${CARD_HEIGHT.movie - HANDLE_SIZE}px;
 `
 
 export const makeRightVariants = delay => ({
