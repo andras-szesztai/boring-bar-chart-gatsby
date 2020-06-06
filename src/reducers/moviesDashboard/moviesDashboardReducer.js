@@ -92,10 +92,11 @@ function moviesDashboardReducer(state, { type, payload }) {
     SET_ACTIVE_MOVIE: () => ({
       ...state,
       activeMovie: {
-        ...state.activeMovie,
         id: payload.id,
         data: payload.data || {},
         position: payload.position,
+        cast: [],
+        crew: [],
       },
     }),
     SET_ACTIVE_MOVIE_CREDITS: () => ({

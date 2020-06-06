@@ -52,7 +52,7 @@ export default function ListItem({
   hiddenContentProps,
   handleMouseEnter,
   activeNameID,
-  setActiveNameID
+  setActiveNameID,
 }) {
   const delayedRevealProps = {
     animate: { opacity: 1, transition: { delay: 0.5 } },
@@ -92,7 +92,6 @@ export default function ListItem({
   return (
     <Item
       ref={itemRef}
-      key={data.id}
       animate={{
         width:
           itemHovered === data.id
@@ -109,7 +108,10 @@ export default function ListItem({
       onMouseDown={() => {
         if (activeNameID !== data.id) {
           setIsClicked(true)
-          timeOut.current = setTimeout(() => setActiveNameID({ id: data.id, isActiveMovieClicked: true }), 1000)
+          timeOut.current = setTimeout(
+            () => setActiveNameID({ id: data.id, isActiveMovieClicked: true }),
+            1000
+          )
         }
       }}
       onMouseUp={() => {
@@ -119,7 +121,7 @@ export default function ListItem({
       style={{
         backgroundColor: bgColor,
         border: `1px solid ${bgColor && chroma(bgColor).darken()}`,
-        cursor: activeNameID !== data.id ? "pointer" : "default"
+        cursor: activeNameID !== data.id ? "pointer" : "default",
       }}
     >
       {activeNameID !== data.id && (
@@ -133,7 +135,7 @@ export default function ListItem({
             width: isClicked ? originalWidth + hiddenInformationWidth - 2 : 0,
           }}
           transition={{
-            duration: isClicked ? 1 : .25,
+            duration: isClicked ? 1 : 0.25,
             type: "tween",
             ease: [0.65, 0, 0.35, 1],
           }}
