@@ -2,7 +2,10 @@ import React from "react"
 import { select } from "d3-selection"
 import chroma from "chroma-js"
 
-import { COLORS, CIRCLE_ADJUST } from "../../../../../../../constants/moviesDashboard"
+import {
+  COLORS,
+  CIRCLE_ADJUST,
+} from "../../../../../../../constants/moviesDashboard"
 
 import { setRadius, getSelectedLineYPos } from "../utils"
 
@@ -13,6 +16,7 @@ export default function useActiveMovieIDUpdate({
   isSizeDynamic,
   chart,
   dims,
+  setActiveMovie,
 }) {
   React.useEffect(() => {
     if (storedValues.current.isInit && activeMovieID !== prevActiveMovieID) {
@@ -22,6 +26,7 @@ export default function useActiveMovieIDUpdate({
         currXScale,
         yScale,
         currSizeScale,
+        voronoiArea,
       } = storedValues.current
       chartArea.select(".selected-circle").remove()
       chartArea.select(".selected-line").remove()
@@ -39,7 +44,11 @@ export default function useActiveMovieIDUpdate({
               .attr("fill", "#fff")
               .attr("stroke", chroma(COLORS.secondary).darken())
               .attr("r", d =>
-                setRadius({ adjust: CIRCLE_ADJUST, isSizeDynamic, currSizeScale })(d)
+                setRadius({
+                  adjust: CIRCLE_ADJUST,
+                  isSizeDynamic,
+                  currSizeScale,
+                })(d)
               )
             chartArea.select(".selected-circle").lower()
             const isMainChart = chart === "main"
@@ -61,6 +70,10 @@ export default function useActiveMovieIDUpdate({
           }
         })
       }
+      voronoiArea
+        .selectAll(".voronoi-path")
+        .on("click", setActiveMovie)
+        .attr("cursor", d => (activeMovieID === d.id ? "default" : "pointer"))
     }
   })
 }

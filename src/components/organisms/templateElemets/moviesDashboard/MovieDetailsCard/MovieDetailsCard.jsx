@@ -45,16 +45,16 @@ const ContentGrid = styled(motion.div)`
   padding: ${space[3]}px;
 
   display: grid;
-  grid-template-columns: 1fr 120px 30px;
+  grid-template-columns: 1fr 120px;
   grid-column-gap: ${space[3]}px;
-  grid-template-rows: 180px repeat(3, 70px) 1fr;
+  grid-template-rows: 185px repeat(3, 70px) 1fr;
   grid-row-gap: ${space[2]}px;
   grid-template-areas:
-    "info poster icons"
-    "genre genre genre"
-    "crew crew crew"
-    "cast cast cast"
-    "link link link";
+    "info poster"
+    "genre genre"
+    "crew crew"
+    "cast cast"
+    "link link";
 `
 
 const MainInfoContainer = styled.div`
@@ -63,6 +63,26 @@ const MainInfoContainer = styled.div`
   grid-area: info;
   align-items: start;
   position: relative;
+`
+
+const IconsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  
+  position: absolute;
+  right: 12px;
+  top: ${space[3]}px;
+  
+  background: rgba(255, 255, 255, .9);
+  border-radius: 0 0 0 2px;
+  padding-top:${space[1]}px;
+  width: 40px;
+
+  .icon {
+    cursor: pointer;
+  }
 `
 
 const PlaceHolderDiv = styled.div`
@@ -76,6 +96,7 @@ const MovieTitle = styled(TitleContainer)`
   color: ${COLORS.secondaryDark};
   line-height: 1.3;
   font-size: ${themifyFontSize(2)};
+  cursor: default;
 `
 
 const SubTitle = styled(TitleContainer)`
@@ -87,6 +108,7 @@ const SubTitle = styled(TitleContainer)`
   color: ${COLORS.textColor};
   cursor: pointer;
   margin-top: 2px;
+  cursor: default;
 `
 
 const Overview = styled(TextContainer)`
@@ -100,7 +122,6 @@ const ContentItem = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 `
 
 const LinkContainer = styled.div`
@@ -196,14 +217,14 @@ export default function MovieDetailsCardComponent({
   }
 
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
-  const [leftOverviewRef, { height: leftHeight }] = useMeasure()
+  //const [leftOverviewRef, { height: leftHeight }] = useMeasure()
 
   return (
     <>
       <AnimatePresence>
         {activeMovie.position === 0 && (
           <MovieDetailsCardRight {...makeCardProps(makeRightVariants(delay))}>
-            <CloseIconContainerRight
+            {/* <CloseIconContainerRight
               {...closeContainerProps}
               initial={{
                 x: isMovieDetailsCardOpen ? -8 : -CARD_WIDTH + HANDLE_SIZE,
@@ -223,7 +244,7 @@ export default function MovieDetailsCardComponent({
               <motion.div whileHover={WHILE_HOVER}>
                 <IoIosCloseCircle size={30} color={COLORS.secondaryDark} />
               </motion.div>
-            </CloseIconContainerRight>
+            </CloseIconContainerRight> */}
             <ArrowIconContainerRight {...arrowContainerProps}>
               <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
             </ArrowIconContainerRight>
@@ -246,6 +267,17 @@ export default function MovieDetailsCardComponent({
                   alt={`${activeMovie.data.title}-poster`}
                 />
               </ContentItem>
+              <IconsContainer>
+                <motion.div className="icon" whileHover={WHILE_HOVER}>
+                  <IoIosCloseCircle size={28} color={COLORS.secondaryDark} />
+                </motion.div>
+                <motion.div whileHover={WHILE_HOVER}>
+                  <FavoriteStar isFavorited={true} isHovered={false} />
+                </motion.div>
+                <motion.div whileHover={WHILE_HOVER}>
+                  <FavoriteStar isFavorited={true} isHovered={true} />
+                </motion.div>
+              </IconsContainer>
               <Row style={{ gridArea: "genre" }}>
                 <RowTitle>Genres</RowTitle>
                 <HorizontalScrollList

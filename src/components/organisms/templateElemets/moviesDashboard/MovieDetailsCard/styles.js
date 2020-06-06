@@ -65,7 +65,7 @@ const IconContainer = styled(motion.div)`
 
 export const ArrowIconContainerRight = styled(IconContainer)`
   left: -${HANDLE_SIZE - 4}px;
-  top: ${CARD_HEIGHT.movie - HANDLE_SIZE * 2}px;
+  top: ${CARD_HEIGHT.movie - HANDLE_SIZE}px;
 `
 
 export const ArrowIconContainerLeft = styled(IconContainer)`

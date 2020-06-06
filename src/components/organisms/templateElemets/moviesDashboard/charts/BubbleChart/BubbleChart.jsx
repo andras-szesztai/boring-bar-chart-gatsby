@@ -67,10 +67,6 @@ const ChartSvg = styled.svg`
   height: 100%;
   width: 100%;
   z-index: 1;
-
-  .voronoi-path {
-    cursor: pointer;
-  }
 `
 
 const ChartTitle = styled(motion.div)`
@@ -140,6 +136,7 @@ export default function BubbleChart(props) {
       const chartArea = select(chartAreaRef.current)
       const svgArea = select(svgAreaRef.current)
       const gridArea = select(gridAreaRef.current)
+      const voronoiArea = select(voronoiRef.current)
       storedValues.current = {
         isInit: true,
         currXScale,
@@ -148,6 +145,7 @@ export default function BubbleChart(props) {
         chartArea,
         svgArea,
         gridArea,
+        voronoiArea,
         filteredData,
       }
       createGrid()
@@ -217,8 +215,25 @@ export default function BubbleChart(props) {
       .text(d => d)
   }
 
+  function setActiveMovie(d) {
+    const { currXScale } = storedValues.current
+    props.activeMovie.id !== d.id &&
+      props.setActiveMovie({
+        id: d.id,
+        data: d,
+        position: Number(
+          currXScale(new Date(d.release_date)) + margin.left >= dims.width / 2
+        ),
+      })
+  }
+
   function createUpdateVoronoi() {
-    const { yScale, currXScale, filteredData } = storedValues.current
+    const {
+      yScale,
+      currXScale,
+      filteredData,
+      voronoiArea,
+    } = storedValues.current
     const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
     const setYPos = d => yScale(d.vote_average) + margin.top
     const delaunay = Delaunay.from(filteredData, setXPos, setYPos).voronoi([
@@ -228,7 +243,7 @@ export default function BubbleChart(props) {
       dims.height,
     ])
 
-    select(voronoiRef.current)
+    voronoiArea
       .selectAll(".voronoi-path")
       .data(filteredData, d => d.id)
       .join(
@@ -237,19 +252,13 @@ export default function BubbleChart(props) {
             .append("path")
             .attr("class", "voronoi-path")
             .attr("fill", "transparent")
+            .attr("cursor", d =>
+              props.activeMovie.id === d.id ? "default" : "pointer"
+            )
             // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
             // .on("mouseover", d => console.log(d))
-            .on("click", d => {
-              props.setActiveMovie({
-                id: d.id,
-                data: d,
-                position: Number(
-                  currXScale(new Date(d.release_date)) + margin.left >=
-                    dims.width / 2
-                ),
-              })
-            })
+            .on("click", setActiveMovie)
             .call(enter => enter),
         update =>
           update.call(update =>
@@ -274,6 +283,7 @@ export default function BubbleChart(props) {
   })
   useActiveMovieIDUpdate({
     storedValues,
+    setActiveMovie,
     activeMovieID: props.activeMovie.id,
     prevActiveMovieID: prevProps && prevProps.activeMovie.id,
     isSizeDynamic,
