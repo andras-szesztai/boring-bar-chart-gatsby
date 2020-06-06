@@ -75,8 +75,8 @@ const PlaceHolderDiv = styled.div`
 
 const MovieTitle = styled(TitleContainer)`
   color: ${COLORS.secondaryDark};
-  line-height: 1.15;
-  font-size: ${themifyFontSize(3)};
+  line-height: 1.3;
+  font-size: ${themifyFontSize(2)};
 `
 
 const SubTitle = styled(TitleContainer)`
@@ -87,6 +87,7 @@ const SubTitle = styled(TitleContainer)`
   font-weight: 200;
   color: ${COLORS.textColor};
   cursor: pointer;
+  margin-top: 2px;
 `
 
 const Overview = styled(TextContainer)`
@@ -196,6 +197,7 @@ export default function MovieDetailsCardComponent({
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
   const [leftOverviewRef, { height: leftHeight }] = useMeasure()
 
+
   return (
     <>
       <AnimatePresence>
@@ -228,11 +230,7 @@ export default function MovieDetailsCardComponent({
             <ContentGrid>
               <MainInfoContainer>
                 <MovieTitle>{activeMovie.data.title}</MovieTitle>
-                {activeMovie.data.title !== activeMovie.data.original_title ? (
-                  <SubTitle>{activeMovie.data.original_title}</SubTitle>
-                ) : (
-                  <div />
-                )}
+                <SubTitle>{activeMovie.data.release_date.slice(0, 4)}</SubTitle>
                 <div
                   ref={rightOverviewRef}
                   style={{ position: "relative", alignSelf: "stretch" }}
@@ -250,17 +248,17 @@ export default function MovieDetailsCardComponent({
               </ContentItem>
               <Row style={{ gridArea: "genre" }}>
                 <RowTitle>Genres</RowTitle>
-                {/* <HorizontalScrollList
+                <HorizontalScrollList
                   type="genre"
-                  array={activeMovie.data.genre_ids.map(
-                    id => genreList.find(genre => genre.id === id).name
+                  array={genreList.filter(el =>
+                    activeMovie.data.genre_ids.includes(el.id)
                   )}
-                /> */}
+                  bgColor={COLORS.textColor}
+                />
               </Row>
               <Row style={{ gridArea: "crew" }}>
                 <RowTitle>Lead crew</RowTitle>
                 <HorizontalScrollList
-                  key={`${activeMovie.id}-crew`}
                   type="crew"
                   array={activeMovie.crew}
                   bgColor={COLORS.primary}
@@ -276,7 +274,6 @@ export default function MovieDetailsCardComponent({
               <Row style={{ gridArea: "cast" }}>
                 <RowTitle>Lead cast</RowTitle>
                 <HorizontalScrollList
-                  key={`${activeMovie.id}-cast`}
                   type="cast"
                   array={activeMovie.cast}
                   bgColor={COLORS.primary}

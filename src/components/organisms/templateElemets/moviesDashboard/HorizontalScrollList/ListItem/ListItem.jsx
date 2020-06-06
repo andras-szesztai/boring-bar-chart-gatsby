@@ -104,10 +104,10 @@ export default function ListItem({
       }}
       onMouseEnter={() => {
         handleMouseEnter && handleMouseEnter(hiddenInformationWidth)
-        setItemHovered(data.id)
+        HoverContent && setItemHovered(data.id)
       }}
       onMouseDown={() => {
-        if (activeNameID !== data.id) {
+        if (activeNameID && activeNameID !== data.id) {
           setIsClicked(true)
           timeOut.current = setTimeout(
             () => setActiveNameID({ id: data.id, isActiveMovieClicked: true }),
@@ -122,11 +122,12 @@ export default function ListItem({
       style={{
         backgroundColor: bgColor,
         border: `1px solid ${bgColor && chroma(bgColor).darken()}`,
-        cursor: activeNameID !== data.id ? "pointer" : "default",
+        cursor:
+          activeNameID && activeNameID !== data.id ? "pointer" : "default",
       }}
     >
       <AnimatePresence>
-        {activeNameID !== data.id && (
+        {activeNameID && activeNameID !== data.id && (
           <MouseDownAnimation
             initial={{
               width: 0,
