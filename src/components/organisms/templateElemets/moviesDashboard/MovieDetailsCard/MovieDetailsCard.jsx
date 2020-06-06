@@ -70,29 +70,21 @@ const MainInfoContainer = styled.div`
 const IconsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   align-items: center;
 
   position: absolute;
-  right: 12px;
-  top: ${space[3]}px;
+  left: -${HANDLE_SIZE-4}px;
+  top: 0px;
 
-  background: rgba(255, 255, 255, 0.95);
   border-radius: 0 0 0 2px;
-  padding-top: ${space[1]}px;
-  padding-bottom: ${space[1]}px;
-  width: 40px;
+  width: ${HANDLE_SIZE}px;
+  height: ${HANDLE_SIZE * 2}px;
+  z-index: 4;
 
   .icon {
     cursor: pointer;
   }
-`
-
-const PlaceHolderDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
 `
 
 const MovieTitle = styled(TitleContainer)`

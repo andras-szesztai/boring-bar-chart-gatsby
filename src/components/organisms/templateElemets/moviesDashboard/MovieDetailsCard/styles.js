@@ -26,9 +26,7 @@ const HandleStyle = css`
   content: "";
   position: absolute;
   z-index: 4;
-  bottom: 0px;
   width: ${HANDLE_SIZE}px;
-  height: ${HANDLE_SIZE}px;
   background-color: #fff;
   border-radius: ${space[1]}px 0 0 ${space[1]}px;
 `
@@ -37,7 +35,18 @@ export const MovieDetailsCardRight = styled(MovieDetailsCard)`
   right: ${space[2]}px;
   :after {
     ${HandleStyle}
+    bottom: 0px;
+    height: ${HANDLE_SIZE}px;
     left: -${HANDLE_SIZE - 4}px;
+    border-radius: ${space[1]}px 0 0 ${space[1]}px;
+  }
+
+  :before {
+    ${HandleStyle}
+    top: 0px;
+    height: ${HANDLE_SIZE * 2}px;
+    left: -${HANDLE_SIZE - 4}px;
+    border-radius: ${space[1]}px 0 0 ${space[1]}px;
   }
 `
 
