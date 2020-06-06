@@ -185,37 +185,21 @@ export default function MovieDetailsCardComponent({
   setActiveNameID,
 }) {
   const delay = typeof prevActiveMovie.position == "number" ? 0.25 : 0
-  const {
-    accessor,
-    isMovieDetailsCardOpen,
-    setIsMovieDetailsCardOpen,
-  } = useAnimationAccessor({ prevActiveMovie, activeMovie })
 
   const makeCardProps = variants => ({
     initial: "initial",
-    animate: accessor,
+    animate: "animate",
     exit: "exit",
     variants: variants,
   })
 
   const arrowContainerProps = {
     role: "button",
-    onClick: () => setIsMovieDetailsCardOpen(prev => !prev),
-    whileHover: WHILE_HOVER,
-    initial: { rotate: 180 },
-    animate: {
-      rotate: isMovieDetailsCardOpen ? 180 : 0,
-      transition: {
-        delay: 1,
-      },
-    },
-  }
-
-  const closeContainerProps = {
     onClick: () =>
       setActiveMovie({
         activeMovie: NO_ACTIVE_MOVIE,
       }),
+    whileHover: WHILE_HOVER,
   }
 
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
@@ -226,113 +210,86 @@ export default function MovieDetailsCardComponent({
       <AnimatePresence>
         {activeMovie.position === 0 && (
           <MovieDetailsCardRight {...makeCardProps(makeRightVariants(delay))}>
-            {/* <CloseIconContainerRight
-              {...closeContainerProps}
-              initial={{
-                x: isMovieDetailsCardOpen ? -8 : -CARD_WIDTH + HANDLE_SIZE,
-              }}
-              animate={{
-                x: isMovieDetailsCardOpen ? -8 : -CARD_WIDTH + HANDLE_SIZE,
-                background: isMovieDetailsCardOpen
-                  ? "rgba(255,255,255,1)"
-                  : "rgba(255,255,255,0)",
-                transition: {
-                  type: "spring",
-                  damping: 17,
-                  delay: 0.5,
-                },
-              }}
-            >
-              <motion.div whileHover={WHILE_HOVER}>
-                <IoIosCloseCircle size={30} color={COLORS.secondaryDark} />
-              </motion.div>
-            </CloseIconContainerRight> */}
-            <ArrowIconContainerRight {...closeContainerProps}>
-              <IoIosArrowBack size={24} color={COLORS.secondaryDark} />
+            <ArrowIconContainerRight {...arrowContainerProps}>
+              <IoIosCloseCircle size={28} color={COLORS.secondaryDark} />
             </ArrowIconContainerRight>
-            <AnimatePresence>
-              {isMovieDetailsCardOpen && (
-                <ContentGrid {...OPACITY_VARIANT}>
-                  <MainInfoContainer>
-                    <MovieTitle>{activeMovie.data.title}</MovieTitle>
-                    <SubTitle>
-                      {activeMovie.data.release_date.slice(0, 4)}
-                    </SubTitle>
-                    <div
-                      ref={rightOverviewRef}
-                      style={{ position: "relative", alignSelf: "stretch" }}
-                    />
-                    <Overview style={{ height: rightHeight - space[2] }}>
-                      {activeMovie.data.overview}
-                    </Overview>
-                  </MainInfoContainer>
-                  <ContentItem style={{ gridArea: "poster" }}>
-                    <Image
-                      url={activeMovie.data.poster_path}
-                      height={180}
-                      alt={`${activeMovie.data.title}-poster`}
-                    />
-                  </ContentItem>
-                  <IconsContainer>
-                    <motion.div whileHover={WHILE_HOVER}>
-                      <FavoriteStar isFavorited={true} isHovered={false} />
-                    </motion.div>
-                    <motion.div whileHover={WHILE_HOVER}>
-                      <FavoriteStar isFavorited={true} isHovered={true} />
-                    </motion.div>
-                  </IconsContainer>
-                  <Row style={{ gridArea: "genre" }}>
-                    <RowTitle>Genres</RowTitle>
-                    <HorizontalScrollList
-                      type="genre"
-                      array={genreList.filter(el =>
-                        activeMovie.data.genre_ids.includes(el.id)
-                      )}
-                      bgColor={COLORS.textColor}
-                    />
-                  </Row>
-                  <Row style={{ gridArea: "crew" }}>
-                    <RowTitle>Lead crew</RowTitle>
-                    <HorizontalScrollList
-                      type="crew"
-                      array={activeMovie.crew}
-                      bgColor={COLORS.primary}
-                      hoverContent={HoverContent}
-                      hoverContentProps={{
-                        accessor: "job",
-                      }}
-                      mouseDownContent={MouseDownContent}
-                      activeNameID={activeNameID}
-                      setActiveNameID={setActiveNameID}
-                    />
-                  </Row>
-                  <Row style={{ gridArea: "cast" }}>
-                    <RowTitle>Lead cast</RowTitle>
-                    <HorizontalScrollList
-                      type="cast"
-                      array={activeMovie.cast}
-                      bgColor={COLORS.primary}
-                      hoverContent={HoverContent}
-                      hoverContentProps={{
-                        accessor: "character",
-                      }}
-                      mouseDownContent={MouseDownContent}
-                      activeNameID={activeNameID}
-                      setActiveNameID={setActiveNameID}
-                    />
-                  </Row>
-                  <LinkContainer>
-                    <a
-                      href={`https://www.themoviedb.org/${activeMovie.data.media_type}/${activeMovie.data.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Find out more on TMBD
-                    </a>
-                  </LinkContainer>
-                </ContentGrid>
-              )}
-            </AnimatePresence>
+            <ContentGrid>
+              <MainInfoContainer>
+                <MovieTitle>{activeMovie.data.title}</MovieTitle>
+                <SubTitle>{activeMovie.data.release_date.slice(0, 4)}</SubTitle>
+                <div
+                  ref={rightOverviewRef}
+                  style={{ position: "relative", alignSelf: "stretch" }}
+                />
+                <Overview style={{ height: rightHeight - space[2] }}>
+                  {activeMovie.data.overview}
+                </Overview>
+              </MainInfoContainer>
+              <ContentItem style={{ gridArea: "poster" }}>
+                <Image
+                  url={activeMovie.data.poster_path}
+                  height={180}
+                  alt={`${activeMovie.data.title}-poster`}
+                />
+              </ContentItem>
+              <IconsContainer>
+                <motion.div whileHover={WHILE_HOVER}>
+                  <FavoriteStar isFavorited={true} isHovered={false} />
+                </motion.div>
+                <motion.div whileHover={WHILE_HOVER}>
+                  <FavoriteStar isFavorited={true} isHovered={true} />
+                </motion.div>
+              </IconsContainer>
+              <Row style={{ gridArea: "genre" }}>
+                <RowTitle>Genres</RowTitle>
+                <HorizontalScrollList
+                  type="genre"
+                  array={genreList.filter(el =>
+                    activeMovie.data.genre_ids.includes(el.id)
+                  )}
+                  bgColor={COLORS.textColor}
+                />
+              </Row>
+              <Row style={{ gridArea: "crew" }}>
+                <RowTitle>Lead crew</RowTitle>
+                <HorizontalScrollList
+                  type="crew"
+                  array={activeMovie.crew}
+                  bgColor={COLORS.primary}
+                  hoverContent={HoverContent}
+                  hoverContentProps={{
+                    accessor: "job",
+                  }}
+                  mouseDownContent={MouseDownContent}
+                  activeNameID={activeNameID}
+                  setActiveNameID={setActiveNameID}
+                />
+              </Row>
+              <Row style={{ gridArea: "cast" }}>
+                <RowTitle>Lead cast</RowTitle>
+                <HorizontalScrollList
+                  type="cast"
+                  array={activeMovie.cast}
+                  bgColor={COLORS.primary}
+                  hoverContent={HoverContent}
+                  hoverContentProps={{
+                    accessor: "character",
+                  }}
+                  mouseDownContent={MouseDownContent}
+                  activeNameID={activeNameID}
+                  setActiveNameID={setActiveNameID}
+                />
+              </Row>
+              <LinkContainer>
+                <a
+                  href={`https://www.themoviedb.org/${activeMovie.data.media_type}/${activeMovie.data.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Find out more on TMBD
+                </a>
+              </LinkContainer>
+            </ContentGrid>
           </MovieDetailsCardRight>
         )}
       </AnimatePresence>

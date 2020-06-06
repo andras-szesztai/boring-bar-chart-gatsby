@@ -91,23 +91,15 @@ export const makeRightVariants = delay => ({
   initial: {
     x: CARD_WIDTH + HANDLE_SIZE,
   },
-  animateFirst: {
+  animate: {
     x: 0,
     transition: {
       ...TRANSITION.primary,
       delay,
     },
   },
-  animateOpen: {
-    x: 0,
-    transition: TRANSITION.primary,
-  },
-  animateClose: {
-    x: CARD_WIDTH - HANDLE_SIZE,
-    transition: TRANSITION.primary,
-  },
   exit: {
-    x: CARD_WIDTH + HANDLE_SIZE,
+    x: CARD_WIDTH + HANDLE_SIZE * 2,
   },
 })
 
@@ -115,22 +107,14 @@ export const makeLeftVariants = delay => ({
   initial: {
     x: -(CARD_WIDTH + HANDLE_SIZE),
   },
-  animateFirst: {
+  animate: {
     x: 0,
     transition: {
       ...TRANSITION.primary,
       delay,
     },
   },
-  animateOpen: {
-    x: 0,
-    transition: TRANSITION.primary,
-  },
-  animateClose: {
-    x: -CARD_WIDTH + HANDLE_SIZE,
-    transition: TRANSITION.primary,
-  },
   exit: {
-    x: -(CARD_WIDTH + HANDLE_SIZE),
+    x: -(CARD_WIDTH + HANDLE_SIZE * 2),
   },
 })
