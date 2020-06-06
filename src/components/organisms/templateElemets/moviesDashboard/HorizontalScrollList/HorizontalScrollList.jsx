@@ -6,7 +6,7 @@ import { space } from "../../../../../themes/theme"
 import { COLORS } from "../../../../../constants/moviesDashboard"
 
 import { dentedStyling } from "../styles/styles"
-import RowItem from "./ListItem/ListItem"
+import ListItem from "./ListItem/ListItem"
 
 const RowListContainer = styled(motion.div)`
   justify-self: stretch;
@@ -58,10 +58,10 @@ export default function HorizontalScrollList(props) {
             width: itemHovered ? originalWidth + growBy : originalWidth,
           }}
         >
-          {array.map(el => (
-            <RowItem
-              key={`${el}-crew`}
-              el={el}
+          {!!array.length && array.map(el => (
+            <ListItem
+              key={`${el.id}-${type}`}
+              data={el}
               {...props}
               itemHovered={itemHovered}
               setItemHovered={setItemHovered}
@@ -70,8 +70,8 @@ export default function HorizontalScrollList(props) {
         </RowList>
       </RowListContainer>
       <HiddenRowList ref={listRef}>
-        {array.map(el => (
-          <RowItem key={`${el}-${type}-hidden`} el={el} />
+        {!!array.length && array.map(el => (
+          <ListItem key={`${el.id}-${type}-hidden`} data={el} />
         ))}
       </HiddenRowList>
     </>

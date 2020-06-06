@@ -5,7 +5,7 @@ import chroma from "chroma-js"
 
 import { space } from "../../../../../../themes/theme"
 
-const RowItem = styled(motion.span)`
+const Item = styled(motion.span)`
   color: #fff;
   padding: ${space[0]}px ${space[2]}px 1px ${space[2]}px;
   margin-right: ${space[2]}px;
@@ -16,13 +16,14 @@ const RowItem = styled(motion.span)`
   justify-content: space-between;
 `
 
-export default function RowItemComponent({
-  el,
+export default function ListItem({
+  data,
   bgColor,
   itemHovered,
   setItemHovered,
   growBy,
   hiddenContent: HiddenContent,
+  hiddenContentProps,
 }) {
   const delayedRevealProps = {
     animate: { opacity: 1, transition: { delay: 0.5 } },
@@ -41,33 +42,44 @@ export default function RowItemComponent({
     if (!originalWidth && itemRef.current) {
       setOriginalListWidth(itemRef.current.offsetWidth)
     }
-  }, [el, originalWidth])
+  }, [originalWidth])
   return (
-    <RowItem
+    <Item
       ref={itemRef}
-      key={el}
+      key={data.id}
       animate={{
-        width: itemHovered === el ? originalWidth + growBy : originalWidth,
+        width: itemHovered === data.id ? originalWidth + growBy : originalWidth,
       }}
-      onMouseEnter={() => setItemHovered(el)}
+      onMouseEnter={() => setItemHovered(data.id)}
       style={{
         backgroundColor: bgColor,
         border: `1px solid ${bgColor && chroma(bgColor).darken()}`,
       }}
     >
-      <div>{el}</div>
+      <div>{data.name}</div>
       <AnimatePresence>
-        {itemHovered === el && (
-          <motion.div initial={{ opacity: 0, y: -1.5 }} {...delayedRevealProps}>
+        {itemHovered === data.id && (
+          <motion.div
+            key="separate-line"
+            initial={{ opacity: 0, y: -1.5 }}
+            {...delayedRevealProps}
+          >
             |
           </motion.div>
         )}
-        {itemHovered === el && <HiddenContent animateProps={delayedRevealProps} />}
+        {itemHovered === data.id && (
+          <HiddenContent
+            key="content"
+            animateProps={delayedRevealProps}
+            data={data}
+            {...hiddenContentProps}
+          />
+        )}
       </AnimatePresence>
-    </RowItem>
+    </Item>
   )
 }
 
-RowItemComponent.defaultProps = {
+ListItem.defaultProps = {
   hiddenContent: () => <div />,
 }
