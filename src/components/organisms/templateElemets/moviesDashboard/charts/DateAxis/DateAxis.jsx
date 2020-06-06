@@ -19,7 +19,7 @@ import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
 
 import { useSelectedUpdate } from "./hooks"
-import Tooltip from "../../../../../molecules/containers/CarouselContainer/TooltipContainer"
+import Tooltip from "./Tooltip/Tooltip"
 
 const fadeOutEffect = css`
   content: "";
@@ -67,8 +67,6 @@ const ChartSvg = styled.svg`
     cursor: pointer;
   }
 `
-
-
 
 export default function DateAxis(props) {
   const { margin, xScale, mainData, subData, activeMovie } = props
@@ -164,7 +162,9 @@ export default function DateAxis(props) {
 
   function getXPosition(d) {
     const { currXScale } = storedValues.current
-    Number(currXScale(new Date(d.release_date)) + margin.left >= dims.width / 2)
+    return Number(
+      currXScale(new Date(d.release_date)) + margin.left >= dims.width / 2
+    )
   }
 
   function addInteractions() {}
@@ -193,6 +193,7 @@ export default function DateAxis(props) {
                 id: d.id,
                 data: d,
                 yPosition: props.isBoth ? 1 : 2,
+                x: currXScale(new Date(d.release_date)),
                 xPosition: getXPosition(d),
               })
             })
@@ -233,7 +234,7 @@ export default function DateAxis(props) {
         />
         <g ref={voronoiRef} />
       </ChartSvg>
-      <Tooltip />
+      <Tooltip hoveredMovie={props.hoveredMovie} />
     </Wrapper>
   )
 }

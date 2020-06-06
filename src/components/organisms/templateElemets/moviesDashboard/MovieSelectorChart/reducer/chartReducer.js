@@ -63,7 +63,7 @@ function movieSelectorChartReducer(state, { type, payload }) {
 
 export default function useMovieSelectorChartReducer({ dataSets }) {
   //const prevDataSets = usePrevious(dataSets)
-  const [chartState, dispatch] = useReducer(
+  const [state, dispatch] = useReducer(
     movieSelectorChartReducer,
     initialState
   )
@@ -79,7 +79,7 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
   useEffect(() => {
     if (
       dataSets.personCredits &&
-      (!chartState.nameId || chartState.nameId !== dataSets.personCredits.id)
+      (!state.nameId || state.nameId !== dataSets.personCredits.id)
     ) {
       const isBoth =
         !!dataSets.personCredits.cast.length &&
@@ -102,7 +102,7 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
         sizeScale,
       })
     }
-  }, [actions, chartState, dataSets])
+  }, [actions, state, dataSets])
 
-  return { chartState, actions }
+  return { state, actions }
 }

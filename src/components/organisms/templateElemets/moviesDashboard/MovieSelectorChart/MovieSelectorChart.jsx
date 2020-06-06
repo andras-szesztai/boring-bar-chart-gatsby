@@ -47,16 +47,16 @@ export default function MovieSelectorChart({
   setActiveMovie,
   activeMovie,
 }) {
-  const { chartState, actions } = useMovieSelectorChartReducer({ dataSets })
+  const { state, actions } = useMovieSelectorChartReducer({ dataSets })
 
   const makeProps = acc => ({
     chart: acc,
-    type: chartState.types[acc],
-    data: dataSets.personCredits[chartState.types[acc]],
-    xScale: chartState.scales.xScale,
-    sizeScale: chartState.scales.sizeScale,
-    isYDomainSynced: chartState.isYDomainSynced,
-    isSizeDynamic: chartState.isSizeDynamic,
+    type: state.types[acc],
+    data: dataSets.personCredits[state.types[acc]],
+    xScale: state.scales.xScale,
+    sizeScale: state.scales.sizeScale,
+    isYDomainSynced: state.isYDomainSynced,
+    isSizeDynamic: state.isSizeDynamic,
     setActiveMovie: setActiveMovie,
     activeMovie: activeMovie,
   })
@@ -70,20 +70,21 @@ export default function MovieSelectorChart({
               <div onClick={actions.setIsYDomainSynced}>Y-domain</div>
               <div onClick={actions.setIsSizeSynced}>Size</div>
             </PlaceHolderDiv>
-            {typeof chartState.isBoth == "boolean" && (
-              <ChartContainer twoCharts={chartState.isBoth}>
+            {typeof state.isBoth == "boolean" && (
+              <ChartContainer twoCharts={state.isBoth}>
                 <BubbleChart {...makeProps("main")} />
                 <DateAxis
-                  mainData={dataSets.personCredits[chartState.types.main] || []}
-                  subData={dataSets.personCredits[chartState.types.sub] || []}
-                  type={chartState.types.main}
-                  xScale={chartState.scales.xScale}
+                  mainData={dataSets.personCredits[state.types.main] || []}
+                  subData={dataSets.personCredits[state.types.sub] || []}
+                  type={state.types.main}
+                  xScale={state.scales.xScale}
                   setActiveMovie={setActiveMovie}
                   activeMovie={activeMovie}
                   setHoveredMovie={actions.setHoveredMovie}
-                  isBoth={chartState.isBoth}
+                  hoveredMovie={state.hoveredMovie}
+                  isBoth={state.isBoth}
                 />
-                {chartState.isBoth && <BubbleChart {...makeProps("sub")} />}
+                {state.isBoth && <BubbleChart {...makeProps("sub")} />}
               </ChartContainer>
             )}
           </SubContainer>
