@@ -22,6 +22,8 @@ const HiddenInformation = styled.div`
   position: absolute;
   bottom: 0px;
   right: 0px;
+
+  display: flex;
 `
 
 export default function ListItem({
@@ -65,6 +67,13 @@ export default function ListItem({
       setHiddenInformationWidth(hiddenInformationRef.current.offsetWidth)
     }
   }, [hiddenContentProps, hiddenInformationWidth])
+  itemHovered === data.id &&
+    console.log(
+      "hiddenInformationWidth",
+      data.name,
+      hiddenInformationWidth,
+      data[hiddenContentProps.accessor]
+    )
 
   return (
     <Item
@@ -73,7 +82,7 @@ export default function ListItem({
       animate={{
         width:
           itemHovered === data.id
-            ? originalWidth + growBy + hiddenInformationWidth
+            ? originalWidth + hiddenInformationWidth
             : originalWidth,
       }}
       onMouseEnter={() => {
@@ -85,12 +94,13 @@ export default function ListItem({
         border: `1px solid ${bgColor && chroma(bgColor).darken()}`,
       }}
     >
-      <div>{data.name}</div>
+      <div>{data.name.trim()}</div>
       <AnimatePresence>
         {itemHovered === data.id && (
           <motion.div
             key="separate-line"
             initial={{ opacity: 0, y: -1.5 }}
+            style={{ marginLeft: space[2], marginRight: space[2] }}
             {...delayedRevealProps}
           >
             |
@@ -107,8 +117,20 @@ export default function ListItem({
       </AnimatePresence>
 
       {hiddenContentProps && hiddenContentProps.accessor && (
-        <HiddenInformation ref={hiddenInformationRef}>
-          {data[hiddenContentProps.accessor]}
+        <HiddenInformation
+          key={data.id + data[hiddenContentProps.accessor]}
+          ref={hiddenInformationRef}
+        >
+          <div
+            style={{
+              marginLeft: space[2],
+              marginRight: space[2],
+              transform: "translateY(1.5px)",
+            }}
+          >
+            |
+          </div>
+          <div>{data[hiddenContentProps.accessor].trim()}</div>
         </HiddenInformation>
       )}
     </Item>

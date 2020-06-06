@@ -37,7 +37,7 @@ const HiddenList = styled(List)`
 `
 
 export default function HorizontalScrollList(props) {
-  const { array, type, growBy } = props
+  const { array, type } = props
   const [itemHovered, setItemHovered] = useState(false)
 
   const [originalWidth, setOriginalWidth] = useState(undefined)
@@ -46,7 +46,7 @@ export default function HorizontalScrollList(props) {
   useEffect(() => {
     const newWidth = listRef.current && listRef.current.offsetWidth
     if (newWidth && originalWidth !== newWidth) {
-      setOriginalWidth(newWidth)
+      setOriginalWidth(newWidth + 20)
     }
   })
 
@@ -58,8 +58,8 @@ export default function HorizontalScrollList(props) {
         <List
           animate={{
             width: itemHovered
-              ? originalWidth + 10 + extraWidth.current
-              : originalWidth + 10,
+              ? originalWidth + extraWidth.current
+              : originalWidth,
           }}
         >
           {!!array.length &&

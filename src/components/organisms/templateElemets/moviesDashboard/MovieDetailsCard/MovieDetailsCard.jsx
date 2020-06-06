@@ -202,12 +202,7 @@ export default function MovieDetailsCardComponent({
             </ArrowIconContainerRight>
             <ContentGrid>
               <MainInfoContainer>
-                <MovieTitle>
-                  {activeMovie.data.title}
-                  <div style={{ marginTop: -3 }}>
-                    <FavoriteStar isFavorited={true} isHovered={false} />
-                  </div>
-                </MovieTitle>
+                <MovieTitle>{activeMovie.data.title}</MovieTitle>
                 {activeMovie.data.title !== activeMovie.data.original_title ? (
                   <SubTitle>{activeMovie.data.original_title}</SubTitle>
                 ) : (
@@ -217,7 +212,7 @@ export default function MovieDetailsCardComponent({
                   ref={rightOverviewRef}
                   style={{ position: "relative", alignSelf: "stretch" }}
                 />
-                <Overview style={{ height: rightHeight - space[1] }}>
+                <Overview style={{ height: rightHeight - space[2] }}>
                   {activeMovie.data.overview}
                 </Overview>
               </MainInfoContainer>
@@ -244,7 +239,6 @@ export default function MovieDetailsCardComponent({
                   type="crew"
                   array={activeMovie.crew}
                   bgColor={COLORS.primary}
-                  growBy={0}
                   hiddenContent={HiddenContent}
                   hiddenContentProps={{
                     accessor: "job",
@@ -258,7 +252,6 @@ export default function MovieDetailsCardComponent({
                   type="cast"
                   array={activeMovie.cast}
                   bgColor={COLORS.primary}
-                  growBy={0}
                   hiddenContent={HiddenContent}
                   hiddenContentProps={{
                     accessor: "character",
