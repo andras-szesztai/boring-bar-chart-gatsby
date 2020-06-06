@@ -11,6 +11,7 @@ import {
 } from "../../constants/moviesDashboard"
 import { useEffectOnce } from "react-use"
 import { useActiveMovieCredits } from "./hooks"
+import { makeUniqData } from "../../components/organisms/templateElemets/moviesDashboard/utils"
 
 const initialState = {
   activeNameID: undefined,
@@ -239,7 +240,11 @@ export default function useMoviesDashboardReducer() {
               type: FETCH_INFO_BY_ID_SUCCESS,
               payload: {
                 details: details.data,
-                credits: credits.data,
+                credits: {
+                  cast: makeUniqData(credits.data.cast, "cast"),
+                  crew: makeUniqData(credits.data.crew, "crew"),
+                  id: credits.data.id,
+                },
               },
             })
           })

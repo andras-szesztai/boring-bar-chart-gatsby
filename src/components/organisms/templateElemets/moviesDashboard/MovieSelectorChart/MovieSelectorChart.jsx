@@ -48,6 +48,7 @@ export default function MovieSelectorChart({
   activeMovie,
 }) {
   const { chartState, actions } = useMovieSelectorChartReducer({ dataSets })
+  console.log("chartState", chartState)
 
   const makeProps = acc => ({
     chart: acc,
@@ -61,7 +62,6 @@ export default function MovieSelectorChart({
     activeMovie: activeMovie,
   })
 
-  console.log(dataSets.personCredits.crew)
   return (
     <>
       {activeNameID && !loading.personCredits && (
@@ -75,13 +75,14 @@ export default function MovieSelectorChart({
               <ChartContainer twoCharts={chartState.isBoth}>
                 <BubbleChart {...makeProps("main")} />
                 <DateAxis
-                  crewData={dataSets.personCredits.crew}
-                  castData={dataSets.personCredits.cast}
+                  mainData={dataSets.personCredits[chartState.types.main] || []}
+                  subData={dataSets.personCredits[chartState.types.sub] || []}
                   type={chartState.types.main}
                   xScale={chartState.scales.xScale}
                   setActiveMovie={setActiveMovie}
                   activeMovie={activeMovie}
                   setHoveredMovie={actions.setHoveredMovie}
+                  isBoth={chartState.isBoth}
                 />
                 {chartState.isBoth && <BubbleChart {...makeProps("sub")} />}
               </ChartContainer>

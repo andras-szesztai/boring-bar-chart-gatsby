@@ -24,7 +24,7 @@ import {
   useActiveMovieIDUpdate,
 } from "./hooks"
 import { setRadius } from "./utils"
-import { makeUniqData } from "../../utils"
+import { makeUniqData, makeFilteredData } from "../../utils"
 
 const fadeOutEffect = css`
   content: "";
@@ -122,7 +122,7 @@ export default function BubbleChart(props) {
       !prevDims.width &&
       dims.width
     ) {
-      const filteredData = makeUniqData(data, props.type)
+      const filteredData = makeFilteredData(data)
       const currXScale = xScale.range([
         0,
         dims.width - margin.left - margin.right,

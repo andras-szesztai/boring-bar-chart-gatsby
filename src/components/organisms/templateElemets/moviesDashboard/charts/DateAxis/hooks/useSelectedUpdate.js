@@ -41,11 +41,8 @@ export default function useSelectedUpdate({
           .transition(t)
           .attr("cx", setX)
           .attr("opacity", 1)
-        const isCast = type === "cast"
-        const mainData = isCast ? data.castData : data.crewData
-        const subData = isCast ? data.crewData : data.castData
-        const topLineData = mainData.filter(d => d.id === activeMovieID)
-        const bottomLineData = subData.filter(d => d.id === activeMovieID)
+        const topLineData = data.mainData.filter(d => d.id === activeMovieID)
+        const bottomLineData = data.subData.filter(d => d.id === activeMovieID)
         chartArea
           .selectAll(".line")
           .datum(selectedCircleData)

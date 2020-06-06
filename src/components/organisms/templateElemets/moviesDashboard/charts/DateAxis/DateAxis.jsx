@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react"
 import styled, { css } from "styled-components"
 import chroma from "chroma-js"
 import _ from "lodash"
-import { select } from "d3-selection"
+import { select, mouse } from "d3-selection"
 import { useMeasure } from "react-use"
 import "d3-transition"
 import { axisBottom } from "d3-axis"
@@ -67,7 +67,7 @@ const ChartSvg = styled.svg`
 `
 
 export default function DateAxis(props) {
-  const { margin, xScale, crewData, castData, activeMovie } = props
+  const { margin, xScale, mainData, subData, activeMovie } = props
   const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
@@ -77,7 +77,7 @@ export default function DateAxis(props) {
 
   useEffect(() => {
     if (!storedValues.current.isInit && dims.width) {
-      const filteredData = _.uniqBy([...crewData, ...castData], "id")
+      const filteredData = _.uniqBy([...mainData, ...subData], "id")
         .filter(d => !!d.release_date && !!d.vote_count)
         .sort((a, b) => b.vote_count - a.vote_count)
       const currXScale = xScale.range([
@@ -158,9 +158,7 @@ export default function DateAxis(props) {
       .attr("opacity", 0)
   }
 
-  function addInteractions(){
-
-  }
+  function addInteractions() {}
 
   function createUpdateVoronoi() {
     const { currXScale, filteredData } = storedValues.current
@@ -180,9 +178,14 @@ export default function DateAxis(props) {
             .append("path")
             .attr("class", "voronoi-path")
             .attr("fill", "transparent")
-            // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
-            .on("mouseover", d => console.log(d))
+            .on("mouseover", d => {
+              props.setHoveredMovie({
+                id: d.id,
+                data: d,
+                position: props.isBoth ? 1 : 2,
+              })
+            })
             .on("click", d =>
               props.setActiveMovie({
                 id: d.id,
@@ -206,9 +209,9 @@ export default function DateAxis(props) {
     activeMovieID: activeMovie.id,
     prevActiveMovieID: prevProps && prevProps.activeMovie.id,
     type: props.type,
-    data: { crewData, castData },
+    data: { mainData, subData },
     dims,
-    addInteractions
+    addInteractions,
   })
 
   return (
