@@ -48,7 +48,6 @@ export default function MovieSelectorChart({
   activeMovie,
 }) {
   const { chartState, actions } = useMovieSelectorChartReducer({ dataSets })
-  console.log("chartState", chartState)
 
   const makeProps = acc => ({
     chart: acc,

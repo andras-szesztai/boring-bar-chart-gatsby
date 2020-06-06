@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react"
 import styled, { css } from "styled-components"
 import chroma from "chroma-js"
 import _ from "lodash"
-import { select, mouse } from "d3-selection"
+import { select } from "d3-selection"
 import { useMeasure } from "react-use"
 import "d3-transition"
 import { axisBottom } from "d3-axis"
@@ -13,11 +13,13 @@ import {
   SIZE_RANGE,
   CIRCLE_ADJUST,
   CHART_SIDE_MARGINS,
+  NO_HOVERED_MOVIE,
 } from "../../../../../../constants/moviesDashboard"
 import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
 
 import { useSelectedUpdate } from "./hooks"
+import Tooltip from "../../../../../molecules/containers/CarouselContainer/TooltipContainer"
 
 const fadeOutEffect = css`
   content: "";
@@ -65,6 +67,8 @@ const ChartSvg = styled.svg`
     cursor: pointer;
   }
 `
+
+
 
 export default function DateAxis(props) {
   const { margin, xScale, mainData, subData, activeMovie } = props
@@ -158,6 +162,11 @@ export default function DateAxis(props) {
       .attr("opacity", 0)
   }
 
+  function getXPosition(d) {
+    const { currXScale } = storedValues.current
+    Number(currXScale(new Date(d.release_date)) + margin.left >= dims.width / 2)
+  }
+
   function addInteractions() {}
 
   function createUpdateVoronoi() {
@@ -183,17 +192,16 @@ export default function DateAxis(props) {
               props.setHoveredMovie({
                 id: d.id,
                 data: d,
-                position: props.isBoth ? 1 : 2,
+                yPosition: props.isBoth ? 1 : 2,
+                xPosition: getXPosition(d),
               })
             })
+            .on("mouseout", () => props.setHoveredMovie(NO_HOVERED_MOVIE))
             .on("click", d =>
               props.setActiveMovie({
                 id: d.id,
                 data: d,
-                position: Number(
-                  currXScale(new Date(d.release_date)) + margin.left >=
-                    dims.width / 2
-                ),
+                position: getXPosition(d),
               })
             )
             .call(enter => enter),
@@ -225,6 +233,7 @@ export default function DateAxis(props) {
         />
         <g ref={voronoiRef} />
       </ChartSvg>
+      <Tooltip />
     </Wrapper>
   )
 }

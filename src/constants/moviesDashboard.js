@@ -97,5 +97,6 @@ export const NO_ACTIVE_MOVIE = {
 export const NO_HOVERED_MOVIE = {
   id: undefined,
   data: {},
-  position: undefined,
+  xPosition: undefined,
+  yPosition: undefined,
 }

@@ -20,7 +20,8 @@ const initialState = {
   hoveredMovie: {
     id: undefined,
     data: {},
-    position: undefined,
+    yPosition: undefined,
+    xPosition: undefined,
   },
 }
 
