@@ -1,22 +1,32 @@
 import React from "react"
 import styled, { css } from "styled-components"
+import { Image } from "../../.."
+import { dropShadow, space } from "../../../../../../../themes/theme"
 
-const WIDTH = 100
-const LINE_WIDTH = 20
+const WIDTH = 240
+const HEIGHT = 160
+const LINE_WIDTH = 16
 
 const TooltipContainer = styled.div`
   position: absolute;
   width: ${WIDTH}px;
-  height: 100px;
+  height: ${HEIGHT}px;
 
-  ${({ left, top }) => css`
+  ${({ left, top, bottom }) => css`
     left: ${left}px;
     top: ${top}px;
+    bottom: ${bottom}px;
   `}
 
-  border: 1px solid black;
   z-index: 5;
   pointer-events: none;
+
+  padding: ${space[2]}px;
+
+  border-radius: ${space[1]}px;
+  background-color: #fff;
+  filter: drop-shadow(${dropShadow.primary})
+    drop-shadow(${dropShadow.secondary});
 `
 
 export default function Tooltip({
@@ -26,12 +36,19 @@ export default function Tooltip({
   // console.log("id", id)
   // console.log("data", data)
 
+  // TODO: bottom or top 0
   if (!id) return null
   return (
     <TooltipContainer
-      left={xPosition ? x - WIDTH + LINE_WIDTH : x + LINE_WIDTH}
-      top={5}
-    ></TooltipContainer>
+      left={xPosition ? x - WIDTH - LINE_WIDTH : x + LINE_WIDTH * 2}
+      top={0}
+    >
+      <Image
+        url={data.poster_path}
+        height={HEIGHT - space[3]}
+        alt={`${data.title}-poster`}
+      />
+    </TooltipContainer>
   )
 }
 
