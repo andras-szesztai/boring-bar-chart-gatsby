@@ -133,7 +133,8 @@ export default function MovieDetailsCardComponent({
   prevActiveMovie,
   setActiveMovie,
   genreList,
-  activeNameID
+  activeNameID,
+  setActiveNameID,
 }) {
   const delay = typeof prevActiveMovie.position == "number" ? 0.25 : 0
   const {
@@ -245,6 +246,7 @@ export default function MovieDetailsCardComponent({
                     accessor: "job",
                   }}
                   activeNameID={activeNameID}
+                  setActiveNameID={setActiveNameID}
                 />
               </Row>
               <Row style={{ gridArea: "cast" }}>
@@ -258,6 +260,8 @@ export default function MovieDetailsCardComponent({
                   hiddenContentProps={{
                     accessor: "character",
                   }}
+                  activeNameID={activeNameID}
+                  setActiveNameID={setActiveNameID}
                 />
               </Row>
               <PlaceHolderDiv style={{ gridArea: "score" }}>

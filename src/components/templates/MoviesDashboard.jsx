@@ -44,7 +44,7 @@ export default function MoviesDashboard() {
   const { favoritePersons } = localStorageValues
   const { setFavoritePersons } = localStorageSetters
   const { dataSets, activeNameID, activeMovie } = state
-  const { setActiveMovie } = actions
+  const { setActiveMovie, setActiveNameID } = actions
   
   useEffect(() => {
     favoritePersons &&
@@ -86,6 +86,7 @@ export default function MoviesDashboard() {
             setActiveMovie={setActiveMovie}
             genreList={state.dataSets.genres}
             activeNameID={activeNameID}
+            setActiveNameID={setActiveNameID}
           />
         </div>
       )}

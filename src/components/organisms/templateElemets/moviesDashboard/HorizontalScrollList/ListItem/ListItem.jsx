@@ -17,7 +17,6 @@ const Item = styled(motion.span)`
   justify-content: space-between;
 
   color: #fff;
-  cursor: pointer;
 `
 
 const HiddenInformation = styled.div`
@@ -41,7 +40,6 @@ export const MouseDownAnimation = styled(motion.div)`
   border-radius: 2px;
 
   cursor: pointer;
-  color: red;
   overflow: hidden;
 `
 
@@ -54,6 +52,7 @@ export default function ListItem({
   hiddenContentProps,
   handleMouseEnter,
   activeNameID,
+  setActiveNameID
 }) {
   const delayedRevealProps = {
     animate: { opacity: 1, transition: { delay: 0.5 } },
@@ -100,6 +99,9 @@ export default function ListItem({
             ? originalWidth + hiddenInformationWidth
             : originalWidth,
       }}
+      onMouseLeave={() => {
+        setIsClicked(false)
+      }}
       onMouseEnter={() => {
         handleMouseEnter && handleMouseEnter(hiddenInformationWidth)
         setItemHovered(data.id)
@@ -107,16 +109,17 @@ export default function ListItem({
       onMouseDown={() => {
         if (activeNameID !== data.id) {
           setIsClicked(true)
-          //timeOut.current = setTimeout(() => setActiveNameID({ id }), 1000)
+          timeOut.current = setTimeout(() => setActiveNameID({ id: data.id, isActiveMovieClicked: true }), 1000)
         }
       }}
       onMouseUp={() => {
-        // clearTimeout(timeOut.current)
+        clearTimeout(timeOut.current)
         setIsClicked(false)
       }}
       style={{
         backgroundColor: bgColor,
         border: `1px solid ${bgColor && chroma(bgColor).darken()}`,
+        cursor: activeNameID !== data.id ? "pointer" : "default"
       }}
     >
       {activeNameID !== data.id && (
@@ -124,18 +127,33 @@ export default function ListItem({
           initial={{
             width: 0,
             zIndex: 1,
+            color: bgColor,
           }}
           animate={{
             width: isClicked ? originalWidth + hiddenInformationWidth - 2 : 0,
           }}
           transition={{
-            duration: 1,
+            duration: isClicked ? 1 : .25,
             type: "tween",
             ease: [0.65, 0, 0.35, 1],
           }}
         >
-          <div style={{ display: "flex", transform: "translate(5px, 2px)" }}>
-            <IoIosSearch size={16} color={bgColor} /> Search
+          <div
+            style={{
+              position: "absolute",
+              display: "flex",
+              alignItems: "center",
+              transform: "translate(5px, 0.5px)",
+            }}
+          >
+            <IoIosSearch size={14} color={bgColor} />{" "}
+            <div
+              style={{
+                transform: "translate(4px, -1px)",
+              }}
+            >
+              Search
+            </div>
           </div>
         </MouseDownAnimation>
       )}
