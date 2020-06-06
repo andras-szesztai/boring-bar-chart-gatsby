@@ -1,115 +1,33 @@
 import React, { useState } from "react"
-import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import { IoIosCloseCircle, IoIosSearch } from "react-icons/io"
 import { FaExternalLinkSquareAlt } from "react-icons/fa"
+import { useMeasure } from "react-use"
+
+
+import { FavoriteStar } from "../../../../../molecules"
+import Image from "../../Image/Image"
+import HorizontalScrollList from "../../HorizontalScrollList/HorizontalScrollList"
+
+import {
+  ContentGrid,
+  MainInfoContainer,
+  MovieTitle,
+  SubTitle,
+  ContentItem,
+  Overview,
+  Row,
+  RowTitle,
+  LinkContainer,
+} from "./styles"
+import { space } from "../../../../../../themes/theme"
 
 import {
   NO_ACTIVE_MOVIE,
   WHILE_HOVER,
   COLORS,
 } from "../../../../../../constants/moviesDashboard"
-import { space } from "../../../../../../themes/theme"
-import { TitleContainer, TextContainer } from "../../styles/styles"
-import { themifyFontSize } from "../../../../../../themes/mixins"
-import Image from "../../Image/Image"
-import { FavoriteStar } from "../../../../../molecules"
-import HorizontalScrollList from "../../HorizontalScrollList/HorizontalScrollList"
-import { useMeasure } from "react-use"
 
-const ContentGrid = styled(motion.div)`
-  width: 100%;
-  height: 100%;
-
-  position: absolute;
-  top: 0px;
-  padding: ${space[3]}px;
-
-  display: grid;
-  grid-template-columns: 1fr 120px;
-  grid-column-gap: ${space[3]}px;
-  grid-template-rows: 185px repeat(3, 70px) 1fr;
-  grid-row-gap: ${space[2]}px;
-  grid-template-areas:
-    "info poster"
-    "genre genre"
-    "crew crew"
-    "cast cast"
-    "link link";
-`
-
-const MainInfoContainer = styled.div`
-  display: grid;
-  grid-template-rows: repeat(2, min-content) 1fr;
-  grid-area: info;
-  align-items: start;
-  position: relative;
-`
-
-const MovieTitle = styled(TitleContainer)`
-  color: ${COLORS.secondaryDark};
-  line-height: 1.3;
-  font-size: ${themifyFontSize(2)};
-  cursor: default;
-`
-
-const SubTitle = styled(TitleContainer)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: ${themifyFontSize(1)};
-  font-weight: 300;
-  color: ${COLORS.textColor};
-  cursor: pointer;
-  margin-top: 2px;
-  cursor: default;
-`
-
-const Overview = styled(TextContainer)`
-  margin-top: 0px;
-  width: 100%;
-  position: absolute;
-  bottom: 0px;
-`
-
-const ContentItem = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const LinkContainer = styled.div`
-  display: flex;
-
-  align-items: center;
-  grid-area: link;
-
-  font-size: ${themifyFontSize(1)};
-  color: ${COLORS.textColor};
-
-  a {
-    text-decoration: none;
-    color: inherit;
-
-    span {
-      font-weight: 500;
-    }
-  }
-`
-
-const Row = styled.div`
-  display: grid;
-  grid-template-rows: 30px 1fr;
-  font-size: ${themifyFontSize(1)};
-`
-
-const RowTitle = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  color: ${COLORS.textColor};
-  font-weight: 500;
-`
 
 const HoverContent = ({ animateProps, data, accessor }) => {
   return (
@@ -235,7 +153,7 @@ export default function CardContent(props) {
                 setActiveNameID={setActiveNameID}
               />
             </Row>
-            <LinkContainer style={{ justifyContent: "flex-start" }}>
+            <LinkContainer style={{ justifyContent: props.justifyLink }}>
               <a
                 href={`https://www.themoviedb.org/${activeMovie.data.media_type}/${activeMovie.data.id}`}
                 target="_blank"

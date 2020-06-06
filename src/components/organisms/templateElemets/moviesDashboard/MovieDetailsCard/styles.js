@@ -125,3 +125,31 @@ export const makeLeftVariants = delay => ({
     x: -(CARD_WIDTH + HANDLE_SIZE * 2),
   },
 })
+
+const IconsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+
+  position: absolute;
+
+  top: 0px;
+
+  border-radius: 0 0 0 2px;
+  width: ${HANDLE_SIZE}px;
+  height: ${HANDLE_SIZE * 2}px;
+  z-index: 4;
+
+  .icon {
+    cursor: pointer;
+  }
+`
+
+export  const IconsContainerRight = styled(IconsContainer)`
+  left: -${HANDLE_SIZE - 4}px;
+`
+
+export  const IconsContainerLeft = styled(IconsContainer)`
+  right: -${HANDLE_SIZE - 4}px;
+`
