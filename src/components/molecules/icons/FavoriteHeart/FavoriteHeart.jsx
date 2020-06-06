@@ -21,7 +21,7 @@ const circlesData = [
   },
 ]
 
-export default function FavoriteStar({
+export default function FavoriteHearth({
   isFavorited,
   isHovered,
   color,
@@ -127,7 +127,7 @@ export default function FavoriteStar({
   )
 }
 
-FavoriteStar.defaultProps = {
+FavoriteHearth.defaultProps = {
   color: "#ffbd69",
   inactiveColor: colors.grayLightest,
   isActive: true,

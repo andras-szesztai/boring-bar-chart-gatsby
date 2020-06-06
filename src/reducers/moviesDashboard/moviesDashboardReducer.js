@@ -14,7 +14,13 @@ import { useActiveMovieCredits } from "./hooks"
 
 const initialState = {
   activeNameID: undefined,
-  activeMovie: NO_ACTIVE_MOVIE,
+  activeMovie: {
+    id: undefined,
+    data: {},
+    position: undefined,
+    cast: [],
+    crew: [],
+  },
   dataSets: {
     personDetails: undefined,
     personCredits: undefined,

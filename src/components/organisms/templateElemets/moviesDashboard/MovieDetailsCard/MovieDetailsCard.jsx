@@ -45,17 +45,16 @@ const ContentGrid = styled(motion.div)`
   padding: ${space[3]}px;
 
   display: grid;
-  grid-template-columns: 1fr 120px;
+  grid-template-columns: 1fr 120px 30px;
   grid-column-gap: ${space[3]}px;
-  grid-template-rows: 170px repeat(4, 55px) 1fr;
+  grid-template-rows: 180px repeat(3, 70px) 1fr;
   grid-row-gap: ${space[2]}px;
   grid-template-areas:
-    "info poster"
-    "genre genre"
-    "crew crew"
-    "cast cast"
-    "score score"
-    "link link";
+    "info poster icons"
+    "genre genre genre"
+    "crew crew crew"
+    "cast cast cast"
+    "link link link";
 `
 
 const MainInfoContainer = styled.div`
@@ -84,7 +83,7 @@ const SubTitle = styled(TitleContainer)`
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: ${themifyFontSize(1)};
-  font-weight: 200;
+  font-weight: 300;
   color: ${COLORS.textColor};
   cursor: pointer;
   margin-top: 2px;
@@ -112,7 +111,7 @@ const LinkContainer = styled.div`
 
 const Row = styled.div`
   display: grid;
-  grid-template-rows: 25px 1fr;
+  grid-template-rows: 30px 1fr;
   font-size: ${themifyFontSize(1)};
 `
 
@@ -120,6 +119,8 @@ const RowTitle = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  color: ${COLORS.textColor};
+  font-weight: 500;
 `
 
 const HoverContent = ({ animateProps, data, accessor }) => {
@@ -196,7 +197,6 @@ export default function MovieDetailsCardComponent({
 
   const [rightOverviewRef, { height: rightHeight }] = useMeasure()
   const [leftOverviewRef, { height: leftHeight }] = useMeasure()
-
 
   return (
     <>
@@ -286,9 +286,6 @@ export default function MovieDetailsCardComponent({
                   setActiveNameID={setActiveNameID}
                 />
               </Row>
-              <PlaceHolderDiv style={{ gridArea: "score" }}>
-                Score comes here
-              </PlaceHolderDiv>
               <LinkContainer>
                 <a
                   href={`https://www.themoviedb.org/${activeMovie.data.media_type}/${activeMovie.data.id}`}

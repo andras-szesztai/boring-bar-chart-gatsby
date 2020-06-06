@@ -16,6 +16,8 @@ const ListContainer = styled(motion.div)`
   padding: ${space[1]}px ${space[2]}px;
   overflow-x: auto;
 
+  display: flex;
+
   ::-webkit-scrollbar {
     display: none;
   }
