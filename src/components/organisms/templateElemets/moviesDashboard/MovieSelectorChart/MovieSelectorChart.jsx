@@ -61,6 +61,7 @@ export default function MovieSelectorChart({
     activeMovie: activeMovie,
   })
 
+  console.log(dataSets.personCredits.crew)
   return (
     <>
       {activeNameID && !loading.personCredits && (
@@ -80,6 +81,7 @@ export default function MovieSelectorChart({
                   xScale={chartState.scales.xScale}
                   setActiveMovie={setActiveMovie}
                   activeMovie={activeMovie}
+                  setHoveredMovie={actions.setHoveredMovie}
                 />
                 {chartState.isBoth && <BubbleChart {...makeProps("sub")} />}
               </ChartContainer>

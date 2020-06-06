@@ -158,6 +158,10 @@ export default function DateAxis(props) {
       .attr("opacity", 0)
   }
 
+  function addInteractions(){
+
+  }
+
   function createUpdateVoronoi() {
     const { currXScale, filteredData } = storedValues.current
     const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
@@ -178,7 +182,7 @@ export default function DateAxis(props) {
             .attr("fill", "transparent")
             // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
-            // .on("mouseover", d => console.log(d))
+            .on("mouseover", d => console.log(d))
             .on("click", d =>
               props.setActiveMovie({
                 id: d.id,
@@ -204,6 +208,7 @@ export default function DateAxis(props) {
     type: props.type,
     data: { crewData, castData },
     dims,
+    addInteractions
   })
 
   return (

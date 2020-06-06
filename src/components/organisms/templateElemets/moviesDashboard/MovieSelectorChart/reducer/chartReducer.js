@@ -17,11 +17,17 @@ const initialState = {
   },
   isYDomainSynced: true,
   isSizeDynamic: true,
+  hoveredMovie: {
+    id: undefined,
+    data: {},
+    position: undefined,
+  },
 }
 
 const SET_CHART_START_SETTINGS = "SET_CHART_START_SETTINGS"
 const SET_IS_Y_DOMAIN_SYNCED = "SET_IS_Y_DOMAIN_SYNCED"
 const SET_IS_SIZE_DYNAMIC = "SET_IS_SIZE_DYNAMIC"
+const SET_HOVERED_MOVIE = "SET_HOVERED_MOVIE"
 
 function movieSelectorChartReducer(state, { type, payload }) {
   const types = {
@@ -46,12 +52,16 @@ function movieSelectorChartReducer(state, { type, payload }) {
       ...state,
       isSizeDynamic: !state.isSizeDynamic,
     }),
+    SET_HOVERED_MOVIE: () => ({
+      ...state,
+      hoveredMovie: payload,
+    }),
   }
   return types[type] ? types[type]() : state
 }
 
 export default function useMovieSelectorChartReducer({ dataSets }) {
-  const prevDataSets = usePrevious(dataSets)
+  //const prevDataSets = usePrevious(dataSets)
   const [chartState, dispatch] = useReducer(
     movieSelectorChartReducer,
     initialState
@@ -62,6 +72,7 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
       dispatch({ type: SET_CHART_START_SETTINGS, payload }),
     setIsYDomainSynced: () => dispatch({ type: SET_IS_Y_DOMAIN_SYNCED }),
     setIsSizeSynced: () => dispatch({ type: SET_IS_SIZE_DYNAMIC }),
+    setHoveredMovie: payload => dispatch({ type: SET_HOVERED_MOVIE, payload }),
   }
 
   useEffect(() => {

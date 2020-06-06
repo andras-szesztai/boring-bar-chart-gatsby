@@ -164,10 +164,10 @@ export default function CardContent(props) {
                 Find out more on <span>TMBD</span>
               </a>
               <motion.div
-                style={{ marginLeft: 8, paddingTop: 5 }}
+                style={{ marginLeft: 6, paddingTop: 5 }}
                 animate={{ scale: isLinkHovered ? 1.3 : 1 }}
               >
-                <FaExternalLinkSquareAlt size={24} />
+                <FaExternalLinkSquareAlt size={22} />
               </motion.div>
             </LinkContainer>
           </ContentGrid>
