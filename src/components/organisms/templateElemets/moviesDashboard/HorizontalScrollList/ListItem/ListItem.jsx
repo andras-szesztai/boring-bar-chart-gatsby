@@ -48,8 +48,9 @@ export default function ListItem({
   bgColor,
   itemHovered,
   setItemHovered,
-  hiddenContent: HiddenContent,
-  hiddenContentProps,
+  hoverContent: HoverContent,
+  hoverContentProps,
+  mouseDownContent: MouseDownContent,
   handleMouseEnter,
   activeNameID,
   setActiveNameID,
@@ -77,14 +78,14 @@ export default function ListItem({
   const [hiddenInformationWidth, setHiddenInformationWidth] = useState(0)
   useEffect(() => {
     if (
-      hiddenContentProps &&
-      hiddenContentProps.accessor &&
+      hoverContentProps &&
+      hoverContentProps.accessor &&
       !hiddenInformationWidth &&
       hiddenInformationRef.current
     ) {
       setHiddenInformationWidth(hiddenInformationRef.current.offsetWidth)
     }
-  }, [hiddenContentProps, hiddenInformationWidth])
+  }, [hoverContentProps, hiddenInformationWidth])
 
   const [isClicked, setIsClicked] = useState()
   const timeOut = React.useRef(false)
@@ -124,41 +125,30 @@ export default function ListItem({
         cursor: activeNameID !== data.id ? "pointer" : "default",
       }}
     >
-      {activeNameID !== data.id && (
-        <MouseDownAnimation
-          initial={{
-            width: 0,
-            zIndex: 1,
-            color: bgColor,
-          }}
-          animate={{
-            width: isClicked ? originalWidth + hiddenInformationWidth - 2 : 0,
-          }}
-          transition={{
-            duration: isClicked ? 1 : 0.25,
-            type: "tween",
-            ease: [0.65, 0, 0.35, 1],
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              display: "flex",
-              alignItems: "center",
-              transform: "translate(5px, 0.5px)",
+      <AnimatePresence>
+        {activeNameID !== data.id && (
+          <MouseDownAnimation
+            initial={{
+              width: 0,
+              zIndex: 1,
+              color: bgColor,
+            }}
+            animate={{
+              width: isClicked ? originalWidth + hiddenInformationWidth - 2 : 0,
+            }}
+            exit={{
+              width: 0,
+            }}
+            transition={{
+              duration: isClicked ? 1 : 0.25,
+              type: "tween",
+              ease: [0.65, 0, 0.35, 1],
             }}
           >
-            <IoIosSearch size={14} color={bgColor} />{" "}
-            <div
-              style={{
-                transform: "translate(4px, -1px)",
-              }}
-            >
-              Search
-            </div>
-          </div>
-        </MouseDownAnimation>
-      )}
+            <MouseDownContent />
+          </MouseDownAnimation>
+        )}
+      </AnimatePresence>
       <div>{data.name.trim()}</div>
       <AnimatePresence>
         {itemHovered === data.id && (
@@ -172,18 +162,18 @@ export default function ListItem({
           </motion.div>
         )}
         {itemHovered === data.id && (
-          <HiddenContent
+          <HoverContent
             key="content"
             animateProps={delayedRevealProps}
             data={data}
-            {...hiddenContentProps}
+            {...hoverContentProps}
           />
         )}
       </AnimatePresence>
 
-      {hiddenContentProps && hiddenContentProps.accessor && (
+      {hoverContentProps && hoverContentProps.accessor && (
         <HiddenInformation
-          key={data.id + data[hiddenContentProps.accessor]}
+          key={data.id + data[hoverContentProps.accessor]}
           ref={hiddenInformationRef}
         >
           <div
@@ -195,7 +185,7 @@ export default function ListItem({
           >
             |
           </div>
-          <div>{data[hiddenContentProps.accessor].trim()}</div>
+          <div>{data[hoverContentProps.accessor].trim()}</div>
         </HiddenInformation>
       )}
     </Item>
@@ -204,4 +194,5 @@ export default function ListItem({
 
 ListItem.defaultProps = {
   hiddenContent: () => <div />,
+  mouseDownContent: () => <div />,
 }

@@ -7,6 +7,7 @@ import {
   IoIosArrowForward,
   IoIosClose,
   IoIosCloseCircle,
+  IoIosSearch,
 } from "react-icons/io"
 
 import {
@@ -120,11 +121,33 @@ const RowTitle = styled.div`
   align-items: center;
 `
 
-const HiddenContent = ({ animateProps, data, accessor }) => {
+const HoverContent = ({ animateProps, data, accessor }) => {
   return (
     <motion.div initial={{ opacity: 0 }} {...animateProps}>
       {data[accessor]}
     </motion.div>
+  )
+}
+
+const MouseDownContent = ({ bgColor }) => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        display: "flex",
+        alignItems: "center",
+        transform: "translate(5px, 0.5px)",
+      }}
+    >
+      <IoIosSearch size={14} color={bgColor} />{" "}
+      <div
+        style={{
+          transform: "translate(4px, -1px)",
+        }}
+      >
+        Search
+      </div>
+    </div>
   )
 }
 
@@ -241,10 +264,11 @@ export default function MovieDetailsCardComponent({
                   type="crew"
                   array={activeMovie.crew}
                   bgColor={COLORS.primary}
-                  hiddenContent={HiddenContent}
-                  hiddenContentProps={{
+                  hoverContent={HoverContent}
+                  hoverContentProps={{
                     accessor: "job",
                   }}
+                  mouseDownContent={MouseDownContent}
                   activeNameID={activeNameID}
                   setActiveNameID={setActiveNameID}
                 />
@@ -256,10 +280,11 @@ export default function MovieDetailsCardComponent({
                   type="cast"
                   array={activeMovie.cast}
                   bgColor={COLORS.primary}
-                  hiddenContent={HiddenContent}
-                  hiddenContentProps={{
+                  hoverContent={HoverContent}
+                  hoverContentProps={{
                     accessor: "character",
                   }}
+                  mouseDownContent={MouseDownContent}
                   activeNameID={activeNameID}
                   setActiveNameID={setActiveNameID}
                 />
