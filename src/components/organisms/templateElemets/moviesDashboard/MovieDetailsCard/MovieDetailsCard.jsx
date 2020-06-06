@@ -1,69 +1,17 @@
-import React, { useState } from "react"
-import styled, { css } from "styled-components"
-import { AnimatePresence, motion } from "framer-motion"
-import chroma from "chroma-js"
-import {
-  IoIosArrowBack,
-  IoIosArrowForward,
-  IoIosClose,
-  IoIosCloseCircle,
-  IoIosSearch,
-} from "react-icons/io"
+import React from "react"
+import styled from "styled-components"
 
-import {
-  CARD_WIDTH,
-  HANDLE_SIZE,
-  WHILE_HOVER,
-  COLORS,
-  NO_ACTIVE_MOVIE,
-  OPACITY_VARIANT,
-} from "../../../../../constants/moviesDashboard"
-import { useAnimationAccessor } from "./hooks"
+import { HANDLE_SIZE } from "../../../../../constants/moviesDashboard"
 import {
   MovieDetailsCardRight,
+  MovieDetailsCardLeft,
   CloseIconContainerLeft,
   CloseIconContainerRight,
-  MovieDetailsCardLeft,
-  makeRightVariants,
   makeLeftVariants,
+  makeRightVariants,
 } from "./styles"
-import Image from "../Image/Image"
-import { TitleContainer, TextContainer, dentedStyling } from "../styles/styles"
-import { space } from "../../../../../themes/theme"
-import { FavoriteStar } from "../../../../molecules"
-import { themifyFontSize } from "../../../../../themes/mixins"
-import { useMeasure } from "react-use"
-import HorizontalScrollList from "../HorizontalScrollList/HorizontalScrollList"
-import { FaExternalLinkSquareAlt } from "react-icons/fa"
-
-const ContentGrid = styled(motion.div)`
-  width: 100%;
-  height: 100%;
-
-  position: absolute;
-  top: 0px;
-  padding: ${space[3]}px;
-
-  display: grid;
-  grid-template-columns: 1fr 120px;
-  grid-column-gap: ${space[3]}px;
-  grid-template-rows: 185px repeat(3, 70px) 1fr;
-  grid-row-gap: ${space[2]}px;
-  grid-template-areas:
-    "info poster"
-    "genre genre"
-    "crew crew"
-    "cast cast"
-    "link link";
-`
-
-const MainInfoContainer = styled.div`
-  display: grid;
-  grid-template-rows: repeat(2, min-content) 1fr;
-  grid-area: info;
-  align-items: start;
-  position: relative;
-`
+import CardContent from "./CardContent/CardContent"
+import { makeCardProps } from "./utils"
 
 const IconsContainer = styled.div`
   display: flex;
@@ -93,136 +41,28 @@ const IconsContainerLeft = styled(IconsContainer)`
   right: -${HANDLE_SIZE - 4}px;
 `
 
-const MovieTitle = styled(TitleContainer)`
-  color: ${COLORS.secondaryDark};
-  line-height: 1.3;
-  font-size: ${themifyFontSize(2)};
-  cursor: default;
-`
+export default function MovieDetailsCardComponent(props) {
+  const delay = typeof props.prevActiveMovie.position == "number" ? 0.5 : 0
 
-const SubTitle = styled(TitleContainer)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: ${themifyFontSize(1)};
-  font-weight: 300;
-  color: ${COLORS.textColor};
-  cursor: pointer;
-  margin-top: 2px;
-  cursor: default;
-`
-
-const Overview = styled(TextContainer)`
-  margin-top: 0px;
-  width: 100%;
-  position: absolute;
-  bottom: 0px;
-`
-
-const ContentItem = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const LinkContainer = styled.div`
-  display: flex;
-
-  align-items: center;
-  grid-area: link;
-
-  font-size: ${themifyFontSize(1)};
-  color: ${COLORS.textColor};
-
-  a {
-    text-decoration: none;
-    color: inherit;
-
-    span {
-      font-weight: 500;
-    }
-  }
-`
-
-const Row = styled.div`
-  display: grid;
-  grid-template-rows: 30px 1fr;
-  font-size: ${themifyFontSize(1)};
-`
-
-const RowTitle = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  color: ${COLORS.textColor};
-  font-weight: 500;
-`
-
-const HoverContent = ({ animateProps, data, accessor }) => {
-  return (
-    <motion.div initial={{ opacity: 0 }} {...animateProps}>
-      {data[accessor]}
-    </motion.div>
-  )
-}
-
-const MouseDownContent = ({ bgColor }) => {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        display: "flex",
-        alignItems: "center",
-        transform: "translate(5px, 0.5px)",
-      }}
-    >
-      <IoIosSearch size={14} color={bgColor} />{" "}
-      <div
-        style={{
-          transform: "translate(4px, -1px)",
-        }}
-      >
-        Search
-      </div>
-    </div>
-  )
-}
-
-export const makeCardProps = variants => ({
-  initial: "initial",
-  animate: "animate",
-  exit: "exit",
-  variants: variants,
-})
-
-export default function MovieDetailsCardComponent({
-  activeMovie,
-  prevActiveMovie,
-  setActiveMovie,
-  genreList,
-  activeNameID,
-  setActiveNameID,
-}) {
-  const delay = typeof prevActiveMovie.position == "number" ? 0.5 : 0
-
-  const arrowContainerProps = {
-    role: "button",
-    onClick: () =>
-      setActiveMovie({
-        activeMovie: NO_ACTIVE_MOVIE,
-      }),
-    whileHover: WHILE_HOVER,
-  }
-
-  const [rightOverviewRef, { height: rightHeight }] = useMeasure()
-  const [leftOverviewRef, { height: leftHeight }] = useMeasure()
-
-  // TODO: setup left and right with reusable elements
-
-  const [isLinkHovered, setIsLinkHovered] = useState(false)
   return (
     <>
-      <AnimatePresence>
+      <CardContent
+        {...props}
+        positionCheck={0}
+        card={MovieDetailsCardRight}
+        closeIconContainer={CloseIconContainerRight}
+        iconsContainer={IconsContainerRight}
+        cardAnimationProps={makeCardProps(makeRightVariants(delay))}
+      />
+      <CardContent
+        {...props}
+        positionCheck={1}
+        card={MovieDetailsCardLeft}
+        closeIconContainer={CloseIconContainerLeft}
+        iconsContainer={IconsContainerLeft}
+        cardAnimationProps={makeCardProps(makeLeftVariants(delay))}
+      />
+      {/* <AnimatePresence>
         {activeMovie.position === 0 && (
           <MovieDetailsCardRight {...makeCardProps(makeRightVariants(delay))}>
             <CloseIconContainerRight {...arrowContainerProps}>
@@ -410,7 +250,7 @@ export default function MovieDetailsCardComponent({
             </ContentGrid>
           </MovieDetailsCardLeft>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   )
 }

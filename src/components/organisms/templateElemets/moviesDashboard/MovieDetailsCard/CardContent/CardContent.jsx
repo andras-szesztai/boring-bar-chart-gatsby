@@ -1,26 +1,21 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
-import {
-  IoIosCloseCircle,
-  IoIosSearch,
-} from "react-icons/io"
+import { IoIosCloseCircle, IoIosSearch } from "react-icons/io"
 import { FaExternalLinkSquareAlt } from "react-icons/fa"
 
-import { makeCardProps } from "../utils"
-import { makeLeftVariants } from "../styles"
 import {
   NO_ACTIVE_MOVIE,
   WHILE_HOVER,
   COLORS,
 } from "../../../../../../constants/moviesDashboard"
 import { space } from "../../../../../../themes/theme"
-import { TitleContainer } from "../../styles/styles"
+import { TitleContainer, TextContainer } from "../../styles/styles"
 import { themifyFontSize } from "../../../../../../themes/mixins"
-import { TextContainer } from "../../FavoritesList/styles"
 import Image from "../../Image/Image"
 import { FavoriteStar } from "../../../../../molecules"
 import HorizontalScrollList from "../../HorizontalScrollList/HorizontalScrollList"
+import { useMeasure } from "react-use"
 
 const ContentGrid = styled(motion.div)`
   width: 100%;
@@ -146,34 +141,30 @@ const MouseDownContent = ({ bgColor }) => {
   )
 }
 
-export default function CardContent({
-  activeMovie,
-  positionCheck,
-  card: Card,
-  closeIconContainer: CloseIconContainer,
-  iconsContainer: IconsContainer,
-  delay,
-  setActiveMovie,
-  ref,
-  refHeight,
-  genreList,
-  activeNameID,
-  setActiveNameID,
-}) {
+export default function CardContent(props) {
+  const {
+    activeMovie,
+    activeNameID,
+    setActiveNameID,
+    card: Card,
+    closeIconContainer: CloseIconContainer,
+    iconsContainer: IconsContainer,
+  } = props
+  const [isLinkHovered, setIsLinkHovered] = useState(false)
+  const [ref, { height }] = useMeasure()
   const arrowContainerProps = {
     role: "button",
     onClick: () =>
-      setActiveMovie({
+      props.setActiveMovie({
         activeMovie: NO_ACTIVE_MOVIE,
       }),
     whileHover: WHILE_HOVER,
   }
 
-  const [isLinkHovered, setIsLinkHovered] = useState(false)
   return (
     <AnimatePresence>
-      {activeMovie.position === positionCheck && (
-        <Card {...makeCardProps(makeLeftVariants(delay))}>
+      {activeMovie.position === props.positionCheck && (
+        <Card {...props.cardAnimationProps}>
           <CloseIconContainer {...arrowContainerProps}>
             <IoIosCloseCircle size={28} color={COLORS.secondaryDark} />
           </CloseIconContainer>
@@ -185,7 +176,7 @@ export default function CardContent({
                 ref={ref}
                 style={{ position: "relative", alignSelf: "stretch" }}
               />
-              <Overview style={{ height: refHeight - space[2] }}>
+              <Overview style={{ height: height - space[2] }}>
                 {activeMovie.data.overview}
               </Overview>
             </MainInfoContainer>
@@ -208,7 +199,7 @@ export default function CardContent({
               <RowTitle>Genres</RowTitle>
               <HorizontalScrollList
                 type="genre"
-                array={genreList.filter(el =>
+                array={props.genreList.filter(el =>
                   activeMovie.data.genre_ids.includes(el.id)
                 )}
                 bgColor={COLORS.textColor}
