@@ -120,13 +120,9 @@ const RowTitle = styled.div`
   align-items: center;
 `
 
-const HiddenContent = ({animateProps, data, accessor}) => {
-
+const HiddenContent = ({ animateProps, data, accessor }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      {...animateProps}
-    >
+    <motion.div initial={{ opacity: 0 }} {...animateProps}>
       {data[accessor]}
     </motion.div>
   )
@@ -242,25 +238,32 @@ export default function MovieDetailsCardComponent({
                 /> */}
               </Row>
               <Row style={{ gridArea: "crew" }}>
-                <RowTitle>Crew</RowTitle>
+                <RowTitle>Lead crew</RowTitle>
                 <HorizontalScrollList
+                  key={`${activeMovie.id}-crew`}
                   type="crew"
                   array={activeMovie.crew}
                   bgColor={COLORS.primary}
-                  growBy={150}
+                  growBy={0}
                   hiddenContent={HiddenContent}
                   hiddenContentProps={{
-                    accessor: "job"
+                    accessor: "job",
                   }}
                 />
               </Row>
               <Row style={{ gridArea: "cast" }}>
-                <RowTitle>Cast</RowTitle>
-                {/* <HorizontalScrollList
+                <RowTitle>Lead cast</RowTitle>
+                <HorizontalScrollList
+                  key={`${activeMovie.id}-cast`}
                   type="cast"
                   array={activeMovie.cast}
                   bgColor={COLORS.primary}
-                /> */}
+                  growBy={0}
+                  hiddenContent={HiddenContent}
+                  hiddenContentProps={{
+                    accessor: "character",
+                  }}
+                />
               </Row>
               <PlaceHolderDiv style={{ gridArea: "score" }}>
                 Score comes here

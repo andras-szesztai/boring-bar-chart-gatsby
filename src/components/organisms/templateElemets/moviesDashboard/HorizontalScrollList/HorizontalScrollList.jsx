@@ -8,7 +8,7 @@ import { COLORS } from "../../../../../constants/moviesDashboard"
 import { dentedStyling } from "../styles/styles"
 import ListItem from "./ListItem/ListItem"
 
-const RowListContainer = styled(motion.div)`
+const ListContainer = styled(motion.div)`
   justify-self: stretch;
   margin-top: 0px;
   ${dentedStyling}
@@ -21,14 +21,14 @@ const RowListContainer = styled(motion.div)`
   }
 `
 
-const RowList = styled(motion.div)`
+const List = styled(motion.div)`
   display: flex;
   justify-content: flex-start;
   align-items: center;
   position: relative;
 `
 
-const HiddenRowList = styled(RowList)`
+const HiddenList = styled(List)`
   opacity: 0;
   pointer-events: none;
   position: absolute;
@@ -50,30 +50,37 @@ export default function HorizontalScrollList(props) {
     }
   })
 
+  const extraWidth = React.useRef(0)
+
   return (
     <>
-      <RowListContainer onMouseLeave={() => setItemHovered(false)}>
-        <RowList
+      <ListContainer onMouseLeave={() => setItemHovered(false)}>
+        <List
           animate={{
-            width: itemHovered ? originalWidth + growBy : originalWidth,
+            width: itemHovered
+              ? originalWidth + 10 + extraWidth.current
+              : originalWidth + 10,
           }}
         >
-          {!!array.length && array.map(el => (
-            <ListItem
-              key={`${el.id}-${type}`}
-              data={el}
-              {...props}
-              itemHovered={itemHovered}
-              setItemHovered={setItemHovered}
-            />
+          {!!array.length &&
+            array.map(el => (
+              <ListItem
+                key={`${el.id}-${type}`}
+                data={el}
+                {...props}
+                itemHovered={itemHovered}
+                setItemHovered={setItemHovered}
+                handleMouseEnter={width => (extraWidth.current = width)}
+              />
+            ))}
+        </List>
+      </ListContainer>
+      <HiddenList ref={listRef}>
+        {!!array.length &&
+          array.map(el => (
+            <ListItem key={`${el.id}-${type}-hidden`} data={el} />
           ))}
-        </RowList>
-      </RowListContainer>
-      <HiddenRowList ref={listRef}>
-        {!!array.length && array.map(el => (
-          <ListItem key={`${el.id}-${type}-hidden`} data={el} />
-        ))}
-      </HiddenRowList>
+      </HiddenList>
     </>
   )
 }
@@ -82,5 +89,5 @@ HorizontalScrollList.defaultProps = {
   array: [],
   type: "list",
   growBy: 50,
-  bgColor: COLORS.textColor
+  bgColor: COLORS.textColor,
 }
