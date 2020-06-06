@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import chroma from "chroma-js"
 
 import { space } from "../../../../../../themes/theme"
@@ -11,6 +11,9 @@ const RowItem = styled(motion.span)`
   margin-right: ${space[2]}px;
   border-radius: 2px;
   white-space: nowrap;
+
+  display: flex;
+  justify-content: space-between;
 `
 
 export default function RowItemComponent({
@@ -18,8 +21,20 @@ export default function RowItemComponent({
   bgColor,
   itemHovered,
   setItemHovered,
-  growBy
+  growBy,
+  hiddenContent: HiddenContent,
 }) {
+  const delayedRevealProps = {
+    animate: { opacity: 1, transition: { delay: 0.5 } },
+    exit: {
+      opacity: 0,
+      transition: {
+        duration: 0,
+        type: "tween",
+      },
+    },
+  }
+
   const [originalWidth, setOriginalListWidth] = useState(undefined)
   const itemRef = React.useRef(null)
   useEffect(() => {
@@ -40,7 +55,19 @@ export default function RowItemComponent({
         border: `1px solid ${bgColor && chroma(bgColor).darken()}`,
       }}
     >
-      {el}
+      <div>{el}</div>
+      <AnimatePresence>
+        {itemHovered === el && (
+          <motion.div initial={{ opacity: 0, y: -1.5 }} {...delayedRevealProps}>
+            |
+          </motion.div>
+        )}
+        {itemHovered === el && <HiddenContent animateProps={delayedRevealProps} />}
+      </AnimatePresence>
     </RowItem>
   )
+}
+
+RowItemComponent.defaultProps = {
+  hiddenContent: () => <div />,
 }

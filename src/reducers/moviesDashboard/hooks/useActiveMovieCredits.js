@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import isEqual from "lodash/isEqual"
-import uniq from "lodash/uniq"
+import uniqBy from "lodash/uniqBy"
 import axios from "axios"
 
 import {
@@ -28,8 +28,8 @@ export default function useActiveMovieCredits({
           dispatch({
             type: SET_ACTIVE_MOVIE_CREDITS,
             payload: {
-              cast: uniq(response.data.cast.map(d => d.name)).slice(0, 5),
-              crew: uniq(response.data.crew.map(d => d.name)).slice(0, 10),
+              cast: uniqBy(response.data.cast, "id").slice(0, 5),
+              crew: uniqBy(response.data.crew, "id").slice(0, 10),
             },
           })
         })

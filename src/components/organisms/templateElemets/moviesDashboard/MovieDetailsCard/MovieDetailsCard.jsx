@@ -120,6 +120,18 @@ const RowTitle = styled.div`
   align-items: center;
 `
 
+const HiddenContent = props => {
+  console.log("HiddenContent -> props", props)
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      {...props.animateProps}
+    >
+      Hello
+    </motion.div>
+  )
+}
+
 export default function MovieDetailsCardComponent({
   activeMovie,
   prevActiveMovie,
@@ -233,15 +245,17 @@ export default function MovieDetailsCardComponent({
                 <RowTitle>Crew</RowTitle>
                 <HorizontalScrollList
                   type="crew"
-                  array={activeMovie.crew}
+                  array={activeMovie.crew.map(d => d.name)}
                   bgColor={COLORS.primary}
+                  growBy={100}
+                  hiddenContent={HiddenContent}
                 />
               </Row>
               <Row style={{ gridArea: "cast" }}>
                 <RowTitle>Cast</RowTitle>
                 <HorizontalScrollList
                   type="cast"
-                  array={activeMovie.cast}
+                  array={activeMovie.cast.map(d => d.name)}
                   bgColor={COLORS.primary}
                 />
               </Row>
