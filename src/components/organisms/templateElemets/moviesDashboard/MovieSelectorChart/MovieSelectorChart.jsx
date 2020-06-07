@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import Select, { components } from "react-select"
+import _ from "lodash"
 
 import {
   HANDLE_SIZE,
@@ -14,12 +15,16 @@ import { BubbleChart, DateAxis } from "../charts"
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
 import { space } from "../../../../../themes/theme"
-import { IoIosArrowDropdownCircle, IoIosArrowDown } from "react-icons/io"
+import {
+  IoIosArrowDropdownCircle,
+  IoIosArrowDown,
+  IoIosClose,
+} from "react-icons/io"
 
 const ControlsContainer = styled(motion.div)`
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: flex-end;
 `
 
 const MovieSearchContainer = styled(motion.div)`
@@ -32,15 +37,44 @@ const MovieSearchContainer = styled(motion.div)`
 `
 
 const DropdownIndicator = props => {
-  console.log("props", props.selectProps)
   return (
     <components.DropdownIndicator {...props}>
-      <IoIosArrowDown size={20} color={COLORS.secondaryDark} />
+      <motion.div style={{ marginTop: 2 }} whileHover={WHILE_HOVER}>
+        <IoIosArrowDown size={18} color={COLORS.secondaryDark} />
+      </motion.div>
     </components.DropdownIndicator>
   )
 }
 
-const customStyles = {}
+const ClearIndicator = props => {
+  return (
+    <components.ClearIndicator {...props}>
+      <motion.div style={{ marginTop: 2 }} whileHover={WHILE_HOVER}>
+        <IoIosClose size={22} color={COLORS.secondaryDark} />
+      </motion.div>
+    </components.ClearIndicator>
+  )
+}
+
+const customStyles = {
+  clearIndicator: provided => {
+    return {
+      ...provided,
+      cursor: "pointer",
+      padding: 0,
+      paddingRight: 8,
+    }
+  },
+  dropdownIndicator: provided => {
+    return {
+      ...provided,
+      cursor: "pointer",
+      padding: 0,
+      paddingLeft: 8,
+      paddingRight: 8,
+    }
+  },
+}
 
 export default function MovieSelectorChart({
   activeNameID,
@@ -82,14 +116,20 @@ export default function MovieSelectorChart({
                   test="test"
                   options={state.movieSearchData}
                   styles={customStyles}
-                  components={{ DropdownIndicator }}
-                  onChange={element =>{
-                    console.log(state.scales.xScale.domain())
+                  components={{ DropdownIndicator, ClearIndicator }}
+                  onChange={element => {
                     element
                       ? setActiveMovie({
                           id: element.value,
                           data: element.data,
-                          position: 0,
+                          position: Number(
+                            +element.data.release_date.slice(0, 4) >=
+                              _.mean(
+                                state.scales.xScale
+                                  .domain()
+                                  .map(d => d.getFullYear())
+                              )
+                          ),
                         })
                       : setActiveMovie(NO_ACTIVE_MOVIE)
                   }}
