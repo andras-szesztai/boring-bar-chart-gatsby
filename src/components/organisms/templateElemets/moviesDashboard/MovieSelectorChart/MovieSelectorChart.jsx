@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import Select, { components } from "react-select"
@@ -16,6 +16,7 @@ import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
 import { space, fontFamily, fontSize } from "../../../../../themes/theme"
 import { IoIosArrowDown, IoIosClose, IoIosSearch } from "react-icons/io"
+import { usePrevious } from "../../../../../hooks"
 
 const ControlsContainer = styled(motion.div)`
   display: flex;
@@ -52,15 +53,15 @@ const ClearIndicator = props => {
   )
 }
 
-
 const Option = props => {
-  return (
-    <components.Option {...props}>
-      <div onMouseEnter={() => console.log(props)}>
-        Hello
-      </div>
-    </components.Option>
-  )
+  const prevProps = usePrevious(props)
+  useEffect(() => {
+    if (prevProps && !!props.isFocused && !prevProps.isFocused) {
+      _.isFunction(props.selectProps.setHoveredMovie) &&
+        props.selectProps.setHoveredMovie(props.data)
+    }
+  }, [prevProps, props])
+  return <components.Option {...props} />
 }
 
 const Placeholder = props => {
@@ -70,7 +71,7 @@ const Placeholder = props => {
         <motion.div style={{ marginTop: 6 }} whileHover={WHILE_HOVER}>
           <IoIosSearch size={20} color={COLORS.secondaryDark} />{" "}
         </motion.div>
-        <div  style={{ marginTop: 4, marginLeft: 8 }}>Search for a title</div>
+        <div style={{ marginTop: 4, marginLeft: 8 }}>Search for a title</div>
       </div>
     </components.Placeholder>
   )
@@ -157,7 +158,6 @@ export default function MovieSelectorChart({
   setActiveMovie,
   activeMovie,
 }) {
-  console.log("activeMovie", activeMovie)
   const { state, actions } = useMovieSelectorChartReducer({ dataSets })
   const [isFirstEntered, setIsFirstEntered] = React.useState(true)
 
@@ -177,6 +177,7 @@ export default function MovieSelectorChart({
     setIsFirstEntered: setIsFirstEntered,
   })
 
+  const [testItem, setTestItem] = useState(undefined)
   return (
     <>
       {activeNameID && !loading.personCredits && (
@@ -189,12 +190,21 @@ export default function MovieSelectorChart({
                   isSearchable
                   test="test"
                   options={state.movieSearchData}
+                  setHoveredMovie={d =>
+                    actions.setHoveredMovie({
+                      id: d.value,
+                      data: d.data,
+                      yPosition: 1,
+                      xPosition: 1,
+                      x: 20,
+                    })
+                  }
                   styles={customStyles}
                   components={{
                     DropdownIndicator,
                     ClearIndicator,
                     Placeholder,
-                    Option
+                    Option,
                   }}
                   value={
                     activeMovie.id && {
