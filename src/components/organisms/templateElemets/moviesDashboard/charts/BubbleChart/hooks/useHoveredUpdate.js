@@ -15,7 +15,8 @@ export default function useHoveredUpdate({
   hoveredMovie,
   prevHoveredMovie,
   chart,
-  dims
+  dims,
+  addUpdateInteractions,
 }) {
   React.useEffect(() => {
     if (
@@ -73,6 +74,7 @@ export default function useHoveredUpdate({
           }
         })
       }
+      addUpdateInteractions()
     }
   })
 }

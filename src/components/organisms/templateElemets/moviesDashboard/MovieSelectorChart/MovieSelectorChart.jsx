@@ -49,6 +49,7 @@ export default function MovieSelectorChart({
 }) {
   const { state, actions } = useMovieSelectorChartReducer({ dataSets })
 
+  const [isFirstEntered, setIsFirstEntered] = React.useState(true)
   const makeProps = acc => ({
     chart: acc,
     type: state.types[acc],
@@ -61,6 +62,8 @@ export default function MovieSelectorChart({
     activeMovie: activeMovie,
     setHoveredMovie: actions.setHoveredMovie,
     hoveredMovie: state.hoveredMovie,
+    isFirstEntered: isFirstEntered,
+    setIsFirstEntered: setIsFirstEntered,
   })
 
   return (
@@ -73,7 +76,10 @@ export default function MovieSelectorChart({
               <div onClick={actions.setIsSizeSynced}>Size</div>
             </PlaceHolderDiv>
             {typeof state.isBoth == "boolean" && (
-              <ChartContainer twoCharts={state.isBoth}>
+              <ChartContainer
+                twoCharts={state.isBoth}
+                onMouseLeave={() => setIsFirstEntered(true)}
+              >
                 <BubbleChart
                   {...makeProps("main")}
                   tooltipYPosition={state.isBoth ? 0 : 1}
@@ -90,10 +96,7 @@ export default function MovieSelectorChart({
                   isBoth={state.isBoth}
                 />
                 {state.isBoth && (
-                  <BubbleChart
-                    {...makeProps("sub")}
-                    tooltipYPosition={1}
-                  />
+                  <BubbleChart {...makeProps("sub")} tooltipYPosition={1} />
                 )}
               </ChartContainer>
             )}

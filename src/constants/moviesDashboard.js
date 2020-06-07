@@ -101,3 +101,7 @@ export const NO_HOVERED_MOVIE = {
   xPosition: undefined,
   yPosition: undefined,
 }
+
+export const TIMEOUT = {
+  short: 300
+}

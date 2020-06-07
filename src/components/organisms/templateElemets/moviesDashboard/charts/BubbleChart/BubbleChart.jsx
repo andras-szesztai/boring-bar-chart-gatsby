@@ -15,6 +15,7 @@ import {
   SIZE_RANGE,
   CHART_SIDE_MARGINS,
   NO_HOVERED_MOVIE,
+  TIMEOUT
 } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize } from "../../../../../../themes/theme"
@@ -26,7 +27,7 @@ import {
   useHoveredUpdate,
 } from "./hooks"
 import { setRadius } from "./utils"
-import { makeUniqData, makeFilteredData } from "../../utils"
+import { makeFilteredData } from "../../utils"
 
 const fadeOutEffect = css`
   content: "";
@@ -233,7 +234,44 @@ export default function BubbleChart(props) {
       })
   }
 
-  // const timeOut = useRef(null)
+  function addUpdateInteractions() {
+    const {
+      currXScale,
+      voronoiArea,
+    } = storedValues.current
+
+    console.log(props.isFirstEntered)
+
+    voronoiArea
+      .selectAll(".voronoi-path")
+      .on("mouseover", d => {
+        console.log(props.isFirstEntered)
+        const setHoveredMovie = () =>
+          props.setHoveredMovie({
+            id: d.id,
+            data: d,
+            yPosition: props.tooltipYPosition,
+            x: currXScale(new Date(d.release_date)),
+            xPosition: getXPosition(d),
+          })
+        if (!props.isFirstEntered) {
+          setHoveredMovie()
+        }
+        if (props.isFirstEntered) {
+          timeOut.current = setTimeout(() => {
+            props.setIsFirstEntered(false)
+            setHoveredMovie()
+          }, TIMEOUT.short)
+        }
+      })
+      .on("mouseout", () => {
+        clearTimeout(timeOut.current)
+        props.setHoveredMovie(NO_HOVERED_MOVIE)
+      })
+      .on("click", setActiveMovie)
+  }
+
+  const timeOut = useRef(null)
 
   function createUpdateVoronoi() {
     const {
@@ -263,28 +301,15 @@ export default function BubbleChart(props) {
             .attr("cursor", d =>
               props.activeMovie.id === d.id ? "default" : "pointer"
             )
-            // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
-            .on("mouseover", d =>
-              props.setHoveredMovie({
-                id: d.id,
-                data: d,
-                yPosition: props.tooltipYPosition,
-                x: currXScale(new Date(d.release_date)),
-                xPosition: getXPosition(d),
-              })
-            )
-            .on("mouseout", () => {
-              // clearTimeout(timeOut.current)
-              props.setHoveredMovie(NO_HOVERED_MOVIE)
-            })
-            .on("click", setActiveMovie)
             .call(enter => enter),
         update =>
           update.call(update =>
             update.transition().attr("d", (_, i) => delaunay.renderCell(i))
           )
       )
+
+    addUpdateInteractions()
   }
 
   useYDomainSyncUpdate({
@@ -309,6 +334,7 @@ export default function BubbleChart(props) {
     isSizeDynamic,
     chart,
     dims,
+    addUpdateInteractions,
   })
   useHoveredUpdate({
     storedValues,
@@ -317,6 +343,16 @@ export default function BubbleChart(props) {
     prevHoveredMovie: prevProps && prevProps.hoveredMovie,
     chart,
     dims,
+    addUpdateInteractions,
+  })
+
+  useEffect(() => {
+    if (
+      storedValues.current.isInit &&
+      props.isFirstEntered !== prevProps.isFirstEntered
+    ) {
+      addUpdateInteractions()
+    }
   })
 
   return (
