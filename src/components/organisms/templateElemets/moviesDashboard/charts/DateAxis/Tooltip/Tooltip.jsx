@@ -36,7 +36,6 @@ const TooltipContainer = styled.div`
   display: grid;
   grid-template-columns: minmax(105px, min-content) 1fr;
   grid-column-gap: 12px;
-  /* border: 1px dashed ${COLORS.secondaryDark}; */
 `
 
 const ImageContainer = styled.div`
@@ -78,10 +77,12 @@ const TextContentGrid = styled.div`
 `
 
 export default function Tooltip({
-  hoveredMovie: { id, data, xPosition, x, yPosition },
+  hoveredMovie: { id, data, xPosition, yPosition },
   activeMovieID,
+  xScale
 }) {
   if (!id) return null
+  const x = xScale(new Date(data.release_date))
   return (
     <TooltipContainer
       key={id}

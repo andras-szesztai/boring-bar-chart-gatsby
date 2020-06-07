@@ -145,7 +145,7 @@ export default function DateAxis(props) {
   const timeOut = useRef(null)
 
   function addUpdateInteractions() {
-    const { currXScale, voronoiArea } = storedValues.current
+    const { voronoiArea } = storedValues.current
 
     voronoiArea
       .selectAll(".voronoi-path")
@@ -155,7 +155,6 @@ export default function DateAxis(props) {
             id: d.id,
             data: d,
             yPosition: !!mainData.find(mD => _.isEqual(d, mD)) ? 0 : 1,
-            x: currXScale(new Date(d.release_date)),
             xPosition: getXPosition(d),
           })
         if (!props.isFirstEntered) {
@@ -260,6 +259,7 @@ export default function DateAxis(props) {
         <g ref={voronoiRef} />
       </ChartSvg>
       <Tooltip
+        xScale={storedValues && storedValues.current.currXScale}
         hoveredMovie={props.hoveredMovie}
         activeMovieID={activeMovie.id}
       />

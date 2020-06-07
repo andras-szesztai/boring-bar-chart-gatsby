@@ -9,13 +9,12 @@ import {
   WHILE_HOVER,
   COLORS,
   NO_ACTIVE_MOVIE,
-  NO_HOVERED_MOVIE,
 } from "../../../../../constants/moviesDashboard"
 
 import { BubbleChart, DateAxis } from "../charts"
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
-import { space, fontFamily, fontSize } from "../../../../../themes/theme"
+import { space, fontFamily } from "../../../../../themes/theme"
 import { IoIosArrowDown, IoIosClose, IoIosSearch } from "react-icons/io"
 import { usePrevious } from "../../../../../hooks"
 
@@ -26,12 +25,12 @@ const ControlsContainer = styled(motion.div)`
 `
 
 const MovieSearchContainer = styled(motion.div)`
-  width: 300px;
+  width: 240px;
 
   display: flex;
   flex-direction: column;
   margin-right: ${space[2]}px;
-  z-index: 4;
+  z-index: 6;
 `
 
 const DropdownIndicator = props => {
@@ -178,8 +177,12 @@ export default function MovieSelectorChart({
     setIsFirstEntered: setIsFirstEntered,
   })
 
-  console.log(" state.hoveredMovie", state.hoveredMovie)
-  const xScale = React.useRef(null)
+  function getXPosition(data) {
+    return Number(
+      +data.data.release_date.slice(0, 4) >=
+        _.mean(state.scales.xScale.domain().map(d => d.getFullYear()))
+    )
+  }
 
   return (
     <>
@@ -198,15 +201,7 @@ export default function MovieSelectorChart({
                       id: d.value,
                       data: d.data,
                       yPosition: 1,
-                      x: xScale.current(new Date(d.data.release_date)),
-                      xPosition: Number(
-                        +d.data.release_date.slice(0, 4) >=
-                          _.mean(
-                            state.scales.xScale
-                              .domain()
-                              .map(d => d.getFullYear())
-                          )
-                      ),
+                      xPosition: getXPosition(d),
                     })
                   }}
                   styles={customStyles}
@@ -222,19 +217,12 @@ export default function MovieSelectorChart({
                       label: activeMovie.data.title,
                     }
                   }
-                  onChange={element => {
-                    element
+                  onChange={el => {
+                    el
                       ? setActiveMovie({
-                          id: element.value,
-                          data: element.data,
-                          position: Number(
-                            +element.data.release_date.slice(0, 4) >=
-                              _.mean(
-                                state.scales.xScale
-                                  .domain()
-                                  .map(d => d.getFullYear())
-                              )
-                          ),
+                          id: el.value,
+                          data: el.data,
+                          position: getXPosition(el),
                         })
                       : setActiveMovie(NO_ACTIVE_MOVIE)
                   }}
@@ -251,7 +239,6 @@ export default function MovieSelectorChart({
                 <BubbleChart
                   {...makeProps("main")}
                   tooltipYPosition={state.isBoth ? 0 : 1}
-                  setXScale={scale => (xScale.current = scale)}
                 />
                 <DateAxis
                   mainData={dataSets.personCredits[state.types.main] || []}

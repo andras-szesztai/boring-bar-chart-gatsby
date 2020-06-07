@@ -91,7 +91,6 @@ export default function BubbleChart(props) {
       createCircles()
       createUpdateVoronoi()
       setNumber(filteredData.length)
-      props.setXScale && props.setXScale(currXScale)
     }
   })
 
@@ -173,7 +172,7 @@ export default function BubbleChart(props) {
   const timeOut = useRef(null)
 
   function addUpdateInteractions() {
-    const { currXScale, voronoiArea } = storedValues.current
+    const { voronoiArea } = storedValues.current
 
     voronoiArea
       .selectAll(".voronoi-path")
@@ -183,7 +182,6 @@ export default function BubbleChart(props) {
             id: d.id,
             data: d,
             yPosition: props.tooltipYPosition,
-            x: currXScale(new Date(d.release_date)),
             xPosition: getXPosition(d),
           })
         if (!props.isFirstEntered) {
@@ -263,7 +261,6 @@ export default function BubbleChart(props) {
     createUpdateVoronoi,
     chart,
     isSizeDynamic,
-    setXScale: props.setXScale
   })
   useActiveMovieIDUpdate({
     storedValues,
