@@ -247,9 +247,8 @@ export default function DateAxis(props) {
       storedValues.current.isInit &&
       hoveredMovie.id !== prevProps.hoveredMovie.id
     ) {
-      const { chartArea, filteredData, currXScale } = storedValues.current
+      const { chartArea, currXScale } = storedValues.current
       const setX = d => currXScale(new Date(d.release_date))
-      console.log("addInteractions -> hoveredMovie", hoveredMovie)
       const isToTooltipTheRight = hoveredMovie.xPosition === 0
       const posAdjust = SIZE_RANGE[0] + CIRCLE_ADJUST
       if (hoveredMovie.id) {

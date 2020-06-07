@@ -24,7 +24,7 @@ const TooltipContainer = styled.div`
     bottom: ${bottom}px;
   `}
 
-  z-index: 5;
+  z-index: 4;
   pointer-events: none;
 
   padding: ${space[2]}px;
@@ -34,7 +34,7 @@ const TooltipContainer = styled.div`
   filter: drop-shadow(${dropShadow.secondary});
 
   display: grid;
-  grid-template-columns: 105px 1fr;
+  grid-template-columns: min-content 1fr;
   grid-column-gap: 12px;
   border: 1px dashed ${COLORS.secondaryDark};
 `
@@ -52,17 +52,19 @@ const TextContentGrid = styled.div`
     font-size: ${themifyFontSize(2)};
     font-weight: ${themifyFontWeight(4)};
     color: ${COLORS.secondaryDark};
-    margin-bottom: ${space[1]}px;
   }
 
   .section {
     margin-top: ${space[1]}px;
     font-size: ${themifyFontSize(1)};
-    font-weight: ${themifyFontWeight(3)};
+    font-weight: ${themifyFontWeight(4)};
     color: ${COLORS.textColor};
 
     span {
       font-weight: ${themifyFontWeight(1)};
+      span {
+        color: ${COLORS.gridColor};
+      }
     }
   }
 
@@ -71,6 +73,7 @@ const TextContentGrid = styled.div`
     height: 16px;
     position: relative;
   }
+
 `
 
 export default function Tooltip({
@@ -107,7 +110,14 @@ export default function Tooltip({
         </div>
         <div className="section">
           <div>
-            Avg. vote: <span>{data.vote_average}</span>
+            Avg. vote:{" "}
+            <span>
+              {data.vote_average} &nbsp;
+              <span>
+                ( {data.vote_count} vote
+                {data.vote_count > 1 ? "s" : ""} )
+              </span>
+            </span>
           </div>
         </div>
         <div className="section score">
@@ -128,11 +138,8 @@ export default function Tooltip({
             }}
           ></div>
         </div>
-        <div className="section">
-          <span>
-            (based on {data.vote_count} vote
-            {data.vote_count > 1 ? "s" : ""})
-          </span>
+        <div className="section hint">
+          Click<span> to explore the {data.media_type}!</span>
         </div>
       </TextContentGrid>
     </TooltipContainer>
