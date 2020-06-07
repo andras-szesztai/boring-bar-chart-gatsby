@@ -104,5 +104,5 @@ export const NO_HOVERED_MOVIE = {
 }
 
 export const TIMEOUT = {
-  short: 400
+  short: 300
 }

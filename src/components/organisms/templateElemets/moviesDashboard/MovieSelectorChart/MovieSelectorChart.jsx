@@ -27,21 +27,24 @@ const ControlsContainer = styled(motion.div)`
 `
 
 const MovieSearchContainer = styled.div`
-  width: 240px;
+  width: 280px;
 
   display: flex;
   flex-direction: column;
-  margin-right: ${space[3]}px;
+  margin-right: ${space[6]}px;
   z-index: 6;
 `
 
 const CheckBoxContainer = styled.div`
-  margin-right: ${space[3]}px;
+  margin-right: ${space[6]}px;
   display: flex;
   align-items: flex-end;
+  height: 32px;
 
   div {
-    font-size: ${themifyFontSize(1)};
+    font-size: ${themifyFontSize(2)};
+    color: ${COLORS.textColor};
+    margin-right: ${space[2]}px;
   }
 
   cursor: pointer;
@@ -243,25 +246,55 @@ export default function MovieSelectorChart({
                 />
               </MovieSearchContainer>
               <CheckBoxContainer>
+                <div
+                  onClick={() => actions.setIsYDomainSynced(false)}
+                  role="button"
+                >
+                  Dynamic
+                </div>
                 <Switch
-                  checked={!state.isYDomainSynced}
-                  onChange={actions.setIsYDomainSynced}
+                  checked={state.isYDomainSynced}
+                  onChange={() =>
+                    actions.setIsYDomainSynced(!state.isYDomainSynced)
+                  }
                   uncheckedIcon={false}
                   checkedIcon={false}
-                  width={32}
-                  height={16}
+                  width={40}
+                  height={20}
+                  onColor={COLORS.textColor}
                   offColor={COLORS.textColor}
-                  onColor={COLORS.backgroundGray}
                 />
                 <div
-                  onClick={actions.setIsYDomainSynced}
-                  role="checkbox"
-                  aria-checked={!state.isYDomainSynced}
+                  onClick={() => actions.setIsYDomainSynced(true)}
+                  role="button"
                 >
-                  Fixed/Dynamic score axis
+                  Fixed score axis
                 </div>
               </CheckBoxContainer>
-              <div onClick={actions.setIsSizeSynced}>Size</div>
+              <CheckBoxContainer>
+                <div
+                  onClick={() => actions.setIsSizeSynced(false)}
+                  role="button"
+                >
+                  Dynamic
+                </div>
+                <Switch
+                  checked={state.isSizeDynamic}
+                  onChange={() => actions.setIsSizeSynced(!state.isSizeDynamic)}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  width={40}
+                  height={20}
+                  onColor={COLORS.textColor}
+                  offColor={COLORS.textColor}
+                />
+                <div
+                  onClick={() => actions.setIsSizeSynced(true)}
+                  role="button"
+                >
+                  Fixed dot size
+                </div>
+              </CheckBoxContainer>
             </ControlsContainer>
             {typeof state.isBoth == "boolean" && (
               <ChartContainer

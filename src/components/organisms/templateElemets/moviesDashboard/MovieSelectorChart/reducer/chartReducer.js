@@ -50,11 +50,11 @@ function movieSelectorChartReducer(state, { type, payload }) {
     }),
     SET_IS_Y_DOMAIN_SYNCED: () => ({
       ...state,
-      isYDomainSynced: !state.isYDomainSynced,
+      isYDomainSynced: payload,
     }),
     SET_IS_SIZE_DYNAMIC: () => ({
       ...state,
-      isSizeDynamic: !state.isSizeDynamic,
+      isSizeDynamic: payload,
     }),
     SET_HOVERED_MOVIE: () => ({
       ...state,
@@ -71,8 +71,10 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
   const actions = {
     setChartStartSettings: payload =>
       dispatch({ type: SET_CHART_START_SETTINGS, payload }),
-    setIsYDomainSynced: () => dispatch({ type: SET_IS_Y_DOMAIN_SYNCED }),
-    setIsSizeSynced: () => dispatch({ type: SET_IS_SIZE_DYNAMIC }),
+    setIsYDomainSynced: payload =>
+      dispatch({ type: SET_IS_Y_DOMAIN_SYNCED, payload }),
+    setIsSizeSynced: payload =>
+      dispatch({ type: SET_IS_SIZE_DYNAMIC, payload }),
     setHoveredMovie: payload => dispatch({ type: SET_HOVERED_MOVIE, payload }),
   }
 
@@ -92,7 +94,7 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
         .map(el => ({
           value: el.id,
           label: el.title,
-          data: el
+          data: el,
         }))
         .sort((a, b) => a.label.localeCompare(b.label))
       const xScale = scaleTime().domain(

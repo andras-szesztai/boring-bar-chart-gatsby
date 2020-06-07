@@ -25,6 +25,7 @@ export const SubContainer = styled.div`
 
 export const ChartContainer = styled.div`
   display: grid;
+  padding-top: 10px;
 
   grid-template-rows: ${({ twoCharts }) =>
     twoCharts ? "1fr 50px 1fr" : "1fr 50px"};
