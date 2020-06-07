@@ -14,7 +14,7 @@ export default function useSelectedUpdate({
 }) {
   React.useEffect(() => {
     if (storedValues.current.isInit && activeMovieID !== prevActiveMovieID) {
-      const { chartArea, filteredData, currXScale } = storedValues.current
+      const { chartArea, filteredData, currXScale, voronoiArea } = storedValues.current
       const setX = d => currXScale(new Date(d.release_date))
       if (activeMovieID) {
         const selectedCircleData = filteredData.find(
@@ -34,9 +34,7 @@ export default function useSelectedUpdate({
           .attr("x2", setX)
           .attr("opacity", 1)
         if (topLineData.length) {
-          chartArea
-            .selectAll(".selected-top-line")
-            .attr("y2", -dims.height / 2)
+          chartArea.selectAll(".selected-top-line").attr("y2", -dims.height / 2)
         } else {
           chartArea
             .selectAll(".selected-top-line")
@@ -53,13 +51,12 @@ export default function useSelectedUpdate({
         }
       }
       if (!activeMovieID) {
-        chartArea
-          .selectAll(".selected-circle")
-          .attr("opacity", 0)
-        chartArea
-          .selectAll(".selected-line")
-          .attr("opacity", 0)
+        chartArea.selectAll(".selected-circle").attr("opacity", 0)
+        chartArea.selectAll(".selected-line").attr("opacity", 0)
       }
+      voronoiArea
+        .selectAll(".voronoi-path")
+        .attr("cursor", d => (activeMovieID === d.id ? "default" : "pointer"))
     }
   })
 }

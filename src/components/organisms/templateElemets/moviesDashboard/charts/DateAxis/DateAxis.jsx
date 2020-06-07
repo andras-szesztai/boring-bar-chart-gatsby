@@ -22,7 +22,6 @@ import { useSelectedUpdate, useHoveredUpdate, useChartResize } from "./hooks"
 import Tooltip from "./Tooltip/Tooltip"
 import { Wrapper, ChartSvg } from "./styles"
 
-
 export default function DateAxis(props) {
   const { margin, xScale, mainData, subData, activeMovie, hoveredMovie } = props
   const prevProps = usePrevious(props)
@@ -201,6 +200,9 @@ export default function DateAxis(props) {
             .append("path")
             .attr("class", "voronoi-path")
             .attr("fill", "transparent")
+            .attr("cursor", d =>
+              props.activeMovie.id === d.id ? "default" : "pointer"
+            )
             .attr("d", (_, i) => delaunay.renderCell(i))
             .call(enter => enter),
         update =>
@@ -215,7 +217,8 @@ export default function DateAxis(props) {
     dims,
     storedValues,
     margin,
-    createUpdateVoronoi
+    createUpdateVoronoi,
+    createDateAxis,
   })
 
   useSelectedUpdate({

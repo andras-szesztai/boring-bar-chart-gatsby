@@ -36,7 +36,7 @@ const TooltipContainer = styled.div`
   display: grid;
   grid-template-columns: minmax(105px, min-content) 1fr;
   grid-column-gap: 12px;
-  border: 1px dashed ${COLORS.secondaryDark};
+  /* border: 1px dashed ${COLORS.secondaryDark}; */
 `
 
 const ImageContainer = styled.div`
@@ -85,7 +85,7 @@ export default function Tooltip({
   return (
     <TooltipContainer
       key={id}
-      left={xPosition ? x - WIDTH - LINE_WIDTH + 6 : x + LINE_WIDTH * 2}
+      left={xPosition ? x - WIDTH - LINE_WIDTH + 12 : x + LINE_WIDTH * 2}
       top={yPosition === 0 && 0}
       bottom={yPosition === 1 && 0}
     >

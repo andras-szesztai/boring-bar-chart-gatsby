@@ -74,7 +74,6 @@ export default function useActiveMovieIDUpdate({
       }
       voronoiArea
         .selectAll(".voronoi-path")
-        .on("click", setActiveMovie)
         .attr("cursor", d => (activeMovieID === d.id ? "default" : "pointer"))
     }
   })
