@@ -106,7 +106,10 @@ export const makeRightVariants = delay => ({
     },
   },
   exit: {
-    x: CARD_WIDTH + HANDLE_SIZE * 2,
+    x: CARD_WIDTH + HANDLE_SIZE,
+    transition: {
+      ...TRANSITION.primary
+    },
   },
 })
 
@@ -122,7 +125,10 @@ export const makeLeftVariants = delay => ({
     },
   },
   exit: {
-    x: -(CARD_WIDTH + HANDLE_SIZE * 2),
+    x: -(CARD_WIDTH + HANDLE_SIZE),
+    transition: {
+      ...TRANSITION.primary
+    },
   },
 })
 
@@ -146,10 +152,10 @@ const IconsContainer = styled.div`
   }
 `
 
-export  const IconsContainerRight = styled(IconsContainer)`
+export const IconsContainerRight = styled(IconsContainer)`
   left: -${HANDLE_SIZE - 4}px;
 `
 
-export  const IconsContainerLeft = styled(IconsContainer)`
+export const IconsContainerLeft = styled(IconsContainer)`
   right: -${HANDLE_SIZE - 4}px;
 `

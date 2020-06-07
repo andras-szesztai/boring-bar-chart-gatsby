@@ -1,53 +1,46 @@
-import React, { useState } from "react"
-import axios from "axios"
+import React from "react"
 import styled from "styled-components"
-import { IoIosSearch, IoIosClose } from "react-icons/io"
-import { AnimatePresence, motion } from "framer-motion"
-import chroma from "chroma-js"
+import { motion } from "framer-motion"
+import Select, { components } from "react-select"
 
-import { HANDLE_SIZE, CARD_WIDTH, COLORS } from "../../../../../constants/moviesDashboard"
+import {
+  HANDLE_SIZE,
+  WHILE_HOVER,
+  COLORS,
+  NO_ACTIVE_MOVIE,
+} from "../../../../../constants/moviesDashboard"
 
 import { BubbleChart, DateAxis } from "../charts"
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
-import { space, fontFamily } from "../../../../../themes/theme"
-import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
+import { space } from "../../../../../themes/theme"
+import { IoIosArrowDropdownCircle, IoIosArrowDown } from "react-icons/io"
 
 const ControlsContainer = styled(motion.div)`
   display: flex;
   justify-content: flex-start;
-  align-items: flex-end;
+  align-items: flex-start;
 `
 
 const MovieSearchContainer = styled(motion.div)`
+  width: 240px;
+
   display: flex;
   flex-direction: column;
   margin-right: ${space[2]}px;
   z-index: 4;
 `
 
+const DropdownIndicator = props => {
+  console.log("props", props.selectProps)
+  return (
+    <components.DropdownIndicator {...props}>
+      <IoIosArrowDown size={20} color={COLORS.secondaryDark} />
+    </components.DropdownIndicator>
+  )
+}
 
-const StyledSearchBar = styled(motion.input)`
-  z-index: ${themifyZIndex("hoverOverlay")};
-  width: 300px;
-  height: 30px;
-  border-radius: ${space[1]}px;
-  background: ${COLORS.secondary};
-  color: #fff;
-  border: 1px solid ${chroma(COLORS.secondary).darken()};
-  font-family: ${fontFamily};
-  font-size: ${themifyFontSize(2)};
-  font-weight: 300;
-  outline: none;
-
-  padding-bottom: 2px;
-
-  &::placeholder {
-    font-weight: 300;
-    color: ${chroma(COLORS.primary).brighten(3)};
-    font-family: inherit;
-  }
-`
+const customStyles = {}
 
 export default function MovieSelectorChart({
   activeNameID,
@@ -59,7 +52,6 @@ export default function MovieSelectorChart({
   const { state, actions } = useMovieSelectorChartReducer({ dataSets })
   const [isFirstEntered, setIsFirstEntered] = React.useState(true)
 
-  console.log("state", state.movieSearchData)
   const makeProps = acc => ({
     chart: acc,
     type: state.types[acc],
@@ -83,7 +75,25 @@ export default function MovieSelectorChart({
           <SubContainer>
             <ControlsContainer>
               <MovieSearchContainer>
-                <StyledSearchBar/>
+                <Select
+                  placeholder="Select or search a title..."
+                  isClearable
+                  isSearchable
+                  test="test"
+                  options={state.movieSearchData}
+                  styles={customStyles}
+                  components={{ DropdownIndicator }}
+                  onChange={element =>{
+                    console.log(state.scales.xScale.domain())
+                    element
+                      ? setActiveMovie({
+                          id: element.value,
+                          data: element.data,
+                          position: 0,
+                        })
+                      : setActiveMovie(NO_ACTIVE_MOVIE)
+                  }}
+                />
               </MovieSearchContainer>
               <div onClick={actions.setIsYDomainSynced}>Y-domain</div>
               <div onClick={actions.setIsSizeSynced}>Size</div>

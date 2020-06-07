@@ -92,6 +92,7 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
         .map(el => ({
           value: el.id,
           label: el.title,
+          data: el
         }))
         .sort((a, b) => a.label.localeCompare(b.label))
       const xScale = scaleTime().domain(

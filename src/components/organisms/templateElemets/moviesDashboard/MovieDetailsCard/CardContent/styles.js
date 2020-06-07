@@ -8,8 +8,6 @@ import { space } from "../../../../../../themes/theme"
 import { TitleContainer, TextContainer } from "../../styles/styles"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 
-
-
 export const ContentGrid = styled(motion.div)`
   width: 100%;
   height: 100%;
