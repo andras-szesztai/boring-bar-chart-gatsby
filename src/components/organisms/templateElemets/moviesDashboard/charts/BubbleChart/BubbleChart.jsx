@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from "react"
-import styled, { css } from "styled-components"
-import { motion } from "framer-motion"
 import chroma from "chroma-js"
 import { scaleLinear } from "d3-scale"
 import { extent } from "d3-array"
@@ -17,8 +15,6 @@ import {
   NO_HOVERED_MOVIE,
   TIMEOUT,
 } from "../../../../../../constants/moviesDashboard"
-import { themifyFontSize } from "../../../../../../themes/mixins"
-import { colors, fontSize } from "../../../../../../themes/theme"
 
 import {
   useYDomainSyncUpdate,
@@ -29,70 +25,8 @@ import {
 } from "./hooks"
 import { setRadius } from "./utils"
 import { makeFilteredData } from "../../utils"
-
-const fadeOutEffect = css`
-  content: "";
-  position: absolute;
-  z-index: 2;
-  left: 0;
-  pointer-events: none;
-  width: 100%;
-  height: 2rem;
-`
-
-const Wrapper = styled.div`
-  position: relative;
-  height: 100%;
-  width: 100%;
-
-  :after {
-    ${fadeOutEffect}
-    bottom: 0;
-    background-image: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 1) 95%
-    );
-  }
-
-  :before {
-    ${fadeOutEffect}
-    top: 0px;
-    background-image: linear-gradient(
-      to top,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 1) 95%
-    );
-  }
-`
-
-const ChartSvg = styled.svg`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-`
-
-const ChartTitle = styled(motion.div)`
-  font-size: ${themifyFontSize(12)};
-  line-height: 0.8;
-  font-weight: 500;
-  text-transform: uppercase;
-  color: ${colors.grayDark};
-  position: absolute;
-  top: 12px;
-`
-
-const NumberContainer = styled(motion.div)`
-  font-size: ${themifyFontSize(4)};
-  line-height: 0.8;
-  font-weight: 500;
-  text-transform: uppercase;
-  color: ${colors.grayDark};
-  opacity: 0.5;
-  position: absolute;
-  top: 8px;
-`
+import { Wrapper, ChartTitle, NumberContainer, ChartSvg } from "./styles"
+import { fontSize } from "../../../../../../themes/theme"
 
 const gridData = [0, 2, 4, 6, 8, 10]
 
@@ -321,7 +255,11 @@ export default function BubbleChart(props) {
     prevIsSizeDynamic: prevProps && prevProps.isSizeDynamic,
   })
   useChartResize({
-    dims, prevDims,
+    dims,
+    prevDims,
+    storedValues,
+    margin,
+    createUpdateVoronoi,
   })
   useActiveMovieIDUpdate({
     storedValues,
