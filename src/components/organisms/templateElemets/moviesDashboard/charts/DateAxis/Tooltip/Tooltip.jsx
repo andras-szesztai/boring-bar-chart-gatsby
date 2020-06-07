@@ -1,5 +1,7 @@
 import React from "react"
 import styled, { css } from "styled-components"
+import useResizeAware from 'react-resize-aware';
+
 import { Image } from "../../.."
 import { dropShadow, space } from "../../../../../../../themes/theme"
 
@@ -9,7 +11,6 @@ const LINE_WIDTH = 16
 
 const TooltipContainer = styled.div`
   position: absolute;
-  width: ${WIDTH}px;
   height: ${HEIGHT}px;
 
   ${({ left, top, bottom }) => css`
@@ -25,14 +26,26 @@ const TooltipContainer = styled.div`
 
   border-radius: ${space[1]}px;
   background-color: #fff;
-  filter: drop-shadow(${dropShadow.primary})
-    drop-shadow(${dropShadow.secondary});
+  filter: drop-shadow(${dropShadow.secondary});
+
+  display: flex;
+`
+
+const TextContentGrid = styled.div`
+  display: flex;
+  white-space: nowrap;
+  margin-left: ${space[2]}px;
+
+  .title {
+
+  }
 `
 
 export default function Tooltip({
   hoveredMovie: { id, data, xPosition, x, yPosition },
 }) {
-  console.log("xPosition", xPosition)
+  const [resizeListener, sizes] = useResizeAware();
+  console.log("sizes", sizes)
   // console.log("id", id)
   // console.log("data", data)
 
@@ -43,19 +56,24 @@ export default function Tooltip({
       left={xPosition ? x - WIDTH - LINE_WIDTH : x + LINE_WIDTH * 2}
       top={0}
     >
+      {resizeListener}
       <Image
         url={data.poster_path}
         height={HEIGHT - space[3]}
         alt={`${data.title}-poster`}
       />
+      <TextContentGrid>
+        <div>{data.title}</div>
+      </TextContentGrid>
     </TooltipContainer>
   )
 }
 
-// job: (2) ["Director", "Writer"]
-// media_type: "movie"
 // poster_path: "/glrievSqGcTj7O6AQlGdbwUAsWa.jpg"
-// release_date: "1968-12-18"
+
 // title: "Amblin'"
+// release_date: "1968-12-18"
+// media_type: "movie"
 // vote_average: 6.3
 // vote_count: 20
+// job: (2) ["Director", "Writer"]
