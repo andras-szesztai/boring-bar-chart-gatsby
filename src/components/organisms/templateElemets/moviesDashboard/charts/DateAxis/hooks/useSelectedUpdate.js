@@ -1,6 +1,5 @@
 import React from "react"
 
-import { makeTransition } from "../../../../../../../utils/chartHelpers"
 import {
   SIZE_RANGE,
   CIRCLE_ADJUST,

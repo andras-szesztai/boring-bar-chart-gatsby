@@ -18,8 +18,8 @@ import {
 import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
 
-import { useSelectedUpdate } from "./hooks"
-import Tooltip, { LINE_WIDTH } from "./Tooltip/Tooltip"
+import { useSelectedUpdate, useHoveredUpdate } from "./hooks"
+import Tooltip from "./Tooltip/Tooltip"
 
 const fadeOutEffect = css`
   content: "";
@@ -243,63 +243,12 @@ export default function DateAxis(props) {
     addInteractions,
   })
 
-  useEffect(() => {
-    if (
-      storedValues.current.isInit &&
-      hoveredMovie.id !== prevProps.hoveredMovie.id
-    ) {
-      const { chartArea, currXScale } = storedValues.current
-      const setX = d => currXScale(new Date(d.release_date))
-      const isToTooltipTheRight = hoveredMovie.xPosition === 0
-      const posAdjust = SIZE_RANGE[0] + CIRCLE_ADJUST
-      if (hoveredMovie.id) {
-        const isMain = !!mainData.find(d => _.isEqual(hoveredMovie.data, d))
-        chartArea
-          .selectAll(".hovered-circle")
-          .datum(hoveredMovie.data)
-          .attr("cx", setX)
-          .attr("opacity", 1)
-        chartArea
-          .selectAll(".hovered-horizontal-line")
-          .datum(hoveredMovie.data)
-          .attr(
-            "x1",
-            d =>
-              currXScale(new Date(d.release_date)) +
-              (isToTooltipTheRight ? posAdjust : -posAdjust)
-          )
-          .attr(
-            "x2",
-            d =>
-              currXScale(new Date(d.release_date)) +
-              (isToTooltipTheRight
-                ? posAdjust + LINE_WIDTH
-                : -(posAdjust + LINE_WIDTH))
-          )
-          .attr("opacity", 1)
-        if (isMain) {
-          chartArea
-            .select(".hovered-top-line")
-            .datum(hoveredMovie.data)
-            .attr("y2", -dims.height / 2)
-            .attr("x1", setX)
-            .attr("x2", setX)
-            .attr("opacity", 1)
-        } else {
-          chartArea
-            .select(".hovered-bottom-line")
-            .datum(hoveredMovie.data)
-            .attr("y2", dims.height / 2)
-            .attr("x1", setX)
-            .attr("x2", setX)
-            .attr("opacity", 1)
-        }
-      }
-      if (!hoveredMovie.id) {
-        chartArea.selectAll(".hovered-circle").attr("opacity", 0)
-        chartArea.selectAll(".hovered-line").attr("opacity", 0)
-      }
-    }
+  useHoveredUpdate({
+    storedValues,
+    hoveredMovie,
+    prevHoveredMovie: prevProps && prevProps.hoveredMovie,
+    dims,
+    mainData
   })
 
   return (
