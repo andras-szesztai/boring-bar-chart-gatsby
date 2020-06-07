@@ -13,7 +13,7 @@ import { COLORS } from "../../../../../../../constants/moviesDashboard"
 
 const WIDTH = 320
 const HEIGHT = 160
-const LINE_WIDTH = 16
+export const LINE_WIDTH = space[3]
 
 const TooltipContainer = styled.div`
   position: absolute;

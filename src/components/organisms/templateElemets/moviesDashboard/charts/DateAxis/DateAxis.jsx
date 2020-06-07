@@ -97,6 +97,7 @@ export default function DateAxis(props) {
       }
       createDateAxis()
       createUpdateVoronoi()
+      createRefElements("hovered")
       createRefElements("selected")
     }
   })
@@ -128,6 +129,7 @@ export default function DateAxis(props) {
       .attr("r", SIZE_RANGE[0] + CIRCLE_ADJUST)
       .attr("fill", "#fff")
       .attr("stroke", chroma(COLORS.secondary).darken())
+      .attr("stroke-dasharray", className === "hovered" && "2,2")
       .attr("stroke-width", 1)
       .attr("opacity", 0)
     chartArea
@@ -145,6 +147,7 @@ export default function DateAxis(props) {
       .attr("class", `${className}-top-line ${className}-line`)
       .attr("y1", -SIZE_RANGE[0] - CIRCLE_ADJUST)
       .attr("y2", -SIZE_RANGE[0] - CIRCLE_ADJUST)
+      .attr("stroke-dasharray", className === "hovered" && "3,2")
       .attr("x1", 0)
       .attr("x2", 0)
       .attr("stroke", chroma(COLORS.secondary).darken())
@@ -155,11 +158,25 @@ export default function DateAxis(props) {
       .attr("class", `${className}-bottom-line ${className}-line`)
       .attr("y1", SIZE_RANGE[0] + CIRCLE_ADJUST)
       .attr("y2", SIZE_RANGE[0] + CIRCLE_ADJUST)
+      .attr("stroke-dasharray", className === "hovered" && "3,2")
       .attr("x1", 0)
       .attr("x2", 0)
       .attr("stroke", chroma(COLORS.secondary).darken())
       .attr("stroke-width", 1)
       .attr("opacity", 0)
+    if (className === "hovered") {
+      chartArea
+        .append("line")
+        .attr("class", `${className}-horizontal-line ${className}-line`)
+        .attr("y1", 0)
+        .attr("y2", 0)
+        .attr("stroke-dasharray", className === "hovered" && "3,2")
+        .attr("x1", 0)
+        .attr("x2", 0)
+        .attr("stroke", chroma(COLORS.secondary).darken())
+        .attr("stroke-width", 1)
+        .attr("opacity", 0)
+    }
   }
 
   function getXPosition(d) {
