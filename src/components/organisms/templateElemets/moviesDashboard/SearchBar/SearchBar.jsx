@@ -7,7 +7,7 @@ import chroma from "chroma-js"
 
 import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
 import { space, fontFamily } from "../../../../../themes/theme"
-import { COLORS, API_ROOT, TRANSITION } from "../../../../../constants/moviesDashboard"
+import { COLORS, API_ROOT, TRANSITION, CARD_WIDTH } from "../../../../../constants/moviesDashboard"
 import { useDebouncedSearch } from "../../../../../hooks"
 import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
 
@@ -25,7 +25,7 @@ const SearchBarSubContainer = styled(motion.div)`
 
 const StyledSearchBar = styled(motion.input)`
   z-index: ${themifyZIndex("hoverOverlay")};
-  width: 350px;
+  width: ${CARD_WIDTH}px;
   height: 40px;
   border-radius: ${space[1]}px;
   background: ${COLORS.primary};
@@ -50,6 +50,7 @@ const SearchIconContainer = styled(motion.div)`
   top: ${space[2]}px;
   left: ${space[2]}px;
   z-index: ${themifyZIndex("tooltip")};
+  cursor: default;
 `
 
 const CloseIconContainer = styled(motion.div)`
@@ -174,9 +175,10 @@ export default function SearchBar({ setActiveNameID }) {
             rotateY: inputText.length ? 0 : 80,
             x: inputText.length ? 0 : 10,
             opacity: inputText.length ? 1 : 0,
+            transition: TRANSITION.primary
           }}
           whileHover={{ scale: 1.3 }}
-          transition={{ type: "spring", damping: 12 }}
+
           onClick={() => {
             setInputText("")
             setNameSearchResults([])
@@ -188,7 +190,7 @@ export default function SearchBar({ setActiveNameID }) {
         <StyledSearchBar
           animate={{
             paddingLeft: searchIsFocused ? 10 : 40,
-            width: 350,
+            width: CARD_WIDTH,
           }}
           initial={{
             paddingLeft: 40,
@@ -201,7 +203,7 @@ export default function SearchBar({ setActiveNameID }) {
           type="text"
           id="search"
           name="name search"
-          placeholder="Search a name"
+          placeholder="Search for a film director, actress, writer . . . "
           size="50"
           autoComplete="off"
           onFocus={() => setSearchIsFocused(true)}

@@ -190,7 +190,6 @@ export default function DateAxis(props) {
       () => dims.height / 2
     ).voronoi([0, 0, dims.width, dims.height])
 
-    // TODO: setup pointer if not selected
     voronoiArea
       .selectAll(".voronoi-path")
       .data(filteredData, d => d.id)
