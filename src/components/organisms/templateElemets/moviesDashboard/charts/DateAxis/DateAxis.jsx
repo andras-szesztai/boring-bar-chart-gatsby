@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react"
-import styled, { css } from "styled-components"
 import chroma from "chroma-js"
 import _ from "lodash"
 import { select } from "d3-selection"
@@ -19,55 +18,10 @@ import {
 import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
 
-import { useSelectedUpdate, useHoveredUpdate } from "./hooks"
+import { useSelectedUpdate, useHoveredUpdate, useChartResize } from "./hooks"
 import Tooltip from "./Tooltip/Tooltip"
+import { Wrapper, ChartSvg } from "./styles"
 
-const fadeOutEffect = css`
-  content: "";
-  position: absolute;
-  z-index: 2;
-  left: 0;
-  pointer-events: none;
-  width: 100%;
-  height: 1.5rem;
-`
-
-const Wrapper = styled.div`
-  position: relative;
-  height: 100%;
-  width: 100%;
-
-  :after {
-    ${fadeOutEffect}
-    bottom: 0;
-    background-image: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 1) 95%
-    );
-  }
-
-  :before {
-    ${fadeOutEffect}
-    top: 0px;
-    background-image: linear-gradient(
-      to top,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 1) 95%
-    );
-  }
-`
-
-const ChartSvg = styled.svg`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-
-  .voronoi-path {
-    cursor: pointer;
-  }
-`
 
 export default function DateAxis(props) {
   const { margin, xScale, mainData, subData, activeMovie, hoveredMovie } = props
@@ -237,6 +191,7 @@ export default function DateAxis(props) {
       () => dims.height / 2
     ).voronoi([0, 0, dims.width, dims.height])
 
+    // TODO: setup pointer if not selected
     voronoiArea
       .selectAll(".voronoi-path")
       .data(filteredData, d => d.id)
@@ -255,6 +210,13 @@ export default function DateAxis(props) {
       )
     addUpdateInteractions()
   }
+
+  useChartResize({
+    dims,
+    storedValues,
+    margin,
+    createUpdateVoronoi
+  })
 
   useSelectedUpdate({
     storedValues,

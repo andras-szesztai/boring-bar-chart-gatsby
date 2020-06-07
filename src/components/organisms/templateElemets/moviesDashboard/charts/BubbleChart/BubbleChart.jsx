@@ -260,6 +260,8 @@ export default function BubbleChart(props) {
     storedValues,
     margin,
     createUpdateVoronoi,
+    chart,
+    isSizeDynamic,
   })
   useActiveMovieIDUpdate({
     storedValues,
