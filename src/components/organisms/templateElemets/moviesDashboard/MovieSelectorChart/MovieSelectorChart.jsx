@@ -14,7 +14,7 @@ import {
 import { BubbleChart, DateAxis } from "../charts"
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
-import { space } from "../../../../../themes/theme"
+import { space, fontFamily, fontSize } from "../../../../../themes/theme"
 import {
   IoIosArrowDropdownCircle,
   IoIosArrowDown,
@@ -28,7 +28,7 @@ const ControlsContainer = styled(motion.div)`
 `
 
 const MovieSearchContainer = styled(motion.div)`
-  width: 240px;
+  width: 300px;
 
   display: flex;
   flex-direction: column;
@@ -39,7 +39,7 @@ const MovieSearchContainer = styled(motion.div)`
 const DropdownIndicator = props => {
   return (
     <components.DropdownIndicator {...props}>
-      <motion.div style={{ marginTop: 2 }} whileHover={WHILE_HOVER}>
+      <motion.div style={{ marginTop: 4 }} whileHover={WHILE_HOVER}>
         <IoIosArrowDown size={18} color={COLORS.secondaryDark} />
       </motion.div>
     </components.DropdownIndicator>
@@ -49,7 +49,7 @@ const DropdownIndicator = props => {
 const ClearIndicator = props => {
   return (
     <components.ClearIndicator {...props}>
-      <motion.div style={{ marginTop: 2 }} whileHover={WHILE_HOVER}>
+      <motion.div style={{ marginTop: 4 }} whileHover={WHILE_HOVER}>
         <IoIosClose size={22} color={COLORS.secondaryDark} />
       </motion.div>
     </components.ClearIndicator>
@@ -74,6 +74,60 @@ const customStyles = {
       paddingRight: 8,
     }
   },
+  input: () => ({
+    fontFamily: fontFamily,
+    fontSize: 16,
+    color: COLORS.textColor,
+    "& input": {
+      font: "inherit",
+    },
+  }),
+  placeholder: provided => ({
+    ...provided,
+    fontSize: 16,
+    color: COLORS.textColor,
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    fontSize: 12,
+    cursor: state.isSelected ? "auto" : "pointer",
+    backgroundColor: state.isSelected
+      ? COLORS.secondaryDark
+      : state.isFocused
+      ? COLORS.secondaryLight
+      : "#fff",
+    color: state.isSelected ? "#fff" : COLORS.textColor,
+    ":active": {
+      backgroundColor: COLORS.secondaryLight,
+    },
+  }),
+  singleValue: provided => ({
+    ...provided,
+    fontSize: 16,
+  }),
+  valueContainer: provided => {
+    return {
+      ...provided,
+    }
+  },
+  control: (provided, state) => {
+    return {
+      ...provided,
+      borderColor: COLORS.secondaryDark,
+      height: 10,
+      boxShadow: "none",
+      cursor: "pointer",
+      "&:hover": {
+        borderColor: COLORS.secondaryDark,
+      },
+    }
+  },
+  indicatorSeparator: (provided, state) => {
+    return {
+      ...provided,
+      backgroundColor: COLORS.secondaryDark,
+    }
+  },
 }
 
 export default function MovieSelectorChart({
@@ -83,6 +137,7 @@ export default function MovieSelectorChart({
   setActiveMovie,
   activeMovie,
 }) {
+  console.log("activeMovie", activeMovie)
   const { state, actions } = useMovieSelectorChartReducer({ dataSets })
   const [isFirstEntered, setIsFirstEntered] = React.useState(true)
 
@@ -110,13 +165,19 @@ export default function MovieSelectorChart({
             <ControlsContainer>
               <MovieSearchContainer>
                 <Select
-                  placeholder="Select or search a title..."
+                  placeholder="Select or search a title"
                   isClearable
                   isSearchable
                   test="test"
                   options={state.movieSearchData}
                   styles={customStyles}
                   components={{ DropdownIndicator, ClearIndicator }}
+                  value={
+                    activeMovie.id && {
+                      value: activeMovie.id,
+                      label: activeMovie.data.title,
+                    }
+                  }
                   onChange={element => {
                     element
                       ? setActiveMovie({
