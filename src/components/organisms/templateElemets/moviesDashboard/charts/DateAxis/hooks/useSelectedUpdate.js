@@ -21,17 +21,6 @@ export default function useSelectedUpdate({
         const selectedCircleData = filteredData.find(
           d => d.id === activeMovieID
         )
-        if (!Number(chartArea.selectAll(".selected-line").attr("opacity"))) {
-          chartArea
-            .selectAll(".selected-line")
-            .datum(selectedCircleData)
-            .attr("x1", setX)
-            .attr("x2", setX)
-          chartArea
-            .selectAll(".selected-circle")
-            .datum(selectedCircleData)
-            .attr("cx", setX)
-        }
         chartArea
           .selectAll(".selected-circle")
           .datum(selectedCircleData)

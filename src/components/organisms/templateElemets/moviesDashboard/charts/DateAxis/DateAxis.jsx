@@ -19,7 +19,7 @@ import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
 
 import { useSelectedUpdate } from "./hooks"
-import Tooltip from "./Tooltip/Tooltip"
+import Tooltip, { LINE_WIDTH } from "./Tooltip/Tooltip"
 
 const fadeOutEffect = css`
   content: "";
@@ -69,7 +69,7 @@ const ChartSvg = styled.svg`
 `
 
 export default function DateAxis(props) {
-  const { margin, xScale, mainData, subData, activeMovie } = props
+  const { margin, xScale, mainData, subData, activeMovie, hoveredMovie } = props
   const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
   const chartAreaRef = useRef(null)
@@ -240,6 +240,48 @@ export default function DateAxis(props) {
     data: { mainData, subData },
     dims,
     addInteractions,
+  })
+
+  useEffect(() => {
+    if (
+      storedValues.current.isInit &&
+      hoveredMovie.id !== prevProps.hoveredMovie.id
+    ) {
+      const { chartArea, filteredData, currXScale } = storedValues.current
+      const setX = d => currXScale(new Date(d.release_date))
+      console.log("addInteractions -> hoveredMovie", hoveredMovie)
+      const isToTooltipTheRight = hoveredMovie.xPosition === 0
+      const posAdjust = SIZE_RANGE[0] + CIRCLE_ADJUST
+      if (hoveredMovie.id) {
+        chartArea
+          .selectAll(".hovered-circle")
+          .datum(hoveredMovie.data)
+          .attr("cx", setX)
+          .attr("opacity", 1)
+        chartArea
+          .selectAll(".hovered-horizontal-line")
+          .datum(hoveredMovie.data)
+          .attr(
+            "x1",
+            d =>
+              currXScale(new Date(d.release_date)) +
+              (isToTooltipTheRight ? posAdjust : -posAdjust)
+          )
+          .attr(
+            "x2",
+            d =>
+              currXScale(new Date(d.release_date)) +
+              (isToTooltipTheRight
+                ? posAdjust + LINE_WIDTH
+                : -(posAdjust + LINE_WIDTH))
+          )
+          .attr("opacity", 1)
+      }
+      if (!hoveredMovie.id) {
+        chartArea.selectAll(".hovered-circle").attr("opacity", 0)
+        chartArea.selectAll(".hovered-line").attr("opacity", 0)
+      }
+    }
   })
 
   return (

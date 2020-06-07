@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import styled, { css } from "styled-components"
-import useResizeAware from "react-resize-aware"
 import capitalize from "lodash/capitalize"
 
 import { Image } from "../../.."
@@ -81,7 +80,7 @@ export default function Tooltip({
   return (
     <TooltipContainer
       key={id}
-      left={xPosition ? x - WIDTH - LINE_WIDTH : x + LINE_WIDTH * 2}
+      left={xPosition ? x - WIDTH - LINE_WIDTH + 6 : x + LINE_WIDTH * 2}
       top={yPosition === 1 && 0}
       bottom={yPosition === 2 && 0}
     >
