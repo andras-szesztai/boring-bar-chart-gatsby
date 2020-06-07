@@ -91,6 +91,7 @@ export default function BubbleChart(props) {
       createCircles()
       createUpdateVoronoi()
       setNumber(filteredData.length)
+      props.setXScale && props.setXScale(currXScale)
     }
   })
 
@@ -262,6 +263,7 @@ export default function BubbleChart(props) {
     createUpdateVoronoi,
     chart,
     isSizeDynamic,
+    setXScale: props.setXScale
   })
   useActiveMovieIDUpdate({
     storedValues,

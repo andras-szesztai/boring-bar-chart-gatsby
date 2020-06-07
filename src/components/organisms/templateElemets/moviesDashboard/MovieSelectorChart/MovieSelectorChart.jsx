@@ -9,6 +9,7 @@ import {
   WHILE_HOVER,
   COLORS,
   NO_ACTIVE_MOVIE,
+  NO_HOVERED_MOVIE,
 } from "../../../../../constants/moviesDashboard"
 
 import { BubbleChart, DateAxis } from "../charts"
@@ -177,7 +178,9 @@ export default function MovieSelectorChart({
     setIsFirstEntered: setIsFirstEntered,
   })
 
-  const [testItem, setTestItem] = useState(undefined)
+  console.log(" state.hoveredMovie", state.hoveredMovie)
+  const xScale = React.useRef(null)
+
   return (
     <>
       {activeNameID && !loading.personCredits && (
@@ -190,15 +193,22 @@ export default function MovieSelectorChart({
                   isSearchable
                   test="test"
                   options={state.movieSearchData}
-                  setHoveredMovie={d =>
+                  setHoveredMovie={d => {
                     actions.setHoveredMovie({
                       id: d.value,
                       data: d.data,
                       yPosition: 1,
-                      xPosition: 1,
-                      x: 20,
+                      x: xScale.current(new Date(d.data.release_date)),
+                      xPosition: Number(
+                        +d.data.release_date.slice(0, 4) >=
+                          _.mean(
+                            state.scales.xScale
+                              .domain()
+                              .map(d => d.getFullYear())
+                          )
+                      ),
                     })
-                  }
+                  }}
                   styles={customStyles}
                   components={{
                     DropdownIndicator,
@@ -241,6 +251,7 @@ export default function MovieSelectorChart({
                 <BubbleChart
                   {...makeProps("main")}
                   tooltipYPosition={state.isBoth ? 0 : 1}
+                  setXScale={scale => (xScale.current = scale)}
                 />
                 <DateAxis
                   mainData={dataSets.personCredits[state.types.main] || []}

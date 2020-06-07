@@ -30,10 +30,8 @@ export default function useHoveredUpdate({
         yScale,
         currSizeScale,
       } = storedValues.current
-      if (!hoveredMovie.id) {
-        chartArea.select(".hovered-circle").remove()
-        chartArea.select(".hovered-line").remove()
-      }
+      chartArea.select(".hovered-circle").remove()
+      chartArea.select(".hovered-line").remove()
       if (hoveredMovie.id) {
         chartArea.selectAll(".main-circle").each((d, i, n) => {
           if (isEqual(d, hoveredMovie.data)) {

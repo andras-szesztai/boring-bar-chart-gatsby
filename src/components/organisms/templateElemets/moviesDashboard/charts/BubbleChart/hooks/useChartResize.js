@@ -10,6 +10,7 @@ export default function useChartResize({
   createUpdateVoronoi,
   chart,
   isSizeDynamic,
+  setXScale
 }) {
   useEffect(() => {
     if (storedValues.current.isInit && !isEqual(dims, prevDims)) {
@@ -55,6 +56,7 @@ export default function useChartResize({
         .attr("x", dims.width - margin.left)
         .attr("y", d => storedValues.current.yScale(d))
       createUpdateVoronoi()
+      setXScale && setXScale(currXScale)
     }
-  }, [chart, createUpdateVoronoi, dims, isSizeDynamic, margin, prevDims, storedValues])
+  }, [chart, createUpdateVoronoi, dims, isSizeDynamic, margin, prevDims, setXScale, storedValues])
 }
