@@ -12,6 +12,7 @@ export const COLORS = {
   favorite: "#ffa71e",
   textColor: colors.grayDarker,
   gridColor: colors.gray,
+  backgroundGray: colors.whiteDark,
 }
 
 export const TRANSITION = {

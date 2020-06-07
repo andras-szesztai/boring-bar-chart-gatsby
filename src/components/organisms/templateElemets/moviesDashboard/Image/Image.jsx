@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 
 import { IMAGE_ROOT } from "../../../../../constants/moviesDashboard"
+import { colors } from "../../../../../themes/theme"
 
 const ImageContainer = styled.img`
   height: 100%;
@@ -21,7 +22,7 @@ export default function Image({
     <div
       style={{
         gridArea: "photo",
-        background: "#f2f2f2",
+        background: colors.whiteDark,
         width: height * 0.66,
         height,
         borderRadius,

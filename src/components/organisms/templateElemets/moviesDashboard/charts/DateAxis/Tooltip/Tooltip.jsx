@@ -12,7 +12,7 @@ import {
 import { COLORS } from "../../../../../../../constants/moviesDashboard"
 import { useMeasure } from "react-use"
 
-const WIDTH = 280
+const WIDTH = 320
 const HEIGHT = 160
 const LINE_WIDTH = 16
 
@@ -35,7 +35,9 @@ const TooltipContainer = styled.div`
   background-color: #fff;
   filter: drop-shadow(${dropShadow.secondary});
 
-  display: flex;
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  grid-column-gap: 12px;
 `
 
 const ImageContainer = styled.div`
@@ -45,25 +47,36 @@ const ImageContainer = styled.div`
 const TextContentGrid = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 12px;
+  position: relative;
 
   .title {
-    font-size: ${themifyFontSize(1)};
+    font-size: ${themifyFontSize(2)};
     font-weight: ${themifyFontWeight(4)};
     color: ${COLORS.secondaryDark};
+    margin-bottom: ${space[1]}px;
   }
 
-  .date {
+  .section {
+    margin-top: ${space[1]}px;
     font-size: ${themifyFontSize(1)};
-    font-weight: ${themifyFontWeight(1)};
+    font-weight: ${themifyFontWeight(3)};
     color: ${COLORS.textColor};
+
+    span {
+      font-weight: ${themifyFontWeight(1)};
+    }
+  }
+
+  .score {
+    width: 100%;
+    height: 16px;
+    position: relative;
   }
 `
 
 export default function Tooltip({
   hoveredMovie: { id, data, xPosition, x, yPosition },
 }) {
-  console.log("data", data)
   if (!id) return null
   return (
     <TooltipContainer
@@ -80,12 +93,46 @@ export default function Tooltip({
       </ImageContainer>
       <TextContentGrid>
         <div className="title">{data.title}</div>
-        <div className="date">
-          Release year: {data.release_date.slice(0, 4)}
+        <div className="section">
+          Release year: <span>{data.release_date.slice(0, 4)}</span>
         </div>
-        <div className="date">Media type: {capitalize(data.media_type)}</div>
-        <div className="date">
-          {data.character ? "Character" : "Job"}: {data.job.filter(Boolean).length ? data.job.join(", ") : "N/A"}
+        <div className="section">
+          Media type: <span>{capitalize(data.media_type)}</span>
+        </div>
+        <div className="section">
+          {data.character ? "Character" : "Job"}:{" "}
+          <span>
+            {data.job.filter(Boolean).length ? data.job.join(", ") : "N/A"}
+          </span>
+        </div>
+        <div className="section">
+          <div>
+            Avg. vote: <span>{data.vote_average}</span>
+          </div>
+        </div>
+        <div className="section score">
+          <div
+            style={{
+              position: "absolute",
+              width: `${data.vote_average * 10}%`,
+              height: "100%",
+              backgroundColor: COLORS.secondary,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              border: `1px solid ${COLORS.secondaryDark}`,
+            }}
+          ></div>
+        </div>
+        <div className="section">
+          <span>
+            (based on {data.vote_count} vote
+            {data.vote_count > 1 ? "s" : ""})
+          </span>
         </div>
       </TextContentGrid>
     </TooltipContainer>
