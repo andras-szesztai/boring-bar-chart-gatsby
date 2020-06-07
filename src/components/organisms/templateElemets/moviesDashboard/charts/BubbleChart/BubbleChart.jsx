@@ -25,6 +25,7 @@ import {
   useRadiusUpdate,
   useActiveMovieIDUpdate,
   useHoveredUpdate,
+  useChartResize,
 } from "./hooks"
 import { setRadius } from "./utils"
 import { makeFilteredData } from "../../utils"
@@ -302,7 +303,6 @@ export default function BubbleChart(props) {
             update.transition().attr("d", (_, i) => delaunay.renderCell(i))
           )
       )
-
     addUpdateInteractions()
   }
 
@@ -319,6 +319,9 @@ export default function BubbleChart(props) {
     chart,
     isSizeDynamic,
     prevIsSizeDynamic: prevProps && prevProps.isSizeDynamic,
+  })
+  useChartResize({
+    dims, prevDims,
   })
   useActiveMovieIDUpdate({
     storedValues,
