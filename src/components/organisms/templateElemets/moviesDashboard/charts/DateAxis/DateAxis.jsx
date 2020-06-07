@@ -217,13 +217,14 @@ export default function DateAxis(props) {
               })
             })
             .on("mouseout", () => props.setHoveredMovie(NO_HOVERED_MOVIE))
-            .on("click", d =>
+            .on("click", d => {
               props.setActiveMovie({
                 id: d.id,
                 data: d,
                 position: getXPosition(d),
               })
-            )
+              // props.setHoveredMovie(NO_HOVERED_MOVIE)
+            })
             .call(enter => enter),
         update =>
           update.call(update =>
@@ -252,6 +253,7 @@ export default function DateAxis(props) {
       const isToTooltipTheRight = hoveredMovie.xPosition === 0
       const posAdjust = SIZE_RANGE[0] + CIRCLE_ADJUST
       if (hoveredMovie.id) {
+        const isMain = !!mainData.find(d => _.isEqual(hoveredMovie.data, d))
         chartArea
           .selectAll(".hovered-circle")
           .datum(hoveredMovie.data)
@@ -275,6 +277,23 @@ export default function DateAxis(props) {
                 : -(posAdjust + LINE_WIDTH))
           )
           .attr("opacity", 1)
+        if (isMain) {
+          chartArea
+            .select(".hovered-top-line")
+            .datum(hoveredMovie.data)
+            .attr("y2", -dims.height / 2)
+            .attr("x1", setX)
+            .attr("x2", setX)
+            .attr("opacity", 1)
+        } else {
+          chartArea
+            .select(".hovered-bottom-line")
+            .datum(hoveredMovie.data)
+            .attr("y2", dims.height / 2)
+            .attr("x1", setX)
+            .attr("x2", setX)
+            .attr("opacity", 1)
+        }
       }
       if (!hoveredMovie.id) {
         chartArea.selectAll(".hovered-circle").attr("opacity", 0)
@@ -294,7 +313,10 @@ export default function DateAxis(props) {
         />
         <g ref={voronoiRef} />
       </ChartSvg>
-      <Tooltip hoveredMovie={props.hoveredMovie} />
+      <Tooltip
+        hoveredMovie={props.hoveredMovie}
+        activeMovieID={activeMovie.id}
+      />
     </Wrapper>
   )
 }

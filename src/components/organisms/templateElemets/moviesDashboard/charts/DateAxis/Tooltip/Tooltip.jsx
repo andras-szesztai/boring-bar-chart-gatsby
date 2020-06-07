@@ -34,7 +34,7 @@ const TooltipContainer = styled.div`
   filter: drop-shadow(${dropShadow.secondary});
 
   display: grid;
-  grid-template-columns: min-content 1fr;
+  grid-template-columns: minmax(105px, min-content) 1fr;
   grid-column-gap: 12px;
   border: 1px dashed ${COLORS.secondaryDark};
 `
@@ -73,11 +73,11 @@ const TextContentGrid = styled.div`
     height: 16px;
     position: relative;
   }
-
 `
 
 export default function Tooltip({
   hoveredMovie: { id, data, xPosition, x, yPosition },
+  activeMovieID,
 }) {
   if (!id) return null
   return (
@@ -138,9 +138,11 @@ export default function Tooltip({
             }}
           ></div>
         </div>
-        <div className="section hint">
-          Click<span> to explore the {data.media_type}!</span>
-        </div>
+        {activeMovieID !== id && (
+          <div className="section hint">
+            Click<span> to explore the {data.media_type}!</span>
+          </div>
+        )}
       </TextContentGrid>
     </TooltipContainer>
   )
