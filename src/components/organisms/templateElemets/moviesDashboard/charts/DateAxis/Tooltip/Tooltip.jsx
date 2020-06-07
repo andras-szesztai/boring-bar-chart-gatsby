@@ -71,6 +71,8 @@ const TextContentGrid = styled.div`
   .score {
     width: 100%;
     height: 16px;
+    margin-top: 6px;
+    margin-bottom: 1px;
     position: relative;
   }
 `
@@ -110,7 +112,7 @@ export default function Tooltip({
         </div>
         <div className="section">
           <div>
-            Avg. vote:{" "}
+            User score:{" "}
             <span>
               {data.vote_average} &nbsp;
               <span>

@@ -23,6 +23,7 @@ import {
   useYDomainSyncUpdate,
   useRadiusUpdate,
   useActiveMovieIDUpdate,
+  useHoveredUpdate,
 } from "./hooks"
 import { setRadius } from "./utils"
 import { makeUniqData, makeFilteredData } from "../../utils"
@@ -232,6 +233,8 @@ export default function BubbleChart(props) {
       })
   }
 
+  // const timeOut = useRef(null)
+
   function createUpdateVoronoi() {
     const {
       yScale,
@@ -262,7 +265,7 @@ export default function BubbleChart(props) {
             )
             // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
-            .on("mouseover", d => {
+            .on("mouseover", d =>
               props.setHoveredMovie({
                 id: d.id,
                 data: d,
@@ -270,8 +273,11 @@ export default function BubbleChart(props) {
                 x: currXScale(new Date(d.release_date)),
                 xPosition: getXPosition(d),
               })
+            )
+            .on("mouseout", () => {
+              // clearTimeout(timeOut.current)
+              props.setHoveredMovie(NO_HOVERED_MOVIE)
             })
-            .on("mouseout", () => props.setHoveredMovie(NO_HOVERED_MOVIE))
             .on("click", setActiveMovie)
             .call(enter => enter),
         update =>
@@ -301,6 +307,14 @@ export default function BubbleChart(props) {
     activeMovieID: props.activeMovie.id,
     prevActiveMovieID: prevProps && prevProps.activeMovie.id,
     isSizeDynamic,
+    chart,
+    dims,
+  })
+  useHoveredUpdate({
+    storedValues,
+    isSizeDynamic,
+    hoveredMovie: props.hoveredMovie,
+    prevHoveredMovie: prevProps && prevProps.hoveredMovie,
     chart,
     dims,
   })

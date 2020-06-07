@@ -30,6 +30,8 @@ export default function useActiveMovieIDUpdate({
       } = storedValues.current
       chartArea.select(".selected-circle").remove()
       chartArea.select(".selected-line").remove()
+      chartArea.select(".hovered-circle").remove()
+      chartArea.select(".hovered-line").remove()
       const selectedData = filteredData.find(d => d.id === activeMovieID)
       if (selectedData) {
         chartArea.selectAll(".main-circle").each((d, i, n) => {
