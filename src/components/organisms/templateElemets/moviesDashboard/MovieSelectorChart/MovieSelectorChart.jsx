@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import Select, { components } from "react-select"
 import _ from "lodash"
+import Switch from "react-switch"
 
 import {
   HANDLE_SIZE,
@@ -17,6 +18,7 @@ import { MainContainer, SubContainer, ChartContainer } from "./styles"
 import { space, fontFamily } from "../../../../../themes/theme"
 import { IoIosArrowDown, IoIosClose, IoIosSearch } from "react-icons/io"
 import { usePrevious } from "../../../../../hooks"
+import { themifyFontSize } from "../../../../../themes/mixins"
 
 const ControlsContainer = styled(motion.div)`
   display: flex;
@@ -24,13 +26,25 @@ const ControlsContainer = styled(motion.div)`
   align-items: flex-end;
 `
 
-const MovieSearchContainer = styled(motion.div)`
+const MovieSearchContainer = styled.div`
   width: 240px;
 
   display: flex;
   flex-direction: column;
-  margin-right: ${space[2]}px;
+  margin-right: ${space[3]}px;
   z-index: 6;
+`
+
+const CheckBoxContainer = styled.div`
+  margin-right: ${space[3]}px;
+  display: flex;
+  align-items: flex-end;
+
+  div {
+    font-size: ${themifyFontSize(1)};
+  }
+
+  cursor: pointer;
 `
 
 const DropdownIndicator = props => {
@@ -228,7 +242,25 @@ export default function MovieSelectorChart({
                   }}
                 />
               </MovieSearchContainer>
-              <div onClick={actions.setIsYDomainSynced}>Y-domain</div>
+              <CheckBoxContainer>
+                <Switch
+                  checked={!state.isYDomainSynced}
+                  onChange={actions.setIsYDomainSynced}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  width={32}
+                  height={16}
+                  offColor={COLORS.textColor}
+                  onColor={COLORS.backgroundGray}
+                />
+                <div
+                  onClick={actions.setIsYDomainSynced}
+                  role="checkbox"
+                  aria-checked={!state.isYDomainSynced}
+                >
+                  Fixed/Dynamic score axis
+                </div>
+              </CheckBoxContainer>
               <div onClick={actions.setIsSizeSynced}>Size</div>
             </ControlsContainer>
             {typeof state.isBoth == "boolean" && (

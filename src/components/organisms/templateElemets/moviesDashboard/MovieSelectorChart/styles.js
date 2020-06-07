@@ -20,7 +20,7 @@ export const SubContainer = styled.div`
   width: calc(100% - (2 * ${HANDLE_SIZE}px));
   height: 80%;
 
-  grid-template-rows: 60px auto;
+  grid-template-rows: 50px auto;
 `
 
 export const ChartContainer = styled.div`

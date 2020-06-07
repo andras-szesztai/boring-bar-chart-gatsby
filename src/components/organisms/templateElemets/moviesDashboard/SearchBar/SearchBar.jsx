@@ -25,7 +25,7 @@ const SearchBarSubContainer = styled(motion.div)`
 
 const StyledSearchBar = styled(motion.input)`
   z-index: ${themifyZIndex("hoverOverlay")};
-  width: ${CARD_WIDTH}px;
+  width: ${CARD_WIDTH - 50}px;
   height: 40px;
   border-radius: ${space[1]}px;
   background: ${COLORS.primary};
@@ -190,7 +190,7 @@ export default function SearchBar({ setActiveNameID }) {
         <StyledSearchBar
           animate={{
             paddingLeft: searchIsFocused ? 10 : 40,
-            width: CARD_WIDTH,
+            width: CARD_WIDTH - 50,
           }}
           initial={{
             paddingLeft: 40,
@@ -203,7 +203,7 @@ export default function SearchBar({ setActiveNameID }) {
           type="text"
           id="search"
           name="name search"
-          placeholder="Search for a film director, actress, writer . . . "
+          placeholder="Search for a film director, actor, writer . . . "
           size="50"
           autoComplete="off"
           onFocus={() => setSearchIsFocused(true)}
