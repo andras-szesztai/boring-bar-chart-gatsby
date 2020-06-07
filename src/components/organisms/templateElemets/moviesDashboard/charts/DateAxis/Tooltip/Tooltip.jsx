@@ -79,13 +79,14 @@ export default function Tooltip({
   hoveredMovie: { id, data, xPosition, x, yPosition },
   activeMovieID,
 }) {
+  console.log("yPosition", yPosition)
   if (!id) return null
   return (
     <TooltipContainer
       key={id}
       left={xPosition ? x - WIDTH - LINE_WIDTH + 6 : x + LINE_WIDTH * 2}
-      top={yPosition === 1 && 0}
-      bottom={yPosition === 2 && 0}
+      top={yPosition === 0 && 0}
+      bottom={yPosition === 1 && 0}
     >
       <ImageContainer>
         <Image

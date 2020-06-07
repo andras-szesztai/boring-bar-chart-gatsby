@@ -14,6 +14,7 @@ import {
   COLORS,
   SIZE_RANGE,
   CHART_SIDE_MARGINS,
+  NO_HOVERED_MOVIE,
 } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize } from "../../../../../../themes/theme"
@@ -215,15 +216,19 @@ export default function BubbleChart(props) {
       .text(d => d)
   }
 
-  function setActiveMovie(d) {
+  function getXPosition(d) {
     const { currXScale } = storedValues.current
+    return Number(
+      currXScale(new Date(d.release_date)) + margin.left >= dims.width / 2
+    )
+  }
+
+  function setActiveMovie(d) {
     props.activeMovie.id !== d.id &&
       props.setActiveMovie({
         id: d.id,
         data: d,
-        position: Number(
-          currXScale(new Date(d.release_date)) + margin.left >= dims.width / 2
-        ),
+        position: getXPosition(d),
       })
   }
 
@@ -257,7 +262,16 @@ export default function BubbleChart(props) {
             )
             // .attr("stroke", "#333")
             .attr("d", (_, i) => delaunay.renderCell(i))
-            // .on("mouseover", d => console.log(d))
+            .on("mouseover", d => {
+              props.setHoveredMovie({
+                id: d.id,
+                data: d,
+                yPosition: props.tooltipYPosition,
+                x: currXScale(new Date(d.release_date)),
+                xPosition: getXPosition(d),
+              })
+            })
+            .on("mouseout", () => props.setHoveredMovie(NO_HOVERED_MOVIE))
             .on("click", setActiveMovie)
             .call(enter => enter),
         update =>

@@ -186,8 +186,6 @@ export default function DateAxis(props) {
     )
   }
 
-  function addInteractions() {}
-
   function createUpdateVoronoi() {
     const { currXScale, filteredData } = storedValues.current
     const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
@@ -207,15 +205,15 @@ export default function DateAxis(props) {
             .attr("class", "voronoi-path")
             .attr("fill", "transparent")
             .attr("d", (_, i) => delaunay.renderCell(i))
-            .on("mouseover", d => {
+            .on("mouseover", d =>
               props.setHoveredMovie({
                 id: d.id,
                 data: d,
-                yPosition: props.isBoth ? 1 : 2,
+                yPosition: !!mainData.find(mD => _.isEqual(d, mD)) ? 0 : 1,
                 x: currXScale(new Date(d.release_date)),
                 xPosition: getXPosition(d),
               })
-            })
+            )
             .on("mouseout", () => props.setHoveredMovie(NO_HOVERED_MOVIE))
             .on("click", d => {
               props.setActiveMovie({
@@ -223,7 +221,6 @@ export default function DateAxis(props) {
                 data: d,
                 position: getXPosition(d),
               })
-              // props.setHoveredMovie(NO_HOVERED_MOVIE)
             })
             .call(enter => enter),
         update =>
@@ -248,7 +245,7 @@ export default function DateAxis(props) {
     hoveredMovie,
     prevHoveredMovie: prevProps && prevProps.hoveredMovie,
     dims,
-    mainData
+    mainData,
   })
 
   return (

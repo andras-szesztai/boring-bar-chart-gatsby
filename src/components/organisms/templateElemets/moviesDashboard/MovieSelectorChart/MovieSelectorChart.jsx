@@ -59,6 +59,8 @@ export default function MovieSelectorChart({
     isSizeDynamic: state.isSizeDynamic,
     setActiveMovie: setActiveMovie,
     activeMovie: activeMovie,
+    setHoveredMovie: actions.setHoveredMovie,
+    hoveredMovie: state.hoveredMovie,
   })
 
   return (
@@ -72,7 +74,10 @@ export default function MovieSelectorChart({
             </PlaceHolderDiv>
             {typeof state.isBoth == "boolean" && (
               <ChartContainer twoCharts={state.isBoth}>
-                <BubbleChart {...makeProps("main")} />
+                <BubbleChart
+                  {...makeProps("main")}
+                  tooltipYPosition={state.isBoth ? 0 : 1}
+                />
                 <DateAxis
                   mainData={dataSets.personCredits[state.types.main] || []}
                   subData={dataSets.personCredits[state.types.sub] || []}
@@ -84,7 +89,12 @@ export default function MovieSelectorChart({
                   hoveredMovie={state.hoveredMovie}
                   isBoth={state.isBoth}
                 />
-                {state.isBoth && <BubbleChart {...makeProps("sub")} />}
+                {state.isBoth && (
+                  <BubbleChart
+                    {...makeProps("sub")}
+                    tooltipYPosition={1}
+                  />
+                )}
               </ChartContainer>
             )}
           </SubContainer>
