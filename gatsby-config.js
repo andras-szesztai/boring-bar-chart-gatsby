@@ -53,12 +53,13 @@ module.exports = {
         accessToken: "ih7LJB9xSp9alB5BlKkaxBKmCdtDhG2Rknw_xe5PDdY",
       },
     },
-    // {
-    //   resolve: `gatsby-plugin-page-creator`,
-    //   options: {
-    //     path: `${__dirname}/posts`,
-    //   },
-    // },
+    {
+      resolve: `gatsby-plugin-hotjar`,
+      options: {
+        id: 1845129,
+        sv: 6
+      },
+    },
   ],
 }
 

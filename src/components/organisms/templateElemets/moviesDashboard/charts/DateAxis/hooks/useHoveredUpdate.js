@@ -12,9 +12,9 @@ export default function useHoveredUpdate({
   hoveredMovie,
   prevHoveredMovie,
   dims,
-  mainData
+  mainData,
+  addUpdateInteractions,
 }) {
-
   React.useEffect(() => {
     if (
       storedValues.current.isInit &&
@@ -71,6 +71,7 @@ export default function useHoveredUpdate({
         chartArea.selectAll(".hovered-circle").attr("opacity", 0)
         chartArea.selectAll(".hovered-line").attr("opacity", 0)
       }
+      addUpdateInteractions()
     }
   })
 }

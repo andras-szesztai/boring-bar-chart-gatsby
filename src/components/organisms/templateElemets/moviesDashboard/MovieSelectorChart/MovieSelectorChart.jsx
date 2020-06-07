@@ -48,8 +48,8 @@ export default function MovieSelectorChart({
   activeMovie,
 }) {
   const { state, actions } = useMovieSelectorChartReducer({ dataSets })
-
   const [isFirstEntered, setIsFirstEntered] = React.useState(true)
+  
   const makeProps = acc => ({
     chart: acc,
     type: state.types[acc],
@@ -94,6 +94,8 @@ export default function MovieSelectorChart({
                   setHoveredMovie={actions.setHoveredMovie}
                   hoveredMovie={state.hoveredMovie}
                   isBoth={state.isBoth}
+                  isFirstEntered={isFirstEntered}
+                  setIsFirstEntered={setIsFirstEntered}
                 />
                 {state.isBoth && (
                   <BubbleChart {...makeProps("sub")} tooltipYPosition={1} />

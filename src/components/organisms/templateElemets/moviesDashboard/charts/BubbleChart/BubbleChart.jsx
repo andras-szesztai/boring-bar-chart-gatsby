@@ -15,7 +15,7 @@ import {
   SIZE_RANGE,
   CHART_SIDE_MARGINS,
   NO_HOVERED_MOVIE,
-  TIMEOUT
+  TIMEOUT,
 } from "../../../../../../constants/moviesDashboard"
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors, fontSize } from "../../../../../../themes/theme"
@@ -234,18 +234,14 @@ export default function BubbleChart(props) {
       })
   }
 
-  function addUpdateInteractions() {
-    const {
-      currXScale,
-      voronoiArea,
-    } = storedValues.current
+  const timeOut = useRef(null)
 
-    console.log(props.isFirstEntered)
+  function addUpdateInteractions() {
+    const { currXScale, voronoiArea } = storedValues.current
 
     voronoiArea
       .selectAll(".voronoi-path")
       .on("mouseover", d => {
-        console.log(props.isFirstEntered)
         const setHoveredMovie = () =>
           props.setHoveredMovie({
             id: d.id,
@@ -270,8 +266,6 @@ export default function BubbleChart(props) {
       })
       .on("click", setActiveMovie)
   }
-
-  const timeOut = useRef(null)
 
   function createUpdateVoronoi() {
     const {

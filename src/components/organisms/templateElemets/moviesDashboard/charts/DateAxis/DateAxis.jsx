@@ -14,6 +14,7 @@ import {
   CIRCLE_ADJUST,
   CHART_SIDE_MARGINS,
   NO_HOVERED_MOVIE,
+  TIMEOUT,
 } from "../../../../../../constants/moviesDashboard"
 import { fontSize } from "../../../../../../themes/theme"
 import { usePrevious } from "../../../../../../hooks"
@@ -88,12 +89,14 @@ export default function DateAxis(props) {
       ])
       const chartArea = select(chartAreaRef.current)
       const svgArea = select(svgAreaRef.current)
+      const voronoiArea = select(voronoiRef.current)
       storedValues.current = {
         isInit: true,
         currXScale,
         filteredData,
         chartArea,
         svgArea,
+        voronoiArea,
       }
       createDateAxis()
       createUpdateVoronoi()
@@ -186,10 +189,47 @@ export default function DateAxis(props) {
     )
   }
 
-  function addInteractions() {}
+  const timeOut = useRef(null)
+
+  function addUpdateInteractions() {
+    const { currXScale, voronoiArea } = storedValues.current
+
+    voronoiArea
+      .selectAll(".voronoi-path")
+      .on("mouseover", d => {
+        const setHoveredMovie = () =>
+          props.setHoveredMovie({
+            id: d.id,
+            data: d,
+            yPosition: !!mainData.find(mD => _.isEqual(d, mD)) ? 0 : 1,
+            x: currXScale(new Date(d.release_date)),
+            xPosition: getXPosition(d),
+          })
+        if (!props.isFirstEntered) {
+          setHoveredMovie()
+        }
+        if (props.isFirstEntered) {
+          timeOut.current = setTimeout(() => {
+            props.setIsFirstEntered(false)
+            setHoveredMovie()
+          }, TIMEOUT.short)
+        }
+      })
+      .on("mouseout", () => {
+        clearTimeout(timeOut.current)
+        props.setHoveredMovie(NO_HOVERED_MOVIE)
+      })
+      .on("click", d => {
+        props.setActiveMovie({
+          id: d.id,
+          data: d,
+          position: getXPosition(d),
+        })
+      })
+  }
 
   function createUpdateVoronoi() {
-    const { currXScale, filteredData } = storedValues.current
+    const { currXScale, filteredData, voronoiArea } = storedValues.current
     const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
     const delaunay = Delaunay.from(
       filteredData,
@@ -197,7 +237,7 @@ export default function DateAxis(props) {
       () => dims.height / 2
     ).voronoi([0, 0, dims.width, dims.height])
 
-    select(voronoiRef.current)
+    voronoiArea
       .selectAll(".voronoi-path")
       .data(filteredData, d => d.id)
       .join(
@@ -207,29 +247,13 @@ export default function DateAxis(props) {
             .attr("class", "voronoi-path")
             .attr("fill", "transparent")
             .attr("d", (_, i) => delaunay.renderCell(i))
-            .on("mouseover", d =>
-              props.setHoveredMovie({
-                id: d.id,
-                data: d,
-                yPosition: !!mainData.find(mD => _.isEqual(d, mD)) ? 0 : 1,
-                x: currXScale(new Date(d.release_date)),
-                xPosition: getXPosition(d),
-              })
-            )
-            .on("mouseout", () => props.setHoveredMovie(NO_HOVERED_MOVIE))
-            .on("click", d => {
-              props.setActiveMovie({
-                id: d.id,
-                data: d,
-                position: getXPosition(d),
-              })
-            })
             .call(enter => enter),
         update =>
           update.call(update =>
             update.transition().attr("d", (_, i) => delaunay.renderCell(i))
           )
       )
+    addUpdateInteractions()
   }
 
   useSelectedUpdate({
@@ -239,7 +263,7 @@ export default function DateAxis(props) {
     type: props.type,
     data: { mainData, subData },
     dims,
-    addInteractions,
+    addUpdateInteractions,
   })
 
   useHoveredUpdate({
@@ -248,6 +272,16 @@ export default function DateAxis(props) {
     prevHoveredMovie: prevProps && prevProps.hoveredMovie,
     dims,
     mainData,
+    addUpdateInteractions,
+  })
+
+  useEffect(() => {
+    if (
+      storedValues.current.isInit &&
+      props.isFirstEntered !== prevProps.isFirstEntered
+    ) {
+      addUpdateInteractions()
+    }
   })
 
   return (
