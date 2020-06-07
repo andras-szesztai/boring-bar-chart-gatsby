@@ -10,7 +10,6 @@ import {
   themifyFontWeight,
 } from "../../../../../../../themes/mixins"
 import { COLORS } from "../../../../../../../constants/moviesDashboard"
-import { useMeasure } from "react-use"
 
 const WIDTH = 320
 const HEIGHT = 160
@@ -38,6 +37,7 @@ const TooltipContainer = styled.div`
   display: grid;
   grid-template-columns: 105px 1fr;
   grid-column-gap: 12px;
+  border: 1px dashed ${COLORS.secondaryDark};
 `
 
 const ImageContainer = styled.div`
@@ -82,7 +82,8 @@ export default function Tooltip({
     <TooltipContainer
       key={id}
       left={xPosition ? x - WIDTH - LINE_WIDTH : x + LINE_WIDTH * 2}
-      top={0}
+      top={yPosition === 1 && 0}
+      bottom={yPosition === 2 && 0}
     >
       <ImageContainer>
         <Image
@@ -138,12 +139,3 @@ export default function Tooltip({
     </TooltipContainer>
   )
 }
-
-// poster_path: "/glrievSqGcTj7O6AQlGdbwUAsWa.jpg"
-
-// title: "Amblin'"
-// release_date: "1968-12-18"
-// media_type: "movie"
-// vote_average: 6.3
-// vote_count: 20
-// job: (2) ["Director", "Writer"]

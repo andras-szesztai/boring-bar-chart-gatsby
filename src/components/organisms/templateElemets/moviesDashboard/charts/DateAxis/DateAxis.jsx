@@ -97,7 +97,7 @@ export default function DateAxis(props) {
       }
       createDateAxis()
       createUpdateVoronoi()
-      createRefElements()
+      createRefElements("selected")
     }
   })
 
@@ -118,10 +118,11 @@ export default function DateAxis(props) {
       })
   }
 
-  function createRefElements() {
+  function createRefElements(className) {
     const { chartArea } = storedValues.current
     chartArea
       .append("circle")
+      .attr("class", `${className}-circle`)
       .attr("cy", 0)
       .attr("cx", 0)
       .attr("r", SIZE_RANGE[0] + CIRCLE_ADJUST)
@@ -131,6 +132,7 @@ export default function DateAxis(props) {
       .attr("opacity", 0)
     chartArea
       .append("circle")
+      .attr("class", `${className}-circle`)
       .attr("cy", 0)
       .attr("cx", 0)
       .attr("r", SIZE_RANGE[0])
@@ -140,7 +142,7 @@ export default function DateAxis(props) {
       .attr("opacity", 0)
     chartArea
       .append("line")
-      .attr("class", "top-line line")
+      .attr("class", `${className}-top-line ${className}-line`)
       .attr("y1", -SIZE_RANGE[0] - CIRCLE_ADJUST)
       .attr("y2", -SIZE_RANGE[0] - CIRCLE_ADJUST)
       .attr("x1", 0)
@@ -150,7 +152,7 @@ export default function DateAxis(props) {
       .attr("opacity", 0)
     chartArea
       .append("line")
-      .attr("class", "bottom-line line")
+      .attr("class", `${className}-bottom-line ${className}-line`)
       .attr("y1", SIZE_RANGE[0] + CIRCLE_ADJUST)
       .attr("y2", SIZE_RANGE[0] + CIRCLE_ADJUST)
       .attr("x1", 0)
