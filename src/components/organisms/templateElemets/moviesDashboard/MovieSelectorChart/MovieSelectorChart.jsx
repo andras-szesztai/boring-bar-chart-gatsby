@@ -15,11 +15,7 @@ import { BubbleChart, DateAxis } from "../charts"
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
 import { space, fontFamily, fontSize } from "../../../../../themes/theme"
-import {
-  IoIosArrowDropdownCircle,
-  IoIosArrowDown,
-  IoIosClose,
-} from "react-icons/io"
+import { IoIosArrowDown, IoIosClose, IoIosSearch } from "react-icons/io"
 
 const ControlsContainer = styled(motion.div)`
   display: flex;
@@ -56,6 +52,30 @@ const ClearIndicator = props => {
   )
 }
 
+
+const Option = props => {
+  return (
+    <components.Option {...props}>
+      <div onMouseEnter={() => console.log(props)}>
+        Hello
+      </div>
+    </components.Option>
+  )
+}
+
+const Placeholder = props => {
+  return (
+    <components.Placeholder {...props}>
+      <div style={{ display: "flex" }}>
+        <motion.div style={{ marginTop: 6 }} whileHover={WHILE_HOVER}>
+          <IoIosSearch size={20} color={COLORS.secondaryDark} />{" "}
+        </motion.div>
+        <div  style={{ marginTop: 4, marginLeft: 8 }}>Search for a title</div>
+      </div>
+    </components.Placeholder>
+  )
+}
+
 const customStyles = {
   clearIndicator: provided => {
     return {
@@ -86,6 +106,7 @@ const customStyles = {
     ...provided,
     fontSize: 16,
     color: COLORS.textColor,
+    fontWeight: 300,
   }),
   option: (provided, state) => ({
     ...provided,
@@ -114,7 +135,6 @@ const customStyles = {
     return {
       ...provided,
       borderColor: COLORS.secondaryDark,
-      height: 10,
       boxShadow: "none",
       cursor: "pointer",
       "&:hover": {
@@ -165,13 +185,17 @@ export default function MovieSelectorChart({
             <ControlsContainer>
               <MovieSearchContainer>
                 <Select
-                  placeholder="Select or search a title"
                   isClearable
                   isSearchable
                   test="test"
                   options={state.movieSearchData}
                   styles={customStyles}
-                  components={{ DropdownIndicator, ClearIndicator }}
+                  components={{
+                    DropdownIndicator,
+                    ClearIndicator,
+                    Placeholder,
+                    Option
+                  }}
                   value={
                     activeMovie.id && {
                       value: activeMovie.id,
