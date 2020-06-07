@@ -3,7 +3,6 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import Select, { components } from "react-select"
 import _ from "lodash"
-import Switch from "react-switch"
 
 import {
   HANDLE_SIZE,
@@ -11,6 +10,7 @@ import {
   COLORS,
   NO_ACTIVE_MOVIE,
 } from "../../../../../constants/moviesDashboard"
+import { themifyFontSize } from "../../../../../themes/mixins"
 
 import { BubbleChart, DateAxis } from "../charts"
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
@@ -18,7 +18,7 @@ import { MainContainer, SubContainer, ChartContainer } from "./styles"
 import { space, fontFamily } from "../../../../../themes/theme"
 import { IoIosArrowDown, IoIosClose, IoIosSearch } from "react-icons/io"
 import { usePrevious } from "../../../../../hooks"
-import { themifyFontSize } from "../../../../../themes/mixins"
+import Switch from "../Switch/Switch"
 
 const ControlsContainer = styled(motion.div)`
   display: flex;
@@ -36,18 +36,18 @@ const MovieSearchContainer = styled.div`
 `
 
 const CheckBoxContainer = styled.div`
-  margin-right: ${space[6]}px;
+  margin-right: ${space[4]}px;
   display: flex;
-  align-items: flex-end;
-  height: 32px;
+  align-items: center;
+  height: 36px;
 
-  div {
+  label {
+    cursor: pointer;
     font-size: ${themifyFontSize(2)};
     color: ${COLORS.textColor};
     margin-right: ${space[2]}px;
+    margin-left: ${space[2]}px;
   }
-
-  cursor: pointer;
 `
 
 const DropdownIndicator = props => {
@@ -245,56 +245,18 @@ export default function MovieSelectorChart({
                   }}
                 />
               </MovieSearchContainer>
-              <CheckBoxContainer>
-                <div
-                  onClick={() => actions.setIsYDomainSynced(false)}
-                  role="button"
-                >
-                  Dynamic
-                </div>
-                <Switch
-                  checked={state.isYDomainSynced}
-                  onChange={() =>
-                    actions.setIsYDomainSynced(!state.isYDomainSynced)
-                  }
-                  uncheckedIcon={false}
-                  checkedIcon={false}
-                  width={40}
-                  height={20}
-                  onColor={COLORS.textColor}
-                  offColor={COLORS.textColor}
-                />
-                <div
-                  onClick={() => actions.setIsYDomainSynced(true)}
-                  role="button"
-                >
-                  Fixed score axis
-                </div>
-              </CheckBoxContainer>
-              <CheckBoxContainer>
-                <div
-                  onClick={() => actions.setIsSizeSynced(false)}
-                  role="button"
-                >
-                  Dynamic
-                </div>
-                <Switch
-                  checked={state.isSizeDynamic}
-                  onChange={() => actions.setIsSizeSynced(!state.isSizeDynamic)}
-                  uncheckedIcon={false}
-                  checkedIcon={false}
-                  width={40}
-                  height={20}
-                  onColor={COLORS.textColor}
-                  offColor={COLORS.textColor}
-                />
-                <div
-                  onClick={() => actions.setIsSizeSynced(true)}
-                  role="button"
-                >
-                  Fixed dot size
-                </div>
-              </CheckBoxContainer>
+              <Switch
+                handleAction={actions.setIsYDomainSynced}
+                value={state.isYDomainSynced}
+                offText="Dynamic"
+                onText="Fixed score axis"
+              />
+              <Switch
+                handleAction={actions.setIsSizeSynced}
+                value={state.isSizeDynamic}
+                offText="Fixed"
+                onText="Dynamic dot size"
+              />
             </ControlsContainer>
             {typeof state.isBoth == "boolean" && (
               <ChartContainer
