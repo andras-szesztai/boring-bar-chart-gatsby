@@ -4,6 +4,7 @@ import "d3-transition"
 
 import { getSelectedLineYPos } from "../utils"
 import { makeTransition } from "../../../../../../../utils/chartHelpers"
+import { transition } from "../../../../../../../themes/theme"
 
 export default function useYDomainSyncUpdate({
   storedValues,
@@ -28,15 +29,16 @@ export default function useYDomainSyncUpdate({
       yScale.domain(
         isYDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
       )
-      const t = makeTransition(chartArea, 500, "y-update")
+      const tChart = makeTransition(chartArea, transition.mdNum, "y-update")
+      const tGrid = makeTransition(gridArea, transition.mdNum, "y-update")
       const setY = d => yScale(d)
       chartArea
         .selectAll(".main-circle circle")
-        .transition(t)
+        .transition(tChart)
         .attr("cy", ({ vote_average }) => yScale(vote_average))
       chartArea
         .select(".selected-line")
-        .transition(t)
+        .transition(tChart)
         .attr("y1", d =>
           getSelectedLineYPos({
             data: d,
@@ -46,12 +48,12 @@ export default function useYDomainSyncUpdate({
         )
       gridArea
         .selectAll(".grid-line")
-        .transition(t)
+        .transition(tGrid)
         .attr("y1", setY)
         .attr("y2", setY)
       gridArea
         .selectAll(".grid-text")
-        .transition(t)
+        .transition(tGrid)
         .attr("y", setY)
       createUpdateVoronoi()
       storedValues.current = {

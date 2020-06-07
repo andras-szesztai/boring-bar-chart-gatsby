@@ -27,8 +27,8 @@ export const WHILE_HOVER = {
 }
 
 export const CHART_SIDE_MARGINS = {
-  left: 10,
-  right: 20,
+  left: 15,
+  right: 25,
 }
 
 export const SIZE_RANGE = [2, 20]
@@ -103,5 +103,5 @@ export const NO_HOVERED_MOVIE = {
 }
 
 export const TIMEOUT = {
-  short: 300
+  short: 500
 }

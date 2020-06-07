@@ -36,7 +36,7 @@ const fadeOutEffect = css`
   left: 0;
   pointer-events: none;
   width: 100%;
-  height: 2.5rem;
+  height: 2rem;
 `
 
 const Wrapper = styled.div`

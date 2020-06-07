@@ -1,6 +1,7 @@
 import React from "react"
 import { select } from "d3-selection"
 import chroma from "chroma-js"
+import isEqual from "lodash/isEqual"
 
 import {
   COLORS,
@@ -35,7 +36,7 @@ export default function useHoveredUpdate({
       }
       if (hoveredMovie.id) {
         chartArea.selectAll(".main-circle").each((d, i, n) => {
-          if (d.id === hoveredMovie.id) {
+          if (isEqual(d, hoveredMovie.data)) {
             const selection = select(n[i])
             selection
               .append("circle")
