@@ -186,6 +186,8 @@ export default function DateAxis(props) {
     )
   }
 
+  function addInteractions() {}
+
   function createUpdateVoronoi() {
     const { currXScale, filteredData } = storedValues.current
     const setXPos = d => currXScale(new Date(d.release_date)) + margin.left

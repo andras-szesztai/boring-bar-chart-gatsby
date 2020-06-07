@@ -79,7 +79,6 @@ export default function Tooltip({
   hoveredMovie: { id, data, xPosition, x, yPosition },
   activeMovieID,
 }) {
-  console.log("yPosition", yPosition)
   if (!id) return null
   return (
     <TooltipContainer
