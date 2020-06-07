@@ -1,4 +1,5 @@
 import { useReducer, useEffect } from "react"
+import uniqBy from "lodash/uniqBy"
 
 import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
@@ -6,6 +7,7 @@ import { usePrevious } from "../../../../../../hooks"
 
 const initialState = {
   nameId: undefined,
+  movieSearchData: [],
   types: {
     main: undefined,
     sub: undefined,
@@ -35,6 +37,7 @@ function movieSelectorChartReducer(state, { type, payload }) {
     SET_CHART_START_SETTINGS: () => ({
       ...state,
       nameId: payload.nameId,
+      movieSearchData: payload.movieSearchData,
       types: {
         main: payload.mainType,
         sub: payload.subType,
@@ -63,10 +66,7 @@ function movieSelectorChartReducer(state, { type, payload }) {
 
 export default function useMovieSelectorChartReducer({ dataSets }) {
   //const prevDataSets = usePrevious(dataSets)
-  const [state, dispatch] = useReducer(
-    movieSelectorChartReducer,
-    initialState
-  )
+  const [state, dispatch] = useReducer(movieSelectorChartReducer, initialState)
 
   const actions = {
     setChartStartSettings: payload =>
@@ -88,6 +88,12 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
         ...dataSets.personCredits.crew,
         ...dataSets.personCredits.cast,
       ].filter(d => !!d.release_date && !!d.vote_count)
+      const movieSearchData = uniqBy(data, "id")
+        .map(el => ({
+          value: el.id,
+          label: el.title,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label))
       const xScale = scaleTime().domain(
         extent(data, d => new Date(d.release_date))
       )
@@ -100,6 +106,7 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
         isBoth,
         xScale,
         sizeScale,
+        movieSearchData,
       })
     }
   }, [actions, state, dataSets])

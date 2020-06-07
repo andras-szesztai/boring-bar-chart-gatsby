@@ -1,24 +1,52 @@
-import React from "react"
+import React, { useState } from "react"
+import axios from "axios"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { IoIosSearch, IoIosClose } from "react-icons/io"
+import { AnimatePresence, motion } from "framer-motion"
+import chroma from "chroma-js"
 
-import { HANDLE_SIZE } from "../../../../../constants/moviesDashboard"
+import { HANDLE_SIZE, CARD_WIDTH, COLORS } from "../../../../../constants/moviesDashboard"
 
 import { BubbleChart, DateAxis } from "../charts"
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
+import { space, fontFamily } from "../../../../../themes/theme"
+import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
 
 const ControlsContainer = styled(motion.div)`
-
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
-  border: 1px solid #ccc;
 `
 
 const MovieSearchContainer = styled(motion.div)`
-  width: 200px;
-  height: 50px;
+  display: flex;
+  flex-direction: column;
+  margin-right: ${space[2]}px;
+  z-index: 4;
+`
+
+
+const StyledSearchBar = styled(motion.input)`
+  z-index: ${themifyZIndex("hoverOverlay")};
+  width: 300px;
+  height: 30px;
+  border-radius: ${space[1]}px;
+  background: ${COLORS.secondary};
+  color: #fff;
+  border: 1px solid ${chroma(COLORS.secondary).darken()};
+  font-family: ${fontFamily};
+  font-size: ${themifyFontSize(2)};
+  font-weight: 300;
+  outline: none;
+
+  padding-bottom: 2px;
+
+  &::placeholder {
+    font-weight: 300;
+    color: ${chroma(COLORS.primary).brighten(3)};
+    font-family: inherit;
+  }
 `
 
 export default function MovieSelectorChart({
@@ -31,6 +59,7 @@ export default function MovieSelectorChart({
   const { state, actions } = useMovieSelectorChartReducer({ dataSets })
   const [isFirstEntered, setIsFirstEntered] = React.useState(true)
 
+  console.log("state", state.movieSearchData)
   const makeProps = acc => ({
     chart: acc,
     type: state.types[acc],
@@ -53,6 +82,9 @@ export default function MovieSelectorChart({
         <MainContainer>
           <SubContainer>
             <ControlsContainer>
+              <MovieSearchContainer>
+                <StyledSearchBar/>
+              </MovieSearchContainer>
               <div onClick={actions.setIsYDomainSynced}>Y-domain</div>
               <div onClick={actions.setIsSizeSynced}>Size</div>
             </ControlsContainer>
