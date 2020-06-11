@@ -1,6 +1,7 @@
 import React from "react"
 import styled, { css } from "styled-components"
 import capitalize from "lodash/capitalize"
+import chroma from "chroma-js"
 
 import { Image } from "../../.."
 import { dropShadow, space } from "../../../../../../../themes/theme"
@@ -79,7 +80,7 @@ const TextContentGrid = styled.div`
 export default function Tooltip({
   hoveredMovie: { id, data, xPosition, yPosition },
   activeMovieID,
-  xScale
+  xScale,
 }) {
   if (!id) return null
   const x = xScale(new Date(data.release_date))
@@ -130,6 +131,7 @@ export default function Tooltip({
               width: `${data.vote_average * 10}%`,
               height: "100%",
               backgroundColor: COLORS.secondary,
+              borderRadius: 2
             }}
           />
           <div
@@ -137,9 +139,10 @@ export default function Tooltip({
               position: "absolute",
               width: "100%",
               height: "100%",
-              border: `1px solid ${COLORS.secondaryDark}`,
+              border: `1px solid ${chroma(COLORS.secondary).darken()}`,
+              borderRadius: 2
             }}
-          ></div>
+          />
         </div>
         {activeMovieID !== id && (
           <div className="section hint">

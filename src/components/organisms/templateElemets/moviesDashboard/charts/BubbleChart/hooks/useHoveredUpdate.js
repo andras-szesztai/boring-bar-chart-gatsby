@@ -43,8 +43,7 @@ export default function useHoveredUpdate({
               .attr("cx", d => currXScale(new Date(d.release_date)))
               .attr("cy", d => yScale(d.vote_average))
               .attr("fill", "#fff")
-              .attr("stroke", chroma(COLORS.secondary).darken())
-              .attr("stroke-dasharray", "2.5,2")
+              .attr("stroke", COLORS.secondary)
               .attr("r", d =>
                 setRadius({
                   adjust: CIRCLE_ADJUST,
@@ -68,8 +67,7 @@ export default function useHoveredUpdate({
                 })
               )
               .attr("y2", isMainChart ? dims.height : -dims.height)
-              .attr("stroke", chroma(COLORS.secondary).darken())
-              .attr("stroke-dasharray", "3,2")
+              .attr("stroke", COLORS.secondary)
           }
         })
       }

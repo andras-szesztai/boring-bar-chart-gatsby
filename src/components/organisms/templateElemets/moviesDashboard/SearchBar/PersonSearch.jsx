@@ -28,7 +28,7 @@ export default function PersonSearch({ setActiveNameID }) {
       handleResultSelect={id => setActiveNameID({ id })}
       results={nameSearchResults}
       setResults={setNameSearchResults}
-      color={COLORS.secondary}
+      color={COLORS.primary}
     />
   )
 }

@@ -77,6 +77,10 @@ export default function DateAxis(props) {
 
   function createRefElements(className) {
     const { chartArea } = storedValues.current
+    const strokeColor =
+      className === "hovered"
+        ? COLORS.secondary
+        : chroma(COLORS.secondary).darken()
     chartArea
       .append("circle")
       .attr("class", `${className}-circle`)
@@ -84,8 +88,7 @@ export default function DateAxis(props) {
       .attr("cx", 0)
       .attr("r", SIZE_RANGE[0] + CIRCLE_ADJUST)
       .attr("fill", "#fff")
-      .attr("stroke", chroma(COLORS.secondary).darken())
-      .attr("stroke-dasharray", className === "hovered" && "2,2")
+      .attr("stroke", strokeColor)
       .attr("stroke-width", 1)
       .attr("opacity", 0)
     chartArea
@@ -95,7 +98,7 @@ export default function DateAxis(props) {
       .attr("cx", 0)
       .attr("r", SIZE_RANGE[0])
       .attr("fill", COLORS.secondary)
-      .attr("stroke", chroma(COLORS.secondary).darken())
+      .attr("stroke", strokeColor)
       .attr("stroke-width", 1)
       .attr("opacity", 0)
     chartArea
@@ -103,10 +106,9 @@ export default function DateAxis(props) {
       .attr("class", `${className}-top-line ${className}-line`)
       .attr("y1", -SIZE_RANGE[0] - CIRCLE_ADJUST)
       .attr("y2", -SIZE_RANGE[0] - CIRCLE_ADJUST)
-      .attr("stroke-dasharray", className === "hovered" && "3,2")
+      .attr("stroke", strokeColor)
       .attr("x1", 0)
       .attr("x2", 0)
-      .attr("stroke", chroma(COLORS.secondary).darken())
       .attr("stroke-width", 1)
       .attr("opacity", 0)
     chartArea
@@ -114,10 +116,9 @@ export default function DateAxis(props) {
       .attr("class", `${className}-bottom-line ${className}-line`)
       .attr("y1", SIZE_RANGE[0] + CIRCLE_ADJUST)
       .attr("y2", SIZE_RANGE[0] + CIRCLE_ADJUST)
-      .attr("stroke-dasharray", className === "hovered" && "3,2")
+      .attr("stroke", strokeColor)
       .attr("x1", 0)
       .attr("x2", 0)
-      .attr("stroke", chroma(COLORS.secondary).darken())
       .attr("stroke-width", 1)
       .attr("opacity", 0)
     if (className === "hovered") {
@@ -126,10 +127,9 @@ export default function DateAxis(props) {
         .attr("class", `${className}-horizontal-line ${className}-line`)
         .attr("y1", 0)
         .attr("y2", 0)
-        .attr("stroke-dasharray", className === "hovered" && "3,2")
         .attr("x1", 0)
         .attr("x2", 0)
-        .attr("stroke", chroma(COLORS.secondary).darken())
+        .attr("stroke", strokeColor)
         .attr("stroke-width", 1)
         .attr("opacity", 0)
     }
