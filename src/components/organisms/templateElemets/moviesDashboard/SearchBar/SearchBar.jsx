@@ -3,11 +3,7 @@ import { IoIosSearch, IoIosClose } from "react-icons/io"
 import { AnimatePresence } from "framer-motion"
 import chroma from "chroma-js"
 
-import {
-  COLORS,
-  TRANSITION,
-  CARD_WIDTH,
-} from "../../../../../constants/moviesDashboard"
+import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
 import { useDebouncedSearch } from "../../../../../hooks"
 import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
 import {
@@ -30,21 +26,6 @@ export default function SearchBar({
   const { inputText, setInputText } = useDebouncedSearch(getResults, 1000)
   const [activeSearchResult, setActiveSearchResult] = useState(0)
   const [searchIsFocused, setSearchIsFocused] = useState(false)
-
-  const getSearchResultProps = index => {
-    return {
-      onClick: () => {
-        handleResultSelect(results[index].id)
-        setResults([])
-        setInputText("")
-        setSearchIsFocused(false)
-        setActiveSearchResult(0)
-      },
-      onMouseOver: () => {
-        setActiveSearchResult(index)
-      },
-    }
-  }
 
   return (
     <SearchBarMainContainer
@@ -118,13 +99,21 @@ export default function SearchBar({
             setSearchIsFocused(true)
           }}
           onKeyDown={({ key }) => {
-            // TODO: add option to go last when top
-            if (key === "ArrowDown" && activeSearchResult !== 4) {
-              setActiveSearchResult(prev => prev + 1)
+            if (key === "ArrowUp") {
+              if (activeSearchResult === 0) {
+                setActiveSearchResult(4)
+              } else {
+                setActiveSearchResult(prev => prev - 1)
+              }
             }
-            if (key === "ArrowUp" && activeSearchResult !== 0) {
-              setActiveSearchResult(prev => prev - 1)
+            if (key === "ArrowDown") {
+              if (activeSearchResult === 4) {
+                setActiveSearchResult(0)
+              } else {
+                setActiveSearchResult(prev => prev + 1)
+              }
             }
+
             if (key === "Enter" && results[activeSearchResult]) {
               handleResultSelect(results[activeSearchResult].id)
               setResults([])
@@ -143,41 +132,23 @@ export default function SearchBar({
               exit="exit"
               variants={variants}
             >
-              {results[0] && (
+              {results.map((res, i) => (
                 <ResultContainerContent
-                  containerProps={getSearchResultProps(0)}
-                  zIndex={4}
-                  nameSearchResult={results[0]}
+                  key={res.id}
+                  zIndex={Math.abs(i - 4)}
+                  nameSearchResult={res}
+                  handleClick={() => {
+                    handleResultSelect(res.id)
+                    setResults([])
+                    setInputText("")
+                    setSearchIsFocused(false)
+                    setActiveSearchResult(0)
+                  }}
+                  handleMouseOver={() => {
+                    setActiveSearchResult(i)
+                  }}
                 />
-              )}
-              {results[1] && (
-                <ResultContainerContent
-                  containerProps={getSearchResultProps(1)}
-                  zIndex={3}
-                  nameSearchResult={results[1]}
-                />
-              )}
-              {results[2] && (
-                <ResultContainerContent
-                  containerProps={getSearchResultProps(2)}
-                  zIndex={2}
-                  nameSearchResult={results[2]}
-                />
-              )}
-              {results[3] && (
-                <ResultContainerContent
-                  containerProps={getSearchResultProps(3)}
-                  zIndex={1}
-                  nameSearchResult={results[3]}
-                />
-              )}
-              {results[4] && (
-                <ResultContainerContent
-                  containerProps={getSearchResultProps(4)}
-                  zIndex={0}
-                  nameSearchResult={results[4]}
-                />
-              )}
+              ))}
             </ResultsContainer>
           )}
         </AnimatePresence>

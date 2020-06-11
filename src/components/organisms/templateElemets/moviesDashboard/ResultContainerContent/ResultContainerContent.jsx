@@ -68,10 +68,16 @@ const variants = {
 export default function ResultContainerContent({
   nameSearchResult,
   zIndex,
-  containerProps,
+  handleClick,
+  handleMouseOver,
 }) {
   return (
-    <ResultContainer style={{ zIndex }} variants={variants} {...containerProps}>
+    <ResultContainer
+      style={{ zIndex }}
+      variants={variants}
+      onClick={handleClick}
+      onMouseOver={handleMouseOver}
+    >
       <Image
         height={52}
         url={nameSearchResult.profile_path}
