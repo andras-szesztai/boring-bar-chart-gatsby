@@ -1,7 +1,7 @@
 import React from "react"
 import axios from "axios"
 
-import { API_ROOT } from "../../../../../constants/moviesDashboard"
+import { API_ROOT, COLORS } from "../../../../../constants/moviesDashboard"
 import SearchBar from "./SearchBar"
 
 export default function PersonSearch({ setActiveNameID }) {
@@ -28,6 +28,7 @@ export default function PersonSearch({ setActiveNameID }) {
       handleResultSelect={id => setActiveNameID({ id })}
       results={nameSearchResults}
       setResults={setNameSearchResults}
+      color={COLORS.secondary}
     />
   )
 }

@@ -3,14 +3,16 @@ import { colors, space } from "../themes/theme"
 export const IMAGE_ROOT = "https://image.tmdb.org/t/p/w500"
 export const API_ROOT = "https://api.themoviedb.org/3"
 
+
+//726a95
 export const COLORS = {
-  primaryLight: "#d6f4f7",
-  primary: "#6a8caf",
-  secondaryLight: "#BFECAC",
-  secondary: "#9ae17b",
-  secondaryDark: "#5d9c44",
-  delete: "#fc5050",
-  favorite: "#ffa71e",
+  primaryLight: "#8E7595",
+  primary: "#79627F",
+  primaryDark: "#635068",
+  secondaryLight: "#A7C8C8",
+  secondary: "#8EB7B8",
+  secondaryDark: "#75A9A9",
+  favorite: "#FFE270",
   textColor: colors.grayDarker,
   gridColor: colors.gray,
   backgroundGray: colors.whiteDark,

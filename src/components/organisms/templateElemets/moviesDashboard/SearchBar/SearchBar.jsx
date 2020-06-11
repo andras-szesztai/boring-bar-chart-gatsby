@@ -3,7 +3,7 @@ import { IoIosSearch, IoIosClose } from "react-icons/io"
 import { AnimatePresence } from "framer-motion"
 import chroma from "chroma-js"
 
-import { COLORS, TRANSITION } from "../../../../../constants/moviesDashboard"
+import { TRANSITION } from "../../../../../constants/moviesDashboard"
 import { useDebouncedSearch } from "../../../../../hooks"
 import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
 import {
@@ -22,6 +22,7 @@ export default function SearchBar({
   handleResultSelect,
   results,
   setResults,
+  color,
 }) {
   const { inputText, setInputText } = useDebouncedSearch(getResults, 1000)
   const [activeSearchResult, setActiveSearchResult] = useState(0)
@@ -44,6 +45,7 @@ export default function SearchBar({
               animate={{ y: 45 + activeSearchResult * 70, opacity: 0.15 }}
               exit={{ opacity: 0 }}
               transition={TRANSITION.primary}
+              color={color}
             />
           )}
         </AnimatePresence>
@@ -55,7 +57,7 @@ export default function SearchBar({
           }}
           transition={TRANSITION.primary}
         >
-          <IoIosSearch size={25} color={chroma(COLORS.primary).brighten(3)} />
+          <IoIosSearch size={25} color="#FFF" />
         </SearchIconContainer>
         <CloseIconContainer
           initial={{
@@ -74,7 +76,7 @@ export default function SearchBar({
           }}
           role="button"
         >
-          <IoIosClose size={25} color={chroma(COLORS.primary).brighten(3)} />
+          <IoIosClose size={25} color="#FFF" />
         </CloseIconContainer>
         <StyledSearchBar
           animate={{
@@ -89,6 +91,7 @@ export default function SearchBar({
           name="name search"
           placeholder="Search for a film director, actor, writer . . . "
           size="50"
+          color={color}
           autoComplete="off"
           onFocus={() => setSearchIsFocused(true)}
           onBlur={() => setSearchIsFocused(false)}
@@ -127,6 +130,7 @@ export default function SearchBar({
         <AnimatePresence>
           {results.length && (
             <ResultsContainer
+              color={color}
               initial="enter"
               animate="animate"
               exit="exit"

@@ -1,9 +1,9 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { motion } from "framer-motion"
 import chroma from "chroma-js"
 
 import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
-import { COLORS, CARD_WIDTH } from "../../../../../constants/moviesDashboard"
+import { CARD_WIDTH } from "../../../../../constants/moviesDashboard"
 import { space, fontFamily } from "../../../../../themes/theme"
 
 export const SearchBarMainContainer = styled(motion.div)`
@@ -23,9 +23,13 @@ export const StyledSearchBar = styled(motion.input)`
   width: ${CARD_WIDTH - 50}px;
   height: 40px;
   border-radius: ${space[1]}px;
-  background: ${COLORS.primary};
-  color: ${chroma(COLORS.primary).brighten(3)};
-  border: 1px solid ${chroma(COLORS.primary).darken()};
+    color: #FFF;
+
+  ${({ color }) => css`
+    background: ${color};
+    border: 1px solid ${chroma(color).darken()};
+  `}
+  
   font-family: ${fontFamily};
   font-size: ${themifyFontSize(2)};
   font-weight: 300;
@@ -35,8 +39,8 @@ export const StyledSearchBar = styled(motion.input)`
 
   &::placeholder {
     font-weight: 300;
-    color: ${chroma(COLORS.primary).brighten(3)};
     font-family: inherit;
+    color: #FFF;   
   }
 `
 
@@ -61,10 +65,13 @@ export const SearchItemHover = styled(motion.div)`
 
   height: 70px;
   width: 100%;
-  background-color: ${COLORS.primary};
-  border: 1px solid ${chroma(COLORS.primary).darken(2)};
   border-radius: ${space[1]}px;
   pointer-events: none;
+
+  ${({ color }) => css`
+    background-color: ${color};
+    border: 1px solid ${chroma(color).darken(2)};
+  `}
 `
 
 export const ResultsContainer = styled(motion.div)`
