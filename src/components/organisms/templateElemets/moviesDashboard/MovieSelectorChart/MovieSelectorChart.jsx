@@ -47,14 +47,14 @@ export default function MovieSelectorChart({
         <MainContainer>
           <SubContainer>
             <ControlsContainer>
-              <TitleSearch
+              {/* <TitleSearch
                 options={state.movieSearchData}
                 setHoveredMovie={actions.setHoveredMovie}
                 xScale={state.scales.xScale}
                 activeMovie={activeMovie}
                 setActiveMovie={setActiveMovie}
-              />
-              <Switch
+              /> */}
+              {/* <Switch
                 handleAction={actions.setIsYDomainSynced}
                 value={state.isYDomainSynced}
                 offText="Dynamic"
@@ -65,7 +65,7 @@ export default function MovieSelectorChart({
                 value={state.isSizeDynamic}
                 offText="Fixed"
                 onText="Dynamic dot size"
-              />
+              /> */}
             </ControlsContainer>
             {typeof state.isBoth == "boolean" && (
               <ChartContainer

@@ -88,7 +88,7 @@ const customStyles = {
   input: () => ({
     fontFamily: fontFamily,
     fontSize: 16,
-    color: COLORS.textColor,
+    color: COLORS.secondaryDark,
     "& input": {
       font: "inherit",
     },
@@ -96,7 +96,7 @@ const customStyles = {
   placeholder: provided => ({
     ...provided,
     fontSize: 16,
-    color: COLORS.textColor,
+    color: COLORS.secondaryDark,
     fontWeight: 300,
   }),
   option: (provided, state) => ({
