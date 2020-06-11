@@ -106,9 +106,9 @@ export const makeRightVariants = delay => ({
     },
   },
   exit: {
-    x: CARD_WIDTH + HANDLE_SIZE,
+    x: CARD_WIDTH + HANDLE_SIZE + space[2],
     transition: {
-      ...TRANSITION.primary
+      ...TRANSITION.primary,
     },
   },
 })
@@ -125,9 +125,9 @@ export const makeLeftVariants = delay => ({
     },
   },
   exit: {
-    x: -(CARD_WIDTH + HANDLE_SIZE),
+    x: -(CARD_WIDTH + HANDLE_SIZE + space[2]),
     transition: {
-      ...TRANSITION.primary
+      ...TRANSITION.primary,
     },
   },
 })

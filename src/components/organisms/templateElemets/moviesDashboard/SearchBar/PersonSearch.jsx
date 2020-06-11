@@ -5,6 +5,7 @@ import { API_ROOT, COLORS } from "../../../../../constants/moviesDashboard"
 
 import PersonResultContainerContent from "../PersonResultContainerContent/PersonResultContainerContent"
 import SearchBar from "./SearchBar"
+import { SearchBarMainContainer } from "./styles"
 
 export default function PersonSearch({ setActiveNameID }) {
   const [nameSearchResults, setNameSearchResults] = React.useState([])
@@ -25,13 +26,19 @@ export default function PersonSearch({ setActiveNameID }) {
   }
 
   return (
-    <SearchBar
-      getResults={fetchNames}
-      handleResultSelect={id => setActiveNameID({ id })}
-      results={nameSearchResults}
-      setResults={setNameSearchResults}
-      color={COLORS.primary}
-      resultContent={PersonResultContainerContent}
-    />
+    <SearchBarMainContainer
+
+    >
+      <SearchBar
+        key="person-search"
+        getResults={fetchNames}
+        handleResultSelect={id => setActiveNameID({ id })}
+        results={nameSearchResults}
+        setResults={setNameSearchResults}
+        color={COLORS.primary}
+        resultContent={PersonResultContainerContent}
+        placeholder="Search for a film director, actor, writer . . . "
+      />
+    </SearchBarMainContainer>
   )
 }

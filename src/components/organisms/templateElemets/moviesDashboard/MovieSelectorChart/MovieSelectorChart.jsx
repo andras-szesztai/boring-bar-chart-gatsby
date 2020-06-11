@@ -8,6 +8,8 @@ import { BubbleChart, DateAxis } from "../charts"
 
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
+import SearchBar from "../SearchBar/SearchBar"
+import { COLORS } from "../../../../../constants/moviesDashboard"
 
 const ControlsContainer = styled(motion.div)`
   display: flex;
@@ -47,6 +49,16 @@ export default function MovieSelectorChart({
         <MainContainer>
           <SubContainer>
             <ControlsContainer>
+              <SearchBar
+                key="movie-search"
+                // getResults={fetchNames}
+                // handleResultSelect={id => setActiveNameID({ id })}
+                results={[]}
+                // setResults={setNameSearchResults}
+                color={COLORS.secondary}
+                // resultContent={PersonResultContainerContent}
+                placeholder="Search for a title"
+              />
               {/* <TitleSearch
                 options={state.movieSearchData}
                 setHoveredMovie={actions.setHoveredMovie}
@@ -79,7 +91,9 @@ export default function MovieSelectorChart({
                 <DateAxis
                   mainData={dataSets.personCredits[state.types.main] || []}
                   subData={
-                    state.isBoth ? dataSets.personCredits[state.types.sub] || [] : []
+                    state.isBoth
+                      ? dataSets.personCredits[state.types.sub] || []
+                      : []
                   }
                   type={state.types.main}
                   xScale={state.scales.xScale}

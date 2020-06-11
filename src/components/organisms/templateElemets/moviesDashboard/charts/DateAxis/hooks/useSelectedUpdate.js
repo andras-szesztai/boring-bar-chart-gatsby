@@ -30,10 +30,8 @@ export default function useSelectedUpdate({
           .datum(selectedCircleData)
           .attr("cx", setX)
           .attr("opacity", 1)
-        console.log("data.mainData", data.mainData)
         const topLineData = data.mainData.filter(d => d.id === activeMovieID)
         const bottomLineData = data.subData.filter(d => d.id === activeMovieID)
-        console.log("data.subData", data.subData)
         chartArea
           .selectAll(".selected-line")
           .datum(selectedCircleData)

@@ -6,7 +6,7 @@ import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
 import { CARD_WIDTH } from "../../../../../constants/moviesDashboard"
 import { space, fontFamily } from "../../../../../themes/theme"
 
-export const SearchBarMainContainer = styled(motion.div)`
+export const SearchBarMainContainer = styled.div`
   position: fixed;
   left: ${space[2]}px;
   top: ${space[2]}px;
