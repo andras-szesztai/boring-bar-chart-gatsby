@@ -13,7 +13,7 @@ import { IoIosArrowBack, IoIosArrowForward, IoIosClose } from "react-icons/io"
 
 import { useDeviceType, usePrevious, useStateWithPrevious } from "../../hooks"
 import {
-  SearchBar,
+  PersonSearch,
   PersonDetailCard,
   FavoritesList,
   MovieSelectorChart,
@@ -58,7 +58,7 @@ export default function MoviesDashboard() {
       <Helmet title="Dashboard under construction" />
       {device === "desktop" && (
         <div style={{ userSelect: "none" }}>
-          <SearchBar setActiveNameID={actions.setActiveNameID} />
+          <PersonSearch setActiveNameID={actions.setActiveNameID} />
           <PersonDetailCard
             state={state}
             prevState={prevState}

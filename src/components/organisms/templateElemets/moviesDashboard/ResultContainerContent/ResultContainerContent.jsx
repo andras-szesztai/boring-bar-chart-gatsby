@@ -66,8 +66,7 @@ const variants = {
 }
 
 export default function ResultContainerContent({
-  nameSearchResults,
-  index,
+  nameSearchResult,
   zIndex,
   containerProps,
 }) {
@@ -75,12 +74,12 @@ export default function ResultContainerContent({
     <ResultContainer style={{ zIndex }} variants={variants} {...containerProps}>
       <Image
         height={52}
-        url={nameSearchResults[index].profile_path}
-        alt={nameSearchResults[index].name}
+        url={nameSearchResult.profile_path}
+        alt={nameSearchResult.name}
       />
-      <NameContainer>{nameSearchResults[index].name}</NameContainer>
+      <NameContainer>{nameSearchResult.name}</NameContainer>
       <JobContainer>
-        Known for: {nameSearchResults[index].known_for_department}
+        Known for: {nameSearchResult.known_for_department}
       </JobContainer>
     </ResultContainer>
   )
