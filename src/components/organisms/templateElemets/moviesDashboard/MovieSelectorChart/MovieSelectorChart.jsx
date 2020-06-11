@@ -78,7 +78,9 @@ export default function MovieSelectorChart({
                 />
                 <DateAxis
                   mainData={dataSets.personCredits[state.types.main] || []}
-                  subData={dataSets.personCredits[state.types.sub] || []}
+                  subData={
+                    state.isBoth ? dataSets.personCredits[state.types.sub] || [] : []
+                  }
                   type={state.types.main}
                   xScale={state.scales.xScale}
                   setActiveMovie={setActiveMovie}

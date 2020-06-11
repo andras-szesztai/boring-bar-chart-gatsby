@@ -20,7 +20,6 @@ export default function useHoveredUpdate({
       storedValues.current.isInit &&
       hoveredMovie.id !== prevHoveredMovie.id
     ) {
-      
       const { chartArea, currXScale } = storedValues.current
       const setX = d => currXScale(new Date(d.release_date))
       const isToTooltipTheRight = hoveredMovie.xPosition === 0

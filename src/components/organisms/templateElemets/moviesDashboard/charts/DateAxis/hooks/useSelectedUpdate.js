@@ -14,7 +14,12 @@ export default function useSelectedUpdate({
 }) {
   React.useEffect(() => {
     if (storedValues.current.isInit && activeMovieID !== prevActiveMovieID) {
-      const { chartArea, filteredData, currXScale, voronoiArea } = storedValues.current
+      const {
+        chartArea,
+        filteredData,
+        currXScale,
+        voronoiArea,
+      } = storedValues.current
       const setX = d => currXScale(new Date(d.release_date))
       if (activeMovieID) {
         const selectedCircleData = filteredData.find(
@@ -25,8 +30,10 @@ export default function useSelectedUpdate({
           .datum(selectedCircleData)
           .attr("cx", setX)
           .attr("opacity", 1)
+        console.log("data.mainData", data.mainData)
         const topLineData = data.mainData.filter(d => d.id === activeMovieID)
         const bottomLineData = data.subData.filter(d => d.id === activeMovieID)
+        console.log("data.subData", data.subData)
         chartArea
           .selectAll(".selected-line")
           .datum(selectedCircleData)
