@@ -2,14 +2,11 @@ import React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
-import Switch from "../Switch/Switch"
-import TitleSearch from "./TitleSearch/TitleSearch"
 import { BubbleChart, DateAxis } from "../charts"
 
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
-import SearchBar from "../SearchBar/SearchBar"
-import { COLORS } from "../../../../../constants/moviesDashboard"
+import { MovieSearch } from "../SearchBar"
 
 const ControlsContainer = styled(motion.div)`
   display: flex;
@@ -49,23 +46,10 @@ export default function MovieSelectorChart({
         <MainContainer>
           <SubContainer>
             <ControlsContainer>
-              <SearchBar
-                key="movie-search"
-                // getResults={fetchNames}
-                // handleResultSelect={id => setActiveNameID({ id })}
-                results={[]}
-                // setResults={setNameSearchResults}
-                color={COLORS.secondary}
-                // resultContent={PersonResultContainerContent}
-                placeholder="Search for a title"
-              />
-              {/* <TitleSearch
-                options={state.movieSearchData}
-                setHoveredMovie={actions.setHoveredMovie}
-                xScale={state.scales.xScale}
-                activeMovie={activeMovie}
+              <MovieSearch
                 setActiveMovie={setActiveMovie}
-              /> */}
+                setHoveredMovie={actions.setHoveredMovie}
+              />
               {/* <Switch
                 handleAction={actions.setIsYDomainSynced}
                 value={state.isYDomainSynced}

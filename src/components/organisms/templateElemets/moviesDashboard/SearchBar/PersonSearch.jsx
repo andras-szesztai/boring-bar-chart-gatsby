@@ -26,9 +26,7 @@ export default function PersonSearch({ setActiveNameID }) {
   }
 
   return (
-    <SearchBarMainContainer
-
-    >
+    <SearchBarMainContainer>
       <SearchBar
         key="person-search"
         getResults={fetchNames}
