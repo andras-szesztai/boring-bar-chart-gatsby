@@ -5,7 +5,7 @@ import chroma from "chroma-js"
 
 import { TRANSITION } from "../../../../../constants/moviesDashboard"
 import { useDebouncedSearch } from "../../../../../hooks"
-import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
+import PersonResultContainerContent from "../PersonResultContainerContent/PersonResultContainerContent"
 import {
   SearchBarMainContainer,
   SearchBarSubContainer,
@@ -23,6 +23,7 @@ export default function SearchBar({
   results,
   setResults,
   color,
+  resultContent: ResultContent
 }) {
   const { inputText, setInputText } = useDebouncedSearch(getResults, 1000)
   const [activeSearchResult, setActiveSearchResult] = useState(0)
@@ -137,10 +138,10 @@ export default function SearchBar({
               variants={variants}
             >
               {results.map((res, i) => (
-                <ResultContainerContent
+                <ResultContent
                   key={res.id}
                   zIndex={Math.abs(i - 4)}
-                  nameSearchResult={res}
+                  data={res}
                   handleClick={() => {
                     handleResultSelect(res.id)
                     setResults([])

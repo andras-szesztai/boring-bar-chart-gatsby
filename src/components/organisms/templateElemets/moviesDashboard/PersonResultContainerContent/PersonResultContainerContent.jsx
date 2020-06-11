@@ -14,7 +14,7 @@ const ResultContainer = styled(motion.div)`
   grid-template-areas:
     "photo name"
     "photo job";
-  grid-column-gap: 1rem;
+  grid-column-gap: 1.5rem;
 
   align-self: start;
   width: calc(100% - 10px);
@@ -34,6 +34,7 @@ const NameContainer = styled.div`
   font-weight: 500;
   color: ${COLORS.primary};
   grid-area: name;
+  margin-top: 2px;
 `
 
 const JobContainer = styled.div`
@@ -41,8 +42,9 @@ const JobContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   font-size: ${themifyFontSize(1)};
-  font-weight: 200;
+  font-weight: 300;
   grid-area: job;
+  margin-bottom: 3px;
 `
 
 const variants = {
@@ -66,7 +68,7 @@ const variants = {
 }
 
 export default function ResultContainerContent({
-  nameSearchResult,
+  data,
   zIndex,
   handleClick,
   handleMouseOver,
@@ -80,12 +82,12 @@ export default function ResultContainerContent({
     >
       <Image
         height={52}
-        url={nameSearchResult.profile_path}
-        alt={nameSearchResult.name}
+        url={data.profile_path}
+        alt={data.name}
       />
-      <NameContainer>{nameSearchResult.name}</NameContainer>
+      <NameContainer>{data.name}</NameContainer>
       <JobContainer>
-        Known for: {nameSearchResult.known_for_department}
+        Known for: {data.known_for_department}
       </JobContainer>
     </ResultContainer>
   )

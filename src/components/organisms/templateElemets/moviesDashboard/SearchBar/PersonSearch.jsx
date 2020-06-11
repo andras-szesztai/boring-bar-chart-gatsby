@@ -2,6 +2,8 @@ import React from "react"
 import axios from "axios"
 
 import { API_ROOT, COLORS } from "../../../../../constants/moviesDashboard"
+
+import PersonResultContainerContent from "../PersonResultContainerContent/PersonResultContainerContent"
 import SearchBar from "./SearchBar"
 
 export default function PersonSearch({ setActiveNameID }) {
@@ -29,6 +31,7 @@ export default function PersonSearch({ setActiveNameID }) {
       results={nameSearchResults}
       setResults={setNameSearchResults}
       color={COLORS.primary}
+      resultContent={PersonResultContainerContent}
     />
   )
 }
