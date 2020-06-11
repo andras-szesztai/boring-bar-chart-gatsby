@@ -2,11 +2,12 @@ import React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
-import { BubbleChart, DateAxis } from "../charts"
-import useMovieSelectorChartReducer from "./reducer/chartReducer"
-import { MainContainer, SubContainer, ChartContainer } from "./styles"
 import Switch from "../Switch/Switch"
 import TitleSearch from "./TitleSearch/TitleSearch"
+import { BubbleChart, DateAxis } from "../charts"
+
+import useMovieSelectorChartReducer from "./reducer/chartReducer"
+import { MainContainer, SubContainer, ChartContainer } from "./styles"
 
 const ControlsContainer = styled(motion.div)`
   display: flex;

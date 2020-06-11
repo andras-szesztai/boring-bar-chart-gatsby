@@ -22,7 +22,7 @@ const MovieSearchContainer = styled.div`
   z-index: 6;
 `
 
-// TODO: setup  to stay open on select
+// TODO: setup to stay open on select
 const DropdownIndicator = props => {
   return (
     <components.DropdownIndicator {...props}>

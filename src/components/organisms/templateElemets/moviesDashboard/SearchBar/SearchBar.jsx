@@ -7,7 +7,12 @@ import chroma from "chroma-js"
 
 import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
 import { space, fontFamily } from "../../../../../themes/theme"
-import { COLORS, API_ROOT, TRANSITION, CARD_WIDTH } from "../../../../../constants/moviesDashboard"
+import {
+  COLORS,
+  API_ROOT,
+  TRANSITION,
+  CARD_WIDTH,
+} from "../../../../../constants/moviesDashboard"
 import { useDebouncedSearch } from "../../../../../hooks"
 import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
 
@@ -28,8 +33,8 @@ const StyledSearchBar = styled(motion.input)`
   width: ${CARD_WIDTH - 50}px;
   height: 40px;
   border-radius: ${space[1]}px;
-  background: ${COLORS.primary};
-  color: ${chroma(COLORS.primary).brighten(3)};
+  background: #fff;
+  color: ${chroma(COLORS.primary).darken(2)};
   border: 1px solid ${chroma(COLORS.primary).darken()};
   font-family: ${fontFamily};
   font-size: ${themifyFontSize(2)};
@@ -40,7 +45,7 @@ const StyledSearchBar = styled(motion.input)`
 
   &::placeholder {
     font-weight: 300;
-    color: ${chroma(COLORS.primary).brighten(3)};
+    color: ${chroma(COLORS.primary).darken(2)};
     font-family: inherit;
   }
 `
@@ -122,7 +127,7 @@ export default function SearchBar({ setActiveNameID }) {
   const getSearchResultProps = index => {
     return {
       onClick: () => {
-        setActiveNameID({id: nameSearchResults[index].id})
+        setActiveNameID({ id: nameSearchResults[index].id })
         setNameSearchResults([])
         setInputText("")
         setSearchIsFocused(false)
@@ -165,7 +170,7 @@ export default function SearchBar({ setActiveNameID }) {
             damping: 12,
           }}
         >
-          <IoIosSearch size={25} color={chroma(COLORS.primary).brighten(3)} />
+          <IoIosSearch size={24} color={chroma(COLORS.primary).darken()} />
         </SearchIconContainer>
         <CloseIconContainer
           initial={{
@@ -175,10 +180,9 @@ export default function SearchBar({ setActiveNameID }) {
             rotateY: inputText.length ? 0 : 80,
             x: inputText.length ? 0 : 10,
             opacity: inputText.length ? 1 : 0,
-            transition: TRANSITION.primary
+            transition: TRANSITION.primary,
           }}
           whileHover={{ scale: 1.3 }}
-
           onClick={() => {
             setInputText("")
             setNameSearchResults([])
@@ -194,11 +198,10 @@ export default function SearchBar({ setActiveNameID }) {
           }}
           initial={{
             paddingLeft: 40,
-            width: 20,
           }}
           transition={{
             type: "spring",
-            damping: 12
+            damping: 12,
           }}
           type="text"
           id="search"
@@ -208,7 +211,7 @@ export default function SearchBar({ setActiveNameID }) {
           autoComplete="off"
           onFocus={() => setSearchIsFocused(true)}
           onBlur={() => setSearchIsFocused(false)}
-          onChange={(e, v) => {
+          onChange={e => {
             setNameSearchResults([])
             setActiveSearchResult(0)
             setInputText(e.target.value)
@@ -222,7 +225,7 @@ export default function SearchBar({ setActiveNameID }) {
               setActiveSearchResult(prev => prev - 1)
             }
             if (key === "Enter" && nameSearchResults[activeSearchResult]) {
-              setActiveNameID({id: nameSearchResults[activeSearchResult].id})
+              setActiveNameID({ id: nameSearchResults[activeSearchResult].id })
               setNameSearchResults([])
               setInputText("")
               setSearchIsFocused(false)
