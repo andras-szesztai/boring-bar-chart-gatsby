@@ -3,6 +3,7 @@ import styled, { css } from "styled-components"
 import capitalize from "lodash/capitalize"
 import chroma from "chroma-js"
 import { AnimatePresence, motion } from "framer-motion"
+import numeral from "numeral"
 
 import { Image } from "../../.."
 import { dropShadow, space } from "../../../../../../../themes/theme"
@@ -10,11 +11,7 @@ import {
   themifyFontSize,
   themifyFontWeight,
 } from "../../../../../../../themes/mixins"
-import {
-  COLORS,
-  OPACITY_VARIANT,
-  ANIMATE_PROPS,
-} from "../../../../../../../constants/moviesDashboard"
+import { COLORS } from "../../../../../../../constants/moviesDashboard"
 
 const WIDTH = 320
 const HEIGHT = 160
@@ -67,9 +64,6 @@ const TextContentGrid = styled.div`
 
     span {
       font-weight: ${themifyFontWeight(1)};
-      span {
-        color: ${COLORS.gridColor};
-      }
     }
   }
 
@@ -123,8 +117,8 @@ export default function Tooltip({
             <span>
               {data.vote_average} &nbsp;
               <span>
-                ( {data.vote_count} vote
-                {data.vote_count > 1 ? "s" : ""} )
+                ({numeral(data.vote_count).format("0,0")} vote
+                {data.vote_count > 1 ? "s" : ""})
               </span>
             </span>
           </div>

@@ -7,7 +7,6 @@ import { space } from "../../../../../themes/theme"
 import { themifyFontSize } from "../../../../../themes/mixins"
 import { COLORS } from "../../../../../constants/moviesDashboard"
 
-// TODO: fix order + style selected with bolder or underline!!!
 const CheckBoxContainer = styled.div`
   display: flex;
   align-items: flex-end;
