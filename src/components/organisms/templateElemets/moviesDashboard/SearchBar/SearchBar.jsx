@@ -116,7 +116,7 @@ export default function SearchBar({
             }
           }
           if (key === "ArrowDown") {
-            if (activeSearchResult === 4) {
+            if (activeSearchResult === results.length - 1) {
               setActiveSearchResult(0)
             } else {
               setActiveSearchResult(prev => prev + 1)

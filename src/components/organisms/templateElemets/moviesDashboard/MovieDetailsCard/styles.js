@@ -19,7 +19,7 @@ const MovieDetailsCard = styled(motion.div)`
   top: calc(50% - ${CARD_HEIGHT.movie / 2}px);
   width: ${CARD_WIDTH}px;
   height: ${CARD_HEIGHT.movie}px;
-  z-index: 4;
+  z-index: 15;
 `
 
 const HandleStyle = css`

@@ -12,6 +12,7 @@ export default function MovieSearch({
   setActiveMovie,
   setHoveredMovie,
   allMovies,
+  xScale
 }) {
   const [results, setResults] = React.useState([])
   const [searchText, setSearchText, prevSearchText] = useStateWithPrevious("")
@@ -32,7 +33,11 @@ export default function MovieSearch({
       key="person-search"
       getResults={getResults}
       id="movie-search"
-      // handleResultSelect={id => setActiveMovie({ id })}
+      handleResultSelect={id => {
+        const data = allMovies.find(movie => movie.id === id)
+        console.log("data", data)
+        // setActiveMovie({ id, data: , position: })
+      }}
       // handleResultHover={setHoveredMovie} // TODO: setup inside searchbar
       results={results.map(d => d.data)}
       setResults={setResults}

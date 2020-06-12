@@ -2,7 +2,10 @@ import React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
-import { themifyFontSize } from "../../../../../themes/mixins"
+import {
+  themifyFontSize,
+  themifyFontWeight,
+} from "../../../../../themes/mixins"
 import { COLORS } from "../../../../../constants/moviesDashboard"
 import { space, dropShadow } from "../../../../../themes/theme"
 import Image from "../Image/Image"
@@ -42,9 +45,14 @@ const JobContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   font-size: ${themifyFontSize(1)};
-  font-weight: 300;
+  font-weight: ${themifyFontWeight(4)};
   grid-area: job;
   margin-bottom: 3px;
+  color: ${COLORS.textColor};
+
+  span {
+    font-weight: ${themifyFontWeight(1)};
+  }
 `
 
 const variants = {
@@ -72,9 +80,8 @@ export default function ResultContent({
   zIndex,
   handleClick,
   handleMouseOver,
-  accessors
+  accessors,
 }) {
-  console.log("data", data)
   return (
     <ResultContainer
       style={{ zIndex }}
@@ -82,14 +89,10 @@ export default function ResultContent({
       onClick={handleClick}
       onMouseOver={handleMouseOver}
     >
-      <Image
-        height={52}
-        url={data[accessors.img]}
-        alt={data[accessors.name]}
-      />
+      <Image height={52} url={data[accessors.img]} alt={data[accessors.name]} />
       <NameContainer>{data[accessors.imgAlt]}</NameContainer>
       <JobContainer>
-        {accessors.subText}: {data[accessors.subTextValue]}
+        {accessors.subText}:&nbsp;<span>{data[accessors.subTextValue]}</span>
       </JobContainer>
     </ResultContainer>
   )
