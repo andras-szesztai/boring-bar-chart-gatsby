@@ -27,7 +27,7 @@ const Container = styled(motion.div)`
   left: ${space[2]}px;
   bottom: ${space[2]}px;
   background-color: #fff;
-  border-radius: 2px;
+  border-radius: 4px;
   width: calc(100vw - ${space[3]}px);
   filter: drop-shadow(${dropShadow.primary})
     drop-shadow(${dropShadow.secondary});
@@ -95,19 +95,19 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
           type="favorites"
           withAnimation
           array={
-            favoritesCombined && favoritesCombined.length
+            favoritesCombined &&
+            (favoritesCombined.length
               ? favoritesCombined
               : [
                   {
                     id: -99,
                     name: "Please start your list by adding a person . . . ",
                   },
-                ]
+                ])
           }
           bgColor={COLORS.primary}
           hoverContent={HoverContent}
           mouseDownContent={MouseDownContent}
-          mouseDownAnimationAdjust={3}
           activeNameID={state.activeNameID}
           setActiveNameID={actions.setActiveNameID}
         />

@@ -77,6 +77,7 @@ export const ANIMATE_PROPS = {
 export const LOCAL_STORE_ACCESSORS = {
   lockedPersonDetailCard: "lockedPersonDetailCard",
   favoritePersons: "favoritePersons",
+  isVisited: "isVisited"
 }
 
 export const FIXED_DIMS = {

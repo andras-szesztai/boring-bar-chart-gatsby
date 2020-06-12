@@ -11,6 +11,7 @@ export const MainContainer = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
   user-select: none;
 `

@@ -89,7 +89,6 @@ export default function ListItem({
   const [isClicked, setIsClicked] = useState()
   const timeOut = React.useRef(false)
 
-  console.log("originalWidth", originalWidth)
   return (
     <Item
       ref={itemRef}
