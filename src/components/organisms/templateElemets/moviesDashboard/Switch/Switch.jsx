@@ -13,17 +13,25 @@ const CheckBoxContainer = styled.div`
   align-items: flex-end;
   height: 35px;
 
+  .react-switch-bg {
+    border: 1px solid
+      ${({ isOn }) =>
+        isOn
+          ? chroma(COLORS.secondary).darken()
+          : chroma(COLORS.backgroundGray).darken()};
+  }
+
   label {
     cursor: pointer;
     font-size: ${themifyFontSize(2)};
-    color: ${COLORS.textColor};
+    color: ${COLORS.gridColor};
     margin-left: ${space[2]}px;
   }
 `
 
 const SwitchComponent = ({ handleAction, value, onText }) => {
   return (
-    <CheckBoxContainer>
+    <CheckBoxContainer isOn={value}>
       <Switch
         checked={value}
         onChange={() => handleAction(!value)}
@@ -31,10 +39,11 @@ const SwitchComponent = ({ handleAction, value, onText }) => {
         checkedIcon={false}
         width={40}
         height={20}
-        onColor={COLORS.textColor}
-        offColor={COLORS.gridColor}
+        onColor={COLORS.secondary}
+        offHandleColor={COLORS.gridColor}
+        offColor={COLORS.backgroundGray}
       />
-      <label onClick={() => handleAction(true)} role="button">
+      <label onClick={() => handleAction(!value)} role="button" tabIndex="1">
         {onText}
       </label>
     </CheckBoxContainer>

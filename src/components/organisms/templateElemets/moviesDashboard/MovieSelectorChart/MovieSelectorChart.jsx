@@ -77,14 +77,12 @@ export default function MovieSelectorChart({
               <Switch
                 handleAction={actions.setIsYDomainSynced}
                 value={state.isYDomainSynced}
-                offText="Dynamic"
                 onText="Fixed score axis"
               />
               <Switch
                 handleAction={actions.setIsSizeSynced}
                 value={state.isSizeDynamic}
-                offText="Fixed"
-                onText="Dynamic dot size"
+                onText="Dynamic dot size based on the number of votes"
               />
             </ControlsContainer>
             {typeof state.isBoth == "boolean" && (
