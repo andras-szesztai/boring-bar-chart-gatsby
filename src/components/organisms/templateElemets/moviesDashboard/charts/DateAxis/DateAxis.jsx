@@ -21,7 +21,7 @@ import { usePrevious } from "../../../../../../hooks"
 
 import { useSelectedUpdate, useHoveredUpdate, useChartResize } from "./hooks"
 import Tooltip from "./Tooltip/Tooltip"
-import { Wrapper, ChartSvg } from "./styles"
+import { Wrapper, ChartSvg, LabelContainer } from "./styles"
 
 export default function DateAxis(props) {
   const { margin, xScale, mainData, subData, activeMovie, hoveredMovie } = props
@@ -264,6 +264,9 @@ export default function DateAxis(props) {
         hoveredMovie={props.hoveredMovie}
         activeMovieID={activeMovie.id}
       />
+      <LabelContainer>
+        Release year
+      </LabelContainer>
     </Wrapper>
   )
 }

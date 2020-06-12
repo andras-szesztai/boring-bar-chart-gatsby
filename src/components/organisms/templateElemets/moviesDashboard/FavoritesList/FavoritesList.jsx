@@ -14,7 +14,9 @@ const HoverContent = ({ animateProps, data, isMatch }) => {
   return (
     <motion.div initial={{ opacity: 0 }} {...animateProps}>
       {isMatch
-        ? "Already selected, let's explore!"
+        ? data.id === -99
+          ? " . . . as one of your favorites!"
+          : "Already selected, let's explore! "
         : "Hold down right click to search!"}
     </motion.div>
   )
@@ -25,7 +27,7 @@ const Container = styled(motion.div)`
   left: ${space[2]}px;
   bottom: ${space[2]}px;
   background-color: #fff;
-  border-radius: ${space[1]}px;
+  border-radius: 2px;
   width: calc(100vw - ${space[3]}px);
   filter: drop-shadow(${dropShadow.primary})
     drop-shadow(${dropShadow.secondary});
@@ -39,7 +41,7 @@ const Container = styled(motion.div)`
   color: ${COLORS.textColor};
   z-index: 10;
 
-  padding: ${space[2]}px ${space[3]}px;
+  padding: ${space[2]}px ${space[2]}px ${space[2]}px ${space[3]}px;
 `
 
 const TextContainer = styled.div`
@@ -91,7 +93,17 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
         <TextContainer>Your recent favorites</TextContainer>
         <HorizontalScrollList
           type="favorites"
-          array={favoritesCombined}
+          array={
+            favoritesCombined && favoritesCombined.length
+              ? favoritesCombined
+              : [
+                  {
+                    id: -99,
+                    name:
+                      "Please start your list by adding a person . . . ",
+                  },
+                ]
+          }
           bgColor={COLORS.primary}
           hoverContent={HoverContent}
           mouseDownContent={MouseDownContent}

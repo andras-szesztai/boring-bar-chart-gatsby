@@ -24,7 +24,7 @@ import {
   useChartResize,
 } from "./hooks"
 import { setRadius } from "./utils"
-import { Wrapper, ChartTitle, NumberContainer, ChartSvg } from "./styles"
+import { Wrapper, ChartTitle, NumberContainer, ChartSvg, LabelContainer } from "./styles"
 import { fontSize } from "../../../../../../themes/theme"
 
 const gridData = [0, 2, 4, 6, 8, 10]
@@ -64,9 +64,7 @@ export default function BubbleChart(props) {
         dims.width - margin.left - margin.right,
       ])
       const yScale = scaleLinear()
-        .domain(
-          isYDomainSynced ? [0, 10] : extent(data, d => d.vote_average)
-        )
+        .domain(isYDomainSynced ? [0, 10] : extent(data, d => d.vote_average))
         .range([dims.height - margin.top - margin.bottom, 0])
       const currSizeScale = sizeScale.range(props.sizeRange)
       const chartArea = select(chartAreaRef.current)
@@ -198,11 +196,7 @@ export default function BubbleChart(props) {
   }
 
   function createUpdateVoronoi() {
-    const {
-      yScale,
-      currXScale,
-      voronoiArea,
-    } = storedValues.current
+    const { yScale, currXScale, voronoiArea } = storedValues.current
     const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
     const setYPos = d => yScale(d.vote_average) + margin.top
     const delaunay = Delaunay.from(data, setXPos, setYPos).voronoi([
@@ -241,7 +235,7 @@ export default function BubbleChart(props) {
     isSizeDynamic,
     createUpdateVoronoi,
     chart,
-    data
+    data,
   })
   useRadiusUpdate({
     storedValues,
@@ -267,7 +261,7 @@ export default function BubbleChart(props) {
     chart,
     dims,
     addUpdateInteractions,
-    data
+    data,
   })
   useHoveredUpdate({
     storedValues,
@@ -309,6 +303,7 @@ export default function BubbleChart(props) {
         />
         <g ref={voronoiRef} />
       </ChartSvg>
+      <LabelContainer>Avg. user score</LabelContainer>
     </Wrapper>
   )
 }

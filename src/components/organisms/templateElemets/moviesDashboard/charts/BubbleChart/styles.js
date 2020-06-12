@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 
 import { themifyFontSize } from "../../../../../../themes/mixins"
 import { colors } from "../../../../../../themes/theme"
+import { COLORS } from "../../../../../../constants/moviesDashboard"
 
 const fadeOutEffect = css`
   content: "";
@@ -66,4 +67,12 @@ export const NumberContainer = styled(motion.div)`
   opacity: 0.5;
   position: absolute;
   top: 8px;
+`
+
+export const LabelContainer = styled.div`
+  position: absolute;
+  bottom: 20px;
+  right: 15px;
+  color: ${COLORS.gridColor};
+  font-size: ${themifyFontSize(1)};
 `

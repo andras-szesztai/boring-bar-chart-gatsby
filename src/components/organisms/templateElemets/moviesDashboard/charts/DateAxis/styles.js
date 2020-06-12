@@ -1,4 +1,6 @@
 import styled, { css } from "styled-components"
+import { themifyFontSize } from "../../../../../../themes/mixins"
+import { COLORS } from "../../../../../../constants/moviesDashboard"
 
 const fadeOutEffect = css`
   content: "";
@@ -41,4 +43,14 @@ export const ChartSvg = styled.svg`
   height: 100%;
   width: 100%;
   z-index: 1;
+`
+
+export const LabelContainer = styled.div`
+  position: absolute;
+  top: 7px;
+  left: 0px;
+  color: ${COLORS.gridColor};
+  font-size: ${themifyFontSize(1)};
+  line-height: 1.2;
+  width: 50px;
 `

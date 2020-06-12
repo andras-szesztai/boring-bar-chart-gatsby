@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
-import { IoIosSearch } from "react-icons/io"
 import chroma from "chroma-js"
 
 import { space } from "../../../../../../themes/theme"
@@ -73,6 +72,7 @@ export default function ListItem({
       setOriginalListWidth(itemRef.current.offsetWidth)
     }
   }, [originalWidth])
+  console.log("originalWidth", originalWidth)
 
   const hiddenInformationRef = React.useRef(null)
   const [hiddenInformationWidth, setHiddenInformationWidth] = useState(0)
@@ -167,10 +167,9 @@ export default function ListItem({
         )}
         {itemHovered === data.id && (
           <HoverContent
-            key="content"
             animateProps={delayedRevealProps}
             data={data}
-            isMatch={itemHovered === activeNameID}
+            isMatch={itemHovered === activeNameID || itemHovered === -99}
           />
         )}
       </AnimatePresence>
@@ -187,10 +186,9 @@ export default function ListItem({
             |
           </div>
           <HoverContent
-            key="content"
             animateProps={delayedRevealProps}
             data={data}
-            isMatch={itemHovered === activeNameID}
+            isMatch={itemHovered === activeNameID || itemHovered === -99}
           />
         </HiddenInformation>
       )}
@@ -201,5 +199,5 @@ export default function ListItem({
 ListItem.defaultProps = {
   hiddenContent: () => <div />,
   mouseDownContent: () => <div />,
-  mouseDownAnimationAdjust: 2
+  mouseDownAnimationAdjust: 2,
 }
