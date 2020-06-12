@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from "react"
 import _ from "lodash"
-import { useMeasure, useWindowSize } from "react-use"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import { motion } from "framer-motion"
 import { IoIosSearch } from "react-icons/io"
 
 import { space, dropShadow } from "../../../../../themes/theme"
 import { usePrevious } from "../../../../../hooks"
-import ControlCollapsed from "./ControlCollapsed/ControlCollapsed"
-import EndIconsContainer from "./EndIconsContainer/EndIconsContainer"
-import ShadowRecentList from "./ShadowRecentList/ShadowRecentList"
-import RecentList from "./RecentList/RecentList"
-import { FIXED_DIMS, COLORS } from "../../../../../constants/moviesDashboard"
 import HorizontalScrollList from "../HorizontalScrollList/HorizontalScrollList"
 import { themifyFontSize } from "../../../../../themes/mixins"
+import { COLORS } from "../../../../../constants/moviesDashboard"
 
-const HoverContent = ({ animateProps, data, accessor }) => {
-  console.log("HoverContent -> data", data)
+const HoverContent = ({ animateProps, data, isMatch }) => {
   return (
     <motion.div initial={{ opacity: 0 }} {...animateProps}>
-      {data.name}
+      {isMatch
+        ? "Already selected, let's explore!"
+        : "Hold down right click to search!"}
     </motion.div>
   )
 }
@@ -51,15 +47,7 @@ const TextContainer = styled.div`
   align-items: center;
 
   padding: ${space[2]}px;
-`
-
-const Flex = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 75%;
-  align-self: center;
-  position: relative;
+  margin-bottom: 1px;
 `
 
 const MouseDownContent = ({ bgColor }) => {
@@ -67,33 +55,19 @@ const MouseDownContent = ({ bgColor }) => {
     <div
       style={{
         position: "absolute",
-        display: "flex",
-        alignItems: "center",
-        transform: "translate(5px, 0.5px)",
+        top: 2,
+        left: 5,
       }}
     >
-      <IoIosSearch size={14} color={bgColor} />{" "}
-      <div
-        style={{
-          transform: "translate(4px, -1px)",
-        }}
-      >
-        Search
-      </div>
+      <IoIosSearch size={20} color={bgColor} />{" "}
     </div>
   )
 }
 
-export default function FavoritesList({
-  actions,
-  state,
-  localStorageValues,
-  localStorageSetters,
-}) {
+export default function FavoritesList({ actions, state, localStorageValues }) {
   const { favoritePersons } = localStorageValues
   const prevLocalStorageValues = usePrevious(localStorageValues)
 
-  const [runReCalc, setRunReCalc] = useState(false)
   const [favoritesCombined, setFavoriteCombined] = useState(undefined)
   useEffect(() => {
     if (!favoritesCombined) {
@@ -108,71 +82,24 @@ export default function FavoritesList({
       setFavoriteCombined(
         [...favoritePersons].sort((a, b) => new Date(b.date) - new Date(a.date))
       )
-      if (
-        favoritePersons.length > prevLocalStorageValues.favoritePersons.length
-      ) {
-        setRunReCalc(true)
-      }
     }
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
-  const [isOpen, setIsOpen] = useState(false)
-  const [listRef, dims] = useMeasure()
-
-  const [elementDims, setElementDims] = useState([])
-
-  const [hoveredFavorite, setHoveredFavorite] = useState(undefined)
-
-  const { width } = useWindowSize()
-  const maxWidth = width - 2 * space[2] - FIXED_DIMS.controlCollapsedWidth - 40
-
-  console.log(favoritesCombined)
-  //Make it fixed and look like the other lists
   return (
     <>
       <Container>
         <TextContainer>Your recent favorites</TextContainer>
-
         <HorizontalScrollList
           type="favorites"
           array={favoritesCombined}
           bgColor={COLORS.primary}
           hoverContent={HoverContent}
           mouseDownContent={MouseDownContent}
+          mouseDownAnimationAdjust={3}
           activeNameID={state.activeNameID}
           setActiveNameID={actions.setActiveNameID}
         />
       </Container>
-
-      {/* <ShadowRecentList
-        listRef={listRef}
-        favoritesCombined={favoritesCombined}
-        elementDims={elementDims}
-        setElementDims={setElementDims}
-        hoveredFavorite={hoveredFavorite}
-        runReCalc={runReCalc}
-        setRunReCalc={setRunReCalc}
-      />
-      <RecentList
-        setHoveredFavorite={setHoveredFavorite}
-        hoveredFavorite={hoveredFavorite}
-        favoritesCombined={favoritesCombined}
-        activeNameID={state.activeNameID}
-        setActiveNameID={actions.setActiveNameID}
-        dims={dims}
-        maxWidth={maxWidth}
-        setFavoritePersons={localStorageSetters.setFavoritePersons}
-        isOpen={isOpen}
-        elementDims={elementDims}
-        setRunReCalc={setRunReCalc}
-      />
-      <ControlCollapsed isOpen={isOpen} />
-      <EndIconsContainer
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        maxWidth={maxWidth}
-        dims={dims}
-      /> */}
     </>
   )
 }

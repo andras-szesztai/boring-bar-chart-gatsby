@@ -49,11 +49,11 @@ export default function ListItem({
   itemHovered,
   setItemHovered,
   hoverContent: HoverContent,
-  hoverContentProps,
   mouseDownContent: MouseDownContent,
   handleMouseEnter,
   activeNameID,
   setActiveNameID,
+  mouseDownAnimationAdjust,
 }) {
   const delayedRevealProps = {
     animate: { opacity: 1, transition: { delay: 0.35 } },
@@ -78,14 +78,13 @@ export default function ListItem({
   const [hiddenInformationWidth, setHiddenInformationWidth] = useState(0)
   useEffect(() => {
     if (
-      hoverContentProps &&
-      hoverContentProps.accessor &&
+      HoverContent &&
       !hiddenInformationWidth &&
       hiddenInformationRef.current
     ) {
       setHiddenInformationWidth(hiddenInformationRef.current.offsetWidth)
     }
-  }, [hoverContentProps, hiddenInformationWidth])
+  }, [hiddenInformationWidth, HoverContent])
 
   const [isClicked, setIsClicked] = useState()
   const timeOut = React.useRef(false)
@@ -135,7 +134,11 @@ export default function ListItem({
               color: bgColor,
             }}
             animate={{
-              width: isClicked ? originalWidth + hiddenInformationWidth - 2 : 0,
+              width: isClicked
+                ? originalWidth +
+                  hiddenInformationWidth -
+                  mouseDownAnimationAdjust
+                : 0,
             }}
             exit={{
               width: 0,
@@ -167,16 +170,13 @@ export default function ListItem({
             key="content"
             animateProps={delayedRevealProps}
             data={data}
-            {...hoverContentProps}
+            isMatch={itemHovered === activeNameID}
           />
         )}
       </AnimatePresence>
 
-      {hoverContentProps && hoverContentProps.accessor && (
-        <HiddenInformation
-          key={data.id + data[hoverContentProps.accessor]}
-          ref={hiddenInformationRef}
-        >
+      {HoverContent && (
+        <HiddenInformation key={data.id} ref={hiddenInformationRef}>
           <div
             style={{
               marginLeft: space[2],
@@ -186,7 +186,12 @@ export default function ListItem({
           >
             |
           </div>
-          <div>{data[hoverContentProps.accessor].trim()}</div>
+          <HoverContent
+            key="content"
+            animateProps={delayedRevealProps}
+            data={data}
+            isMatch={itemHovered === activeNameID}
+          />
         </HiddenInformation>
       )}
     </Item>
@@ -196,4 +201,5 @@ export default function ListItem({
 ListItem.defaultProps = {
   hiddenContent: () => <div />,
   mouseDownContent: () => <div />,
+  mouseDownAnimationAdjust: 2
 }

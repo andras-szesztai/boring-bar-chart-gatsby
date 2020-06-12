@@ -27,10 +27,19 @@ import {
   COLORS,
 } from "../../../../../../constants/moviesDashboard"
 
-const HoverContent = ({ animateProps, data, accessor }) => {
+const HoverContentCast = ({ animateProps, data, accessor }) => {
   return (
     <motion.div initial={{ opacity: 0 }} {...animateProps}>
-      {data[accessor]}
+      {data.character}
+    </motion.div>
+  )
+}
+
+
+const HoverContentCrew = ({ animateProps, data, accessor }) => {
+  return (
+    <motion.div initial={{ opacity: 0 }} {...animateProps}>
+      {data.job}
     </motion.div>
   )
 }
@@ -124,10 +133,7 @@ export default function CardContent(props) {
                 type="crew"
                 array={activeMovie.crew}
                 bgColor={COLORS.primary}
-                hoverContent={HoverContent}
-                hoverContentProps={{
-                  accessor: "job",
-                }}
+                hoverContent={HoverContentCrew}
                 mouseDownContent={MouseDownContent}
                 activeNameID={activeNameID}
                 setActiveNameID={setActiveNameID}
@@ -139,10 +145,7 @@ export default function CardContent(props) {
                 type="cast"
                 array={activeMovie.cast}
                 bgColor={COLORS.primary}
-                hoverContent={HoverContent}
-                hoverContentProps={{
-                  accessor: "character",
-                }}
+                hoverContent={HoverContentCast}
                 mouseDownContent={MouseDownContent}
                 activeNameID={activeNameID}
                 setActiveNameID={setActiveNameID}
@@ -156,7 +159,7 @@ export default function CardContent(props) {
                 onMouseEnter={() => setIsLinkHovered(true)}
                 onMouseLeave={() => setIsLinkHovered(false)}
               >
-                Find out more on <span>TMBD</span>
+                Click here to find out more on <span>TMBD</span>
               </a>
               <motion.div
                 style={{ marginLeft: 6, paddingTop: 5 }}
