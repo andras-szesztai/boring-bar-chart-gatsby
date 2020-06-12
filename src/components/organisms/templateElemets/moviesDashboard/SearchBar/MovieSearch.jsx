@@ -1,6 +1,5 @@
 import React from "react"
-import styled from "styled-components"
-import { motion } from "framer-motion"
+import mean from "lodash/mean"
 
 import { COLORS } from "../../../../../constants/moviesDashboard"
 import { useStateWithPrevious } from "../../../../../hooks"
@@ -12,7 +11,7 @@ export default function MovieSearch({
   setActiveMovie,
   setHoveredMovie,
   allMovies,
-  xScale
+  xScale,
 }) {
   const [results, setResults] = React.useState([])
   const [searchText, setSearchText, prevSearchText] = useStateWithPrevious("")
@@ -28,15 +27,27 @@ export default function MovieSearch({
     }
   }, [allMovies, prevSearchText, searchText])
 
+  const getXPosition = year =>  Number(+year >= mean(xScale.domain().map(el => el.getFullYear())))
+
+  // Hovered:
+  // id: undefined,
+  // data: {},
+  // yPosition: undefined,
+  // xPosition: undefined,
+
   return (
     <SearchBar
       key="person-search"
       getResults={getResults}
       id="movie-search"
       handleResultSelect={id => {
-        const data = allMovies.find(movie => movie.id === id)
-        console.log("data", data)
-        // setActiveMovie({ id, data: , position: })
+        const data = allMovies.find(movie => movie.id === id).data
+        const meanYear = 
+        setActiveMovie({
+          id,
+          data: data,
+          position: getXPosition(data.release_year)
+        })
       }}
       // handleResultHover={setHoveredMovie} // TODO: setup inside searchbar
       results={results.map(d => d.data)}
@@ -47,7 +58,7 @@ export default function MovieSearch({
         img: "poster_path",
         imgAlt: "title",
         subText: "Release year",
-        subTextValue: "release_date",
+        subTextValue: "release_year",
       }}
       placeholder="Search for a title"
       topZ={8}

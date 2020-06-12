@@ -2,6 +2,7 @@ import React from "react"
 import styled, { css } from "styled-components"
 import capitalize from "lodash/capitalize"
 import chroma from "chroma-js"
+import { AnimatePresence, motion } from "framer-motion"
 
 import { Image } from "../../.."
 import { dropShadow, space } from "../../../../../../../themes/theme"
@@ -9,7 +10,11 @@ import {
   themifyFontSize,
   themifyFontWeight,
 } from "../../../../../../../themes/mixins"
-import { COLORS } from "../../../../../../../constants/moviesDashboard"
+import {
+  COLORS,
+  OPACITY_VARIANT,
+  ANIMATE_PROPS,
+} from "../../../../../../../constants/moviesDashboard"
 
 const WIDTH = 320
 const HEIGHT = 160
@@ -131,7 +136,7 @@ export default function Tooltip({
               width: `${data.vote_average * 10}%`,
               height: "100%",
               backgroundColor: COLORS.secondary,
-              borderRadius: 2
+              borderRadius: 2,
             }}
           />
           <div
@@ -140,15 +145,22 @@ export default function Tooltip({
               width: "100%",
               height: "100%",
               border: `1px solid ${chroma(COLORS.secondary).darken()}`,
-              borderRadius: 2
+              borderRadius: 2,
             }}
           />
         </div>
-        {activeMovieID !== id && (
-          <div className="section hint">
-            Click<span> to explore the {data.media_type}!</span>
-          </div>
-        )}
+        <AnimatePresence>
+          {activeMovieID !== id && (
+            <motion.div
+              className="section hint"
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              Click<span> to explore the {data.media_type}!</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </TextContentGrid>
     </TooltipContainer>
   )

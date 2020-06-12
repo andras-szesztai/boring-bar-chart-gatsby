@@ -3,7 +3,6 @@ import uniqBy from "lodash/uniqBy"
 
 import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
-import { usePrevious } from "../../../../../../hooks"
 
 const initialState = {
   nameId: undefined,
@@ -94,7 +93,7 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
         .map(el => ({
           id: el.id,
           title: el.title,
-          data: el,
+          data: {...el, release_year: el.release_date.slice(0, 4)},
         }))
         .sort((a, b) => b.popularity - a.popularity)
       const xScale = scaleTime().domain(
