@@ -96,7 +96,7 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
           title: el.title,
           data: el,
         }))
-        .sort((a, b) => a.title.localeCompare(b.title))
+        .sort((a, b) => b.popularity - a.popularity)
       const xScale = scaleTime().domain(
         extent(data, d => new Date(d.release_date))
       )

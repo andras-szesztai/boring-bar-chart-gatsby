@@ -105,7 +105,7 @@ export default function SearchBar({
         onKeyDown={({ key }) => {
           if (key === "ArrowUp") {
             if (activeSearchResult === 0) {
-              setActiveSearchResult(4)
+              setActiveSearchResult(results.length)
             } else {
               setActiveSearchResult(prev => prev - 1)
             }

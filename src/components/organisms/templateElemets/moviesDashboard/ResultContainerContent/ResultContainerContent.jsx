@@ -74,6 +74,7 @@ export default function ResultContent({
   handleMouseOver,
   accessors
 }) {
+  console.log("data", data)
   return (
     <ResultContainer
       style={{ zIndex }}
