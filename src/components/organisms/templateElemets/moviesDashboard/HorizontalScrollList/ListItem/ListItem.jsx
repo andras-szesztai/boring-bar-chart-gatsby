@@ -71,8 +71,7 @@ export default function ListItem({
     if (!originalWidth && itemRef.current) {
       setOriginalListWidth(itemRef.current.offsetWidth)
     }
-  }, [originalWidth])
-  console.log("originalWidth", originalWidth)
+  }, [data, originalWidth])
 
   const hiddenInformationRef = React.useRef(null)
   const [hiddenInformationWidth, setHiddenInformationWidth] = useState(0)
@@ -84,11 +83,12 @@ export default function ListItem({
     ) {
       setHiddenInformationWidth(hiddenInformationRef.current.offsetWidth)
     }
-  }, [hiddenInformationWidth, HoverContent])
+  }, [hiddenInformationWidth, HoverContent, data])
 
   const [isClicked, setIsClicked] = useState()
   const timeOut = React.useRef(false)
 
+  console.log("originalWidth", originalWidth)
   return (
     <Item
       ref={itemRef}
@@ -97,6 +97,7 @@ export default function ListItem({
           itemHovered === data.id
             ? originalWidth + hiddenInformationWidth
             : originalWidth,
+        opacity: 1,
       }}
       onMouseLeave={() => {
         setIsClicked(false)
@@ -124,6 +125,9 @@ export default function ListItem({
         cursor:
           activeNameID && activeNameID !== data.id ? "pointer" : "default",
       }}
+      initial={{ opacity: 0 }}
+      // animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
     >
       <AnimatePresence>
         {activeNameID && activeNameID !== data.id && (

@@ -139,8 +139,7 @@ const IconsContainer = styled.div`
   align-items: center;
 
   position: absolute;
-
-  top: 1px;
+  top: -2px;
 
   border-radius: 0 0 0 2px;
   width: ${HANDLE_SIZE}px;

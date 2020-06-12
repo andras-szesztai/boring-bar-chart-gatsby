@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion"
 
 import { space } from "../../../../../themes/theme"
 import { COLORS } from "../../../../../constants/moviesDashboard"
@@ -54,28 +54,42 @@ export default function HorizontalScrollList(props) {
 
   const extraWidth = React.useRef(0)
 
+  const spring = {
+    type: "spring",
+    damping: 10,
+    stiffness: 100,
+  }
+
   return (
     <>
       <ListContainer onMouseLeave={() => setItemHovered(false)}>
-        <List
-          animate={{
-            width: itemHovered
-              ? originalWidth + extraWidth.current
-              : originalWidth,
-          }}
-        >
-          {!!array.length &&
-            array.map(el => (
-              <ListItem
-                key={`${el.id}-${type}`}
-                data={el}
-                {...props}
-                itemHovered={itemHovered}
-                setItemHovered={setItemHovered}
-                handleMouseEnter={width => (extraWidth.current = width)}
-              />
-            ))}
-        </List>
+        <AnimateSharedLayout>
+          <List
+            animate={{
+              width: itemHovered
+                ? originalWidth + extraWidth.current
+                : originalWidth,
+            }}
+          >
+            <AnimatePresence>
+              {!!array.length &&
+                array.map(el => {
+                  return (
+                    <motion.div key={`${el.id}-${type}`} animate>
+                      <ListItem
+                        data={el}
+                        itemHovered={itemHovered}
+                        setItemHovered={setItemHovered}
+                        handleMouseEnter={width => (extraWidth.current = width)}
+                        {...props}
+                        layoutId="list-item"
+                      />
+                    </motion.div>
+                  )
+                })}
+            </AnimatePresence>
+          </List>
+        </AnimateSharedLayout>
       </ListContainer>
       <HiddenList ref={listRef}>
         {!!array.length &&
