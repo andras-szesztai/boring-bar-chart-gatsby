@@ -1,7 +1,6 @@
-import React, { useEffect } from "react"
+import React from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
-import chroma from "chroma-js"
 
 import { BubbleChart, DateAxis } from "../charts"
 import Switch from "../Switch/Switch"
@@ -11,6 +10,10 @@ import { MainContainer, SubContainer, ChartContainer } from "./styles"
 import { MovieSearch } from "../SearchBar"
 import { space } from "../../../../../themes/theme"
 import IntroText from "./IntroText/IntroText"
+import {
+  OPACITY_VARIANT,
+  ANIMATE_PROPS,
+} from "../../../../../constants/moviesDashboard"
 
 const ControlsContainer = styled(motion.div)`
   display: grid;
@@ -45,69 +48,79 @@ export default function MovieSelectorChart({
     setIsFirstEntered: setIsFirstEntered,
   })
 
-  //console.log(loading) might be animateable TODO: setup animation
   return (
-    <MainContainer>
-      {!activeNameID && <IntroText />}
+    <>
+      <AnimatePresence>
+        {!activeNameID && (
+          <MainContainer variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
+            <IntroText />
+          </MainContainer>
+        )}
+      </AnimatePresence>
       {activeNameID && !loading.personCredits && (
-        <SubContainer>
-          <ControlsContainer>
-            <MovieSearch
-              setActiveMovie={setActiveMovie}
-              setHoveredMovie={actions.setHoveredMovie}
-              allMovies={state.movieSearchData}
-              xScale={state.scales.xScale}
-              mainData={
-                state.types.main &&
-                (dataSets.personCredits[state.types.main] || [])
-              }
-            />
-            <Switch
-              handleAction={actions.setIsYDomainSynced}
-              value={state.isYDomainSynced}
-              offText="Dynamic"
-              onText="Fixed score axis"
-            />
-            <Switch
-              handleAction={actions.setIsSizeSynced}
-              value={state.isSizeDynamic}
-              offText="Fixed"
-              onText="Dynamic dot size"
-            />
-          </ControlsContainer>
-          {typeof state.isBoth == "boolean" && (
-            <ChartContainer
-              twoCharts={state.isBoth}
-              onMouseLeave={() => setIsFirstEntered(true)}
-            >
-              <BubbleChart
-                {...makeProps("main")}
-                tooltipYPosition={state.isBoth ? 0 : 1}
-              />
-              <DateAxis
-                mainData={dataSets.personCredits[state.types.main] || []}
-                subData={
-                  state.isBoth
-                    ? dataSets.personCredits[state.types.sub] || []
-                    : []
-                }
-                type={state.types.main}
-                xScale={state.scales.xScale}
+        <MainContainer
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { delay: 0.5 } }}
+        >
+          <SubContainer>
+            <ControlsContainer>
+              <MovieSearch
                 setActiveMovie={setActiveMovie}
-                activeMovie={activeMovie}
                 setHoveredMovie={actions.setHoveredMovie}
-                hoveredMovie={state.hoveredMovie}
-                isBoth={state.isBoth}
-                isFirstEntered={isFirstEntered}
-                setIsFirstEntered={setIsFirstEntered}
+                allMovies={state.movieSearchData}
+                xScale={state.scales.xScale}
+                mainData={
+                  state.types.main &&
+                  (dataSets.personCredits[state.types.main] || [])
+                }
               />
-              {state.isBoth && (
-                <BubbleChart {...makeProps("sub")} tooltipYPosition={1} />
-              )}
-            </ChartContainer>
-          )}
-        </SubContainer>
+              <Switch
+                handleAction={actions.setIsYDomainSynced}
+                value={state.isYDomainSynced}
+                offText="Dynamic"
+                onText="Fixed score axis"
+              />
+              <Switch
+                handleAction={actions.setIsSizeSynced}
+                value={state.isSizeDynamic}
+                offText="Fixed"
+                onText="Dynamic dot size"
+              />
+            </ControlsContainer>
+            {typeof state.isBoth == "boolean" && (
+              <ChartContainer
+                twoCharts={state.isBoth}
+                onMouseLeave={() => setIsFirstEntered(true)}
+              >
+                <BubbleChart
+                  {...makeProps("main")}
+                  tooltipYPosition={state.isBoth ? 0 : 1}
+                />
+                <DateAxis
+                  mainData={dataSets.personCredits[state.types.main] || []}
+                  subData={
+                    state.isBoth
+                      ? dataSets.personCredits[state.types.sub] || []
+                      : []
+                  }
+                  type={state.types.main}
+                  xScale={state.scales.xScale}
+                  setActiveMovie={setActiveMovie}
+                  activeMovie={activeMovie}
+                  setHoveredMovie={actions.setHoveredMovie}
+                  hoveredMovie={state.hoveredMovie}
+                  isBoth={state.isBoth}
+                  isFirstEntered={isFirstEntered}
+                  setIsFirstEntered={setIsFirstEntered}
+                />
+                {state.isBoth && (
+                  <BubbleChart {...makeProps("sub")} tooltipYPosition={1} />
+                )}
+              </ChartContainer>
+            )}
+          </SubContainer>
+        </MainContainer>
       )}
-    </MainContainer>
+    </>
   )
 }
