@@ -67,11 +67,12 @@ const variants = {
   },
 }
 
-export default function ResultContainerContent({
+export default function ResultContent({
   data,
   zIndex,
   handleClick,
   handleMouseOver,
+  accessors
 }) {
   return (
     <ResultContainer
@@ -82,12 +83,12 @@ export default function ResultContainerContent({
     >
       <Image
         height={52}
-        url={data.profile_path}
-        alt={data.name}
+        url={data[accessors.img]}
+        alt={data[accessors.name]}
       />
-      <NameContainer>{data.name}</NameContainer>
+      <NameContainer>{data[accessors.imgAlt]}</NameContainer>
       <JobContainer>
-        Known for: {data.known_for_department}
+        {accessors.subText}: {data[accessors.subTextValue]}
       </JobContainer>
     </ResultContainer>
   )

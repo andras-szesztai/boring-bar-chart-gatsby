@@ -9,7 +9,7 @@ import { useUpdateEffect } from "react-use"
 import isEqual from "lodash/isEqual"
 import { scaleTime, scaleSqrt } from "d3-scale"
 import { extent } from "d3-array"
-import { IoIosArrowBack, IoIosArrowForward, IoIosClose } from "react-icons/io"
+import { IoIosArrowBack, IoIosArrowForward, xIoIosClose } from "react-icons/io"
 
 import { useDeviceType, usePrevious, useStateWithPrevious } from "../../hooks"
 import {

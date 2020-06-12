@@ -23,6 +23,8 @@ export default function SearchBar({
   color,
   resultContent: ResultContent,
   placeholder,
+  id,
+  resultContentAccessors
 }) {
   const { inputText, setInputText } = useDebouncedSearch(getResults, 1000)
   const [activeSearchResult, setActiveSearchResult] = useState(0)
@@ -86,8 +88,8 @@ export default function SearchBar({
         }}
         transition={TRANSITION.primary}
         type="text"
-        id="search"
-        name="name search"
+        id={id}
+        name={id}
         placeholder={placeholder}
         size="50"
         color={color}
@@ -140,6 +142,7 @@ export default function SearchBar({
                 key={res.id}
                 zIndex={Math.abs(i - 4)}
                 data={res}
+                accessors={resultContentAccessors}
                 handleClick={() => {
                   handleResultSelect(res.id)
                   setResults([])

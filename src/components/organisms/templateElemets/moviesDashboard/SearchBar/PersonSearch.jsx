@@ -3,7 +3,7 @@ import axios from "axios"
 
 import { API_ROOT, COLORS } from "../../../../../constants/moviesDashboard"
 
-import PersonResultContainerContent from "../PersonResultContainerContent/PersonResultContainerContent"
+import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
 import SearchBar from "./SearchBar"
 import { SearchBarMainContainer } from "./styles"
 
@@ -29,12 +29,19 @@ export default function PersonSearch({ setActiveNameID }) {
     <SearchBarMainContainer>
       <SearchBar
         key="person-search"
+        id="person-search"
         getResults={fetchNames}
         handleResultSelect={id => setActiveNameID({ id })}
         results={nameSearchResults}
         setResults={setNameSearchResults}
         color={COLORS.primary}
-        resultContent={PersonResultContainerContent}
+        resultContent={ResultContainerContent}
+        resultContentAccessors={{
+          img: "profile_path",
+          imgAlt: "name",
+          subText: "Known for",
+          subTextValue: "known_for_department"
+        }}
         placeholder="Search for a film director, actor, writer . . . "
       />
     </SearchBarMainContainer>
