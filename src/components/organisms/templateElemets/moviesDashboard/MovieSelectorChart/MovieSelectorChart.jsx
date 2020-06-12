@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import chroma from "chroma-js"
 
 import { BubbleChart, DateAxis } from "../charts"
 import Switch from "../Switch/Switch"
@@ -15,6 +16,7 @@ import {
   LOCAL_STORE_ACCESSORS,
 } from "../../../../../constants/moviesDashboard"
 import { useLocalStorage } from "../../../../../hooks"
+import { FavoriteStar } from "../../../../molecules"
 
 const ControlsContainer = styled(motion.div)`
   display: grid;
@@ -24,15 +26,25 @@ const ControlsContainer = styled(motion.div)`
 `
 
 const TextContainer = styled(motion.div)`
-  width: 500px;
+  width: 550px;
   font-size: ${themifyFontSize(2)};
   color: ${COLORS.textColor};
   margin-bottom: ${space[3]}px;
+  line-height: 1.65;
 `
 
 const ColoredSpan = styled.span`
-  padding: ${space[1]}px  ${space[2]}px;;
+  padding: 0px ${space[2]}px 2px ${space[2]}px;
   background-color: ${({ color }) => color};
+  border: 1px solid ${({ color }) => chroma(color).darken()};
+  border-radius: 2px;
+  color: #fff;
+`
+
+const Link = styled(motion.a)`
+  padding: 0px ${space[2]}px 2px ${space[2]}px;
+  background-color: #1da1f2;
+  border: 1px solid ${chroma("#1DA1F2").darken()};
   border-radius: 2px;
   color: #fff;
 `
@@ -92,7 +104,31 @@ export default function MovieSelectorChart({
           </TextContainer>
           <TextContainer>
             You can take a start already by typing a name into the{" "}
-            <ColoredSpan color={COLORS.primary}>search bar</ColoredSpan>
+            <ColoredSpan color={COLORS.primary}>search bar</ColoredSpan> in the
+            top left corner. When selecting a person from the results, you will
+            see this middle part getting populated and you can start exploring
+            the data by hovering over the elements and by just clicking around!
+          </TextContainer>
+          <TextContainer>
+            The dashboard allows you also to mark persons and movies/series as
+            your favorites{" "}
+            <span style={{ position: "relative" }}>
+              ‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎
+              <span style={{ position: "absolute", top: -4, right: -8 }}>
+                <FavoriteStar isFavorited={true} width={30} />
+              </span>
+            </span>{" "}
+            , which can help you with quick search options whenever you come
+            back next time!
+          </TextContainer>
+          <TextContainer>
+            Please keep in mind that this dashboard is a constant work in
+            progress, and it will experience some changes in the near future by
+            receiving some cool new features and getting some issues fixed. If
+            you feel like share an idea about what type of features you would
+            like to be added or any feedback about potential issues, please feel
+            free to contact me anytime via <Link>twitter</Link>. Thank you so
+            much and please enjoy your time exploring!
           </TextContainer>
         </>
       )}

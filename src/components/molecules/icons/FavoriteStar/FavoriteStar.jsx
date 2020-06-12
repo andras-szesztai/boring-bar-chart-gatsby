@@ -35,6 +35,7 @@ export default function FavoriteStar({
   color,
   isActive,
   inactiveColor,
+  width
 }) {
   const topRef = useRef(null)
   const circleRef = useArrayRefs(5)
@@ -120,7 +121,7 @@ export default function FavoriteStar({
 
   const fill = isActive ? color : inactiveColor
   return (
-    <motion.svg width="35px" viewBox="0 0 591.2 591.2">
+    <motion.svg width={width} viewBox="0 0 591.2 591.2">
       <motion.path
         ref={topRef}
         {...makeIconColorTransitionProps("fill", fill)}
@@ -157,4 +158,5 @@ FavoriteStar.defaultProps = {
   color: "#ffbd69",
   inactiveColor: colors.grayLightest,
   isActive: true,
+  width: 35
 }

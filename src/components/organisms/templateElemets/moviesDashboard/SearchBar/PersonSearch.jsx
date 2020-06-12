@@ -42,7 +42,7 @@ export default function PersonSearch({ setActiveNameID }) {
           subText: "Known for",
           subTextValue: "known_for_department",
         }}
-        placeholder="Search for a film director, actor, writer . . . "
+        placeholder="Search for a film director, actor, screenwriter . . . "
         topZ={11}
       />
     </SearchBarMainContainer>
