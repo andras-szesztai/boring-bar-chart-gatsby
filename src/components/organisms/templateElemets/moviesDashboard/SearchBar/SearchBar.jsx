@@ -24,7 +24,8 @@ export default function SearchBar({
   resultContent: ResultContent,
   placeholder,
   id,
-  resultContentAccessors
+  resultContentAccessors,
+  topZ
 }) {
   const { inputText, setInputText } = useDebouncedSearch(getResults, 1000)
   const [activeSearchResult, setActiveSearchResult] = useState(0)
@@ -38,6 +39,7 @@ export default function SearchBar({
       animate={{
         opacity: 1,
       }}
+      z={topZ}
     >
       <AnimatePresence>
         {results.length && (
@@ -47,6 +49,7 @@ export default function SearchBar({
             exit={{ opacity: 0 }}
             transition={TRANSITION.primary}
             color={color}
+            z={topZ}
           />
         )}
       </AnimatePresence>
@@ -57,6 +60,7 @@ export default function SearchBar({
           opacity: searchIsFocused ? 0 : 1,
         }}
         transition={TRANSITION.primary}
+        z={topZ}
       >
         <IoIosSearch size={25} color="#FFF" />
       </SearchIconContainer>
@@ -75,6 +79,7 @@ export default function SearchBar({
           setInputText("")
           setResults([])
         }}
+        z={topZ}
         role="button"
       >
         <IoIosClose size={25} color="#FFF" />
@@ -105,7 +110,7 @@ export default function SearchBar({
         onKeyDown={({ key }) => {
           if (key === "ArrowUp") {
             if (activeSearchResult === 0) {
-              setActiveSearchResult(results.length)
+              setActiveSearchResult(results.length - 1)
             } else {
               setActiveSearchResult(prev => prev - 1)
             }

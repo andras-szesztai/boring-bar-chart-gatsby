@@ -45,6 +45,7 @@ export default function MovieSearch({
         subTextValue: "release_date",
       }}
       placeholder="Search for a title"
+      topZ={8}
     />
   )
 }

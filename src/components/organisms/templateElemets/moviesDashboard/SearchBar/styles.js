@@ -2,7 +2,7 @@ import styled, { css } from "styled-components"
 import { motion } from "framer-motion"
 import chroma from "chroma-js"
 
-import { themifyZIndex, themifyFontSize } from "../../../../../themes/mixins"
+import { themifyFontSize } from "../../../../../themes/mixins"
 import { CARD_WIDTH } from "../../../../../constants/moviesDashboard"
 import { space, fontFamily } from "../../../../../themes/theme"
 
@@ -10,16 +10,16 @@ export const SearchBarMainContainer = styled.div`
   position: fixed;
   left: ${space[2]}px;
   top: ${space[2]}px;
-  z-index: 5;
+  z-index: ${({z}) => z};
 `
 
 export const SearchBarSubContainer = styled(motion.div)`
   position: relative;
   cursor: pointer;
+  z-index: ${({z}) => z};
 `
 
 export const StyledSearchBar = styled(motion.input)`
-  z-index: ${themifyZIndex("hoverOverlay")};
   width: ${CARD_WIDTH - 50}px;
   height: 40px;
   border-radius: ${space[1]}px;
@@ -48,20 +48,20 @@ export const SearchIconContainer = styled(motion.div)`
   position: absolute;
   top: ${space[2]}px;
   left: ${space[2]}px;
-  z-index: ${themifyZIndex("tooltip")};
   cursor: default;
+  z-index: ${({z}) => z + 1};
 `
 
 export const CloseIconContainer = styled(motion.div)`
   position: absolute;
   top: ${space[2]}px;
   right: 5px;
-  z-index: ${themifyZIndex("tooltip")};
+  z-index: ${({z}) => z + 1};
 `
 
 export const SearchItemHover = styled(motion.div)`
   position: absolute;
-  z-index: ${themifyZIndex("tooltip")};
+  z-index: ${({z}) => z + 1};
 
   height: 70px;
   width: 100%;
@@ -76,7 +76,6 @@ export const SearchItemHover = styled(motion.div)`
 
 export const ResultsContainer = styled(motion.div)`
   position: absolute;
-  z-index: -1;
   padding-top: 35px;
   top: 10px;
   width: 100%;
@@ -84,6 +83,7 @@ export const ResultsContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  z-index: -1;
 `
 
 export const variants = {
@@ -93,8 +93,9 @@ export const variants = {
     },
   },
   exit: {
+    pointerEvents: "none",
     transition: {
-      staggerChildren: 0.15,
+      staggerChildren: 0.1,
       staggerDirection: -1,
     },
   },

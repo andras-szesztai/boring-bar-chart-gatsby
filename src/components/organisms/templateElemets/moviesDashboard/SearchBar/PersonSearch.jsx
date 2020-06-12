@@ -26,7 +26,7 @@ export default function PersonSearch({ setActiveNameID }) {
   }
 
   return (
-    <SearchBarMainContainer>
+    <SearchBarMainContainer z={11}>
       <SearchBar
         key="person-search"
         id="person-search"
@@ -40,9 +40,10 @@ export default function PersonSearch({ setActiveNameID }) {
           img: "profile_path",
           imgAlt: "name",
           subText: "Known for",
-          subTextValue: "known_for_department"
+          subTextValue: "known_for_department",
         }}
         placeholder="Search for a film director, actor, writer . . . "
+        topZ={11}
       />
     </SearchBarMainContainer>
   )
