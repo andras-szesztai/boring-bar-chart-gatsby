@@ -3,15 +3,18 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 
 import { BubbleChart, DateAxis } from "../charts"
+import Switch from "../Switch/Switch"
 
 import useMovieSelectorChartReducer from "./reducer/chartReducer"
 import { MainContainer, SubContainer, ChartContainer } from "./styles"
 import { MovieSearch } from "../SearchBar"
+import { space } from "../../../../../themes/theme"
 
 const ControlsContainer = styled(motion.div)`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  grid-column-gap: ${space[6]}px;
+  align-items: end;
 `
 
 export default function MovieSelectorChart({
@@ -56,7 +59,7 @@ export default function MovieSelectorChart({
                   (dataSets.personCredits[state.types.main] || [])
                 }
               />
-              {/* <Switch
+              <Switch
                 handleAction={actions.setIsYDomainSynced}
                 value={state.isYDomainSynced}
                 offText="Dynamic"
@@ -67,7 +70,7 @@ export default function MovieSelectorChart({
                 value={state.isSizeDynamic}
                 offText="Fixed"
                 onText="Dynamic dot size"
-              /> */}
+              />
             </ControlsContainer>
             {typeof state.isBoth == "boolean" && (
               <ChartContainer

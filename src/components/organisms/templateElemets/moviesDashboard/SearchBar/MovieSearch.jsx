@@ -3,7 +3,10 @@ import mean from "lodash/mean"
 import isEqual from "lodash/isEqual"
 import omit from "lodash/omit"
 
-import { COLORS } from "../../../../../constants/moviesDashboard"
+import {
+  COLORS,
+  NO_HOVERED_MOVIE,
+} from "../../../../../constants/moviesDashboard"
 import { useStateWithPrevious } from "../../../../../hooks"
 
 import SearchBar from "./SearchBar"
@@ -28,16 +31,13 @@ export default function MovieSearch({
         .slice(0, 5)
       setResults(newResults)
     }
-  }, [allMovies, prevSearchText, searchText])
+    if (!searchText && prevSearchText) {
+      setHoveredMovie(NO_HOVERED_MOVIE)
+    }
+  }, [allMovies, prevSearchText, searchText, setHoveredMovie])
 
   const getXPosition = year =>
     Number(+year >= mean(xScale.domain().map(el => el.getFullYear())))
-
-  // Hovered:
-  // id: undefined,
-  // data: {},
-  // yPosition: undefined,
-  // xPosition: undefined,
 
   return (
     <SearchBar

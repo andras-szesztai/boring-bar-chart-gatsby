@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import Switch from "react-switch"
+import chroma from "chroma-js"
 
 import { space } from "../../../../../themes/theme"
 import { themifyFontSize } from "../../../../../themes/mixins"
@@ -8,26 +9,21 @@ import { COLORS } from "../../../../../constants/moviesDashboard"
 
 // TODO: fix order + style selected with bolder or underline!!!
 const CheckBoxContainer = styled.div`
-  margin-right: ${space[4]}px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   height: 35px;
 
   label {
     cursor: pointer;
     font-size: ${themifyFontSize(2)};
     color: ${COLORS.textColor};
-    margin-right: ${space[2]}px;
     margin-left: ${space[2]}px;
   }
 `
 
-const SwitchComponent = ({ handleAction, value, offText, onText }) => {
+const SwitchComponent = ({ handleAction, value, onText }) => {
   return (
     <CheckBoxContainer>
-      <label onClick={() => handleAction(false)} role="button">
-        {offText}
-      </label>
       <Switch
         checked={value}
         onChange={() => handleAction(!value)}
@@ -36,7 +32,7 @@ const SwitchComponent = ({ handleAction, value, offText, onText }) => {
         width={40}
         height={20}
         onColor={COLORS.textColor}
-        offColor={COLORS.textColor}
+        offColor={COLORS.gridColor}
       />
       <label onClick={() => handleAction(true)} role="button">
         {onText}

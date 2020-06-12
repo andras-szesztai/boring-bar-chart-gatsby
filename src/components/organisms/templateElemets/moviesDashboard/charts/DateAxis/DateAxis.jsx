@@ -6,7 +6,6 @@ import { useMeasure } from "react-use"
 import "d3-transition"
 import { axisBottom } from "d3-axis"
 import { Delaunay } from "d3-delaunay"
-import { format } from "date-fns"
 
 import {
   COLORS,
