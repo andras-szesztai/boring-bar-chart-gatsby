@@ -30,7 +30,7 @@ export const WHILE_HOVER = {
 }
 
 export const CHART_SIDE_MARGINS = {
-  left: 15,
+  left: 25,
   right: 25,
 }
 

@@ -28,7 +28,7 @@ export default function useActiveMovieCredits({
           dispatch({
             type: SET_ACTIVE_MOVIE_CREDITS,
             payload: {
-              cast: uniqBy(response.data.cast, "id").slice(0, 5),
+              cast: uniqBy(response.data.cast, "id").slice(0, 10),
               crew: uniqBy(response.data.crew, "id").slice(0, 10),
             },
           })

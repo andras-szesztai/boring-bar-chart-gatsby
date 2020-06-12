@@ -24,7 +24,6 @@ import {
   useChartResize,
 } from "./hooks"
 import { setRadius } from "./utils"
-import { makeFilteredData } from "../../utils"
 import { Wrapper, ChartTitle, NumberContainer, ChartSvg } from "./styles"
 import { fontSize } from "../../../../../../themes/theme"
 
@@ -60,14 +59,13 @@ export default function BubbleChart(props) {
       !prevDims.width &&
       dims.width
     ) {
-      const filteredData = makeFilteredData(data)
       const currXScale = xScale.range([
         0,
         dims.width - margin.left - margin.right,
       ])
       const yScale = scaleLinear()
         .domain(
-          isYDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
+          isYDomainSynced ? [0, 10] : extent(data, d => d.vote_average)
         )
         .range([dims.height - margin.top - margin.bottom, 0])
       const currSizeScale = sizeScale.range(props.sizeRange)
@@ -84,13 +82,12 @@ export default function BubbleChart(props) {
         svgArea,
         gridArea,
         voronoiArea,
-        filteredData,
       }
       createGrid()
       createGridText()
       createCircles()
       createUpdateVoronoi()
-      setNumber(filteredData.length)
+      setNumber(data.length)
     }
   })
 
@@ -100,12 +97,11 @@ export default function BubbleChart(props) {
       currSizeScale,
       yScale,
       chartArea,
-      filteredData,
     } = storedValues.current
 
     chartArea
       .selectAll(".main-circle")
-      .data(filteredData, d => d.id)
+      .data(data, d => d.id)
       .enter()
       .append("g")
       .attr("class", "main-circle")
@@ -205,12 +201,11 @@ export default function BubbleChart(props) {
     const {
       yScale,
       currXScale,
-      filteredData,
       voronoiArea,
     } = storedValues.current
     const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
     const setYPos = d => yScale(d.vote_average) + margin.top
-    const delaunay = Delaunay.from(filteredData, setXPos, setYPos).voronoi([
+    const delaunay = Delaunay.from(data, setXPos, setYPos).voronoi([
       0,
       0,
       dims.width,
@@ -219,7 +214,7 @@ export default function BubbleChart(props) {
 
     voronoiArea
       .selectAll(".voronoi-path")
-      .data(filteredData, d => d.id)
+      .data(data, d => d.id)
       .join(
         enter =>
           enter
