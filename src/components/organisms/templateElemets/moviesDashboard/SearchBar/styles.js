@@ -87,7 +87,11 @@ export const ResultsContainer = styled(motion.div)`
 `
 
 export const variants = {
+  initial: {
+    pointerEvents: "auto",
+  },
   animate: {
+    pointerEvents: "auto",
     transition: {
       staggerChildren: 0.25,
     },
