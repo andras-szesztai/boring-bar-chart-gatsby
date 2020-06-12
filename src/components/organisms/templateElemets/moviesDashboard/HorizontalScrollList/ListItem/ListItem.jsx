@@ -8,7 +8,7 @@ import { space } from "../../../../../../themes/theme"
 
 const Item = styled(motion.span)`
   position: relative;
-  padding: ${space[0]}px ${space[2]}px 1px ${space[2]}px;
+  padding: ${space[0]}px 12px 1px 12px;
   margin-right: ${space[2]}px;
   border-radius: 2px;
   white-space: nowrap;
