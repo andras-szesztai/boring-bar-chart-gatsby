@@ -44,7 +44,7 @@ export const MovieDetailsCardRight = styled(MovieDetailsCard)`
   :before {
     ${HandleStyle}
     top: 0px;
-    height: ${HANDLE_SIZE * 2}px;
+    height: ${HANDLE_SIZE}px;
     left: -${HANDLE_SIZE - 4}px;
     border-radius: ${space[1]}px 0 0 ${space[1]}px;
   }
@@ -65,7 +65,7 @@ export const MovieDetailsCardLeft = styled(MovieDetailsCard)`
     ${HandleStyle}
     top: 0px;
     right: ${-HANDLE_SIZE + 4}px;
-    height: ${HANDLE_SIZE * 2}px;
+    height: ${HANDLE_SIZE}px;
     border-radius: 0 ${space[1]}px ${space[1]}px 0;
   }
 `
@@ -135,21 +135,19 @@ export const makeLeftVariants = delay => ({
 const IconsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
 
   position: absolute;
 
-  top: 0px;
+  top: 1px;
 
   border-radius: 0 0 0 2px;
   width: ${HANDLE_SIZE}px;
-  height: ${HANDLE_SIZE * 2}px;
+  height: ${HANDLE_SIZE}px;
   z-index: 4;
 
-  .icon {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `
 
 export const IconsContainerRight = styled(IconsContainer)`

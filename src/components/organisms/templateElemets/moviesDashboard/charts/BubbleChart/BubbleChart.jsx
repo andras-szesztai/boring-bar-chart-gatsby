@@ -241,6 +241,7 @@ export default function BubbleChart(props) {
     isSizeDynamic,
     createUpdateVoronoi,
     chart,
+    data
   })
   useRadiusUpdate({
     storedValues,
@@ -266,6 +267,7 @@ export default function BubbleChart(props) {
     chart,
     dims,
     addUpdateInteractions,
+    data
   })
   useHoveredUpdate({
     storedValues,

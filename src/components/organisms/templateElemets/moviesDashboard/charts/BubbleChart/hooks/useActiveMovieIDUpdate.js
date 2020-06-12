@@ -16,13 +16,12 @@ export default function useActiveMovieIDUpdate({
   isSizeDynamic,
   chart,
   dims,
-  setActiveMovie,
+  data
 }) {
   React.useEffect(() => {
     if (storedValues.current.isInit && activeMovieID !== prevActiveMovieID) {
       const {
         chartArea,
-        filteredData,
         currXScale,
         yScale,
         currSizeScale,
@@ -32,7 +31,7 @@ export default function useActiveMovieIDUpdate({
       chartArea.select(".selected-line").remove()
       chartArea.select(".hovered-circle").remove()
       chartArea.select(".hovered-line").remove()
-      const selectedData = filteredData.find(d => d.id === activeMovieID)
+      const selectedData = data.find(d => d.id === activeMovieID)
       if (selectedData) {
         chartArea.selectAll(".main-circle").each((d, i, n) => {
           if (d.id === activeMovieID) {

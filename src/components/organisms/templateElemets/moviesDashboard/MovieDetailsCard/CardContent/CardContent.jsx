@@ -4,7 +4,6 @@ import { IoIosCloseCircle, IoIosSearch } from "react-icons/io"
 import { FaExternalLinkSquareAlt } from "react-icons/fa"
 import { useMeasure } from "react-use"
 
-
 import { FavoriteStar } from "../../../../../molecules"
 import Image from "../../Image/Image"
 import HorizontalScrollList from "../../HorizontalScrollList/HorizontalScrollList"
@@ -27,7 +26,6 @@ import {
   WHILE_HOVER,
   COLORS,
 } from "../../../../../../constants/moviesDashboard"
-
 
 const HoverContent = ({ animateProps, data, accessor }) => {
   return (
@@ -106,9 +104,6 @@ export default function CardContent(props) {
               />
             </ContentItem>
             <IconsContainer>
-              <motion.div whileHover={WHILE_HOVER}>
-                <FavoriteStar isFavorited={true} isHovered={false} />
-              </motion.div>
               <motion.div whileHover={WHILE_HOVER}>
                 <FavoriteStar isFavorited={true} isHovered={false} />
               </motion.div>

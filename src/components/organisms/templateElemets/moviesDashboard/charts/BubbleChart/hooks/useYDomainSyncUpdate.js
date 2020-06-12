@@ -12,7 +12,8 @@ export default function useYDomainSyncUpdate({
   prevIsYDomainSynced,
   isSizeDynamic,
   createUpdateVoronoi,
-  chart
+  chart,
+  data
 }) {
   useEffect(() => {
     if (
@@ -21,13 +22,12 @@ export default function useYDomainSyncUpdate({
     ) {
       const {
         yScale,
-        filteredData,
         chartArea,
         gridArea,
         currSizeScale,
       } = storedValues.current
       yScale.domain(
-        isYDomainSynced ? [0, 10] : extent(filteredData, d => d.vote_average)
+        isYDomainSynced ? [0, 10] : extent(data, d => d.vote_average)
       )
       const tChart = makeTransition(chartArea, transition.mdNum, "y-update")
       const tGrid = makeTransition(gridArea, transition.mdNum, "y-update")
@@ -61,5 +61,5 @@ export default function useYDomainSyncUpdate({
         yScale,
       }
     }
-  }, [chart, createUpdateVoronoi, isSizeDynamic, storedValues, isYDomainSynced, prevIsYDomainSynced])
+  }, [chart, createUpdateVoronoi, isSizeDynamic, storedValues, isYDomainSynced, prevIsYDomainSynced, data])
 }
