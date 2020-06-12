@@ -1,9 +1,14 @@
 import React, { useState } from "react"
 import { IoIosSearch, IoIosClose } from "react-icons/io"
 import { AnimatePresence } from "framer-motion"
+import isFunction from "lodash/isFunction"
 
 import { TRANSITION } from "../../../../../constants/moviesDashboard"
-import { useDebouncedSearch } from "../../../../../hooks"
+import {
+  useDebouncedSearch,
+  useStateWithPrevious,
+  usePrevious,
+} from "../../../../../hooks"
 
 import {
   SearchBarSubContainer,
@@ -18,6 +23,7 @@ import {
 export default function SearchBar({
   getResults,
   handleResultSelect,
+  handleResultHover,
   results,
   setResults,
   color,
@@ -25,11 +31,34 @@ export default function SearchBar({
   placeholder,
   id,
   resultContentAccessors,
-  topZ
+  topZ,
 }) {
+  const prevResults = usePrevious(results)
   const { inputText, setInputText } = useDebouncedSearch(getResults, 1000)
-  const [activeSearchResult, setActiveSearchResult] = useState(0)
+  const [
+    activeSearchResult,
+    setActiveSearchResult,
+    prevActiveSearchResult,
+  ] = useStateWithPrevious(0)
   const [searchIsFocused, setSearchIsFocused] = useState(false)
+
+  React.useEffect(() => {
+    if (
+      isFunction(handleResultHover) &&
+      results.length &&
+      ((!isNaN(prevActiveSearchResult) &&
+        activeSearchResult !== prevActiveSearchResult) ||
+        (!prevResults.length && results.length))
+    ) {
+      handleResultHover(results[activeSearchResult])
+    }
+  }, [
+    activeSearchResult,
+    handleResultHover,
+    prevActiveSearchResult,
+    prevResults,
+    results,
+  ])
 
   return (
     <SearchBarSubContainer
@@ -122,7 +151,6 @@ export default function SearchBar({
               setActiveSearchResult(prev => prev + 1)
             }
           }
-
           if (key === "Enter" && results[activeSearchResult]) {
             handleResultSelect(results[activeSearchResult].id)
             setResults([])

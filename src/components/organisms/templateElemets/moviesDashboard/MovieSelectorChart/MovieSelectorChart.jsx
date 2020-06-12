@@ -51,6 +51,10 @@ export default function MovieSelectorChart({
                 setHoveredMovie={actions.setHoveredMovie}
                 allMovies={state.movieSearchData}
                 xScale={state.scales.xScale}
+                mainData={
+                  state.types.main &&
+                  (dataSets.personCredits[state.types.main] || [])
+                }
               />
               {/* <Switch
                 handleAction={actions.setIsYDomainSynced}

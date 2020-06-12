@@ -1,5 +1,7 @@
 import React from "react"
 import mean from "lodash/mean"
+import isEqual from "lodash/isEqual"
+import omit from "lodash/omit"
 
 import { COLORS } from "../../../../../constants/moviesDashboard"
 import { useStateWithPrevious } from "../../../../../hooks"
@@ -12,6 +14,7 @@ export default function MovieSearch({
   setHoveredMovie,
   allMovies,
   xScale,
+  mainData,
 }) {
   const [results, setResults] = React.useState([])
   const [searchText, setSearchText, prevSearchText] = useStateWithPrevious("")
@@ -27,7 +30,8 @@ export default function MovieSearch({
     }
   }, [allMovies, prevSearchText, searchText])
 
-  const getXPosition = year =>  Number(+year >= mean(xScale.domain().map(el => el.getFullYear())))
+  const getXPosition = year =>
+    Number(+year >= mean(xScale.domain().map(el => el.getFullYear())))
 
   // Hovered:
   // id: undefined,
@@ -42,14 +46,21 @@ export default function MovieSearch({
       id="movie-search"
       handleResultSelect={id => {
         const data = allMovies.find(movie => movie.id === id).data
-        const meanYear = 
         setActiveMovie({
           id,
           data: data,
-          position: getXPosition(data.release_year)
+          position: getXPosition(data.release_year),
         })
       }}
-      // handleResultHover={setHoveredMovie} // TODO: setup inside searchbar
+      handleResultHover={res => {
+        const data = omit(res, "release_year")
+        setHoveredMovie({
+          id: res.id,
+          data,
+          yPosition: !!mainData.find(mD => isEqual(data, mD)) ? 0 : 1,
+          xPosition: getXPosition(res.release_year),
+        })
+      }}
       results={results.map(d => d.data)}
       setResults={setResults}
       color={COLORS.secondaryDark}
