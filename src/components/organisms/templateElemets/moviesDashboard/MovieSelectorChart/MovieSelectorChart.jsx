@@ -23,7 +23,7 @@ export default function MovieSelectorChart({
 }) {
   const { state, actions } = useMovieSelectorChartReducer({ dataSets })
   const [isFirstEntered, setIsFirstEntered] = React.useState(true)
-
+  
   const makeProps = acc => ({
     chart: acc,
     type: state.types[acc],
@@ -49,6 +49,7 @@ export default function MovieSelectorChart({
               <MovieSearch
                 setActiveMovie={setActiveMovie}
                 setHoveredMovie={actions.setHoveredMovie}
+                allMovies={state.movieSearchData}
               />
               {/* <Switch
                 handleAction={actions.setIsYDomainSynced}

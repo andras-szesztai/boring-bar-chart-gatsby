@@ -92,11 +92,11 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
       ].filter(d => !!d.release_date && !!d.vote_count)
       const movieSearchData = uniqBy(data, "id")
         .map(el => ({
-          value: el.id,
-          label: el.title,
+          id: el.id,
+          title: el.title,
           data: el,
         }))
-        .sort((a, b) => a.label.localeCompare(b.label))
+        .sort((a, b) => a.title.localeCompare(b.title))
       const xScale = scaleTime().domain(
         extent(data, d => new Date(d.release_date))
       )

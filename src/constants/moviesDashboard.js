@@ -11,7 +11,7 @@ export const COLORS = {
   primaryDark: "#635068",
   secondaryLight: "#A7C8C8",
   secondary: "#8EB7B8",
-  secondaryDark: "#75A9A9",
+  secondaryDark: "#82B0B0",
   favorite: "#FFE270",
   textColor: colors.grayDarker,
   gridColor: colors.gray,
