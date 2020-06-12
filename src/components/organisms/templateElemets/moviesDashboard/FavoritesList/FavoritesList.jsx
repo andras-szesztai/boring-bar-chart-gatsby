@@ -93,14 +93,14 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
         <TextContainer>Your recent favorites</TextContainer>
         <HorizontalScrollList
           type="favorites"
+          withAnimation
           array={
             favoritesCombined && favoritesCombined.length
               ? favoritesCombined
               : [
                   {
                     id: -99,
-                    name:
-                      "Please start your list by adding a person . . . ",
+                    name: "Please start your list by adding a person . . . ",
                   },
                 ]
           }

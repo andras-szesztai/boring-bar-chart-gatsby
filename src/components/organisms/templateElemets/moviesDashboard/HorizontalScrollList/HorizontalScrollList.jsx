@@ -39,7 +39,7 @@ const HiddenList = styled(List)`
 `
 
 export default function HorizontalScrollList(props) {
-  const { array, type } = props
+  const { array, type, withAnimation } = props
   const [itemHovered, setItemHovered] = useState(false)
 
   const [originalWidth, setOriginalWidth] = useState(undefined)
@@ -54,16 +54,40 @@ export default function HorizontalScrollList(props) {
 
   const extraWidth = React.useRef(0)
 
-  const spring = {
-    type: "spring",
-    damping: 10,
-    stiffness: 100,
-  }
-
   return (
     <>
       <ListContainer onMouseLeave={() => setItemHovered(false)}>
-        <AnimateSharedLayout>
+        {withAnimation ? (
+          <AnimateSharedLayout>
+            <List
+              animate={{
+                width: itemHovered
+                  ? originalWidth + extraWidth.current
+                  : originalWidth,
+              }}
+            >
+              <AnimatePresence>
+                {!!array.length &&
+                  array.map(el => {
+                    return (
+                      <motion.span key={`${el.id}-${type}`} animate>
+                        <ListItem
+                          data={el}
+                          itemHovered={itemHovered}
+                          setItemHovered={setItemHovered}
+                          handleMouseEnter={width =>
+                            (extraWidth.current = width)
+                          }
+                          {...props}
+                          layoutId="list-item"
+                        />
+                      </motion.span>
+                    )
+                  })}
+              </AnimatePresence>
+            </List>
+          </AnimateSharedLayout>
+        ) : (
           <List
             animate={{
               width: itemHovered
@@ -71,25 +95,22 @@ export default function HorizontalScrollList(props) {
                 : originalWidth,
             }}
           >
-            <AnimatePresence>
-              {!!array.length &&
-                array.map(el => {
-                  return (
-                    <motion.div key={`${el.id}-${type}`} animate>
-                      <ListItem
-                        data={el}
-                        itemHovered={itemHovered}
-                        setItemHovered={setItemHovered}
-                        handleMouseEnter={width => (extraWidth.current = width)}
-                        {...props}
-                        layoutId="list-item"
-                      />
-                    </motion.div>
-                  )
-                })}
-            </AnimatePresence>
+            {!!array.length &&
+              array.map(el => {
+                return (
+                  <ListItem
+                    key={`${el.id}-${type}`}
+                    data={el}
+                    itemHovered={itemHovered}
+                    setItemHovered={setItemHovered}
+                    handleMouseEnter={width => (extraWidth.current = width)}
+                    {...props}
+                    layoutId="list-item"
+                  />
+                )
+              })}
           </List>
-        </AnimateSharedLayout>
+        )}
       </ListContainer>
       <HiddenList ref={listRef}>
         {!!array.length &&

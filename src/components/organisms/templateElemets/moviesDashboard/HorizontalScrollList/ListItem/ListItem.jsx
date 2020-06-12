@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import chroma from "chroma-js"
 
 import { space } from "../../../../../../themes/theme"
+import { TRANSITION } from "../../../../../../constants/moviesDashboard"
 
 const Item = styled(motion.span)`
   position: relative;
@@ -92,13 +93,16 @@ export default function ListItem({
   return (
     <Item
       ref={itemRef}
+      initial={{ opacity: 0 }}
       animate={{
         width:
           itemHovered === data.id
             ? originalWidth + hiddenInformationWidth
             : originalWidth,
+  
         opacity: 1,
       }}
+      exit={{ y: 50, opacity: 0 }}
       onMouseLeave={() => {
         setIsClicked(false)
       }}
@@ -125,9 +129,6 @@ export default function ListItem({
         cursor:
           activeNameID && activeNameID !== data.id ? "pointer" : "default",
       }}
-      initial={{ opacity: 0 }}
-      // animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
     >
       <AnimatePresence>
         {activeNameID && activeNameID !== data.id && (
