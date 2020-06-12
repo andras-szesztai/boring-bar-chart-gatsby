@@ -92,7 +92,7 @@ export default function Tooltip({
   return (
     <TooltipContainer
       key={id}
-      left={xPosition ? x - WIDTH - LINE_WIDTH + 12 : x + LINE_WIDTH * 2}
+      left={xPosition ? x - WIDTH - LINE_WIDTH + 20 : x + LINE_WIDTH + 30}
       top={yPosition === 0 && 0}
       bottom={yPosition === 1 && 0}
     >

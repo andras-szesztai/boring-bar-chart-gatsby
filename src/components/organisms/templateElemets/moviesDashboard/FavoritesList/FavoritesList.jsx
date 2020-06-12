@@ -8,7 +8,41 @@ import ControlCollapsed from "./ControlCollapsed/ControlCollapsed"
 import EndIconsContainer from "./EndIconsContainer/EndIconsContainer"
 import ShadowRecentList from "./ShadowRecentList/ShadowRecentList"
 import RecentList from "./RecentList/RecentList"
-import { FIXED_DIMS } from "../../../../../constants/moviesDashboard"
+import { FIXED_DIMS, COLORS } from "../../../../../constants/moviesDashboard"
+import HorizontalScrollList from "../HorizontalScrollList/HorizontalScrollList"
+import { motion } from "framer-motion"
+import { IoIosSearch } from "react-icons/io"
+
+const HoverContent = ({ animateProps, data, accessor }) => {
+  console.log("HoverContent -> data", data)
+  return (
+    <motion.div initial={{ opacity: 0 }} {...animateProps}>
+      {data.name}
+    </motion.div>
+  )
+}
+
+const MouseDownContent = ({ bgColor }) => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        display: "flex",
+        alignItems: "center",
+        transform: "translate(5px, 0.5px)",
+      }}
+    >
+      <IoIosSearch size={14} color={bgColor} />{" "}
+      <div
+        style={{
+          transform: "translate(4px, -1px)",
+        }}
+      >
+        Search
+      </div>
+    </div>
+  )
+}
 
 export default function FavoritesList({
   actions,
@@ -16,7 +50,6 @@ export default function FavoritesList({
   localStorageValues,
   localStorageSetters,
 }) {
-
   const { favoritePersons } = localStorageValues
   const prevLocalStorageValues = usePrevious(localStorageValues)
 
@@ -53,9 +86,31 @@ export default function FavoritesList({
   const { width } = useWindowSize()
   const maxWidth = width - 2 * space[2] - FIXED_DIMS.controlCollapsedWidth - 40
 
+  console.log(favoritesCombined)
+  //Make it fixed and look like the other lists
   return (
     <>
-      <ShadowRecentList
+      <div
+        style={{
+          position: "fixed",
+          bottom: space[2],
+          left: space[2],
+          height: 40,
+          background: "#ccc",
+        }}
+      >
+        <HorizontalScrollList
+          type="favorites"
+          array={favoritesCombined}
+          bgColor={COLORS.primary}
+          hoverContent={HoverContent}
+          mouseDownContent={MouseDownContent}
+          activeNameID={state.activeNameID}
+          setActiveNameID={actions.setActiveNameID}
+        />
+      </div>
+
+      {/* <ShadowRecentList
         listRef={listRef}
         favoritesCombined={favoritesCombined}
         elementDims={elementDims}
@@ -83,7 +138,7 @@ export default function FavoritesList({
         setIsOpen={setIsOpen}
         maxWidth={maxWidth}
         dims={dims}
-      />
+      /> */}
     </>
   )
 }

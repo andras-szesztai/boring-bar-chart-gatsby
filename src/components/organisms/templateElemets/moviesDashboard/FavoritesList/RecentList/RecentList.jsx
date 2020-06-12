@@ -134,7 +134,6 @@ export default function RecentList({
               exit={{ opacity: 0, transition: { duration: 0, delay: 0 } }}
               style={{ fontWeight: 300, alignSelf: "stretch" }}
             >
-              {/* TODO: Mark a movie/series or person as a favorite to display them here! */}
               Mark a person as your favorite to start the list!
             </TextContainer>
           )}
