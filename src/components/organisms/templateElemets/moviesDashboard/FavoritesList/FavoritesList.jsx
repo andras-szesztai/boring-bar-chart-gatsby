@@ -8,7 +8,7 @@ import { space, dropShadow } from "../../../../../themes/theme"
 import { usePrevious } from "../../../../../hooks"
 import HorizontalScrollList from "../HorizontalScrollList/HorizontalScrollList"
 import { themifyFontSize } from "../../../../../themes/mixins"
-import { COLORS } from "../../../../../constants/moviesDashboard"
+import { COLORS, ANIMATE_PROPS } from "../../../../../constants/moviesDashboard"
 
 const HoverContent = ({ animateProps, data, isMatch }) => {
   return (
@@ -88,30 +88,38 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
   }, [favoritesCombined, favoritePersons, prevLocalStorageValues])
 
   return (
-    <>
-      <Container>
-        <TextContainer>Your recent favorites</TextContainer>
-        <HorizontalScrollList
-          type="favorites"
-          withAnimation
-          array={
-            favoritesCombined &&
-            (favoritesCombined.length
-              ? favoritesCombined
-              : [
-                  {
-                    id: -99,
-                    name: "Please start your list by adding a person . . . ",
-                  },
-                ])
-          }
-          bgColor={COLORS.primary}
-          hoverContent={HoverContent}
-          mouseDownContent={MouseDownContent}
-          activeNameID={state.activeNameID}
-          setActiveNameID={actions.setActiveNameID}
-        />
-      </Container>
-    </>
+    <Container
+      initial={{ y: 100 }}
+      animate={{
+        y: 0,
+        transition: {
+          delay: 2,
+          type: "spring",
+          stiffness: 180,
+        },
+      }}
+    >
+      <TextContainer>Your recent favorites</TextContainer>
+      <HorizontalScrollList
+        type="favorites"
+        withAnimation
+        array={
+          favoritesCombined &&
+          (favoritesCombined.length
+            ? favoritesCombined
+            : [
+                {
+                  id: -99,
+                  name: "Please start your list by adding a person . . . ",
+                },
+              ])
+        }
+        bgColor={COLORS.primary}
+        hoverContent={HoverContent}
+        mouseDownContent={MouseDownContent}
+        activeNameID={state.activeNameID}
+        setActiveNameID={actions.setActiveNameID}
+      />
+    </Container>
   )
 }
