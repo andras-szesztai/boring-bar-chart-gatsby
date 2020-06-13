@@ -1,6 +1,5 @@
 import { useReducer, useEffect } from "react"
 import axios from "axios"
-import _ from "lodash"
 
 import { usePrevious, useLocalStorage } from "../../hooks"
 
@@ -9,8 +8,7 @@ import {
   LOCAL_STORE_ACCESSORS,
   NO_ACTIVE_MOVIE,
 } from "../../constants/moviesDashboard"
-import { useEffectOnce } from "react-use"
-import { useActiveMovieCredits } from "./hooks"
+import { useActiveMovieCredits, useFetchGenres } from "./hooks"
 import {
   makeUniqData,
   makeFilteredData,
@@ -205,32 +203,7 @@ export default function useMoviesDashboardReducer() {
     closePersonDetails: () => dispatch({ type: CLOSE_PERSON_DETAILS_CARD }),
   }
 
-  useEffectOnce(() => {
-    dispatch({ type: FETCH_GENRES })
-    axios
-      .all([
-        axios.get(
-          `${API_ROOT}/genre/movie/list?api_key=${process.env.MDB_API_KEY}&language=en-US`
-        ),
-        axios.get(
-          `${API_ROOT}/genre/tv/list?api_key=${process.env.MDB_API_KEY}&language=en-US`
-        ),
-      ])
-      .then(
-        axios.spread((movie, tv) => {
-          dispatch({
-            type: FETCH_GENRES_SUCCESS,
-            payload: _.uniqBy([...movie.data.genres, ...tv.data.genres], "id"),
-          })
-        })
-      )
-      .catch(function(error) {
-        dispatch({
-          type: FETCH_GENRES_FAIL,
-          payload: error,
-        })
-      })
-  })
+  useFetchGenres(dispatch)
 
   useEffect(() => {
     if (state.activeNameID && state.activeNameID !== prevState.activeNameID) {
