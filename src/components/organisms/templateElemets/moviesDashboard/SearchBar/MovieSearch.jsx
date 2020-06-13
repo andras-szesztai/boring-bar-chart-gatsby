@@ -17,6 +17,7 @@ export default function MovieSearch({
   allMovies,
   xScale,
   mainData,
+  isBoth,
 }) {
   const [results, setResults] = React.useState([])
   const [searchText, setSearchText, prevSearchText] = useStateWithPrevious("")
@@ -53,10 +54,15 @@ export default function MovieSearch({
       }}
       handleResultHover={res => {
         const data = omit(res, "release_year")
+        console.log("isBoth", isBoth)
         setHoveredMovie({
           id: res.id,
           data,
-          yPosition: !!mainData.find(mD => isEqual(data, mD)) ? 0 : 1,
+          yPosition: !isBoth
+            ? 1
+            : !!mainData.find(({ id }) => data.id === id)
+            ? 0
+            : 1,
           xPosition: getXPosition(res.release_year),
         })
       }}
@@ -69,7 +75,7 @@ export default function MovieSearch({
         imgAltSecondary: "name",
         subText: "Release year",
         subTextValue: "release_year",
-        color: COLORS.secondaryDark
+        color: COLORS.secondaryDark,
       }}
       placeholder="Search for a title"
       topZ={8}

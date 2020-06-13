@@ -71,6 +71,7 @@ export default function MovieSelectorChart({
                 setHoveredMovie={actions.setHoveredMovie}
                 allMovies={state.movieSearchData}
                 xScale={state.scales.xScale}
+                isBoth={state.isBoth}
                 mainData={
                   state.types.main &&
                   (dataSets.personCredits[state.types.main] || [])
