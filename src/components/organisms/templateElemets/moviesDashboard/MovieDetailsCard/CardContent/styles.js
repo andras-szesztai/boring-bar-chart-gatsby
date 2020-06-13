@@ -42,6 +42,7 @@ export const MovieTitle = styled(TitleContainer)`
   line-height: 1.3;
   font-size: ${themifyFontSize(2)};
   cursor: default;
+  cursor: pointer;
 `
 
 export const SubTitle = styled(TitleContainer)`

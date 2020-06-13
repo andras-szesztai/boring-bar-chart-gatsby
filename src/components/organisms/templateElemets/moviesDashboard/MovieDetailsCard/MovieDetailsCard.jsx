@@ -27,6 +27,7 @@ export default function MovieDetailsCardComponent(props) {
         cardAnimationProps={makeCardProps(makeRightVariants(delay))}
         justifyLink="flex-end"
         setFavoriteMovies={props.setFavoriteMovies}
+        favoriteMovies={props.favoriteMovies}
       />
       <CardContent
         {...props}
@@ -37,6 +38,7 @@ export default function MovieDetailsCardComponent(props) {
         cardAnimationProps={makeCardProps(makeLeftVariants(delay))}
         justifyLink="flex-start"
         setFavoriteMovies={props.setFavoriteMovies}
+        favoriteMovies={props.favoriteMovies}
       />
     </>
   )

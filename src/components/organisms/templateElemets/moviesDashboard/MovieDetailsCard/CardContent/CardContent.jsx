@@ -25,11 +25,9 @@ import {
   NO_ACTIVE_MOVIE,
   WHILE_HOVER,
   COLORS,
-  LOCAL_STORE_ACCESSORS,
 } from "../../../../../../constants/moviesDashboard"
-import { useLocalStorage } from "../../../../../../hooks"
 
-const HoverContentCast = ({ animateProps, data, accessor }) => {
+const HoverContentCast = ({ animateProps, data }) => {
   return (
     <motion.div initial={{ opacity: 0 }} {...animateProps}>
       {data.character}
@@ -37,8 +35,7 @@ const HoverContentCast = ({ animateProps, data, accessor }) => {
   )
 }
 
-
-const HoverContentCrew = ({ animateProps, data, accessor }) => {
+const HoverContentCrew = ({ animateProps, data }) => {
   return (
     <motion.div initial={{ opacity: 0 }} {...animateProps}>
       {data.job}
@@ -76,6 +73,8 @@ export default function CardContent(props) {
     card: Card,
     closeIconContainer: CloseIconContainer,
     iconsContainer: IconsContainer,
+    setFavoriteMovies,
+    favoriteMovies,
   } = props
   const [isLinkHovered, setIsLinkHovered] = useState(false)
   const [ref, { height }] = useMeasure()
@@ -88,7 +87,13 @@ export default function CardContent(props) {
     whileHover: WHILE_HOVER,
   }
 
-
+  const [isFavoriteHovered, setIsFavoriteHovered] = useState(false)
+  const interactionProps = {
+    onMouseEnter: () => setIsFavoriteHovered(true),
+    onMouseLeave: () => setIsFavoriteHovered(false),
+    onClick: () => setFavoriteMovies(),
+  }
+  console.log("CardContent -> activeMovie", activeMovie)
 
   return (
     <AnimatePresence>
@@ -99,7 +104,9 @@ export default function CardContent(props) {
           </CloseIconContainer>
           <ContentGrid>
             <MainInfoContainer>
-              <MovieTitle>{activeMovie.data.title}</MovieTitle>
+              <MovieTitle role="button" {...interactionProps}>
+                {activeMovie.data.title}
+              </MovieTitle>
               <SubTitle>{activeMovie.data.release_date.slice(0, 4)}</SubTitle>
               <div
                 ref={ref}
@@ -116,8 +123,12 @@ export default function CardContent(props) {
                 alt={`${activeMovie.data.title}-poster`}
               />
             </ContentItem>
-            <IconsContainer>
-              <motion.div whileHover={WHILE_HOVER}>
+            <IconsContainer
+              role="button"
+              {...interactionProps}
+              animate={{ scale: isFavoriteHovered ? 1.3 : 1, originY: 0.6 }}
+            >
+              <motion.div>
                 <FavoriteHeart isFavorited={true} isHovered={false} />
               </motion.div>
             </IconsContainer>

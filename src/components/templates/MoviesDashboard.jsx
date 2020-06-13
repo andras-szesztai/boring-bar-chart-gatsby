@@ -73,6 +73,7 @@ export default function MoviesDashboard() {
             activeNameID={activeNameID}
             setActiveNameID={setActiveNameID}
             setFavoriteMovies={setFavoriteMovies}
+            favoriteMovies={favoriteMovies}
           />
         </div>
       )}

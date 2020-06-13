@@ -132,7 +132,7 @@ export const makeLeftVariants = delay => ({
   },
 })
 
-const IconsContainer = styled.div`
+const IconsContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
