@@ -28,6 +28,7 @@ export default function MovieSelectorChart({
   dataSets,
   setActiveMovie,
   activeMovie,
+  favoriteMovies,
 }) {
   const { state, actions } = useMovieSelectorChartReducer({ dataSets })
   const [isFirstEntered, setIsFirstEntered] = React.useState(true)
@@ -46,6 +47,7 @@ export default function MovieSelectorChart({
     hoveredMovie: state.hoveredMovie,
     isFirstEntered: isFirstEntered,
     setIsFirstEntered: setIsFirstEntered,
+    favoriteMovies,
   })
 
   return (

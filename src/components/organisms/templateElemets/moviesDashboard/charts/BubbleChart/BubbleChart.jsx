@@ -22,9 +22,16 @@ import {
   useActiveMovieIDUpdate,
   useHoveredUpdate,
   useChartResize,
+  useFavoriteUpdate,
 } from "./hooks"
 import { setRadius } from "./utils"
-import { Wrapper, ChartTitle, NumberContainer, ChartSvg, LabelContainer } from "./styles"
+import {
+  Wrapper,
+  ChartTitle,
+  NumberContainer,
+  ChartSvg,
+  LabelContainer,
+} from "./styles"
 import { fontSize } from "../../../../../../themes/theme"
 
 const gridData = [0, 2, 4, 6, 8, 10]
@@ -39,6 +46,7 @@ export default function BubbleChart(props) {
     isYDomainSynced,
     isSizeDynamic,
     chart,
+    favoriteMovies,
   } = props
   const prevProps = usePrevious(props)
   const storedValues = useRef({ isInit: false })
@@ -111,8 +119,14 @@ export default function BubbleChart(props) {
       .attr("cx", ({ unified_year }) => currXScale(new Date(unified_year)))
       .attr("cy", ({ vote_average }) => yScale(vote_average))
       .attr("r", d => setRadius({ props, currSizeScale, isSizeDynamic })(d))
-      .attr("fill", COLORS.secondary)
-      .attr("stroke", chroma(COLORS.secondary).darken())
+      .attr("fill", ({ id }) =>
+        favoriteMovies.includes(id) ? COLORS.favorite : COLORS.secondary
+      )
+      .attr("stroke", ({ id }) =>
+        favoriteMovies.includes(id)
+          ? chroma(COLORS.favorite).darken()
+          : chroma(COLORS.secondary).darken()
+      )
       .attr("stroke-width", 1)
   }
 
@@ -271,6 +285,10 @@ export default function BubbleChart(props) {
     chart,
     dims,
     addUpdateInteractions,
+  })
+
+  useFavoriteUpdate({
+
   })
 
   useEffect(() => {

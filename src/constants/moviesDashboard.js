@@ -12,7 +12,7 @@ export const COLORS = {
   secondaryLight: "#A7C8C8",
   secondary: "#8EB7B8",
   secondaryDark: "#82B0B0",
-  favorite: "#FFE270",
+  favorite: "#FFDA47",
   textColor: colors.grayDarker,
   gridColor: colors.gray,
   backgroundGray: colors.whiteDark,
