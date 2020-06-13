@@ -117,7 +117,7 @@ export default function Tooltip({
           <div>
             User score:{" "}
             <span>
-              {data.vote_average} &nbsp;
+              {numeral(data.vote_average).format("0.0")} &nbsp;
               <span>
                 ({numeral(data.vote_count).format("0,0")} vote
                 {data.vote_count > 1 ? "s" : ""})

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion"
+import chroma from "chroma-js"
 
 import { space } from "../../../../../themes/theme"
 import { COLORS } from "../../../../../constants/moviesDashboard"
@@ -17,9 +18,23 @@ const ListContainer = styled(motion.div)`
   overflow-x: auto;
 
   display: flex;
-
   ::-webkit-scrollbar {
-    display: none;
+    height: ${space[1]}px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: ${COLORS.backgroundGray};
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${COLORS.primary};
+    border-radius: 2px;
+
+    :hover {
+      background: ${chroma(COLORS.primary).darken()};
+    }
   }
 `
 
