@@ -1,18 +1,16 @@
-import { useReducer, useEffect } from "react"
-import axios from "axios"
+import { useReducer } from "react"
 
 import { usePrevious, useLocalStorage } from "../../hooks"
 
 import {
-  API_ROOT,
   LOCAL_STORE_ACCESSORS,
   NO_ACTIVE_MOVIE,
 } from "../../constants/moviesDashboard"
-import { useActiveMovieCredits, useFetchGenres } from "./hooks"
 import {
-  makeUniqData,
-  makeFilteredData,
-} from "../../components/organisms/templateElemets/moviesDashboard/utils"
+  useActiveMovieCredits,
+  useFetchGenres,
+  useFetchPersonCredit,
+} from "./hooks"
 
 const initialState = {
   activeNameID: undefined,
@@ -204,52 +202,11 @@ export default function useMoviesDashboardReducer() {
   }
 
   useFetchGenres(dispatch)
-
-  useEffect(() => {
-    if (state.activeNameID && state.activeNameID !== prevState.activeNameID) {
-      dispatch({ type: FETCH_INFO_BY_ID })
-      axios
-        .all([
-          axios.get(
-            `${API_ROOT}/person/${state.activeNameID}?api_key=${process.env.MDB_API_KEY}&language=en-US`
-          ),
-          axios.get(
-            `${API_ROOT}/person/${state.activeNameID}/combined_credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
-          ),
-        ])
-        .then(
-          axios.spread((details, credits) => {
-            dispatch({
-              type: FETCH_INFO_BY_ID_SUCCESS,
-              payload: {
-                details: details.data,
-                credits: {
-                  cast: makeUniqData(
-                    makeFilteredData(credits.data.cast, "cast"),
-                    "cast"
-                  ),
-                  crew: makeUniqData(
-                    makeFilteredData(credits.data.crew, "crew"),
-                    "crew"
-                  ),
-                  id: credits.data.id,
-                },
-              },
-            })
-          })
-        )
-        .catch(function(error) {
-          dispatch({
-            type: FETCH_INFO_BY_ID_FAIL,
-            payload: {
-              details: error,
-              credits: error,
-            },
-          })
-        })
-    }
+  useFetchPersonCredit({
+    activeNameID: state.activeNameID,
+    prevActiveNameID: prevState && prevState.activeNameID,
+    dispatch,
   })
-
   useActiveMovieCredits({ prevState, state, dispatch })
 
   return { state, prevState, actions, localStorageValues, localStorageSetters }
