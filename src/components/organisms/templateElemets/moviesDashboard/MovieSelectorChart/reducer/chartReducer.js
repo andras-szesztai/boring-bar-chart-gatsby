@@ -92,7 +92,7 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
       const movieSearchData = uniqBy(data, "id")
         .map(el => ({
           id: el.id,
-          title: el.title,
+          title: el.title || el.name,
           data: {...el, release_year: el.unified_year},
         }))
         .sort((a, b) => b.popularity - a.popularity)

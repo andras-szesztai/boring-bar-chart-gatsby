@@ -68,6 +68,7 @@ export default function MovieSearch({
       resultContentAccessors={{
         img: "poster_path",
         imgAlt: "title",
+        imgAltSecondary: "name",
         subText: "Release year",
         subTextValue: "release_year",
       }}

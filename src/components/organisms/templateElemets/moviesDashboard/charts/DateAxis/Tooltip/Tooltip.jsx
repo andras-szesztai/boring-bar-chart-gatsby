@@ -94,11 +94,11 @@ export default function Tooltip({
         <Image
           url={data.poster_path}
           height={HEIGHT}
-          alt={`${data.title}-poster`}
+          alt={`${data.title || data.name}-poster`}
         />
       </ImageContainer>
       <TextContentGrid>
-        <div className="title">{data.title}</div>
+        <div className="title">{data.title || data.name}</div>
         <div className="section">
           Release year: <span>{data.unified_year}</span>
         </div>

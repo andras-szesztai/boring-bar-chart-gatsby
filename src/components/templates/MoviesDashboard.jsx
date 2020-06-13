@@ -37,7 +37,6 @@ export default function MoviesDashboard() {
     }
   }, [actions, favoritePersons])
 
-  console.log("MoviesDashboard -> dataSets", dataSets)
   return (
     <>
       <Helmet title="Dashboard under construction" />

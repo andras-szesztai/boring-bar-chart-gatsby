@@ -179,7 +179,7 @@ export default function TitleSearch({
         value={
           activeMovie.id && {
             value: activeMovie.id,
-            label: activeMovie.data.title,
+            label: activeMovie.data.title || activeMovie.data.name,
           }
         }
         onChange={el => {

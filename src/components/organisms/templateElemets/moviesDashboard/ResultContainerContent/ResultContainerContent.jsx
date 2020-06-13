@@ -82,6 +82,7 @@ export default function ResultContent({
   handleMouseOver,
   accessors,
 }) {
+  const title = data[accessors.imgAlt] || data[accessors.imgAltSecondary]
   return (
     <ResultContainer
       style={{ zIndex }}
@@ -89,8 +90,8 @@ export default function ResultContent({
       onClick={handleClick}
       onMouseOver={handleMouseOver}
     >
-      <Image height={52} url={data[accessors.img]} alt={data[accessors.name]} />
-      <NameContainer>{data[accessors.imgAlt]}</NameContainer>
+      <Image height={52} url={data[accessors.img]} alt={title} />
+      <NameContainer>{title}</NameContainer>
       <JobContainer>
         {accessors.subText}:&nbsp;<span>{data[accessors.subTextValue]}</span>
       </JobContainer>

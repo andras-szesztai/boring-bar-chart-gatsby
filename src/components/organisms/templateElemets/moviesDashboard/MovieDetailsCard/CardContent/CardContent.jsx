@@ -106,6 +106,7 @@ export default function CardContent(props) {
     },
   }
 
+  const title = activeMovie.data.title || activeMovie.data.name
   return (
     <AnimatePresence>
       {activeMovie.position === props.positionCheck && (
@@ -116,7 +117,7 @@ export default function CardContent(props) {
           <ContentGrid>
             <MainInfoContainer>
               <MovieTitle role="button" {...interactionProps}>
-                {activeMovie.data.title}
+                {title}
               </MovieTitle>
               <SubTitle>{activeMovie.data.unified_year}</SubTitle>
               <div
@@ -131,7 +132,7 @@ export default function CardContent(props) {
               <Image
                 url={activeMovie.data.poster_path}
                 height={180}
-                alt={`${activeMovie.data.title}-poster`}
+                alt={`${title}-poster`}
               />
             </ContentItem>
             <IconsContainer
