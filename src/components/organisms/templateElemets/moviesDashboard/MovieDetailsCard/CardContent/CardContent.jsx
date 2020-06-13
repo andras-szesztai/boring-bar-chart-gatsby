@@ -190,7 +190,7 @@ export default function CardContent(props) {
                 onMouseEnter={() => setIsLinkHovered(true)}
                 onMouseLeave={() => setIsLinkHovered(false)}
               >
-                Click here to find out more on <span>TMBD</span>
+                Click here to find out more on <span>TMDb</span>
               </a>
               <motion.div
                 style={{ marginLeft: 6, paddingTop: 5 }}

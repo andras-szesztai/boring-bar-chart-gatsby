@@ -10,6 +10,7 @@ import {
   TRANSITION,
 } from "../../../../../constants/moviesDashboard"
 import { TextContainer } from "../styles/styles"
+import { FavoriteHeart } from "../../../../molecules"
 
 const InformationContainer = styled(motion.div)`
   position: fixed;
@@ -20,11 +21,10 @@ const InformationContainer = styled(motion.div)`
     drop-shadow(${dropShadow.secondary});
 
   top: ${space[2]}px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 40%;
 
-  height: 100px;
-  width: 200px;
+  height: 90px;
+  width: 280px;
   z-index: 5;
   padding: ${space[1]}px ${space[2]}px ${space[2]}px ${space[2]}px;
 
@@ -61,23 +61,62 @@ const IconButton = styled(motion.button)`
 const Text = styled(TextContainer)`
   display: grid;
   grid-template-rows: repeat(3, 1fr);
+  align-items: center;
+  width: 100%;
+`
 
+const Link = styled.a`
+  color: ${COLORS.textColor};
+  font-weight: 500;
 `
 
 export default function InformationContainerComponent() {
   const [isHovered, setIsHovered] = React.useState(false)
   const [isOpen, setIsOpen] = React.useState(false)
+  const [isFavorited, setIsFavorited] = React.useState(false)
+
   return (
     <InformationContainer
-      initial={{ opacity: 0, y: -100 }}
+      initial={{ opacity: 0, y: -90 }}
       animate={{
         opacity: 1,
-        y: isOpen ? 0 : -100,
+        y: isOpen ? 0 : -90,
         transition: { ...TRANSITION.primary, stiffness: 140 },
       }}
+      onAnimationComplete={() => setIsFavorited(isOpen)}
     >
       <Text>
-
+        <div>
+          Built with‏‏‎ ‎‏‏‎ ‎ ‎ ‎ ‎ ‎ ‎
+          <span style={{ position: "relative" }}>
+            <span style={{ position: "absolute", top: -5, left: -22 }}>
+              <FavoriteHeart
+                size={22}
+                isFavorited={isFavorited}
+                isHovered={isFavorited}
+              />
+            </span>{" "}
+            by{" "}
+            <Link
+              href="https://twitter.com/LinkndSzesztai"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Andras Szesztai
+            </Link>
+          </span>
+        </div>
+        <div>Please feel free to contact with any idea or feedback!</div>
+        <div>
+          Data source:{" "}
+          <Link
+            href="https://www.themoviedb.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            The Movie Database (TMDb)
+          </Link>
+        </div>
       </Text>
 
       <IconButton
