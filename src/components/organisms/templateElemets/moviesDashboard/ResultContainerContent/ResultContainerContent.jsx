@@ -35,9 +35,13 @@ const NameContainer = styled.div`
   align-items: center;
   font-size: ${themifyFontSize(2)};
   font-weight: 500;
-  color: ${COLORS.primary};
+  color: ${({color}) => color};
   grid-area: name;
   margin-top: 2px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const JobContainer = styled.div`
@@ -91,7 +95,7 @@ export default function ResultContent({
       onMouseOver={handleMouseOver}
     >
       <Image height={52} url={data[accessors.img]} alt={title} />
-      <NameContainer>{title}</NameContainer>
+      <NameContainer color={accessors.color}>{title}</NameContainer>
       <JobContainer>
         {accessors.subText}:&nbsp;<span>{data[accessors.subTextValue]}</span>
       </JobContainer>

@@ -41,11 +41,12 @@ export function createRefElements({
     chartArea.selectAll(".main-circle").each((d, i, n) => {
       if (d.id === activeMovieID) {
         const selection = select(n[i])
+        const setX = ({ unified_date }) => currXScale(new Date(unified_date))
         selection
           .append("circle")
           .datum(selectedData)
           .attr("class", "selected-circle")
-          .attr("cx", d => currXScale(new Date(d.unified_year)))
+          .attr("cx", setX)
           .attr("cy", d => yScale(d.vote_average))
           .attr("fill", "#fff")
           .attr("stroke", chroma(COLORS.secondary).darken())
@@ -62,8 +63,8 @@ export function createRefElements({
           .append("line")
           .datum(selectedData)
           .attr("class", "selected-line")
-          .attr("x1", d => currXScale(new Date(d.unified_year)))
-          .attr("x2", d => currXScale(new Date(d.unified_year)))
+          .attr("x1", setX)
+          .attr("x2", setX)
           .attr("y1", d =>
             getSelectedLineYPos({
               data: d,

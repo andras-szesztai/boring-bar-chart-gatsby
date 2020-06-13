@@ -147,7 +147,7 @@ export default function DateAxis(props) {
   function getXPosition(d) {
     const { currXScale } = storedValues.current
     return Number(
-      currXScale(new Date(d.unified_year)) + margin.left >= dims.width / 2
+      currXScale(new Date(d.unified_date)) + margin.left >= dims.width / 2
     )
   }
 
@@ -191,7 +191,7 @@ export default function DateAxis(props) {
 
   function createUpdateVoronoi() {
     const { currXScale, filteredData, voronoiArea } = storedValues.current
-    const setXPos = d => currXScale(new Date(d.unified_year)) + margin.left
+    const setXPos = d => currXScale(new Date(d.unified_date)) + margin.left
     const delaunay = Delaunay.from(
       filteredData,
       setXPos,

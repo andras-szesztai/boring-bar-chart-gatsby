@@ -21,7 +21,7 @@ export default function useHoveredUpdate({
       hoveredMovie.id !== prevHoveredMovie.id
     ) {
       const { chartArea, currXScale } = storedValues.current
-      const setX = d => currXScale(new Date(d.unified_year))
+      const setX = d => currXScale(new Date(d.unified_date))
       const isToTooltipTheRight = hoveredMovie.xPosition === 0
       const posAdjust = SIZE_RANGE[0] + CIRCLE_ADJUST
       chartArea.selectAll(".hovered-circle").attr("opacity", 0)
@@ -39,13 +39,13 @@ export default function useHoveredUpdate({
           .attr(
             "x1",
             d =>
-              currXScale(new Date(d.unified_year)) +
+              currXScale(new Date(d.unified_date)) +
               (isToTooltipTheRight ? posAdjust : -posAdjust)
           )
           .attr(
             "x2",
             d =>
-              currXScale(new Date(d.unified_year)) +
+              currXScale(new Date(d.unified_date)) +
               (isToTooltipTheRight
                 ? posAdjust + LINE_WIDTH
                 : -(posAdjust + LINE_WIDTH))

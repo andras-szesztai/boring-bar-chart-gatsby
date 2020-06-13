@@ -28,16 +28,17 @@ export default function useChartResize({
         currXScale,
         yScale,
       }
+      const setX = ({ unified_date }) => currXScale(new Date(unified_date))
       chartArea
         .selectAll(".main-circle")
         .selectAll("circle")
-        .attr("cx", ({ unified_year }) => currXScale(new Date(unified_year)))
+        .attr("cx", setX)
         .attr("cy", ({ vote_average }) => yScale(vote_average))
       const isMainChart = chart === "main"
       chartArea
         .select(".selected-line")
-        .attr("x1", d => currXScale(new Date(d.unified_year)))
-        .attr("x2", d => currXScale(new Date(d.unified_year)))
+        .attr("x1", setX)
+        .attr("x2", setX)
         .attr("y1", d =>
           getSelectedLineYPos({
             data: d,

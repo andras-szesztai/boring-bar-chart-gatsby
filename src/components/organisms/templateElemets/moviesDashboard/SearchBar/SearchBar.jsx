@@ -19,6 +19,7 @@ import {
   variants,
   StyledSearchBar,
 } from "./styles"
+import ResultContent from "../ResultContainerContent/ResultContainerContent"
 
 export default function SearchBar({
   getResults,
@@ -27,7 +28,6 @@ export default function SearchBar({
   results,
   setResults,
   color,
-  resultContent: ResultContent,
   placeholder,
   id,
   resultContentAccessors,

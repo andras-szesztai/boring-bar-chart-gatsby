@@ -83,7 +83,7 @@ export default function Tooltip({
   xScale,
 }) {
   if (!id) return null
-  const x = isFunction(xScale) && xScale(new Date(data.unified_year))
+  const x = isFunction(xScale) && xScale(new Date(data.unified_date))
   return (
     <TooltipContainer
       key={id}

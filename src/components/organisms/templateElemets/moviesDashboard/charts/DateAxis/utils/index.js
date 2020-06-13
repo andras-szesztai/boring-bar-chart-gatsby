@@ -12,7 +12,7 @@ export function showRefElements({
   height,
 }) {
   const { currXScale, chartArea, voronoiArea } = storedValues.current
-  const setX = d => d && currXScale(new Date(d.unified_year))
+  const setX = d => d && currXScale(new Date(d.unified_date))
   const selectedCircleData = filteredData.find(d => d.id === activeMovieID)
   chartArea
     .selectAll(".selected-circle")

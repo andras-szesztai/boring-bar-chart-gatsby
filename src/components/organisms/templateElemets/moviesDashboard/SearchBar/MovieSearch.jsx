@@ -10,7 +10,6 @@ import {
 import { useStateWithPrevious } from "../../../../../hooks"
 
 import SearchBar from "./SearchBar"
-import ResultContainerContent from "../ResultContainerContent/ResultContainerContent"
 
 export default function MovieSearch({
   setActiveMovie,
@@ -64,13 +63,13 @@ export default function MovieSearch({
       results={results.map(d => d.data)}
       setResults={setResults}
       color={COLORS.secondaryDark}
-      resultContent={ResultContainerContent}
       resultContentAccessors={{
         img: "poster_path",
         imgAlt: "title",
         imgAltSecondary: "name",
         subText: "Release year",
         subTextValue: "release_year",
+        color: COLORS.secondaryDark
       }}
       placeholder="Search for a title"
       topZ={8}

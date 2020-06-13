@@ -20,7 +20,7 @@ export default function useChartSettings({
         }))
         .sort((a, b) => b.popularity - a.popularity)
       const xScale = scaleTime().domain(
-        extent(data, d => new Date(d.unified_year))
+        extent(data, d => new Date(d.unified_date))
       )
       const sizeScale = scaleSqrt().domain(extent(data, d => d.vote_count))
       const isActor = personDetails.known_for_department === "Acting"

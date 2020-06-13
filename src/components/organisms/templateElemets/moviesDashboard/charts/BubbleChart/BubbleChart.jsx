@@ -126,7 +126,7 @@ export default function BubbleChart(props) {
       .selectAll(".main-circle")
       .append("circle")
       .attr("class", "circle")
-      .attr("cx", ({ unified_year }) => currXScale(new Date(unified_year)))
+      .attr("cx", ({ unified_date }) => currXScale(new Date(unified_date)))
       .attr("cy", ({ vote_average }) => yScale(vote_average))
       .attr("r", d => setRadius({ props, currSizeScale, isSizeDynamic })(d))
       .attr("fill", ({ id }) =>
@@ -174,7 +174,7 @@ export default function BubbleChart(props) {
   function getXPosition(d) {
     const { currXScale } = storedValues.current
     return Number(
-      currXScale(new Date(d.unified_year)) + margin.left >= dims.width / 2
+      currXScale(new Date(d.unified_date)) + margin.left >= dims.width / 2
     )
   }
 
@@ -221,7 +221,7 @@ export default function BubbleChart(props) {
 
   function createUpdateVoronoi() {
     const { yScale, currXScale, voronoiArea } = storedValues.current
-    const setXPos = d => currXScale(new Date(d.unified_year)) + margin.left
+    const setXPos = d => currXScale(new Date(d.unified_date)) + margin.left
     const setYPos = d => yScale(d.vote_average) + margin.top
     const delaunay = Delaunay.from(data, setXPos, setYPos).voronoi([
       0,
