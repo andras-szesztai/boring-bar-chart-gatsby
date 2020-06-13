@@ -40,7 +40,7 @@ export default function useActiveMovieIDUpdate({
               .append("circle")
               .datum(selectedData)
               .attr("class", "selected-circle")
-              .attr("cx", d => currXScale(new Date(d.release_date)))
+              .attr("cx", d => currXScale(new Date(d.unified_year)))
               .attr("cy", d => yScale(d.vote_average))
               .attr("fill", "#fff")
               .attr("stroke", chroma(COLORS.secondary).darken())
@@ -57,8 +57,8 @@ export default function useActiveMovieIDUpdate({
               .append("line")
               .datum(selectedData)
               .attr("class", "selected-line")
-              .attr("x1", d => currXScale(new Date(d.release_date)))
-              .attr("x2", d => currXScale(new Date(d.release_date)))
+              .attr("x1", d => currXScale(new Date(d.unified_year)))
+              .attr("x2", d => currXScale(new Date(d.unified_year)))
               .attr("y1", d =>
                 getSelectedLineYPos({
                   data: d,

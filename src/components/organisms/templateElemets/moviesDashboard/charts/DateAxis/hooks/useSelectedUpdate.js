@@ -20,7 +20,7 @@ export default function useSelectedUpdate({
         currXScale,
         voronoiArea,
       } = storedValues.current
-      const setX = d => currXScale(new Date(d.release_date))
+      const setX = d => currXScale(new Date(d.unified_year))
       if (activeMovieID) {
         const selectedCircleData = filteredData.find(
           d => d.id === activeMovieID

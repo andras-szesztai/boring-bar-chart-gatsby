@@ -118,7 +118,7 @@ export default function CardContent(props) {
               <MovieTitle role="button" {...interactionProps}>
                 {activeMovie.data.title}
               </MovieTitle>
-              <SubTitle>{activeMovie.data.release_date.slice(0, 4)}</SubTitle>
+              <SubTitle>{activeMovie.data.unified_year}</SubTitle>
               <div
                 ref={ref}
                 style={{ position: "relative", alignSelf: "stretch" }}

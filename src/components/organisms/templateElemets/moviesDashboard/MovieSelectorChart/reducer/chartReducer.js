@@ -88,16 +88,16 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
       const data = [
         ...dataSets.personCredits.crew,
         ...dataSets.personCredits.cast,
-      ].filter(d => !!d.release_date && !!d.vote_count)
+      ]
       const movieSearchData = uniqBy(data, "id")
         .map(el => ({
           id: el.id,
           title: el.title,
-          data: {...el, release_year: el.release_date.slice(0, 4)},
+          data: {...el, release_year: el.unified_year},
         }))
         .sort((a, b) => b.popularity - a.popularity)
       const xScale = scaleTime().domain(
-        extent(data, d => new Date(d.release_date))
+        extent(data, d => new Date(d.unified_year))
       )
       const sizeScale = scaleSqrt().domain(extent(data, d => d.vote_count))
       const isActor = dataSets.personDetails.known_for_department === "Acting"

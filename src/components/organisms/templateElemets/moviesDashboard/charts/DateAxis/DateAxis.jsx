@@ -34,8 +34,6 @@ export default function DateAxis(props) {
   useEffect(() => {
     if (!storedValues.current.isInit && dims.width) {
       const filteredData = _.uniqBy([...mainData, ...subData], "id")
-        .filter(d => !!d.release_date && !!d.vote_count)
-        .sort((a, b) => b.vote_count - a.vote_count)
       const currXScale = xScale.range([
         0,
         dims.width - margin.left - margin.right,
@@ -138,7 +136,7 @@ export default function DateAxis(props) {
   function getXPosition(d) {
     const { currXScale } = storedValues.current
     return Number(
-      currXScale(new Date(d.release_date)) + margin.left >= dims.width / 2
+      currXScale(new Date(d.unified_year)) + margin.left >= dims.width / 2
     )
   }
 
@@ -182,7 +180,7 @@ export default function DateAxis(props) {
 
   function createUpdateVoronoi() {
     const { currXScale, filteredData, voronoiArea } = storedValues.current
-    const setXPos = d => currXScale(new Date(d.release_date)) + margin.left
+    const setXPos = d => currXScale(new Date(d.unified_year)) + margin.left
     const delaunay = Delaunay.from(
       filteredData,
       setXPos,

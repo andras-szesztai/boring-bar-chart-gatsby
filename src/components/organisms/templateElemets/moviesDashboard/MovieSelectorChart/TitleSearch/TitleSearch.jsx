@@ -150,7 +150,7 @@ export default function TitleSearch({
 }) {
   function getXPosition(data) {
     return Number(
-      +data.data.release_date.slice(0, 4) >=
+      +data.data.unified_year >=
         _.mean(xScale.domain().map(d => d.getFullYear()))
     )
   }

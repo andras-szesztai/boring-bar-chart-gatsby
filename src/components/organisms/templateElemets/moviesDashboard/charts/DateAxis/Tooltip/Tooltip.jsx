@@ -82,7 +82,7 @@ export default function Tooltip({
   xScale,
 }) {
   if (!id) return null
-  const x = xScale(new Date(data.release_date))
+  const x = xScale(new Date(data.unified_year))
   return (
     <TooltipContainer
       key={id}
@@ -100,7 +100,7 @@ export default function Tooltip({
       <TextContentGrid>
         <div className="title">{data.title}</div>
         <div className="section">
-          Release year: <span>{data.release_date.slice(0, 4)}</span>
+          Release year: <span>{data.unified_year}</span>
         </div>
         <div className="section">
           Media type: <span>{capitalize(data.media_type)}</span>
