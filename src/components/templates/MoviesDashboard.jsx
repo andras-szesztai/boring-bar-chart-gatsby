@@ -9,6 +9,7 @@ import {
   FavoritesList,
   MovieSelectorChart,
   MovieDetailsCard,
+  InformationContainer,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 
@@ -75,6 +76,7 @@ export default function MoviesDashboard() {
             setFavoriteMovies={setFavoriteMovies}
             favoriteMovies={favoriteMovies}
           />
+          <InformationContainer/>
         </div>
       )}
     </>

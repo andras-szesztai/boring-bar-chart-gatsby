@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import styled from "styled-components"
 import { IoIosArrowUp, IoIosUnlock, IoIosLock } from "react-icons/io"
 import _ from "lodash"
 
@@ -9,86 +8,17 @@ import Image from "../Image/Image"
 import { FavoriteStar } from "../../../../molecules"
 import ContentLoader from "./ContentLoader"
 
-import { dropShadow, space } from "../../../../../themes/theme"
+import { space } from "../../../../../themes/theme"
 import { usePrevious, useLocalStorage } from "../../../../../hooks"
 import {
   OPACITY_VARIANT,
   ANIMATE_PROPS,
   COLORS,
-  TRANSITION,
   LOCAL_STORE_ACCESSORS,
-  CARD_WIDTH,
-  CARD_HEIGHT,
 } from "../../../../../constants/moviesDashboard"
 import { TextContainer, TitleContainer } from "../styles/styles"
-import { themifyZIndex } from "../../../../../themes/mixins"
 
-const variants = {
-  initial: {
-    y: "-100%",
-  },
-  animateFirst: {
-    y: space[2],
-    transition: TRANSITION.primary,
-  },
-  animateOpen: {
-    y: space[2],
-    transition: TRANSITION.primary,
-  },
-  animateClose: {
-    y: -(CARD_HEIGHT.person * 0.75),
-    transition: TRANSITION.primary,
-  },
-  exit: {
-    y: "-100%",
-  },
-}
-
-const PersonDetailsCard = styled(motion.div)`
-  position: fixed;
-
-  background-color: #fff;
-  filter: drop-shadow(${dropShadow.primary})
-    drop-shadow(${dropShadow.secondary});
-  border-radius: ${space[1]}px;
-
-  right: ${space[2]}px;
-  width: ${CARD_WIDTH}px;
-  height: ${CARD_HEIGHT.person}px;
-  z-index: 5;
-`
-
-const DetailCardContent = styled(motion.div)`
-  position: relative;
-
-  display: flex;
-  justify-content: center;
-
-  width: ${CARD_WIDTH}px;
-  height: ${CARD_HEIGHT.person}px;
-`
-
-const IconContainer = styled(motion.div)`
-  position: absolute;
-  left: ${space[2]}px;
-  cursor: pointer;
-  z-index: ${themifyZIndex("hoverOverlay")};
-`
-
-const CardGrid = styled(motion.div)`
-  display: flex;
-  justify-content: space-between;
-
-  padding: ${space[2]}px;
-
-  width: ${CARD_WIDTH}px;
-  height: ${CARD_HEIGHT.person - 40}px;
-`
-
-const CardTextGrid = styled(motion.div)`
-  display: grid;
-  grid-template-rows: min-content 1fr;
-`
+import { PersonDetailsCard, variants, IconContainer, DetailCardContent, CardGrid, CardTextGrid } from "./styles"
 
 let animateCard
 
