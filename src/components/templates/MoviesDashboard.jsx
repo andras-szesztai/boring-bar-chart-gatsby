@@ -40,7 +40,7 @@ export default function MoviesDashboard() {
 
   return (
     <>
-      <Helmet title="Dashboard under construction" />
+      <Helmet title="Movie Explorer" />
       {device === "desktop" && (
         <div style={{ userSelect: "none" }}>
           <PersonSearch setActiveNameID={actions.setActiveNameID} />

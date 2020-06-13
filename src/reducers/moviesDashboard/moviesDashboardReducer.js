@@ -252,11 +252,11 @@ export default function useMoviesDashboardReducer() {
                 details: details.data,
                 credits: {
                   cast: makeUniqData(
-                    makeFilteredData(credits.data.cast),
+                    makeFilteredData(credits.data.cast, "cast"),
                     "cast"
                   ),
                   crew: makeUniqData(
-                    makeFilteredData(credits.data.crew),
+                    makeFilteredData(credits.data.crew, "crew"),
                     "crew"
                   ),
                   id: credits.data.id,

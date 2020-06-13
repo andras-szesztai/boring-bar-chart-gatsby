@@ -14,9 +14,17 @@ export const makeUniqData = (data, type) => {
   return enrichedUniq
 }
 
-export const makeFilteredData = data => {
+export const makeFilteredData = (data, type) => {
+  const accessor = type === "cast" ? "character" : "job"
+  const ceremonies = ["The Academy Awards", "Tony Awards"]
   const filteredData = data
-    .filter(d => (!!d.release_date || !!d.first_air_date) && !!d.vote_count)
+    .filter(
+      d =>
+        (!!d.release_date || !!d.first_air_date) &&
+        !!d.vote_count &&
+        !!d[accessor] &&
+        !ceremonies.includes(d.title || d.name)
+    )
     .map(d => ({
       ...d,
       unified_date: d.release_date || d.first_air_date,

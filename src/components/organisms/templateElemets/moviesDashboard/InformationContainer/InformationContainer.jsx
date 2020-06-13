@@ -1,6 +1,7 @@
 import React from "react"
 import { motion } from "framer-motion"
 import styled from "styled-components"
+
 import { space, dropShadow } from "../../../../../themes/theme"
 
 const InformationContainer = styled(motion.div)`
