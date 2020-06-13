@@ -8,19 +8,22 @@ import { API_ROOT } from "../../../constants/moviesDashboard"
 
 import { SET_ACTIVE_MOVIE_CREDITS } from "../moviesDashboardReducer"
 
-export default function useActiveMovieCredits({ prevState, state, dispatch }) {
+export default function useActiveMovieCredits({
+  prevActiveMovie,
+  activeMovie,
+  dispatch,
+}) {
   useEffect(() => {
     if (
-      prevState &&
-      state.activeMovie.id &&
+      activeMovie.id &&
       !isEqual(
-        omit(state.activeMovie, ["crew", "cast"]),
-        omit(prevState.activeMovie, ["crew", "cast"])
+        omit(activeMovie, ["crew", "cast"]),
+        omit(prevActiveMovie, ["crew", "cast"])
       )
     ) {
       axios
         .get(
-          `${API_ROOT}/${state.activeMovie.data.media_type}/${state.activeMovie.id}/credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
+          `${API_ROOT}/${activeMovie.data.media_type}/${activeMovie.id}/credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
         )
         .then(response => {
           dispatch({
@@ -32,5 +35,5 @@ export default function useActiveMovieCredits({ prevState, state, dispatch }) {
           })
         })
     }
-  }, [dispatch, prevState, state])
+  }, [activeMovie, dispatch, prevActiveMovie])
 }

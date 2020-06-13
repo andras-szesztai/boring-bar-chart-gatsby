@@ -207,7 +207,11 @@ export default function useMoviesDashboardReducer() {
     prevActiveNameID: prevState && prevState.activeNameID,
     dispatch,
   })
-  useActiveMovieCredits({ prevState, state, dispatch })
+  useActiveMovieCredits({
+    activeMovie: state.activeMovie,
+    prevActiveMovie: prevState && prevState.activeMovie,
+    dispatch,
+  })
 
   return { state, prevState, actions, localStorageValues, localStorageSetters }
 }
