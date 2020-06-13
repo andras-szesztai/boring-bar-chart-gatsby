@@ -37,6 +37,7 @@ export const makeFilteredData = (data, type) => {
         (!!d.release_date || !!d.first_air_date) &&
         !!d.vote_count &&
         !!d.vote_average &&
+        d.vote_average !== 10 &&
         !!d[accessor] &&
         !ceremonies.includes(d.title || d.name) &&
         (d.character
