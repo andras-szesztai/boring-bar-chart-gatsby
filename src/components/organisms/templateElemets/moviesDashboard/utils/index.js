@@ -27,6 +27,9 @@ export const makeFilteredData = (data, type) => {
     "Fantastic",
     "Good Morning America",
     "CBS News Sunday Morning",
+    "Critics' Choice Movie Awards",
+    "The Graham Norton Show",
+    "The Bill Engvall Show"
   ]
   const filteredData = data
     .filter(

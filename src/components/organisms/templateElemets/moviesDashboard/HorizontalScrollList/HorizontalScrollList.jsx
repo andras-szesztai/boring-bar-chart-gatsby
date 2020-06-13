@@ -126,6 +126,7 @@ export default function HorizontalScrollList(props) {
                     handleMouseEnter={width => (extraWidth.current = width)}
                     {...props}
                     layoutId="list-item"
+                    isActiveMovieClicked={props.isActiveMovieClicked}
                   />
                 )
               })}

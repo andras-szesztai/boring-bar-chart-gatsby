@@ -166,6 +166,7 @@ export default function CardContent(props) {
                 mouseDownContent={MouseDownContent}
                 activeNameID={activeNameID}
                 setActiveNameID={setActiveNameID}
+                isActiveMovieClicked
               />
             </Row>
             <Row style={{ gridArea: "cast" }}>
@@ -178,6 +179,7 @@ export default function CardContent(props) {
                 mouseDownContent={MouseDownContent}
                 activeNameID={activeNameID}
                 setActiveNameID={setActiveNameID}
+                isActiveMovieClicked
               />
             </Row>
             <LinkContainer style={{ justifyContent: props.justifyLink }}>
