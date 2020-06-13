@@ -29,15 +29,20 @@ export const makeFilteredData = (data, type) => {
     "CBS News Sunday Morning",
     "Critics' Choice Movie Awards",
     "The Graham Norton Show",
-    "The Bill Engvall Show"
+    "The Bill Engvall Show",
   ]
   const filteredData = data
     .filter(
       d =>
         (!!d.release_date || !!d.first_air_date) &&
         !!d.vote_count &&
+        !!d.vote_average &&
         !!d[accessor] &&
-        !ceremonies.includes(d.title || d.name)
+        !ceremonies.includes(d.title || d.name) &&
+        (d.character
+          ? !d.character.toLowerCase().includes("himself") &&
+            !d.character.toLowerCase().includes("archive")
+          : true)
     )
     .map(d => ({
       ...d,
