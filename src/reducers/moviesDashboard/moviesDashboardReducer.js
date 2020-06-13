@@ -246,7 +246,6 @@ export default function useMoviesDashboardReducer() {
         ])
         .then(
           axios.spread((details, credits) => {
-          console.log("useMoviesDashboardReducer -> credits", credits)
             dispatch({
               type: FETCH_INFO_BY_ID_SUCCESS,
               payload: {

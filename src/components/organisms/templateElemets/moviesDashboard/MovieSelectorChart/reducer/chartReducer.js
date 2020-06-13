@@ -64,7 +64,6 @@ function movieSelectorChartReducer(state, { type, payload }) {
 }
 
 export default function useMovieSelectorChartReducer({ dataSets }) {
-  //const prevDataSets = usePrevious(dataSets)
   const [state, dispatch] = useReducer(movieSelectorChartReducer, initialState)
 
   const actions = {
