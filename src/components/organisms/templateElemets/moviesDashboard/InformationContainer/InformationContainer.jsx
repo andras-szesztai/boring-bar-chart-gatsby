@@ -98,7 +98,7 @@ export default function InformationContainerComponent() {
             </span>{" "}
             by{" "}
             <Link
-              href="https://twitter.com/LinkndSzesztai"
+              href="https://twitter.com/AndSzesztai"
               target="_blank"
               rel="noopener noreferrer"
             >

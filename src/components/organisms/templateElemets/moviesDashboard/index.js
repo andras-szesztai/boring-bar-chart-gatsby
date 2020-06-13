@@ -7,3 +7,4 @@ export { default as MovieSelectorChart } from "./MovieSelectorChart/MovieSelecto
 export { default as MovieDetailsCard } from "./MovieDetailsCard/MovieDetailsCard"
 export { default as HorizontalScrollList } from "./HorizontalScrollList/HorizontalScrollList"
 export { default as InformationContainer } from "./InformationContainer/InformationContainer"
+export { default as Disclaimer } from "./Disclaimer/Disclaimer"

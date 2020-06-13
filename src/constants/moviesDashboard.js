@@ -3,8 +3,6 @@ import { colors, space } from "../themes/theme"
 export const IMAGE_ROOT = "https://image.tmdb.org/t/p/w500"
 export const API_ROOT = "https://api.themoviedb.org/3"
 
-
-
 export const COLORS = {
   primaryLight: "#8E7595",
   primary: "#79627F",

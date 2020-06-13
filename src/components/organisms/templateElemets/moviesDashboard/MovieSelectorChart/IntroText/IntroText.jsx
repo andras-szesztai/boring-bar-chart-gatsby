@@ -63,20 +63,17 @@ export const variants = {
   },
 }
 
-// TODO: animate paragraphs && setup alternative text
 export default function IntroText() {
   const [isVisited, setIsVisited] = useLocalStorage(
     LOCAL_STORE_ACCESSORS.isVisited,
     false
   )
-  const startIsVisited = React.useRef(isVisited) // use to determine text
+  const startIsVisited = React.useRef(isVisited)
   useEffect(() => {
     if (!isVisited) {
       setIsVisited(true)
     }
   })
-  console.log("IntroText -> startIsVisited", startIsVisited)
-  console.log("IntroText -> isVisited", isVisited)
 
   const [isLinkHovered, setIsLinkHovered] = React.useState(false)
   return (

@@ -1,8 +1,9 @@
 import React, { useEffect } from "react"
 import { Helmet } from "react-helmet"
 import last from "lodash/last"
+import { AnimatePresence } from "framer-motion"
 
-import { useDeviceType } from "../../hooks"
+import { useDeviceType, useWindowDimensions } from "../../hooks"
 import {
   PersonSearch,
   PersonDetailCard,
@@ -10,6 +11,7 @@ import {
   MovieSelectorChart,
   MovieDetailsCard,
   InformationContainer,
+  Disclaimer,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
 
@@ -38,11 +40,22 @@ export default function MoviesDashboard() {
     }
   }, [actions, favoritePersons])
 
+  const { windowWidth } = useWindowDimensions()
+
   return (
     <>
-      <Helmet title="Movie Explorer" />
+      <Helmet title="The Filmography Explorer" />
       {device === "desktop" && (
         <div style={{ userSelect: "none" }}>
+          <AnimatePresence>
+            {!isNaN(windowWidth) && windowWidth < 1000 && (
+              <Disclaimer
+                bigText="Sorry, the dashboard has not yet been optimized for smaller screen size."
+                smallText="Please set your browser's width bigger if possible, or open it on a
+        wider screen, thank you!"
+              />
+            )}
+          </AnimatePresence>
           <PersonSearch setActiveNameID={actions.setActiveNameID} />
           <PersonDetailCard
             state={state}
@@ -76,7 +89,7 @@ export default function MoviesDashboard() {
             setFavoriteMovies={setFavoriteMovies}
             favoriteMovies={favoriteMovies}
           />
-          <InformationContainer/>
+          <InformationContainer />
         </div>
       )}
     </>

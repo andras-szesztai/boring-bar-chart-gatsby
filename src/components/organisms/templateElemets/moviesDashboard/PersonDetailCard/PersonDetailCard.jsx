@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { IoIosArrowUp, IoIosUnlock, IoIosLock } from "react-icons/io"
-import _ from "lodash"
 
 import ClosedNameContainer from "../ClosedNameContainer/ClosedNameContainer"
 import Image from "../Image/Image"
@@ -18,7 +17,14 @@ import {
 } from "../../../../../constants/moviesDashboard"
 import { TextContainer, TitleContainer } from "../styles/styles"
 
-import { PersonDetailsCard, variants, IconContainer, DetailCardContent, CardGrid, CardTextGrid } from "./styles"
+import {
+  PersonDetailsCard,
+  variants,
+  IconContainer,
+  DetailCardContent,
+  CardGrid,
+  CardTextGrid,
+} from "./styles"
 
 let animateCard
 
@@ -100,11 +106,6 @@ export default function PersonDetailCard({
       id: dataSets.personDetails.id,
       name: dataSets.personDetails.name,
       date: new Date(),
-      credits: _.uniq(
-        [dataSets.personCredits.cast, dataSets.personCredits.crew]
-          .flat()
-          .map(credit => credit && credit.id)
-      ),
     },
   ]
 
