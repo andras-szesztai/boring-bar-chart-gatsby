@@ -4,6 +4,7 @@ import capitalize from "lodash/capitalize"
 import chroma from "chroma-js"
 import { AnimatePresence, motion } from "framer-motion"
 import numeral from "numeral"
+import isFunction from "lodash/isFunction"
 
 import { Image } from "../../.."
 import { dropShadow, space } from "../../../../../../../themes/theme"
@@ -82,7 +83,7 @@ export default function Tooltip({
   xScale,
 }) {
   if (!id) return null
-  const x = xScale(new Date(data.unified_year))
+  const x = isFunction(xScale) && xScale(new Date(data.unified_year))
   return (
     <TooltipContainer
       key={id}
@@ -108,7 +109,8 @@ export default function Tooltip({
         <div className="section">
           {data.character ? "Character" : "Job"}:{" "}
           <span>
-            {data.job.filter(Boolean).length ? data.job.join(", ") : "N/A"}
+            {data.job &&
+              (data.job.filter(Boolean).length ? data.job.join(", ") : "N/A")}
           </span>
         </div>
         <div className="section">

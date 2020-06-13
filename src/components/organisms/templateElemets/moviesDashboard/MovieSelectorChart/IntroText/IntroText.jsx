@@ -66,7 +66,7 @@ export const variants = {
 // TODO: animate paragraphs && setup alternative text
 export default function IntroText() {
   const [isVisited, setIsVisited] = useLocalStorage(
-    LOCAL_STORE_ACCESSORS.lockedPersonDetailCard,
+    LOCAL_STORE_ACCESSORS.isVisited,
     false
   )
   const startIsVisited = React.useRef(isVisited) // use to determine text
@@ -75,26 +75,29 @@ export default function IntroText() {
       setIsVisited(true)
     }
   })
+  console.log("IntroText -> startIsVisited", startIsVisited)
+  console.log("IntroText -> isVisited", isVisited)
 
   const [isLinkHovered, setIsLinkHovered] = React.useState(false)
   return (
     <motion.div variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
-      {startIsVisited ? (
+      {startIsVisited.current ? (
         <TextContainer>
-          Hey, welcome back! It is good to see you again.
+          Hey, welcome back, it is good to see you again!
         </TextContainer>
       ) : (
         <>
           <TextContainer>
-            Hi there, thank you so much for passing by! Please let me welcome
+            Hi there, thank you so much for passing by, please let me welcome
             you on your first visit of this dashboard!
           </TextContainer>
           <TextContainer>
             To quickly explain the idea behind it, allow me to ask you a
-            question: have you ever wanted to more easily explore discover more
-            about the filmography of some of your favorite actors, directors or
-            screenwriters? If your answer is yes, the good news is that the
-            following dashboard attempts to help you to do exactly that!
+            question: have you ever wanted to more easily explore or discover
+            more about the filmography of some of your favorite actors,
+            directors or screenwriters? If your answer is yes, the good news is
+            that the following dashboard attempts to help you to do exactly
+            that!
           </TextContainer>
         </>
       )}
@@ -103,7 +106,7 @@ export default function IntroText() {
         <ColoredSpan color={COLORS.primary}>search bar</ColoredSpan> in the top
         left corner. When selecting a person from the results, you will see this
         middle part getting populated and you can start exploring the data by
-        hovering over the elements and by just clicking around!
+        hovering over the elements and by just clicking around.
       </TextContainer>
       <TextContainer>
         The dashboard allows you also to mark persons and movies/series as your
@@ -124,10 +127,9 @@ export default function IntroText() {
       <TextContainer>
         Please keep in mind that this dashboard is a constant work in progress,
         and it will experience some changes in the near future by receiving some
-        cool new features and getting some issues fixed. If you feel like share
-        an idea about what type of features you would like to be added or any
-        feedback about potential issues, please feel free to contact me anytime
-        via{" "}
+        cool new features and getting some issues fixed. If you feel like
+        sharing an idea about what you would like to be added or any feedback
+        about potential issues, please feel free to contact me anytime via{" "}
         <span style={{ position: "relative" }}>
           <LnkContainer
             initial={{ width: 59 }}
