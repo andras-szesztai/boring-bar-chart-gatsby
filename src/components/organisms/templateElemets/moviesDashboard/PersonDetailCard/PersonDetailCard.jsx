@@ -190,7 +190,7 @@ export default function PersonDetailCard({
                           onMouseEnter={() => setIsTitleHovered(true)}
                           onMouseLeave={() => setIsTitleHovered(false)}
                         >
-                          {dataSets.personDetails.name}
+                          <span>{dataSets.personDetails.name}</span>
                           <motion.div
                             style={{
                               position: "absolute",

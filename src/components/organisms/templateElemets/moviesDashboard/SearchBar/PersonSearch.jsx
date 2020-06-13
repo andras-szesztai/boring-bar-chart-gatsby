@@ -41,7 +41,7 @@ export default function PersonSearch({ setActiveNameID }) {
           subTextValue: "known_for_department",
           color: COLORS.primary
         }}
-        placeholder="Search for a director, actor, screenwriter . . . "
+        placeholder="Search for a director, actor, writer . . . "
         topZ={11}
       />
     </SearchBarMainContainer>

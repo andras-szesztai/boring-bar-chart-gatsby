@@ -15,7 +15,7 @@ import { FavoriteStar } from "../../../../molecules"
 const Container = styled(motion.div)`
   position: absolute;
   bottom: 12px;
-  right: ${space[2]}px;
+  right: ${space[3]}px;
   font-size: ${themifyFontSize(3)};
   font-weight: 300;
   color: #fff;
@@ -23,7 +23,7 @@ const Container = styled(motion.div)`
   padding: 2px 16px;
   background-color: ${chroma(COLORS.primary)};
   border: 1px solid ${chroma(COLORS.primary).darken()};
-  white-space: nowrap; 
+  white-space: nowrap;
 
   display: flex;
   cursor: pointer;
@@ -46,7 +46,7 @@ export default function ClosedNameContainer({
       onMouseLeave={() => setIsTitleHovered(false)}
       {...ANIMATE_PROPS}
     >
-      {dataSets.personDetails.name}
+      <span>{dataSets.personDetails.name}</span>
       <motion.div
         style={{
           position: "absolute",
@@ -56,7 +56,11 @@ export default function ClosedNameContainer({
           scale: isTitleHovered ? 1.2 : 1,
         }}
       >
-        <FavoriteStar color={COLORS.favorite} isFavorited={isFavorited} isHovered={isTitleHovered} />
+        <FavoriteStar
+          color={COLORS.favorite}
+          isFavorited={isFavorited}
+          isHovered={isTitleHovered}
+        />
       </motion.div>
     </Container>
   )

@@ -15,7 +15,7 @@ import { useLocalStorage } from "../../../../../../hooks"
 import { FavoriteStar } from "../../../../../molecules"
 
 const TextContainer = styled(motion.div)`
-  width: 550px;
+  width: 560px;
   font-size: ${themifyFontSize(2)};
   color: ${COLORS.textColor};
   margin-bottom: ${space[3]}px;

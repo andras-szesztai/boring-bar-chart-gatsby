@@ -55,7 +55,7 @@ export default function ListItem({
   setActiveNameID,
   mouseDownAnimationAdjust,
   withAnimation,
-  isActiveMovieClicked
+  isActiveMovieClicked,
 }) {
   const delayedRevealProps = {
     animate: { opacity: 1, transition: { delay: 0.35 } },
@@ -129,7 +129,7 @@ export default function ListItem({
           setIsClicked(true)
           timeOut.current = setTimeout(
             () => setActiveNameID({ id: data.id, isActiveMovieClicked }),
-            1000
+            400
           )
         }
       }}
@@ -163,7 +163,7 @@ export default function ListItem({
               width: 0,
             }}
             transition={{
-              duration: isClicked ? 1 : 0.25,
+              duration: isClicked ? 0.4 : 0.2,
               type: "tween",
               ease: [0.65, 0, 0.35, 1],
             }}
