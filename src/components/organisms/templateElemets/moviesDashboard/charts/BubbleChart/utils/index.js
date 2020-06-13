@@ -75,8 +75,11 @@ export function createRefElements({
           .attr("stroke", chroma(COLORS.secondary).darken())
       }
     })
+    voronoiArea
+      .selectAll(".voronoi-path")
+      .attr("cursor", d => (activeMovieID === d.id ? "default" : "pointer"))
   }
-  voronoiArea
-    .selectAll(".voronoi-path")
-    .attr("cursor", d => (activeMovieID === d.id ? "default" : "pointer"))
+  if (!selectedData) {
+    voronoiArea.selectAll(".voronoi-path").attr("cursor", "pointer")
+  }
 }

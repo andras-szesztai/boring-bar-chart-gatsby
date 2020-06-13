@@ -1,13 +1,6 @@
 import React from "react"
-import { select } from "d3-selection"
-import chroma from "chroma-js"
 
-import {
-  COLORS,
-  CIRCLE_ADJUST,
-} from "../../../../../../../constants/moviesDashboard"
-
-import { setRadius, getSelectedLineYPos, createRefElements } from "../utils"
+import { createRefElements } from "../utils"
 
 export default function useActiveMovieIDUpdate({
   storedValues,
@@ -25,17 +18,14 @@ export default function useActiveMovieIDUpdate({
       chartArea.select(".selected-line").remove()
       chartArea.select(".hovered-circle").remove()
       chartArea.select(".hovered-line").remove()
-      const selectedData = data.find(d => d.id === activeMovieID)
-      if (selectedData) {
-        createRefElements({
-          data,
-          activeMovieID,
-          storedValues,
-          chart,
-          isSizeDynamic,
-          height: dims.height,
-        })
-      }
+      createRefElements({
+        data,
+        activeMovieID,
+        storedValues,
+        chart,
+        isSizeDynamic,
+        height: dims.height,
+      })
     }
   })
 }

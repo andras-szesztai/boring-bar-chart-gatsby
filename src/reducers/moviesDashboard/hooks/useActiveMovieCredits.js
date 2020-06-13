@@ -23,7 +23,6 @@ export default function useActiveMovieCredits({ prevState, state, dispatch }) {
           `${API_ROOT}/${state.activeMovie.data.media_type}/${state.activeMovie.id}/credits?api_key=${process.env.MDB_API_KEY}&language=en-US`
         )
         .then(response => {
-          console.log("response", response)
           dispatch({
             type: SET_ACTIVE_MOVIE_CREDITS,
             payload: {

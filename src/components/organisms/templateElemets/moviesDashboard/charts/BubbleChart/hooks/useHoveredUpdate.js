@@ -1,6 +1,5 @@
 import React from "react"
 import { select } from "d3-selection"
-import chroma from "chroma-js"
 import isEqual from "lodash/isEqual"
 
 import {
