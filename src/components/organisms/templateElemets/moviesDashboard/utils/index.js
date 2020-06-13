@@ -16,7 +16,12 @@ export const makeUniqData = (data, type) => {
 
 export const makeFilteredData = data => {
   const filteredData = data
-    .filter(d => !!d.release_date && !!d.vote_count)
+    .filter(d => (!!d.release_date || !!d.first_air_date) && !!d.vote_count)
+    .map(d => ({
+      ...d,
+      unified_date: d.release_date || d.first_air_date,
+      unified_year: (d.release_date || d.first_air_date).slice(0, 4),
+    }))
     .sort((a, b) => b.vote_count - a.vote_count)
   return filteredData
 }

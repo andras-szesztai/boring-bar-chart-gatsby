@@ -87,13 +87,24 @@ export default function CardContent(props) {
     whileHover: WHILE_HOVER,
   }
 
+  const [isFavorited, setIsFavorited] = useState()
+  React.useEffect(() => {
+    setIsFavorited(!!favoriteMovies.find(id => id === activeMovie.id))
+  }, [activeMovie.id, favoriteMovies, isFavorited])
+
   const [isFavoriteHovered, setIsFavoriteHovered] = useState(false)
   const interactionProps = {
     onMouseEnter: () => setIsFavoriteHovered(true),
     onMouseLeave: () => setIsFavoriteHovered(false),
-    onClick: () => setFavoriteMovies(),
+    onClick: () => {
+      if (isFavorited) {
+        setFavoriteMovies(favoriteMovies.filter(id => id !== activeMovie.id))
+      }
+      if (!isFavorited) {
+        setFavoriteMovies([activeMovie.id, ...favoriteMovies])
+      }
+    },
   }
-  console.log("CardContent -> activeMovie", activeMovie)
 
   return (
     <AnimatePresence>
@@ -126,10 +137,13 @@ export default function CardContent(props) {
             <IconsContainer
               role="button"
               {...interactionProps}
-              animate={{ scale: isFavoriteHovered ? 1.3 : 1, originY: 0.6 }}
+              animate={{ scale: isFavoriteHovered ? 1.2 : 1, originY: 0.6 }}
             >
               <motion.div>
-                <FavoriteHeart isFavorited={true} isHovered={false} />
+                <FavoriteHeart
+                  isFavorited={isFavorited}
+                  isHovered={isFavoriteHovered}
+                />
               </motion.div>
             </IconsContainer>
             <Row style={{ gridArea: "genre" }}>

@@ -82,7 +82,7 @@ export default function FavoriteHearth({
       gsap.to(circle.current, {
         opacity: isHovered ? 1 : 0,
         stagger: {
-          amount: 0.2,
+          amount: 0.4,
         },
       })
     )
