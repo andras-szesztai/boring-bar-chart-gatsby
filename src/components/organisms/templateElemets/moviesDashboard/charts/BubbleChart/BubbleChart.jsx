@@ -24,7 +24,7 @@ import {
   useChartResize,
   useFavoriteUpdate,
 } from "./hooks"
-import { setRadius } from "./utils"
+import { setRadius, createRefElements } from "./utils"
 import {
   Wrapper,
   ChartTitle,
@@ -94,6 +94,16 @@ export default function BubbleChart(props) {
       createCircles()
       createUpdateVoronoi()
       setNumber(data.length)
+      if (!!props.activeMovie.id) {
+        createRefElements({
+          data,
+          activeMovieID: props.activeMovie.id,
+          storedValues,
+          chart,
+          isSizeDynamic,
+          height: dims.height,
+        })
+      }
     }
   })
 
@@ -289,7 +299,7 @@ export default function BubbleChart(props) {
 
   useFavoriteUpdate({
     storedValues,
-    favoriteMovies
+    favoriteMovies,
   })
 
   useEffect(() => {
