@@ -135,12 +135,10 @@ export default function CardContent(props) {
                 alt={`${title}-poster`}
               />
             </ContentItem>
-            <IconsContainer
-              role="button"
-              {...interactionProps}
-              animate={{ scale: isFavoriteHovered ? 1.2 : 1, originY: 0.6 }}
-            >
-              <motion.div>
+            <IconsContainer role="button" {...interactionProps}>
+              <motion.div
+                animate={{ scale: isFavoriteHovered ? 1.25 : 1 }}
+              >
                 <FavoriteHeart
                   color={COLORS.favorite}
                   isFavorited={isFavorited}

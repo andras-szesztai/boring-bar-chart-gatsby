@@ -52,7 +52,7 @@ export default function Disclaimer({
     >
       <p>{bigText}</p>
       <p className="explain">{smallText}</p>
-      <div>
+      <div style={{ marginTop: space[3] }}>
         <IoMdBuild size={30} color="#fff" />
       </div>
     </Overlay>

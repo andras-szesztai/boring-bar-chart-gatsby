@@ -8,7 +8,7 @@ import { space, dropShadow } from "../../../../../themes/theme"
 import { usePrevious } from "../../../../../hooks"
 import HorizontalScrollList from "../HorizontalScrollList/HorizontalScrollList"
 import { themifyFontSize } from "../../../../../themes/mixins"
-import { COLORS, ANIMATE_PROPS } from "../../../../../constants/moviesDashboard"
+import { COLORS } from "../../../../../constants/moviesDashboard"
 
 const HoverContent = ({ animateProps, data, isMatch }) => {
   return (
@@ -99,7 +99,7 @@ export default function FavoritesList({ actions, state, localStorageValues }) {
         },
       }}
     >
-      <TextContainer>Your recent favorites</TextContainer>
+      <TextContainer>My recent favorites</TextContainer>
       <HorizontalScrollList
         type="favorites"
         withAnimation

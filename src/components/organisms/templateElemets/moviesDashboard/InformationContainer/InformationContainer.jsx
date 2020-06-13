@@ -103,7 +103,7 @@ export default function InformationContainerComponent() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Andras Szesztai
+              András Szesztai
             </Link>
           </span>
         </div>

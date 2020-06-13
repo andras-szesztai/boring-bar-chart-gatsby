@@ -29,11 +29,11 @@ const ListContainer = styled(motion.div)`
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: ${COLORS.primary};
+    background: ${({ color }) => color};
     border-radius: 2px;
 
     :hover {
-      background: ${chroma(COLORS.primary).darken()};
+      background: ${({ color }) => chroma(color).darken()};
     }
   }
 `
@@ -71,7 +71,10 @@ export default function HorizontalScrollList(props) {
 
   return (
     <>
-      <ListContainer onMouseLeave={() => setItemHovered(false)}>
+      <ListContainer
+        color={props.bgColor}
+        onMouseLeave={() => setItemHovered(false)}
+      >
         {withAnimation ? (
           <AnimateSharedLayout>
             <List

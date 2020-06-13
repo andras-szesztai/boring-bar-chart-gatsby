@@ -16,7 +16,18 @@ export const makeUniqData = (data, type) => {
 
 export const makeFilteredData = (data, type) => {
   const accessor = type === "cast" ? "character" : "job"
-  const ceremonies = ["The Academy Awards", "Tony Awards"]
+  const ceremonies = [
+    "The Academy Awards",
+    "Tony Awards",
+    "Saturday Night Live",
+    "MTV Video Music Awards",
+    "Kids' Choice Awards",
+    "Great Performances",
+    "Today",
+    "Fantastic",
+    "Good Morning America",
+    "CBS News Sunday Morning",
+  ]
   const filteredData = data
     .filter(
       d =>
