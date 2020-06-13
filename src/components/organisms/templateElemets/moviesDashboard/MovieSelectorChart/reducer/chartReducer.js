@@ -1,8 +1,5 @@
-import { useReducer, useEffect } from "react"
-import uniqBy from "lodash/uniqBy"
-
-import { scaleTime, scaleSqrt } from "d3-scale"
-import { extent } from "d3-array"
+import { useReducer } from "react"
+import { useChartSettings } from "./hooks"
 
 const initialState = {
   nameId: undefined,
@@ -76,41 +73,11 @@ export default function useMovieSelectorChartReducer({ dataSets }) {
     setHoveredMovie: payload => dispatch({ type: SET_HOVERED_MOVIE, payload }),
   }
 
-  useEffect(() => {
-    if (
-      dataSets.personCredits &&
-      (!state.nameId || state.nameId !== dataSets.personCredits.id)
-    ) {
-      const isBoth =
-        !!dataSets.personCredits.cast.length &&
-        !!dataSets.personCredits.crew.length
-      const data = [
-        ...dataSets.personCredits.crew,
-        ...dataSets.personCredits.cast,
-      ]
-      const movieSearchData = uniqBy(data, "id")
-        .map(el => ({
-          id: el.id,
-          title: el.title || el.name,
-          data: {...el, release_year: el.unified_year},
-        }))
-        .sort((a, b) => b.popularity - a.popularity)
-      const xScale = scaleTime().domain(
-        extent(data, d => new Date(d.unified_year))
-      )
-      const sizeScale = scaleSqrt().domain(extent(data, d => d.vote_count))
-      const isActor = dataSets.personDetails.known_for_department === "Acting"
-      actions.setChartStartSettings({
-        nameId: dataSets.personCredits.id,
-        mainType: isActor ? "cast" : "crew",
-        subType: isBoth && isActor ? "crew" : "cast",
-        isBoth,
-        xScale,
-        sizeScale,
-        movieSearchData,
-      })
-    }
-  }, [actions, state, dataSets])
+  useChartSettings({
+    dataSets,
+    nameId: state.nameId,
+    setChartStartSettings: actions.setChartStartSettings,
+  })
 
   return { state, actions }
 }

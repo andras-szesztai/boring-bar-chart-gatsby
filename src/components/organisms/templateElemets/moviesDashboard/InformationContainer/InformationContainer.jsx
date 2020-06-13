@@ -83,7 +83,8 @@ export default function InformationContainerComponent() {
         y: isOpen ? 0 : -90,
         transition: { ...TRANSITION.primary, stiffness: 140 },
       }}
-      onAnimationComplete={() => setIsFavorited(isOpen)}
+      onAnimationStart={() => !isOpen && setIsFavorited(false)}
+      onAnimationComplete={() => isOpen && setIsFavorited(true)}
     >
       <Text>
         <div>

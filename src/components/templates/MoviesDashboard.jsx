@@ -40,7 +40,7 @@ export default function MoviesDashboard() {
     }
   }, [actions, favoritePersons])
 
-  const { windowWidth } = useWindowDimensions()
+  const { windowWidth, windowHeight } = useWindowDimensions()
 
   return (
     <>
@@ -91,6 +91,19 @@ export default function MoviesDashboard() {
           />
           <InformationContainer />
         </div>
+      )}
+      {(device === "mobile" || device === "tablet") && (
+        <Disclaimer
+          bigText={`Sorry, the dashboard has not yet been optimized for ${
+            device === "mobile" ? "mobile devices" : "tablet"
+          }.`}
+          smallText={`Please open it in your desktop browser until ${
+            device === "mobile" ? "mobile" : "tablet"
+          } layout will be added!`}
+          height={windowHeight}
+          width={windowWidth}
+          size={device === "mobile" ? 4 : 5}
+        />
       )}
     </>
   )

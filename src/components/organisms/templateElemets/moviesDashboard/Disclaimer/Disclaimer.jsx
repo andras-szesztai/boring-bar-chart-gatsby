@@ -1,7 +1,8 @@
 import React from "react"
 import styled from "styled-components"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import chroma from "chroma-js"
+import { IoMdBuild } from "react-icons/io"
 
 import {
   COLORS,
@@ -10,13 +11,12 @@ import {
 } from "../../../../../constants/moviesDashboard"
 import { space } from "../../../../../themes/theme"
 import { themifyFontSize } from "../../../../../themes/mixins"
-import { useWindowDimensions } from "../../../../../hooks"
 
 const Overlay = styled(motion.div)`
   position: fixed;
   z-index: 100;
-  width: 100vw;
-  height: 100vh;
+  height: ${({ height }) => (height ? `${height}px` : "100vh")};
+  width: ${({ width }) => (width ? `${width}px` : "100vw")};
 
   background-color: ${chroma(COLORS.textColor).alpha(0.98)};
   padding: ${space[8]}px;
@@ -25,7 +25,7 @@ const Overlay = styled(motion.div)`
   align-items: center;
   flex-direction: column;
   color: #fff;
-  font-size: ${themifyFontSize(6)};
+  font-size: ${({ size }) => themifyFontSize(size || 6)};
   font-weight: 200;
   text-align: center;
 
@@ -35,16 +35,26 @@ const Overlay = styled(motion.div)`
   }
 `
 
-export default function Disclaimer({ bigText, smallText }) {
+export default function Disclaimer({
+  bigText,
+  smallText,
+  height,
+  width,
+  size,
+}) {
   return (
-    <Overlay variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
-      <p>
-        {bigText}
-      </p>
-      <p className="explain">
-        Please set your browser's width bigger if possible, or open it on a
-        wider screen, thank you!
-      </p>
+    <Overlay
+      height={height}
+      width={width}
+      size={size}
+      variants={OPACITY_VARIANT}
+      {...ANIMATE_PROPS}
+    >
+      <p>{bigText}</p>
+      <p className="explain">{smallText}</p>
+      <div>
+        <IoMdBuild size={30} color="#fff" />
+      </div>
     </Overlay>
   )
 }
