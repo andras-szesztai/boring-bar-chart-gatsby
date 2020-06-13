@@ -8,11 +8,10 @@ import {
   makeLeftVariants,
   makeRightVariants,
   IconsContainerRight,
-  IconsContainerLeft
+  IconsContainerLeft,
 } from "./styles"
 import CardContent from "./CardContent/CardContent"
 import { makeCardProps } from "./utils"
-
 
 export default function MovieDetailsCardComponent(props) {
   const delay = typeof props.prevActiveMovie.position == "number" ? 0.5 : 0
@@ -27,6 +26,7 @@ export default function MovieDetailsCardComponent(props) {
         iconsContainer={IconsContainerRight}
         cardAnimationProps={makeCardProps(makeRightVariants(delay))}
         justifyLink="flex-end"
+        setFavoriteMovies={props.setFavoriteMovies}
       />
       <CardContent
         {...props}
@@ -36,6 +36,7 @@ export default function MovieDetailsCardComponent(props) {
         iconsContainer={IconsContainerLeft}
         cardAnimationProps={makeCardProps(makeLeftVariants(delay))}
         justifyLink="flex-start"
+        setFavoriteMovies={props.setFavoriteMovies}
       />
     </>
   )

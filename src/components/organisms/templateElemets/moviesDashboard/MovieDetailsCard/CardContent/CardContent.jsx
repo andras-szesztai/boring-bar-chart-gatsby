@@ -25,7 +25,9 @@ import {
   NO_ACTIVE_MOVIE,
   WHILE_HOVER,
   COLORS,
+  LOCAL_STORE_ACCESSORS,
 } from "../../../../../../constants/moviesDashboard"
+import { useLocalStorage } from "../../../../../../hooks"
 
 const HoverContentCast = ({ animateProps, data, accessor }) => {
   return (
@@ -85,6 +87,8 @@ export default function CardContent(props) {
       }),
     whileHover: WHILE_HOVER,
   }
+
+
 
   return (
     <AnimatePresence>

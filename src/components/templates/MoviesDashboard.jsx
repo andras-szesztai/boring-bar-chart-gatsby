@@ -1,17 +1,8 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useEffect } from "react"
 import { Helmet } from "react-helmet"
-import axios from "axios"
-import styled, { css } from "styled-components"
-import { AnimatePresence, motion } from "framer-motion"
-import chroma from "chroma-js"
-import _ from "lodash"
-import { useUpdateEffect } from "react-use"
-import isEqual from "lodash/isEqual"
-import { scaleTime, scaleSqrt } from "d3-scale"
-import { extent } from "d3-array"
-import { IoIosArrowBack, IoIosArrowForward, xIoIosClose } from "react-icons/io"
+import last from "lodash/last"
 
-import { useDeviceType, usePrevious, useStateWithPrevious } from "../../hooks"
+import { useDeviceType } from "../../hooks"
 import {
   PersonSearch,
   PersonDetailCard,
@@ -20,16 +11,6 @@ import {
   MovieDetailsCard,
 } from "../organisms/templateElemets/moviesDashboard"
 import { moviesDashboardReducer } from "../../reducers"
-import { dropShadow, space } from "../../themes/theme"
-import {
-  CARD_WIDTH,
-  CARD_HEIGHT,
-  COLORS,
-  TRANSITION,
-  HANDLE_SIZE,
-  WHILE_HOVER,
-} from "../../constants/moviesDashboard"
-import { themifyZIndex } from "../../themes/mixins"
 
 export default function MoviesDashboard() {
   const device = useDeviceType()
@@ -41,17 +22,20 @@ export default function MoviesDashboard() {
     localStorageValues,
     localStorageSetters,
   } = moviesDashboardReducer()
-  const { favoritePersons } = localStorageValues
-  const { setFavoritePersons } = localStorageSetters
+  const { favoritePersons, favoriteMovies } = localStorageValues
+  const { setFavoritePersons, setFavoriteMovies } = localStorageSetters
   const { dataSets, activeNameID, activeMovie } = state
   const { setActiveMovie, setActiveNameID } = actions
 
+  const isInit = React.useRef(true)
   useEffect(() => {
-    favoritePersons &&
-      favoritePersons.length &&
-      actions.setActiveNameID({ id: _.last(favoritePersons).id })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    if (isInit.current) {
+      favoritePersons &&
+        favoritePersons.length &&
+        actions.setActiveNameID({ id: last(favoritePersons).id })
+      isInit.current = false
+    }
+  }, [actions, favoritePersons])
 
   return (
     <>
@@ -79,6 +63,7 @@ export default function MoviesDashboard() {
             dataSets={dataSets}
             setActiveMovie={setActiveMovie}
             activeMovie={activeMovie}
+            favoriteMovies={favoriteMovies}
           />
           <MovieDetailsCard
             activeMovie={activeMovie}
@@ -87,6 +72,7 @@ export default function MoviesDashboard() {
             genreList={state.dataSets.genres}
             activeNameID={activeNameID}
             setActiveNameID={setActiveNameID}
+            setFavoriteMovies={setFavoriteMovies}
           />
         </div>
       )}

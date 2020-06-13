@@ -183,12 +183,19 @@ export default function useMoviesDashboardReducer() {
     []
   )
 
+  const [favoriteMovies, setFavoriteMovies] = useLocalStorage(
+    LOCAL_STORE_ACCESSORS.favoriteMovies,
+    []
+  )
+
   const localStorageValues = {
     favoritePersons,
+    favoriteMovies
   }
 
   const localStorageSetters = {
     setFavoritePersons,
+    setFavoriteMovies
   }
 
   const actions = {
