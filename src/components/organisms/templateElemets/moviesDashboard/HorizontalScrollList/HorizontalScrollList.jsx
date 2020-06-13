@@ -72,6 +72,7 @@ export default function HorizontalScrollList(props) {
                     return (
                       <motion.span key={`${el.id}-${type}`} animate>
                         <ListItem
+                          withAnimation={withAnimation}
                           data={el}
                           itemHovered={itemHovered}
                           setItemHovered={setItemHovered}
@@ -99,6 +100,7 @@ export default function HorizontalScrollList(props) {
               array.map(el => {
                 return (
                   <ListItem
+                    withAnimation={withAnimation}
                     key={`${el.id}-${type}`}
                     data={el}
                     itemHovered={itemHovered}

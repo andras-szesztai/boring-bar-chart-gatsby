@@ -54,6 +54,7 @@ export default function ListItem({
   activeNameID,
   setActiveNameID,
   mouseDownAnimationAdjust,
+  withAnimation,
 }) {
   const delayedRevealProps = {
     animate: { opacity: 1, transition: { delay: 0.35 } },
@@ -89,19 +90,32 @@ export default function ListItem({
   const [isClicked, setIsClicked] = useState()
   const timeOut = React.useRef(false)
 
+  const animationProps = withAnimation
+    ? {
+        initial: { opacity: 0 },
+        animate: {
+          width:
+            itemHovered === data.id
+              ? originalWidth + hiddenInformationWidth
+              : originalWidth,
+
+          opacity: 1,
+        },
+        exit: { y: 50, opacity: 0 },
+      }
+    : {
+        animate: {
+          width:
+            itemHovered === data.id
+              ? originalWidth + hiddenInformationWidth
+              : originalWidth,
+        },
+      }
+
   return (
     <Item
       ref={itemRef}
-      initial={{ opacity: 0 }}
-      animate={{
-        width:
-          itemHovered === data.id
-            ? originalWidth + hiddenInformationWidth
-            : originalWidth,
-  
-        opacity: 1,
-      }}
-      exit={{ y: 50, opacity: 0 }}
+      {...animationProps}
       onMouseLeave={() => {
         setIsClicked(false)
       }}
