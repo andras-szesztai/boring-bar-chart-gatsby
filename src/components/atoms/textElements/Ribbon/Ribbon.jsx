@@ -16,39 +16,18 @@ const RibbonContainer = styled.div`
   pointer-events: none;
   right: -13px;
 
-  ::before,
-  ::after {
-    position: absolute;
-    z-index: -1;
-    content: "";
-    display: block;
-    border: 5px solid ${colors.tealBlueLighter};
-    border-top-color: transparent;
-    border-right-color: transparent;
-  }
-
-  ::before {
-    top: 0;
-    left: 0;
-  }
-
-  ::after {
-    bottom: 0;
-    right: 0;
-  }
-
   span {
     position: absolute;
     display: block;
-    width: 160px;
+    width: 200px;
     padding: ${({ padding }) => padding}px 0;
-    background-color: ${chroma(colors.tealBlueLighter).alpha(.75)};
+    background-color: ${chroma(colors.tealBlueLighter).alpha(.95)};
     color: ${colors.tealBlueDarkest};
     text-align: center;
     font-weight: 600;
-    letter-spacing: 1.1px;
-    left: -25px;
-    top: 30px;
+    letter-spacing: .95px;
+    left: -43px;
+    top: 28px;
     transform: rotate(45deg);
   }
 `

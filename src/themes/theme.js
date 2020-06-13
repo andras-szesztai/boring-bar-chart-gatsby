@@ -20,7 +20,7 @@ export const colors = {
   tealBlue: "#8bbabb",
   tealBlueDark: "#7AA5A5",
   tealBlueDarker: "#678C8C",
-  tealBlueDarkest: "#547272 ",
+  tealBlueDarkest: "#4E6A6A ",
 }
 
 export const ease = {

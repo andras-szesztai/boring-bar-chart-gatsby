@@ -103,7 +103,7 @@ export default function IntroText() {
         <ColoredSpan color={COLORS.primary}>search bar</ColoredSpan> in the top
         left corner. When selecting a person from the results, you will see this
         middle part getting populated and you can start exploring the data by
-        hovering over the elements and by just clicking around.
+        hovering over the elements and just clicking around.
       </TextContainer>
       <TextContainer>
         The dashboard allows you also to mark persons and movies/series as your
