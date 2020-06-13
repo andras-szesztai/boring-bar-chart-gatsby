@@ -288,7 +288,8 @@ export default function BubbleChart(props) {
   })
 
   useFavoriteUpdate({
-    storedValues
+    storedValues,
+    favoriteMovies
   })
 
   useEffect(() => {
