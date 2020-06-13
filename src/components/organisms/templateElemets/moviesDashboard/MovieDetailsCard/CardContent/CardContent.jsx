@@ -142,6 +142,7 @@ export default function CardContent(props) {
             >
               <motion.div>
                 <FavoriteHeart
+                  color={COLORS.favorite}
                   isFavorited={isFavorited}
                   isHovered={isFavoriteHovered}
                 />

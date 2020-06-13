@@ -80,7 +80,9 @@ export default function IntroText() {
   return (
     <motion.div variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
       {startIsVisited ? (
-        <TextContainer>Hey, welcome back! It is good to see you again.</TextContainer>
+        <TextContainer>
+          Hey, welcome back! It is good to see you again.
+        </TextContainer>
       ) : (
         <>
           <TextContainer>
@@ -109,7 +111,11 @@ export default function IntroText() {
         <span style={{ position: "relative" }}>
           ‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎
           <span style={{ position: "absolute", top: -4, right: -8 }}>
-            <FavoriteStar isFavorited={true} width={30} />
+            <FavoriteStar
+              color={COLORS.favorite}
+              isFavorited={true}
+              width={30}
+            />
           </span>
         </span>{" "}
         , which can help you with quick search options whenever you come back

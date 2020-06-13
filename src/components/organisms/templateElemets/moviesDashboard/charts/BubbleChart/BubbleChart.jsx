@@ -288,7 +288,7 @@ export default function BubbleChart(props) {
   })
 
   useFavoriteUpdate({
-
+    storedValues
   })
 
   useEffect(() => {

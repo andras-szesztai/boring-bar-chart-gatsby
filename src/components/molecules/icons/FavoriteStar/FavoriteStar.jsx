@@ -155,7 +155,7 @@ export default function FavoriteStar({
 }
 
 FavoriteStar.defaultProps = {
-  color: "#ffbd69",
+  color: "#FFDA47",
   inactiveColor: colors.grayLightest,
   isActive: true,
   width: 35

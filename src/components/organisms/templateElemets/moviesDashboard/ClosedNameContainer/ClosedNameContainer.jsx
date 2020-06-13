@@ -56,7 +56,7 @@ export default function ClosedNameContainer({
           scale: isTitleHovered ? 1.2 : 1,
         }}
       >
-        <FavoriteStar isFavorited={isFavorited} isHovered={isTitleHovered} />
+        <FavoriteStar color={COLORS.favorite} isFavorited={isFavorited} isHovered={isTitleHovered} />
       </motion.div>
     </Container>
   )

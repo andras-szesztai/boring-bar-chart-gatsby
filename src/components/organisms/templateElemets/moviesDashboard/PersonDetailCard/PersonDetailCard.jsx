@@ -270,6 +270,7 @@ export default function PersonDetailCard({
                             }}
                           >
                             <FavoriteStar
+                              color={COLORS.favorite}
                               isFavorited={isFavorited}
                               isHovered={isTitleHovered}
                             />
