@@ -124,7 +124,7 @@ export default function CardContent(props) {
                 ref={ref}
                 style={{ position: "relative", alignSelf: "stretch" }}
               />
-              <Overview style={{ height: height - space[2] }}>
+              <Overview style={{ height: height - space[2] }} color={COLORS.secondary}>
                 {activeMovie.data.overview}
               </Overview>
             </MainInfoContainer>

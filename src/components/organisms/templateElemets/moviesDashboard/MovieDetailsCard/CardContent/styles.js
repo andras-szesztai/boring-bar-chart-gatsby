@@ -1,9 +1,7 @@
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
-import {
-  COLORS,
-} from "../../../../../../constants/moviesDashboard"
+import { COLORS } from "../../../../../../constants/moviesDashboard"
 import { space } from "../../../../../../themes/theme"
 import { TitleContainer, TextContainer } from "../../styles/styles"
 import { themifyFontSize } from "../../../../../../themes/mixins"

@@ -207,7 +207,7 @@ export default function PersonDetailCard({
                             />
                           </motion.div>
                         </TitleContainer>
-                        <TextContainer>
+                        <TextContainer color={COLORS.primary}>
                           {dataSets.personDetails.biography}
                         </TextContainer>
                       </CardTextGrid>
