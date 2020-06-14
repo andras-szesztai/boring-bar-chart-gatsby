@@ -97,7 +97,7 @@ export default function MoviesDashboard() {
           bigText={`Sorry, the dashboard has not yet been optimized for ${
             device === "mobile" ? "mobile devices" : "tablet"
           }.`}
-          smallText={`Please open it in your desktop browser until ${
+          smallText={`Please use it in your desktop browser until ${
             device === "mobile" ? "mobile" : "tablet"
           } layout will be added!`}
           height={windowHeight}
