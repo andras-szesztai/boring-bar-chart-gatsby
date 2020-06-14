@@ -163,7 +163,11 @@ export default function DateAxis(props) {
           props.setHoveredMovie({
             id: d.id,
             data: d,
-            yPosition: !!mainData.find(mD => _.isEqual(d, mD)) ? 0 : 1,
+            yPosition: !props.isBoth
+              ? 1
+              : !!mainData.find(({ id }) => d.id === id)
+              ? 0
+              : 1,
             xPosition: getXPosition(d),
           })
         if (!props.isFirstEntered) {

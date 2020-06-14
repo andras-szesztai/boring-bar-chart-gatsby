@@ -1,6 +1,5 @@
 import React from "react"
 import mean from "lodash/mean"
-import isEqual from "lodash/isEqual"
 import omit from "lodash/omit"
 
 import {
