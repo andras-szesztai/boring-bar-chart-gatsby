@@ -22,6 +22,7 @@ import { useSelectedUpdate, useHoveredUpdate, useChartResize } from "./hooks"
 import Tooltip from "./Tooltip/Tooltip"
 import { Wrapper, ChartSvg, LabelContainer } from "./styles"
 import { showRefElements } from "./utils"
+import { makeYPosition } from "../../utils"
 
 export default function DateAxis(props) {
   const { margin, xScale, mainData, subData, activeMovie, hoveredMovie } = props
@@ -163,11 +164,11 @@ export default function DateAxis(props) {
           props.setHoveredMovie({
             id: d.id,
             data: d,
-            yPosition: !props.isBoth
-              ? 1
-              : !!mainData.find(({ id }) => d.id === id)
-              ? 0
-              : 1,
+            yPosition: makeYPosition({
+              data: d,
+              mainData,
+              isBoth: props.isBoth,
+            }),
             xPosition: getXPosition(d),
           })
         if (!props.isFirstEntered) {

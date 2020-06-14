@@ -9,6 +9,7 @@ import {
 import { useStateWithPrevious } from "../../../../../hooks"
 
 import SearchBar from "./SearchBar"
+import { makeYPosition } from "../utils"
 
 export default function MovieSearch({
   setActiveMovie,
@@ -57,11 +58,7 @@ export default function MovieSearch({
         setHoveredMovie({
           id: res.id,
           data,
-          yPosition: !isBoth
-            ? 1
-            : !!mainData.find(({ id }) => data.id === id)
-            ? 0
-            : 1,
+          yPosition: makeYPosition({ isBoth, mainData, data }),
           xPosition: getXPosition(res.release_year),
         })
       }}

@@ -53,3 +53,6 @@ export const makeFilteredData = (data, type) => {
     .sort((a, b) => b.vote_count - a.vote_count)
   return filteredData
 }
+
+export const makeYPosition = ({data, mainData, isBoth}) =>
+  !isBoth ? 1 : !!mainData.find(({ id }) => data.id === id) ? 0 : 1
