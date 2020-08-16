@@ -24,8 +24,8 @@ const RibbonContainer = styled.div`
     background-color: ${chroma(colors.tealBlueLighter).alpha(.95)};
     color: ${colors.tealBlueDarkest};
     text-align: center;
-    font-weight: 600;
-    letter-spacing: .95px;
+    font-weight: 500;
+    letter-spacing: .8px;
     left: -43px;
     top: 28px;
     transform: rotate(45deg);

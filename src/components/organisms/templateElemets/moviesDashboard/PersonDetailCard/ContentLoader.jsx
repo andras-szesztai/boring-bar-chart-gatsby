@@ -7,6 +7,7 @@ import {
 } from "../../../../../constants/moviesDashboard"
 
 export default function({ isOpen }) {
+  
   return (
     <motion.div variants={OPACITY_VARIANT} {...ANIMATE_PROPS}>
       {isOpen ? (

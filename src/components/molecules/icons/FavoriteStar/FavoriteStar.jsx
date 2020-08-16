@@ -35,7 +35,7 @@ export default function FavoriteStar({
   color,
   isActive,
   inactiveColor,
-  width
+  width,
 }) {
   const topRef = useRef(null)
   const circleRef = useArrayRefs(5)
@@ -132,7 +132,7 @@ export default function FavoriteStar({
       />
       <motion.path
         fill="none"
-        {...makeIconColorTransitionProps("stroke", fill)}
+        {...("stroke", fill)}
         strokeWidth={25}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -158,5 +158,5 @@ FavoriteStar.defaultProps = {
   color: "#FFDA47",
   inactiveColor: colors.grayLightest,
   isActive: true,
-  width: 35
+  width: 35,
 }
