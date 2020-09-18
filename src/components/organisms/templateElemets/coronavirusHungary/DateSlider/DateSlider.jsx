@@ -50,6 +50,18 @@ export function StyledDateSlider({
     {
       value: dates.diff + 42,
     },
+    {
+      value: dates.diff + 73,
+    },
+    {
+      value: dates.diff + 103,
+    },
+    {
+      value: dates.diff + 134,
+    },
+    {
+      value: dates.diff + 165,
+    },
   ]
   return (
     <Container width="100%" marginTop={sliderMarginTop}>

@@ -108,12 +108,12 @@ export const TEXT = {
     },
     age: {
       total: {
-        hu: "Elhunytak átlagéletkora",
-        en: "Average age of the deceased over time",
+        hu: "Elhunytak átlagéletkora május 1-je óta",
+        en: "Average age of the deceased over time since the 1st of May",
       },
       gender: {
-        hu: "Elhunytak átlagéletkora nemek szerint",
-        en: "Average age of the deceased over time per gender",
+        hu: "Elhunytak átlagéletkora nemek szerint május 1-je óta",
+        en: "Average age of the deceased over time per gender since the 1st of May",
       },
     },
     ratio: {
@@ -122,8 +122,8 @@ export const TEXT = {
         en: "Gender distribution",
       },
       gender: {
-        hu: "Nemek százalékos megoszlása",
-        en: "Gender distribution",
+        hu: "Nemek százalékos megoszlása május 1-je óta",
+        en: "Gender distribution since the 1st of May",
       },
     },
     main: {
@@ -264,7 +264,7 @@ export const TEXT = {
     },
   },
   sliderLabels: {
-    en: ["March", "April", "May"],
-    hu: ["Március", "Április", "Május"],
+    en: ["M", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
+    hu: ["M", "Ápr", "Máj", "Jún", "Júl", "Aug", "Szep"],
   },
 }

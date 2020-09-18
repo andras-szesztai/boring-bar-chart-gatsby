@@ -86,7 +86,7 @@ function makeRunningAvg(dateGrouped, key) {
   return movingAvg
 }
 
-// TODO: make it ccleaner, move out allDates and ENRICHED ALL ADATES
+// TODO: make it cleaner, move out allDates and ENRICHED ALL ADATES
 function makeAvgAge(dateGrouped, key) {
   const allDates = Object.keys(dateGrouped)
   const enrichedAllDates = getDaysArray(
@@ -129,6 +129,15 @@ function makeRatio(dateGrouped, key, runningTotal) {
   })
   return ratio
 }
+
+const filterOutDataBeforeMay = data =>
+  data.filter(
+    d =>
+      new Date(d.date) >=
+      new Date(
+        "Fri May 01 2020 00:00:00 GMT+0200 (Central European Summer Time)"
+      )
+  )
 
 const SET_FORMATTED_DATA = "SET_FORMATTED_DATA"
 const SET_INITIAL_DATES = "SET_INITIAL_DATES"
@@ -272,16 +281,16 @@ export const coronavirusDashboardReducer = (state, { type, payload }) => {
             ],
           },
           age: {
-            total: makeAvgAge(groupedFull, "total"),
+            total: filterOutDataBeforeMay(makeAvgAge(groupedFull, "total")),
             gender: [
-              ...makeAvgAge(groupedMale, "female"),
-              ...makeAvgAge(groupedFemale, "male"),
+              ...filterOutDataBeforeMay(makeAvgAge(groupedMale, "female")),
+              ...filterOutDataBeforeMay(makeAvgAge(groupedFemale, "male")),
             ],
           },
           ratio: {
             gender: [
-              ...makeRatio(groupedMale, "female", runningTotal),
-              ...makeRatio(groupedFemale, "male", runningTotal),
+              ...filterOutDataBeforeMay(makeRatio(groupedMale, "female", runningTotal)),
+              ...filterOutDataBeforeMay(makeRatio(groupedFemale, "male", runningTotal)),
             ],
           },
         },
