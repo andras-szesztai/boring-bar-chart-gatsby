@@ -27,6 +27,7 @@ export default function LineChart({
   margin,
   isPercentage,
   noTransition,
+  isDecimal,
 }) {
   const { svgRef, wrapperRef, yAxisRef, xAxisRef, yGridRef } = useChartRefs()
   const dims = useDimensions({
@@ -120,7 +121,9 @@ export default function LineChart({
         .call(
           axisLeft(yScale)
             .ticks(4)
-            .tickFormat(format(isPercentage ? ".0%" : ".0f"))
+            .tickFormat(
+              format(isPercentage ? ".0%" : isDecimal ? ".1f" : ".0f")
+            )
             .tickSizeOuter(0)
             .tickSizeInner(space[1])
         )
@@ -130,11 +133,12 @@ export default function LineChart({
             .attr("stroke", colors.grayDarkest)
             .attr("stroke-width", 0.5)
         })
+      console.log("isDecimal", isDecimal)
       select(yGridRef.current)
         .call(
           axisRight(yScale)
             .ticks(4)
-            .tickFormat(format(isPercentage ? ".0%" : ".0f"))
+            .tickFormat(format(isPercentage ? ".0%" : ".1f"))
             .tickSizeOuter(0)
             .tickSizeInner(dims.chartWidth)
         )
