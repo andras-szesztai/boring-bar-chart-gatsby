@@ -4,7 +4,6 @@ import styled from "styled-components"
 import { MdTranslate } from "react-icons/md"
 import { GoCalendar } from "react-icons/go"
 
-import { useDeviceType } from "../../../hooks"
 import { FlexContainer } from "../../atoms"
 import { space } from "../../../themes/theme"
 
@@ -25,8 +24,6 @@ const MobileFilterContainer = styled.div`
 `
 
 export default function Dashboard({ data, loading }) {
-  const device = useDeviceType()
-
   const [width, height] = useWindowSize()
 
   return (
@@ -39,7 +36,7 @@ export default function Dashboard({ data, loading }) {
         >
           <MobileFilterContainer>
             <FlexContainer>
-              <GoCalendar  size={25} />
+              <GoCalendar size={25} />
             </FlexContainer>
             <FlexContainer>
               <MdTranslate size={25} />
